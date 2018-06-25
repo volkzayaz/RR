@@ -1,0 +1,413 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		76F1FA4720DBA8DE00C9191F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA3D20DBA8DE00C9191F /* Info.plist */; };
+		76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */; };
+		76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA4120DBA8DE00C9191F /* Main.storyboard */; };
+		76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA4620DBA8DE00C9191F /* AppDelegate.swift */; };
+		76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA4D20DBA92F00C9191F /* Assets.xcassets */; };
+		76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA4F20DBA96200C9191F /* RhythmicRebellion.swift */; };
+		76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA5920DBA9FF00C9191F /* AppControllerViewModel.swift */; };
+		76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA5A20DBA9FF00C9191F /* AppRouter.swift */; };
+		76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA5B20DBA9FF00C9191F /* AppViewController.swift */; };
+		76F1FA6020DBA9FF00C9191F /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA5C20DBA9FF00C9191F /* AppViewModel.swift */; };
+		76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6220DBAEEC00C9191F /* PlayerControllerViewModel.swift */; };
+		76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6320DBAEEC00C9191F /* PlayerRouter.swift */; };
+		76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6420DBAEEC00C9191F /* PlayerViewController.swift */; };
+		76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6520DBAEEC00C9191F /* PlayerViewModel.swift */; };
+		76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */; };
+		76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */; };
+		76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RhythmicRebellion.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		76F1FA3D20DBA8DE00C9191F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76F1FA4020DBA8DE00C9191F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		76F1FA4220DBA8DE00C9191F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		76F1FA4620DBA8DE00C9191F /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		76F1FA4D20DBA92F00C9191F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		76F1FA4F20DBA96200C9191F /* RhythmicRebellion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmicRebellion.swift; sourceTree = "<group>"; };
+		76F1FA5920DBA9FF00C9191F /* AppControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppControllerViewModel.swift; sourceTree = "<group>"; };
+		76F1FA5A20DBA9FF00C9191F /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		76F1FA5B20DBA9FF00C9191F /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
+		76F1FA5C20DBA9FF00C9191F /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		76F1FA6220DBAEEC00C9191F /* PlayerControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControllerViewModel.swift; sourceTree = "<group>"; };
+		76F1FA6320DBAEEC00C9191F /* PlayerRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRouter.swift; sourceTree = "<group>"; };
+		76F1FA6420DBAEEC00C9191F /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		76F1FA6520DBAEEC00C9191F /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
+		76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
+		76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedLabel.swift; sourceTree = "<group>"; };
+		76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarRegular.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		76F1FA2420DBA88100C9191F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		76F1FA1E20DBA88100C9191F = {
+			isa = PBXGroup;
+			children = (
+				76F1FA2920DBA88100C9191F /* RhythmicRebellion */,
+				76F1FA2820DBA88100C9191F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		76F1FA2820DBA88100C9191F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		76F1FA2920DBA88100C9191F /* RhythmicRebellion */ = {
+			isa = PBXGroup;
+			children = (
+				76F1FA4320DBA8DE00C9191F /* Source */,
+				76F1FA3E20DBA8DE00C9191F /* Resources */,
+				76F1FA3C20DBA8DE00C9191F /* Supporting Files */,
+			);
+			path = RhythmicRebellion;
+			sourceTree = "<group>";
+		};
+		76F1FA3C20DBA8DE00C9191F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				76F1FA3D20DBA8DE00C9191F /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		76F1FA3E20DBA8DE00C9191F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				76F1FA4D20DBA92F00C9191F /* Assets.xcassets */,
+				76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */,
+				76F1FA4120DBA8DE00C9191F /* Main.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		76F1FA4320DBA8DE00C9191F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				76F1FA6A20DBD94200C9191F /* UI Components */,
+				76F1FA6120DBAA2700C9191F /* Player */,
+				76F1FA5A20DBA9FF00C9191F /* AppRouter.swift */,
+				76F1FA5C20DBA9FF00C9191F /* AppViewModel.swift */,
+				76F1FA5920DBA9FF00C9191F /* AppControllerViewModel.swift */,
+				76F1FA5B20DBA9FF00C9191F /* AppViewController.swift */,
+				76F1FA4620DBA8DE00C9191F /* AppDelegate.swift */,
+				76F1FA4F20DBA96200C9191F /* RhythmicRebellion.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		76F1FA6120DBAA2700C9191F /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				76F1FA6320DBAEEC00C9191F /* PlayerRouter.swift */,
+				76F1FA6520DBAEEC00C9191F /* PlayerViewModel.swift */,
+				76F1FA6220DBAEEC00C9191F /* PlayerControllerViewModel.swift */,
+				76F1FA6420DBAEEC00C9191F /* PlayerViewController.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		76F1FA6A20DBD94200C9191F /* UI Components */ = {
+			isa = PBXGroup;
+			children = (
+				76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */,
+				76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */,
+				76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */,
+			);
+			path = "UI Components";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		76F1FA2620DBA88100C9191F /* RhythmicRebellion */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76F1FA3920DBA88100C9191F /* Build configuration list for PBXNativeTarget "RhythmicRebellion" */;
+			buildPhases = (
+				76F1FA2320DBA88100C9191F /* Sources */,
+				76F1FA2420DBA88100C9191F /* Frameworks */,
+				76F1FA2520DBA88100C9191F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RhythmicRebellion;
+			productName = RhythmicRebellion;
+			productReference = 76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		76F1FA1F20DBA88100C9191F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = "Patron Empowerment, LLC";
+				TargetAttributes = {
+					76F1FA2620DBA88100C9191F = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 76F1FA2220DBA88100C9191F /* Build configuration list for PBXProject "RhythmicRebellion" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 76F1FA1E20DBA88100C9191F;
+			productRefGroup = 76F1FA2820DBA88100C9191F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				76F1FA2620DBA88100C9191F /* RhythmicRebellion */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		76F1FA2520DBA88100C9191F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */,
+				76F1FA4720DBA8DE00C9191F /* Info.plist in Resources */,
+				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
+				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		76F1FA2320DBA88100C9191F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
+				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
+				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
+				76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */,
+				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
+				76F1FA6020DBA9FF00C9191F /* AppViewModel.swift in Sources */,
+				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
+				76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */,
+				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
+				76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */,
+				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,
+				76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */,
+				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76F1FA4020DBA8DE00C9191F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		76F1FA4120DBA8DE00C9191F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76F1FA4220DBA8DE00C9191F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		76F1FA3720DBA88100C9191F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		76F1FA3820DBA88100C9191F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		76F1FA3A20DBA88100C9191F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4M6W632NJ7;
+				INFOPLIST_FILE = "$(SRCROOT)/RhythmicRebellion/Supporting Files/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.patronempowerment.RhythmicRebellion;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		76F1FA3B20DBA88100C9191F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4M6W632NJ7;
+				INFOPLIST_FILE = "$(SRCROOT)/RhythmicRebellion/Supporting Files/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.patronempowerment.RhythmicRebellion;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		76F1FA2220DBA88100C9191F /* Build configuration list for PBXProject "RhythmicRebellion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76F1FA3720DBA88100C9191F /* Debug */,
+				76F1FA3820DBA88100C9191F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76F1FA3920DBA88100C9191F /* Build configuration list for PBXNativeTarget "RhythmicRebellion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76F1FA3A20DBA88100C9191F /* Debug */,
+				76F1FA3B20DBA88100C9191F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 76F1FA1F20DBA88100C9191F /* Project object */;
+}
