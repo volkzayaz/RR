@@ -35,6 +35,18 @@
                                         <real key="value" value="14"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="eaA-0x-KLk"/>
+                                        <exclude reference="rGy-TS-Lhx"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="eaA-0x-KLk"/>
+                                        <include reference="rGy-TS-Lhx"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <action selector="onPlayerDisclosureButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="idw-sV-b6L"/>
                                 </connections>
@@ -64,10 +76,18 @@
                             <mask key="subviews">
                                 <exclude reference="MKU-JK-xnh"/>
                             </mask>
+                            <mask key="constraints">
+                                <exclude reference="BTH-nu-dIL"/>
+                                <exclude reference="xKa-oY-Yrf"/>
+                            </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="MKU-JK-xnh"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="BTH-nu-dIL"/>
+                                <include reference="xKa-oY-Yrf"/>
                             </mask>
                         </variation>
                     </view>
@@ -106,8 +126,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bfK-Ul-jeC" userLabel="Player Controls View">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="03:50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="60f-jB-7iz">
-                                        <rect key="frame" x="9" y="9" width="34" height="14.666666666666664"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="60f-jB-7iz">
+                                        <rect key="frame" x="8.9999999999999982" y="9" width="26.333333333333329" height="14.666666666666664"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" red="0.70980392156862748" green="0.74509803921568629" blue="1" alpha="0.59886023116438358" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -132,14 +152,23 @@
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="AA9-pN-wTv"/>
                                             <barButtonItem image="PreviousTrack" width="25" id="GKK-mB-XVl">
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="onBackwardButtonWithSender:" destination="zss-td-B1y" id="c2Y-WU-12T"/>
+                                                </connections>
                                             </barButtonItem>
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="OUi-hx-dYt"/>
-                                            <barButtonItem image="Play" width="25" id="6hV-Vv-jU3">
+                                            <barButtonItem title="Play" image="Play" width="25" id="6hV-Vv-jU3">
                                                 <color key="tintColor" red="0.9882352941176471" green="0.24313725490196078" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="onPlayButtonWithSender:" destination="zss-td-B1y" id="rxH-ME-FQa"/>
+                                                </connections>
                                             </barButtonItem>
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="Xgb-3t-qiZ"/>
                                             <barButtonItem image="PlayForward" width="25" id="jL3-CH-VlI">
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="onForwardButtonWithSender:" destination="zss-td-B1y" id="WI4-9A-Rz6"/>
+                                                </connections>
                                             </barButtonItem>
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="wIm-js-Fak"/>
                                             <barButtonItem image="Dislike" width="25" id="1P7-jT-DKF">
@@ -175,7 +204,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F8a-Lp-rAk">
-                                        <rect key="frame" x="344" y="34" width="21" height="26"/>
+                                        <rect key="frame" x="335" y="32" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="Jqv-0A-U6i"/>
                                             <constraint firstAttribute="width" secondItem="F8a-Lp-rAk" secondAttribute="height" multiplier="1:1" id="eCI-re-rVD"/>
@@ -183,7 +212,7 @@
                                         <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" image="FollowCompact"/>
                                     </button>
-                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Vsh-2p-3dY" userLabel="ProgressView">
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vsh-2p-3dY" userLabel="ProgressView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="2"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="2" id="LXt-hM-PUi">
@@ -286,29 +315,29 @@ Track</string>
                                         <exclude reference="09d-tP-zuF"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="GF6-l8-sbb"/>
-                                        <exclude reference="LUC-AP-RlM"/>
-                                        <exclude reference="Oa6-Ks-iEB"/>
                                         <exclude reference="3kU-Ff-oEc"/>
                                         <exclude reference="Hii-ZP-ehg"/>
                                         <exclude reference="ePD-Aw-egr"/>
                                         <exclude reference="fLn-XY-IPd"/>
                                         <exclude reference="w9e-Yb-ehK"/>
-                                        <exclude reference="71F-0u-6Pz"/>
-                                        <exclude reference="Cdh-ZA-m9d"/>
-                                        <exclude reference="dJ6-bx-AhM"/>
-                                        <exclude reference="siS-bp-mct"/>
-                                        <exclude reference="uZN-no-G2R"/>
                                         <exclude reference="HLK-z4-T6a"/>
                                         <exclude reference="IP7-9k-im4"/>
                                         <exclude reference="PdL-Hn-lzM"/>
                                         <exclude reference="TUL-WH-Fjn"/>
                                         <exclude reference="TW4-iy-NE0"/>
+                                        <exclude reference="71F-0u-6Pz"/>
+                                        <exclude reference="Cdh-ZA-m9d"/>
+                                        <exclude reference="dJ6-bx-AhM"/>
+                                        <exclude reference="siS-bp-mct"/>
+                                        <exclude reference="uZN-no-G2R"/>
+                                        <exclude reference="GPY-FN-0YY"/>
+                                        <exclude reference="rqY-yh-XtC"/>
+                                        <exclude reference="GF6-l8-sbb"/>
+                                        <exclude reference="LUC-AP-RlM"/>
+                                        <exclude reference="Oa6-Ks-iEB"/>
                                         <exclude reference="0jV-f6-K3z"/>
                                         <exclude reference="FHL-Nh-5fP"/>
                                         <exclude reference="OTC-Cd-dx8"/>
-                                        <exclude reference="GPY-FN-0YY"/>
-                                        <exclude reference="rqY-yh-XtC"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -316,19 +345,19 @@ Track</string>
                                         <include reference="F8a-Lp-rAk"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="GF6-l8-sbb"/>
-                                        <include reference="LUC-AP-RlM"/>
-                                        <include reference="Oa6-Ks-iEB"/>
                                         <include reference="Hii-ZP-ehg"/>
                                         <include reference="fLn-XY-IPd"/>
                                         <include reference="w9e-Yb-ehK"/>
-                                        <include reference="71F-0u-6Pz"/>
-                                        <include reference="dJ6-bx-AhM"/>
-                                        <include reference="uZN-no-G2R"/>
                                         <include reference="HLK-z4-T6a"/>
                                         <include reference="TUL-WH-Fjn"/>
                                         <include reference="TW4-iy-NE0"/>
+                                        <include reference="71F-0u-6Pz"/>
+                                        <include reference="dJ6-bx-AhM"/>
+                                        <include reference="uZN-no-G2R"/>
                                         <include reference="GPY-FN-0YY"/>
+                                        <include reference="GF6-l8-sbb"/>
+                                        <include reference="LUC-AP-RlM"/>
+                                        <include reference="Oa6-Ks-iEB"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular">
@@ -338,14 +367,14 @@ Track</string>
                                     <mask key="constraints">
                                         <include reference="3kU-Ff-oEc"/>
                                         <include reference="ePD-Aw-egr"/>
-                                        <include reference="Cdh-ZA-m9d"/>
-                                        <include reference="siS-bp-mct"/>
                                         <include reference="IP7-9k-im4"/>
                                         <include reference="PdL-Hn-lzM"/>
+                                        <include reference="Cdh-ZA-m9d"/>
+                                        <include reference="siS-bp-mct"/>
+                                        <include reference="rqY-yh-XtC"/>
                                         <include reference="0jV-f6-K3z"/>
                                         <include reference="FHL-Nh-5fP"/>
                                         <include reference="OTC-Cd-dx8"/>
-                                        <include reference="rqY-yh-XtC"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -394,14 +423,23 @@ Track</string>
                     <connections>
                         <outlet property="compactFollowButton" destination="F8a-Lp-rAk" id="fXu-LT-Ctu"/>
                         <outlet property="compactTabBar" destination="DR6-Rj-pL8" id="2Vn-nW-ygX"/>
+                        <outlet property="pauseBarButtonItem" destination="MSp-8n-rsp" id="MuC-J4-5IT"/>
+                        <outlet property="playBarButtonItem" destination="6hV-Vv-jU3" id="Mp7-QD-8YC"/>
+                        <outlet property="playerItemCurrentTimeLabel" destination="60f-jB-7iz" id="CQP-fP-j15"/>
                         <outlet property="playerItemDescriptionLabel" destination="aJl-Wj-UON" id="5NQ-fY-pTK"/>
-                        <outlet property="playerItemFullTimeLabel" destination="rnt-6h-dAN" id="ZJO-A3-aZH"/>
-                        <outlet property="playerItemProgressTimeLabel" destination="60f-jB-7iz" id="m5v-CM-g8C"/>
+                        <outlet property="playerItemDurationLabel" destination="rnt-6h-dAN" id="K3y-GH-EiA"/>
                         <outlet property="playerItemProgressView" destination="Vsh-2p-3dY" id="JQH-hj-AWm"/>
                         <outlet property="regularTabBar" destination="09d-tP-zuF" id="u68-a3-xL5"/>
+                        <outlet property="toolBar" destination="i8t-9k-jQM" id="JtG-7R-NnA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pXC-eX-esf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem title="Pause" image="Pause" id="MSp-8n-rsp">
+                    <color key="tintColor" red="0.9882352941176471" green="0.24313725490196078" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <action selector="onPauseButtonWithSender:" destination="zss-td-B1y" id="JqU-vH-TNF"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="32.03125" y="-475.19531249999994"/>
         </scene>
@@ -413,6 +451,7 @@ Track</string>
         <image name="FollowCompact" width="21" height="26"/>
         <image name="Like" width="21" height="20"/>
         <image name="Lyrics" width="14" height="14"/>
+        <image name="Pause" width="26" height="31"/>
         <image name="Play" width="28" height="32"/>
         <image name="PlayForward" width="19" height="13"/>
         <image name="Playlist" width="17" height="17"/>

@@ -31,12 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.setupAppearance()
 
-        if let appViewController = self.window?.rootViewController as? AppViewController {
-            let defaultAppRouter = DefaultAppRouter()
-            defaultAppRouter.start(controller: appViewController)
+//        http://player-ngrx2.fan.rebellionretailsite.com/
+//        ws://player-ngrx2.rebellionretailsite.com:3000/
 
-            self.appRouter = defaultAppRouter
-        }
+//        https://rebels.rhythmic-rebellion.com
+//        wss://ws.rebellion-services.com/
+        let webSocketService = WebSocketService(with: URL(string: "ws://player-ngrx2.rebellionretailsite.com:3000/")!)
+        let appViewController = self.window?.rootViewController as! AppViewController
+
+        let defaultAppRouter = DefaultAppRouter(webSocketService: webSocketService)
+        defaultAppRouter.start(controller: appViewController)
+
+        self.appRouter = defaultAppRouter
 
         return self.appRouter != nil
     }

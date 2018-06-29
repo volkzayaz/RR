@@ -13,8 +13,8 @@ final class PlayerViewController: UIViewController {
 
     @IBOutlet weak var playerItemDescriptionLabel: UILabel!
 
-    @IBOutlet weak var playerItemProgressTimeLabel: UILabel!
-    @IBOutlet weak var playerItemFullTimeLabel: UILabel!
+    @IBOutlet weak var playerItemCurrentTimeLabel: UILabel!
+    @IBOutlet weak var playerItemDurationLabel: UILabel!
 
     @IBOutlet weak var playerItemProgressView: UIProgressView!
 
@@ -23,8 +23,9 @@ final class PlayerViewController: UIViewController {
 
     @IBOutlet weak var compactFollowButton: UIButton!
 
-
     @IBOutlet weak var toolBar: UIToolbar!
+    @IBOutlet var playBarButtonItem: UIBarButtonItem!
+    @IBOutlet var pauseBarButtonItem: UIBarButtonItem!
 
     // MARK: - Public properties -
 
@@ -46,11 +47,40 @@ final class PlayerViewController: UIViewController {
         viewModel.load(with: self)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        viewModel.startObservePlayer()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        viewModel.stopObservePlayer()
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
         self.playerItemDescriptionLabel.numberOfLines = self.traitCollection.horizontalSizeClass == .regular ? 2 : 1
+        self.refreshUI()
+    }
 
+    // MARK: - Actions -
+    @IBAction func onPlayButton(sender: UIBarButtonItem) {
+        self.viewModel.play()
+    }
+
+    @IBAction func onPauseButton(sender: UIBarButtonItem) {
+        viewModel.pause()
+    }
+
+    @IBAction func onForwardButton(sender: UIBarButtonItem) {
+        viewModel.forward()
+    }
+
+    @IBAction func onBackwardButton(sender: UIBarButtonItem) {
+        viewModel.backward()
     }
 }
 
@@ -73,8 +103,38 @@ extension PlayerViewController {
 
 extension PlayerViewController: PlayerViewModelDelegate {
 
-    func refreshUI() {
+    func updatePlayPauseState() {
+
+        var playerToolBarItems = self.toolBar.items
+        let playButtonIndex = playerToolBarItems?.index(of: self.playBarButtonItem)
+        let pauseButtonIndex = playerToolBarItems?.index(of: self.pauseBarButtonItem)
+        if self.viewModel.isPlaying {
+            if pauseButtonIndex == nil && playButtonIndex != nil {
+                playerToolBarItems?.remove(at: playButtonIndex!)
+                playerToolBarItems?.insert(self.pauseBarButtonItem, at: playButtonIndex!)
+            }
+        } else {
+            if pauseButtonIndex != nil && playButtonIndex == nil {
+                playerToolBarItems?.remove(at: pauseButtonIndex!)
+                playerToolBarItems?.insert(self.playBarButtonItem, at: pauseButtonIndex!)
+            }
+        }
+        self.toolBar.items = playerToolBarItems
 
     }
 
+    func refreshUI() {
+        guard self.isViewLoaded == true else { return }
+
+        self.playerItemDescriptionLabel.attributedText = self.viewModel.playerItemDescriptionAttributedText(for: self.traitCollection)
+        self.playerItemDurationLabel.text = self.viewModel.playerItemDurationString
+
+        self.refreshProgressUI()
+    }
+
+    func refreshProgressUI() {
+        self.playerItemCurrentTimeLabel.text = self.viewModel.playerItemCurrentTimeString
+        self.playerItemProgressView.progress = self.viewModel.playerItemProgress
+        self.updatePlayPauseState()
+    }
 }

@@ -46,3 +46,7 @@ extension SegueCompatible {
         sourceController?.performSegue(withIdentifier: destination.identifier, sender: destination)
     }
 }
+
+struct RouterDependencies {
+    let webSocketService: WebSocketService
+}

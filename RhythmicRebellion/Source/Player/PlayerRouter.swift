@@ -32,6 +32,8 @@ final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
         }
     }
 
+    var dependencies: RouterDependencies
+
     private(set) weak var viewModel: PlayerViewModel?
     private(set) weak var sourceController: UIViewController?
 
@@ -49,13 +51,13 @@ final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
         }
     }
 
-    init() {
-
+    init(dependencies: RouterDependencies) {
+        self.dependencies = dependencies
     }
 
     func start(controller: PlayerViewController) {
         sourceController = controller
-        let vm = PlayerControllerViewModel(router: self)
+        let vm = PlayerControllerViewModel(router: self, webSocketService: self.dependencies.webSocketService)
         controller.configure(viewModel: vm, router: self)
     }
 }

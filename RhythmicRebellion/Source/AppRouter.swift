@@ -33,6 +33,8 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         }
     }
 
+    var dependencies: RouterDependencies
+
     private(set) weak var viewModel: AppViewModel?
     private(set) weak var sourceController: UIViewController?
 
@@ -47,14 +49,14 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         switch payload {
         case .player:
             guard let playerViewController = segue.destination as? PlayerViewController else { fatalError("Incorrect controller for PlayerSegueIdentifier") }
-            let playerRouter = DefaultPlayerRouter()
+            let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies)
             playerRouter.start(controller: playerViewController)
             break
         }
     }
 
-    init() {
-
+    init(webSocketService: WebSocketService) {
+        self.dependencies = RouterDependencies(webSocketService: webSocketService)
     }
 
     func start(controller: AppViewController) {
