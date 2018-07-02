@@ -11,7 +11,7 @@ import Foundation
 struct TrackState: Codable {
 
     let hash: String
-    let progress: Float
+    let progress: TimeInterval
     let isPlaying: Bool
 
     enum CodingKeys: String, CodingKey {

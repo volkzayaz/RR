@@ -16,22 +16,22 @@ private var playerKVOContext = 0
 final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     // MARK: - Public properties -
-    var playerItemDuration: Float? {
+    var playerItemDuration: TimeInterval? {
         guard let duration = self.player.currentItem?.duration, duration.value != 0 else { return nil }
-        return Float(CMTimeGetSeconds(duration))
+        return TimeInterval(CMTimeGetSeconds(duration))
     }
 
     var playerItemDurationString: String {
         guard let playerItemDuration = self.playerItemDuration else { return "--:--"}
 
-        return playerItemDuration.timeString();
+        return playerItemDuration.stringFormatted();
     }
 
-    var playerItemCurrentTime: Float? {
+    var playerItemCurrentTime: TimeInterval? {
         if self.player.rate == 1.0 {
             let currentTime = self.player.currentTime()
             guard currentTime.value != 0 else { return nil }
-            return Float(CMTimeGetSeconds(currentTime))
+            return TimeInterval(CMTimeGetSeconds(currentTime))
         } else if let currentTrackState = self.currentTrackState  {
             return currentTrackState.progress
         }
@@ -42,14 +42,14 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     var playerItemCurrentTimeString: String {
         guard let playerItemCurrentTime = self.playerItemCurrentTime else { return "--:--"}
 
-        return playerItemCurrentTime.timeString();
+        return playerItemCurrentTime.stringFormatted();
     }
 
     var playerItemProgress: Float {
         guard let playerItemDuration = self.playerItemDuration, playerItemDuration != 0.0,
             let playerItemCurrentTime = self.playerItemCurrentTime else { return 0.0 }
 
-        return playerItemCurrentTime / playerItemDuration
+        return Float(playerItemCurrentTime / playerItemDuration)
     }
 
     var isPlaying: Bool {
@@ -275,7 +275,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func backward() {
 
-        if self.playerItemCurrentTime ?? Float(0.0) > Float(3.0) {
+        if self.playerItemCurrentTime ?? TimeInterval(0.0) > TimeInterval(3.0) {
             let time = CMTime(seconds: Double(0.0), preferredTimescale: Int32(kCMTimeMaxTimescale))
             self.player.currentItem?.seek(to: time, completionHandler: { [unowned self] (success) in
                 guard success == true else { return }

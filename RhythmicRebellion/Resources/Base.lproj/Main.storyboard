@@ -330,11 +330,11 @@ Track</string>
                                         <exclude reference="dJ6-bx-AhM"/>
                                         <exclude reference="siS-bp-mct"/>
                                         <exclude reference="uZN-no-G2R"/>
-                                        <exclude reference="GPY-FN-0YY"/>
-                                        <exclude reference="rqY-yh-XtC"/>
                                         <exclude reference="GF6-l8-sbb"/>
                                         <exclude reference="LUC-AP-RlM"/>
                                         <exclude reference="Oa6-Ks-iEB"/>
+                                        <exclude reference="GPY-FN-0YY"/>
+                                        <exclude reference="rqY-yh-XtC"/>
                                         <exclude reference="0jV-f6-K3z"/>
                                         <exclude reference="FHL-Nh-5fP"/>
                                         <exclude reference="OTC-Cd-dx8"/>
@@ -354,10 +354,10 @@ Track</string>
                                         <include reference="71F-0u-6Pz"/>
                                         <include reference="dJ6-bx-AhM"/>
                                         <include reference="uZN-no-G2R"/>
-                                        <include reference="GPY-FN-0YY"/>
                                         <include reference="GF6-l8-sbb"/>
                                         <include reference="LUC-AP-RlM"/>
                                         <include reference="Oa6-Ks-iEB"/>
+                                        <include reference="GPY-FN-0YY"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular">

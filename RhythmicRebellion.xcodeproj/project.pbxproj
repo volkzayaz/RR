@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7650960E20E2325F00BF1F79 /* Float+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650960D20E2325F00BF1F79 /* Float+Extension.swift */; };
+		761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */; };
 		7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961120E2615F00BF1F79 /* WebSocketService.swift */; };
 		7650961520E3A15D00BF1F79 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961420E3A15D00BF1F79 /* Track.swift */; };
 		7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961620E3A8C600BF1F79 /* AudioFile.swift */; };
@@ -41,7 +41,7 @@
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66178C740DE1BEC2147F6CD6 /* Pods-RhythmicRebellion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.debug.xcconfig"; sourceTree = "<group>"; };
-		7650960D20E2325F00BF1F79 /* Float+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float+Extension.swift"; sourceTree = "<group>"; };
+		761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		7650961120E2615F00BF1F79 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		7650961420E3A15D00BF1F79 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		7650961620E3A8C600BF1F79 /* AudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFile.swift; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 		7650960C20E2322B00BF1F79 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				7650960D20E2325F00BF1F79 /* Float+Extension.swift */,
+				761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -363,9 +363,9 @@
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,
 				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,
 				76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */,
-				7650960E20E2325F00BF1F79 /* Float+Extension.swift in Sources */,
 				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
 				7650961920E3B35000BF1F79 /* Command.swift in Sources */,
+				761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
