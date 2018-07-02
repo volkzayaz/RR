@@ -55,13 +55,13 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         }
     }
 
-    init(webSocketService: WebSocketService) {
-        self.dependencies = RouterDependencies(webSocketService: webSocketService)
+    init(dependencies: RouterDependencies) {
+        self.dependencies = dependencies
     }
 
     func start(controller: AppViewController) {
         sourceController = controller
-        let vm = AppControllerViewModel(router: self)
+        let vm = AppControllerViewModel(router: self, restApiService: self.dependencies.restApiService, webSocketService: self.dependencies.webSocketService)
         controller.configure(viewModel: vm, router: self)
     }
 }

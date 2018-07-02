@@ -50,6 +50,8 @@ class WebSocketService: WebSocketDelegate, Observable {
     func connect(with token: String) {
         self.token = token
 
+        print("Connect with token: \(token)")
+
         self.webSocket.connect()
     }
 
@@ -101,7 +103,7 @@ class WebSocketService: WebSocketDelegate, Observable {
             }
 
 
-        } catch {
+        } catch (let error) {
             print(error.localizedDescription)
         }
 

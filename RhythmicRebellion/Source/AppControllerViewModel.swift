@@ -16,16 +16,30 @@ final class AppControllerViewModel: AppViewModel {
     private(set) weak var delegate: AppViewModelDelegate?
     private(set) weak var router: AppRouter?
 
+    private(set) weak var restApiService: RestApiService?
+    private(set) weak var webSocketService: WebSocketService?
+
     var isPlayerDisclosed: Bool = false
+
+    var user: User?
 
     // MARK: - Lifecycle -
 
-    init(router: AppRouter) {
+    init(router: AppRouter, restApiService: RestApiService, webSocketService: WebSocketService) {
         self.router = router
+        self.restApiService = restApiService
+        self.webSocketService = webSocketService
     }
 
     func load(with delegate: AppViewModelDelegate) {
         self.delegate = delegate
+
+        self.restApiService?.getFanUser(completion: { [unowned self] (user) in
+            self.user = user
+            if let user = user {
+                self.webSocketService?.connect(with: user.wsToken)
+            }
+        })
     }
 
     func togglePlayerDisclosure() {

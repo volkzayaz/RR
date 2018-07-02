@@ -37,9 +37,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        https://rebels.rhythmic-rebellion.com
 //        wss://ws.rebellion-services.com/
         let webSocketService = WebSocketService(with: URL(string: "ws://player-ngrx2.rebellionretailsite.com:3000/")!)
+        let restApiService = RestApiService(serverURL: URL(string: "http://player-ngrx2.api.rebellionretailsite.com")!)
+
         let appViewController = self.window?.rootViewController as! AppViewController
 
-        let defaultAppRouter = DefaultAppRouter(webSocketService: webSocketService)
+        let routerDependencies = RouterDependencies(restApiService: restApiService, webSocketService: webSocketService)
+        let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
         defaultAppRouter.start(controller: appViewController)
 
         self.appRouter = defaultAppRouter

@@ -17,6 +17,8 @@
 		7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961E20E4E45000BF1F79 /* TrackState.swift */; };
 		7650962120E5029200BF1F79 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962020E5029200BF1F79 /* Observable.swift */; };
 		7650962320E5238100BF1F79 /* PlayListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayListItem.swift */; };
+		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
+		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
 		76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */; };
 		76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA4120DBA8DE00C9191F /* Main.storyboard */; };
 		76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA4620DBA8DE00C9191F /* AppDelegate.swift */; };
@@ -49,6 +51,8 @@
 		7650961E20E4E45000BF1F79 /* TrackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackState.swift; sourceTree = "<group>"; };
 		7650962020E5029200BF1F79 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		7650962220E5238100BF1F79 /* PlayListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListItem.swift; sourceTree = "<group>"; };
+		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
+		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RhythmicRebellion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76F1FA3D20DBA8DE00C9191F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76F1FA4020DBA8DE00C9191F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				7650961120E2615F00BF1F79 /* WebSocketService.swift */,
+				7650962420E662D100BF1F79 /* RestApiService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -117,6 +122,7 @@
 				7650961620E3A8C600BF1F79 /* AudioFile.swift */,
 				7650961A20E4DC7800BF1F79 /* Artist.swift */,
 				7650961820E3B35000BF1F79 /* Command.swift */,
+				76DB5ABC20E684A60008D2FE /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -297,10 +303,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -336,6 +344,7 @@
 				7650962320E5238100BF1F79 /* PlayListItem.swift in Sources */,
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
+				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
@@ -344,6 +353,7 @@
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				76F1FA6020DBA9FF00C9191F /* AppViewModel.swift in Sources */,
 				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
+				7650962520E662D100BF1F79 /* RestApiService.swift in Sources */,
 				7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */,
 				76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */,
 				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
@@ -496,8 +506,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4M6W632NJ7;
 				INFOPLIST_FILE = "$(SRCROOT)/RhythmicRebellion/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.patronempowerment.RhythmicRebellion;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olearis.patronempowerment.RhythmicRebellion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -512,8 +523,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4M6W632NJ7;
 				INFOPLIST_FILE = "$(SRCROOT)/RhythmicRebellion/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.patronempowerment.RhythmicRebellion;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olearis.patronempowerment.RhythmicRebellion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
