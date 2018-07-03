@@ -11,13 +11,14 @@
 		7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961120E2615F00BF1F79 /* WebSocketService.swift */; };
 		7650961520E3A15D00BF1F79 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961420E3A15D00BF1F79 /* Track.swift */; };
 		7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961620E3A8C600BF1F79 /* AudioFile.swift */; };
-		7650961920E3B35000BF1F79 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961820E3B35000BF1F79 /* Command.swift */; };
+		7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961820E3B35000BF1F79 /* WebSocketCommand.swift */; };
 		7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961A20E4DC7800BF1F79 /* Artist.swift */; };
 		7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961C20E4E11C00BF1F79 /* TrackId.swift */; };
 		7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961E20E4E45000BF1F79 /* TrackState.swift */; };
 		7650962120E5029200BF1F79 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962020E5029200BF1F79 /* Observable.swift */; };
 		7650962320E5238100BF1F79 /* PlayListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayListItem.swift */; };
 		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
+		7655476E20EB80DC004AC0BD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655476D20EB80DC004AC0BD /* Token.swift */; };
 		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
 		76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */; };
 		76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA4120DBA8DE00C9191F /* Main.storyboard */; };
@@ -45,13 +46,14 @@
 		7650961120E2615F00BF1F79 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		7650961420E3A15D00BF1F79 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		7650961620E3A8C600BF1F79 /* AudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFile.swift; sourceTree = "<group>"; };
-		7650961820E3B35000BF1F79 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		7650961820E3B35000BF1F79 /* WebSocketCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketCommand.swift; sourceTree = "<group>"; };
 		7650961A20E4DC7800BF1F79 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		7650961C20E4E11C00BF1F79 /* TrackId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackId.swift; sourceTree = "<group>"; };
 		7650961E20E4E45000BF1F79 /* TrackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackState.swift; sourceTree = "<group>"; };
 		7650962020E5029200BF1F79 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		7650962220E5238100BF1F79 /* PlayListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListItem.swift; sourceTree = "<group>"; };
 		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
+		7655476D20EB80DC004AC0BD /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RhythmicRebellion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76F1FA3D20DBA8DE00C9191F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +97,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		761B6CB920EB56000019A71D /* WebSocketService */ = {
+			isa = PBXGroup;
+			children = (
+				7650961820E3B35000BF1F79 /* WebSocketCommand.swift */,
+				7650961120E2615F00BF1F79 /* WebSocketService.swift */,
+			);
+			path = WebSocketService;
+			sourceTree = "<group>";
+		};
 		7650960C20E2322B00BF1F79 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,7 +117,7 @@
 		7650960F20E2593F00BF1F79 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				7650961120E2615F00BF1F79 /* WebSocketService.swift */,
+				761B6CB920EB56000019A71D /* WebSocketService */,
 				7650962420E662D100BF1F79 /* RestApiService.swift */,
 			);
 			path = Services;
@@ -121,8 +132,8 @@
 				7650961E20E4E45000BF1F79 /* TrackState.swift */,
 				7650961620E3A8C600BF1F79 /* AudioFile.swift */,
 				7650961A20E4DC7800BF1F79 /* Artist.swift */,
-				7650961820E3B35000BF1F79 /* Command.swift */,
 				76DB5ABC20E684A60008D2FE /* User.swift */,
+				7655476D20EB80DC004AC0BD /* Token.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -354,6 +365,7 @@
 				76F1FA6020DBA9FF00C9191F /* AppViewModel.swift in Sources */,
 				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
 				7650962520E662D100BF1F79 /* RestApiService.swift in Sources */,
+				7655476E20EB80DC004AC0BD /* Token.swift in Sources */,
 				7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */,
 				76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */,
 				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
@@ -364,7 +376,7 @@
 				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,
 				76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */,
 				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
-				7650961920E3B35000BF1F79 /* Command.swift in Sources */,
+				7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */,
 				761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -34,6 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        http://player-ngrx2.fan.rebellionretailsite.com/
 //        ws://player-ngrx2.rebellionretailsite.com:3000/
 
+//        http://player-ngrx2.api.rebellionretailsite.com/api/fan/user
+
 //        https://rebels.rhythmic-rebellion.com
 //        wss://ws.rebellion-services.com/
         let webSocketService = WebSocketService(with: URL(string: "ws://player-ngrx2.rebellionretailsite.com:3000/")!)

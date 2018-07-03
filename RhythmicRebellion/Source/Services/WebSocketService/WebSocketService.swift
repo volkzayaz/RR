@@ -34,7 +34,7 @@ class WebSocketService: WebSocketDelegate, Observable {
     let observersContainer = ObserversContainer<WebSocketServiceObserver>()
 
     var webSocket: WebSocket
-    var token: String?
+    var token: Token?
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
@@ -47,61 +47,76 @@ class WebSocketService: WebSocketDelegate, Observable {
         self.webSocket.delegate = self
     }
 
-    func connect(with token: String) {
+    func connect(with token: Token) {
         self.token = token
-
-        print("Connect with token: \(token)")
 
         self.webSocket.connect()
     }
 
-    // MARK: - WebSocketDelegate -
-    public func websocketDidConnect(socket: WebSocketClient) {
-        print("websocketDidConnect")
-
-        let data = ["isGuest" : true, "token" : self.token!] as [String : Any]
-        let initInfo = ["channel" : "user", "cmd" : "init", "data" : data] as [String : Any]
-
+    func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {
 
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: initInfo, options: .prettyPrinted)
-            self.webSocket.write(data: jsonData)
-        } catch {
-            print(error.localizedDescription)
+            let jsonData = try JSONEncoder().encode(command)
+            self.webSocket.write(data: jsonData, completion: { completion?(nil) })
+        } catch (let error) {
+            completion?(error)
         }
     }
 
+    // MARK: - WebSocketDelegate -
+    public func websocketDidConnect(socket: WebSocketClient) {
+        guard let token = self.token else { return }
+        let initialCommand = WebSocketCommand.initialCommand(token: token)
+        self.sendCommand(command: initialCommand)
+    }
+
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        print("websocketDidDisconnect: \(error)")
+        print("websocketDidDisconnect: \(String(describing: error))")
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
 
+
         guard let data = text.data(using: .utf8) else { return }
         do {
 
-            let command = try JSONDecoder().decode(Command.self, from: data)
-            switch command {
-            case .playListLoadTracks(let traks):
-                self.observersContainer.invoke({ (observer) in
-                    observer.webSocketService(self, didReceiveTracks: traks)
-                })
-            case .playListUpdate(let playList):
-                self.observersContainer.invoke({ (observer) in
-                    observer.webSocketService(self, didReceivePlayList: playList)
-                })
-            case .currentTrackId(let trackId):
-                self.observersContainer.invoke({ (observer) in
-                    observer.webSocketService(self, didReceiveCurrentTrackId: trackId)
-                })
-            case .currentTrackState(let trackState):
-                self.observersContainer.invoke({ (observer) in
-                    observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
-                })
-            case .unknown:
-                print("Unknown command: \(text)")
-            }
+            let webSoketCommand = try JSONDecoder().decode(WebSocketCommand.self, from: data)
 
+            switch webSoketCommand.data {
+            case .success(let successWebSocketData):
+                switch successWebSocketData {
+
+                case .userInit( _ ):
+                    break
+
+                case .playListLoadTracks(let tracks):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveTracks: tracks)
+                    })
+
+                case .playListUpdate(let playList):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceivePlayList: playList)
+                    })
+
+                case .currentTrackId(let trackId):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveCurrentTrackId: trackId)
+                    })
+
+                case .currentTrackState(let trackState):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
+                    })
+
+                }
+            case .faile(let error):
+                print(error)
+
+            case .unknown:
+                print("Unknown channel: \(webSoketCommand.channel) command: \(webSoketCommand.command)")
+                print("websocketDidReceiveMessage: \(text)")
+            }
 
         } catch (let error) {
             print(error.localizedDescription)

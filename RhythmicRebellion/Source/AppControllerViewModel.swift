@@ -37,7 +37,8 @@ final class AppControllerViewModel: AppViewModel {
         self.restApiService?.getFanUser(completion: { [unowned self] (user) in
             self.user = user
             if let user = user {
-                self.webSocketService?.connect(with: user.wsToken)
+
+                self.webSocketService?.connect(with: Token(token: user.wsToken, isGuest: self.user?.isGuest ?? true))
             }
         })
     }
