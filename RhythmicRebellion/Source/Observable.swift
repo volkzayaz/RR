@@ -47,7 +47,7 @@ class ObserversContainer<T> {
 
 protocol Observable {
 
-    associatedtype ObserverType: AnyObject
+    associatedtype ObserverType: Any
 
     var observersContainer: ObserversContainer<ObserverType> { get }
 
