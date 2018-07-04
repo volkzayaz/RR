@@ -34,7 +34,15 @@ final class AppControllerViewModel: AppViewModel {
     func load(with delegate: AppViewModelDelegate) {
         self.delegate = delegate
 
-        self.restApiService?.fanLogin(email: "alexander@olearis.com", password: "ngrx2Fan", completion: { (user) in
+        #if DEBUG
+            let email = "alexander@olearis.com"
+            let password = "ngrx2Fan"
+        #else
+            let email = "alena@olearis.com"
+            let password = "Olearistest1"
+        #endif
+
+        self.restApiService?.fanLogin(email: email, password: password, completion: { (user) in
             self.user = user
             if let user = user {
                 self.webSocketService?.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
