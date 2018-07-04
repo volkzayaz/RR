@@ -247,6 +247,7 @@
 				76F1FA2420DBA88100C9191F /* Frameworks */,
 				76F1FA2520DBA88100C9191F /* Resources */,
 				2616D3E71915AA44E4F4E126 /* [CP] Embed Pods Frameworks */,
+				313865CA6ADEBCA2DCF418E4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -328,6 +329,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		313865CA6ADEBCA2DCF418E4 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FEA8E141940AF8FBF6D73CC2 /* [CP] Check Pods Manifest.lock */ = {
@@ -524,7 +540,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/RhythmicRebellion/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.olearis.patronempowerment.RhythmicRebellion;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olearis.RhythmicRebellion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -541,7 +557,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/RhythmicRebellion/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.olearis.patronempowerment.RhythmicRebellion;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olearis.RhythmicRebellion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -1,0 +1,40 @@
+default_platform :ios
+
+lane :pre_build do
+    cocoapods
+
+    new_build_number = ENV['XCS_INTEGRATION_NUMBER']
+    set_info_plist_value(
+        path: "./RhythmicRebellion/Supporting Files/Info.plist",
+        key: "CFBundleVersion",
+        value: new_build_number)
+end
+
+    lane :code_gen do
+    root_directory = "#{File.expand_path(File.dirname(__FILE__))}/../"
+
+    sh("#{root_directory}/Pods/R.swift/rswift generate -p \"#{root_directory}/WodProofSocial.xcodeproj\" -t WodProofSocial --bundleIdentifier com.olexabez.wodproof --productModuleName WodProofSocial --buildProductsDir \"#{root_directory}\" --developerDir \"#{root_directory}\" --sourceRoot \"#{root_directory}\" --sdkRoot \"$(SDKROOT)\"  \"#{root_directory}\"")
+end
+
+
+
+lane :upload_testflight do
+    scheme_name = 'RhythmicRebellion'
+    ipa_name = "RhythmicRebellion.ipa"
+
+    gym(
+        scheme: scheme_name,
+        skip_build_archive: true,
+        archive_path: ENV['XCS_ARCHIVE'],
+        codesigning_identity: 'iPhone Distribution: Olearis TOV (4M6W632NJ7)',
+        export_options: {
+            provisioningProfiles: { 
+                "com.olearis.RhythmicRebellion" => "Rhythmic Rebellion AppStore"
+            }
+        })
+
+    pilot(
+        ipa: ipa_name,
+        skip_waiting_for_build_processing: true,
+        username: 'oleg@olearis.com')
+end
