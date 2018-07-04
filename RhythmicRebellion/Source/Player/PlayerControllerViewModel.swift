@@ -93,6 +93,11 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     func load(with delegate: PlayerViewModelDelegate) {
         self.delegate = delegate
 
+
+        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+
+
+
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterrupted(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -470,10 +475,13 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     // MARK: - Notifications -
-    @objc func audioSessionInterrupted(_ notification:Notification) {
+    @objc func audioSessionInterrupted(_ notification: Notification) {
         print("interruption received: \(notification)")
     }
 
+    @objc func playerItemDidPlayToEndTime(_ notification: Notification) {
+        self.forward()
+    }
 }
 
 extension PlayerControllerViewModel: WebSocketServiceObserver {
