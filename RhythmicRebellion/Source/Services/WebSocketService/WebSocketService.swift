@@ -84,9 +84,14 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocketDidDisconnect: \(String(describing: error))")
+
+        self.webSocket.connect()
+
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+
+        print("websocketDidReceiveMessage")
 
         guard let data = text.data(using: .utf8) else { return }
         do {
@@ -116,13 +121,11 @@ class WebSocketService: WebSocketDelegate, Observable {
                     })
 
                 case .currentTrackState(let trackState):
-
                     if Date().timeIntervalSince(self.trackStateSendDate) > 1.0 {
                         self.observersContainer.invoke({ (observer) in
                             observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
                         })
                     }
-
                 }
             case .faile(let error):
                 print(error)
