@@ -24,7 +24,7 @@ class RestApiService {
         return componets?.url
     }
 
-    func getFanUser(completion: @escaping (User?) -> Void) {
+    func fanUser(completion: @escaping (User?) -> Void) {
 
         guard let fanUserURL = self.makeURL(with: "fan/user") else { return }
 
@@ -32,7 +32,7 @@ class RestApiService {
                                     "Content-Type" : "application/json"]
 
         Alamofire.request(fanUserURL, method: .get, headers: headers).validate().response { (response) in
-            guard let responseData = response.data else { return }
+            guard let responseData = response.data else { completion(nil); return }
 
             do {
                 let user = try JSONDecoder().decode(User.self, from: responseData)
@@ -42,5 +42,27 @@ class RestApiService {
                 completion(nil)
             }
         }
+    }
+
+    func fanLogin(email: String, password: String, completion: @escaping (User?) -> Void) {
+
+        guard let fanLoginURL = self.makeURL(with: "fan/login") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+        let parameters: Parameters = ["email" : email, "password" : password]
+
+        Alamofire.request(fanLoginURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate().response { (response) in
+            guard let responseData = response.data else { completion(nil); return }
+
+            do {
+                let user = try JSONDecoder().decode(User.self, from: responseData)
+                completion(user)
+            } catch (let error) {
+                print(error.localizedDescription)
+                completion(nil)
+            }
+        }
+
     }
 }

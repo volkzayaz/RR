@@ -60,13 +60,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     private(set) weak var delegate: PlayerViewModelDelegate?
     private(set) weak var router: PlayerRouter?
-
-//    private let webSocketToken = "32707f7e47c587a369fbbe3ed123beaa512438a068042c7f3a3f06a0bd1f937c"
-//    private let webSocketToken = "f8b5cb700eb684b075d03867019359a0581fe459b4b33673441a2917464929dc"  //Alena
-
-//    private let webSocketToken = "f4dd23e815bb3ece8da32f4b4d4f9dc8d12776ae47a7ce0871db086a49b82744"
-//    private let webSocketToken = "f3b77ecd0889aecfdddf31dd7d108a28db4e3303400413bef9a93175f0eddb1b"
-
+    
     private(set) var webSocketService: WebSocketService
 
     private(set) var tracks = [Track]()
@@ -78,6 +72,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     @objc private var player = AVPlayer()
     var timeObserverToken: Any?
     var shouldStartPlay: Bool = false
+
+    let playerHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
 
     // MARK: - Lifecycle -
 
@@ -152,10 +148,16 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         let interval = CMTimeMake(1, 1)
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
-            let timeElapsed = Float(CMTimeGetSeconds(time))
 //            print("timeElapsed: \(timeElapsed)")
             self.delegate?.refreshProgressUI()
 
+            let timeElapsed = TimeInterval(CMTimeGetSeconds(time))
+            if self.currentTrackState?.hash == self.playerHash  {
+                let currentTrackState = TrackState(hash: self.playerHash, progress: timeElapsed, isPlaying: self.player.rate == 1.0)
+                let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+                self.webSocketService.sendCommand(command: webSocketCommand)
+                self.currentTrackState = currentTrackState
+            }
 
             if let playerItem = self.player.currentItem {
                 var nowPlayingInfo = [String : Any]()
@@ -203,7 +205,6 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         guard let track = self.tracks.filter({ return $0.id == trackId.id }).first else { return }
 
-        self.currentTrackId = trackId
         self.prepareToPlay(track: track)
     }
 
@@ -224,16 +225,56 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     // MARK: - Actions -
 
     func play() {
+
+        guard let currentTrackId = self.currentTrackId else {
+
+            if let firstTrack = self.playList.filter( { return $0.value.previousTrackKey == nil }).first {
+                let trackId = TrackId(id: firstTrack.value.id, key: firstTrack.value.trackKey)
+                let webSocketCommand = WebSocketCommand.setCurrentTrack(trackId: trackId)
+
+                self.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                    guard let strongSelf = self, error == nil else { return }
+                    strongSelf.currentTrackId = trackId
+
+                    let currentTrackState = TrackState(hash: strongSelf.playerHash, progress: 0.0, isPlaying: false)
+                    let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+                    strongSelf.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                        guard let strongSelf = self, error == nil else { return }
+
+                        strongSelf.currentTrackState = currentTrackState
+                        strongSelf.play()
+                    })
+                })
+
+            }
+            return
+        }
+
         if self.player.currentItem == nil {
 
-        } else if let currentTrackState = self.currentTrackState {
+        } else if let currentTrackState = self.currentTrackState, currentTrackState.hash != self.playerHash {
 
-            let time = CMTime(seconds: Double(currentTrackState.progress), preferredTimescale: Int32(kCMTimeMaxTimescale))
-            self.player.currentItem?.seek(to: time, completionHandler: { [unowned self] (success) in
-                guard success == true else { return }
-                self.player.play()
+
+            let currentTrackState = TrackState(hash: self.playerHash, progress: currentTrackState.progress, isPlaying: false)
+            let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+            self.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                guard let strongSelf = self, error == nil else { return }
+
+                strongSelf.currentTrackState = currentTrackState
+
+                let time = CMTime(seconds: Double(currentTrackState.progress), preferredTimescale: Int32(kCMTimeMaxTimescale))
+                strongSelf.player.currentItem?.seek(to: time, completionHandler: { [weak self] (success) in
+                    guard success == true else { return }
+                    self?.player.play()
+                })
             })
         } else {
+
+            let currentTrackState = TrackState(hash: self.playerHash, progress:0.0, isPlaying: false)
+            let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+            self.webSocketService.sendCommand(command: webSocketCommand)
+            self.currentTrackState = currentTrackState
+
             self.player.play()
         }
 
@@ -243,6 +284,20 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     func pause() {
         self.player.pause()
         self.shouldStartPlay = false
+
+        if let playerItemCurrentTime = self.playerItemCurrentTime {
+            let currentTrackState = TrackState(hash: self.playerHash, progress: playerItemCurrentTime, isPlaying: false)
+            let webSocketTrackStateCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+
+            self.webSocketService.sendCommand(command: webSocketTrackStateCommand, completion: { [weak self] (error) in
+                guard error == nil else { return }
+
+                self?.currentTrackState = currentTrackState
+                self?.delegate?.refreshUI()
+
+                print("pause")
+            })
+        }
     }
 
     func forward() {
@@ -268,19 +323,63 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         } while track?.isPlayable == false
 
-        self.currentTrackId = trackId
-        self.prepareToPlay(track: track!)
 
+        if trackId.id != currentTrackId.id {
+
+            let shouldPlay = self.shouldStartPlay || self.currentTrackState?.isPlaying ?? false == true
+
+            if let currentPlayerItemTime = self.playerItemCurrentTime {
+                let currentTrackState = TrackState(hash: self.playerHash, progress: currentPlayerItemTime, isPlaying: false)
+                let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+                self.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                    guard let strongSelf = self, error == nil else { return }
+
+                    let webSocketCommand = WebSocketCommand.setCurrentTrack(trackId: trackId)
+                    strongSelf.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                        guard let strongSelf = self, error == nil else { return }
+
+                        let currentTrackState = TrackState(hash: strongSelf.playerHash, progress: 0.0, isPlaying: shouldPlay)
+                        let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+                        strongSelf.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                            guard let strongSelf = self, error == nil else { return }
+
+                            print("currentTrackState!!!!!")
+                            strongSelf.currentTrackState = currentTrackState
+                        })
+
+
+                        strongSelf.shouldStartPlay = shouldPlay
+                        strongSelf.currentTrackId = trackId
+                        strongSelf.prepareToPlay(track: track!)
+                    })
+
+                })
+            }
+        }
     }
 
     func backward() {
 
+        let shouldPlay = self.shouldStartPlay || self.currentTrackState?.isPlaying ?? false == true
+
         if self.playerItemCurrentTime ?? TimeInterval(0.0) > TimeInterval(3.0) {
-            let time = CMTime(seconds: Double(0.0), preferredTimescale: Int32(kCMTimeMaxTimescale))
-            self.player.currentItem?.seek(to: time, completionHandler: { [unowned self] (success) in
-                guard success == true else { return }
-                self.currentTrackState = nil
-                self.delegate?.refreshProgressUI()
+
+            let trackState = TrackState(hash: self.playerHash, progress: 0.0, isPlaying: false)
+            let webSocketCommand = WebSocketCommand.setTrackState(trackState: trackState)
+            self.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                guard let strongSelf = self, error == nil else { return }
+
+                let time = CMTime(seconds: Double(0.0), preferredTimescale: Int32(kCMTimeMaxTimescale))
+                strongSelf.player.currentItem?.seek(to: time, completionHandler: { [weak self] (success) in
+                    guard success == true else { return }
+                    self?.currentTrackState = trackState
+                    self?.delegate?.refreshProgressUI()
+
+                    if shouldPlay {
+                        self?.player.play()
+                    }
+                })
+
             })
             return
         }
@@ -307,8 +406,38 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         } while track?.isPlayable == false
 
-        self.currentTrackId = trackId
-        self.prepareToPlay(track: track!)
+        if trackId.id != currentTrackId.id {
+
+            let shouldPlay = self.shouldStartPlay || self.currentTrackState?.isPlaying ?? false == true
+
+            if let currentPlayerItemTime = self.playerItemCurrentTime {
+                let currentTrackState = TrackState(hash: self.playerHash, progress: currentPlayerItemTime, isPlaying: false)
+                let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+                self.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                    guard let strongSelf = self, error == nil else { return }
+
+                    let webSocketCommand = WebSocketCommand.setCurrentTrack(trackId: trackId)
+                    strongSelf.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                        guard let strongSelf = self, error == nil else { return }
+
+                        let currentTrackState = TrackState(hash: strongSelf.playerHash, progress: 0.0, isPlaying: shouldPlay)
+                        let webSocketCommand = WebSocketCommand.setTrackState(trackState: currentTrackState)
+                        strongSelf.webSocketService.sendCommand(command: webSocketCommand, completion: { [weak self] (error) in
+                            guard let strongSelf = self, error == nil else { return }
+
+                            print("currentTrackState!!!!!")
+                            strongSelf.currentTrackState = currentTrackState
+                        })
+
+
+                        strongSelf.shouldStartPlay = shouldPlay
+                        strongSelf.currentTrackId = trackId
+                        strongSelf.prepareToPlay(track: track!)
+                    })
+
+                })
+            }
+        }
     }
     
 
@@ -371,6 +500,14 @@ extension PlayerControllerViewModel: WebSocketServiceObserver {
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) {
         self.currentTrackState = trackState
+
+//        print("self.currentTrackState: \(self.currentTrackState)")
+//        print("hash: \(self.playerHash) == \(self.currentTrackState?.hash)")
+
+        if trackState.hash != self.playerHash {
+            self.player.pause()
+        }
+
         self.delegate?.refreshProgressUI()
     }
 }

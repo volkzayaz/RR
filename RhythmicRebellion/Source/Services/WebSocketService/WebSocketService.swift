@@ -36,6 +36,8 @@ class WebSocketService: WebSocketDelegate, Observable {
     var webSocket: WebSocket
     var token: Token?
 
+    var trackStateSendDate = Date()
+
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
     init(with url: URL) {
@@ -50,6 +52,8 @@ class WebSocketService: WebSocketDelegate, Observable {
     func connect(with token: Token) {
         self.token = token
 
+        print("self.token: \(self.token)")
+
         self.webSocket.connect()
     }
 
@@ -57,7 +61,15 @@ class WebSocketService: WebSocketDelegate, Observable {
 
         do {
             let jsonData = try JSONEncoder().encode(command)
-            self.webSocket.write(data: jsonData, completion: { completion?(nil) })
+            self.webSocket.write(data: jsonData, completion: { [weak self] in
+
+                if command.commandType == .currentTrackState {
+                    self?.trackStateSendDate = Date()
+                }
+
+
+                completion?(nil)
+            })
         } catch (let error) {
             completion?(error)
         }
@@ -75,7 +87,6 @@ class WebSocketService: WebSocketDelegate, Observable {
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-
 
         guard let data = text.data(using: .utf8) else { return }
         do {
@@ -105,9 +116,12 @@ class WebSocketService: WebSocketDelegate, Observable {
                     })
 
                 case .currentTrackState(let trackState):
-                    self.observersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
-                    })
+
+                    if Date().timeIntervalSince(self.trackStateSendDate) > 1.0 {
+                        self.observersContainer.invoke({ (observer) in
+                            observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
+                        })
+                    }
 
                 }
             case .faile(let error):
