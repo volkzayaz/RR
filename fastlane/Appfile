@@ -1,0 +1,8 @@
+# The Appfile can be used to specify information that's used across all fastlane
+# tools, like your Apple or Google credentials, or the app's bundle identifier.
+#
+# For more details, check out the documentation at:
+# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md
+
+itc_team_id "118799036" # iTunes Connect Team ID
+team_id "4M6W632NJ7" # Developer Portal Team ID
