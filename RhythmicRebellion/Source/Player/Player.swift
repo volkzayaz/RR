@@ -315,7 +315,7 @@ class Player: NSObject, Observable {
         let isPlaying = self.isPlaying
         let playerCurrentItemCurrentTime = self.playerCurrentItemCurrentTime ?? 0.0
 
-        if playerCurrentItemCurrentTime > TimeInterval(0.3) {
+        if playerCurrentItemCurrentTime > TimeInterval(3.0) {
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
             self.sendTrackState(trackState: trackState) { [weak self] (error) in
                 guard let strongSelf = self, error == nil else { return }
@@ -434,8 +434,9 @@ extension Player: WebSocketServiceObserver {
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
 
-        if trackId != nil {
+        if let trackId = trackId {
             self.currentTrackId = trackId
+            self.prepareToPlay(trackId: trackId)
         }
 
         if trackId == nil && self.status == .unknown  {
@@ -451,7 +452,7 @@ extension Player: WebSocketServiceObserver {
 
         self.currentTrackState = trackState
 
-        print("\(self.stateHash) == \(trackState.hash)")
+        print("\(self.stateHash) == \(trackState)")
 
         if self.status == .unknown {
             self.updateStatus(status: .initialized)

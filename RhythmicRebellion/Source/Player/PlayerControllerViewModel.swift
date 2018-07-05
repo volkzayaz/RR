@@ -100,16 +100,15 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.player.removeObserver(self)
     }
 
-
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {
         guard let currentTrack = self.player.currentTrack else { return NSAttributedString() }
 
-        let currentTrackArtistName = currentTrack.artist.name + (traitCollection.horizontalSizeClass == .regular ?  "\n" : " - ")
-        let descriptionAttributedString = NSMutableAttributedString(string: currentTrackArtistName,
+        let currentTrackName = currentTrack.name + (traitCollection.horizontalSizeClass == .regular ?  "\n" : " - ")
+        let descriptionAttributedString = NSMutableAttributedString(string: currentTrackName,
                                                                     attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
 
-        descriptionAttributedString.append(NSAttributedString(string: currentTrack.name,
+        descriptionAttributedString.append(NSAttributedString(string: currentTrack.artist.name,
                                                               attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
                                                                            NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)]))
 
