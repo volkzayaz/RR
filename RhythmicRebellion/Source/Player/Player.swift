@@ -361,6 +361,7 @@ class Player: NSObject, Observable {
     }
 
     @objc func playerItemDidPlayToEndTime(_ notification: Notification) {
+        self.playForward()
     }
 
     // MARK: - KVO Observation
