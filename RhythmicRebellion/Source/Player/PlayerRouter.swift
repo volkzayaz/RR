@@ -57,7 +57,7 @@ final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
 
     func start(controller: PlayerViewController) {
         sourceController = controller
-        let vm = PlayerControllerViewModel(router: self, webSocketService: self.dependencies.webSocketService)
+        let vm = PlayerControllerViewModel(router: self, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
     }
 }

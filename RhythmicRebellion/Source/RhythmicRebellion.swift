@@ -50,4 +50,5 @@ extension SegueCompatible {
 struct RouterDependencies {
     let restApiService: RestApiService
     let webSocketService: WebSocketService
+    let player: Player
 }

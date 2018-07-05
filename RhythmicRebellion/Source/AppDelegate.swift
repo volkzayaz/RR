@@ -31,19 +31,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.setupAppearance()
 
-//        http://player-ngrx2.fan.rebellionretailsite.com/
-//        ws://player-ngrx2.rebellionretailsite.com:3000/
-
-//        http://player-ngrx2.api.rebellionretailsite.com/api/fan/user
-
-//        https://rebels.rhythmic-rebellion.com
-//        wss://ws.rebellion-services.com/
-        let webSocketService = WebSocketService(with: URL(string: "ws://player-ngrx2.rebellionretailsite.com:3000/")!)
-        let restApiService = RestApiService(serverURL: URL(string: "http://player-ngrx2.api.rebellionretailsite.com")!)
+        let webSocketService = WebSocketService(with: URL(string: "ws://new-ngrx.rebellionretailsite.com:3000/")!)
+        let restApiService = RestApiService(serverURL: URL(string: "http://new-ngrx.api.rebellionretailsite.com")!)
+        let player = Player(with: webSocketService)
 
         let appViewController = self.window?.rootViewController as! AppViewController
 
-        let routerDependencies = RouterDependencies(restApiService: restApiService, webSocketService: webSocketService)
+        let routerDependencies = RouterDependencies(restApiService: restApiService, webSocketService: webSocketService, player: player)
         let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
         defaultAppRouter.start(controller: appViewController)
 

@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import Reachability
 
 final class AppControllerViewModel: AppViewModel {
 
@@ -19,8 +20,17 @@ final class AppControllerViewModel: AppViewModel {
     private(set) weak var restApiService: RestApiService?
     private(set) weak var webSocketService: WebSocketService?
 
+    private let reachability: Reachability? = Reachability()
+
     var isPlayerDisclosed: Bool = false
 
+    #if DEBUG
+        let email = "alexander@olearis.com"
+        let password = "ngrx2Fan"
+    #else
+        let email = "alena@olearis.com"
+        let password = "Olearistest1"
+    #endif
     var user: User?
 
     // MARK: - Lifecycle -
@@ -29,39 +39,37 @@ final class AppControllerViewModel: AppViewModel {
         self.router = router
         self.restApiService = restApiService
         self.webSocketService = webSocketService
+
+        self.reachability?.whenReachable = { [unowned self] _ in
+            DispatchQueue.main.async { [unowned self] in
+                guard let user = self.user else { self.login(); return }
+                self.webSocketService?.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+            }
+        }
+        reachability?.whenUnreachable = { [unowned self] _ in
+            DispatchQueue.main.async { [unowned self] in
+
+            }
+        }
     }
 
     func load(with delegate: AppViewModelDelegate) {
         self.delegate = delegate
 
-        #if DEBUG
-            let email = "alexander@olearis.com"
-            let password = "ngrx2Fan"
-        #else
-            let email = "alena@olearis.com"
-            let password = "Olearistest1"
-        #endif
+        _ = try? reachability?.startNotifier()
 
-        self.restApiService?.fanLogin(email: email, password: password, completion: { (user) in
-            self.user = user
-            if let user = user {
-                self.webSocketService?.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+
+    }
+
+    func login() {
+        guard let reachability = self.reachability, reachability.connection != .none else { return }
+
+        self.restApiService?.fanLogin(email: email, password: password, completion: { [weak self] (user) in
+            self?.user = user
+            if let user = self?.user {
+                self?.webSocketService?.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
             }
         })
-
-//        self.restApiService?.getFanUser(completion: { [unowned self] (user) in
-//            self.user = user
-//            if let user = user {
-//
-//                let webSocketToken = "32707f7e47c587a369fbbe3ed123beaa512438a068042c7f3a3f06a0bd1f937c"
-//                //    private let webSocketToken = "f8b5cb700eb684b075d03867019359a0581fe459b4b33673441a2917464929dc"  //Alena
-//
-//                //    private let webSocketToken = "f4dd23e815bb3ece8da32f4b4d4f9dc8d12776ae47a7ce0871db086a49b82744"
-//                //    private let webSocketToken = "f3b77ecd0889aecfdddf31dd7d108a28db4e3303400413bef9a93175f0eddb1b"
-//
-//                self.webSocketService?.connect(with: Token(token: webSocketToken, isGuest: self.user?.isGuest ?? true))
-//            }
-//        })
     }
 
     func togglePlayerDisclosure() {

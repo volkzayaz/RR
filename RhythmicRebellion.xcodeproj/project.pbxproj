@@ -20,6 +20,8 @@
 		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
 		7655476E20EB80DC004AC0BD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655476D20EB80DC004AC0BD /* Token.swift */; };
 		7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655477020EBA5A2004AC0BD /* String+Extension.swift */; };
+		767289C620ED1A13008A86B6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C420ED1A13008A86B6 /* Player.swift */; };
+		767289C720ED1A13008A86B6 /* PlayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C520ED1A13008A86B6 /* PlayList.swift */; };
 		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
 		76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */; };
 		76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA4120DBA8DE00C9191F /* Main.storyboard */; };
@@ -56,6 +58,8 @@
 		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
 		7655476D20EB80DC004AC0BD /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		7655477020EBA5A2004AC0BD /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		767289C420ED1A13008A86B6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		767289C520ED1A13008A86B6 /* PlayList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayList.swift; sourceTree = "<group>"; };
 		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RhythmicRebellion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76F1FA3D20DBA8DE00C9191F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -209,6 +213,8 @@
 		76F1FA6120DBAA2700C9191F /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				767289C420ED1A13008A86B6 /* Player.swift */,
+				767289C520ED1A13008A86B6 /* PlayList.swift */,
 				76F1FA6320DBAEEC00C9191F /* PlayerRouter.swift */,
 				76F1FA6520DBAEEC00C9191F /* PlayerViewModel.swift */,
 				76F1FA6220DBAEEC00C9191F /* PlayerControllerViewModel.swift */,
@@ -247,7 +253,6 @@
 				76F1FA2420DBA88100C9191F /* Frameworks */,
 				76F1FA2520DBA88100C9191F /* Resources */,
 				2616D3E71915AA44E4F4E126 /* [CP] Embed Pods Frameworks */,
-				313865CA6ADEBCA2DCF418E4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -319,31 +324,18 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		313865CA6ADEBCA2DCF418E4 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FEA8E141940AF8FBF6D73CC2 /* [CP] Check Pods Manifest.lock */ = {
@@ -375,6 +367,7 @@
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
 				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,
+				767289C620ED1A13008A86B6 /* Player.swift in Sources */,
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
@@ -391,6 +384,7 @@
 				76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */,
 				7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */,
 				7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */,
+				767289C720ED1A13008A86B6 /* PlayList.swift in Sources */,
 				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,
 				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,

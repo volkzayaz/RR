@@ -12,17 +12,23 @@ import os.log
 
 protocol WebSocketServiceObserver: class {
 
+    func webSocketServiceDidConnect(_ service: WebSocketService)
+    func webSocketServiceDidDisconnect(_ service: WebSocketService)
+
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
     func webSocketService(_ service: WebSocketService, didReceivePlayList playList: [String: PlayListItem])
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId)
+    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
 }
 
 extension WebSocketServiceObserver {
 
+    func webSocketServiceDidConnect(_ service: WebSocketService) { }
+    func webSocketServiceDidDisconnect(_ service: WebSocketService) { }
+
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
     func webSocketService(_ service: WebSocketService, didReceivePlayList playList: [String: PlayListItem]) { }
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId) { }
+    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
 
 }
@@ -35,8 +41,6 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     var webSocket: WebSocket
     var token: Token?
-
-    var trackStateSendDate = Date()
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
@@ -62,12 +66,6 @@ class WebSocketService: WebSocketDelegate, Observable {
         do {
             let jsonData = try JSONEncoder().encode(command)
             self.webSocket.write(data: jsonData, completion: { [weak self] in
-
-                if command.commandType == .currentTrackState {
-                    self?.trackStateSendDate = Date()
-                }
-
-
                 completion?(nil)
             })
         } catch (let error) {
@@ -121,11 +119,9 @@ class WebSocketService: WebSocketDelegate, Observable {
                     })
 
                 case .currentTrackState(let trackState):
-                    if Date().timeIntervalSince(self.trackStateSendDate) > 1.0 {
-                        self.observersContainer.invoke({ (observer) in
-                            observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
-                        })
-                    }
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
+                    })
                 }
             case .faile(let error):
                 print(error)

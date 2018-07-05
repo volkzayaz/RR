@@ -35,7 +35,7 @@ struct WebSocketCommand: Codable {
         case userInit(Token)
         case playListLoadTracks([Track])
         case playListUpdate([String : PlayListItem])
-        case currentTrackId(TrackId)
+        case currentTrackId(TrackId?)
         case currentTrackState(TrackState)
     }
 
@@ -86,7 +86,15 @@ struct WebSocketCommand: Codable {
                 self.data = .unknown
             }
         } catch (let error) {
-            guard let errorData = try container.decodeIfPresent(CommandErrorData.self, forKey: .data) else { throw error }
+            guard let errorData = try container.decodeIfPresent(CommandErrorData.self, forKey: .data) else {
+                switch commandType {
+                case .currentTrackId:
+                    self.data = .success(.currentTrackId(nil))
+                    return
+                default:
+                    throw error
+                }
+            }
             self.data = .faile(errorData)
         }
     }

@@ -11,10 +11,8 @@ import UIKit
 
 protocol PlayerViewModel: class {
 
-    var playerItemDuration: TimeInterval? { get }
     var playerItemDurationString: String { get }
 
-    var playerItemCurrentTime: TimeInterval? { get }
     var playerItemCurrentTimeString: String { get }
 
     var playerItemProgress: Float { get }
