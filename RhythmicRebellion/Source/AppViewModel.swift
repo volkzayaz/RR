@@ -11,6 +11,8 @@ import UIKit
 
 protocol AppViewModel: class {
 
+    var isPlayerDisclosed: Bool { get }
+
     func load(with delegate: AppViewModelDelegate)
 
     func togglePlayerDisclosure()

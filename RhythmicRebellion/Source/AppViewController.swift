@@ -9,6 +9,30 @@
 
 import UIKit
 
+class testView: UIView {
+
+    override var frame: CGRect {
+        set {
+            super.frame = newValue
+        }
+        get {
+            return super.frame
+        }
+    }
+}
+
+class testConstraint: NSLayoutConstraint {
+    override var constant: CGFloat {
+        set {
+            super.constant = constant
+        }
+
+        get {
+            return super.constant
+        }
+    }
+}
+
 final class AppViewController: UIViewController {
 
     @IBOutlet weak var playerContainerView: UIView!
@@ -38,6 +62,32 @@ final class AppViewController: UIViewController {
         super.viewDidLoad()
 
         viewModel.load(with: self)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if self.traitCollection.horizontalSizeClass == .compact {
+            self.playerContainerViewHeightConstraint?.constant = self.viewModel.isPlayerDisclosed ? 118.0 : 74.0
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+
+        if self.traitCollection.horizontalSizeClass == .compact {
+            self.playerContainerViewHeightConstraint?.constant = self.viewModel.isPlayerDisclosed ? 118.0 : 74.0
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        print("self.playerContainerView: \(self.playerContainerView)")
+        print("self.playerContainerViewHeightConstraint: \(self.playerContainerViewHeightConstraint)")
+
     }
 
     // MARK: - Actions -
@@ -75,7 +125,7 @@ extension AppViewController: AppViewModelDelegate {
         let playerMenuButtonImageViewTransform = isDisclosed ? CGAffineTransform(rotationAngle: .pi) : CGAffineTransform(rotationAngle: .pi - 3.14159)
         let playerMenuButtonBackgroundColor = isDisclosed ?  #colorLiteral(red: 0.07252354175, green: 0.03960485011, blue: 0.2421343923, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
         let playerMenuButtonTintColor = isDisclosed ? #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1) : #colorLiteral(red: 0.07252354175, green: 0.03960485011, blue: 0.2421343923, alpha: 1)
-        self.playerContainerViewHeightConstraint?.constant = isDisclosed ? 118.0 : 74
+        self.playerContainerViewHeightConstraint?.constant = isDisclosed ? 118.0 : 74.0
 
         UIView.animate(withDuration: 0.25, animations: {
             self.view.layoutIfNeeded()
