@@ -19,6 +19,15 @@ public enum PlayerStatus : Int {
     case failed
 }
 
+public enum PlayerInitializationAction : Int {
+
+    case none
+    case playCurrent
+    case pause
+    case playForward
+    case playBackward
+}
+
 protocol PlayerObserver: class {
 
     func player(player: Player, didChangeStatus status: PlayerStatus)
@@ -50,15 +59,18 @@ class Player: NSObject, Observable {
     var currentTrackId: TrackId?
     var currentTrack: Track?
     var currentTrackState: TrackState?
-    var isMasterStateSendDate = Date(timeIntervalSinceNow: -1)
 
-    private(set) var status: PlayerStatus = .unknown
     private let stateHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
-
     var isMaster: Bool {
         guard let currentTrackState = self.currentTrackState else { return false }
         return currentTrackState.hash == self.stateHash
     }
+    private var isMasterStateSendDate = Date(timeIntervalSinceNow: -1)
+
+    private(set) var status: PlayerStatus = .unknown
+    private(set) var initializationAction: PlayerInitializationAction = .none
+
+    private var playBackgroundTaskIdentifier: UIBackgroundTaskIdentifier?
 
     @objc private var player = AVPlayer()
     var timeObserverToken: Any?
@@ -105,7 +117,7 @@ class Player: NSObject, Observable {
             self.updateCurrentTrackState(with: timeElapsed)
         }
 
-
+        self.setupMPRemoteCommands()
     }
 
     deinit {
@@ -124,10 +136,42 @@ class Player: NSObject, Observable {
         self.webSocketService.removeObserver(self)
     }
 
+    func performeInitializationAction() {
+
+        var actionCompletion: (() -> ())? = nil
+        if self.playBackgroundTaskIdentifier != nil {
+            actionCompletion = { [weak self] in
+                if let playBackgroundTaskIdentifier = self?.playBackgroundTaskIdentifier {
+                    UIApplication.shared.endBackgroundTask(playBackgroundTaskIdentifier)
+                    self?.playBackgroundTaskIdentifier = nil
+                }
+            }
+        }
+
+        switch self.initializationAction {
+        case .playCurrent: self.play(completion: actionCompletion)
+        case .playForward: self.playForward(completion: actionCompletion)
+        case .playBackward: self.playBackward(completion: actionCompletion)
+        case .pause: self.pause(completion: actionCompletion)
+        case .none: break
+        }
+    }
+
     func updateStatus(status: PlayerStatus) {
         guard self.status != status else { return }
 
         self.status = status
+
+        switch status {
+        case .initialized:
+            self.updateMPRemoteInfo()
+            if self.initializationAction != .none {
+                self.performeInitializationAction()
+                self.initializationAction = .none
+            }
+
+        default: break
+        }
 
         self.observersContainer.invoke({ (observer) in
             observer.player(player: self, didChangeStatus: self.status)
@@ -141,24 +185,11 @@ class Player: NSObject, Observable {
             self.currentTrackState = currentTrackState
         }
 
-        self.updateMediaPlayerInfo()
+        self.updateMPRemoteInfo()
 
         self.observersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItemCurrentTime: timeElapsed)
         })
-    }
-
-    func updateMediaPlayerInfo() {
-        if let playerItem = self.player.currentItem {
-//            var nowPlayingInfo = [String : Any]()
-//            nowPlayingInfo[MPMediaItemPropertyTitle] = self.currentTrack?.name
-//            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerItem.currentTime().seconds
-//            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = playerItem.asset.duration.seconds
-//            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate
-//
-//            // Set the metadata
-//            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        }
     }
 
     func findPlayableTrack(after trackId: TrackId) -> Track? {
@@ -210,59 +241,61 @@ class Player: NSObject, Observable {
             self.player.replaceCurrentItem(with: playerItem)
         }
 
-        self.updateMediaPlayerInfo()
+        self.updateMPRemoteInfo()
     }
 
 
     // MARK: - Actions
-    func play() {
-        guard self.status == .initialized else { return }
-        guard let currentTrack = self.currentTrack else { return }
-        guard self.playerCurrentItem != nil else { return }
+    func play(completion: (() -> ())? = nil) {
+        guard self.status == .initialized, let currentTrack = self.currentTrack, self.playerCurrentItem != nil else {
+            completion?()
+            return
+        }
 
         if self.currentTrackId == nil {
             if let trackId = self.playlist.trackId(for: currentTrack) {
                 let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: true)
                 self.sendTrackId(trackId: trackId, trackState: trackState) { [weak self] (error) in
-                    guard let strongSelf = self, error == nil else { return }
+                    guard let strongSelf = self, error == nil else { completion?(); return }
 
                     strongSelf.shouldStartPlay = true
                     strongSelf.currentTrackId = trackId
                     strongSelf.currentTrackState = trackState
                     strongSelf.player.play()
+                    completion?()
                 }
             }
         } else if let currentTrackState = self.currentTrackState {
 
             let trackState = TrackState(hash: self.stateHash, progress: currentTrackState.progress, isPlaying: true)
             self.sendTrackState(trackState: trackState) { [weak self] (error) in
-                guard let strongSelf = self, error == nil else { return }
+                guard let strongSelf = self, error == nil else { completion?(); return }
 
                 strongSelf.currentTrackState = trackState
 
                 let time = CMTime(seconds: Double(currentTrackState.progress), preferredTimescale: Int32(kCMTimeMaxTimescale))
                 strongSelf.player.currentItem?.seek(to: time, completionHandler: { [weak self] (success) in
-                    guard success == true else { return }
+                    guard success == true else { completion?(); return }
                     self?.shouldStartPlay = true
                     self?.player.play()
+                    completion?()
                 })
             }
         } else {
             let trackState = TrackState(hash: self.stateHash, progress:0.0, isPlaying: true)
             self.sendTrackState(trackState: trackState) { [weak self] (error) in
-                guard let strongSelf = self, error == nil else { return }
+                guard let strongSelf = self, error == nil else { completion?(); return }
 
                 strongSelf.currentTrackState = trackState
                 strongSelf.shouldStartPlay = true
                 strongSelf.player.play()
+                completion?()
             }
         }
     }
 
-    func pause() {
-        guard self.status == .initialized else { return }
-        guard self.playerCurrentItem != nil else { return }
-
+    func pause(completion: (() -> ())? = nil) {
+        guard self.status == .initialized, self.playerCurrentItem != nil else { completion?(); return }
 
         self.player.pause()
         self.shouldStartPlay = false
@@ -270,46 +303,49 @@ class Player: NSObject, Observable {
         let playerCurrentItemCurrentTime = self.currentTrackState?.progress ?? 0.0
         let trackState = TrackState(hash: self.stateHash, progress: playerCurrentItemCurrentTime, isPlaying: false)
         self.sendTrackState(trackState: trackState) { [weak self] (error) in
-            guard let strongSelf = self, error == nil else { return }
+            guard let strongSelf = self, error == nil else { completion?(); return }
 
             strongSelf.currentTrackState = trackState
             strongSelf.observersContainer.invoke({ (observer) in
                 observer.player(player: strongSelf, didChangePlayState: trackState.isPlaying)
             })
 
+            completion?()
         }
     }
 
-    func playForward() {
+    func playForward(completion: (() -> ())? = nil) {
         guard let currentTrack = self.currentTrack,
             let currentTrackId = self.playlist.trackId(for: currentTrack),
             let nextTrack = self.findPlayableTrack(after: currentTrackId),
-            let nextTrackId = self.playlist.trackId(for: nextTrack) else { return }
+            let nextTrackId = self.playlist.trackId(for: nextTrack) else { completion?(); return }
 
 
         let isPlaying = self.isPlaying
         let playerCurrentItemCurrentTime = self.playerCurrentItemCurrentTime ?? 0.0
         let trackState = TrackState(hash: self.stateHash, progress: playerCurrentItemCurrentTime, isPlaying: false)
         self.sendTrackState(trackState: trackState) { [weak self] (error) in
-            guard let strongSelf = self, error == nil else { return }
+            guard let strongSelf = self, error == nil else { completion?(); return }
 
             let nextTrackState = TrackState(hash: strongSelf.stateHash, progress: 0.0, isPlaying: isPlaying)
             strongSelf.sendTrackId(trackId: nextTrackId, trackState: nextTrackState, completion: { [weak self] (error) in
-                guard let strongSelf = self, error == nil else { return }
+                guard let strongSelf = self, error == nil else { completion?(); return }
 
                 strongSelf.currentTrackId = nextTrackId
                 strongSelf.currentTrackState = nextTrackState
                 strongSelf.shouldStartPlay = isPlaying
                 strongSelf.prepareToPlay(track: nextTrack)
+                if isPlaying { strongSelf.player.play() }
+                completion?();
             })
         }
     }
 
-    func playBackward() {
+    func playBackward(completion: (() -> ())? = nil) {
         guard let currentTrack = self.currentTrack,
             let currentTrackId = self.playlist.trackId(for: currentTrack),
             let previousTrack = self.findPlayableTrack(before: currentTrackId),
-            let previousTrackId = self.playlist.trackId(for: previousTrack) else { return }
+            let previousTrackId = self.playlist.trackId(for: previousTrack) else { completion?(); return }
 
 
         let isPlaying = self.isPlaying
@@ -318,11 +354,11 @@ class Player: NSObject, Observable {
         if playerCurrentItemCurrentTime > TimeInterval(3.0) {
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
             self.sendTrackState(trackState: trackState) { [weak self] (error) in
-                guard let strongSelf = self, error == nil else { return }
+                guard let strongSelf = self, error == nil else { completion?(); return }
 
                 strongSelf.currentTrackState = trackState
 
-                strongSelf.updateMediaPlayerInfo()
+                strongSelf.updateMPRemoteInfo()
 
                 strongSelf.observersContainer.invoke({ (observer) in
                     observer.player(player: strongSelf, didChangePlayerItemCurrentTime: trackState.progress)
@@ -330,26 +366,29 @@ class Player: NSObject, Observable {
 
                 let time = CMTime(seconds: Double(0.0), preferredTimescale: Int32(kCMTimeMaxTimescale))
                 strongSelf.player.currentItem?.seek(to: time, completionHandler: { [weak self] (success) in
-                    guard success == true else { return }
+                    guard success == true else { completion?(); return }
 
                     self?.shouldStartPlay = isPlaying
                     if isPlaying { self?.player.play() }
+                    completion?()
                 })
             }
         } else {
 
             let trackState = TrackState(hash: self.stateHash, progress: playerCurrentItemCurrentTime, isPlaying: false)
             self.sendTrackState(trackState: trackState) { [weak self] (error) in
-                guard let strongSelf = self, error == nil else { return }
+                guard let strongSelf = self, error == nil else { completion?(); return }
 
                 let previousTrackState = TrackState(hash: strongSelf.stateHash, progress: 0.0, isPlaying: isPlaying)
                 strongSelf.sendTrackId(trackId: previousTrackId, trackState: previousTrackState, completion: { [weak self] (error) in
-                    guard let strongSelf = self, error == nil else { return }
+                    guard let strongSelf = self, error == nil else { completion?(); return }
 
                     strongSelf.currentTrackId = previousTrackId
                     strongSelf.currentTrackState = previousTrackState
                     strongSelf.shouldStartPlay = isPlaying
                     strongSelf.prepareToPlay(track: previousTrack)
+                    if isPlaying { strongSelf.player.play() }
+                    completion?()
                 })
             }
         }
@@ -379,6 +418,7 @@ class Player: NSObject, Observable {
     func observePlayerValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?) {
 
         if keyPath == #keyPath(Player.player.rate) {
+
             self.observersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayState: self.player.rate == 1.0)
             })
@@ -405,6 +445,10 @@ class Player: NSObject, Observable {
 }
 
 extension Player: WebSocketServiceObserver {
+
+    func webSocketServiceDidDisconnect(_ service: WebSocketService) {
+        self.updateStatus(status: .unknown)
+    }
 
     func webSocketServiceDidConnect(_ service: WebSocketService) {
         self.updateStatus(status: .unknown)
@@ -490,6 +534,93 @@ extension Player {
             completion?(nil)
         }
 
+    }
+}
+
+extension Player {
+
+    func setupMPRemoteCommands() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+
+        commandCenter.playCommand.addTarget { [weak self] event in
+
+            guard self?.status == .initialized else {
+                if self?.webSocketService.isReachable == true {
+                    self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                    self?.initializationAction = .playCurrent
+                    return .success                    
+                }
+                return .noActionableNowPlayingItem }
+
+            if self?.player.rate == 0.0 {
+                self?.play()
+                return .success
+            }
+
+            return .commandFailed
+        }
+
+        commandCenter.pauseCommand.addTarget { [weak self] event in
+
+            guard self?.status == .initialized else {
+                if self?.webSocketService.isReachable == true {
+                    self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                    self?.initializationAction = .pause
+                    return .success
+                }
+                return .noActionableNowPlayingItem }
+
+            if self?.player.rate == 1.0 {
+                self?.pause()
+                return .success
+            }
+
+            return .commandFailed
+        }
+
+        commandCenter.nextTrackCommand.addTarget { [weak self] event in
+
+            guard self?.status == .initialized else {
+                if self?.webSocketService.isReachable == true {
+                    self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                    self?.initializationAction = .playForward
+                    return .success
+                }
+                return .noActionableNowPlayingItem }
+
+            self?.playForward()
+
+            return .success
+        }
+
+        commandCenter.previousTrackCommand.addTarget { [weak self] event in
+
+            guard self?.status == .initialized else {
+                if self?.webSocketService.isReachable == true {
+                    self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                    self?.initializationAction = .playBackward
+                    return .success
+                }
+                return .noActionableNowPlayingItem }
+
+            self?.playBackward()
+
+            return .success
+        }
+
+    }
+
+    func updateMPRemoteInfo() {
+        if let playerItem = self.player.currentItem {
+            var nowPlayingInfo = [String : Any]()
+            nowPlayingInfo[MPMediaItemPropertyTitle] = self.currentTrack?.name
+            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerItem.currentTime().seconds
+            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = playerItem.asset.duration.seconds
+            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate
+
+            // Set the metadata
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        }
     }
 }
 

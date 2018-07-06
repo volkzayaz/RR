@@ -42,13 +42,14 @@ final class AppControllerViewModel: AppViewModel {
 
         self.reachability?.whenReachable = { [unowned self] _ in
             DispatchQueue.main.async { [unowned self] in
+                self.webSocketService?.isReachable = true
                 guard let user = self.user else { self.login(); return }
                 self.webSocketService?.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
             }
         }
         reachability?.whenUnreachable = { [unowned self] _ in
             DispatchQueue.main.async { [unowned self] in
-
+                self.webSocketService?.isReachable = false
             }
         }
     }

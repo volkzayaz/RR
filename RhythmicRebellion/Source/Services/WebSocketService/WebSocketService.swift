@@ -42,6 +42,8 @@ class WebSocketService: WebSocketDelegate, Observable {
     var webSocket: WebSocket
     var token: Token?
 
+    var isReachable: Bool = true
+
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
     init(with url: URL) {
@@ -75,16 +77,27 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     // MARK: - WebSocketDelegate -
     public func websocketDidConnect(socket: WebSocketClient) {
-        guard let token = self.token else { return }
-        let initialCommand = WebSocketCommand.initialCommand(token: token)
-        self.sendCommand(command: initialCommand)
+
+        if let token = self.token {
+            let initialCommand = WebSocketCommand.initialCommand(token: token)
+            self.sendCommand(command: initialCommand)
+        }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.webSocketServiceDidConnect(self)
+        })
     }
 
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocketDidDisconnect: \(String(describing: error))")
 
-        self.webSocket.connect()
+        self.observersContainer.invoke({ (observer) in
+            observer.webSocketServiceDidDisconnect(self)
+        })
 
+        if self.isReachable {
+            self.webSocket.connect()
+        }
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {

@@ -47,8 +47,6 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.player = player
 
         super.init()
-
-        self.player.addObserver(self)
     }
 
     deinit {
@@ -57,39 +55,6 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func load(with delegate: PlayerViewModelDelegate) {
         self.delegate = delegate
-
-
-//        let commandCenter = MPRemoteCommandCenter.shared()
-//
-//        // Add handler for Play Command
-//        commandCenter.playCommand.addTarget { [unowned self] event in
-//
-//            print("webSocketIsConnected: \(self.webSocketService.webSocket.isConnected)")
-//
-//            if self.player.rate == 0.0 {
-//                self.shouldStartPlay = true
-//                self.player.play()
-//
-//                return .success
-//            }
-//            return .commandFailed
-//        }
-//
-//        // Add handler for Pause Command
-//        commandCenter.pauseCommand.addTarget { [unowned self] event in
-//            if self.player.rate == 1.0 {
-//                self.player.pause()
-//                self.shouldStartPlay = false
-//                return .success
-//            }
-//            return .commandFailed
-//        }
-//
-//        commandCenter.nextTrackCommand.addTarget { [unowned self] event in
-//
-//            self.forward()
-//            return .success
-//        }
     }
 
     func startObservePlayer() {

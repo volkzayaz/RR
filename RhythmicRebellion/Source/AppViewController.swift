@@ -82,14 +82,6 @@ final class AppViewController: UIViewController {
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        print("self.playerContainerView: \(self.playerContainerView)")
-        print("self.playerContainerViewHeightConstraint: \(self.playerContainerViewHeightConstraint)")
-
-    }
-
     // MARK: - Actions -
     @IBAction func onPlayerDisclosureButton(sender: UIButton) {
         self.viewModel.togglePlayerDisclosure()
