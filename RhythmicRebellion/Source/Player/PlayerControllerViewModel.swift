@@ -31,6 +31,28 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         return Float(playerItemCurrentTime / playerItemDuration)
     }
 
+    var playerItemNameString: String {
+        guard let currentTrack = self.player.currentTrack else { return "" }
+        return currentTrack.name
+    }
+
+    var playerItemNameAttributedString: NSAttributedString {
+        return NSMutableAttributedString(string: self.playerItemNameString,
+                                         attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
+                                                      NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
+    }
+
+    var playerItemArtistNameString: String {
+        guard let currentTrack = self.player.currentTrack else { return "" }
+        return currentTrack.artist.name
+    }
+
+    var playerItemArtistNameAttributedString: NSAttributedString {
+        return NSAttributedString(string: self.playerItemArtistNameString,
+                                  attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
+                                               NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
+    }
+
     var isPlaying: Bool { return self.player.isPlaying }
 
     // MARK: - Private properties -
@@ -74,7 +96,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
 
         descriptionAttributedString.append(NSAttributedString(string: currentTrack.artist.name,
-                                                              attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
+                                                              attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 0.96),
                                                                            NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)]))
 
         return descriptionAttributedString

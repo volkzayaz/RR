@@ -17,6 +17,12 @@ protocol PlayerViewModel: class {
 
     var playerItemProgress: Float { get }
 
+    var playerItemNameString: String { get }
+    var playerItemNameAttributedString: NSAttributedString { get }
+
+    var playerItemArtistNameString: String { get }
+    var playerItemArtistNameAttributedString: NSAttributedString { get }
+
     var isPlaying: Bool { get }
 
     func load(with delegate: PlayerViewModelDelegate)
@@ -30,8 +36,6 @@ protocol PlayerViewModel: class {
     func pause()
     func forward()
     func backward()
-
-
 }
 
 protocol PlayerViewModelDelegate: class {

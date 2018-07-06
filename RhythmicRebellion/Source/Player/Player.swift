@@ -632,9 +632,10 @@ extension Player {
     }
 
     func updateMPRemoteInfo() {
-        if let playerItem = self.player.currentItem {
+        if let playerItem = self.player.currentItem, let currentTrack = self.currentTrack {
             var nowPlayingInfo = [String : Any]()
-            nowPlayingInfo[MPMediaItemPropertyTitle] = self.currentTrack?.name
+
+            nowPlayingInfo[MPMediaItemPropertyTitle] = currentTrack.name + " - " + currentTrack.artist.name
             nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerItem.currentTime().seconds
             nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = playerItem.asset.duration.seconds
             nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate

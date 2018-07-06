@@ -11,7 +11,9 @@ import UIKit
 
 final class PlayerViewController: UIViewController {
 
-    @IBOutlet weak var playerItemDescriptionLabel: UILabel!
+    @IBOutlet weak var playerItemNameLabel: UILabel!
+    @IBOutlet weak var playerItemNameSeparatorLabel: UILabel!
+    @IBOutlet weak var playerItemArtistNameLabel: UILabel!
 
     @IBOutlet weak var playerItemCurrentTimeLabel: UILabel!
     @IBOutlet weak var playerItemDurationLabel: UILabel!
@@ -61,8 +63,6 @@ final class PlayerViewController: UIViewController {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
-        self.playerItemDescriptionLabel.numberOfLines = self.traitCollection.horizontalSizeClass == .regular ? 2 : 1
         self.refreshUI()
     }
 
@@ -126,7 +126,11 @@ extension PlayerViewController: PlayerViewModelDelegate {
     func refreshUI() {
         guard self.isViewLoaded == true else { return }
 
-        self.playerItemDescriptionLabel.attributedText = self.viewModel.playerItemDescriptionAttributedText(for: self.traitCollection)
+        self.playerItemNameLabel.text = self.viewModel.playerItemNameString
+        self.playerItemArtistNameLabel.text = self.viewModel.playerItemArtistNameString
+
+        self.playerItemNameSeparatorLabel.isHidden = self.playerItemNameLabel.text?.isEmpty ?? true || self.playerItemArtistNameLabel.text?.isEmpty ?? true
+
         self.playerItemDurationLabel.text = self.viewModel.playerItemDurationString
 
         self.refreshProgressUI()
