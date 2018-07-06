@@ -253,6 +253,7 @@ class Player: NSObject, Observable {
         }
 
         if self.currentTrackId == nil {
+
             if let trackId = self.playlist.trackId(for: currentTrack) {
                 let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: true)
                 self.sendTrackId(trackId: trackId, trackState: trackState) { [weak self] (error) in
@@ -282,6 +283,7 @@ class Player: NSObject, Observable {
                 })
             }
         } else {
+
             let trackState = TrackState(hash: self.stateHash, progress:0.0, isPlaying: true)
             self.sendTrackState(trackState: trackState) { [weak self] (error) in
                 guard let strongSelf = self, error == nil else { completion?(); return }
@@ -468,7 +470,7 @@ extension Player: WebSocketServiceObserver {
         switch self.status {
         case .unknown:
                 self.playlist.reset(playListItems: playListItems)
-                if let firstTrackId = self.playlist.firstTrackId {
+                if self.currentTrackId == nil,  let firstTrackId = self.playlist.firstTrackId {
                     self.prepareToPlay(trackId: firstTrackId)
                 }
 
@@ -479,7 +481,7 @@ extension Player: WebSocketServiceObserver {
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
 
-        if let trackId = trackId {
+        if let trackId = trackId, self.currentTrackId?.id != trackId.id {
             self.currentTrackId = trackId
             self.prepareToPlay(trackId: trackId)
         }
