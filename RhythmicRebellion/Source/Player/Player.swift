@@ -81,7 +81,7 @@ class Player: NSObject, Observable {
     var playerCurrentItem: AVPlayerItem? { return self.player.currentItem }
     var playerCurrentItemDuration: TimeInterval? {
         guard let duration = self.playerCurrentItem?.duration, duration.value != 0 else { return nil }
-        return TimeInterval(CMTimeGetSeconds(duration))
+        return TimeInterval(CMTimeGetSeconds(duration)).rounded(.towardZero)
     }
     var playerCurrentItemCurrentTime: TimeInterval? {
         guard let currentTrackState = self.currentTrackState else { return nil }
