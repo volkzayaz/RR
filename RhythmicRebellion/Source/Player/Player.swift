@@ -99,12 +99,17 @@ class Player: NSObject, Observable {
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterrupted(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+
+        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionRouteChange(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             let _ = try AVAudioSession.sharedInstance().setActive(true)
         } catch let error as NSError {
             print("an error occurred when audio session category.\n \(error)")
         }
+
+
 
         addObserver(self, forKeyPath: #keyPath(Player.player.rate), options: [.new, .initial], context: &playerKVOContext)
         addObserver(self, forKeyPath: #keyPath(Player.player.currentItem), options: [.new, .initial], context: &playerKVOContext)
@@ -403,6 +408,20 @@ class Player: NSObject, Observable {
 
     @objc func playerItemDidPlayToEndTime(_ notification: Notification) {
         self.playForward()
+    }
+
+    @objc func audioSessionRouteChange(_ notification: Notification) {
+
+        if let notificationUserInfo = notification.userInfo {
+            if let audioSessionRouteChangeReason = AVAudioSessionRouteChangeReason(rawValue: notificationUserInfo[AVAudioSessionRouteChangeReasonKey] as? UInt ?? 0) {
+
+                switch audioSessionRouteChangeReason {
+                case .oldDeviceUnavailable:
+                    if self.shouldStartPlay { DispatchQueue.main.async { self.player.play() } }
+                default: break
+                }
+            }
+        }
     }
 
     // MARK: - KVO Observation
