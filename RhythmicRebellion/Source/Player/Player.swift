@@ -67,6 +67,11 @@ class Player: NSObject, Observable {
     }
     private var isMasterStateSendDate = Date(timeIntervalSinceNow: -1)
 
+    var playerCurrentTrackDuration: TimeInterval? {
+        guard let audioFile = self.currentTrack?.audioFile else { return nil }
+        return TimeInterval(audioFile.duration)
+    }
+
     private(set) var status: PlayerStatus = .unknown
     private(set) var initializationAction: PlayerInitializationAction = .none
 

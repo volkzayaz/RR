@@ -15,7 +15,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     // MARK: - Public properties -
     var playerItemDurationString: String {
-        guard let playerItemDuration = self.player.playerCurrentItemDuration else { return "--:--"}
+        guard let playerItemDuration = self.player.playerCurrentTrackDuration else { return "--:--"}
         return playerItemDuration.stringFormatted();
     }
     
