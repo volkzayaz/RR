@@ -89,7 +89,7 @@ class Player: NSObject, Observable {
         return TimeInterval(CMTimeGetSeconds(duration)).rounded(.towardZero)
     }
     var playerCurrentItemCurrentTime: TimeInterval? {
-        guard let currentTrackState = self.currentTrackState else { return nil }
+        guard let currentTrackState = self.currentTrackState else { return self.currentTrack != nil ? 0.0 : nil }
         return currentTrackState.progress
     }
 
@@ -507,6 +507,9 @@ extension Player: WebSocketServiceObserver {
 
         if let trackId = trackId, self.currentTrackId?.id != trackId.id {
             self.currentTrackId = trackId
+            self.player.pause()
+            self.shouldStartPlay = false
+            self.currentTrackState = nil
             self.prepareToPlay(trackId: trackId)
         }
 
