@@ -12,6 +12,7 @@ class PlayList {
 
     private(set) var tracks = [Track]()
     private(set) var playListItems = [String : PlayListItem]()
+    private(set) var tracksAddons = [Int : [Addon]]()
 
     var firstTrackId: TrackId? {
         guard let firstPlayListItem = self.playListItems.filter( { return $0.value.previousTrackKey == nil }).first else { return nil }
@@ -36,7 +37,11 @@ class PlayList {
     }
 
     func add(playListItems: [String : PlayListItem]) {
+        self.playListItems += playListItems
+    }
 
+    func add(tracksAddons: [Int : [Addon]]) {
+        self.tracksAddons += tracksAddons
     }
 
     func track(for trackId: TrackId) -> Track? {
@@ -74,5 +79,10 @@ class PlayList {
         }
 
         return nil
+    }
+
+    func addons(for track: Track) -> [Addon]? {
+
+        return self.tracksAddons[track.id]
     }
 }

@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */; };
+		76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DC820F5E91100140D03 /* RestApiResponse.swift */; };
+		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
+		76310DCD20F6252200140D03 /* AddonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCC20F6252200140D03 /* AddonState.swift */; };
+		76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCE20F6343A00140D03 /* CheckAddons.swift */; };
 		7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961120E2615F00BF1F79 /* WebSocketService.swift */; };
 		7650961520E3A15D00BF1F79 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961420E3A15D00BF1F79 /* Track.swift */; };
 		7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961620E3A8C600BF1F79 /* AudioFile.swift */; };
@@ -22,6 +26,8 @@
 		7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655477020EBA5A2004AC0BD /* String+Extension.swift */; };
 		767289C620ED1A13008A86B6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C420ED1A13008A86B6 /* Player.swift */; };
 		767289C720ED1A13008A86B6 /* PlayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C520ED1A13008A86B6 /* PlayList.swift */; };
+		768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */; };
+		768EC2CB20F4FB1000629F1B /* Addon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768EC2CA20F4FB1000629F1B /* Addon.swift */; };
 		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
 		76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */; };
 		76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA4120DBA8DE00C9191F /* Main.storyboard */; };
@@ -46,6 +52,10 @@
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66178C740DE1BEC2147F6CD6 /* Pods-RhythmicRebellion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.debug.xcconfig"; sourceTree = "<group>"; };
 		761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
+		76310DC820F5E91100140D03 /* RestApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiResponse.swift; sourceTree = "<group>"; };
+		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
+		76310DCC20F6252200140D03 /* AddonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddonState.swift; sourceTree = "<group>"; };
+		76310DCE20F6343A00140D03 /* CheckAddons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAddons.swift; sourceTree = "<group>"; };
 		7650961120E2615F00BF1F79 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		7650961420E3A15D00BF1F79 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		7650961620E3A8C600BF1F79 /* AudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFile.swift; sourceTree = "<group>"; };
@@ -60,6 +70,8 @@
 		7655477020EBA5A2004AC0BD /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		767289C420ED1A13008A86B6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		767289C520ED1A13008A86B6 /* PlayList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayList.swift; sourceTree = "<group>"; };
+		768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
+		768EC2CA20F4FB1000629F1B /* Addon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Addon.swift; sourceTree = "<group>"; };
 		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RhythmicRebellion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76F1FA3D20DBA8DE00C9191F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -106,8 +118,8 @@
 		761B6CB920EB56000019A71D /* WebSocketService */ = {
 			isa = PBXGroup;
 			children = (
-				7650961820E3B35000BF1F79 /* WebSocketCommand.swift */,
 				7650961120E2615F00BF1F79 /* WebSocketService.swift */,
+				7650961820E3B35000BF1F79 /* WebSocketCommand.swift */,
 			);
 			path = WebSocketService;
 			sourceTree = "<group>";
@@ -117,6 +129,7 @@
 			children = (
 				7655477020EBA5A2004AC0BD /* String+Extension.swift */,
 				761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */,
+				768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -124,8 +137,8 @@
 		7650960F20E2593F00BF1F79 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				768EC2C420F4DA2600629F1B /* RestApiService */,
 				761B6CB920EB56000019A71D /* WebSocketService */,
-				7650962420E662D100BF1F79 /* RestApiService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -139,10 +152,23 @@
 				7650961E20E4E45000BF1F79 /* TrackState.swift */,
 				7650961620E3A8C600BF1F79 /* AudioFile.swift */,
 				7650961A20E4DC7800BF1F79 /* Artist.swift */,
-				76DB5ABC20E684A60008D2FE /* User.swift */,
 				7655476D20EB80DC004AC0BD /* Token.swift */,
+				76DB5ABC20E684A60008D2FE /* User.swift */,
+				768EC2CA20F4FB1000629F1B /* Addon.swift */,
+				76310DCC20F6252200140D03 /* AddonState.swift */,
+				76310DCE20F6343A00140D03 /* CheckAddons.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		768EC2C420F4DA2600629F1B /* RestApiService */ = {
+			isa = PBXGroup;
+			children = (
+				7650962420E662D100BF1F79 /* RestApiService.swift */,
+				76310DC820F5E91100140D03 /* RestApiResponse.swift */,
+				76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */,
+			);
+			path = RestApiService;
 			sourceTree = "<group>";
 		};
 		76F1FA1E20DBA88100C9191F = {
@@ -364,14 +390,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				7650962320E5238100BF1F79 /* PlayListItem.swift in Sources */,
+				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
 				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,
 				767289C620ED1A13008A86B6 /* Player.swift in Sources */,
+				76310DCD20F6252200140D03 /* AddonState.swift in Sources */,
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
+				768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */,
 				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
+				76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */,
 				76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */,
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				76F1FA6020DBA9FF00C9191F /* AppViewModel.swift in Sources */,
@@ -385,11 +415,13 @@
 				7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */,
 				7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */,
 				767289C720ED1A13008A86B6 /* PlayList.swift in Sources */,
+				76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */,
 				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,
 				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,
 				76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */,
 				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
+				768EC2CB20F4FB1000629F1B /* Addon.swift in Sources */,
 				7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */,
 				761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */,
 			);

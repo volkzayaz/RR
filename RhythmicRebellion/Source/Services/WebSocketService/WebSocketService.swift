@@ -43,13 +43,14 @@ class WebSocketService: WebSocketDelegate, Observable {
     var token: Token?
 
     var isReachable: Bool = true
+    var isConnected: Bool { return self.webSocket.isConnected }
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
     init(with url: URL) {
 
         var request = URLRequest(url: url)
-        request.timeoutInterval = 1
+        request.timeoutInterval = 5
 
         self.webSocket = WebSocket(request: request)
         self.webSocket.delegate = self
@@ -61,6 +62,14 @@ class WebSocketService: WebSocketDelegate, Observable {
         print("self.token: \(self.token)")
 
         self.webSocket.connect()
+    }
+
+    func reconnect() {
+        self.webSocket.connect()
+    }
+
+    func disconnect() {
+        self.webSocket.disconnect()
     }
 
     func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {
@@ -94,10 +103,6 @@ class WebSocketService: WebSocketDelegate, Observable {
         self.observersContainer.invoke({ (observer) in
             observer.webSocketServiceDidDisconnect(self)
         })
-
-        if self.isReachable {
-            self.webSocket.connect()
-        }
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -117,6 +122,9 @@ class WebSocketService: WebSocketDelegate, Observable {
                     break
 
                 case .playListLoadTracks(let tracks):
+
+//                    print("LoadTracksCommand: \(text)")
+
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTracks: tracks)
                     })
@@ -135,8 +143,15 @@ class WebSocketService: WebSocketDelegate, Observable {
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
                     })
+
+                case .checkAddons(let checkAddons):
+                    print("checkAddons: \(checkAddons)")
+
+                case .playAddon(let addonState):
+                    print("addinState: \(addonState)")
                 }
-            case .faile(let error):
+
+            case .failure(let error):
                 print(error)
 
             case .unknown:

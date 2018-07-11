@@ -53,6 +53,7 @@ class Player: NSObject, Observable {
 
     let observersContainer = ObserversContainer<PlayerObserver>()
 
+    private let restApiService: RestApiService
     private let webSocketService: WebSocketService
 
     let playlist: PlayList = PlayList()
@@ -94,7 +95,8 @@ class Player: NSObject, Observable {
     }
 
 
-    init(with webSocketService: WebSocketService) {
+    init(restApiService: RestApiService, webSocketService: WebSocketService) {
+        self.restApiService = restApiService
         self.webSocketService = webSocketService
 
         super.init()
@@ -113,7 +115,6 @@ class Player: NSObject, Observable {
         } catch let error as NSError {
             print("an error occurred when audio session category.\n \(error)")
         }
-
 
 
         addObserver(self, forKeyPath: #keyPath(Player.player.rate), options: [.new, .initial], context: &playerKVOContext)
@@ -243,6 +244,21 @@ class Player: NSObject, Observable {
     func prepareToPlay(track: Track) {
 
         self.currentTrack = track
+
+        guard let trackAddons = self.playlist.addons(for: track) else {
+            self.restApiService.audioAddons(for: [track.id]) { response in
+
+                switch response {
+                case .success(let addons):
+                    self.playlist.add(tracksAddons: addons)
+                    
+
+                case .failure(let error): print("Error: \(error)")
+                }
+            }
+            return
+        }
+
 
         guard let audioFile = track.audioFile, let playItemURL = URL(string: audioFile.urlString) else { return }
         let playerItem = AVPlayerItem(url: playItemURL)

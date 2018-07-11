@@ -28,6 +28,8 @@ struct WebSocketCommand: Codable {
         case playListUpdate = "playlist-update"
         case currentTrackId = "currentTrack-setTrack"
         case currentTrackState = "currentTrack-setState"
+        case checkAddons = "addons-checkAddons"
+        case playAddon = "addons-playAddon"
         case unknown
     }
 
@@ -37,11 +39,13 @@ struct WebSocketCommand: Codable {
         case playListUpdate([String : PlayListItem])
         case currentTrackId(TrackId?)
         case currentTrackState(TrackState)
+        case checkAddons(CheckAddons)
+        case playAddon(AddonState)
     }
 
     enum CommandData {
         case success(SuccessCommandData)
-        case faile(CommandErrorData)
+        case failure(CommandErrorData)
         case unknown
     }
 
@@ -82,6 +86,10 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.currentTrackId(try container.decode(TrackId.self, forKey: .data)))
             case .currentTrackState:
                 self.data = .success(.currentTrackState(try container.decode(TrackState.self, forKey: .data)))
+            case .checkAddons:
+                self.data = .success(.checkAddons(try container.decode(CheckAddons.self, forKey: .data)))
+            case .playAddon:
+                self.data = .success(.playAddon(try container.decode(AddonState.self, forKey: .data)))
             case .unknown:
                 self.data = .unknown
             }
@@ -95,7 +103,7 @@ struct WebSocketCommand: Codable {
                     throw error
                 }
             }
-            self.data = .faile(errorData)
+            self.data = .failure(errorData)
         }
     }
 
@@ -126,8 +134,12 @@ struct WebSocketCommand: Codable {
                 try container.encode(trackId, forKey: .data)
             case .currentTrackState(let trackState):
                 try container.encode(trackState, forKey: .data)
+            case .checkAddons(let checkAddons):
+                try container.encode(checkAddons, forKey: .data)
+            case .playAddon(let addonState):
+                try container.encode(addonState, forKey: .data)
             }
-        case .faile( let errorData):
+        case .failure( let errorData):
             try container.encode(errorData, forKey: .data)
         case .unknown:
             break
@@ -147,6 +159,14 @@ extension WebSocketCommand {
 
     static func setTrackState(trackState: TrackState) -> WebSocketCommand {
         return WebSocketCommand(channel: "currentTrack", command: "setState", data: .success(.currentTrackState(trackState)))
+    }
+
+    static func checkAddons(checkAddons: CheckAddons) -> WebSocketCommand {
+        return WebSocketCommand(channel: "addons", command: "checkAddons", data: .success(.checkAddons(checkAddons)))
+    }
+
+    static func playAddon(addonState: AddonState) -> WebSocketCommand {
+        return WebSocketCommand(channel: "addons", command: "playAddon", data: .success(.playAddon(addonState)))
     }
 }
 
