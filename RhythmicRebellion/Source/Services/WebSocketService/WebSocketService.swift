@@ -19,6 +19,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceivePlayList playList: [String: PlayListItem])
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
+    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
 }
 
 extension WebSocketServiceObserver {
@@ -30,7 +31,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceivePlayList playList: [String: PlayListItem]) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
-
+    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
 }
 
 class WebSocketService: WebSocketDelegate, Observable {
@@ -107,8 +108,6 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
 
-        print("websocketDidReceiveMessage")
-
         guard let data = text.data(using: .utf8) else { return }
         do {
 
@@ -144,6 +143,11 @@ class WebSocketService: WebSocketDelegate, Observable {
                         observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
                     })
 
+                case .currentTrackBlock(let isBlocked):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveCurrentTrackBlock: isBlocked)
+                    })
+
                 case .checkAddons(let checkAddons):
                     print("checkAddons: \(checkAddons)")
 
@@ -161,6 +165,7 @@ class WebSocketService: WebSocketDelegate, Observable {
 
         } catch (let error) {
             print(error.localizedDescription)
+            print("websocketDidReceiveMessage: \(text)")
         }
 
     }

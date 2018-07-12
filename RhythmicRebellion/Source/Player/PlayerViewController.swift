@@ -11,6 +11,8 @@ import UIKit
 
 final class PlayerViewController: UIViewController {
 
+    @IBOutlet var blockOverlayView: UILabel!
+
     @IBOutlet weak var playerItemNameLabel: UILabel!
     @IBOutlet weak var playerItemNameSeparatorLabel: UILabel!
     @IBOutlet weak var playerItemArtistNameLabel: UILabel!
@@ -125,6 +127,21 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
     func refreshUI() {
         guard self.isViewLoaded == true else { return }
+
+        if self.viewModel.isPlayerBlocked == true && self.blockOverlayView.superview == nil {
+
+            self.blockOverlayView.frame = self.view.bounds
+            self.view.addSubview(self.blockOverlayView)
+
+            NSLayoutConstraint.activate([self.blockOverlayView.topAnchor.constraint(equalTo: self.view.topAnchor),
+                                         self.blockOverlayView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+                                         self.blockOverlayView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                                         self.blockOverlayView.rightAnchor.constraint(equalTo: self.view.rightAnchor)])
+
+        } else if self.viewModel.isPlayerBlocked == false && self.blockOverlayView.superview != nil {
+
+            self.blockOverlayView.removeFromSuperview()
+        }
 
         self.playerItemNameLabel.text = self.viewModel.playerItemNameString
         self.playerItemArtistNameLabel.text = self.viewModel.playerItemArtistNameString

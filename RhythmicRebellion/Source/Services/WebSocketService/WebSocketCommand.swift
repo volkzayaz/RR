@@ -28,6 +28,7 @@ struct WebSocketCommand: Codable {
         case playListUpdate = "playlist-update"
         case currentTrackId = "currentTrack-setTrack"
         case currentTrackState = "currentTrack-setState"
+        case currentTrackBlock = "currentTrack-setBlock"
         case checkAddons = "addons-checkAddons"
         case playAddon = "addons-playAddon"
         case unknown
@@ -39,6 +40,7 @@ struct WebSocketCommand: Codable {
         case playListUpdate([String : PlayListItem])
         case currentTrackId(TrackId?)
         case currentTrackState(TrackState)
+        case currentTrackBlock(Bool)
         case checkAddons(CheckAddons)
         case playAddon(AddonState)
     }
@@ -86,6 +88,8 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.currentTrackId(try container.decode(TrackId.self, forKey: .data)))
             case .currentTrackState:
                 self.data = .success(.currentTrackState(try container.decode(TrackState.self, forKey: .data)))
+            case .currentTrackBlock:
+                self.data = .success(.currentTrackBlock(try container.decode(Bool.self, forKey: .data)))
             case .checkAddons:
                 self.data = .success(.checkAddons(try container.decode(CheckAddons.self, forKey: .data)))
             case .playAddon:
@@ -134,6 +138,8 @@ struct WebSocketCommand: Codable {
                 try container.encode(trackId, forKey: .data)
             case .currentTrackState(let trackState):
                 try container.encode(trackState, forKey: .data)
+            case .currentTrackBlock(let isBlocked):
+                try container.encode(isBlocked, forKey: .data)
             case .checkAddons(let checkAddons):
                 try container.encode(checkAddons, forKey: .data)
             case .playAddon(let addonState):
@@ -159,6 +165,10 @@ extension WebSocketCommand {
 
     static func setTrackState(trackState: TrackState) -> WebSocketCommand {
         return WebSocketCommand(channel: "currentTrack", command: "setState", data: .success(.currentTrackState(trackState)))
+    }
+
+    static func setTrackBlock(isBlocked: Bool) -> WebSocketCommand {
+        return WebSocketCommand(channel: "currentTrack", command: "setBlock", data: .success(.currentTrackBlock(isBlocked)))
     }
 
     static func checkAddons(checkAddons: CheckAddons) -> WebSocketCommand {

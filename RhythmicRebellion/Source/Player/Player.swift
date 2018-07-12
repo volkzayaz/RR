@@ -30,6 +30,8 @@ public enum PlayerInitializationAction : Int {
 
 protocol PlayerObserver: class {
 
+    func player(player: Player, didChangeBlockedState isBlocked: Bool)
+
     func player(player: Player, didChangeStatus status: PlayerStatus)
 
     func player(player: Player, didChangePlayState isPlaying: Bool)
@@ -39,6 +41,9 @@ protocol PlayerObserver: class {
 }
 
 extension PlayerObserver {
+
+    func player(player: Player, didChangeBlockedState isBlocked: Bool) { }
+
     func player(player: Player, didChange status: PlayerStatus) { }
 
     func player(player: Player, didChangePlayState isPlaying: Bool) { }
@@ -55,6 +60,8 @@ class Player: NSObject, Observable {
 
     private let restApiService: RestApiService
     private let webSocketService: WebSocketService
+
+    var isBlocked: Bool = false
 
     let playlist: PlayList = PlayList()
     var currentTrackId: TrackId?
@@ -78,7 +85,7 @@ class Player: NSObject, Observable {
 
     private var playBackgroundTaskIdentifier: UIBackgroundTaskIdentifier?
 
-    @objc private var player = AVPlayer()
+    @objc private var player = AVQueuePlayer()
     var timeObserverToken: Any?
     var shouldStartPlay: Bool = false
 
@@ -245,19 +252,26 @@ class Player: NSObject, Observable {
 
         self.currentTrack = track
 
-        guard let trackAddons = self.playlist.addons(for: track) else {
-            self.restApiService.audioAddons(for: [track.id]) { response in
-
-                switch response {
-                case .success(let addons):
-                    self.playlist.add(tracksAddons: addons)
-                    
-
-                case .failure(let error): print("Error: \(error)")
-                }
-            }
-            return
-        }
+//        guard let trackAddons = self.playlist.addons(for: track) else {
+//            self.restApiService.audioAddons(for: [track.id]) { [weak self] response in
+//                guard let strongSelf = self, let currentTrack = strongSelf.currentTrack, currentTrack.id == track.id else { return }
+//
+//                switch response {
+//                case .success(let addons):
+//                    strongSelf.playlist.add(tracksAddons: addons)
+//                    if let addonsStates = strongSelf.playlist.addonsStates(for: currentTrack) {
+//                        let checkAddons = CheckAddons(trackId: currentTrack.id, addonsStates: addonsStates)
+//                        strongSelf.sendCheckAddons(checkAddons: checkAddons, completion: { (error) in
+//                            guard error == nil else { print("error: \(error!)"); return }
+//                            print("CheckAddons: Success!!!")
+//                        })
+//                    }
+//
+//                case .failure(let error): print("Error: \(error)")
+//                }
+//            }
+//            return
+//        }
 
 
         guard let audioFile = track.audioFile, let playItemURL = URL(string: audioFile.urlString) else { return }
@@ -555,6 +569,17 @@ extension Player: WebSocketServiceObserver {
 
         self.updateCurrentTrackState(with: TimeInterval(trackState.progress))
     }
+
+    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) {
+
+        print("didReceiveCurrentTrackBlock: \(isBlocked)")
+
+        self.isBlocked = isBlocked
+
+        self.observersContainer.invoke({ (observer) in
+            observer.player(player: self, didChangeBlockedState: isBlocked)
+        })
+    }
 }
 
 extension Player {
@@ -575,6 +600,25 @@ extension Player {
             if strongSelf.isMaster == false {
                 strongSelf.isMasterStateSendDate = Date()
             }
+
+            completion?(nil)
+        }
+    }
+
+    func sendTrackBlock(isBlocked: Bool, completion: ((Error?) -> ())? = nil) {
+        let webSocketCommand = WebSocketCommand.setTrackBlock(isBlocked: isBlocked)
+        self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
+            guard let _ = self, error == nil else { completion?(error); return }
+
+            completion?(nil)
+        }
+    }
+
+    func sendCheckAddons(checkAddons: CheckAddons, completion: ((Error?) -> ())? = nil) {
+        let webSocketCommand = WebSocketCommand.checkAddons(checkAddons: checkAddons)
+
+        self.webSocketService.sendCommand(command: webSocketCommand) { (error) in
+            guard error == nil else { completion?(error); return }
 
             completion?(nil)
         }

@@ -53,6 +53,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
                                                NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
     }
 
+    var isPlayerBlocked: Bool { return self.player.isBlocked }
     var isPlaying: Bool { return self.player.isPlaying }
 
     // MARK: - Private properties -
@@ -140,5 +141,8 @@ extension PlayerControllerViewModel: PlayerObserver {
         self.delegate?.refreshProgressUI()
     }
 
+    func player(player: Player, didChangeBlockedState isBlocked: Bool) {
+        self.delegate?.refreshUI()
+    }
 }
 
