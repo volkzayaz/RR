@@ -24,8 +24,15 @@ class PlayList {
         return TrackId(id: lastPlayListItem.value.id, key: lastPlayListItem.value.trackKey)
     }
 
+    var firstTrack: Track? {
+        guard let firstTrackId = self.firstTrackId else { return nil }
+        return self.track(for: firstTrackId)
+    }
+
     func reset(tracks: [Track]) {
         self.tracks = tracks
+        self.playListItems.removeAll()
+        self.tracksAddons.removeAll()
     }
 
     func reset(playListItems: [String : PlayListItem]) {
@@ -84,5 +91,23 @@ class PlayList {
     func addons(for track: Track) -> [Addon]? {
 
         return self.tracksAddons[track.id]
+    }
+
+    func addons(for track: Track, addonsIds: [Int]) -> [Addon]? {
+        guard let allAddons = self.tracksAddons[track.id] else { return nil }
+
+        var addons = [Addon]()
+        for addonId in addonsIds {
+            guard let addon = allAddons.filter({ return $0.id == addonId }).first else { continue }
+            addons.append(addon)
+        }
+
+        return addons
+    }
+
+    func addonsStates(for track: Track) -> [AddonState]? {
+        return self.tracksAddons[track.id]?.map({ (addon) -> AddonState in
+            return AddonState(from: addon)
+        })
     }
 }

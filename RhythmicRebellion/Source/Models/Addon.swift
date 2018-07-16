@@ -63,3 +63,10 @@ struct Addon: Decodable {
     }
 
 }
+
+extension Addon: Equatable {
+    static func == (lhs: Addon, rhs: Addon) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+

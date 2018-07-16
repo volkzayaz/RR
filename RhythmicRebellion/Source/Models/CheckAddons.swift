@@ -45,6 +45,7 @@ struct CheckAddons: Codable {
 
         if let addonsIds = try? container.decode([Int].self, forKey: .addons) {
             self.addons = .addonsIds(addonsIds)
+            return
         }
 
         throw CheckAddonsError.missingAddons

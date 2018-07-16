@@ -23,7 +23,11 @@ protocol PlayerViewModel: class {
     var playerItemArtistNameString: String { get }
     var playerItemArtistNameAttributedString: NSAttributedString { get }
 
+    var isPlayerBlocked: Bool { get }
     var isPlaying: Bool { get }
+
+    var canForward: Bool { get }
+    var canBackward: Bool { get }
 
     func load(with delegate: PlayerViewModelDelegate)
 

@@ -439,9 +439,11 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="backwardBarButtonItem" destination="GKK-mB-XVl" id="ZRh-RT-L2O"/>
                         <outlet property="blockOverlayView" destination="zpU-Lw-fct" id="Vrs-he-WOv"/>
                         <outlet property="compactFollowButton" destination="F8a-Lp-rAk" id="fXu-LT-Ctu"/>
                         <outlet property="compactTabBar" destination="DR6-Rj-pL8" id="2Vn-nW-ygX"/>
+                        <outlet property="forwardBarButtonItem" destination="jL3-CH-VlI" id="Ahd-W1-yAu"/>
                         <outlet property="pauseBarButtonItem" destination="MSp-8n-rsp" id="MuC-J4-5IT"/>
                         <outlet property="playBarButtonItem" destination="6hV-Vv-jU3" id="Mp7-QD-8YC"/>
                         <outlet property="playerItemArtistNameLabel" destination="yNP-x2-oWu" id="OT8-WV-2ik"/>

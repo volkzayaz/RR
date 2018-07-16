@@ -20,6 +20,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
+    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons)
 }
 
 extension WebSocketServiceObserver {
@@ -32,6 +33,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
+    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) { }
 }
 
 class WebSocketService: WebSocketDelegate, Observable {
@@ -60,7 +62,7 @@ class WebSocketService: WebSocketDelegate, Observable {
     func connect(with token: Token) {
         self.token = token
 
-        print("self.token: \(self.token)")
+        print("self.token: \(String(describing: self.token))")
 
         self.webSocket.connect()
     }
@@ -75,13 +77,16 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {
 
+        guard self.webSocket.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
+
         do {
             let jsonData = try JSONEncoder().encode(command)
-            self.webSocket.write(data: jsonData, completion: { [weak self] in
-                completion?(nil)
-            })
+
+//            print("sendCommand: \(String(data: jsonData, encoding: .utf8))")
+
+            self.webSocket.write(data: jsonData, completion: { completion?(nil) })
         } catch (let error) {
-            completion?(error)
+            completion?(AppError(WebSocketServiceError.custom(error)))
         }
     }
 
@@ -107,10 +112,14 @@ class WebSocketService: WebSocketDelegate, Observable {
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-
         guard let data = text.data(using: .utf8) else { return }
-        do {
 
+        self.websocketDidReceiveData(socket: socket, data: data)
+    }
+
+    public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+
+        do {
             let webSoketCommand = try JSONDecoder().decode(WebSocketCommand.self, from: data)
 
             switch webSoketCommand.data {
@@ -121,9 +130,6 @@ class WebSocketService: WebSocketDelegate, Observable {
                     break
 
                 case .playListLoadTracks(let tracks):
-
-//                    print("LoadTracksCommand: \(text)")
-
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTracks: tracks)
                     })
@@ -144,15 +150,18 @@ class WebSocketService: WebSocketDelegate, Observable {
                     })
 
                 case .currentTrackBlock(let isBlocked):
+
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveCurrentTrackBlock: isBlocked)
                     })
 
                 case .checkAddons(let checkAddons):
-                    print("checkAddons: \(checkAddons)")
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveCheckAddons: checkAddons)
+                    })
 
                 case .playAddon(let addonState):
-                    print("addinState: \(addonState)")
+                    print("addonState: \(addonState)")
                 }
 
             case .failure(let error):
@@ -160,27 +169,12 @@ class WebSocketService: WebSocketDelegate, Observable {
 
             case .unknown:
                 print("Unknown channel: \(webSoketCommand.channel) command: \(webSoketCommand.command)")
-                print("websocketDidReceiveMessage: \(text)")
+                print("websocketDidReceiveMessage: \(String(describing: String(data: data, encoding: .utf8)))")
             }
 
         } catch (let error) {
             print(error.localizedDescription)
-            print("websocketDidReceiveMessage: \(text)")
+            print("websocketDidReceiveMessage: \(String(describing: String(data: data, encoding: .utf8)))")
         }
-
-    }
-
-    public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        print("websocketDidReceiveData")
-
-        do {
-
-            let decoded = try JSONSerialization.jsonObject(with: data, options: [])
-
-            print("websocketDidReceiveData: \(decoded)")
-        } catch {
-            print(error.localizedDescription)
-        }
-
     }
 }

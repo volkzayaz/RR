@@ -31,6 +31,9 @@ final class PlayerViewController: UIViewController {
     @IBOutlet var playBarButtonItem: UIBarButtonItem!
     @IBOutlet var pauseBarButtonItem: UIBarButtonItem!
 
+    @IBOutlet var forwardBarButtonItem: UIBarButtonItem!
+    @IBOutlet var backwardBarButtonItem: UIBarButtonItem!
+
     // MARK: - Public properties -
 
     private(set) var viewModel: PlayerViewModel!
@@ -149,6 +152,9 @@ extension PlayerViewController: PlayerViewModelDelegate {
         self.playerItemNameSeparatorLabel.isHidden = self.playerItemNameLabel.text?.isEmpty ?? true || self.playerItemArtistNameLabel.text?.isEmpty ?? true
 
         self.playerItemDurationLabel.text = self.viewModel.playerItemDurationString
+
+        self.forwardBarButtonItem.isEnabled = self.viewModel.canForward
+        self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
 
         self.refreshProgressUI()
     }

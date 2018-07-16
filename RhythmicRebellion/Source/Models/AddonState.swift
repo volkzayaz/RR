@@ -22,6 +22,12 @@ struct AddonState: Codable {
         case trackId = "srtId"
     }
 
+    public init(from addon: Addon) {
+        self.id = addon.id
+        self.typeValue = addon.typeValue
+        self.trackId = addon.trackId
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 

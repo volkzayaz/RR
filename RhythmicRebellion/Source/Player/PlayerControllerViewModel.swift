@@ -20,20 +20,26 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
     
     var playerItemCurrentTimeString: String {
-        guard let playerItemCurrentTime = self.player.playerCurrentItemCurrentTime else { return "--:--"}
+        guard let playerItemCurrentTime = self.player.playerCurrentTrackCurrentTime else { return "--:--"}
         return playerItemCurrentTime.stringFormatted();
     }
 
     var playerItemProgress: Float {
         guard let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0,
-            let playerItemCurrentTime = self.player.playerCurrentItemCurrentTime else { return 0.0 }
+            let playerItemCurrentTime = self.player.playerCurrentTrackCurrentTime else { return 0.0 }
 
         return Float(playerItemCurrentTime / playerItemDuration)
     }
 
     var playerItemNameString: String {
-        guard let currentTrack = self.player.currentTrack else { return "" }
-        return currentTrack.name
+        guard let playerCurrentQueueItem = self.player.playerCurrentQueueItem else { return "" }
+
+        switch playerCurrentQueueItem.content {
+        case .addon(let addon):
+            return addon.audioFile.title
+        case .track(let track):
+            return track.name
+        }
     }
 
     var playerItemNameAttributedString: NSAttributedString {
@@ -43,7 +49,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     var playerItemArtistNameString: String {
-        guard let currentTrack = self.player.currentTrack else { return "" }
+        guard let currentTrack = self.player.playerCurrentTrack else { return "" }
         return currentTrack.artist.name
     }
 
@@ -55,6 +61,14 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     var isPlayerBlocked: Bool { return self.player.isBlocked }
     var isPlaying: Bool { return self.player.isPlaying }
+
+    var canForward: Bool {
+        return self.player.canForward
+    }
+
+    var canBackward: Bool {
+        return self.player.canBackward
+    }
 
     // MARK: - Private properties -
 
@@ -89,7 +103,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {
-        guard let currentTrack = self.player.currentTrack else { return NSAttributedString() }
+        guard let currentTrack = self.player.playerCurrentTrack else { return NSAttributedString() }
 
         let currentTrackName = currentTrack.name + (traitCollection.horizontalSizeClass == .regular ?  "\n" : " - ")
         let descriptionAttributedString = NSMutableAttributedString(string: currentTrackName,
@@ -133,7 +147,7 @@ extension PlayerControllerViewModel: PlayerObserver {
         self.delegate?.refreshUI()
     }
 
-    func player(player: Player, didChangePlayerItem track: Track) {
+    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
         self.delegate?.refreshUI()
     }
 

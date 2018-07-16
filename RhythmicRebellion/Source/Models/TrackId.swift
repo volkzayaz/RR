@@ -17,3 +17,9 @@ struct TrackId: Codable {
         case key
     }
 }
+
+extension TrackId: Equatable {
+    static func == (lhs: TrackId, rhs: TrackId) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
