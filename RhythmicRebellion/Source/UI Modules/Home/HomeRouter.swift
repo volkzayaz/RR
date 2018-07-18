@@ -1,41 +1,40 @@
 //
-//  AppRouter.swift
+//  HomeRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 6/21/18.
+//  Created by Alexander Obolentsev on 7/17/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-protocol AppRouter: FlowRouter {
+protocol HomeRouter: FlowRouter {
 }
 
-final class DefaultAppRouter:  AppRouter, SegueCompatible {
+final class DefaultHomeRouter:  HomeRouter, SegueCompatible {
 
     typealias Destinations = SegueList
 
     enum SegueList: String, SegueDestinations {
-        case player
+        case placeholder
 
         var identifier: String {
             switch self {
-            case .player: return "PlayerSegueIdentifier"
+            case .placeholder: return "placeholder"
             }
         }
 
         static func from(identifier: String) -> SegueList? {
             switch identifier {
-            case "PlayerSegueIdentifier": return .player
             default: return nil
             }
         }
     }
 
-    var dependencies: RouterDependencies
-
-    private(set) weak var viewModel: AppViewModel?
+    private(set) var dependencies: RouterDependencies
+    
+    private(set) weak var viewModel: HomeViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -47,10 +46,7 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .player:
-            guard let playerViewController = segue.destination as? PlayerViewController else { fatalError("Incorrect controller for PlayerSegueIdentifier") }
-            let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies)
-            playerRouter.start(controller: playerViewController)
+        case .placeholder:
             break
         }
     }
@@ -59,9 +55,9 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         self.dependencies = dependencies
     }
 
-    func start(controller: AppViewController) {
+    func start(controller: HomeViewController) {
         sourceController = controller
-        let vm = AppControllerViewModel(router: self, restApiService: self.dependencies.restApiService, webSocketService: self.dependencies.webSocketService)
+        let vm = HomeControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

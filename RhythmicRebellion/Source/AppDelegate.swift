@@ -24,6 +24,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBarItem.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
                                                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
                                                                                                                 for: .selected)
+
+        UITabBar.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).unselectedItemTintColor = #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96)
+        UITabBar.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 0.96)
+        UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
+                                                                                                                 NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
+                                                                                                                for: .normal)
+
+        UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
+                                                                                                                 NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
+                                                                                                                for: .selected)
+
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
+                                                                                                                              NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                                                                                                              NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .highlighted)
+
     }
 
 
@@ -31,17 +47,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.setupAppearance()
 
-        let restApiService = RestApiService(serverURL: URL(string: "http://new-ngrx.api.rebellionretailsite.com")!)
-        let webSocketService = WebSocketService(with: URL(string: "ws://new-ngrx.rebellionretailsite.com:3000/")!)
-        let player = Player(restApiService: restApiService, webSocketService: webSocketService)
-
         let appViewController = self.window?.rootViewController as! AppViewController
 
-        let routerDependencies = RouterDependencies(restApiService: restApiService, webSocketService: webSocketService, player: player)
-        let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
-        defaultAppRouter.start(controller: appViewController)
+        if let application = Application() {
+            let routerDependencies = RouterDependencies(application: application,
+                                                        restApiService: application.restApiService,
+                                                        webSocketService: application.webSocketService,
+                                                        player: application.player)
 
-        self.appRouter = defaultAppRouter
+            let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
+            defaultAppRouter.start(controller: appViewController)
+
+            self.appRouter = defaultAppRouter
+        }
+
+
 
         return self.appRouter != nil
     }

@@ -17,31 +17,35 @@ import Foundation
 //    "guest": true
 //}
 
-struct User: Decodable {
+
+protocol User: Decodable {
+    var isGuest: Bool { get }
+    var wsToken: String { get }
+}
+
+
+struct GuestUser: User {
+
+    let isGuest: Bool
+    let wsToken: String
+
+    enum CodingKeys: String, CodingKey {
+        case wsToken = "ws_token"
+        case isGuest = "guest"
+    }
+}
+
+struct FanUser: User {
+
     let id: Int
     let wsToken: String
     let isGuest: Bool
 
     enum CodingKeys: String, CodingKey {
-        case user
-    }
-
-    enum DataCodingKeys: String, CodingKey {
         case id = "id"
         case wsToken = "ws_token"
         case isGuest = "guest"
     }
-
-     init(from decoder: Decoder) throws {
-
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let dataCotainer = try container.nestedContainer(keyedBy: DataCodingKeys.self, forKey: .user)
-
-        self.id = try dataCotainer.decode(Int.self, forKey: .id)
-        self.wsToken = try dataCotainer.decode(String.self, forKey: .wsToken)
-        self.isGuest = try dataCotainer.decode(Bool.self, forKey: .isGuest)
-    }
-
 }
 
 

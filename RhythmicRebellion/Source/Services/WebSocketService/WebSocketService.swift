@@ -45,15 +45,15 @@ class WebSocketService: WebSocketDelegate, Observable {
     var webSocket: WebSocket
     var token: Token?
 
-    var isReachable: Bool = true
+    var isReachable: Bool = false
     var isConnected: Bool { return self.webSocket.isConnected }
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
-    init(with url: URL) {
+    init(socketURL url: URL) {
 
         var request = URLRequest(url: url)
-        request.timeoutInterval = 5
+        request.timeoutInterval = 1
 
         self.webSocket = WebSocket(request: request)
         self.webSocket.delegate = self
@@ -68,6 +68,8 @@ class WebSocketService: WebSocketDelegate, Observable {
     }
 
     func reconnect() {
+        guard let _ = self.token else { return }
+
         self.webSocket.connect()
     }
 

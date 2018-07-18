@@ -275,9 +275,9 @@ class Player: NSObject, Observable {
 
     func loadAddons(for track: Track, completion: ((Error?) -> ())?) {
 
-        self.restApiService.audioAddons(for: [track.id]) { [weak self] (addonsReasult) in
+        self.restApiService.audioAddons(for: [track.id]) { [weak self] (addonsResult) in
 
-            switch addonsReasult {
+            switch addonsResult {
             case .success(let tracksAddons):
                     self?.playlist.add(tracksAddons: tracksAddons)
                     completion?(nil)
@@ -741,10 +741,6 @@ extension Player: WebSocketServiceObserver {
 
         self.apply(currentTrackState: trackState)
         if self.state.initialized == false {
-
-//            self.currentTrackId = nil
-//            self.currentTrackState = nil
-
             self.initializePlayer()
         }
     }

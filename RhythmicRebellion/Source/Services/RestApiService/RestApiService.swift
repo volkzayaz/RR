@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-enum RestApiServiceResult<T: Decodable> {
+enum RestApiServiceResult<T> {
     case success(T)
     case failure(Error)
 }
@@ -29,27 +29,27 @@ class RestApiService {
         return componets?.url
     }
 
-    func fanUser(completion: @escaping (User?) -> Void) {
+    // MARK: - User
+
+    func fanUser(completion: @escaping (RestApiServiceResult<User>) -> Void) {
 
         guard let fanUserURL = self.makeURL(with: "fan/user") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
                                     "Content-Type" : "application/json"]
 
-        Alamofire.request(fanUserURL, method: .get, headers: headers).validate().response { (response) in
-            guard let responseData = response.data else { completion(nil); return }
+        Alamofire.request(fanUserURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<FanUserResponse>) in
 
-            do {
-                let user = try JSONDecoder().decode(User.self, from: responseData)
-                completion(user)
-            } catch (let error) {
-                 print(error.localizedDescription)
-                completion(nil)
-            }
+                guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
+                guard let user = dataResponse.value?.user else { completion(.failure(AppError(.unexpectedResponse))); return }
+
+                completion(.success(user))
         }
     }
 
-    func fanLogin(email: String, password: String, completion: @escaping (User?) -> Void) {
+    func fanLogin(email: String, password: String, completion: @escaping (RestApiServiceResult<User>) -> Void) {
 
         guard let fanLoginURL = self.makeURL(with: "fan/login") else { return }
 
@@ -57,20 +57,17 @@ class RestApiService {
                                     "Content-Type" : "application/json"]
         let parameters: Parameters = ["email" : email, "password" : password]
 
-        Alamofire.request(fanLoginURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate().response { (response) in
-            guard let responseData = response.data else { completion(nil); return }
+        Alamofire.request(fanLoginURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<FanLoginResponse>) in
+                guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
+                guard let user = dataResponse.value?.user else { completion(.failure(AppError(.unexpectedResponse))); return }
 
-            do {
-                let user = try JSONDecoder().decode(User.self, from: responseData)
-                completion(user)
-            } catch (let error) {
-                print(error.localizedDescription)
-                completion(nil)
-            }
+                completion(.success(user))
         }
     }
 
-    // MARK - Player -
+    // MARK: - Player
 
     func audioAddons(for trackIds: [Int], completion: @escaping (RestApiServiceResult<[Int : [Addon]]>) -> Void) {
         guard let addonsForTracksURL = self.makeURL(with: "player/audio-add-ons-for-tracks") else { return }
@@ -86,7 +83,7 @@ class RestApiService {
 
             Alamofire.request(addonsForTracksURL, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
                 .validate()
-                .restApiResponse { (dataResponse: DataResponse<AddonsForTracks>) in
+                .restApiResponse { (dataResponse: DataResponse<AddonsForTracksResponse>) in
 
                     guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
 
