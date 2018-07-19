@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */; };
+		7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD420FF471300D90D73 /* SignUpRouter.swift */; };
+		7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD520FF471300D90D73 /* SignUpViewController.swift */; };
+		7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD620FF471300D90D73 /* SignUpViewModel.swift */; };
 		761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */; };
 		76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DC820F5E91100140D03 /* RestApiResponse.swift */; };
 		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
@@ -51,6 +55,10 @@
 		7665334F20FF1DE300FEC702 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665334B20FF1DE300FEC702 /* ProfileRouter.swift */; };
 		7665335020FF1DE300FEC702 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665334C20FF1DE300FEC702 /* ProfileViewController.swift */; };
 		7665335120FF1DE300FEC702 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665334D20FF1DE300FEC702 /* ProfileViewModel.swift */; };
+		7665335720FF414300FEC702 /* SignInControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665335320FF414300FEC702 /* SignInControllerViewModel.swift */; };
+		7665335820FF414300FEC702 /* SignInRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665335420FF414300FEC702 /* SignInRouter.swift */; };
+		7665335920FF414300FEC702 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665335520FF414300FEC702 /* SignInViewController.swift */; };
+		7665335A20FF414300FEC702 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665335620FF414300FEC702 /* SignInViewModel.swift */; };
 		767289C620ED1A13008A86B6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C420ED1A13008A86B6 /* Player.swift */; };
 		767289C720ED1A13008A86B6 /* PlayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C520ED1A13008A86B6 /* PlayList.swift */; };
 		768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */; };
@@ -81,6 +89,10 @@
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66178C740DE1BEC2147F6CD6 /* Pods-RhythmicRebellion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.debug.xcconfig"; sourceTree = "<group>"; };
+		7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpControllerViewModel.swift; sourceTree = "<group>"; };
+		7606BDD420FF471300D90D73 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
+		7606BDD520FF471300D90D73 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		7606BDD620FF471300D90D73 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		76310DC820F5E91100140D03 /* RestApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiResponse.swift; sourceTree = "<group>"; };
 		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
@@ -125,6 +137,10 @@
 		7665334B20FF1DE300FEC702 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		7665334C20FF1DE300FEC702 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		7665334D20FF1DE300FEC702 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		7665335320FF414300FEC702 /* SignInControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInControllerViewModel.swift; sourceTree = "<group>"; };
+		7665335420FF414300FEC702 /* SignInRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInRouter.swift; sourceTree = "<group>"; };
+		7665335520FF414300FEC702 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		7665335620FF414300FEC702 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		767289C420ED1A13008A86B6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		767289C520ED1A13008A86B6 /* PlayList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayList.swift; sourceTree = "<group>"; };
 		768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
@@ -175,6 +191,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		7606BDD220FF46CB00D90D73 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */,
+				7606BDD420FF471300D90D73 /* SignUpRouter.swift */,
+				7606BDD520FF471300D90D73 /* SignUpViewController.swift */,
+				7606BDD620FF471300D90D73 /* SignUpViewModel.swift */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
 		761B6CB920EB56000019A71D /* WebSocketService */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +240,8 @@
 		763C905220FDDD22007C1F86 /* Authorization */ = {
 			isa = PBXGroup;
 			children = (
+				7665335220FF411E00FEC702 /* SignIn */,
+				7606BDD220FF46CB00D90D73 /* SignUp */,
 				763C905320FDDE96007C1F86 /* AuthorizationControllerViewModel.swift */,
 				763C905420FDDE96007C1F86 /* AuthorizationRouter.swift */,
 				763C905520FDDE96007C1F86 /* AuthorizationViewController.swift */,
@@ -322,6 +351,17 @@
 				7665334D20FF1DE300FEC702 /* ProfileViewModel.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		7665335220FF411E00FEC702 /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				7665335320FF414300FEC702 /* SignInControllerViewModel.swift */,
+				7665335420FF414300FEC702 /* SignInRouter.swift */,
+				7665335520FF414300FEC702 /* SignInViewController.swift */,
+				7665335620FF414300FEC702 /* SignInViewModel.swift */,
+			);
+			path = SignIn;
 			sourceTree = "<group>";
 		};
 		768EC2C420F4DA2600629F1B /* RestApiService */ = {
@@ -569,6 +609,7 @@
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
 				763C904E20FCBABD007C1F86 /* TabBarViewController.swift in Sources */,
+				7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */,
 				763C904D20FCBABD007C1F86 /* TabBarRouter.swift in Sources */,
 				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,
 				767289C620ED1A13008A86B6 /* Player.swift in Sources */,
@@ -577,12 +618,15 @@
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
+				7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
 				768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */,
 				7665333620FE470C00FEC702 /* HomeViewModel.swift in Sources */,
+				7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */,
 				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
 				763C905820FDDE96007C1F86 /* AuthorizationRouter.swift in Sources */,
 				76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */,
+				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
 				76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */,
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				7665333E20FF1B2E00FEC702 /* SettingsViewController.swift in Sources */,
@@ -595,9 +639,12 @@
 				7665334520FF1CFA00FEC702 /* PagesControllerViewModel.swift in Sources */,
 				76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */,
 				7665333420FE470C00FEC702 /* HomeRouter.swift in Sources */,
+				7665335720FF414300FEC702 /* SignInControllerViewModel.swift in Sources */,
 				7655476E20EB80DC004AC0BD /* Token.swift in Sources */,
 				763C905A20FDDE96007C1F86 /* AuthorizationViewModel.swift in Sources */,
+				7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */,
 				7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */,
+				7665335820FF414300FEC702 /* SignInRouter.swift in Sources */,
 				763C904F20FCBABD007C1F86 /* TabBarViewModel.swift in Sources */,
 				76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */,
 				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
@@ -606,6 +653,7 @@
 				7665333C20FF1B2E00FEC702 /* SettingsControllerViewModel.swift in Sources */,
 				7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */,
 				7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */,
+				7665335A20FF414300FEC702 /* SignInViewModel.swift in Sources */,
 				7665332D20FE26A600FEC702 /* RestApiServiceError.swift in Sources */,
 				767289C720ED1A13008A86B6 /* PlayList.swift in Sources */,
 				7665335120FF1DE300FEC702 /* ProfileViewModel.swift in Sources */,

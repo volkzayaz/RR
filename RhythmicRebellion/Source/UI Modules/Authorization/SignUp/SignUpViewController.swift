@@ -1,5 +1,5 @@
 //
-//  ProfileViewController.swift
+//  SignUpViewController.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 7/18/18.
@@ -9,16 +9,16 @@
 
 import UIKit
 
-final class ProfileViewController: UIViewController {
+final class SignUpViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: ProfileViewModel!
+    private(set) var viewModel: SignUpViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: ProfileViewModel, router: FlowRouter) {
+    func configure(viewModel: SignUpViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -31,16 +31,10 @@ final class ProfileViewController: UIViewController {
         viewModel.load(with: self)
     }
 
-    // MARK: - Actions
-
-    @IBAction func onLogout(sender: Any) {
-        self.viewModel.logout()
-    }
-
 }
 
 // MARK: - Router -
-extension ProfileViewController {
+extension SignUpViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -56,7 +50,7 @@ extension ProfileViewController {
 
 }
 
-extension ProfileViewController: ProfileViewModelDelegate {
+extension SignUpViewController: SignUpViewModelDelegate {
 
     func refreshUI() {
 

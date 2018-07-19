@@ -15,14 +15,21 @@ final class ProfileControllerViewModel: ProfileViewModel {
 
     private(set) weak var delegate: ProfileViewModelDelegate?
     private(set) weak var router: ProfileRouter?
+    private(set) weak var application: Application?
 
     // MARK: - Lifecycle -
 
-    init(router: ProfileRouter) {
+    init(router: ProfileRouter, application: Application) {
         self.router = router
+        self.application = application
     }
 
     func load(with delegate: ProfileViewModelDelegate) {
         self.delegate = delegate
+    }
+
+    // MARK: - Actions
+    func logout() {
+        self.application?.logout()
     }
 }

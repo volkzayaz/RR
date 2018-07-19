@@ -67,6 +67,23 @@ class RestApiService {
         }
     }
 
+    func fanLogout(completion: @escaping (RestApiServiceResult<User>) -> Void) {
+        guard let fanLogoutURL = self.makeURL(with: "fan/logout") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(fanLogoutURL, method: .post, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<FanUserResponse>) in
+                guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
+                guard let user = dataResponse.value?.user else { completion(.failure(AppError(.unexpectedResponse))); return }
+
+                completion(.success(user))
+        }
+
+    }
+
     // MARK: - Player
 
     func audioAddons(for trackIds: [Int], completion: @escaping (RestApiServiceResult<[Int : [Addon]]>) -> Void) {

@@ -24,5 +24,7 @@ final class AuthorizationControllerViewModel: AuthorizationViewModel {
 
     func load(with delegate: AuthorizationViewModelDelegate) {
         self.delegate = delegate
+
+        
     }
 }

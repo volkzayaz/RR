@@ -1,5 +1,5 @@
 //
-//  ProfileRouter.swift
+//  SignUpRouter.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 7/18/18.
@@ -9,10 +9,10 @@
 
 import UIKit
 
-protocol ProfileRouter: FlowRouter {
+protocol SignUpRouter: FlowRouter {
 }
 
-final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
+final class DefaultSignUpRouter:  SignUpRouter, SegueCompatible {
 
     typealias Destinations = SegueList
 
@@ -32,9 +32,7 @@ final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
-
-    private(set) weak var viewModel: ProfileViewModel?
+    private(set) weak var viewModel: SignUpViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -51,13 +49,13 @@ final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
+    init() {
+
     }
 
-    func start(controller: ProfileViewController) {
+    func start(controller: SignUpViewController) {
         sourceController = controller
-        let vm = ProfileControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = SignUpControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

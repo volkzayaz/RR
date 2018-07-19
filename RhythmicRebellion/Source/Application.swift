@@ -29,8 +29,8 @@ class Application: Observable {
     let observersContainer = ObserversContainer<ApplicationObserver>()
 
     struct URI {
-        static let restApiService = "http://new-ngrx.api.rebellionretailsite.com"
-        static let webSocketService = "ws://new-ngrx.rebellionretailsite.com:3000/"
+        static let restApiService = "http://mobile.api.rebellionretailsite.com"
+        static let webSocketService = "ws://mobile.rebellionretailsite.com:3000/"
     }
 
     let restApiService: RestApiService
@@ -92,7 +92,7 @@ class Application: Observable {
 
     }
 
-    func login(with credentials: UserCredentials) {
+    func signIn(with credentials: UserCredentials, completion: ((Error?) -> Void)? = nil) {
         guard let reachability = self.restApiServiceReachability, reachability.connection != .none else { return }
 
         self.restApiService.fanLogin(email: credentials.email, password: credentials.password, completion: { [weak self] (loginUserResult) in
@@ -102,12 +102,29 @@ class Application: Observable {
                 self?.user = user
                 self?.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
                 self?.notifyUserChanged()
-                
+                completion?(nil)
+
+            case .failure(let error):
+                completion?(error)
+            }
+        })
+    }
+
+    func logout() {
+        guard let user = self.user, user.isGuest == false, let reachability = self.restApiServiceReachability, reachability.connection != .none else { return }
+
+        self.restApiService.fanLogout { [weak self] (logoutUserResult) in
+            switch (logoutUserResult) {
+            case .success(let user):
+                self?.webSocketService.disconnect()
+                self?.user = user
+                self?.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+                self?.notifyUserChanged()
 
             case .failure(let error):
                 print("FanUser error: \(error)")
             }
-        })
+        }
     }
 }
 

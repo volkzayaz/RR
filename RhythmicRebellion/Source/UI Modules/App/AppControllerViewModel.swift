@@ -21,13 +21,6 @@ final class AppControllerViewModel: AppViewModel {
 
     var isPlayerDisclosed: Bool = false
 
-    #if DEBUG
-        let email = "alexander@olearis.com"
-        let password = "ngrx2Fan"
-    #else
-        let email = "alena@olearis.com"
-        let password = "Olearistest1"
-    #endif
     var user: User?
 
     // MARK: - Lifecycle -

@@ -1,5 +1,5 @@
 //
-//  ProfileViewModel.swift
+//  SignUpViewModel.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 7/18/18.
@@ -9,14 +9,13 @@
 
 import UIKit
 
-protocol ProfileViewModel: class {
+protocol SignUpViewModel: class {
 
-    func load(with delegate: ProfileViewModelDelegate)
+    func load(with delegate: SignUpViewModelDelegate)
 
-    func logout()
 }
 
-protocol ProfileViewModelDelegate: class {
+protocol SignUpViewModelDelegate: class {
 
     func refreshUI()
 

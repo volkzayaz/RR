@@ -11,7 +11,7 @@ import Foundation
 struct Artist: Codable {
     let id: String
     let name: String
-    let urlString: String
+    let urlString: String?
 
     enum CodingKeys: String, CodingKey {
         case id

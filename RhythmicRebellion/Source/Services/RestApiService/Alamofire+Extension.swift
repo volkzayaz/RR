@@ -32,6 +32,8 @@ extension Request {
         }
 
         do {
+            print("response validData: \(String(data: validData, encoding: .utf8))")
+
             let restApiResponse = try JSONDecoder().decode(T.self, from: validData)
             return .success(restApiResponse)
         } catch {

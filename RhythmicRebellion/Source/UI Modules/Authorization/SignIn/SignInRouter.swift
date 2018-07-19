@@ -1,39 +1,32 @@
 //
-//  AuthorizationRouter.swift
+//  SignInRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/17/18.
+//  Created by Alexander Obolentsev on 7/18/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-enum AuthorizationType: Int {
-    case unknown
-    case signIn
-    case signUp
+protocol SignInRouter: FlowRouter {
 }
 
-protocol AuthorizationRouter: FlowRouter {
-}
-
-final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
+final class DefaultSignInRouter:  SignInRouter, SegueCompatible {
 
     typealias Destinations = SegueList
 
     enum SegueList: String, SegueDestinations {
-        case signIn
+        case placeholder
 
         var identifier: String {
             switch self {
-            case .signIn: return "SignInSegueIdentifier"
+            case .placeholder: return "placeholder"
             }
         }
 
         static func from(identifier: String) -> SegueList? {
             switch identifier {
-            case "SignInSegueIdentifier": return .signIn
             default: return nil
             }
         }
@@ -41,10 +34,8 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
 
     private(set) var dependencies: RouterDependencies
 
-    private(set) weak var viewModel: AuthorizationViewModel?
+    private(set) weak var viewModel: SignInViewModel?
     private(set) weak var sourceController: UIViewController?
-
-    private(set) var authorizationViewControllers = [AuthorizationType : UIViewController]()
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -55,10 +46,8 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .signIn:
-            guard let signInViewController = segue.destination as? SignInViewController else { fatalError("Incorrect controller for SignInSegueIdentifier") }
-            let signInRouter = DefaultSignInRouter(dependencies: self.dependencies)
-            signInRouter.start(controller: signInViewController)
+        case .placeholder:
+            break
         }
     }
 
@@ -66,9 +55,9 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
         self.dependencies = dependencies
     }
 
-    func start(controller: AuthorizationViewController) {
+    func start(controller: SignInViewController) {
         sourceController = controller
-        let vm = AuthorizationControllerViewModel(router: self)
+        let vm = SignInControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }
 }
