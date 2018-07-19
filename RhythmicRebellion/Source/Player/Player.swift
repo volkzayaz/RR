@@ -292,45 +292,56 @@ class Player: NSObject, Observable {
 
     func prepareAddons(for track: Track, completion: ((Error?) -> ())?) {
 
+        let checkAddonsCompletion: ((Error?) -> ())? = { [weak self] (error) in
+            guard error == nil else { completion?(error); return }
+
+            self?.state.waitingAddons = true
+            self?.addonsPlayTimer = Timer.scheduledTimer(withTimeInterval: 1.0,
+                                                         repeats: false,
+                                                         block: { [weak self] (timer) in
+                                                            self?.state.waitingAddons = false
+                                                            self?.set(trackBlocked: false)
+                                                            self?.state.playing = true
+                                                            self?.player.play()
+            })
+
+            completion?(nil)
+        }
+
+
+        self.state.waitingAddons = false
         self.set(trackBlocked: true) { [weak self] (error) in
             guard error == nil else { completion?(error); return }
 
             guard let addonsStates = self?.playlist.addonsStates(for: track) else {
-                self?.loadAddons(for: track, completion: { (error) in
-                    guard error == nil else { completion?(error); return }
-                    guard let addonsStates = self?.playlist.addonsStates(for: track) else { return } // WARNING: Need To Play Track
+                self?.loadAddons(for: track, completion: { [weak self] (error) in
+                    guard error == nil else {
+                        self?.set(trackBlocked: false)
+                        completion?(error)
+                        return
+                    }
 
-                    self?.checkAddons(trackId: track.id, addonsStates: addonsStates, completion: completion)
+                    guard let addonsStates = self?.playlist.addonsStates(for: track) else {
+                        self?.set(trackBlocked: false)
+                        completion?(AppError(.prepareAddons))
+                        return
+                    }
+
+
+                    self?.checkAddons(trackId: track.id, addonsStates: addonsStates, completion: checkAddonsCompletion)
                 })
                 return
             }
 
-            self?.checkAddons(trackId: track.id, addonsStates: addonsStates, completion: completion)
+            self?.checkAddons(trackId: track.id, addonsStates: addonsStates, completion: checkAddonsCompletion)
         }
     }
 
-    func preparePlayerQueueToPlay(completion: (() -> ())? = nil) {
-        guard self.state.initialized, let track = self.playerQueue.track else { completion?(); return }
+    func preparePlayerQueueToPlay(completion: ((Error?) -> ())? = nil) {
+        guard self.state.initialized, let track = self.playerQueue.track else { completion?(AppError(.notInitialized)); return }
+        guard self.playerQueue.isReadyToPlay == true else { self.prepareAddons(for: track, completion: completion); return }
 
-        if self.playerQueue.isReadyToPlay == false {
-            self.prepareAddons(for: track) { [weak self] (error) in
-                guard error == nil else { self?.player.play(); completion?(); return }
-
-                self?.state.waitingAddons = true
-                self?.addonsPlayTimer = Timer.scheduledTimer(withTimeInterval: 2.0,
-                                                             repeats: false,
-                                                             block: { [weak self] (timer) in
-                                                                self?.state.waitingAddons = false
-                                                                self?.set(trackBlocked: false)
-                                                                self?.state.playing = true
-                                                                self?.player.play()
-                                                                completion?()
-                                        })
-            }
-            return
-        }
-
-        completion?()
+        completion?(nil)
     }
 
     // MARK: - Actions
@@ -339,6 +350,7 @@ class Player: NSObject, Observable {
                 let track = self.playerQueue.track,
                 let trackId = self.playlist.trackId(for: track)
                 else {
+                    self.state.playing = true
                     self.player.play()
                     completion?()
                     return
@@ -346,7 +358,8 @@ class Player: NSObject, Observable {
 
         self.state.playing = true
 
-        let prepareQueueCompletion: (() -> ())? = { [weak self] in
+        let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
+            guard error == nil else { self?.player.play(); completion?(); return }
             guard self?.state.waitingAddons == false else { completion?(); return }
             self?.player.play()
             completion?()
@@ -395,8 +408,8 @@ class Player: NSObject, Observable {
 
     func pause(completion: (() -> ())? = nil) {
 
-        self.player.pause()
         self.state.playing = false
+        self.player.pause()
 
         guard self.state.initialized, self.playerCurrentItem != nil else { completion?(); return }
 
@@ -435,10 +448,10 @@ class Player: NSObject, Observable {
 
         let isPlaying = self.isPlaying
 
-        let prepareQueueCompletion: (() -> ())? = { [weak self] in
+        let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
+            guard error == nil else { if self?.state.playing ?? false { self?.player.play() }; completion?(); return }
             guard self?.state.waitingAddons == false else { completion?(); return }
-            self?.state.playing = isPlaying
-            if isPlaying { self?.player.play() }
+            if self?.state.playing ?? false { self?.player.play() }
             completion?()
         }
 
@@ -493,10 +506,10 @@ class Player: NSObject, Observable {
             let previousTrack = self.findPlayableTrack(before: currentTrackId),
             let previousTrackId = self.playlist.trackId(for: previousTrack) else { completion?(); return }
 
-        let prepareQueueCompletion: (() -> ())? = { [weak self] in
+        let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
+            guard error == nil else { if self?.state.playing ?? false { self?.player.play() }; completion?(); return }
             guard self?.state.waitingAddons == false else { completion?(); return }
-            self?.state.playing = isPlaying
-            if isPlaying { self?.player.play() }
+            if self?.state.playing ?? false { self?.player.play() }
             completion?()
         }
 

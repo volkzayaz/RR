@@ -28,15 +28,21 @@ struct AddonsForTracksResponse: RestApiResponse {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        let stringKeyAddonInfo = try container.decode([String : [Addon]].self, forKey: .data)
         var intKeyAddonInfo = [Int : [Addon]]()
 
-        for (stringId, addons) in stringKeyAddonInfo {
-            guard let intKey = Int(stringId) else { continue }
-            intKeyAddonInfo[intKey] = addons
-        }
+        do {
+            let stringKeyAddonInfo = try container.decode([String : [Addon]].self, forKey: .data)
 
-        self.value = intKeyAddonInfo
+            for (stringId, addons) in stringKeyAddonInfo {
+                guard let intKey = Int(stringId) else { continue }
+                intKeyAddonInfo[intKey] = addons
+            }
+
+            self.value = intKeyAddonInfo
+        } catch (let error) {
+            guard let emptyAddons = try? container.decodeIfPresent([Addon].self, forKey: .data), emptyAddons?.isEmpty ?? false else { throw error }
+            self.value = intKeyAddonInfo
+        }
     }
 }
 
