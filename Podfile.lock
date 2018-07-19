@@ -2,11 +2,13 @@ PODS:
   - Alamofire (4.7.2)
   - ReachabilitySwift (4.1.0)
   - Starscream (3.0.5)
+  - SwiftValidator (4.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
   - ReachabilitySwift
   - Starscream (~> 3.0.2)
+  - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, branch `master`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -14,11 +16,22 @@ SPEC REPOS:
     - ReachabilitySwift
     - Starscream
 
+EXTERNAL SOURCES:
+  SwiftValidator:
+    :branch: master
+    :git: https://github.com/jpotts18/SwiftValidator.git
+
+CHECKOUT OPTIONS:
+  SwiftValidator:
+    :commit: ba27b0e501bf542b5c1a97bed8f706d12fb2d4f4
+    :git: https://github.com/jpotts18/SwiftValidator.git
+
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
+  SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
 
-PODFILE CHECKSUM: 4f74d9e0d639f3e12f2f957459eb37657158b4bd
+PODFILE CHECKSUM: 7780c493b062525989b4eeab8b9f6c8712866bfc
 
 COCOAPODS: 1.5.0

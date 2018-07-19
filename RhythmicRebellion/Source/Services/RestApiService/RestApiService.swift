@@ -9,11 +9,6 @@
 import Foundation
 import Alamofire
 
-enum RestApiServiceResult<T> {
-    case success(T)
-    case failure(Error)
-}
-
 class RestApiService {
 
     let serverURL: URL
@@ -31,7 +26,7 @@ class RestApiService {
 
     // MARK: - User
 
-    func fanUser(completion: @escaping (RestApiServiceResult<User>) -> Void) {
+    func fanUser(completion: @escaping (Result<User>) -> Void) {
 
         guard let fanUserURL = self.makeURL(with: "fan/user") else { return }
 
@@ -42,14 +37,14 @@ class RestApiService {
             .validate()
             .restApiResponse { (dataResponse: DataResponse<FanUserResponse>) in
 
-                guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
-                guard let user = dataResponse.value?.user else { completion(.failure(AppError(.unexpectedResponse))); return }
-
-                completion(.success(user))
+                switch dataResponse.result {
+                case .success(let fanUserResponse): completion(.success(fanUserResponse.user))
+                case .failure(let error): completion(.failure(error))
+                }
         }
     }
 
-    func fanLogin(email: String, password: String, completion: @escaping (RestApiServiceResult<User>) -> Void) {
+    func fanLogin(email: String, password: String, completion: @escaping (Result<User>) -> Void) {
 
         guard let fanLoginURL = self.makeURL(with: "fan/login") else { return }
 
@@ -60,14 +55,15 @@ class RestApiService {
         Alamofire.request(fanLoginURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
             .restApiResponse { (dataResponse: DataResponse<FanLoginResponse>) in
-                guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
-                guard let user = dataResponse.value?.user else { completion(.failure(AppError(.unexpectedResponse))); return }
 
-                completion(.success(user))
+                switch dataResponse.result {
+                case .success(let fanLoginResponse): completion(.success(fanLoginResponse.user))
+                case .failure(let error): completion(.failure(error))
+                }
         }
     }
 
-    func fanLogout(completion: @escaping (RestApiServiceResult<User>) -> Void) {
+    func fanLogout(completion: @escaping (Result<User>) -> Void) {
         guard let fanLogoutURL = self.makeURL(with: "fan/logout") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
@@ -76,17 +72,18 @@ class RestApiService {
         Alamofire.request(fanLogoutURL, method: .post, headers: headers)
             .validate()
             .restApiResponse { (dataResponse: DataResponse<FanUserResponse>) in
-                guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
-                guard let user = dataResponse.value?.user else { completion(.failure(AppError(.unexpectedResponse))); return }
 
-                completion(.success(user))
+                switch dataResponse.result {
+                case .success(let fanUserResponse): completion(.success(fanUserResponse.user))
+                case .failure(let error): completion(.failure(error))
+                }
         }
 
     }
 
     // MARK: - Player
 
-    func audioAddons(for trackIds: [Int], completion: @escaping (RestApiServiceResult<[Int : [Addon]]>) -> Void) {
+    func audioAddons(for trackIds: [Int], completion: @escaping (Result<[Int : [Addon]]>) -> Void) {
         guard let addonsForTracksURL = self.makeURL(with: "player/audio-add-ons-for-tracks") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json"]
@@ -102,9 +99,10 @@ class RestApiService {
                 .validate()
                 .restApiResponse { (dataResponse: DataResponse<AddonsForTracksResponse>) in
 
-                    guard dataResponse.error == nil else { completion(.failure(dataResponse.error!)); return }
-
-                    completion(.success(dataResponse.value!.value))
+                    switch dataResponse.result {
+                    case .success(let addonsForTracksResponse): completion(.success(addonsForTracksResponse.trackAddons))
+                    case .failure(let error): completion(.failure(error))
+                    }
             }
 
         } catch (let error) {

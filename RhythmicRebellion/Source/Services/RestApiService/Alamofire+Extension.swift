@@ -23,17 +23,30 @@ extension Request {
         error: Error?)
         -> Result<T>
     {
-        guard error == nil else { return .failure(error!) }
+        guard error == nil else {
+            guard let errorData = data, errorData.count > 0,
+                let restApiResponse = try? JSONDecoder().decode(ErrorResponse.self, from: errorData) else { return .failure(error!) }
 
-        if let response = response, emptyDataStatusCodes.contains(response.statusCode) { return .success(T()) }
+            return .failure(AppError(.serverError(restApiResponse.message, restApiResponse.errors)))
+        }
+
+        if let response = response, emptyDataStatusCodes.contains(response.statusCode) {
+
+            guard T.self is EmptyRestApiResponse.Type else {
+                return .failure(AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength))
+            }
+
+            let emptyRestApiResponseType = T.self as! EmptyRestApiResponse.Type
+            let emptyResponse = emptyRestApiResponseType.init() as! T
+
+            return .success(emptyResponse)
+        }
 
         guard let validData = data, validData.count > 0 else {
             return .failure(AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength))
         }
 
         do {
-            print("response validData: \(String(data: validData, encoding: .utf8))")
-
             let restApiResponse = try JSONDecoder().decode(T.self, from: validData)
             return .success(restApiResponse)
         } catch {

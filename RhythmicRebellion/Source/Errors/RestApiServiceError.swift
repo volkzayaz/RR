@@ -9,14 +9,18 @@
 import Foundation
 
 public enum RestApiServiceError: ErrorsGroup {
+    case unauthorized
     case unexpectedResponse
+    case serverError(String, [String : [String]])
 }
 
 extension RestApiServiceError {
 
     public var description: String {
         switch self {
+        case .unauthorized: return NSLocalizedString("Unauthorized.", comment: "Unauthorized request for instance")
         case .unexpectedResponse: return NSLocalizedString("Unexpected response", comment: "Unexpected response")
+        case .serverError(let message, let errors): return errors.first?.value.first ?? message
         }
     }
 }

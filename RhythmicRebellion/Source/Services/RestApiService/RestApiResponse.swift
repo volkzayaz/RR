@@ -10,19 +10,45 @@ import Foundation
 import Alamofire
 
 public protocol RestApiResponse: Decodable {
+}
+
+public protocol EmptyRestApiResponse: RestApiResponse {
     init()
 }
 
-struct AddonsForTracksResponse: RestApiResponse {
+struct ErrorResponse: RestApiResponse {
 
-    let value: [Int : [Addon]]
+    let message: String
+    let errors: [String: [String]]
+
+    enum CodingKeys: String, CodingKey {
+        case message
+        case meta
+    }
+
+    enum MetaCodingKeys: String, CodingKey {
+        case errors
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let metaContainer = try container.nestedContainer(keyedBy: MetaCodingKeys.self, forKey: .meta)
+
+        self.message = try container.decode(String.self, forKey: .message)
+        self.errors = try metaContainer.decode([String : [String]].self, forKey: .errors)
+    }
+}
+
+struct AddonsForTracksResponse: EmptyRestApiResponse {
+
+    let trackAddons: [Int : [Addon]]
 
     enum CodingKeys: String, CodingKey {
         case data
     }
 
     init() {
-        self.value = [Int : [Addon]]()
+        self.trackAddons = [Int : [Addon]]()
     }
 
     public init(from decoder: Decoder) throws {
@@ -38,17 +64,17 @@ struct AddonsForTracksResponse: RestApiResponse {
                 intKeyAddonInfo[intKey] = addons
             }
 
-            self.value = intKeyAddonInfo
+            self.trackAddons = intKeyAddonInfo
         } catch (let error) {
             guard let emptyAddons = try? container.decodeIfPresent([Addon].self, forKey: .data), emptyAddons?.isEmpty ?? false else { throw error }
-            self.value = intKeyAddonInfo
+            self.trackAddons = intKeyAddonInfo
         }
     }
 }
 
 struct FanUserResponse: RestApiResponse {
 
-    let user: User?
+    let user: User
 
     enum CodingKeys: String, CodingKey {
         case data
@@ -56,10 +82,6 @@ struct FanUserResponse: RestApiResponse {
 
     enum DataCodingKeys: String, CodingKey {
         case guest
-    }
-
-    init () {
-        self.user = nil
     }
 
     public init(from decoder: Decoder) throws {
@@ -78,23 +100,21 @@ struct FanUserResponse: RestApiResponse {
 
 struct FanLoginResponse: RestApiResponse {
 
-    let user: User?
+    let user: User
 
     enum CodingKeys: String, CodingKey {
         case user
+        case meta
     }
 
-    enum DataCodingKeys: String, CodingKey {
+    enum UserCodingKeys: String, CodingKey {
         case guest
-    }
-
-    init () {
-        self.user = nil
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let userContainer = try container.nestedContainer(keyedBy: DataCodingKeys.self, forKey: .user)
+
+        let userContainer = try container.nestedContainer(keyedBy: UserCodingKeys.self, forKey: .user)
 
         let isGuest = try userContainer.decode(Bool.self, forKey: .guest)
 
@@ -105,4 +125,5 @@ struct FanLoginResponse: RestApiResponse {
         }
     }
 }
+
 

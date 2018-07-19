@@ -8,12 +8,20 @@
 //
 
 import UIKit
+import SwiftValidator
 
 protocol SignInViewModel: class {
 
+    var signInErrorDescription: String? { get }
+
     func load(with delegate: SignInViewModelDelegate)
 
-    func signIn(email: String, password: String, completion: @escaping (Error?) -> Void)
+    func registerEmailField(emailField: ValidatableField, emailErrorLabel: UILabel?)
+    func registerPasswordField(passwordField: ValidatableField, passwordErrorLabel: UILabel?)
+
+    func validateField(field: ValidatableField)
+
+    func signIn()
 }
 
 protocol SignInViewModelDelegate: class {

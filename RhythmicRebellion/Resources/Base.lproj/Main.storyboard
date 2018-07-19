@@ -750,7 +750,10 @@
                                                     <constraint firstAttribute="height" constant="44" id="hWY-d3-ZgT"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="email"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="email"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="Inw-xA-eeA" id="zZE-iQ-aKj"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eea-7c-4zv">
                                                 <rect key="frame" x="16" y="166" width="288" height="44"/>
@@ -760,7 +763,10 @@
                                                 </constraints>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="password"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="password"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="Inw-xA-eeA" id="3Hk-Zb-x1m"/>
+                                                </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vnS-Mb-NX5">
                                                 <rect key="frame" x="16" y="240" width="115" height="28.5"/>
@@ -790,17 +796,50 @@
                                                     <action selector="onSignInSender:" destination="Inw-xA-eeA" eventType="touchUpInside" id="os7-cH-fm0"/>
                                                 </connections>
                                             </button>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jsg-Mq-VTh">
+                                                <rect key="frame" x="16" y="144" width="0.0" height="12"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="12" id="FOX-d9-2dg"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAa-ua-3ai">
+                                                <rect key="frame" x="16" y="213" width="0.0" height="12"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="12" id="J3U-aK-aJe"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zPE-eq-zsB">
+                                                <rect key="frame" x="160" y="80" width="0.0" height="12"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="12" id="D7U-md-Den"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="zPE-eq-zsB" firstAttribute="centerX" secondItem="LZa-jk-kfx" secondAttribute="centerX" id="0O6-bf-EBc"/>
                                             <constraint firstItem="HNU-rB-88R" firstAttribute="top" secondItem="vnS-Mb-NX5" secondAttribute="bottom" constant="35" id="2EB-gA-EDL"/>
                                             <constraint firstItem="eea-7c-4zv" firstAttribute="leading" secondItem="JKy-2N-PlT" secondAttribute="leading" id="2aH-Eq-4CI"/>
+                                            <constraint firstItem="Jsg-Mq-VTh" firstAttribute="top" secondItem="JKy-2N-PlT" secondAttribute="bottom" constant="3" id="71A-dt-CUG"/>
+                                            <constraint firstItem="eea-7c-4zv" firstAttribute="top" secondItem="JKy-2N-PlT" secondAttribute="bottom" constant="25" id="8Y3-Tm-6gf"/>
+                                            <constraint firstItem="Jsg-Mq-VTh" firstAttribute="leading" secondItem="JKy-2N-PlT" secondAttribute="leading" id="9hO-wl-Kxa"/>
                                             <constraint firstItem="JKy-2N-PlT" firstAttribute="top" secondItem="KQ0-5Z-mCO" secondAttribute="bottom" constant="40" id="BMg-bi-v4F"/>
-                                            <constraint firstItem="eea-7c-4zv" firstAttribute="top" secondItem="JKy-2N-PlT" secondAttribute="bottom" constant="25" id="BOP-q5-9jP"/>
                                             <constraint firstItem="KQ0-5Z-mCO" firstAttribute="top" secondItem="LZa-jk-kfx" secondAttribute="top" constant="40" id="BgB-6Q-Qdl"/>
                                             <constraint firstItem="vnS-Mb-NX5" firstAttribute="top" secondItem="eea-7c-4zv" secondAttribute="bottom" constant="30" id="ByR-Wy-3mX"/>
+                                            <constraint firstItem="HAa-ua-3ai" firstAttribute="leading" secondItem="eea-7c-4zv" secondAttribute="leading" id="GGr-D3-cZx"/>
                                             <constraint firstItem="HNU-rB-88R" firstAttribute="trailing" secondItem="JKy-2N-PlT" secondAttribute="trailing" id="RjB-S1-2dd"/>
                                             <constraint firstAttribute="trailing" secondItem="KQ0-5Z-mCO" secondAttribute="trailing" constant="5" id="RmL-Nn-Iaj"/>
+                                            <constraint firstItem="JKy-2N-PlT" firstAttribute="top" secondItem="zPE-eq-zsB" secondAttribute="bottom" constant="5" id="cM8-iX-oFg"/>
+                                            <constraint firstItem="HAa-ua-3ai" firstAttribute="top" secondItem="eea-7c-4zv" secondAttribute="bottom" constant="3" id="dIp-eG-XlV"/>
                                             <constraint firstItem="vnS-Mb-NX5" firstAttribute="leading" secondItem="JKy-2N-PlT" secondAttribute="leading" id="dlQ-4A-vGP"/>
                                             <constraint firstItem="eea-7c-4zv" firstAttribute="trailing" secondItem="JKy-2N-PlT" secondAttribute="trailing" id="lo2-eE-rBE"/>
                                             <constraint firstItem="JKy-2N-PlT" firstAttribute="centerX" secondItem="KQ0-5Z-mCO" secondAttribute="centerX" id="oBO-2b-waS"/>
@@ -830,8 +869,11 @@
                         <viewLayoutGuide key="safeArea" id="GDr-DB-jco"/>
                     </view>
                     <connections>
+                        <outlet property="emailErrorLabel" destination="Jsg-Mq-VTh" id="vgu-w2-z3Y"/>
                         <outlet property="emailTextField" destination="JKy-2N-PlT" id="xck-Z4-WEE"/>
+                        <outlet property="passwordErrorLabel" destination="HAa-ua-3ai" id="RDY-Yx-Du3"/>
                         <outlet property="passwordTextField" destination="eea-7c-4zv" id="wno-tJ-pSW"/>
+                        <outlet property="signInErrorLabel" destination="zPE-eq-zsB" id="NWy-Qg-mNS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ExT-uC-bXJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
