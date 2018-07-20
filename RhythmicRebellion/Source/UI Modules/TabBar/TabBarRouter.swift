@@ -23,9 +23,10 @@ enum TabType: Int {
 
 protocol TabBarRouter: FlowRouter {
     func updateTabs(for types: [TabType])
+    func selectTab(for type: TabType)
 }
 
-final class DefaultTabBarRouter:  TabBarRouter, SegueCompatible {
+final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
 
     typealias Destinations = SegueList
     
@@ -86,7 +87,7 @@ final class DefaultTabBarRouter:  TabBarRouter, SegueCompatible {
         var viewControllers = [UIViewController]()
 
         for type in types {
-            guard let viewController = self.childViewController(for: type) else { continue }
+            guard let viewController = self.viewController(for: type, from: self.childViewContollers) else { continue }
 
             switch type {
             case .home:
@@ -129,10 +130,28 @@ final class DefaultTabBarRouter:  TabBarRouter, SegueCompatible {
         tabBarViewController?.viewControllers = viewControllers
     }
 
-    private func childViewController(for type: TabType) -> UIViewController? {
-        return self.childViewContollers?.filter( {
+    func selectTab(for type: TabType) {
+        guard let viewController = self.viewController(for: type, from: self.tabBarViewController?.viewControllers) else { return }
+        self.tabBarViewController?.selectedViewController = viewController
+    }
+
+    private func viewController(for type: TabType, from viewControllers: [UIViewController]?) -> UIViewController? {
+        return viewControllers?.filter( {
             guard let tabBarItem = $0.tabBarItem, let childViewControllerType = TabType(rawValue: tabBarItem.tag) else { return false}
             return childViewControllerType == type
         }).first
     }
 }
+
+//extension DefaultTabBarRouter: UITabBarControllerDelegate {
+//
+//    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+//        guard let tabBarItem = viewController.tabBarItem, let viewiewControllerType = TabType(rawValue: tabBarItem.tag) else { return }
+//
+//        switch viewiewControllerType {
+//        case .authorization:
+//
+//        }
+//    }
+//
+//}
