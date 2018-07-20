@@ -93,7 +93,6 @@ class Application: Observable {
     }
 
     func signIn(with credentials: UserCredentials, completion: ((Error?) -> Void)? = nil) {
-        guard let reachability = self.restApiServiceReachability, reachability.connection != .none else { return }
 
         self.restApiService.fanLogin(email: credentials.email, password: credentials.password, completion: { [weak self] (loginUserResult) in
 

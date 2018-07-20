@@ -81,13 +81,7 @@ final class SignInControllerViewModel: SignInViewModel {
     }
 
     func validateField(field: ValidatableField) {
-        self.validator.validateField(field) { [unowned self] (validationError) in
-//            if field === self.emailField {
-//                self.delegate?.refreshEmailField(field: field, didValidate: validationError)
-//            } else if field === self.passwordField {
-//                self.delegate?.refreshPasswordField(field: field, didValidate: validationError)
-//            }
-        }
+        self.validator.validateField(field) { (validationError) in }
     }
 
     func signIn() {
@@ -101,8 +95,7 @@ final class SignInControllerViewModel: SignInViewModel {
 
                 guard let error = error else { return }
                 guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                    self?.signInErrorDescription = error.localizedDescription
-                    self?.delegate?.refreshUI()
+                    self?.delegate?.show(error: error)
                     return
                 }
 
@@ -110,12 +103,11 @@ final class SignInControllerViewModel: SignInViewModel {
                 case RestApiServiceError.serverError( _, let errors):
                     self?.signInErrorDescription = errors["email"]?.first
                 default:
-                    self?.signInErrorDescription = error.localizedDescription
+                    self?.delegate?.show(error: error)
                 }
 
                 self?.delegate?.refreshUI()
             })
-
         }
     }
 }
