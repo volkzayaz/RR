@@ -8,12 +8,14 @@
 //
 
 import UIKit
+import MaterialTextField
+import SwiftValidator
 
 final class SignInViewController: UIViewController, UITextFieldDelegate {
 
-    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var emailTextField: MFTextField!
     @IBOutlet weak var emailErrorLabel: UILabel!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var passwordTextField: MFTextField!
     @IBOutlet weak var passwordErrorLabel: UILabel!
 
     @IBOutlet weak var signInErrorLabel: UILabel!
@@ -34,19 +36,47 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.load(with: self)
+//        self.emailTextField.layer.cornerRadius = 2.0
+//        self.emailTextField.clipsToBounds = true
+        self.emailTextField.placeholderAnimatesOnFocus = true;
 
-        self.viewModel.registerEmailField(emailField: self.emailTextField, emailErrorLabel: self.emailErrorLabel)
-        self.viewModel.registerPasswordField(passwordField: self.passwordTextField, passwordErrorLabel: self.passwordErrorLabel)
+//        self.passwordTextField.layer.cornerRadius = 2.0
+//        self.passwordTextField.clipsToBounds = true
+        self.passwordTextField.placeholderAnimatesOnFocus = true;
+
+        self.viewModel.load(with: self)
+
+        self.viewModel.registerEmailField(emailField: self.emailTextField)
+        self.viewModel.registerPasswordField(passwordField: self.passwordTextField)
 
         #if DEBUG
-        self.emailTextField.text = "alexander@olearis.com"
-        self.passwordTextField.text = "ngrx2Fan"
-//        self.passwordTextField.text = "ngrx2Fan1111"
+//        self.emailTextField.text = "alexander@olearis.com"
+//        self.passwordTextField.text = "ngrx2Fan"
         #else
-        self.emailTextField.text = "alena@olearis.com"
-        self.passwordTextField.text = "Olearistest1"
+//        self.emailTextField.text = "alena@olearis.com"
+//        self.passwordTextField.text = "Olearistest1"
         #endif
+    }
+
+    func udate(textField: MFTextField, errorLabel: UILabel, withValidationError validationError: ValidationError?) {
+
+        guard let error = validationError else {
+            errorLabel.text = ""
+            errorLabel.isHidden = true
+
+            textField.tintColor = self.viewModel.defaultTintColor
+            textField.textColor = self.viewModel.defaultTextColor
+            textField.defaultPlaceholderColor = self.viewModel.defaultTextColor
+
+            return
+        }
+
+        errorLabel.text = error.errorMessage
+        errorLabel.isHidden = false
+
+        textField.tintColor = self.viewModel.errorColor
+        textField.textColor = self.viewModel.errorColor
+        textField.defaultPlaceholderColor = self.viewModel.errorColor
     }
 
     // MARK: - Actions
@@ -95,9 +125,40 @@ extension SignInViewController {
 
 extension SignInViewController: SignInViewModelDelegate {
 
+    func refresh(textField: MFTextField, errorLabel: UILabel, withValidationError validationError: ValidationError?) {
+
+        guard let error = validationError else {
+            errorLabel.text = ""
+            errorLabel.isHidden = true
+
+            textField.tintColor = self.viewModel.defaultTintColor
+            textField.textColor = self.viewModel.defaultTextColor
+            textField.defaultPlaceholderColor = self.viewModel.defaultTextColor
+            textField.placeholderColor = self.viewModel.defaultTextColor
+
+            return
+        }
+
+        errorLabel.text = error.errorMessage
+        errorLabel.isHidden = false
+
+        textField.tintColor = self.viewModel.errorColor
+        textField.textColor = self.viewModel.errorColor
+        textField.defaultPlaceholderColor = self.viewModel.errorColor
+        textField.placeholderColor = self.viewModel.errorColor
+    }
+
     func refreshUI() {
         self.signInErrorLabel.text = self.viewModel.signInErrorDescription
         self.signInErrorLabel.isHidden = self.signInErrorLabel.text?.isEmpty ?? true
     }
 
+    
+    func refreshEmailField(field: ValidatableField, didValidate validationError: ValidationError?) {
+        self.refresh(textField: self.emailTextField, errorLabel: self.emailErrorLabel, withValidationError: validationError)
+    }
+
+    func refreshPasswordField(field: ValidatableField, didValidate validationError: ValidationError?) {
+        self.refresh(textField: self.passwordTextField, errorLabel: self.passwordErrorLabel, withValidationError: validationError)
+    }
 }

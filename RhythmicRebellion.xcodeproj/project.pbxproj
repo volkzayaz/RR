@@ -358,10 +358,10 @@
 		7665335220FF411E00FEC702 /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
-				7665335320FF414300FEC702 /* SignInControllerViewModel.swift */,
 				7665335420FF414300FEC702 /* SignInRouter.swift */,
-				7665335520FF414300FEC702 /* SignInViewController.swift */,
 				7665335620FF414300FEC702 /* SignInViewModel.swift */,
+				7665335320FF414300FEC702 /* SignInControllerViewModel.swift */,
+				7665335520FF414300FEC702 /* SignInViewController.swift */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -563,6 +563,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/MaterialTextField/MaterialTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
@@ -570,6 +571,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",

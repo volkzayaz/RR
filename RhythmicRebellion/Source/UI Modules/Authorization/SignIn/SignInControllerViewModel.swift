@@ -17,6 +17,13 @@ struct SignInUserCredentials: UserCredentials {
 
 final class SignInControllerViewModel: SignInViewModel {
 
+    // MARK: - Public properties
+
+    var defaultTextColor: UIColor { return #colorLiteral(red: 0.1780987382, green: 0.2085041702, blue: 0.4644742608, alpha: 1) }
+    var defaultTintColor: UIColor { return #colorLiteral(red: 0.1468808055, green: 0.1904500723, blue: 0.8971034884, alpha: 1) }
+
+    var errorColor: UIColor { return #colorLiteral(red: 0.9567829967, green: 0.2645464838, blue: 0.213359952, alpha: 1) }
+
     // MARK: - Private properties -
 
     private(set) weak var delegate: SignInViewModelDelegate?
@@ -40,32 +47,46 @@ final class SignInControllerViewModel: SignInViewModel {
     func load(with delegate: SignInViewModelDelegate) {
         self.delegate = delegate
 
-        self.validator.styleTransformers(success:{ (validationRule) -> Void in
-            validationRule.errorLabel?.isHidden = true
-            validationRule.errorLabel?.text = ""
+        self.validator.styleTransformers(success:{ [unowned self] (validationRule) -> Void in
+            if validationRule.field === self.emailField {
+                self.delegate?.refreshEmailField(field: validationRule.field, didValidate: nil)
+            } else if validationRule.field === self.passwordField {
+                self.delegate?.refreshPasswordField(field: validationRule.field, didValidate: nil)
+            }
         }, error:{ (validationError) -> Void in
-            validationError.errorLabel?.isHidden = false
-            validationError.errorLabel?.text = validationError.errorMessage
+            if validationError.field === self.emailField {
+                self.delegate?.refreshEmailField(field: validationError.field, didValidate: validationError)
+            } else if validationError.field === self.passwordField {
+                self.delegate?.refreshPasswordField(field: validationError.field, didValidate: validationError)
+            }
         })
     }
 
-    func registerEmailField(emailField: ValidatableField, emailErrorLabel: UILabel? = nil) {
+    func registerEmailField(emailField: ValidatableField) {
 
         self.emailField = emailField
         let emailRules: [Rule] = [RequiredRule(message: "The field is required"),
                                   EmailRule(message: "Email is wrong")]
-        self.validator.registerField(emailField, errorLabel: emailErrorLabel, rules: emailRules)
+        self.validator.registerField(emailField, rules: emailRules)
+
+        self.delegate?.refreshEmailField(field: emailField, didValidate: nil)
     }
 
-    func registerPasswordField(passwordField: ValidatableField, passwordErrorLabel: UILabel? = nil) {
+    func registerPasswordField(passwordField: ValidatableField) {
         self.passwordField = passwordField
         let passwordRules: [Rule] = [RequiredRule(message: "The password field is required")]
-        self.validator.registerField(passwordField, errorLabel: passwordErrorLabel, rules: passwordRules)
+        self.validator.registerField(passwordField, rules: passwordRules)
+
+        self.delegate?.refreshPasswordField(field: passwordField, didValidate: nil)
     }
 
     func validateField(field: ValidatableField) {
-        self.validator.validateField(field) { (error) in
-
+        self.validator.validateField(field) { [unowned self] (validationError) in
+//            if field === self.emailField {
+//                self.delegate?.refreshEmailField(field: field, didValidate: validationError)
+//            } else if field === self.passwordField {
+//                self.delegate?.refreshPasswordField(field: field, didValidate: validationError)
+//            }
         }
     }
 
