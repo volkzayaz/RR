@@ -27,6 +27,8 @@ protocol SignInViewModel: class {
     func validateField(field: ValidatableField)
 
     func signIn()
+
+    func restart()
 }
 
 protocol SignInViewModelDelegate: class {

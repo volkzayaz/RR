@@ -29,16 +29,35 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var signInErrorLabel: UILabel!
 
     // MARK: - Public properties -
-
-
     private(set) var viewModel: SignInViewModel!
     private(set) var router: FlowRouter!
+
+    private var applicationWillEnterForegroundObserver: NSObjectProtocol?
+
+    deinit {
+        if let applicationWillEnterForegroundObserver = self.applicationWillEnterForegroundObserver {
+            NotificationCenter.default.removeObserver(applicationWillEnterForegroundObserver)
+            self.applicationWillEnterForegroundObserver = nil
+        }
+    }
 
     // MARK: - Configuration -
 
     func configure(viewModel: SignInViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
+
+        if self.isViewLoaded {
+            self.passwordTextField.text = nil
+            self.bindViewModel()
+        }
+    }
+
+    func bindViewModel() {
+        self.viewModel.load(with: self)
+
+        self.viewModel.registerEmailField(emailField: self.emailTextField)
+        self.viewModel.registerPasswordField(passwordField: self.passwordTextField)
     }
 
     // MARK: - Lifecycle -
@@ -47,22 +66,15 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
 
         self.scrollView.isScrollEnabled = false
-        self.preferredContentSize = CGSize(width: self.view.bounds.size.width, height: 371.0)
+        self.preferredContentSize = CGSize(width: self.view.bounds.size.width, height: 368.0)
 
-//        self.emailTextField.layer.cornerRadius = 2.0
-//        self.emailTextField.clipsToBounds = true
         self.emailTextField.textColor = self.viewModel.defaultTextColor
         self.emailTextField.placeholderAnimatesOnFocus = true;
 
-//        self.passwordTextField.layer.cornerRadius = 2.0
-//        self.passwordTextField.clipsToBounds = true
         self.passwordTextField.textColor = self.viewModel.defaultTextColor
         self.passwordTextField.placeholderAnimatesOnFocus = true;
 
-        self.viewModel.load(with: self)
-
-        self.viewModel.registerEmailField(emailField: self.emailTextField)
-        self.viewModel.registerPasswordField(passwordField: self.passwordTextField)
+        self.bindViewModel()
 
         #if DEBUG
 //        self.emailTextField.text = "alexander@olearis.com"
@@ -71,6 +83,23 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
 //        self.emailTextField.text = "alena@olearis.com"
 //        self.passwordTextField.text = "Olearistest1"
         #endif
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.applicationWillEnterForegroundObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+            self.applicationWillEnterForeground(notification: notification)
+        }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if let applicationWillEnterForegroundObserver = self.applicationWillEnterForegroundObserver {
+            NotificationCenter.default.removeObserver(applicationWillEnterForegroundObserver)
+            self.applicationWillEnterForegroundObserver = nil
+        }
     }
 
     // MARK: - Actions
@@ -97,6 +126,12 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         }
 
         return true
+    }
+
+    // MARK: - Notifications
+
+    func applicationWillEnterForeground(notification: Notification) {
+        self.viewModel.restart()
     }
 }
 

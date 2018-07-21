@@ -60,6 +60,8 @@ final class SignInControllerViewModel: SignInViewModel {
                 self.delegate?.refreshPasswordField(field: validationError.field, didValidate: validationError)
             }
         })
+
+        self.delegate?.refreshUI()
     }
 
     func registerEmailField(emailField: ValidatableField) {
@@ -69,7 +71,11 @@ final class SignInControllerViewModel: SignInViewModel {
                                   EmailRule(message: "Email is wrong")]
         self.validator.registerField(emailField, rules: emailRules)
 
-        self.delegate?.refreshEmailField(field: emailField, didValidate: nil)
+        if emailField.validationText.isEmpty == true {
+            self.delegate?.refreshEmailField(field: emailField, didValidate: nil)
+        } else {
+            self.validator.validateField(emailField) { (validationError) in }
+        }
     }
 
     func registerPasswordField(passwordField: ValidatableField) {
@@ -109,5 +115,9 @@ final class SignInControllerViewModel: SignInViewModel {
                 self?.delegate?.refreshUI()
             })
         }
+    }
+
+    func restart() {
+        self.router?.restart()
     }
 }

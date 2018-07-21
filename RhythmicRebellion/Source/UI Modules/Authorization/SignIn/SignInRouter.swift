@@ -10,6 +10,8 @@
 import UIKit
 
 protocol SignInRouter: FlowRouter {
+
+    func restart()
 }
 
 final class DefaultSignInRouter:  SignInRouter, SegueCompatible {
@@ -35,7 +37,9 @@ final class DefaultSignInRouter:  SignInRouter, SegueCompatible {
     private(set) var dependencies: RouterDependencies
 
     private(set) weak var viewModel: SignInViewModel?
-    private(set) weak var sourceController: UIViewController?
+    private(set) weak var signInViewController: SignInViewController?
+
+    var sourceController: UIViewController? { return signInViewController}
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -56,8 +60,14 @@ final class DefaultSignInRouter:  SignInRouter, SegueCompatible {
     }
 
     func start(controller: SignInViewController) {
-        sourceController = controller
+        signInViewController = controller
         let vm = SignInControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }
+
+    func restart() {
+        let vm = SignInControllerViewModel(router: self, application: self.dependencies.application)
+        signInViewController?.configure(viewModel: vm, router: self)
+    }
+
 }

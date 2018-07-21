@@ -42,7 +42,9 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
     private(set) var dependencies: RouterDependencies
 
     private(set) weak var viewModel: AuthorizationViewModel?
-    private(set) weak var sourceController: UIViewController?
+    private(set) weak var authorizationViewController: AuthorizationViewController?
+
+    var sourceController: UIViewController? { return authorizationViewController }
 
     private(set) var authorizationViewControllers = [AuthorizationType : UIViewController]()
 
@@ -67,8 +69,15 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
     }
 
     func start(controller: AuthorizationViewController) {
-        sourceController = controller
+        authorizationViewController = controller
         let vm = AuthorizationControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
+
+        for childViweController in controller.childViewControllers {
+            if let signInViewController = childViweController as? SignInViewController {
+                let signInRouter = DefaultSignInRouter(dependencies: self.dependencies)
+                signInRouter.start(controller: signInViewController)
+            }
+        }
     }
 }
