@@ -725,7 +725,7 @@
                         <action selector="onPauseButtonWithSender:" destination="zss-td-B1y" id="JqU-vH-TNF"/>
                     </connections>
                 </barButtonItem>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please use your original music player or wait for the artist to end his talk" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zpU-Lw-fct">
+                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please use your original music player or wait for the artist to end his talk" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zpU-Lw-fct">
                     <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="0.75" colorSpace="calibratedRGB"/>
