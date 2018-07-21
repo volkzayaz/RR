@@ -244,10 +244,10 @@
 			children = (
 				7665335220FF411E00FEC702 /* SignIn */,
 				7606BDD220FF46CB00D90D73 /* SignUp */,
-				763C905320FDDE96007C1F86 /* AuthorizationControllerViewModel.swift */,
 				763C905420FDDE96007C1F86 /* AuthorizationRouter.swift */,
-				763C905520FDDE96007C1F86 /* AuthorizationViewController.swift */,
 				763C905620FDDE96007C1F86 /* AuthorizationViewModel.swift */,
+				763C905320FDDE96007C1F86 /* AuthorizationControllerViewModel.swift */,
+				763C905520FDDE96007C1F86 /* AuthorizationViewController.swift */,
 			);
 			path = Authorization;
 			sourceTree = "<group>";

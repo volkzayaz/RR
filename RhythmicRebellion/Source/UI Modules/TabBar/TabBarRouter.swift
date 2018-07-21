@@ -77,6 +77,7 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
     func start(controller: TabBarViewController) {
         tabBarViewController = controller
         childViewContollers = controller.viewControllers
+        tabBarViewController?.delegate = self
         let vm = TabBarControllerViewModel(router: self, application: self.dependencies.application)
 
         controller.configure(viewModel: vm, router: self, viewControllers: [])
@@ -143,15 +144,18 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
     }
 }
 
-//extension DefaultTabBarRouter: UITabBarControllerDelegate {
-//
-//    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-//        guard let tabBarItem = viewController.tabBarItem, let viewiewControllerType = TabType(rawValue: tabBarItem.tag) else { return }
-//
-//        switch viewiewControllerType {
-//        case .authorization:
-//
-//        }
-//    }
-//
-//}
+extension DefaultTabBarRouter: UITabBarControllerDelegate {
+
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        guard let tabBarItem = viewController.tabBarItem, let viewiewControllerType = TabType(rawValue: tabBarItem.tag) else { return }
+
+        switch viewiewControllerType {
+        case .authorization:
+            guard let authorizationViwController = viewController as? AuthorizationViewController else { return }
+            let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
+            authorizationRouter.start(controller: authorizationViwController)
+        default: break
+        }
+    }
+
+}

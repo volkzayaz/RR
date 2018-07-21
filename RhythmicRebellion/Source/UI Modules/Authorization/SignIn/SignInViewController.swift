@@ -11,15 +11,25 @@ import UIKit
 import MaterialTextField
 import SwiftValidator
 
+class SignInView: UIView {
+
+    override var intrinsicContentSize: CGSize {
+        return super.intrinsicContentSize
+    }
+}
+
 final class SignInViewController: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var emailTextField: MFTextField!
     @IBOutlet weak var emailErrorLabel: UILabel!
     @IBOutlet weak var passwordTextField: MFTextField!
     @IBOutlet weak var passwordErrorLabel: UILabel!
 
     @IBOutlet weak var signInErrorLabel: UILabel!
+
     // MARK: - Public properties -
+
 
     private(set) var viewModel: SignInViewModel!
     private(set) var router: FlowRouter!
@@ -35,6 +45,9 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.scrollView.isScrollEnabled = false
+        self.preferredContentSize = CGSize(width: self.view.bounds.size.width, height: 371.0)
 
 //        self.emailTextField.layer.cornerRadius = 2.0
 //        self.emailTextField.clipsToBounds = true

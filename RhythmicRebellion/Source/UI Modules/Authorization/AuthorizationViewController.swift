@@ -32,8 +32,6 @@ final class AuthorizationViewController: UIViewController {
     func configure(viewModel: AuthorizationViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
-
-
     }
 
     // MARK: - Lifecycle -
@@ -54,13 +52,14 @@ final class AuthorizationViewController: UIViewController {
         super.viewDidLoad()
 
         viewModel.load(with: self)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillShow, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
-                self.keyboardWillShow(notification: notification)
+        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+                self.keyboardDidShow(notification: notification)
         }
 
         self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
@@ -82,22 +81,26 @@ final class AuthorizationViewController: UIViewController {
         }
     }
 
-    override public func size(forChildContentContainer container: UIContentContainer, withParentContainerSize parentSize: CGSize) -> CGSize {
-        return super.size(forChildContentContainer: container, withParentContainerSize: parentSize)
-    }
 
     override func systemLayoutFittingSizeDidChange(forChildContentContainer container: UIContentContainer) {
         super.systemLayoutFittingSizeDidChange(forChildContentContainer: container)
+
+        print("container.preferredContentSize = \(container.preferredContentSize)")
+
+        self.containerViewHeightConstraint.constant = container.preferredContentSize.height
     }
 
     // MARK: - Notifications
-    func keyboardWillShow(notification: Notification) {
-        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardInfo = userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue
-        let keyboardSize = keyboardInfo.cgRectValue.size
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-        scrollView.contentInset = contentInsets
-        scrollView.scrollIndicatorInsets = contentInsets
+    func keyboardDidShow(notification: Notification) {
+        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
+
+        let bottomInset = self.view.bounds.maxY - keyboardFrame.minY
+        if bottomInset > 0 {
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
+            scrollView.contentInset = contentInsets
+            scrollView.scrollIndicatorInsets = contentInsets
+        }
     }
 
     func keyboardWillHide(notification: Notification) {
