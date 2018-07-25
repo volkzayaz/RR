@@ -18,9 +18,14 @@ import Foundation
 //}
 
 
-protocol User: Decodable {
+public protocol User: Decodable {
     var isGuest: Bool { get }
     var wsToken: String { get }
+
+//    static func == (lhs: User, rhs: User) -> Bool {
+//        guard type(of: lhs) == type(of: rhs) else { return false }
+//        return lhs.wsToken == rhs.wsToken
+//    }
 }
 
 
@@ -35,18 +40,33 @@ struct GuestUser: User {
     }
 }
 
+extension GuestUser: Equatable {
+    static func == (lhs: GuestUser, rhs: GuestUser) -> Bool {
+        return lhs.wsToken == rhs.wsToken
+    }
+}
+
 struct FanUser: User {
 
     let id: Int
     let wsToken: String
-    let isGuest: Bool
+    let isGuest: Bool = false
+    var listeningSettings: ListeningSettings
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case wsToken = "ws_token"
-        case isGuest = "guest"
+        case listeningSettings = "listening_settings"
     }
 }
+
+extension FanUser: Equatable {
+    static func == (lhs: FanUser, rhs: FanUser) -> Bool {
+        guard lhs.id == rhs.id, lhs.wsToken == rhs.wsToken else { return false }
+        return true
+    }
+}
+
 
 
 

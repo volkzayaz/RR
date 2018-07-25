@@ -78,7 +78,34 @@ class RestApiService {
                 case .failure(let error): completion(.failure(error))
                 }
         }
+    }
 
+    func fanUser(update profilePayload: RestApiListeningSettingsRequestPayload, completion: @escaping (Result<User>) -> Void) {
+        guard let fanProfileURL = self.makeURL(with: "fan/profile") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        do {
+            let jsonData = try JSONEncoder().encode(profilePayload)
+
+            var request = URLRequest(url: fanProfileURL)
+            request.httpMethod = HTTPMethod.put.rawValue
+            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
+            allHTTPHeaderFields += headers
+            request.allHTTPHeaderFields = allHTTPHeaderFields
+            request.httpBody = jsonData
+
+            Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<FanProfileResponse>) in
+                switch dataResponse.result {
+                case .success(let fanUserResponse): completion(.success(fanUserResponse.user))
+                case .failure(let error): completion(.failure(error))
+                }
+            }
+
+        } catch {
+            completion(.failure(error))
+        }
     }
 
     // MARK: - Player

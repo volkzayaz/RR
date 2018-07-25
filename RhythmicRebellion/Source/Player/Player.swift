@@ -781,6 +781,12 @@ extension Player: WebSocketServiceObserver {
     }
 }
 
+extension Player: ApplicationObserver {
+    func application(_ application: Application, didChange listeningSettings: ListeningSettings) {
+        self.playlist.resetAddons()
+    }
+}
+
 extension Player {
 
     func setupMPRemoteCommands() {

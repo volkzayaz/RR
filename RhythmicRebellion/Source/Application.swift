@@ -8,6 +8,7 @@
 
 import Foundation
 import Reachability
+import Alamofire
 
 protocol UserCredentials {
     var email: String { get }
@@ -15,11 +16,13 @@ protocol UserCredentials {
 }
 
 protocol ApplicationObserver: class {
-    func application(_ application: Application, didChangeUser user: User?)
+    func application(_ application: Application, didChange user: User?)
+    func application(_ application: Application, didChange listeningSettings: ListeningSettings)
 }
 
 extension ApplicationObserver {
-    func application(_ application: Application, didChangeUser user: User?) { }
+    func application(_ application: Application, didChange user: User?) { }
+    func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
 }
 
 class Application: Observable {
@@ -67,6 +70,8 @@ class Application: Observable {
             self.webSocketService.isReachable = false
             self.webSocketService.disconnect()
         }
+
+        self.addObserver(self.player)
     }
 
     func start() {
@@ -74,7 +79,7 @@ class Application: Observable {
         _ = try? self.restApiServiceReachability?.startNotifier()
     }
 
-    func fanUser() {
+    func fanUser(completion: ((Result<User>) -> Void)? = nil) {
         guard let reachability = self.restApiServiceReachability, reachability.connection != .none else { return }
 
         self.restApiService.fanUser { [weak self] (fanUserResult) in
@@ -91,6 +96,20 @@ class Application: Observable {
         }
 
     }
+
+    func fanUser1(completion: ((Result<User>) -> Void)? = nil) {
+
+        self.restApiService.fanUser { [weak self] (fanUserResult) in
+
+            switch (fanUserResult) {
+            case .success(let user):
+                completion?(.success(user))
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+
 
     func signIn(with credentials: UserCredentials, completion: ((Error?) -> Void)? = nil) {
 
@@ -110,10 +129,10 @@ class Application: Observable {
     }
 
     func logout() {
-        guard let user = self.user, user.isGuest == false, let reachability = self.restApiServiceReachability, reachability.connection != .none else { return }
+        guard let user = self.user, user.isGuest == false else { return }
 
         self.restApiService.fanLogout { [weak self] (logoutUserResult) in
-            switch (logoutUserResult) {
+            switch logoutUserResult {
             case .success(let user):
                 self?.webSocketService.disconnect()
                 self?.user = user
@@ -125,13 +144,44 @@ class Application: Observable {
             }
         }
     }
+
+    func update(listeningSettings: ListeningSettings, completion: ((Result<ListeningSettings>) -> Void)? = nil) {
+
+        guard let user = self.user, user.isGuest == false else { return }
+
+        let listeningSettingsRequestPayload = RestApiListeningSettingsRequestPayload(with: listeningSettings)
+
+        self.restApiService.fanUser(update: listeningSettingsRequestPayload) { [weak self] (updateUserResult) in
+
+            switch updateUserResult {
+            case .success(let user):
+                guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
+
+                self?.user = user
+                self?.notifyListeningSettingsChanged()
+                completion?(.success(fanUser.listeningSettings))
+
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+
+    }
 }
 
 extension Application {
 
     func notifyUserChanged() {
         self.observersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUser: self.user)
+            observer.application(self, didChange: self.user)
+        })
+    }
+
+    func notifyListeningSettingsChanged() {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChange: fanUser.listeningSettings)
         })
     }
 }

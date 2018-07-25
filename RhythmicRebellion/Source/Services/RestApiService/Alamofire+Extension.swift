@@ -48,8 +48,15 @@ extension Request {
 
         do {
             let restApiResponse = try JSONDecoder().decode(T.self, from: validData)
+
+            if let _ = restApiResponse as? AddonsForTracksResponse {
+                print("addonsForTracksResponseData: \(String(data: validData, encoding: .utf8))")
+                print("addonsForTracksResponse: \(restApiResponse)")
+            }
+
             return .success(restApiResponse)
         } catch {
+            print("Decode Failed for data: \(String(data: validData, encoding: .utf8))")
             return .failure(AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: error)))
         }
     }

@@ -57,7 +57,7 @@ final class TabBarControllerViewModel: TabBarViewModel {
 
 extension TabBarControllerViewModel: ApplicationObserver {
 
-    func application(_ application: Application, didChangeUser user: User?) {
+    func application(_ application: Application, didChange user: User?) {
 
         let userType: UserType = user?.isGuest ?? true ? .guest : .authorized
 

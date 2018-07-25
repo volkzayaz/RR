@@ -98,6 +98,21 @@ struct FanUserResponse: RestApiResponse {
     }
 }
 
+struct FanProfileResponse: RestApiResponse {
+
+    let user: User
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.user = try container.decode(FanUser.self, forKey: .data)
+    }
+}
+
+
 struct FanLoginResponse: RestApiResponse {
 
     let user: User

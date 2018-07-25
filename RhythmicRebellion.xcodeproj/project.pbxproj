@@ -11,6 +11,7 @@
 		7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD420FF471300D90D73 /* SignUpRouter.swift */; };
 		7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD520FF471300D90D73 /* SignUpViewController.swift */; };
 		7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD620FF471300D90D73 /* SignUpViewModel.swift */; };
+		760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760D793A210871FB00FD8D46 /* RestApiRequestPayloads.swift */; };
 		761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */; };
 		76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DC820F5E91100140D03 /* RestApiResponse.swift */; };
 		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
@@ -59,6 +60,17 @@
 		7665335820FF414300FEC702 /* SignInRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665335420FF414300FEC702 /* SignInRouter.swift */; };
 		7665335920FF414300FEC702 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665335520FF414300FEC702 /* SignInViewController.swift */; };
 		7665335A20FF414300FEC702 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665335620FF414300FEC702 /* SignInViewModel.swift */; };
+		7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8162105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift */; };
+		7665E81B2105BC84007D8B98 /* ListeningSettingsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8172105BC84007D8B98 /* ListeningSettingsRouter.swift */; };
+		7665E81C2105BC84007D8B98 /* ListeningSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8182105BC84007D8B98 /* ListeningSettingsViewController.swift */; };
+		7665E81D2105BC84007D8B98 /* ListeningSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8192105BC84007D8B98 /* ListeningSettingsViewModel.swift */; };
+		7665E81F2105DB22007D8B98 /* ListeningSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E81E2105DB22007D8B98 /* ListeningSettings.swift */; };
+		7665E8212105E448007D8B98 /* ModelSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8202105E448007D8B98 /* ModelSupport.swift */; };
+		7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8232106265F007D8B98 /* SwitchableTableViewCell.swift */; };
+		7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */; };
+		7665E8292107224F007D8B98 /* CellsViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8282107224F007D8B98 /* CellsViewModels.swift */; };
+		7665E82B210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7665E82A210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib */; };
+		7665E82D21078732007D8B98 /* SwitchableTableSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E82C21078732007D8B98 /* SwitchableTableSectionHeaderView.swift */; };
 		766B02FE21009505005AB2B6 /* PlayerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766B02FD21009505005AB2B6 /* PlayerError.swift */; };
 		767289C620ED1A13008A86B6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C420ED1A13008A86B6 /* Player.swift */; };
 		767289C720ED1A13008A86B6 /* PlayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C520ED1A13008A86B6 /* PlayList.swift */; };
@@ -94,6 +106,7 @@
 		7606BDD420FF471300D90D73 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
 		7606BDD520FF471300D90D73 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		7606BDD620FF471300D90D73 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		760D793A210871FB00FD8D46 /* RestApiRequestPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiRequestPayloads.swift; sourceTree = "<group>"; };
 		761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		76310DC820F5E91100140D03 /* RestApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiResponse.swift; sourceTree = "<group>"; };
 		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
@@ -142,6 +155,17 @@
 		7665335420FF414300FEC702 /* SignInRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInRouter.swift; sourceTree = "<group>"; };
 		7665335520FF414300FEC702 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		7665335620FF414300FEC702 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		7665E8162105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningSettingsControllerViewModel.swift; sourceTree = "<group>"; };
+		7665E8172105BC84007D8B98 /* ListeningSettingsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningSettingsRouter.swift; sourceTree = "<group>"; };
+		7665E8182105BC84007D8B98 /* ListeningSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningSettingsViewController.swift; sourceTree = "<group>"; };
+		7665E8192105BC84007D8B98 /* ListeningSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningSettingsViewModel.swift; sourceTree = "<group>"; };
+		7665E81E2105DB22007D8B98 /* ListeningSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningSettings.swift; sourceTree = "<group>"; };
+		7665E8202105E448007D8B98 /* ModelSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSupport.swift; sourceTree = "<group>"; };
+		7665E8232106265F007D8B98 /* SwitchableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableTableViewCell.swift; sourceTree = "<group>"; };
+		7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
+		7665E8282107224F007D8B98 /* CellsViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsViewModels.swift; sourceTree = "<group>"; };
+		7665E82A210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchableTableSectionHeaderView.xib; sourceTree = "<group>"; };
+		7665E82C21078732007D8B98 /* SwitchableTableSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableTableSectionHeaderView.swift; sourceTree = "<group>"; };
 		766B02FD21009505005AB2B6 /* PlayerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerError.swift; sourceTree = "<group>"; };
 		767289C420ED1A13008A86B6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		767289C520ED1A13008A86B6 /* PlayList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayList.swift; sourceTree = "<group>"; };
@@ -227,6 +251,7 @@
 		763C905120FDDCF8007C1F86 /* UI Modules */ = {
 			isa = PBXGroup;
 			children = (
+				7665E8142105BBE0007D8B98 /* ListeningSettings */,
 				763C905C20FDF598007C1F86 /* App */,
 				763C905B20FDF54E007C1F86 /* Player */,
 				763C904720FCBA14007C1F86 /* TabBar */,
@@ -296,6 +321,7 @@
 		7650961320E3A0FC00BF1F79 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				7665E8202105E448007D8B98 /* ModelSupport.swift */,
 				7650961420E3A15D00BF1F79 /* Track.swift */,
 				7650962220E5238100BF1F79 /* PlayListItem.swift */,
 				7650961C20E4E11C00BF1F79 /* TrackId.swift */,
@@ -307,6 +333,7 @@
 				768EC2CA20F4FB1000629F1B /* Addon.swift */,
 				76310DCC20F6252200140D03 /* AddonState.swift */,
 				76310DCE20F6343A00140D03 /* CheckAddons.swift */,
+				7665E81E2105DB22007D8B98 /* ListeningSettings.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -366,10 +393,43 @@
 			path = SignIn;
 			sourceTree = "<group>";
 		};
+		7665E8142105BBE0007D8B98 /* ListeningSettings */ = {
+			isa = PBXGroup;
+			children = (
+				7665E82221062611007D8B98 /* Cells */,
+				7665E8272107221C007D8B98 /* CellsViewModels */,
+				7665E8172105BC84007D8B98 /* ListeningSettingsRouter.swift */,
+				7665E8192105BC84007D8B98 /* ListeningSettingsViewModel.swift */,
+				7665E8162105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift */,
+				7665E8182105BC84007D8B98 /* ListeningSettingsViewController.swift */,
+				7665E82A210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib */,
+			);
+			path = ListeningSettings;
+			sourceTree = "<group>";
+		};
+		7665E82221062611007D8B98 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				7665E8232106265F007D8B98 /* SwitchableTableViewCell.swift */,
+				7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */,
+				7665E82C21078732007D8B98 /* SwitchableTableSectionHeaderView.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		7665E8272107221C007D8B98 /* CellsViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7665E8282107224F007D8B98 /* CellsViewModels.swift */,
+			);
+			path = CellsViewModels;
+			sourceTree = "<group>";
+		};
 		768EC2C420F4DA2600629F1B /* RestApiService */ = {
 			isa = PBXGroup;
 			children = (
 				7650962420E662D100BF1F79 /* RestApiService.swift */,
+				760D793A210871FB00FD8D46 /* RestApiRequestPayloads.swift */,
 				76310DC820F5E91100140D03 /* RestApiResponse.swift */,
 				76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */,
 			);
@@ -549,6 +609,7 @@
 				76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */,
 				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
 				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
+				7665E82B210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,6 +667,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7665E8292107224F007D8B98 /* CellsViewModels.swift in Sources */,
+				7665E81D2105BC84007D8B98 /* ListeningSettingsViewModel.swift in Sources */,
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
 				7650962320E5238100BF1F79 /* PlayListItem.swift in Sources */,
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
@@ -624,17 +687,24 @@
 				7665333520FE470C00FEC702 /* HomeViewController.swift in Sources */,
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
+				7665E82D21078732007D8B98 /* SwitchableTableSectionHeaderView.swift in Sources */,
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
+				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,
 				7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
 				768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */,
 				7665333620FE470C00FEC702 /* HomeViewModel.swift in Sources */,
 				7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */,
 				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
+				7665E8212105E448007D8B98 /* ModelSupport.swift in Sources */,
 				763C905820FDDE96007C1F86 /* AuthorizationRouter.swift in Sources */,
 				76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */,
+				760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */,
 				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
+				7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */,
+				7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */,
 				76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */,
+				7665E81F2105DB22007D8B98 /* ListeningSettings.swift in Sources */,
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				7665333E20FF1B2E00FEC702 /* SettingsViewController.swift in Sources */,
 				7665334620FF1CFA00FEC702 /* PagesRouter.swift in Sources */,
@@ -643,6 +713,7 @@
 				7665334720FF1CFA00FEC702 /* PagesViewController.swift in Sources */,
 				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
 				76EDBD1920F78FCD0021297F /* AppError.swift in Sources */,
+				7665E81C2105BC84007D8B98 /* ListeningSettingsViewController.swift in Sources */,
 				7650962520E662D100BF1F79 /* RestApiService.swift in Sources */,
 				7665334520FF1CFA00FEC702 /* PagesControllerViewModel.swift in Sources */,
 				76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */,
@@ -664,6 +735,7 @@
 				7665335A20FF414300FEC702 /* SignInViewModel.swift in Sources */,
 				7665332D20FE26A600FEC702 /* RestApiServiceError.swift in Sources */,
 				767289C720ED1A13008A86B6 /* PlayList.swift in Sources */,
+				7665E81B2105BC84007D8B98 /* ListeningSettingsRouter.swift in Sources */,
 				7665335120FF1DE300FEC702 /* ProfileViewModel.swift in Sources */,
 				7665334F20FF1DE300FEC702 /* ProfileRouter.swift in Sources */,
 				76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */,

@@ -32,11 +32,15 @@ class PlayList {
     func reset(tracks: [Track]) {
         self.tracks = tracks
         self.playListItems.removeAll()
-        self.tracksAddons.removeAll()
+        self.resetAddons()
     }
 
     func reset(playListItems: [String : PlayListItem]) {
         self.playListItems = playListItems
+    }
+
+    func resetAddons() {
+        self.tracksAddons.removeAll()
     }
 
     func add(traks: [Track]) {

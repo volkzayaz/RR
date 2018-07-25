@@ -1,41 +1,40 @@
 //
-//  ProfileRouter.swift
+//  ListeningSettingsRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/18/18.
+//  Created by Alexander Obolentsev on 7/23/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-protocol ProfileRouter: FlowRouter {
+protocol ListeningSettingsRouter: FlowRouter {
 }
 
-final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
+final class DefaultListeningSettingsRouter:  ListeningSettingsRouter, SegueCompatible {
 
     typealias Destinations = SegueList
 
     enum SegueList: String, SegueDestinations {
-        case listeningSettings
+        case placeholder
 
         var identifier: String {
             switch self {
-            case .listeningSettings: return "ListeningSettingsSegueIdentifier"
+            case .placeholder: return "placeholder"
             }
         }
 
         static func from(identifier: String) -> SegueList? {
             switch identifier {
-            case "ListeningSettingsSegueIdentifier": return .listeningSettings
             default: return nil
             }
         }
     }
 
     private(set) var dependencies: RouterDependencies
-
-    private(set) weak var viewModel: ProfileViewModel?
+    
+    private(set) weak var viewModel: ListeningSettingsViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -47,12 +46,8 @@ final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .listeningSettings:
-                guard let listeningSettingsViewController = segue.destination as? ListeningSettingsViewController else {
-                    fatalError("Incorrect controller for ListeningSettingsSegueIdentifier")
-                }
-                let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
-                listeningSettingsRouter.start(controller: listeningSettingsViewController)
+        case .placeholder:
+            break
         }
     }
 
@@ -60,9 +55,9 @@ final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
         self.dependencies = dependencies
     }
 
-    func start(controller: ProfileViewController) {
+    func start(controller: ListeningSettingsViewController) {
         sourceController = controller
-        let vm = ProfileControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = ListeningSettingsControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }
 }

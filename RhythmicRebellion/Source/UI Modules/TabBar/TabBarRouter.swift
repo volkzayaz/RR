@@ -16,6 +16,7 @@ enum TabType: Int {
     case pages
     case profile
     case authorization
+//    case listeningSettings
     //        case myMusic
     //        case search
     //        case mixer
@@ -110,16 +111,24 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
                 viewControllers.append(pagesViwController)
 
             case .profile:
-                guard let profileViwController = viewController as? ProfileViewController else { break }
+                guard let profileNavigationController = viewController as? UINavigationController,
+                    let profileViwController = profileNavigationController.viewControllers.first as? ProfileViewController else { break }
                 let profileRouter = DefaultProfileRouter(dependencies: self.dependencies)
                 profileRouter.start(controller: profileViwController)
-                viewControllers.append(profileViwController)
+                viewControllers.append(profileNavigationController)
 
             case .authorization:
                 guard let authorizationViwController = viewController as? AuthorizationViewController else { break }
                 let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
                 authorizationRouter.start(controller: authorizationViwController)
                 viewControllers.append(authorizationViwController)
+
+//            case .listeningSettings:
+//                guard let listeningSettingsViewController = viewController as? ListeningSettingsViewController else { break }
+//                let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
+//                listeningSettingsRouter.start(controller: listeningSettingsViewController)
+//                viewControllers.append(listeningSettingsViewController)
+
 
 //            case .myMusic:
 //            case .search:
