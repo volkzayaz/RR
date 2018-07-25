@@ -54,18 +54,20 @@ struct ListeningSettings: Codable {
         self.isSongCommentary = try container.decode(Bool.self, forKey: .isSongCommentary)
         self.isSongCommentaryDate = try container.decode(Bool.self, forKey: .isSongCommentaryDate)
 
-        let songCommentaryDateString = try container.decode(String.self, forKey: .songCommentaryDate)
-        print("songCommentaryDateString: \(songCommentaryDateString)")
-        self.songCommentaryDate = ModelSupport.sharedInstance.date(from: songCommentaryDateString)
-        print("songCommentaryDate: \(self.songCommentaryDate)")
+        if let songCommentaryDateString = try? container.decode(String.self, forKey: .songCommentaryDate) {
+            self.songCommentaryDate = ModelSupport.sharedInstance.date(from: songCommentaryDateString)
+        } else {
+            self.songCommentaryDate = nil
+        }
 
         self.isHearArtistsBio = try container.decode(Bool.self, forKey: .isHearArtistsBio)
         self.isHearArtistsBioDate = try container.decode(Bool.self, forKey: .isHearArtistsBioDate)
 
-        let artistsBioDateString = try container.decode(String.self, forKey: .artistsBioDate)
-        print("artistsBioDateString: \(artistsBioDateString)")
-        self.artistsBioDate = ModelSupport.sharedInstance.date(from: artistsBioDateString)
-        print("artistsBioDate: \(self.artistsBioDate)")
+        if let artistsBioDateString = try? container.decode(String.self, forKey: .artistsBioDate) {
+            self.artistsBioDate = ModelSupport.sharedInstance.date(from: artistsBioDateString)
+        } else {
+            self.artistsBioDate = nil
+        }
 
         self.isExplicitMaterialExcluded = try container.decode(Bool.self, forKey: .isExplicitMaterialExcluded)
     }
@@ -76,13 +78,19 @@ struct ListeningSettings: Codable {
         try container.encode(self.isSongCommentary, forKey: .isSongCommentary)
         try container.encode(self.isSongCommentaryDate, forKey: .isSongCommentaryDate)
 
-        let songCommentaryDateString = ModelSupport.sharedInstance.string(from: self.songCommentaryDate ?? Date(timeIntervalSince1970: 0.0))
+        var songCommentaryDateString: String? = nil
+        if let songCommentaryDate = self.songCommentaryDate {
+            songCommentaryDateString = ModelSupport.sharedInstance.string(from: songCommentaryDate)
+        }
         try container.encode(songCommentaryDateString, forKey: .songCommentaryDate)
 
         try container.encode(self.isHearArtistsBio, forKey: .isHearArtistsBio)
         try container.encode(self.isHearArtistsBioDate, forKey: .isHearArtistsBioDate)
 
-        let artistsBioDateString = ModelSupport.sharedInstance.string(from: self.artistsBioDate ?? Date(timeIntervalSince1970: 0.0))
+        var artistsBioDateString: String? = nil
+        if let artistsBioDate = self.artistsBioDate {
+            artistsBioDateString = ModelSupport.sharedInstance.string(from: artistsBioDate)
+        }
         try container.encode(artistsBioDateString, forKey: .artistsBioDate)
 
         try container.encode(self.isExplicitMaterialExcluded, forKey: .isExplicitMaterialExcluded)
