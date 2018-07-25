@@ -111,7 +111,7 @@ class PlayList {
 
     func addonsStates(for track: Track) -> [AddonState]? {
         return self.tracksAddons[track.id]?.map({ (addon) -> AddonState in
-            return AddonState(from: addon)
+            return AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
         })
     }
 }

@@ -8,8 +8,8 @@
 
 import Foundation
 
-class ModelSupport {
-    static let sharedInstance = ModelSupport()
+public class ModelSupport {
+    public static let sharedInstance = ModelSupport()
 
     lazy var dateFormatter: DateFormatter = {
         let dateTimeFormattre = DateFormatter()
@@ -20,7 +20,7 @@ class ModelSupport {
         return dateTimeFormattre
     }()
 
-    lazy private var dateTimeFormattre: DateFormatter = {
+    lazy var dateTimeFormattre: DateFormatter = {
         let dateTimeFormattre = DateFormatter()
 
         dateTimeFormattre.timeZone = TimeZone(secondsFromGMT: 0)
@@ -39,5 +39,23 @@ class ModelSupport {
 
     func string(from date: Date) -> String {
         return dateTimeFormattre.string(from: date)
+    }
+}
+
+
+extension KeyedDecodingContainerProtocol {
+
+    public func decodeAsDate(_ type: String.Type, forKey key: Self.Key, dateFormatter: DateFormatter) throws -> Date? {
+        guard let dateString = try? self.decode(type, forKey: key) else { return nil }
+        return dateFormatter.date(from: dateString)
+    }
+}
+
+extension KeyedEncodingContainerProtocol {
+
+    public mutating func encodeAsString(_ value: Date?, forKey key: Self.Key, dateFormatter: DateFormatter) throws {
+        var stringDate: String? = nil
+        if let date = value { stringDate = dateFormatter.string(from: date) }
+        try self.encode(stringDate, forKey: key)
     }
 }

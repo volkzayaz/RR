@@ -22,10 +22,10 @@ struct AddonState: Codable {
         case trackId = "srtId"
     }
 
-    public init(from addon: Addon) {
-        self.id = addon.id
-        self.typeValue = addon.typeValue
-        self.trackId = addon.trackId
+    public init(id: Int, typeValue: Int, trackId: Int) {
+        self.id = id
+        self.typeValue = typeValue
+        self.trackId = trackId
     }
 
     public init(from decoder: Decoder) throws {

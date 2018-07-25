@@ -22,11 +22,12 @@ public protocol User: Decodable {
     var isGuest: Bool { get }
     var wsToken: String { get }
 
-//    static func == (lhs: User, rhs: User) -> Bool {
-//        guard type(of: lhs) == type(of: rhs) else { return false }
-//        return lhs.wsToken == rhs.wsToken
-//    }
 }
+
+//func == (lhs: User, rhs: User) -> Bool {
+//    guard type(of: lhs) == type(of: rhs) else { return false }
+//    return lhs.wsToken == rhs.wsToken
+//}
 
 
 struct GuestUser: User {

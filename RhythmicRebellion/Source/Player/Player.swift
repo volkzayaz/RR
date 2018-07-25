@@ -280,7 +280,18 @@ class Player: NSObject, Observable {
             switch addonsResult {
             case .success(let tracksAddons):
                     self?.playlist.add(tracksAddons: tracksAddons)
-                    completion?(nil)
+                    self?.restApiService.artists(with: [track.artist.id], completion: { [weak self] (artistsResult) in
+
+                        switch artistsResult {
+                        case .success(let artists):
+                            if let addons = artists.first?.addons {
+                                self?.playlist.add(tracksAddons: [track.id : addons])
+                            }
+                            completion?(nil)
+                        case .failure(let error):
+                            completion?(error)
+                        }
+                    })
 
             case .failure(let error):
                 completion?(error)
@@ -591,7 +602,10 @@ class Player: NSObject, Observable {
 
                 if let currentQueueItem = self.playerQueue.currentItem {
                     switch currentQueueItem.content {
-                    case .addon(let addon): self.playAddon(addon: addon)
+                    case .addon(let addon):
+                        if let track = self.playerCurrentTrack {
+                            self.playAddon(addon: addon, track: track)
+                        }
                     default: break
                     }
                 }
@@ -702,8 +716,8 @@ extension Player: WebSocketServiceObserver {
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
-    func playAddon(addon: Addon,  completion: ((Error?) -> ())? = nil) {
-        let addonState = AddonState(from: addon)
+    func playAddon(addon: Addon, track: Track, completion: ((Error?) -> ())? = nil) {
+        let addonState = AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
         let webSocketCommand = WebSocketCommand.playAddon(addonState: addonState)
 
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)

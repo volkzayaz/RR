@@ -80,7 +80,7 @@ class RestApiService {
         }
     }
 
-    func fanUser(update profilePayload: RestApiListeningSettingsRequestPayload, completion: @escaping (Result<User>) -> Void) {
+    func fanUser<T: RestApiProfileRequestPayload>(update profilePayload: T, completion: @escaping (Result<User>) -> Void) {
         guard let fanProfileURL = self.makeURL(with: "fan/profile") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
@@ -135,5 +135,33 @@ class RestApiService {
         } catch (let error) {
             completion(.failure(error))
         }
+    }
+
+    func artists(with artistIds: [String], completion: @escaping (Result<[Artist]>) -> Void ) {
+        guard let artistTracksURL = self.makeURL(with: "player/artist") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json"]
+        let jsonQuery = ["filters" : ["id" : ["in" : artistIds]]]
+
+        do {
+            let jsonQueryData = try JSONSerialization.data(withJSONObject: jsonQuery)
+            guard let jsonQueryString = String(data: jsonQueryData, encoding: .utf8) else { return }
+
+            let parameters: Parameters = ["jsonQuery" : jsonQueryString]
+
+            Alamofire.request(artistTracksURL, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
+                .validate()
+                .restApiResponse { (dataResponse: DataResponse<ArtistsResponse>) in
+
+                    switch dataResponse.result {
+                    case .success(let artistsResponse): completion(.success(artistsResponse.artists))
+                    case .failure(let error): completion(.failure(error))
+                    }
+            }
+
+        } catch (let error) {
+            completion(.failure(error))
+        }
+
     }
 }

@@ -12,10 +12,12 @@ struct Artist: Codable {
     let id: String
     let name: String
     let urlString: String?
+    let addons: [Addon]?
 
     enum CodingKeys: String, CodingKey {
         case id
         case name
         case urlString = "url"
+        case addons = "audio_add_ons"
     }
 }
