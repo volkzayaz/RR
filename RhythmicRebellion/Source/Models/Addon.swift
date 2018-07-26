@@ -91,3 +91,8 @@ extension Addon: Equatable {
     }
 }
 
+extension Addon: Hashable {
+
+    public var hashValue: Int { return self.id }
+}
+

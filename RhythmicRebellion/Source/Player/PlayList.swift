@@ -12,7 +12,7 @@ class PlayList {
 
     private(set) var tracks = [Track]()
     private(set) var playListItems = [String : PlayListItem]()
-    private(set) var tracksAddons = [Int : [Addon]]()
+    private(set) var tracksAddons = [Int : Set<Addon>]()
 
     var firstTrackId: TrackId? {
         guard let firstPlayListItem = self.playListItems.filter( { return $0.value.previousTrackKey == nil }).first else { return nil }
@@ -52,7 +52,15 @@ class PlayList {
     }
 
     func add(tracksAddons: [Int : [Addon]]) {
-        self.tracksAddons += tracksAddons
+
+        for (trackId, addons) in tracksAddons  {
+            guard let currentAddons = self.tracksAddons[trackId] else {
+                self.tracksAddons[trackId] = Set(addons)
+                continue
+            }
+
+            self.tracksAddons[trackId] = currentAddons.union(Set(addons))
+        }
     }
 
     func track(for trackId: TrackId) -> Track? {
@@ -93,8 +101,9 @@ class PlayList {
     }
 
     func addons(for track: Track) -> [Addon]? {
+        guard let trackAddons = self.tracksAddons[track.id] else { return nil }
 
-        return self.tracksAddons[track.id]
+        return Array(trackAddons)
     }
 
     func addons(for track: Track, addonsIds: [Int]) -> [Addon]? {

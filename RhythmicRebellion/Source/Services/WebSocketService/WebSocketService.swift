@@ -82,12 +82,12 @@ class WebSocketService: WebSocketDelegate, Observable {
         guard self.webSocket.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
 
 
-        #if DEBUG
-        if command.commandType == .playAddon {
-            completion?(nil)
-            return
-        }
-        #endif
+//        #if DEBUG
+//        if command.commandType == .playAddon {
+//            completion?(nil)
+//            return
+//        }
+//        #endif
 
         do {
             let jsonData = try JSONEncoder().encode(command)
