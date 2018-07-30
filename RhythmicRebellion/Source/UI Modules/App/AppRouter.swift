@@ -41,6 +41,9 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
     private(set) weak var viewModel: AppViewModel?
     private(set) weak var sourceController: UIViewController?
 
+    private(set) weak var tabBarViewController: TabBarViewController?
+    private(set) weak var tabBarRouter: TabBarRouter?
+
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
     }
@@ -53,12 +56,14 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         case .player:
             guard let playerViewController = segue.destination as? PlayerViewController else { fatalError("Incorrect controller for PlayerSegueIdentifier") }
             let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies)
-            playerRouter.start(controller: playerViewController)
+            playerRouter.start(controller: playerViewController, navigationDelegate: self)
 
         case .tabBar:
             guard let tabBarViewController = segue.destination as? TabBarViewController else { fatalError("Incorrect controller for TabBarViewController") }
-            let tabBarRouter = DefaultTabBarRouter(dependencies: self.dependencies)
+            let tabBarRouter = DefaultTabBarRouter(dependencies: self.dependencies, playerContentTransitioningDelegate: PlayerContentTransitioningDelegate())
             tabBarRouter.start(controller: tabBarViewController)
+            self.tabBarRouter = tabBarRouter
+            self.tabBarViewController = tabBarViewController
         }
     }
 
@@ -72,3 +77,18 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         controller.configure(viewModel: vm, router: self)
     }
 }
+
+extension DefaultAppRouter: PlayerNavigationDelgate {
+
+    func navigate(to playerNavigationItem: PlayerNavigationItem) {
+
+        guard let playerContentContainerRouter = self.tabBarRouter?.playerContentContainerRouter else {
+            self.tabBarViewController?.performSegue(withIdentifier: "PlayerContantContainerSegueIdentifier", sender: playerNavigationItem)
+            return
+        }
+
+        playerContentContainerRouter.navigate(to: playerNavigationItem)
+    }
+
+}
+

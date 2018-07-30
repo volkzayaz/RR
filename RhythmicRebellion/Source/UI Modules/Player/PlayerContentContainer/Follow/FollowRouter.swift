@@ -1,18 +1,18 @@
 //
-//  PlayerRouter.swift
+//  FollowRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 6/21/18.
+//  Created by Alexander Obolentsev on 7/27/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-protocol PlayerRouter: FlowRouter {
+protocol FollowRouter: FlowRouter {
 }
 
-final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
+final class DefaultFollowRouter:  FollowRouter, SegueCompatible {
 
     typealias Destinations = SegueList
 
@@ -32,9 +32,9 @@ final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
         }
     }
 
-    var dependencies: RouterDependencies
+    private(set) var dependencies: RouterDependencies
 
-    private(set) weak var viewModel: PlayerViewModel?
+    private(set) weak var viewModel: FollowViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -55,9 +55,9 @@ final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
         self.dependencies = dependencies
     }
 
-    func start(controller: PlayerViewController, navigationDelegate: PlayerNavigationDelgate) {
+    func start(controller: FollowViewController) {
         sourceController = controller
-        let vm = PlayerControllerViewModel(router: self, player: self.dependencies.player)
-        controller.configure(viewModel: vm, router: self, navigationDelegate: navigationDelegate)
+        let vm = FollowControllerViewModel(router: self)
+        controller.configure(viewModel: vm, router: self)
     }
 }

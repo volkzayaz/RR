@@ -76,6 +76,34 @@
 		767289C720ED1A13008A86B6 /* PlayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C520ED1A13008A86B6 /* PlayList.swift */; };
 		768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */; };
 		768EC2CB20F4FB1000629F1B /* Addon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768EC2CA20F4FB1000629F1B /* Addon.swift */; };
+		769F4E87210A143C000DD23B /* PlaylistControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E83210A143B000DD23B /* PlaylistControllerViewModel.swift */; };
+		769F4E88210A143C000DD23B /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E84210A143B000DD23B /* PlaylistViewController.swift */; };
+		769F4E89210A143C000DD23B /* PlaylistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E85210A143B000DD23B /* PlaylistRouter.swift */; };
+		769F4E8A210A143C000DD23B /* PlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E86210A143B000DD23B /* PlaylistViewModel.swift */; };
+		769F4E8D210A16CF000DD23B /* PlayerContentStoryboardSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E8C210A16CF000DD23B /* PlayerContentStoryboardSegue.swift */; };
+		769F4E8F210B03F1000DD23B /* PlayerContentPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E8E210B03F1000DD23B /* PlayerContentPresentationController.swift */; };
+		769F4E91210B1574000DD23B /* PlayerContentPresentationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E90210B1574000DD23B /* PlayerContentPresentationAnimator.swift */; };
+		769F4E97210B5BA1000DD23B /* PlayerContentContainerControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E93210B5BA1000DD23B /* PlayerContentContainerControllerViewModel.swift */; };
+		769F4E98210B5BA1000DD23B /* PlayerContentContainerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E94210B5BA1000DD23B /* PlayerContentContainerRouter.swift */; };
+		769F4E99210B5BA1000DD23B /* PlayerContentContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E95210B5BA1000DD23B /* PlayerContentContainerViewController.swift */; };
+		769F4E9A210B5BA1000DD23B /* PlayerContentContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E96210B5BA1000DD23B /* PlayerContentContainerViewModel.swift */; };
+		769F4EA0210B6136000DD23B /* PlayerContentTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4E9F210B6136000DD23B /* PlayerContentTransitioningDelegate.swift */; };
+		769F4EA5210B65D8000DD23B /* FollowControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EA1210B65D8000DD23B /* FollowControllerViewModel.swift */; };
+		769F4EA6210B65D8000DD23B /* FollowRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EA2210B65D8000DD23B /* FollowRouter.swift */; };
+		769F4EA7210B65D8000DD23B /* FollowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EA3210B65D8000DD23B /* FollowViewController.swift */; };
+		769F4EA8210B65D8000DD23B /* FollowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EA4210B65D8000DD23B /* FollowViewModel.swift */; };
+		769F4EAD210B6631000DD23B /* VideoControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EA9210B6631000DD23B /* VideoControllerViewModel.swift */; };
+		769F4EAE210B6631000DD23B /* VideoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EAA210B6631000DD23B /* VideoRouter.swift */; };
+		769F4EAF210B6631000DD23B /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EAB210B6631000DD23B /* VideoViewController.swift */; };
+		769F4EB0210B6631000DD23B /* VideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EAC210B6631000DD23B /* VideoViewModel.swift */; };
+		769F4EB5210B669F000DD23B /* LyricsControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EB1210B669F000DD23B /* LyricsControllerViewModel.swift */; };
+		769F4EB6210B669F000DD23B /* LyricsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EB2210B669F000DD23B /* LyricsRouter.swift */; };
+		769F4EB7210B669F000DD23B /* LyricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EB3210B669F000DD23B /* LyricsViewController.swift */; };
+		769F4EB8210B669F000DD23B /* LyricsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EB4210B669F000DD23B /* LyricsViewModel.swift */; };
+		769F4EBD210B6706000DD23B /* PromoControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EB9210B6706000DD23B /* PromoControllerViewModel.swift */; };
+		769F4EBE210B6706000DD23B /* PromoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBA210B6706000DD23B /* PromoRouter.swift */; };
+		769F4EBF210B6706000DD23B /* PromoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBB210B6706000DD23B /* PromoViewController.swift */; };
+		769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBC210B6706000DD23B /* PromoViewModel.swift */; };
 		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
 		76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1420F73DCC0021297F /* PlayerQueue.swift */; };
 		76EDBD1920F78FCD0021297F /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1820F78FCD0021297F /* AppError.swift */; };
@@ -171,6 +199,34 @@
 		767289C520ED1A13008A86B6 /* PlayList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayList.swift; sourceTree = "<group>"; };
 		768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		768EC2CA20F4FB1000629F1B /* Addon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Addon.swift; sourceTree = "<group>"; };
+		769F4E83210A143B000DD23B /* PlaylistControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistControllerViewModel.swift; sourceTree = "<group>"; };
+		769F4E84210A143B000DD23B /* PlaylistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
+		769F4E85210A143B000DD23B /* PlaylistRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistRouter.swift; sourceTree = "<group>"; };
+		769F4E86210A143B000DD23B /* PlaylistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistViewModel.swift; sourceTree = "<group>"; };
+		769F4E8C210A16CF000DD23B /* PlayerContentStoryboardSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentStoryboardSegue.swift; sourceTree = "<group>"; };
+		769F4E8E210B03F1000DD23B /* PlayerContentPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentPresentationController.swift; sourceTree = "<group>"; };
+		769F4E90210B1574000DD23B /* PlayerContentPresentationAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentPresentationAnimator.swift; sourceTree = "<group>"; };
+		769F4E93210B5BA1000DD23B /* PlayerContentContainerControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentContainerControllerViewModel.swift; sourceTree = "<group>"; };
+		769F4E94210B5BA1000DD23B /* PlayerContentContainerRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentContainerRouter.swift; sourceTree = "<group>"; };
+		769F4E95210B5BA1000DD23B /* PlayerContentContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentContainerViewController.swift; sourceTree = "<group>"; };
+		769F4E96210B5BA1000DD23B /* PlayerContentContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentContainerViewModel.swift; sourceTree = "<group>"; };
+		769F4E9F210B6136000DD23B /* PlayerContentTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerContentTransitioningDelegate.swift; sourceTree = "<group>"; };
+		769F4EA1210B65D8000DD23B /* FollowControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowControllerViewModel.swift; sourceTree = "<group>"; };
+		769F4EA2210B65D8000DD23B /* FollowRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRouter.swift; sourceTree = "<group>"; };
+		769F4EA3210B65D8000DD23B /* FollowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewController.swift; sourceTree = "<group>"; };
+		769F4EA4210B65D8000DD23B /* FollowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewModel.swift; sourceTree = "<group>"; };
+		769F4EA9210B6631000DD23B /* VideoControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoControllerViewModel.swift; sourceTree = "<group>"; };
+		769F4EAA210B6631000DD23B /* VideoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRouter.swift; sourceTree = "<group>"; };
+		769F4EAB210B6631000DD23B /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		769F4EAC210B6631000DD23B /* VideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewModel.swift; sourceTree = "<group>"; };
+		769F4EB1210B669F000DD23B /* LyricsControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsControllerViewModel.swift; sourceTree = "<group>"; };
+		769F4EB2210B669F000DD23B /* LyricsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsRouter.swift; sourceTree = "<group>"; };
+		769F4EB3210B669F000DD23B /* LyricsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsViewController.swift; sourceTree = "<group>"; };
+		769F4EB4210B669F000DD23B /* LyricsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsViewModel.swift; sourceTree = "<group>"; };
+		769F4EB9210B6706000DD23B /* PromoControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoControllerViewModel.swift; sourceTree = "<group>"; };
+		769F4EBA210B6706000DD23B /* PromoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoRouter.swift; sourceTree = "<group>"; };
+		769F4EBB210B6706000DD23B /* PromoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoViewController.swift; sourceTree = "<group>"; };
+		769F4EBC210B6706000DD23B /* PromoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoViewModel.swift; sourceTree = "<group>"; };
 		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76EDBD1420F73DCC0021297F /* PlayerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerQueue.swift; sourceTree = "<group>"; };
 		76EDBD1820F78FCD0021297F /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
@@ -280,6 +336,7 @@
 		763C905B20FDF54E007C1F86 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				769F4E92210B59B2000DD23B /* PlayerContentContainer */,
 				76F1FA6320DBAEEC00C9191F /* PlayerRouter.swift */,
 				76F1FA6520DBAEEC00C9191F /* PlayerViewModel.swift */,
 				76F1FA6220DBAEEC00C9191F /* PlayerControllerViewModel.swift */,
@@ -434,6 +491,89 @@
 				76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */,
 			);
 			path = RestApiService;
+			sourceTree = "<group>";
+		};
+		769F4E82210A143B000DD23B /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				769F4E85210A143B000DD23B /* PlaylistRouter.swift */,
+				769F4E86210A143B000DD23B /* PlaylistViewModel.swift */,
+				769F4E83210A143B000DD23B /* PlaylistControllerViewModel.swift */,
+				769F4E84210A143B000DD23B /* PlaylistViewController.swift */,
+			);
+			path = Playlist;
+			sourceTree = "<group>";
+		};
+		769F4E8B210A1461000DD23B /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				769F4E8C210A16CF000DD23B /* PlayerContentStoryboardSegue.swift */,
+				769F4E9F210B6136000DD23B /* PlayerContentTransitioningDelegate.swift */,
+				769F4E8E210B03F1000DD23B /* PlayerContentPresentationController.swift */,
+				769F4E90210B1574000DD23B /* PlayerContentPresentationAnimator.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		769F4E92210B59B2000DD23B /* PlayerContentContainer */ = {
+			isa = PBXGroup;
+			children = (
+				769F4E8B210A1461000DD23B /* Presentation */,
+				769F4E9B210B5EA3000DD23B /* Follow */,
+				769F4E9C210B5EB6000DD23B /* Video */,
+				769F4E9D210B5EBF000DD23B /* Lyrics */,
+				769F4E82210A143B000DD23B /* Playlist */,
+				769F4E9E210B5EE8000DD23B /* Promo */,
+				769F4E94210B5BA1000DD23B /* PlayerContentContainerRouter.swift */,
+				769F4E96210B5BA1000DD23B /* PlayerContentContainerViewModel.swift */,
+				769F4E93210B5BA1000DD23B /* PlayerContentContainerControllerViewModel.swift */,
+				769F4E95210B5BA1000DD23B /* PlayerContentContainerViewController.swift */,
+			);
+			path = PlayerContentContainer;
+			sourceTree = "<group>";
+		};
+		769F4E9B210B5EA3000DD23B /* Follow */ = {
+			isa = PBXGroup;
+			children = (
+				769F4EA2210B65D8000DD23B /* FollowRouter.swift */,
+				769F4EA4210B65D8000DD23B /* FollowViewModel.swift */,
+				769F4EA1210B65D8000DD23B /* FollowControllerViewModel.swift */,
+				769F4EA3210B65D8000DD23B /* FollowViewController.swift */,
+			);
+			path = Follow;
+			sourceTree = "<group>";
+		};
+		769F4E9C210B5EB6000DD23B /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				769F4EAA210B6631000DD23B /* VideoRouter.swift */,
+				769F4EAC210B6631000DD23B /* VideoViewModel.swift */,
+				769F4EA9210B6631000DD23B /* VideoControllerViewModel.swift */,
+				769F4EAB210B6631000DD23B /* VideoViewController.swift */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		769F4E9D210B5EBF000DD23B /* Lyrics */ = {
+			isa = PBXGroup;
+			children = (
+				769F4EB2210B669F000DD23B /* LyricsRouter.swift */,
+				769F4EB4210B669F000DD23B /* LyricsViewModel.swift */,
+				769F4EB1210B669F000DD23B /* LyricsControllerViewModel.swift */,
+				769F4EB3210B669F000DD23B /* LyricsViewController.swift */,
+			);
+			path = Lyrics;
+			sourceTree = "<group>";
+		};
+		769F4E9E210B5EE8000DD23B /* Promo */ = {
+			isa = PBXGroup;
+			children = (
+				769F4EBA210B6706000DD23B /* PromoRouter.swift */,
+				769F4EBC210B6706000DD23B /* PromoViewModel.swift */,
+				769F4EB9210B6706000DD23B /* PromoControllerViewModel.swift */,
+				769F4EBB210B6706000DD23B /* PromoViewController.swift */,
+			);
+			path = Promo;
 			sourceTree = "<group>";
 		};
 		76EDBD1720F78F0A0021297F /* Errors */ = {
@@ -667,12 +807,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				769F4EA0210B6136000DD23B /* PlayerContentTransitioningDelegate.swift in Sources */,
 				7665E8292107224F007D8B98 /* CellsViewModels.swift in Sources */,
 				7665E81D2105BC84007D8B98 /* ListeningSettingsViewModel.swift in Sources */,
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
 				7650962320E5238100BF1F79 /* PlayListItem.swift in Sources */,
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */,
+				769F4EA7210B65D8000DD23B /* FollowViewController.swift in Sources */,
 				7665333D20FF1B2E00FEC702 /* SettingsRouter.swift in Sources */,
 				7665333F20FF1B2E00FEC702 /* SettingsViewModel.swift in Sources */,
 				7665335020FF1DE300FEC702 /* ProfileViewController.swift in Sources */,
@@ -683,54 +825,72 @@
 				763C904D20FCBABD007C1F86 /* TabBarRouter.swift in Sources */,
 				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,
 				767289C620ED1A13008A86B6 /* Player.swift in Sources */,
+				769F4EAF210B6631000DD23B /* VideoViewController.swift in Sources */,
 				76310DCD20F6252200140D03 /* AddonState.swift in Sources */,
 				7665333520FE470C00FEC702 /* HomeViewController.swift in Sources */,
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
 				7665E82D21078732007D8B98 /* SwitchableTableSectionHeaderView.swift in Sources */,
+				769F4EA6210B65D8000DD23B /* FollowRouter.swift in Sources */,
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
 				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,
 				7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
 				768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */,
+				769F4E8F210B03F1000DD23B /* PlayerContentPresentationController.swift in Sources */,
+				769F4EAD210B6631000DD23B /* VideoControllerViewModel.swift in Sources */,
 				7665333620FE470C00FEC702 /* HomeViewModel.swift in Sources */,
 				7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */,
 				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
 				7665E8212105E448007D8B98 /* ModelSupport.swift in Sources */,
 				763C905820FDDE96007C1F86 /* AuthorizationRouter.swift in Sources */,
 				76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */,
+				769F4EB5210B669F000DD23B /* LyricsControllerViewModel.swift in Sources */,
 				760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */,
 				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
 				7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */,
 				7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */,
 				76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */,
+				769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */,
+				769F4EA5210B65D8000DD23B /* FollowControllerViewModel.swift in Sources */,
 				7665E81F2105DB22007D8B98 /* ListeningSettings.swift in Sources */,
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				7665333E20FF1B2E00FEC702 /* SettingsViewController.swift in Sources */,
+				769F4E87210A143C000DD23B /* PlaylistControllerViewModel.swift in Sources */,
 				7665334620FF1CFA00FEC702 /* PagesRouter.swift in Sources */,
 				76F1FA6020DBA9FF00C9191F /* AppViewModel.swift in Sources */,
 				766B02FE21009505005AB2B6 /* PlayerError.swift in Sources */,
+				769F4E98210B5BA1000DD23B /* PlayerContentContainerRouter.swift in Sources */,
 				7665334720FF1CFA00FEC702 /* PagesViewController.swift in Sources */,
 				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
+				769F4E97210B5BA1000DD23B /* PlayerContentContainerControllerViewModel.swift in Sources */,
 				76EDBD1920F78FCD0021297F /* AppError.swift in Sources */,
+				769F4E99210B5BA1000DD23B /* PlayerContentContainerViewController.swift in Sources */,
 				7665E81C2105BC84007D8B98 /* ListeningSettingsViewController.swift in Sources */,
 				7650962520E662D100BF1F79 /* RestApiService.swift in Sources */,
 				7665334520FF1CFA00FEC702 /* PagesControllerViewModel.swift in Sources */,
 				76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */,
+				769F4E9A210B5BA1000DD23B /* PlayerContentContainerViewModel.swift in Sources */,
 				7665333420FE470C00FEC702 /* HomeRouter.swift in Sources */,
 				7665335720FF414300FEC702 /* SignInControllerViewModel.swift in Sources */,
+				769F4EA8210B65D8000DD23B /* FollowViewModel.swift in Sources */,
 				7655476E20EB80DC004AC0BD /* Token.swift in Sources */,
 				763C905A20FDDE96007C1F86 /* AuthorizationViewModel.swift in Sources */,
 				7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */,
 				7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */,
 				7665335820FF414300FEC702 /* SignInRouter.swift in Sources */,
 				763C904F20FCBABD007C1F86 /* TabBarViewModel.swift in Sources */,
+				769F4E88210A143C000DD23B /* PlaylistViewController.swift in Sources */,
 				76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */,
 				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
 				7665334820FF1CFA00FEC702 /* PagesViewModel.swift in Sources */,
 				76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */,
 				7665333C20FF1B2E00FEC702 /* SettingsControllerViewModel.swift in Sources */,
+				769F4EBD210B6706000DD23B /* PromoControllerViewModel.swift in Sources */,
 				7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */,
+				769F4EBF210B6706000DD23B /* PromoViewController.swift in Sources */,
+				769F4E8A210A143C000DD23B /* PlaylistViewModel.swift in Sources */,
+				769F4EB6210B669F000DD23B /* LyricsRouter.swift in Sources */,
 				7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */,
 				7665335A20FF414300FEC702 /* SignInViewModel.swift in Sources */,
 				7665332D20FE26A600FEC702 /* RestApiServiceError.swift in Sources */,
@@ -739,15 +899,23 @@
 				7665335120FF1DE300FEC702 /* ProfileViewModel.swift in Sources */,
 				7665334F20FF1DE300FEC702 /* ProfileRouter.swift in Sources */,
 				76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */,
+				769F4E89210A143C000DD23B /* PlaylistRouter.swift in Sources */,
+				769F4EB7210B669F000DD23B /* LyricsViewController.swift in Sources */,
+				769F4EB0210B6631000DD23B /* VideoViewModel.swift in Sources */,
 				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,
 				7665333320FE470C00FEC702 /* HomeControllerViewModel.swift in Sources */,
+				769F4E8D210A16CF000DD23B /* PlayerContentStoryboardSegue.swift in Sources */,
+				769F4E91210B1574000DD23B /* PlayerContentPresentationAnimator.swift in Sources */,
 				764CC02A20F8D4FF009C3D28 /* PlayerState.swift in Sources */,
 				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,
 				76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */,
 				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
+				769F4EAE210B6631000DD23B /* VideoRouter.swift in Sources */,
+				769F4EB8210B669F000DD23B /* LyricsViewModel.swift in Sources */,
 				76EDBD1B20F796FF0021297F /* WebSocketServiceError.swift in Sources */,
 				768EC2CB20F4FB1000629F1B /* Addon.swift in Sources */,
+				769F4EBE210B6706000DD23B /* PromoRouter.swift in Sources */,
 				7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */,
 				763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */,
 				763C905720FDDE96007C1F86 /* AuthorizationControllerViewModel.swift in Sources */,

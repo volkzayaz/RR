@@ -23,6 +23,9 @@ enum TabType: Int {
 }
 
 protocol TabBarRouter: FlowRouter {
+
+    var playerContentContainerRouter: PlayerContentContainerRouter? { get }
+
     func updateTabs(for types: [TabType])
     func selectTab(for type: TabType)
 }
@@ -32,22 +35,26 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
     typealias Destinations = SegueList
     
     enum SegueList: String, SegueDestinations {
-        case placeholder
+        case playerContentContainer
 
         var identifier: String {
             switch self {
-            case .placeholder: return "placeholder"
+            case .playerContentContainer: return "PlayerContantContainerSegueIdentifier"
             }
         }
 
         static func from(identifier: String) -> SegueList? {
             switch identifier {
+            case "PlayerContantContainerSegueIdentifier": return .playerContentContainer
             default: return nil
             }
         }
     }
 
     private(set) var dependencies: RouterDependencies
+
+    private(set) var playerContentTransitioningDelegate: PlayerContentTransitioningDelegate
+    private(set) weak var playerContentContainerRouter: PlayerContentContainerRouter?
     
     private(set) weak var viewModel: TabBarViewModel?
     private(set) weak var tabBarViewController: TabBarViewController?
@@ -55,7 +62,6 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
     var sourceController: UIViewController? { return tabBarViewController }
 
     private(set) var childViewContollers: [UIViewController]?
-
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -66,13 +72,24 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .placeholder:
+        case .playerContentContainer:
+            guard let playerContentContainerViewController = segue.destination as? PlayerContentContainerViewController else { fatalError("Incorrect controller for PlayerContantContainerSegueIdentifier") }
+
+            playerContentContainerViewController.transitioningDelegate = self.playerContentTransitioningDelegate
+            playerContentContainerViewController.modalPresentationStyle = .custom
+
+            let playerContentContainerRouter = DefaultPlayerContentContainerRouter(dependencies: self.dependencies)
+            playerContentContainerRouter.start(controller: playerContentContainerViewController, navigationItem: sender as? PlayerNavigationItem)
+
+            self.playerContentContainerRouter = playerContentContainerRouter
+
             break
         }
     }
 
-    init(dependencies: RouterDependencies) {
+    init(dependencies: RouterDependencies, playerContentTransitioningDelegate: PlayerContentTransitioningDelegate) {
         self.dependencies = dependencies
+        self.playerContentTransitioningDelegate = playerContentTransitioningDelegate
     }
 
     func start(controller: TabBarViewController) {
@@ -165,6 +182,9 @@ extension DefaultTabBarRouter: UITabBarControllerDelegate {
             authorizationRouter.start(controller: authorizationViwController)
         default: break
         }
-    }
 
+        if let playerContentContainerRouter = self.playerContentContainerRouter {
+            playerContentContainerRouter.stop(true)
+        }
+    }
 }

@@ -35,6 +35,7 @@ class testConstraint: NSLayoutConstraint {
 
 final class AppViewController: UIViewController {
 
+    @IBOutlet weak var tabBarContainerView: UIView!
     @IBOutlet weak var playerContainerView: UIView!
     @IBOutlet weak var playerContainerViewHeightConstraint: NSLayoutConstraint!
 

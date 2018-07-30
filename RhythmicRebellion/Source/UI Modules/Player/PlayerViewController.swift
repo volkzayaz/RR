@@ -9,8 +9,39 @@
 
 import UIKit
 
+enum PlayerNavigationItemType: Int {
+    case follow
+    case video
+    case lirycs
+    case playList
+    case promo
+}
+
+class PlayerNavigationItem {
+
+    var type: PlayerNavigationItemType
+
+    private weak var playerViewController: PlayerViewController?
+
+    fileprivate init?(playerViewController: PlayerViewController, tag: Int) {
+        guard let type = PlayerNavigationItemType.init(rawValue: tag) else { return nil }
+
+        self.type = type
+        self.playerViewController = playerViewController
+    }
+
+    deinit {
+        self.playerViewController?.unselect(self)
+    }
+}
+
+protocol PlayerNavigationDelgate: class {
+    func navigate(to playerNavigationItem: PlayerNavigationItem)
+}
+
 final class PlayerViewController: UIViewController {
 
+    // MARK: - Outlet properties -
     @IBOutlet var blockOverlayView: UILabel!
 
     @IBOutlet weak var playerItemNameLabel: UILabel!
@@ -38,12 +69,14 @@ final class PlayerViewController: UIViewController {
 
     private(set) var viewModel: PlayerViewModel!
     private(set) var router: FlowRouter!
+    private(set) var navigationDelegate: PlayerNavigationDelgate!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: PlayerViewModel, router: FlowRouter) {
+    func configure(viewModel: PlayerViewModel, router: FlowRouter, navigationDelegate: PlayerNavigationDelgate) {
         self.viewModel = viewModel
         self.router    = router
+        self.navigationDelegate = navigationDelegate
     }
 
     // MARK: - Lifecycle -
@@ -71,6 +104,47 @@ final class PlayerViewController: UIViewController {
         self.refreshUI()
     }
 
+    func tabBarItem(with playerNavigationItemType: PlayerNavigationItemType, on tabBar: UITabBar) -> UITabBarItem? {
+        return tabBar.items?.filter({
+            guard let tabBarItemNavigationItemType = PlayerNavigationItemType(rawValue: $0.tag),
+                tabBarItemNavigationItemType == playerNavigationItemType else { return false }
+            return true
+        }).first
+    }
+
+    func unselect(_ playerNavigationItem: PlayerNavigationItem) {
+
+        switch playerNavigationItem.type {
+        case .follow:
+
+            self.compactFollowButton.isSelected = false
+            self.compactFollowButton.tintColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
+
+            if let regularTabBarSelectedItem = self.regularTabBar.selectedItem,
+                let regularPlayerNavigationItemType = PlayerNavigationItemType(rawValue: regularTabBarSelectedItem.tag),
+                playerNavigationItem.type == regularPlayerNavigationItemType {
+
+                self.regularTabBar.selectedItem = nil
+            }
+
+        default:
+            if let compactTabBarSelectedItem = self.compactTabBar.selectedItem,
+                let compactPlayerNavigationItemType = PlayerNavigationItemType(rawValue: compactTabBarSelectedItem.tag),
+                playerNavigationItem.type == compactPlayerNavigationItemType {
+
+                self.compactTabBar.selectedItem = nil
+            }
+
+            if let regularTabBarSelectedItem = self.regularTabBar.selectedItem,
+                let regularPlayerNavigationItemType = PlayerNavigationItemType(rawValue: regularTabBarSelectedItem.tag),
+                playerNavigationItem.type == regularPlayerNavigationItemType {
+
+                self.regularTabBar.selectedItem = nil
+            }
+        }
+
+    }
+
     // MARK: - Actions -
     @IBAction func onPlayButton(sender: UIBarButtonItem) {
         self.viewModel.play()
@@ -87,9 +161,21 @@ final class PlayerViewController: UIViewController {
     @IBAction func onBackwardButton(sender: UIBarButtonItem) {
         viewModel.backward()
     }
+
+    @IBAction func onFollowCompactButton(sender: UIButton) {
+        guard let navigationItem = PlayerNavigationItem(playerViewController: self, tag: 0) else { return }
+
+        self.compactFollowButton.isSelected = true
+        self.compactFollowButton.tintColor = #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1)
+
+        self.regularTabBar.selectedItem = self.tabBarItem(with: .follow, on: self.regularTabBar)
+
+        self.navigationDelegate.navigate(to: navigationItem)
+    }
 }
 
 // MARK: - Router -
+
 extension PlayerViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -105,6 +191,8 @@ extension PlayerViewController {
     }
 
 }
+
+// MARK: - ViewModel -
 
 extension PlayerViewController: PlayerViewModelDelegate {
 
@@ -163,5 +251,30 @@ extension PlayerViewController: PlayerViewModelDelegate {
         self.playerItemCurrentTimeLabel.text = self.viewModel.playerItemCurrentTimeString
         self.playerItemProgressView.progress = self.viewModel.playerItemProgress
         self.updatePlayPauseState()
+    }
+}
+
+// MARK: - UITabBarDelegate
+
+extension PlayerViewController: UITabBarDelegate {
+
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        guard let navigationItem = PlayerNavigationItem(playerViewController: self, tag: item.tag) else { return }
+
+
+        if tabBar == self.compactTabBar {
+            self.regularTabBar.selectedItem = self.tabBarItem(with: navigationItem.type, on: self.regularTabBar)
+        } else {
+            switch navigationItem.type {
+            case .follow:
+                self.compactFollowButton.isSelected = true
+                self.compactFollowButton.tintColor = #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1)
+
+            default:
+                self.compactTabBar.selectedItem = self.tabBarItem(with: navigationItem.type, on: self.compactTabBar)
+            }
+        }
+
+        self.navigationDelegate.navigate(to: navigationItem)
     }
 }

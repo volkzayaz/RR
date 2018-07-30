@@ -1,33 +1,26 @@
 //
-//  TabBarViewController.swift
+//  LyricsViewController.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/16/18.
+//  Created by Alexander Obolentsev on 7/27/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-final class TabBarViewController: UITabBarController {
+final class LyricsViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: TabBarViewModel!
+    private(set) var viewModel: LyricsViewModel!
     private(set) var router: FlowRouter!
-
-
-    override var transitionCoordinator: UIViewControllerTransitionCoordinator? {
-        return super.transitionCoordinator
-    }
 
     // MARK: - Configuration -
 
-    func configure(viewModel: TabBarViewModel, router: FlowRouter, viewControllers: [UIViewController]) {
+    func configure(viewModel: LyricsViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
-
-        self.viewControllers = viewControllers
     }
 
     // MARK: - Lifecycle -
@@ -36,14 +29,12 @@ final class TabBarViewController: UITabBarController {
         super.viewDidLoad()
 
         viewModel.load(with: self)
-        self.view.clipsToBounds = true
-
     }
 
 }
 
 // MARK: - Router -
-extension TabBarViewController {
+extension LyricsViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -59,7 +50,7 @@ extension TabBarViewController {
 
 }
 
-extension TabBarViewController: TabBarViewModelDelegate {
+extension LyricsViewController: LyricsViewModelDelegate {
 
     func refreshUI() {
 
