@@ -92,8 +92,6 @@ class WebSocketService: WebSocketDelegate, Observable {
         do {
             let jsonData = try JSONEncoder().encode(command)
 
-//            print("sendCommand: \(String(data: jsonData, encoding: .utf8))")
-
             self.webSocket.write(data: jsonData, completion: { completion?(nil) })
         } catch (let error) {
             completion?(AppError(WebSocketServiceError.custom(error)))

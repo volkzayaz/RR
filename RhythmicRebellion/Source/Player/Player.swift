@@ -61,26 +61,25 @@ class Player: NSObject, Observable {
     var isBlocked: Bool = false
 
     var canForward: Bool {
-        guard let currentQueueItem = self.playerQueue.currentItem else { return true }
+        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized }
 
         switch currentQueueItem.content {
         case .addon(let addon): return addon.type == .ArtistBIO || addon.type == .SongCommentary
         default: break
         }
 
-        return true
+        return self.state.initialized
     }
 
     var canBackward: Bool {
-        guard let currentQueueItem = self.playerQueue.currentItem else { return true }
+        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized }
 
         switch currentQueueItem.content {
         case .addon(_): return false
-        default: break
+        case .track(_):
+            guard let trackProgress = self.currentTrackState?.progress, trackProgress > 0.3 else { return self.state.initialized }
+            return true
         }
-
-        return true
-
     }
 
     var playerCurrentTrack: Track? {
@@ -112,6 +111,8 @@ class Player: NSObject, Observable {
     private(set) var initializationAction: PlayerInitializationAction = .none
 
     private var playBackgroundTaskIdentifier: UIBackgroundTaskIdentifier?
+
+    private var audioSessionIsInterrupted: Bool = false
 
     @objc private var player = AVQueuePlayer()
     var timeObserverToken: Any?
@@ -152,7 +153,7 @@ class Player: NSObject, Observable {
 
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            let _ = try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().setActive(true)
         } catch let error as NSError {
             print("an error occurred when audio session category.\n \(error)")
         }
@@ -212,8 +213,9 @@ class Player: NSObject, Observable {
     func initializePlayer() {
 
         self.state.initialized = true
+        self.audioSessionIsInterrupted = false
 
-        if let trackId = self.currentTrackId ?? self.playlist.firstTrackId,
+        if self.currentTrackId == nil, let trackId = self.playlist.firstTrackId,
             let track = self.playlist.track(for: trackId) {
             self.playerQueue.replace(track: track, addons: self.currentTrackState != nil ? [] : nil)
             self.replace(playerItems: self.playerQueue.playerItems)
@@ -224,6 +226,11 @@ class Player: NSObject, Observable {
             self.performeInitializationAction()
             self.initializationAction = .none
         }
+
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.nextTrackCommand.isEnabled = self.canForward
+        commandCenter.previousTrackCommand.isEnabled = self.canBackward
+
 
         self.observersContainer.invoke({ (observer) in
             observer.player(player: self, didChangeStatus: .initialized)
@@ -238,6 +245,9 @@ class Player: NSObject, Observable {
         }
 
         self.updateMPRemoteInfo()
+
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.previousTrackCommand.isEnabled = self.canBackward
 
         if self.playerQueue.containsOnlyTrack {
             self.observersContainer.invoke({ (observer) in
@@ -483,7 +493,7 @@ class Player: NSObject, Observable {
 
     func playBackward(completion: (() -> ())? = nil) {
 
-        guard self.state.initialized, self.canBackward else { completion?(); return }
+        guard self.canBackward else { completion?(); return }
 
         let isPlaying = self.isPlaying
         let playerCurrentItemCurrentTime = self.playerCurrentTrackCurrentTime ?? 0.0
@@ -512,6 +522,7 @@ class Player: NSObject, Observable {
             return
         }
 
+        guard self.state.initialized else { completion?(); return }
         guard let currentTrack = self.playerQueue.track,
             let currentTrackId = self.playlist.trackId(for: currentTrack),
             let previousTrack = self.findPlayableTrack(before: currentTrackId),
@@ -553,6 +564,41 @@ class Player: NSObject, Observable {
     // MARK: Notifications
     @objc func audioSessionInterrupted(_ notification: Notification) {
         print("interruption received: \(notification)")
+
+        guard let userInfo = notification.userInfo,
+            let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSessionInterruptionType(rawValue: typeValue) else { return }
+
+        if type == .began {
+            self.audioSessionIsInterrupted = true
+            let pauseBackgroundtask = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+            self.state.playingBeforeAudioSessionInterruption = self.state.playing
+            self.pause { UIApplication.shared.endBackgroundTask(pauseBackgroundtask) }
+
+        } else if type == .ended {
+
+            self.player.pause()
+            self.audioSessionIsInterrupted = false
+            var options: AVAudioSessionInterruptionOptions = []
+
+            if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
+                options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
+            }
+
+            if self.webSocketService.isConnected == false {
+                self.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
+                    self.initializationAction = .playCurrent
+                }
+                self.webSocketService.reconnect()
+            } else {
+                if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
+                    self.player.play()
+                }
+            }
+
+            self.state.playingBeforeAudioSessionInterruption = false
+        }
     }
 
     @objc func playerItemDidPlayToEndTime(_ notification: Notification) {
@@ -726,6 +772,14 @@ extension Player: WebSocketServiceObserver {
     //MARK: - WebSocketServiceObserver
     func webSocketServiceDidDisconnect(_ service: WebSocketService) {
         self.state.initialized = false
+
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.nextTrackCommand.isEnabled = self.canForward
+        commandCenter.previousTrackCommand.isEnabled = self.canBackward
+
+        if self.audioSessionIsInterrupted == false && self.webSocketService.isReachable {
+            self.webSocketService.reconnect()
+        }
     }
 
     func webSocketServiceDidConnect(_ service: WebSocketService) {
@@ -812,7 +866,14 @@ extension Player {
                 if self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .playCurrent
-                    return .success                    
+                    self?.webSocketService.reconnect()
+                    return .success
+                } else if let _ = self?.playerCurrentTrack {
+                    if self?.player.rate == 0.0 {
+                        self?.play()
+                        return .success
+                    }
+                    return .commandFailed
                 }
                 return .noActionableNowPlayingItem }
 
@@ -831,11 +892,27 @@ extension Player {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .pause
                     return .success
+                } else if let _ = self?.playerCurrentTrack {
+                    if self?.player.rate == 1.0 {
+                        self?.pause(completion: { [weak self] in
+                            if UIApplication.shared.applicationState == .background  {
+                                self?.audioSessionIsInterrupted = true
+                                self?.webSocketService.disconnect()
+                            }
+                        })
+                        return .success
+                    }
+                    return .commandFailed
                 }
                 return .noActionableNowPlayingItem }
 
             if self?.player.rate == 1.0 {
-                self?.pause()
+                self?.pause(completion: { [weak self] in
+                    if UIApplication.shared.applicationState == .background  {
+                        self?.audioSessionIsInterrupted = true
+                        self?.webSocketService.disconnect()
+                    }
+                })
                 return .success
             }
 
@@ -848,11 +925,27 @@ extension Player {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .pause
                     return .success
+                } else if let _ = self?.playerCurrentTrack {
+                    if self?.player.rate == 1.0 {
+                        self?.pause(completion: { [weak self] in
+                            if UIApplication.shared.applicationState == .background  {
+                                self?.audioSessionIsInterrupted = true
+                                self?.webSocketService.disconnect()
+                            }
+                        })
+                        return .success
+                    }
+                    return .commandFailed
                 }
                 return .noActionableNowPlayingItem }
 
             if self?.player.rate == 1.0 {
-                self?.pause()
+                self?.pause(completion: { [weak self] in
+                    if UIApplication.shared.applicationState == .background  {
+                        self?.audioSessionIsInterrupted = true
+                        self?.webSocketService.disconnect()
+                    }
+                })
                 return .success
             }
 
@@ -880,6 +973,9 @@ extension Player {
                 if self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .playBackward
+                    return .success
+                } else if self?.canBackward ?? false {
+                    self?.playBackward()
                     return .success
                 }
                 return .noActionableNowPlayingItem }

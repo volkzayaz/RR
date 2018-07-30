@@ -12,15 +12,28 @@ struct PlayerState: OptionSet {
 
     let rawValue: Int
 
-    static let initialized      = PlayerState(rawValue: 1 << 0)
-    static let playing          = PlayerState(rawValue: 1 << 1)
-    static let waitingAddons    = PlayerState(rawValue: 1 << 2)
-    static let blocked          = PlayerState(rawValue: 1 << 3)
+    static let initialized                              = PlayerState(rawValue: 1 << 0)
+    static let audioSessionInterrupted                  = PlayerState(rawValue: 1 << 1)
+    static let playingBeforeAudioSessionInterruption    = PlayerState(rawValue: 1 << 2)
+    static let playing                                  = PlayerState(rawValue: 1 << 3)
+    static let waitingAddons                            = PlayerState(rawValue: 1 << 4)
+    static let blocked                                  = PlayerState(rawValue: 1 << 5)
 
     var initialized: Bool {
         set { if newValue == true { self.insert(.initialized) } else { self.remove(.initialized) } }
         get { return self.contains(.initialized) }
     }
+
+    var audioSessionInterrupted: Bool {
+        set { if newValue == true { self.insert(.audioSessionInterrupted) } else { self.remove(.audioSessionInterrupted) } }
+        get { return self.contains(.audioSessionInterrupted) }
+    }
+
+    var playingBeforeAudioSessionInterruption: Bool {
+        set { if newValue == true { self.insert(.playingBeforeAudioSessionInterruption) } else { self.remove(.playingBeforeAudioSessionInterruption) } }
+        get { return self.contains(.playingBeforeAudioSessionInterruption) }
+    }
+
 
     var playing: Bool {
         set { if newValue == true { self.insert(.playing) } else { self.remove(.playing) } }
