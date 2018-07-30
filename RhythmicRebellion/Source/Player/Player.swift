@@ -704,6 +704,10 @@ extension Player: WebSocketServiceObserver {
 
         self.currentTrackState = currentTrackState
 
+        if currentTrackState.progress > 1.0 {
+            self.playerQueue.replace(addons: [])
+        }
+
         if self.stateHash != currentTrackState.hash {
             self.state.playing = false
             self.player.pause()
