@@ -57,7 +57,7 @@ final class DefaultHomeRouter:  HomeRouter, SegueCompatible {
 
     func start(controller: HomeViewController) {
         sourceController = controller
-        let vm = HomeControllerViewModel(router: self)
+        let vm = HomeControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
         controller.configure(viewModel: vm, router: self)
     }
 }

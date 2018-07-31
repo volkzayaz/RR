@@ -155,3 +155,26 @@ struct ArtistsResponse: RestApiResponse {
     }
 }
 
+
+struct PlaylistsResponse: RestApiResponse {
+
+    let playlists: [Playlist]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.playlists = try container.decode([Playlist].self)
+    }
+}
+
+struct PlaylistTracksResponse: RestApiResponse {
+    let tracks: [Track]
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.tracks = try container.decode([Track].self, forKey: .data)
+    }
+}

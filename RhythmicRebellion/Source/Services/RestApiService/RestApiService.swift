@@ -162,6 +162,33 @@ class RestApiService {
         } catch (let error) {
             completion(.failure(error))
         }
+    }
 
+    func playlists(completion: @escaping (Result<[Playlist]>) -> Void) {
+        guard let playlistsURL = self.makeURL(with: "player/playlists") else { return }
+
+        Alamofire.request(playlistsURL, method: .get)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<PlaylistsResponse>) in
+
+                switch dataResponse.result {
+                case .success(let playlistsResponse): completion(.success(playlistsResponse.playlists))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    func tracks(for playlistId: Int, completion: @escaping (Result<[Track]>) -> Void) {
+        guard let playlistsURL = self.makeURL(with: "player/records/" + String(playlistId)) else { return }
+
+        Alamofire.request(playlistsURL, method: .get)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<PlaylistTracksResponse>) in
+
+                switch dataResponse.result {
+                case .success(let playlistTracksResponse): completion(.success(playlistTracksResponse.tracks))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
     }
 }

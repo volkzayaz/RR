@@ -15,6 +15,7 @@ struct Playlist: Codable {
     let updatedDate: Date?
     let isDefault: Bool
     let thumbnailURLString: String?
+    let description: String
     let title: String
     let isLocked: Bool
     let sortOrder: Int
@@ -31,6 +32,7 @@ struct Playlist: Codable {
         case updatedDate = "updated_at"
         case isDefault = "is_default"
         case thumbnailURLString = "thumbnail"
+        case description
         case title
         case isLocked = "is_locked"
         case sortOrder = "sort_order"
@@ -48,6 +50,7 @@ struct Playlist: Codable {
 
         self.isDefault = try container.decode(Bool.self, forKey: .isDefault)
         self.thumbnailURLString = try container.decode(String.self, forKey: .thumbnailURLString)
+        self.description = try container.decode(String.self, forKey: .description)
         self.title = try container.decode(String.self, forKey: .title)
         self.isLocked = try container.decode(Bool.self, forKey: .isLocked)
         self.sortOrder = try container.decode(Int.self, forKey: .sortOrder)
