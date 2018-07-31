@@ -98,37 +98,45 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         var listeningSettingsSections = [ListeningSettingsSectionViewModel]()
 
-        let songComentarySectionTitle = NSLocalizedString("Song Commentary turn on/off", comment: "Song Commentary Listening Settings Title")
-        let songComentarySection = ListeningSettingsSectionViewModel(title: songComentarySectionTitle,
-                                                                     isOn: self.listeningSettings.isSongCommentary) { [unowned self] (songComentarySection) -> (Void) in
-                                                                        self.delegate?.listeningSettingsSectionsDidBeginUpdate()
-                                                                        self.songComentarySectionChanged(songComentarySection)
-                                                                        self.delegate?.listeningSettingsSectionsDidEndUpdate()
-                                                                        self.checkDirtyState()
-        }
+        let songCommentarySection = ListeningSettingsSectionViewModel()
 
-        if songComentarySection.isOn {
-            let songCommentarySectionIsDateItem = self.songCommentarySectionIsDateItem(for: songComentarySection)
-            songComentarySection.items.append(.isDate(songCommentarySectionIsDateItem))
+        let songComentarySectionMainItemTitle = NSLocalizedString("Song Commentary turn on/off", comment: "Song Commentary Listening Settings Title")
+        let songComentarySectionMainItem = ListeningSettingsSwitchableSectionItemViewModel(parentSectionViewModel: songCommentarySection,
+                                                                                           title: songComentarySectionMainItemTitle,
+                                                                                           isOn: self.listeningSettings.isSongCommentary) { [unowned self] (songComentarySectionMainItem) -> (Void) in
+                                                                                                    self.delegate?.listeningSettingsSectionsDidBeginUpdate()
+                                                                                                    self.songComentarySectionMainItemChanged(songComentarySectionMainItem)
+                                                                                                    self.delegate?.listeningSettingsSectionsDidEndUpdate()
+                                                                                                    self.checkDirtyState()
+                                                                                            }
+        songCommentarySection.items.append(.main(songComentarySectionMainItem))
+
+        if songComentarySectionMainItem.isOn {
+            let songCommentarySectionIsDateItem = self.songCommentarySectionIsDateItem(for: songCommentarySection)
+            songCommentarySection.items.append(.isDate(songCommentarySectionIsDateItem))
 
             if songCommentarySectionIsDateItem.isOn {
-                let songCommentarySectionDateItem = self.songCommentarySectionDateItem(for: songComentarySection)
-                songComentarySection.items.append(.date(songCommentarySectionDateItem))
+                let songCommentarySectionDateItem = self.songCommentarySectionDateItem(for: songCommentarySection)
+                songCommentarySection.items.append(.date(songCommentarySectionDateItem))
             }
         }
 
-        listeningSettingsSections.append(songComentarySection)
+        listeningSettingsSections.append(songCommentarySection)
 
-        let artistsBIOSectionTitle = NSLocalizedString("Hear Artist's BIOs turn on/off", comment: "Artists BIO's Listening Settings Title")
-        let artistsBIOSection = ListeningSettingsSectionViewModel(title: artistsBIOSectionTitle,
-                                                                  isOn: self.listeningSettings.isHearArtistsBio) { [unowned self] (artistsBIOSection) -> (Void) in
-                                                                    self.delegate?.listeningSettingsSectionsDidBeginUpdate()
-                                                                    self.artistsBIOSectionChanged(artistsBIOSection)
-                                                                    self.delegate?.listeningSettingsSectionsDidEndUpdate()
-                                                                    self.checkDirtyState()
-        }
+        let artistsBIOSection = ListeningSettingsSectionViewModel()
 
-        if artistsBIOSection.isOn {
+        let artistsBIOSectionMainItemTitle = NSLocalizedString("Hear Artist's BIOs turn on/off", comment: "Artists BIO's Listening Settings Title")
+        let artistsBIOSectionMainItem = ListeningSettingsSwitchableSectionItemViewModel(parentSectionViewModel: artistsBIOSection,
+                                                                                        title: artistsBIOSectionMainItemTitle,
+                                                                                        isOn: self.listeningSettings.isHearArtistsBio) { [unowned self] (artistsBIOSectionMainItem) -> (Void) in
+                                                                                                self.delegate?.listeningSettingsSectionsDidBeginUpdate()
+                                                                                                self.artistsBIOSectionMainItemChanged(artistsBIOSectionMainItem)
+                                                                                                self.delegate?.listeningSettingsSectionsDidEndUpdate()
+                                                                                                self.checkDirtyState()
+                                                                                        }
+        artistsBIOSection.items.append(.main(artistsBIOSectionMainItem))
+
+        if artistsBIOSectionMainItem.isOn {
             let artistsBIOSectionIsDateItem = self.artistsBIOSectionIsDateItem(for: artistsBIOSection)
             artistsBIOSection.items.append(.isDate(artistsBIOSectionIsDateItem))
 
@@ -140,15 +148,20 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         listeningSettingsSections.append(artistsBIOSection)
 
-        let explicitMaterialSectionTitle = NSLocalizedString("Explicit material", comment: "Explicit Material Listening Settings Title")
-        let explicitMaterialSectionDescription = NSLocalizedString("I do not want to hear songs with lyrics that are foul or offensive.",
-                                                                   comment: "Explicit Material Listening Settings Description")
-        let explicitMaterialSection = ListeningSettingsSectionViewModel(title: explicitMaterialSectionTitle,
-                                                                        description: explicitMaterialSectionDescription,
-                                                                        isOn: self.listeningSettings.isExplicitMaterialExcluded) { (explicitMaterialSection) -> (Void) in
-                                                                            self.listeningSettings.isExplicitMaterialExcluded = explicitMaterialSection.isOn
-                                                                            self.checkDirtyState()
-        }
+
+        let explicitMaterialSection = ListeningSettingsSectionViewModel()
+
+        let explicitMaterialSectionMainItemTitle = NSLocalizedString("Explicit material", comment: "Explicit Material Listening Settings Title")
+        let explicitMaterialSectionMainItemDescription = NSLocalizedString("I do not want to hear songs with lyrics that are foul or offensive.",
+                                                                           comment: "Explicit Material Listening Settings Description")
+        let explicitMaterialSectionMainItem = ListeningSettingsSwitchableSectionItemViewModel(parentSectionViewModel: explicitMaterialSection,
+                                                                                              title: explicitMaterialSectionMainItemTitle,
+                                                                                              description: explicitMaterialSectionMainItemDescription,
+                                                                                              isOn: self.listeningSettings.isExplicitMaterialExcluded) { [unowned self] (explicitMaterialSectionMainItem) -> (Void) in
+                                                                                                    self.listeningSettings.isExplicitMaterialExcluded = explicitMaterialSectionMainItem.isOn
+                                                                                                    self.checkDirtyState()
+                                                                                                }
+        explicitMaterialSection.items.append(.main(explicitMaterialSectionMainItem))
 
         listeningSettingsSections.append(explicitMaterialSection)
 
@@ -156,16 +169,16 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     }
 
     // MARK: - Song Commentary Section
-    func songCommentarySectionIsDateItem(for songComentarySection: ListeningSettingsSectionViewModel) -> ListeningSettingsIsDateSectionItemViewModel {
+    func songCommentarySectionIsDateItem(for songComentarySection: ListeningSettingsSectionViewModel) -> ListeningSettingsSwitchableSectionItemViewModel {
 
-        return ListeningSettingsIsDateSectionItemViewModel(parentSectionViewModel: songComentarySection,
-                                                           title: NSLocalizedString("Created After:", comment: "Created After Listening Settings Title"),
-                                                           isOn: self.listeningSettings.isSongCommentaryDate) { [unowned self] (isDateSectionItem) -> (Void) in
-                                                            self.delegate?.listeningSettingsSectionsDidBeginUpdate()
-                                                            self.songComentarySectionIsDateItemChanged(isDateSectionItem)
-                                                            self.delegate?.listeningSettingsSectionsDidEndUpdate()
-                                                            self.checkDirtyState()
-        }
+        return ListeningSettingsSwitchableSectionItemViewModel(parentSectionViewModel: songComentarySection,
+                                                               title: NSLocalizedString("Created After:", comment: "Created After Listening Settings Title"),
+                                                               isOn: self.listeningSettings.isSongCommentaryDate) { [unowned self] (isDateSectionItem) -> (Void) in
+                                                                    self.delegate?.listeningSettingsSectionsDidBeginUpdate()
+                                                                    self.songComentarySectionIsDateItemChanged(isDateSectionItem)
+                                                                    self.delegate?.listeningSettingsSectionsDidEndUpdate()
+                                                                    self.checkDirtyState()
+                                                                }
     }
 
     func songCommentarySectionDateItem(for songComentarySection: ListeningSettingsSectionViewModel) -> ListeningSettingsDateSectionItemViewModel {
@@ -174,15 +187,16 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
                                                          date: self.listeningSettings.songCommentaryDate ?? Date(), changeCallback: { [unowned self] (date) -> (Void) in
                                                             self.listeningSettings.songCommentaryDate = date
                                                             self.checkDirtyState()
-        })
+                                                        })
     }
 
 
-    func songComentarySectionChanged(_ songComentarySection: ListeningSettingsSectionViewModel) {
+    func songComentarySectionMainItemChanged(_ songComentarySectionMainItem: ListeningSettingsSwitchableSectionItemViewModel) {
+        guard let songComentarySection = songComentarySectionMainItem.parentSectionViewModel else { return }
 
-        self.listeningSettings.isSongCommentary = songComentarySection.isOn
+        self.listeningSettings.isSongCommentary = songComentarySectionMainItem.isOn
 
-        if songComentarySection.isOn {
+        if songComentarySectionMainItem.isOn {
             let songCommentaryIsDateItem = self.songCommentarySectionIsDateItem(for: songComentarySection)
             let isDateSectionItem: ListeningSettingsSectionItem = .isDate(songCommentaryIsDateItem)
             songComentarySection.items.append(isDateSectionItem)
@@ -209,15 +223,14 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
             }
 
             let songComentarySectionItemsCount = songComentarySection.items.count
-            songComentarySection.items.removeAll()
-            for itemIndex in 0..<songComentarySectionItemsCount {
+            songComentarySection.items.removeSubrange(1..<songComentarySectionItemsCount)
+            for itemIndex in 1..<songComentarySectionItemsCount {
                 self.delegate?.listeningSettingsSection(songComentarySection, didDeleteItem: itemIndex)
             }
         }
     }
 
-    func songComentarySectionIsDateItemChanged(_ songComentaryIsDateSectionItem: ListeningSettingsIsDateSectionItemViewModel) {
-
+    func songComentarySectionIsDateItemChanged(_ songComentaryIsDateSectionItem: ListeningSettingsSwitchableSectionItemViewModel) {
         guard let songComentarySection = songComentaryIsDateSectionItem.parentSectionViewModel else { return }
 
         self.listeningSettings.isSongCommentaryDate = songComentaryIsDateSectionItem.isOn
@@ -247,16 +260,16 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     // MARK: - Artists BIO Section
 
-    func artistsBIOSectionIsDateItem(for artistsBIOSection: ListeningSettingsSectionViewModel) -> ListeningSettingsIsDateSectionItemViewModel {
+    func artistsBIOSectionIsDateItem(for artistsBIOSection: ListeningSettingsSectionViewModel) -> ListeningSettingsSwitchableSectionItemViewModel {
 
-        return ListeningSettingsIsDateSectionItemViewModel(parentSectionViewModel: artistsBIOSection,
-                                                           title: NSLocalizedString("Created After:", comment: "Created After Listening Settings Title"),
-                                                           isOn: self.listeningSettings.isHearArtistsBioDate) { [unowned self] (isDateSectionItem) -> (Void) in
-                                                            self.delegate?.listeningSettingsSectionsDidBeginUpdate()
-                                                            self.artistsBIOSectionIsDateItemChanged(isDateSectionItem)
-                                                            self.delegate?.listeningSettingsSectionsDidEndUpdate()
-                                                            self.checkDirtyState()
-        }
+        return ListeningSettingsSwitchableSectionItemViewModel(parentSectionViewModel: artistsBIOSection,
+                                                               title: NSLocalizedString("Created After:", comment: "Created After Listening Settings Title"),
+                                                               isOn: self.listeningSettings.isHearArtistsBioDate) { [unowned self] (isDateSectionItem) -> (Void) in
+                                                                    self.delegate?.listeningSettingsSectionsDidBeginUpdate()
+                                                                    self.artistsBIOSectionIsDateItemChanged(isDateSectionItem)
+                                                                    self.delegate?.listeningSettingsSectionsDidEndUpdate()
+                                                                    self.checkDirtyState()
+                                                                }
     }
 
     func artistsBIOSectionDateItem(for artistsBIOSection: ListeningSettingsSectionViewModel) -> ListeningSettingsDateSectionItemViewModel {
@@ -265,13 +278,15 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
                                                          date: self.listeningSettings.artistsBioDate ?? Date(), changeCallback: { [unowned self] (date) -> (Void) in
                                                             self.listeningSettings.artistsBioDate = date
                                                             self.checkDirtyState()
-        })
+                                                        })
     }
 
-    func artistsBIOSectionChanged(_ artistsBIOSection: ListeningSettingsSectionViewModel) {
-        self.listeningSettings.isHearArtistsBio = artistsBIOSection.isOn
+    func artistsBIOSectionMainItemChanged(_ artistsBIOSectionMainItem: ListeningSettingsSwitchableSectionItemViewModel) {
+        guard let artistsBIOSection = artistsBIOSectionMainItem.parentSectionViewModel else { return }
 
-        if artistsBIOSection.isOn {
+        self.listeningSettings.isHearArtistsBio = artistsBIOSectionMainItem.isOn
+
+        if artistsBIOSectionMainItem.isOn {
             let artistsBIOSectionIsDateItem = self.artistsBIOSectionIsDateItem(for: artistsBIOSection)
             let isDateSectionItem: ListeningSettingsSectionItem = .isDate(artistsBIOSectionIsDateItem)
             artistsBIOSection.items.append(isDateSectionItem)
@@ -298,16 +313,15 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
             }
 
             let artistsBIOSectionItemsCount = artistsBIOSection.items.count
-            artistsBIOSection.items.removeAll()
-            for itemIndex in 0..<artistsBIOSectionItemsCount {
+            artistsBIOSection.items.removeSubrange(1..<artistsBIOSectionItemsCount)
+            for itemIndex in 1..<artistsBIOSectionItemsCount {
                 self.delegate?.listeningSettingsSection(artistsBIOSection, didDeleteItem: itemIndex)
             }
         }
 
     }
 
-    func artistsBIOSectionIsDateItemChanged(_ artistsBIOSectionIsDateItem: ListeningSettingsIsDateSectionItemViewModel) {
-
+    func artistsBIOSectionIsDateItemChanged(_ artistsBIOSectionIsDateItem: ListeningSettingsSwitchableSectionItemViewModel) {
         guard let artistsBIOSection = artistsBIOSectionIsDateItem.parentSectionViewModel else { return }
 
         self.listeningSettings.isHearArtistsBioDate = artistsBIOSectionIsDateItem.isOn

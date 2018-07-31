@@ -10,6 +10,7 @@ import UIKit
 
 protocol SwitchableTableViewCellViewModel: class {
     var title: String { get }
+    var description: String? { get }
     var isOn: Bool { get set }
     var changeCallback: ((Bool) -> (Void))? { get }
 }
@@ -19,13 +20,14 @@ class SwitchableTableViewCell: UITableViewCell {
     static let reuseIdentifier = "SwitchableTableViewCellIdentifier"
 
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var toggle: UISwitch!
 
     weak var viewModel: SwitchableTableViewCellViewModel?
 
     func setup(with viewModel: SwitchableTableViewCellViewModel) {
         self.titleLabel.text = viewModel.title
-
+        self.descriptionLabel.text = viewModel.description
         self.toggle.isOn = viewModel.isOn
 
         self.viewModel = viewModel

@@ -116,10 +116,11 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
                 viewControllers.append(homeViewController)
 
             case .settings:
-                guard let settingsViwController = viewController as? SettingsViewController else { break }
-                let settingsRouter = DefaultSettingsRouter(dependencies: self.dependencies)
-                settingsRouter.start(controller: settingsViwController)
-                viewControllers.append(settingsViwController)
+                guard let settingsNavigationController = viewController as? UINavigationController,
+                    let listeningSettingsViewController = settingsNavigationController.viewControllers.first as? ListeningSettingsViewController else { break }
+                let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
+                listeningSettingsRouter.start(controller: listeningSettingsViewController)
+                viewControllers.append(settingsNavigationController)
 
             case .pages:
                 guard let pagesViwController = viewController as? PagesViewController else { break }
@@ -180,6 +181,13 @@ extension DefaultTabBarRouter: UITabBarControllerDelegate {
             guard let authorizationViwController = viewController as? AuthorizationViewController else { return }
             let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
             authorizationRouter.start(controller: authorizationViwController)
+
+        case .settings:
+            guard let settingsNavigationController = viewController as? UINavigationController,
+                let listeningSettingsViewController = settingsNavigationController.viewControllers.first as? ListeningSettingsViewController else { break }
+            let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
+            listeningSettingsRouter.start(controller: listeningSettingsViewController)
+
         default: break
         }
 

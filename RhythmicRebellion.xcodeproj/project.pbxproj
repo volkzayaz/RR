@@ -69,8 +69,6 @@
 		7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8232106265F007D8B98 /* SwitchableTableViewCell.swift */; };
 		7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */; };
 		7665E8292107224F007D8B98 /* CellsViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8282107224F007D8B98 /* CellsViewModels.swift */; };
-		7665E82B210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7665E82A210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib */; };
-		7665E82D21078732007D8B98 /* SwitchableTableSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E82C21078732007D8B98 /* SwitchableTableSectionHeaderView.swift */; };
 		766B02FE21009505005AB2B6 /* PlayerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766B02FD21009505005AB2B6 /* PlayerError.swift */; };
 		767289C620ED1A13008A86B6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C420ED1A13008A86B6 /* Player.swift */; };
 		767289C720ED1A13008A86B6 /* PlayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C520ED1A13008A86B6 /* PlayList.swift */; };
@@ -192,8 +190,6 @@
 		7665E8232106265F007D8B98 /* SwitchableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableTableViewCell.swift; sourceTree = "<group>"; };
 		7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		7665E8282107224F007D8B98 /* CellsViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsViewModels.swift; sourceTree = "<group>"; };
-		7665E82A210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchableTableSectionHeaderView.xib; sourceTree = "<group>"; };
-		7665E82C21078732007D8B98 /* SwitchableTableSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableTableSectionHeaderView.swift; sourceTree = "<group>"; };
 		766B02FD21009505005AB2B6 /* PlayerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerError.swift; sourceTree = "<group>"; };
 		767289C420ED1A13008A86B6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		767289C520ED1A13008A86B6 /* PlayList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayList.swift; sourceTree = "<group>"; };
@@ -459,7 +455,6 @@
 				7665E8192105BC84007D8B98 /* ListeningSettingsViewModel.swift */,
 				7665E8162105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift */,
 				7665E8182105BC84007D8B98 /* ListeningSettingsViewController.swift */,
-				7665E82A210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib */,
 			);
 			path = ListeningSettings;
 			sourceTree = "<group>";
@@ -469,7 +464,6 @@
 			children = (
 				7665E8232106265F007D8B98 /* SwitchableTableViewCell.swift */,
 				7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */,
-				7665E82C21078732007D8B98 /* SwitchableTableSectionHeaderView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -749,7 +743,6 @@
 				76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */,
 				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
 				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
-				7665E82B210786D4007D8B98 /* SwitchableTableSectionHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -830,7 +823,6 @@
 				7665333520FE470C00FEC702 /* HomeViewController.swift in Sources */,
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
-				7665E82D21078732007D8B98 /* SwitchableTableSectionHeaderView.swift in Sources */,
 				769F4EA6210B65D8000DD23B /* FollowRouter.swift in Sources */,
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
 				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,

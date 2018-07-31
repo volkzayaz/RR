@@ -10,12 +10,14 @@ import Foundation
 
 
 enum ListeningSettingsSectionItem: Equatable {
-    case isDate(ListeningSettingsIsDateSectionItemViewModel)
+    case main(ListeningSettingsSwitchableSectionItemViewModel)
+    case isDate(ListeningSettingsSwitchableSectionItemViewModel)
     case date(ListeningSettingsDateSectionItemViewModel)
 }
 
 func == (lhs: ListeningSettingsSectionItem, rhs: ListeningSettingsSectionItem) -> Bool {
     switch (lhs, rhs){
+    case (.main, .main): return true
     case (.isDate, .isDate): return true
     case (.date, .date): return true
     default: return false
@@ -23,29 +25,8 @@ func == (lhs: ListeningSettingsSectionItem, rhs: ListeningSettingsSectionItem) -
 }
 
 
-class ListeningSettingsSectionViewModel: SwitchableTableSectionHeaderViewModel {
-
-    private(set) var title: String
-    private(set) var description: String?
-
-    var isOn: Bool
-
+class ListeningSettingsSectionViewModel {
     var items = [ListeningSettingsSectionItem]()
-
-    var changeCallback: ((Bool) -> (Void))?
-
-    init(title: String, description: String? = nil, isOn: Bool, modelChandeCallback: @escaping (ListeningSettingsSectionViewModel) -> (Void)) {
-        self.title = title
-        self.description = description
-        self.isOn = isOn
-
-        self.changeCallback = { [weak self] (isOn) in
-            guard let strongSelf = self else { return }
-
-            strongSelf.isOn = isOn
-            modelChandeCallback(strongSelf)
-        }
-    }
 }
 
 extension ListeningSettingsSectionViewModel: Equatable {
@@ -55,18 +36,20 @@ extension ListeningSettingsSectionViewModel: Equatable {
 }
 
 
-class ListeningSettingsIsDateSectionItemViewModel: SwitchableTableViewCellViewModel {
+class ListeningSettingsSwitchableSectionItemViewModel: SwitchableTableViewCellViewModel {
 
     weak var parentSectionViewModel: ListeningSettingsSectionViewModel?
 
     private(set) var title: String
+    private(set) var description: String?
     var isOn: Bool
 
     var changeCallback: ((Bool) -> (Void))?
 
-    init(parentSectionViewModel: ListeningSettingsSectionViewModel, title: String, isOn: Bool, modelChandeCallback: @escaping (ListeningSettingsIsDateSectionItemViewModel) -> (Void)) {
+    init(parentSectionViewModel: ListeningSettingsSectionViewModel, title: String, description: String? = nil, isOn: Bool, modelChandeCallback: @escaping (ListeningSettingsSwitchableSectionItemViewModel) -> (Void)) {
         self.parentSectionViewModel = parentSectionViewModel
         self.title = title
+        self.description = description
         self.isOn = isOn
 
         self.changeCallback = { [weak self] (isOn) in

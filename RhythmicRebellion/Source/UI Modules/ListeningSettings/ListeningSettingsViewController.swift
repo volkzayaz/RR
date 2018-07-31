@@ -25,6 +25,8 @@ final class ListeningSettingsViewController: UIViewController, UITableViewDataSo
     func configure(viewModel: ListeningSettingsViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
+
+        if self.isViewLoaded { viewModel.load(with: self) }
     }
 
     // MARK: - Lifecycle -
@@ -32,15 +34,7 @@ final class ListeningSettingsViewController: UIViewController, UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let refreshControl = UIRefreshControl()
-//
-//        IRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-//        [refreshControl addTarget:self action:@selector(handleRefresh:) forControlEvents:UIControlEventValueChanged];
-//        [self.myTableView addSubview:refreshControl];
-
         self.tableView.addSubview(self.refreshControl)
-        self.tableView.register(UINib(nibName: "SwitchableTableSectionHeaderView", bundle: nil),
-                                forHeaderFooterViewReuseIdentifier: SwitchableTableSectionHeaderView.reuseIdentifier)
         self.tableView.tableFooterView = UIView()
 
         viewModel.load(with: self)
@@ -76,6 +70,10 @@ final class ListeningSettingsViewController: UIViewController, UITableViewDataSo
         let listeningSettingsSectionItem = listeningSettingsSection.items[indexPath.row]
 
         switch listeningSettingsSectionItem {
+        case .main(let listeningSettingsMainSectionItemViewModel):
+            let switchableTableViewCell = tableView.dequeueReusableCell(withIdentifier: "MainSwitchableTableViewCellIdentifier", for: indexPath) as! SwitchableTableViewCell
+            switchableTableViewCell.setup(with: listeningSettingsMainSectionItemViewModel)
+            tableViewCell = switchableTableViewCell
         case .isDate(let listeningSettingsIsDateSectionItemViewModel):
             let switchableTableViewCell = tableView.dequeueReusableCell(withIdentifier: SwitchableTableViewCell.reuseIdentifier, for: indexPath) as! SwitchableTableViewCell
             switchableTableViewCell.setup(with: listeningSettingsIsDateSectionItemViewModel)
@@ -84,28 +82,15 @@ final class ListeningSettingsViewController: UIViewController, UITableViewDataSo
             let datePickerTableVieCell = tableView.dequeueReusableCell(withIdentifier: DatePickerTableVieCell.reuseIdentifier, for: indexPath) as! DatePickerTableVieCell
             datePickerTableVieCell.setup(with: listeningSettingsDateSectionItemViewModel)
             tableViewCell = datePickerTableVieCell
-
         }
 
         return tableViewCell
     }
 
     // MARK: - UITableViewDelegate
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
-        let sectionHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: SwitchableTableSectionHeaderView.reuseIdentifier)
-        let lesteningSectionViewModel = self.viewModel.listeningSettingsSections[section]
-
-        if let switchableTableSectionHeaderView = sectionHeaderView as? SwitchableTableSectionHeaderView {
-            switchableTableSectionHeaderView.setup(with: lesteningSectionViewModel)
-        }
-
-        return sectionHeaderView
     }
 }
 

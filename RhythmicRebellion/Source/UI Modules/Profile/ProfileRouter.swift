@@ -17,17 +17,16 @@ final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
     typealias Destinations = SegueList
 
     enum SegueList: String, SegueDestinations {
-        case listeningSettings
+        case placeholder
 
         var identifier: String {
             switch self {
-            case .listeningSettings: return "ListeningSettingsSegueIdentifier"
+            case .placeholder: return "placeholder"
             }
         }
 
         static func from(identifier: String) -> SegueList? {
             switch identifier {
-            case "ListeningSettingsSegueIdentifier": return .listeningSettings
             default: return nil
             }
         }
@@ -47,12 +46,8 @@ final class DefaultProfileRouter:  ProfileRouter, SegueCompatible {
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .listeningSettings:
-                guard let listeningSettingsViewController = segue.destination as? ListeningSettingsViewController else {
-                    fatalError("Incorrect controller for ListeningSettingsSegueIdentifier")
-                }
-                let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
-                listeningSettingsRouter.start(controller: listeningSettingsViewController)
+        case .placeholder:
+            break
         }
     }
 
