@@ -329,6 +329,24 @@
             </objects>
             <point key="canvasLocation" x="948.75" y="2936.6197183098593"/>
         </scene>
+        <!--Home-->
+        <scene sceneID="FwA-AQ-P4e">
+            <objects>
+                <navigationController id="yzX-4P-EFu" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="1" title="Home" image="Home" id="YZB-2Z-nfM"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="ZHO-tB-oQ9">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="EE0-GH-JrR" kind="relationship" relationship="rootViewController" id="TaW-ez-G9F"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UIX-4h-gY4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="930" y="403"/>
+        </scene>
         <!--Listening Settings-->
         <scene sceneID="MD1-d4-XIy">
             <objects>
@@ -467,7 +485,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <datePicker clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="QMc-yL-E0d">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="214.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="215"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="554109184.751068">
@@ -555,16 +573,16 @@
             </objects>
             <point key="canvasLocation" x="1700" y="1045.7271364317842"/>
         </scene>
-        <!--Home-->
+        <!--Home View Controller-->
         <scene sceneID="Fyl-E4-0Ha">
             <objects>
                 <viewController id="EE0-GH-JrR" customClass="HomeViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m0q-K7-erT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="573"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="509"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HomeViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Kt-z7-4Dx">
-                                <rect key="frame" x="33" y="265.5" width="309" height="42"/>
+                                <rect key="frame" x="33" y="233.5" width="309" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -577,11 +595,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fh6-2n-SBD"/>
                     </view>
-                    <tabBarItem key="tabBarItem" tag="1" title="Home" image="Home" id="zKu-jo-6Bv"/>
+                    <navigationItem key="navigationItem" id="evc-T1-X1R"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JN3-8q-qMX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="951" y="419"/>
+            <point key="canvasLocation" x="1714" y="403"/>
         </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="dyu-qM-q3u">
@@ -595,7 +613,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="sJe-mq-f8h" kind="custom" identifier="PlayerContantContainerSegueIdentifier" customClass="PlayerContentStoryboardSegue" customModule="RhythmicRebellion" customModuleProvider="target" id="8Sw-v0-QlV"/>
-                        <segue destination="EE0-GH-JrR" kind="relationship" relationship="viewControllers" id="eRg-r7-3hc"/>
+                        <segue destination="yzX-4P-EFu" kind="relationship" relationship="viewControllers" id="VgU-tL-Azc"/>
                         <segue destination="3l1-Uo-jsR" kind="relationship" relationship="viewControllers" id="cer-am-Bmt"/>
                         <segue destination="2fS-6u-uEG" kind="relationship" relationship="viewControllers" id="lqy-Wb-loW"/>
                         <segue destination="rbY-GX-Z7E" kind="relationship" relationship="viewControllers" id="EbI-uI-YfP"/>

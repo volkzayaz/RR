@@ -90,7 +90,14 @@ final class ListeningSettingsViewController: UIViewController, UITableViewDataSo
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+
+        let listeningSettingsSection = self.viewModel.listeningSettingsSections[indexPath.section]
+        let listeningSettingsSectionItem = listeningSettingsSection.items[indexPath.row]
+
+        switch listeningSettingsSectionItem {
+        case .main(_), .isDate(_): return 44.0
+        case .date(_): return 215.0
+        }
     }
 }
 

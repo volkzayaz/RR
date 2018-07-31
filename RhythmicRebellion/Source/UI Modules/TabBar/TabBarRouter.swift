@@ -110,10 +110,11 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
 
             switch type {
             case .home:
-                guard let homeViewController = viewController as? HomeViewController else { break }
+                guard let homeNavigationController = viewController as? UINavigationController,
+                    let homeViewController = homeNavigationController.viewControllers.first as? HomeViewController else { break }
                 let homeRouter = DefaultHomeRouter(dependencies: self.dependencies)
                 homeRouter.start(controller: homeViewController)
-                viewControllers.append(homeViewController)
+                viewControllers.append(homeNavigationController)
 
             case .settings:
                 guard let settingsNavigationController = viewController as? UINavigationController,
