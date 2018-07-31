@@ -8,10 +8,10 @@
 
 import Foundation
 
-class PlayList {
+class PlayerPlaylist {
 
     private(set) var tracks = [Track]()
-    private(set) var playListItems = [String : PlayListItem]()
+    private(set) var playListItems = [String : PlayerPlaylistItem]()
     private(set) var tracksAddons = [Int : Set<Addon>]()
 
     var firstTrackId: TrackId? {
@@ -35,7 +35,7 @@ class PlayList {
         self.resetAddons()
     }
 
-    func reset(playListItems: [String : PlayListItem]) {
+    func reset(playListItems: [String : PlayerPlaylistItem]) {
         self.playListItems = playListItems
     }
 
@@ -47,7 +47,7 @@ class PlayList {
         self.tracks.append(contentsOf: tracks)
     }
 
-    func add(playListItems: [String : PlayListItem]) {
+    func add(playListItems: [String : PlayerPlaylistItem]) {
         self.playListItems += playListItems
     }
 

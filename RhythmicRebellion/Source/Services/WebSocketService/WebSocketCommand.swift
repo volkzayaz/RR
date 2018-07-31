@@ -37,7 +37,7 @@ struct WebSocketCommand: Codable {
     enum SuccessCommandData {
         case userInit(Token)
         case playListLoadTracks([Track])
-        case playListUpdate([String : PlayListItem])
+        case playListUpdate([String : PlayerPlaylistItem])
         case currentTrackId(TrackId?)
         case currentTrackState(TrackState)
         case currentTrackBlock(Bool)
@@ -83,7 +83,7 @@ struct WebSocketCommand: Codable {
             case .playListLoadTracks:
                 self.data = .success(.playListLoadTracks(try container.decode([Track].self, forKey: .data)))
             case .playListUpdate:
-                self.data = .success(.playListUpdate(try container.decode([String : PlayListItem].self, forKey: .data)))
+                self.data = .success(.playListUpdate(try container.decode([String : PlayerPlaylistItem].self, forKey: .data)))
             case .currentTrackId:
                 self.data = .success(.currentTrackId(try container.decode(TrackId.self, forKey: .data)))
             case .currentTrackState:
@@ -132,8 +132,8 @@ struct WebSocketCommand: Codable {
                 try container.encode(token, forKey: .data)
             case .playListLoadTracks(let traks):
                 try container.encode(traks, forKey: .data)
-            case .playListUpdate(let playlist):
-                try container.encode(playlist, forKey: .data)
+            case .playListUpdate(let playerPlaylist):
+                try container.encode(playerPlaylist, forKey: .data)
             case .currentTrackId(let trackId):
                 try container.encode(trackId, forKey: .data)
             case .currentTrackState(let trackState):

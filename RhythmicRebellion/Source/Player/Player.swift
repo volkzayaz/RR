@@ -128,7 +128,7 @@ class Player: NSObject, Observable {
     private let restApiService: RestApiService
     private let webSocketService: WebSocketService
 
-    private let playlist: PlayList = PlayList()
+    private let playlist: PlayerPlaylist = PlayerPlaylist()
     private var playerQueue: PlayerQueue = PlayerQueue()
 
     private var currentTrackId: TrackId?
@@ -799,7 +799,7 @@ extension Player: WebSocketServiceObserver {
         }
     }
 
-    func webSocketService(_ service: WebSocketService, didReceivePlayList playListItems: [String: PlayListItem]) {
+    func webSocketService(_ service: WebSocketService, didReceivePlaylist playListItems: [String: PlayerPlaylistItem]) {
 
         if self.state.initialized {
             self.playlist.add(playListItems: playListItems)

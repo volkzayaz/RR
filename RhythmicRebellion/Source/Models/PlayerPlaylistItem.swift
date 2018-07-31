@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PlayListItem: Codable {
+struct PlayerPlaylistItem: Codable {
 
     let id: Int
     let trackKey: String
