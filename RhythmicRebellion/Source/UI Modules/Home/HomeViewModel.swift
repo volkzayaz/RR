@@ -12,11 +12,18 @@ import UIKit
 protocol HomeViewModel: class {
 
     func load(with delegate: HomeViewModelDelegate)
+    func reload()
+
+    func numberOfItems(in section: Int) -> Int
+    func object(at indexPath: IndexPath) -> PlaylistItemViewModel?
 
 }
 
 protocol HomeViewModelDelegate: class {
 
     func refreshUI()
+    func reloadUI()
+
+    func show(error: Error)
 
 }

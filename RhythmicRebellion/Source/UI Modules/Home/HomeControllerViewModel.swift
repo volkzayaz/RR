@@ -17,6 +17,8 @@ final class HomeControllerViewModel: HomeViewModel {
     private(set) weak var router: HomeRouter?
     private(set) weak var restApiService: RestApiService?
 
+    private(set) var playlists: [Playlist] = [Playlist]()
+
     // MARK: - Lifecycle -
 
     init(router: HomeRouter, restApiService: RestApiService) {
@@ -27,29 +29,36 @@ final class HomeControllerViewModel: HomeViewModel {
     func load(with delegate: HomeViewModelDelegate) {
         self.delegate = delegate
 
-//        self.restApiService?.playlists(completion: { [weak self] (playlistsResult) in
-//
-//            switch playlistsResult {
-//            case .success(let playlists):
-//                print("playlists: \(playlists)")
-//                guard playlists.count > 0 else { return }
-//                self?.loadTracks(for: playlists.first!.id)
-//
-//            case .failure(let error):
-//                print("playlists: \(error)")
-//            }
-//        })
+        self.loadPlaylists()
+
+        self.delegate?.reloadUI()
     }
 
-//    func loadTracks(for playlistId: Int) {
-//
-//        self.restApiService?.tracks(for: playlistId, completion: { (playlistTracksResult) in
-//            switch playlistTracksResult {
-//            case .success(let playlistTracks):
-//                print("playlistTracks: \(playlistTracks)")
-//            case .failure(let error):
-//                print("playlistTracks: \(error)")
-//            }
-//        })
-//    }
+    func reload() {
+        self.loadPlaylists()
+    }
+
+    func loadPlaylists() {
+
+        self.restApiService?.playlists(completion: { [weak self] (playlistsResult) in
+
+            switch playlistsResult {
+            case .success(let playlists):
+                self?.playlists = playlists
+                self?.delegate?.reloadUI()
+            case .failure(let error):
+                self?.delegate?.show(error: error)
+            }
+        })
+    }
+
+    func numberOfItems(in section: Int) -> Int {
+        return self.playlists.count
+    }
+
+    func object(at indexPath: IndexPath) -> PlaylistItemViewModel? {
+        guard indexPath.item < self.playlists.count else { return nil }
+
+        return PlaylistItemViewModel(playlist: self.playlists[indexPath.item])
+    }
 }
