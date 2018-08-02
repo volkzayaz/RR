@@ -188,14 +188,4 @@ extension SignInViewController: SignInViewModelDelegate {
     func refreshPasswordField(field: ValidatableField, didValidate validationError: ValidationError?) {
         self.refresh(textField: self.passwordTextField, errorLabel: self.passwordErrorLabel, withValidationError: validationError)
     }
-
-    func show(error: Error) {
-
-        let errorAlertController = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
-        errorAlertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK Title for AlertAction"), style: .cancel, handler: { (action) in
-            errorAlertController.dismiss(animated: true, completion: nil)
-        }))
-
-        self.present(errorAlertController, animated: true, completion: nil)
-    }
 }

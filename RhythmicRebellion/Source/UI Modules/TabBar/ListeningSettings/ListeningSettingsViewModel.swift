@@ -21,7 +21,7 @@ protocol ListeningSettingsViewModel: class {
     func save()
 }
 
-protocol ListeningSettingsViewModelDelegate: class {
+protocol ListeningSettingsViewModelDelegate: class, ErrorPresnting {
 
     func refreshUI()
     func reloadUI()
@@ -30,6 +30,4 @@ protocol ListeningSettingsViewModelDelegate: class {
     func listeningSettingsSection(_ listeningSettingsSection: ListeningSettingsSectionViewModel, didInsertItem at: Int)
     func listeningSettingsSection(_ listeningSettingsSection: ListeningSettingsSectionViewModel, didDeleteItem at: Int)
     func listeningSettingsSectionsDidEndUpdate()
-
-    func show(error: Error)
 }

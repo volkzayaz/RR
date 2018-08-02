@@ -31,13 +31,10 @@ protocol SignInViewModel: class {
     func restart()
 }
 
-protocol SignInViewModelDelegate: class {
+protocol SignInViewModelDelegate: class, ErrorPresnting {
 
     func refreshUI()
 
     func refreshEmailField(field: ValidatableField, didValidate error: ValidationError?)
     func refreshPasswordField(field: ValidatableField, didValidate error: ValidationError?)
-
-    func show(error: Error)
-
 }

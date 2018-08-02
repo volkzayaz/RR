@@ -9,7 +9,7 @@
 
 import UIKit
 
-final class HomeViewController: UIViewController, UICollectionViewDataSource {
+final class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var refreshControl: UIRefreshControl!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -38,14 +38,22 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource {
         self.collectionView.addSubview(self.refreshControl)
         self.setupCollectionViewLayout()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+
         viewModel.load(with: self)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     func setupCollectionViewLayout() {
         guard let collectionViewFlowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
 
         let offset = collectionViewFlowLayout.minimumInteritemSpacing + collectionViewFlowLayout.sectionInset.left + collectionViewFlowLayout.sectionInset.right
-        let viewWidth = min(self.collectionView.bounds.width, self.collectionView.bounds.height)
+        let viewWidth = min(self.view.bounds.width, self.view.bounds.height)
         let lineWidth = offset + 2 * collectionViewFlowLayout.itemSize.width
         if lineWidth > viewWidth {
             let itemWidth = (viewWidth - offset) / 2
@@ -78,6 +86,12 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource {
 
     // MARK: - UICollectionViewDelegate -
 
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let playlistItemViewModel = self.viewModel.object(at: indexPath)!
+
+        self.performSegue(withIdentifier: "PlaylistContentSegueIdentifier", sender: playlistItemViewModel.playlist)
+    }
+
 }
 
 // MARK: - Router -
@@ -107,15 +121,5 @@ extension HomeViewController: HomeViewModelDelegate {
         self.collectionView.reloadData()
         self.refreshControl.endRefreshing()
         self.refreshUI()
-    }
-
-    func show(error: Error) {
-
-        let errorAlertController = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
-        errorAlertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK Title for AlertAction"), style: .cancel, handler: { (action) in
-            errorAlertController.dismiss(animated: true, completion: nil)
-        }))
-
-        self.present(errorAlertController, animated: true, completion: nil)
     }
 }

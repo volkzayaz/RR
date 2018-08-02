@@ -17,16 +17,17 @@ final class DefaultHomeRouter:  HomeRouter, SegueCompatible {
     typealias Destinations = SegueList
 
     enum SegueList: String, SegueDestinations {
-        case placeholder
+        case playlistContentSegueIdentifier
 
         var identifier: String {
             switch self {
-            case .placeholder: return "placeholder"
+            case .playlistContentSegueIdentifier: return "PlaylistContentSegueIdentifier"
             }
         }
 
         static func from(identifier: String) -> SegueList? {
             switch identifier {
+            case "PlaylistContentSegueIdentifier": return .playlistContentSegueIdentifier
             default: return nil
             }
         }
@@ -46,7 +47,11 @@ final class DefaultHomeRouter:  HomeRouter, SegueCompatible {
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .placeholder:
+        case .playlistContentSegueIdentifier:
+            guard let playlist = sender as? Playlist else { fatalError("Incorrect sender for PlaylistContentSegueIdentifier") }
+            guard let playlistContentViewController = segue.destination as? PlaylistContentViewController else { fatalError("Incorrect controller for PlaylistContentSegueIdentifier") }
+            let playlistContentRouter = DefaultPlaylistContentRouter(dependencies: self.dependencies)
+            playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
             break
         }
     }
