@@ -16,7 +16,7 @@ struct Track: Codable {
     let radioInfo: String
     let ownerId: String
     let isCensorship: Bool
-    let videoURLStrings: [String]
+    let videoURLStrings: [String]?
     let isInstrumental: Bool
     let isFreeForPlaylist: Bool
     let previewTypeValue: Int?
@@ -68,12 +68,14 @@ struct Track: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.id = try container.decode(Int.self, forKey: .id)
+
         self.songId = try container.decode(Int.self, forKey: .songId)
         self.name = try container.decode(String.self, forKey: .name)
         self.radioInfo = try container.decode(String.self, forKey: .radioInfo)
         self.ownerId = try container.decode(String.self, forKey: .ownerId)
         self.isCensorship = try container.decode(Bool.self, forKey: .isCensorship)
-        self.videoURLStrings = try container.decode([String].self, forKey: .videoURLStrings)
+
+        self.videoURLStrings = try? container.decode([String].self, forKey: .videoURLStrings)
         self.isInstrumental = try container.decode(Bool.self, forKey: .isInstrumental)
         self.isFreeForPlaylist = try container.decode(Bool.self, forKey: .isFreeForPlaylist)
         self.previewTypeValue = try? container.decode(Int.self, forKey: .previewTypeValue)
@@ -108,6 +110,7 @@ struct Track: Codable {
         try container.encode(self.ownerId, forKey: .ownerId)
         try container.encode(self.isCensorship, forKey: .isCensorship)
         try container.encode(self.videoURLStrings, forKey: .videoURLStrings)
+
         try container.encode(self.isInstrumental, forKey: .isInstrumental)
         try container.encode(self.isFreeForPlaylist, forKey: .isFreeForPlaylist)
         try container.encode(self.previewTypeValue, forKey: .previewTypeValue)
