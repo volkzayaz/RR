@@ -18,6 +18,7 @@ protocol PlaylistContentViewModel: class {
 
     func numberOfItems(in section: Int) -> Int
     func object(at indexPath: IndexPath) -> TrackItemViewModel?
+    func actions(forObjectAt: IndexPath) -> TrackActionsViewModels.ViewModel?
 }
 
 protocol PlaylistContentViewModelDelegate: class, ErrorPresnting {

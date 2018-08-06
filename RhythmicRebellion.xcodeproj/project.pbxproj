@@ -17,6 +17,8 @@
 		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
 		76310DCD20F6252200140D03 /* AddonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCC20F6252200140D03 /* AddonState.swift */; };
 		76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCE20F6343A00140D03 /* CheckAddons.swift */; };
+		763931DC21144CF600A65257 /* TrackActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DB21144CF600A65257 /* TrackActions.swift */; };
+		763931E121144E9300A65257 /* ActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DF21144E9300A65257 /* ActionSheetViewModel.swift */; };
 		763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C904820FCBABD007C1F86 /* TabBarControllerViewModel.swift */; };
 		763C904D20FCBABD007C1F86 /* TabBarRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C904920FCBABD007C1F86 /* TabBarRouter.swift */; };
 		763C904E20FCBABD007C1F86 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C904A20FCBABD007C1F86 /* TabBarViewController.swift */; };
@@ -150,6 +152,8 @@
 		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
 		76310DCC20F6252200140D03 /* AddonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddonState.swift; sourceTree = "<group>"; };
 		76310DCE20F6343A00140D03 /* CheckAddons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAddons.swift; sourceTree = "<group>"; };
+		763931DB21144CF600A65257 /* TrackActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackActions.swift; sourceTree = "<group>"; };
+		763931DF21144E9300A65257 /* ActionSheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetViewModel.swift; sourceTree = "<group>"; };
 		763C904820FCBABD007C1F86 /* TabBarControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControllerViewModel.swift; sourceTree = "<group>"; };
 		763C904920FCBABD007C1F86 /* TabBarRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarRouter.swift; sourceTree = "<group>"; };
 		763C904A20FCBABD007C1F86 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
@@ -313,6 +317,15 @@
 			path = WebSocketService;
 			sourceTree = "<group>";
 		};
+		763931DA21144A5300A65257 /* ActionsViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				763931DF21144E9300A65257 /* ActionSheetViewModel.swift */,
+				763931DB21144CF600A65257 /* TrackActions.swift */,
+			);
+			path = ActionsViewModels;
+			sourceTree = "<group>";
+		};
 		763C904720FCBA14007C1F86 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -332,6 +345,7 @@
 		763C905120FDDCF8007C1F86 /* UI Modules */ = {
 			isa = PBXGroup;
 			children = (
+				763931DA21144A5300A65257 /* ActionsViewModels */,
 				763C905C20FDF598007C1F86 /* App */,
 				763C905B20FDF54E007C1F86 /* Player */,
 				763C904720FCBA14007C1F86 /* TabBar */,
@@ -881,6 +895,7 @@
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
 				7650962320E5238100BF1F79 /* PlayerPlaylistItem.swift in Sources */,
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
+				763931E121144E9300A65257 /* ActionSheetViewModel.swift in Sources */,
 				763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */,
 				769F4EA7210B65D8000DD23B /* FollowViewController.swift in Sources */,
 				767BA578211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift in Sources */,
@@ -976,6 +991,7 @@
 				76C8DE0121106FDF00773BB1 /* Image.swift in Sources */,
 				76D39CEC2111F7FA00D47DFA /* PlaylistContentRouter.swift in Sources */,
 				769F4EB7210B669F000DD23B /* LyricsViewController.swift in Sources */,
+				763931DC21144CF600A65257 /* TrackActions.swift in Sources */,
 				769F4EB0210B6631000DD23B /* VideoViewModel.swift in Sources */,
 				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,

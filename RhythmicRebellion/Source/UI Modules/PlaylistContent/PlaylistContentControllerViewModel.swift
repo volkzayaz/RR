@@ -16,6 +16,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
     private(set) weak var delegate: PlaylistContentViewModelDelegate?
     private(set) weak var router: PlaylistContentRouter?
+    private(set) weak var application: Application?
+    private(set) weak var player: Player?
     private(set) weak var restApiService: RestApiService?
 
     private var playlist: Playlist
@@ -25,8 +27,10 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: PlaylistContentRouter, restApiService: RestApiService, playlist: Playlist) {
+    init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, playlist: Playlist) {
         self.router = router
+        self.application = application
+        self.player = player
         self.restApiService = restApiService
 
         self.playlist = playlist
@@ -64,5 +68,44 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         guard indexPath.item < self.playlistTracks.count else { return nil }
 
         return TrackItemViewModel(track: self.playlistTracks[indexPath.item])
+    }
+
+    func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
+        switch actionType {
+        case .toPlaylist: return self.application?.user?.isGuest == false
+        case .replaceCurrent, .delete: return false
+        default: return true
+        }
+    }
+
+    func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: Track) {
+
+        switch actionType {
+        case .playNow: self.player?.performAction(.playNow, for: track)
+        case .playNext: self.player?.performAction(.playNext, for: track)
+        case .playLast: self.player?.performAction(.playLast, for: track)
+        case .toPlaylist: break
+        default: break
+        }
+
+    }
+
+    func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel? {
+        guard indexPath.row < playlistTracks.count else { return nil }
+        let track = playlistTracks[indexPath.row]
+
+        let filteredTrackActionsTypes = TrackActionsViewModels.allActionsTypes.filter {
+            return self.isAction(with: $0, availableFor: track)
+        }
+
+        guard filteredTrackActionsTypes.count > 0 else { return nil }
+
+        let trackActions = TrackActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredTrackActionsTypes) { [weak self, track] (actionType) in
+            self?.performeAction(with: actionType, for: track)
+        }
+
+        return TrackActionsViewModels.ViewModel(title: NSLocalizedString("Actions", comment: "Actions title"),
+                                                message: track.name,
+                                                actions: trackActions)
     }
 }

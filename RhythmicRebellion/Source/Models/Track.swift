@@ -15,25 +15,26 @@ struct Track: Codable {
     let name: String
     let radioInfo: String
     let ownerId: String
-//    "is_censorship": false,
-//    "video": [ "https:\/\/www.youtube.com\/watch?v=RYxtwYE7GPY" ],
-//    "is_instrumental": false,
+    let isCensorship: Bool
+    let videoURLStrings: [String]
+    let isInstrumental: Bool
     let isFreeForPlaylist: Bool
-//    "preview_type": null,
-//    "preview_limit_times": null,
+    let previewTypeValue: Int?
+    let previewLimitTimes: Int?
     let isFollowAllowFreeDownload: Bool
     let releaseDateFans: Date?
-//    "featuring": null,
+    let featuring: String?
     let images: [Image]
     let audioFile: AudioFile?
     let cleanAudioFile: AudioFile?
     let artist: Artist
     let fansLiked: Int
     let fansDisliked: Int
-//    "current_fan_listen": null,
+//    let current_fan_listen: Any?
     let isReleasedForFans: Bool
     let writer: TrackWriter
-//    "backing_track": null
+    let backingTrack: AudioFile?
+
 
     var isPlayable: Bool { return self.audioFile != nil }
 
@@ -43,9 +44,15 @@ struct Track: Codable {
         case name
         case radioInfo = "radio_info"
         case ownerId = "owner_id"
+        case isCensorship = "is_censorship"
+        case videoURLStrings = "video"
+        case isInstrumental = "is_instrumental"
         case isFreeForPlaylist = "is_free_for_playlist"
+        case previewTypeValue = "preview_type"
+        case previewLimitTimes = "preview_limit_times"
         case isFollowAllowFreeDownload = "is_follow_allow_free_download"
         case releaseDateFans = "release_date_fans"
+        case featuring
         case images
         case audioFile = "mp3_file"
         case cleanAudioFile = "clean_mp3_file"
@@ -54,6 +61,7 @@ struct Track: Codable {
         case fansDisliked = "fans_disliked"
         case isReleasedForFans = "is_released_for_fans"
         case writer = "songwriter"
+        case backingTrack = "backing_track"
     }
 
     public init(from decoder: Decoder) throws {
@@ -64,11 +72,18 @@ struct Track: Codable {
         self.name = try container.decode(String.self, forKey: .name)
         self.radioInfo = try container.decode(String.self, forKey: .radioInfo)
         self.ownerId = try container.decode(String.self, forKey: .ownerId)
+        self.isCensorship = try container.decode(Bool.self, forKey: .isCensorship)
+        self.videoURLStrings = try container.decode([String].self, forKey: .videoURLStrings)
+        self.isInstrumental = try container.decode(Bool.self, forKey: .isInstrumental)
         self.isFreeForPlaylist = try container.decode(Bool.self, forKey: .isFreeForPlaylist)
+        self.previewTypeValue = try? container.decode(Int.self, forKey: .previewTypeValue)
+        self.previewLimitTimes = try? container.decode(Int.self, forKey: .previewLimitTimes)
         self.isFollowAllowFreeDownload = try container.decode(Bool.self, forKey: .isFollowAllowFreeDownload)
 
         let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
         self.releaseDateFans = try container.decodeAsDate(String.self, forKey: .releaseDateFans, dateFormatter: dateTimeFormatter)
+
+        self.featuring = try? container.decode(String.self, forKey: .featuring)
 
         self.images = try container.decode([Image].self, forKey: .images)
         self.audioFile = try? container.decode(AudioFile.self, forKey: .audioFile)
@@ -80,6 +95,7 @@ struct Track: Codable {
         self.isReleasedForFans = try container.decode(Bool.self, forKey: .isReleasedForFans)
 
         self.writer = try container.decode(TrackWriter.self, forKey: .writer)
+        self.backingTrack = try? container.decode(AudioFile.self, forKey: .backingTrack)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -90,12 +106,18 @@ struct Track: Codable {
         try container.encode(self.name, forKey: .name)
         try container.encode(self.radioInfo, forKey: .radioInfo)
         try container.encode(self.ownerId, forKey: .ownerId)
+        try container.encode(self.isCensorship, forKey: .isCensorship)
+        try container.encode(self.videoURLStrings, forKey: .videoURLStrings)
+        try container.encode(self.isInstrumental, forKey: .isInstrumental)
         try container.encode(self.isFreeForPlaylist, forKey: .isFreeForPlaylist)
+        try container.encode(self.previewTypeValue, forKey: .previewTypeValue)
+        try container.encode(self.previewLimitTimes, forKey: .previewLimitTimes)
         try container.encode(self.isFollowAllowFreeDownload, forKey: .isFollowAllowFreeDownload)
 
         let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
         try container.encodeAsString(self.releaseDateFans, forKey: .releaseDateFans, dateFormatter: dateTimeFormatter)
 
+        try container.encode(self.featuring, forKey: .featuring)
         try container.encode(self.images, forKey: .images)
         try container.encode(self.audioFile, forKey: .audioFile)
         try container.encode(self.cleanAudioFile, forKey: .cleanAudioFile)
@@ -106,9 +128,18 @@ struct Track: Codable {
         try container.encode(self.isReleasedForFans, forKey: .isReleasedForFans)
 
         try container.encode(self.writer, forKey: .writer)
+        try container.encode(self.backingTrack, forKey: .backingTrack)
     }
 }
 
+extension Track: Equatable {
+    static func == (lhs: Track, rhs: Track) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
 
+extension Track: Hashable {
+    public var hashValue: Int { return self.id }
+}
 
 

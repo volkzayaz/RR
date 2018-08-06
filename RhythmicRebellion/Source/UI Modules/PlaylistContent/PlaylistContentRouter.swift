@@ -57,7 +57,13 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, SegueCompatibl
 
     func start(controller: PlaylistContentViewController, playlist: Playlist) {
         sourceController = controller
-        let vm = PlaylistContentControllerViewModel(router: self, restApiService: self.dependencies.restApiService, playlist: playlist)
+
+        let vm = PlaylistContentControllerViewModel(router: self,
+                                                    application: self.dependencies.application,
+                                                    player: self.dependencies.player,
+                                                    restApiService: self.dependencies.restApiService,
+                                                    playlist: playlist)
+
         controller.configure(viewModel: vm, router: self)
     }
 }

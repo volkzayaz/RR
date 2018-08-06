@@ -178,5 +178,14 @@ extension WebSocketCommand {
     static func playAddon(addonState: AddonState) -> WebSocketCommand {
         return WebSocketCommand(channel: "addons", command: "playAddon", data: .success(.playAddon(addonState)))
     }
+
+    static func loadTrack(track: Track) -> WebSocketCommand {
+        return WebSocketCommand(channel: "playlist", command: "loadTracks", data: .success(.playListLoadTracks([track])))
+    }
+
+    static func updatePlaylist(playlistsItems: [String: PlayerPlaylistItem]) -> WebSocketCommand {
+        return WebSocketCommand(channel: "playlist", command: "update", data: .success(.playListUpdate(playlistsItems)))
+    }
+
 }
 

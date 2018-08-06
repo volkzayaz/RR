@@ -29,6 +29,19 @@ struct ImageLink: Codable {
     }
 }
 
+struct Pivot: Codable {
+
+    let modelId: Int
+    let imageId: Int
+    let modelType: String
+
+    enum CodingKeys: String, CodingKey {
+        case modelId = "model_id"
+        case imageId = "image_id"
+        case modelType = "model_type"
+    }
+}
+
 struct Image: Codable {
 
     let id: Int
@@ -36,16 +49,13 @@ struct Image: Codable {
     let title: String
     let originalName: String
     let links: [ImageLinkType.RawValue: ImageLink]
-//    "shared_to_websites": [ "d370474b-be80-4ddf-bbc5-c45c94c13248" ],
+    let sharedToWebsites: [String]
     let isActive: Bool
     let createdDate: Date?
     let updatedDate: Date?
-//    "file_size": 1027245,
-//    "pivot": {
-//    "model_id": 109,
-//    "image_id": 109,
-//    "model_type": "record"
-//     }
+    let fileSize: Int
+    let pivot: Pivot
+
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -53,9 +63,12 @@ struct Image: Codable {
         case title
         case originalName = "original_name"
         case links
+        case sharedToWebsites = "shared_to_websites"
         case isActive = "is_active"
         case createdDate = "created_at"
         case updatedDate = "updated_at"
+        case fileSize = "file_size"
+        case pivot
     }
 
     public init(from decoder: Decoder) throws {
@@ -68,10 +81,14 @@ struct Image: Codable {
         self.isActive = try container.decode(Bool.self, forKey: .isActive)
 
         self.links = try container.decode([ImageLinkType.RawValue: ImageLink].self, forKey: .links)
+        self.sharedToWebsites = try container.decode([String].self, forKey: .sharedToWebsites)
 
         let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
         self.createdDate = try container.decodeAsDate(String.self, forKey: .createdDate, dateFormatter: dateTimeFormatter)
         self.updatedDate = try container.decodeAsDate(String.self, forKey: .updatedDate, dateFormatter: dateTimeFormatter)
+
+        self.fileSize = try container.decode(Int.self, forKey: .fileSize)
+        self.pivot = try container.decode(Pivot.self, forKey: .pivot)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -84,10 +101,14 @@ struct Image: Codable {
         try container.encode(self.isActive, forKey: .isActive)
 
         try container.encode(self.links, forKey: .links)
+        try container.encode(self.sharedToWebsites, forKey: .sharedToWebsites)
 
         let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
         try container.encodeAsString(self.createdDate, forKey: .createdDate, dateFormatter: dateTimeFormatter)
         try container.encodeAsString(self.updatedDate, forKey: .updatedDate, dateFormatter: dateTimeFormatter)
+
+        try container.encode(self.fileSize, forKey: .fileSize)
+        try container.encode(self.pivot, forKey: .pivot)
     }
 }
 

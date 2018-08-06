@@ -10,11 +10,12 @@
 import UIKit
 import AlamofireImage
 
-final class PlaylistContentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class PlaylistContentViewController: UIViewController {
 
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var refreshControl: UIRefreshControl!
     @IBOutlet weak var tableHeaderView: PlaylistTableHeaderView!
 
     // MARK: - Public properties -
@@ -34,6 +35,7 @@ final class PlaylistContentViewController: UIViewController, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.tableView.addSubview(self.refreshControl)
         self.setupTableHeaderView()
         self.tableView.tableFooterView = UIView()
 
@@ -107,7 +109,33 @@ final class PlaylistContentViewController: UIViewController, UITableViewDataSour
     }
 
 
-    // MARK: - UITableViewDataSource -
+    // MARK: - Actions -
+
+    @IBAction func onRefresh(sender: UIRefreshControl) {
+        self.viewModel.reload()
+    }
+
+    func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
+
+        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else {
+            return
+        }
+
+        let actionSheet = UIAlertController.make(from: actionsModel)
+
+        actionSheet.popoverPresentationController?.sourceView = sourceView
+        actionSheet.popoverPresentationController?.sourceRect = sourceRect
+
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+}
+
+
+// MARK: - UITableViewDataSource, UITableViewDelegate -
+
+extension PlaylistContentViewController: UITableViewDataSource, UITableViewDelegate {
+
+
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.numberOfItems(in: section)
     }
@@ -116,12 +144,17 @@ final class PlaylistContentViewController: UIViewController, UITableViewDataSour
         let trackItemTableViewCell = TrackItemTableViewCell.reusableCell(in: tableView, at: indexPath)
         let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
 
-        trackItemTableViewCell.settup(viewModel: trackItemTableViewCellViewModel)
+        trackItemTableViewCell.settup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
+            guard let trackItemTableViewCell = trackItemTableViewCell, let path = tableView?.indexPath(for: trackItemTableViewCell) else { return }
+
+            switch action {
+            case .showFoliaActions:
+                self.showActions(itemAt: path, sourceRect: trackItemTableViewCell.actionButton.frame, sourceView: trackItemTableViewCell)
+            }
+        }
 
         return trackItemTableViewCell
     }
-
-    // MARK: - UITableViewDelegate -
 
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
@@ -153,8 +186,8 @@ extension PlaylistContentViewController: PlaylistContentViewModelDelegate {
     }
 
     func reloadUI() {
-
         self.tableView.reloadData()
+        self.refreshControl.endRefreshing()
         self.refreshUI()
     }
 }

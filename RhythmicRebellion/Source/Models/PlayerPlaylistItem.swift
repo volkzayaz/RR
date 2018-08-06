@@ -12,14 +12,19 @@ struct PlayerPlaylistItem: Codable {
 
     let id: Int
     let trackKey: String
-    let nextTrackKey: String?
-    let previousTrackKey: String?
+    var nextTrackKey: String?
+    var previousTrackKey: String?
 
     enum CodingKeys: String, CodingKey {
         case id
         case trackKey
         case nextTrackKey
         case previousTrackKey
+    }
+
+    init(id: Int, trackKey: String) {
+        self.id = id
+        self.trackKey = trackKey
     }
 
 }

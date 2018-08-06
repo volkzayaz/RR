@@ -19,19 +19,35 @@ protocol TrackItemTableViewCellViewModel {
 
 class TrackItemTableViewCell: UITableViewCell, CellIdentifiable {
 
+    typealias ActionCallback = (Actions) -> Void
+
+    enum Actions {
+        case showFoliaActions
+    }
+
     static let identifier = "TrackItemTableViewCellIdentifier"
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var actionButton: UIButton!
 
     var viewModelId: String = ""
 
-    func settup(viewModel: TrackItemTableViewCellViewModel) {
+    var actionCallback: ActionCallback?
+
+    func settup(viewModel: TrackItemTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
         self.viewModelId = viewModel.id
 
         self.titleLabel.text = viewModel.title
         self.descriptionLabel.text = viewModel.description
+
+        self.actionCallback = actionCallback
     }
 
+    // MARK: - Actions -
+
+    @IBAction func onActionButton(sender: UIButton) {
+        actionCallback?(.showFoliaActions)
+    }
 }

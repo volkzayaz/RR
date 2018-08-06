@@ -8,11 +8,14 @@
 
 import Foundation
 
-class PlayerPlaylist {
+class PlayerPlaylist {    
 
-    private(set) var tracks = [Track]()
+    private(set) var tracks = Set<Track>()
     private(set) var playListItems = [String : PlayerPlaylistItem]()
     private(set) var tracksAddons = [Int : Set<Addon>]()
+
+
+    // MARK: - Tracks -
 
     var firstTrackId: TrackId? {
         guard let firstPlayListItem = self.playListItems.filter( { return $0.value.previousTrackKey == nil }).first else { return nil }
@@ -30,37 +33,13 @@ class PlayerPlaylist {
     }
 
     func reset(tracks: [Track]) {
-        self.tracks = tracks
+        self.tracks = Set(tracks)
         self.playListItems.removeAll()
         self.resetAddons()
     }
 
-    func reset(playListItems: [String : PlayerPlaylistItem]) {
-        self.playListItems = playListItems
-    }
-
-    func resetAddons() {
-        self.tracksAddons.removeAll()
-    }
-
-    func add(traks: [Track]) {
-        self.tracks.append(contentsOf: tracks)
-    }
-
-    func add(playListItems: [String : PlayerPlaylistItem]) {
-        self.playListItems += playListItems
-    }
-
-    func add(tracksAddons: [Int : [Addon]]) {
-
-        for (trackId, addons) in tracksAddons  {
-            guard let currentAddons = self.tracksAddons[trackId] else {
-                self.tracksAddons[trackId] = Set(addons)
-                continue
-            }
-
-            self.tracksAddons[trackId] = currentAddons.union(Set(addons))
-        }
+    func add(traksToAdd: [Track]) {
+        self.tracks = self.tracks.union(Set(traksToAdd))
     }
 
     func track(for trackId: TrackId) -> Track? {
@@ -98,6 +77,67 @@ class PlayerPlaylist {
         }
 
         return nil
+    }
+
+    func contains(track: Track) -> Bool {
+        return self.tracks.contains(track)
+    }
+
+    // MARK: - PlayerPlaylistItem -
+
+    var lastPlayListItem: PlayerPlaylistItem? {
+        guard let lastPlayListItem = self.playListItems.filter( { return $0.value.nextTrackKey == nil }).first else { return nil }
+        return lastPlayListItem.value
+    }
+
+    func reset(playListItems: [String : PlayerPlaylistItem]) {
+        self.playListItems = playListItems
+    }
+
+    func add(playListItems: [String : PlayerPlaylistItem]) {
+        self.playListItems += playListItems
+    }
+
+    func playListItem(for trackId: TrackId?) -> PlayerPlaylistItem? {
+        guard let trackKey = trackId?.key else { return nil }
+
+        return self.playListItems[trackKey]
+    }
+
+    func generateTrackKey() -> String {
+
+        var trackKey: String = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
+
+        while self.playListItems[trackKey] != nil {
+            trackKey = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
+        }
+
+        return trackKey
+    }
+
+    func makePlayListItem(for track: Track) -> PlayerPlaylistItem {
+
+        let trackKey = self.generateTrackKey()
+
+        return PlayerPlaylistItem(id: track.id, trackKey: trackKey)
+    }
+
+    // MARK: - Addons -
+
+    func resetAddons() {
+        self.tracksAddons.removeAll()
+    }
+
+    func add(tracksAddons: [Int : [Addon]]) {
+
+        for (trackId, addons) in tracksAddons  {
+            guard let currentAddons = self.tracksAddons[trackId] else {
+                self.tracksAddons[trackId] = Set(addons)
+                continue
+            }
+
+            self.tracksAddons[trackId] = currentAddons.union(Set(addons))
+        }
     }
 
     func addons(for track: Track) -> [Addon]? {
