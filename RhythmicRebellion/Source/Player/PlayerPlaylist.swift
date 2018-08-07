@@ -16,6 +16,21 @@ class PlayerPlaylist {
 
 
     // MARK: - Tracks -
+    var orderedTracks: [Track] {
+        var orderedTracks: [Track] = [Track]()
+        var currentPlaylistItem: PlayerPlaylistItem? = self.firstPlayListItem
+
+        while currentPlaylistItem != nil {
+            if let track = self.tracks.filter({ return $0.id == currentPlaylistItem!.id }).first {
+                orderedTracks.append(track)
+            }
+
+            guard let nextTrackKey = currentPlaylistItem?.nextTrackKey else { break }
+            currentPlaylistItem = self.playListItems[nextTrackKey]
+        }
+
+        return orderedTracks
+    }
 
     var firstTrackId: TrackId? {
         guard let firstPlayListItem = self.playListItems.filter( { return $0.value.previousTrackKey == nil }).first else { return nil }
@@ -84,6 +99,10 @@ class PlayerPlaylist {
     }
 
     // MARK: - PlayerPlaylistItem -
+    var firstPlayListItem: PlayerPlaylistItem? {
+        guard let firstPlayListItem = self.playListItems.filter( { return $0.value.previousTrackKey == nil }).first else { return nil }
+        return firstPlayListItem.value
+    }
 
     var lastPlayListItem: PlayerPlaylistItem? {
         guard let lastPlayListItem = self.playListItems.filter( { return $0.value.nextTrackKey == nil }).first else { return nil }

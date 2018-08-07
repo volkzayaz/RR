@@ -1,19 +1,17 @@
 //
-//  PlaylistContentViewModel.swift
+//  PlayerNowPlayingViewModel.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 8/1/18.
+//  Created by Alexander Obolentsev on 8/6/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-protocol PlaylistContentViewModel: class {
+protocol PlayerNowPlayingViewModel: class {
 
-    var playlistHeaderViewModel: PlaylistHeaderViewModel { get }
-
-    func load(with delegate: PlaylistContentViewModelDelegate)
+    func load(with delegate: PlayerNowPlayingViewModelDelegate)
     func reload()
 
     func numberOfItems(in section: Int) -> Int
@@ -21,8 +19,9 @@ protocol PlaylistContentViewModel: class {
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
 }
 
-protocol PlaylistContentViewModelDelegate: class, ErrorPresnting {
+protocol PlayerNowPlayingViewModelDelegate: class {
 
     func refreshUI()
     func reloadUI()
+
 }

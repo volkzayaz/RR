@@ -1,24 +1,24 @@
 //
-//  PlaylistViewController.swift
+//  PlayerFollowingViewController.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/26/18.
+//  Created by Alexander Obolentsev on 8/7/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-final class PlaylistViewController: UIViewController {
+final class PlayerFollowingViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: PlaylistViewModel!
+    private(set) var viewModel: PlayerFollowingViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: PlaylistViewModel, router: FlowRouter) {
+    func configure(viewModel: PlayerFollowingViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -34,7 +34,7 @@ final class PlaylistViewController: UIViewController {
 }
 
 // MARK: - Router -
-extension PlaylistViewController {
+extension PlayerFollowingViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -50,7 +50,7 @@ extension PlaylistViewController {
 
 }
 
-extension PlaylistViewController: PlaylistViewModelDelegate {
+extension PlayerFollowingViewController: PlayerFollowingViewModelDelegate {
 
     func refreshUI() {
 

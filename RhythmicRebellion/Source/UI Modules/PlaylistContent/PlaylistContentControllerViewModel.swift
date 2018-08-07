@@ -64,10 +64,10 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         return self.playlistTracks.count
     }
 
-    func object(at indexPath: IndexPath) -> TrackItemViewModel? {
+    func object(at indexPath: IndexPath) -> TrackViewModel? {
         guard indexPath.item < self.playlistTracks.count else { return nil }
 
-        return TrackItemViewModel(track: self.playlistTracks[indexPath.item])
+        return TrackViewModel(track: self.playlistTracks[indexPath.item])
     }
 
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
@@ -81,13 +81,15 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: Track) {
 
         switch actionType {
-        case .playNow: self.player?.performAction(.playNow, for: track)
-        case .playNext: self.player?.performAction(.playNext, for: track)
-        case .playLast: self.player?.performAction(.playLast, for: track)
+        case .playNow: self.player?.performAction(.add(.next), for: track, completion: { [weak self] (error) in
+            guard  error == nil else { return }
+            self?.player?.performAction(.playNow, for: track, completion: nil)
+        })
+        case .playNext: self.player?.performAction(.add(.next), for: track, completion: nil)
+        case .playLast: self.player?.performAction(.add(.last), for: track, completion: nil)
         case .toPlaylist: break
         default: break
         }
-
     }
 
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel? {

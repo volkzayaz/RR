@@ -84,9 +84,9 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
                 let lyricsRouter = DefaultLyricsRouter(dependencies: self.dependencies)
                 lyricsRouter.start(controller: lyricsViewController)
             case .playList:
-                guard let playlistViewController = navigationController.viewControllers.first as? PlaylistViewController else { continue }
-                let playlistRouter = DefaultPlaylistRouter(dependencies: self.dependencies)
-                playlistRouter.start(controller: playlistViewController)
+                guard let playerPlaylistRootViewController = navigationController.viewControllers.first as? PlayerPlaylistRootViewController else { continue }
+                let playerPlaylistRootRouter = DefaultPlayerPlaylistRootRouter(dependencies: self.dependencies)
+                playerPlaylistRootRouter.start(controller: playerPlaylistRootViewController)
             case .promo:
                 guard let promoViewController = navigationController.viewControllers.first as? PromoViewController else { continue }
                 let promoRouter = DefaultPromoRouter(dependencies: self.dependencies)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TrackItemViewModel: TrackItemTableViewCellViewModel {
+struct TrackViewModel: TrackTableViewCellViewModel {
 
     var id: String { return String(track.id) }
 

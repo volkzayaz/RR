@@ -1,18 +1,18 @@
 //
-//  PlaylistRouter.swift
+//  PlayerMyPlaylistsRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/26/18.
+//  Created by Alexander Obolentsev on 8/6/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-protocol PlaylistRouter: FlowRouter {
+protocol PlayerMyPlaylistsRouter: FlowRouter {
 }
 
-final class DefaultPlaylistRouter:  PlaylistRouter, SegueCompatible {
+final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, SegueCompatible {
 
     typealias Destinations = SegueList
 
@@ -34,7 +34,7 @@ final class DefaultPlaylistRouter:  PlaylistRouter, SegueCompatible {
 
     private(set) var dependencies: RouterDependencies
     
-    private(set) weak var viewModel: PlaylistViewModel?
+    private(set) weak var viewModel: PlayerMyPlaylistsViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -55,9 +55,9 @@ final class DefaultPlaylistRouter:  PlaylistRouter, SegueCompatible {
         self.dependencies = dependencies
     }
 
-    func start(controller: PlaylistViewController) {
+    func start(controller: PlayerMyPlaylistsViewController) {
         sourceController = controller
-        let vm = PlaylistControllerViewModel(router: self)
+        let vm = PlayerMyPlaylistsControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

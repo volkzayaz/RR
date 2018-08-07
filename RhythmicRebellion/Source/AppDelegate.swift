@@ -35,10 +35,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
                                                                                                                 for: .selected)
 
-        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
-                                                                                                                              NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
-        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
-                                                                                                                              NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self])
+            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
+                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self])
+            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
+
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationController.self])
+            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
+                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationController.self])
+            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
 
     }
 

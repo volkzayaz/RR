@@ -42,6 +42,8 @@ final class PlaylistContentViewController: UIViewController {
         self.imageView.layer.cornerRadius = 6
         self.imageView.layer.masksToBounds = true
 
+        self.tableView.register(UINib(nibName: "TrackTableViewCell", bundle: nil), forCellReuseIdentifier: TrackTableViewCell.identifier)
+
         viewModel.load(with: self)
 
         let playlistHeaderViewModel = self.viewModel.playlistHeaderViewModel
@@ -141,10 +143,10 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let trackItemTableViewCell = TrackItemTableViewCell.reusableCell(in: tableView, at: indexPath)
+        let trackItemTableViewCell = TrackTableViewCell.reusableCell(in: tableView, at: indexPath)
         let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
 
-        trackItemTableViewCell.settup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
+        trackItemTableViewCell.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
             guard let trackItemTableViewCell = trackItemTableViewCell, let path = tableView?.indexPath(for: trackItemTableViewCell) else { return }
 
             switch action {

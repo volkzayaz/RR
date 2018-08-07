@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TrackItemTableViewCellViewModel {
+protocol TrackTableViewCellViewModel {
 
     var id: String { get }
 
@@ -17,7 +17,7 @@ protocol TrackItemTableViewCellViewModel {
 
 }
 
-class TrackItemTableViewCell: UITableViewCell, CellIdentifiable {
+class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
     typealias ActionCallback = (Actions) -> Void
 
@@ -25,7 +25,7 @@ class TrackItemTableViewCell: UITableViewCell, CellIdentifiable {
         case showFoliaActions
     }
 
-    static let identifier = "TrackItemTableViewCellIdentifier"
+    static let identifier = "TrackTableViewCellIdentifier"
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -35,7 +35,7 @@ class TrackItemTableViewCell: UITableViewCell, CellIdentifiable {
 
     var actionCallback: ActionCallback?
 
-    func settup(viewModel: TrackItemTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
+    func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
         self.viewModelId = viewModel.id
 
