@@ -62,6 +62,6 @@ extension Observable {
     }
 
     func removeObserver(_ observer: ObserverType) {
-        self.observersContainer.add(observer)
+        self.observersContainer.remove(observer)
     }
 }

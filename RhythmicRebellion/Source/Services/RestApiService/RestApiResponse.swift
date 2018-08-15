@@ -166,6 +166,17 @@ struct PlaylistsResponse: RestApiResponse {
     }
 }
 
+struct PlaylistsShortResponse: RestApiResponse {
+    
+    let playlists: [PlaylistShort]
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.playlists = try container.decode([PlaylistShort].self)
+    }
+}
+
+
 struct PlaylistTracksResponse: RestApiResponse {
     let tracks: [Track]
 

@@ -151,6 +151,11 @@
 		76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */; };
 		76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */; };
 		76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */; };
+		AB1423662124345700C926F5 /* UIImageView+Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1423652124345700C926F5 /* UIImageView+Placeholder.swift */; };
+		AB33C983211DC5C9003B88DB /* PlaylistsCollectionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33C97F211DC5C9003B88DB /* PlaylistsCollectionRouter.swift */; };
+		AB33C984211DC5C9003B88DB /* PlaylistsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33C980211DC5C9003B88DB /* PlaylistsCollectionViewController.swift */; };
+		AB33C985211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33C981211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift */; };
+		AB33C986211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33C982211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift */; };
 		F36396C3EBC6647FA74987E9 /* Pods_RhythmicRebellion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */; };
 /* End PBXBuildFile section */
 
@@ -304,6 +309,11 @@
 		76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedLabel.swift; sourceTree = "<group>"; };
 		76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarRegular.swift; sourceTree = "<group>"; };
 		83B9F301DB27C972F85A3104 /* Pods-RhythmicRebellion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.release.xcconfig"; path = "Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.release.xcconfig"; sourceTree = "<group>"; };
+		AB1423652124345700C926F5 /* UIImageView+Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Placeholder.swift"; sourceTree = "<group>"; };
+		AB33C97F211DC5C9003B88DB /* PlaylistsCollectionRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistsCollectionRouter.swift; sourceTree = "<group>"; };
+		AB33C980211DC5C9003B88DB /* PlaylistsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistsCollectionViewController.swift; sourceTree = "<group>"; };
+		AB33C981211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FanPlaylistsCollectionControllerViewModel.swift; sourceTree = "<group>"; };
+		AB33C982211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistsCollectionViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +429,7 @@
 		763C904720FCBA14007C1F86 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				AB33C97E211DC4E8003B88DB /* PlaylistsCollection */,
 				7665332E20FE46DF00FEC702 /* Home */,
 				7665E8142105BBE0007D8B98 /* ListeningSettings */,
 				7665334020FF1CDA00FEC702 /* Pages */,
@@ -841,6 +852,7 @@
 				767BA57921119B6500C390D8 /* GradientView.swift */,
 				767BA57E2111AEEC00C390D8 /* CellIdentifiable.swift */,
 				76D39CF32112F63B00D47DFA /* ErrorPresnting.swift */,
+				AB1423652124345700C926F5 /* UIImageView+Placeholder.swift */,
 			);
 			path = "UI Components";
 			sourceTree = "<group>";
@@ -851,6 +863,17 @@
 				6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AB33C97E211DC4E8003B88DB /* PlaylistsCollection */ = {
+			isa = PBXGroup;
+			children = (
+				AB33C981211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift */,
+				AB33C97F211DC5C9003B88DB /* PlaylistsCollectionRouter.swift */,
+				AB33C980211DC5C9003B88DB /* PlaylistsCollectionViewController.swift */,
+				AB33C982211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift */,
+			);
+			path = PlaylistsCollection;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -992,7 +1015,9 @@
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				763931E121144E9300A65257 /* ActionSheetViewModel.swift in Sources */,
 				763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */,
+				AB33C983211DC5C9003B88DB /* PlaylistsCollectionRouter.swift in Sources */,
 				769F4EA7210B65D8000DD23B /* FollowViewController.swift in Sources */,
+				AB33C985211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift in Sources */,
 				767BA578211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift in Sources */,
 				7665335020FF1DE300FEC702 /* ProfileViewController.swift in Sources */,
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
@@ -1015,6 +1040,7 @@
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
 				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,
 				767BA57F2111AEEC00C390D8 /* CellIdentifiable.swift in Sources */,
+				AB33C986211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift in Sources */,
 				7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
 				768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */,
@@ -1094,7 +1120,9 @@
 				7665334F20FF1DE300FEC702 /* ProfileRouter.swift in Sources */,
 				76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */,
 				769F4E89210A143C000DD23B /* PlayerPlaylistRootRouter.swift in Sources */,
+				AB1423662124345700C926F5 /* UIImageView+Placeholder.swift in Sources */,
 				76C8DE0121106FDF00773BB1 /* Image.swift in Sources */,
+				AB33C984211DC5C9003B88DB /* PlaylistsCollectionViewController.swift in Sources */,
 				76D39CEC2111F7FA00D47DFA /* PlaylistContentRouter.swift in Sources */,
 				769F4EB7210B669F000DD23B /* LyricsViewController.swift in Sources */,
 				763931DC21144CF600A65257 /* TrackActions.swift in Sources */,

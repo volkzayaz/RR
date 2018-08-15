@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  PlaylistsCollectionViewController.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 7/17/18.
@@ -9,19 +9,19 @@
 
 import UIKit
 
-final class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+final class PlaylistsCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var refreshControl: UIRefreshControl!
     @IBOutlet weak var collectionView: UICollectionView!
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: HomeViewModel!
+    private(set) var viewModel: PlaylistsCollectionViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: HomeViewModel, router: FlowRouter) {
+    func configure(viewModel: PlaylistsCollectionViewModel, router: FlowRouter) {
 
         self.viewModel = viewModel
         self.router    = router
@@ -34,7 +34,6 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.collectionView.addSubview(self.refreshControl)
         self.setupCollectionViewLayout()
 
@@ -45,8 +44,6 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     func setupCollectionViewLayout() {
@@ -87,15 +84,12 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
     // MARK: - UICollectionViewDelegate -
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let playlistItemViewModel = self.viewModel.object(at: indexPath)!
-
-        self.performSegue(withIdentifier: "PlaylistContentSegueIdentifier", sender: playlistItemViewModel.playlist)
+        self.viewModel.selectObject(at: indexPath)
     }
-
 }
 
 // MARK: - Router -
-extension HomeViewController {
+extension PlaylistsCollectionViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -111,7 +105,7 @@ extension HomeViewController {
 
 }
 
-extension HomeViewController: HomeViewModelDelegate {
+extension PlaylistsCollectionViewController: PlaylistsCollectionViewModelDelegate {
 
     func refreshUI() {
 

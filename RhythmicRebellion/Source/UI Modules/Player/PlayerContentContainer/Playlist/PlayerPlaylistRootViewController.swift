@@ -38,7 +38,7 @@ final class PlayerPlaylistRootViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         viewModel.load(with: self)
     }
 
@@ -72,9 +72,7 @@ extension PlayerPlaylistRootViewController {
 }
 
 extension PlayerPlaylistRootViewController: PlayerPlaylistRootViewModelDelegate {
-
     func refreshUI() {
 
     }
-
 }

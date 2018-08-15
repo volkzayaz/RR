@@ -14,10 +14,9 @@ protocol PlaylistItemCollectionViewCellViewModel {
     var id: String { get }
 
     var title: String { get }
-    var description: String { get }
+    var description: String? { get }
 
     var thumbnailURL: URL? { get }
-
 }
 
 class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
@@ -84,6 +83,8 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
                                         self.activityIndicatorView.stopAnimating()
             }
+        } else {
+            self.activityIndicatorView.stopAnimating()
         }
 
     }

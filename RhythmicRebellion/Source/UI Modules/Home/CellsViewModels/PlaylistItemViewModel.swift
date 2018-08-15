@@ -13,9 +13,21 @@ struct PlaylistItemViewModel: PlaylistItemCollectionViewCellViewModel {
     var id: String { return String(playlist.id) }
 
     var title: String { return playlist.name }
-    var description: String { return playlist.title }
+    var description: String? { return playlist.title }
 
     var thumbnailURL: URL? { return playlist.thumbnailURL }
 
     let playlist: Playlist
+}
+
+struct ShortPlaylistItemViewModel: PlaylistItemCollectionViewCellViewModel {
+    
+    var id: String { return String(playlist.id) }
+    
+    var title: String { return playlist.name }
+    var description: String? { return nil }
+    
+    var thumbnailURL: URL? { return nil }
+    
+    let playlist: PlaylistShort
 }

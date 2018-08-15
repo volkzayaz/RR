@@ -13,8 +13,8 @@ protocol PlaylistTableHeaderViewModel {
 
     var id: String { get }
 
-    var title: String { get }
-    var description: String { get }
+    var title: String? { get }
+    var description: String? { get }
 
     var thumbnailURL: URL? { get }
 }
@@ -58,6 +58,9 @@ class PlaylistTableHeaderView: UIView {
 
                                         self.activityIndicatorView.stopAnimating()
             }
+        } else {
+            self.imageView.makePlaylistPlaceholder()
+            self.activityIndicatorView.stopAnimating()
         }
     }
 }

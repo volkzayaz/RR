@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import Alamofire
 
 final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
@@ -20,14 +21,14 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     private(set) weak var player: Player?
     private(set) weak var restApiService: RestApiService?
 
-    private var playlist: Playlist
+    private var playlist: PlaylistShortInfo
     private var playlistTracks: [Track] = [Track]()    
 
     var playlistHeaderViewModel: PlaylistHeaderViewModel { return PlaylistHeaderViewModel(playlist: self.playlist) }
 
     // MARK: - Lifecycle -
 
-    init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, playlist: Playlist) {
+    init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, playlist: PlaylistShortInfo) {
         self.router = router
         self.application = application
         self.player = player
@@ -44,8 +45,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     }
 
     func loadTracks() {
-        self.restApiService?.tracks(for: self.playlist.id, completion: { [weak self] (tracksResult) in
-
+        let processResults: (Result<[Track]>) -> Void = { [weak self] (tracksResult) in
             switch tracksResult {
             case .success(let tracks):
                 self?.playlistTracks = tracks
@@ -53,7 +53,12 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
             case .failure(let error):
                 self?.delegate?.show(error: error)
             }
-        })
+        }
+        if self.playlist.isFanPlaylist {
+            self.restApiService?.fanTracks(for: self.playlist.id, completion: processResults)
+        } else {
+            self.restApiService?.tracks(for: self.playlist.id, completion: processResults)
+        }
     }
 
     func reload() {

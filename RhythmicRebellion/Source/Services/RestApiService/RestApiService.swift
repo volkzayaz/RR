@@ -107,6 +107,40 @@ class RestApiService {
             completion(.failure(error))
         }
     }
+    
+    func fanPlaylists(completion: @escaping (Result<[PlaylistShort]>) -> Void) {
+        guard let playlistsURL = self.makeURL(with: "fan/playlist") else { return }
+        
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+        
+        Alamofire.request(playlistsURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<PlaylistsShortResponse>) in
+                
+                switch dataResponse.result {
+                case .success(let playlistsResponse): completion(.success(playlistsResponse.playlists))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+    
+    func fanTracks(for playlistId: Int, completion: @escaping (Result<[Track]>) -> Void) {
+        guard let playlistsURL = self.makeURL(with: "fan/playlist/" + String(playlistId) + "/record") else { return }
+        
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(playlistsURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<PlaylistTracksResponse>) in
+                
+                switch dataResponse.result {
+                case .success(let playlistTracksResponse): completion(.success(playlistTracksResponse.tracks))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
 
     // MARK: - Player
 

@@ -8,18 +8,32 @@
 
 import Foundation
 
-struct Playlist: Codable {
+protocol PlaylistShortInfo {
+    var id: Int {get}
+    var name: String {get}
+    var isDefault: Bool {get}
+    var thumbnailURL: URL? {get}
+    
+    var description: String? {get}
+    var title: String? {get}
+    
+    var isFanPlaylist: Bool {get}
+}
+
+struct Playlist: PlaylistShortInfo, Codable {
     let id: Int
     let name: String
     let createdDate: Date?
     let updatedDate: Date?
     let isDefault: Bool
     let thumbnailURLString: String?
-    let description: String
-    let title: String
+    let description: String?
+    let title: String?
     let isLocked: Bool
     let sortOrder: Int
-
+    
+    let isFanPlaylist: Bool = false
+    
     var thumbnailURL: URL? {
         guard let thumbnailURLString = self.thumbnailURLString else { return nil }
         return URL(string: thumbnailURLString)
@@ -83,4 +97,58 @@ extension Playlist: Equatable {
 extension Playlist: Hashable {
     public var hashValue: Int { return self.id }
 }
+
+
+
+struct PlaylistShort: PlaylistShortInfo, Codable {
+    let id: Int
+    let name: String
+    let isDefault: Bool
+    let description: String?
+    let title: String?
+    let thumbnailURL: URL?
+    
+    let isFanPlaylist: Bool = true
+//    var thumbnailURL: URL? {
+//        guard let thumbnailURLString = self.thumbnailURLString else { return nil }
+//        return URL(string: thumbnailURLString)
+//    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case isDefault = "is_default"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
+        
+        self.isDefault = try container.decode(Bool.self, forKey: .isDefault)
+        self.description = nil
+        self.title = nil        
+        self.thumbnailURL = nil
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.name, forKey: .name)
+        try container.encode(self.isDefault, forKey: .isDefault)
+    }
+}
+
+extension PlaylistShort: Equatable {
+    static func == (lhs: PlaylistShort, rhs: PlaylistShort) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension PlaylistShort: Hashable {
+    public var hashValue: Int { return self.id }
+}
+
 

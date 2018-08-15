@@ -67,6 +67,9 @@ final class PlaylistContentViewController: UIViewController {
 
                                         self.activityIndicatorView.stopAnimating()
             }
+        } else {
+            self.imageView.makePlaylistPlaceholder()
+            self.activityIndicatorView.stopAnimating()
         }
 
         self.navigationItem.title = playlistHeaderViewModel.title

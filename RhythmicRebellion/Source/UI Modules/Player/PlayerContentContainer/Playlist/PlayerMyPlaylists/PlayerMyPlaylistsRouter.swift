@@ -17,16 +17,17 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, SegueCompa
     typealias Destinations = SegueList
 
     enum SegueList: String, SegueDestinations {
-        case placeholder
+        case embedPlaylists
 
         var identifier: String {
             switch self {
-            case .placeholder: return "placeholder"
+            case .embedPlaylists: return "embedPlaylists"
             }
         }
 
         static func from(identifier: String) -> SegueList? {
             switch identifier {
+            case "embedPlaylists" : return .embedPlaylists
             default: return nil
             }
         }
@@ -46,7 +47,10 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, SegueCompa
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .placeholder:
+        case .embedPlaylists:
+            guard let playlistsCollectionViewController = segue.destination as? PlaylistsCollectionViewController else { fatalError("Incorrect controller for embedPlaylists") }
+            let playlistCollectionRouter = DefaultPlaylistsCollectionRouter(dependencies: self.dependencies)
+            playlistCollectionRouter.start(controller: playlistsCollectionViewController)
             break
         }
     }

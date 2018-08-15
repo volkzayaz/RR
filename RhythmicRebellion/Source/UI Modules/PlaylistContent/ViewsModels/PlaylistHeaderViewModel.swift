@@ -12,10 +12,10 @@ struct PlaylistHeaderViewModel: PlaylistTableHeaderViewModel {
 
     var id: String { return String(playlist.id) }
 
-    var title: String { return playlist.name }
-    var description: String { return playlist.title }
+    var title: String? { return playlist.name }
+    var description: String? { return playlist.title }
 
     var thumbnailURL: URL? { return playlist.thumbnailURL }
 
-    let playlist: Playlist
+    let playlist: PlaylistShortInfo
 }

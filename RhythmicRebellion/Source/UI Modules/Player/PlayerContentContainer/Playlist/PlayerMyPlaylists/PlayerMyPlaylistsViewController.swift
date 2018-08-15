@@ -27,7 +27,7 @@ final class PlayerMyPlaylistsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         viewModel.load(with: self)
     }
 
