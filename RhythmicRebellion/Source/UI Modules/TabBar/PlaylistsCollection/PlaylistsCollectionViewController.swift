@@ -44,6 +44,7 @@ final class PlaylistsCollectionViewController: UIViewController, UICollectionVie
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.reload()
     }
 
     func setupCollectionViewLayout() {

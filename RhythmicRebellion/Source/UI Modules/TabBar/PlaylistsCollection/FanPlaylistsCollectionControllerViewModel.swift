@@ -39,7 +39,6 @@ final class FanPlaylistsCollectionControllerViewModel: PlaylistsCollectionViewMo
     }
 
     func loadPlaylists() {
-
         self.restApiService?.fanPlaylists(completion: { [weak self] (playlistsResult) in
 
             switch playlistsResult {

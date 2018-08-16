@@ -62,7 +62,7 @@ class RestApiService {
                 }
         }
     }
-
+    
     func fanLogout(completion: @escaping (Result<User>) -> Void) {
         guard let fanLogoutURL = self.makeURL(with: "fan/logout") else { return }
 
@@ -142,6 +142,42 @@ class RestApiService {
         }
     }
 
+    func fanMove(_ track: Track, to playlist: PlaylistShort, completion: @escaping (Result<[Int]>) -> Void) {
+        guard let moveTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-items") else { return }
+        
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+        
+        let parameters: Parameters = ["records" :[["id" : track.id]]]
+        
+        Alamofire.request(moveTrackURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<TrackMoveResponse>) in
+                switch dataResponse.result {
+                case .success(let moveTrackResponse): completion(.success(moveTrackResponse.recordIds))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+    
+    func fanCreatePlaylist(with name: String, completion: @escaping (Result<PlaylistShort>) -> Void) {
+        guard let createPlaylistURL = self.makeURL(with: "fan/playlist") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+        
+        let parameters: Parameters = ["name" : name]
+
+        Alamofire.request(createPlaylistURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<PlaylistsCreateShortResponse>) in
+                switch dataResponse.result {
+                case .success(let playlistsResponse): completion(.success(playlistsResponse.playlist))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+    
     // MARK: - Player
 
     func audioAddons(for trackIds: [Int], completion: @escaping (Result<[Int : [Addon]]>) -> Void) {

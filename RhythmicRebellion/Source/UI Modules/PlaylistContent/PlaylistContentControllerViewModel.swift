@@ -92,7 +92,9 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         })
         case .playNext: self.player?.performAction(.add(.next), for: track, completion: nil)
         case .playLast: self.player?.performAction(.add(.last), for: track, completion: nil)
-        case .toPlaylist: break
+        case .toPlaylist:
+            self.router?.showAddToPlaylist(for: track)
+            break
         default: break
         }
     }

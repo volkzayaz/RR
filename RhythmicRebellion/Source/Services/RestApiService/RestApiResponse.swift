@@ -189,3 +189,31 @@ struct PlaylistTracksResponse: RestApiResponse {
         self.tracks = try container.decode([Track].self, forKey: .data)
     }
 }
+
+struct PlaylistsCreateShortResponse: RestApiResponse {
+    
+    let playlist: PlaylistShort
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.playlist = try container.decode(PlaylistShort.self)
+    }
+}
+
+struct TrackMoveResponse: RestApiResponse {
+    let recordIds: [Int]
+    
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+    
+    enum RecordsKeys: String, CodingKey {
+        case recordIds
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let recordsContainer = try container.nestedContainer(keyedBy: RecordsKeys.self, forKey: .data)
+        self.recordIds = try recordsContainer.decode([Int].self, forKey: .recordIds)
+    }
+}

@@ -126,7 +126,7 @@ struct PlaylistShort: PlaylistShortInfo, Codable {
         self.id = try container.decode(Int.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         
-        self.isDefault = try container.decode(Bool.self, forKey: .isDefault)
+        self.isDefault = (try? container.decode(Bool.self, forKey: .isDefault)) ?? false
         self.description = nil
         self.title = nil        
         self.thumbnailURL = nil
