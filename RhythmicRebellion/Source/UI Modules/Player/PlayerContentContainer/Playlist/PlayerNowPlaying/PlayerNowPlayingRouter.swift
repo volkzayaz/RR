@@ -10,6 +10,7 @@
 import UIKit
 
 protocol PlayerNowPlayingRouter: FlowRouter {
+    func showAddToPlaylist(for track: Track)
 }
 
 final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, SegueCompatible {
@@ -17,16 +18,17 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, SegueCompati
     typealias Destinations = SegueList
 
     enum SegueList: String, SegueDestinations {
-        case placeholder
-
+        case showAddToPlaylist
+        
         var identifier: String {
             switch self {
-            case .placeholder: return "placeholder"
+            case .showAddToPlaylist: return "showAddToPlaylist"
             }
         }
-
+        
         static func from(identifier: String) -> SegueList? {
             switch identifier {
+            case "showAddToPlaylist": return .showAddToPlaylist
             default: return nil
             }
         }
@@ -46,7 +48,10 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, SegueCompati
         guard let payload = merge(segue: segue, with: sender) else { return }
 
         switch payload {
-        case .placeholder:
+        case .showAddToPlaylist:
+            guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
+            let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, track: sender as! Track)            
             break
         }
     }
@@ -59,5 +64,9 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, SegueCompati
         sourceController = controller
         let vm = PlayerNowPlayingControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
+    }
+    
+    func showAddToPlaylist(for track: Track) {
+        self.sourceController?.performSegue(withIdentifier: "showAddToPlaylist", sender: track)
     }
 }

@@ -66,7 +66,9 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         switch actionType {
         case .playNow: self.player?.performAction(.playNow, for: track, completion: nil)
         case .delete: self.player?.performAction(.delete, for: track, completion: nil)
-        case .toPlaylist: break
+        case .toPlaylist:
+            self.router?.showAddToPlaylist(for: track)
+            break
         default: break
         }
     }

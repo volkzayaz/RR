@@ -938,7 +938,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JA1-aw-hen">
-                                                    <rect key="frame" x="84" y="15" width="426" height="24"/>
+                                                    <rect key="frame" x="84" y="12" width="433" height="29.5"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -2020,9 +2020,9 @@
         <!--Navigation Controller-->
         <scene sceneID="Bnz-OQ-pHB">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BLg-mo-FYo" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="AddToPlaylistContainer" automaticallyAdjustsScrollViewInsets="NO" id="BLg-mo-FYo" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="nyc-SP-FZ0">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" translucent="NO" largeTitles="YES" id="nyc-SP-FZ0">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.68999999999999995" green="0.72999999999999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

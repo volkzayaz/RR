@@ -136,6 +136,7 @@
                     <connections>
                         <outlet property="tableHeaderView" destination="y3W-SX-n73" id="4hd-sa-geM"/>
                         <outlet property="tableView" destination="nCw-tO-NCr" id="vY7-L2-kse"/>
+                        <segue destination="hHC-a4-YxJ" kind="presentation" identifier="showAddToPlaylist" id="5tr-9z-dcA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0uq-Zw-YB3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -172,6 +173,14 @@
                 </view>
             </objects>
             <point key="canvasLocation" x="1891" y="-2176"/>
+        </scene>
+        <!--AddToPlaylistContainer-->
+        <scene sceneID="2tm-My-a9k">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="AddToPlaylistContainer" id="hHC-a4-YxJ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UG9-Wy-Edy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2454" y="-2231"/>
         </scene>
         <!--Player My Playlists View Controller-->
         <scene sceneID="FKZ-bu-net">
