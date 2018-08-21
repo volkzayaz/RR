@@ -32,6 +32,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.router = router
         self.application = application
         self.player = player
+        
         self.restApiService = restApiService
 
         self.playlist = playlist
@@ -42,6 +43,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
         self.loadTracks()
         self.delegate?.reloadUI()
+        self.player?.addObserver(self)
     }
 
     func loadTracks() {
@@ -72,7 +74,17 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     func object(at indexPath: IndexPath) -> TrackViewModel? {
         guard indexPath.item < self.playlistTracks.count else { return nil }
 
-        return TrackViewModel(track: self.playlistTracks[indexPath.item])
+        var isCurrentInPlayer = false
+        var isPlaying = false
+        
+        let track = self.playlistTracks[indexPath.item]
+        if let currentTrack = player?.playerCurrentTrack {
+            isCurrentInPlayer = track.id == currentTrack.id
+            isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
+        }
+        
+        return TrackViewModel(track: track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying)
+
     }
 
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
@@ -116,5 +128,25 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         return TrackActionsViewModels.ViewModel(title: NSLocalizedString("Actions", comment: "Actions title"),
                                                 message: track.name,
                                                 actions: trackActions)
+    }
+    
+}
+
+extension PlaylistContentControllerViewModel: PlayerObserver {
+    
+    func player(player: Player, didChangeStatus status: PlayerStatus) {
+        self.delegate?.reloadUI()
+    }
+    
+    func player(player: Player, didChangePlayState isPlaying: Bool) {
+        self.delegate?.reloadUI()
+    }
+    
+    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+        self.delegate?.reloadUI()
+    }
+    
+    func player(player: Player, didChangeBlockedState isBlocked: Bool) {
+        self.delegate?.reloadUI()
     }
 }

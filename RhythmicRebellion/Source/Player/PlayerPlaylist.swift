@@ -16,13 +16,14 @@ class PlayerPlaylist {
 
 
     // MARK: - Tracks -
-    var orderedTracks: [Track] {
-        var orderedTracks: [Track] = [Track]()
+    var orderedTracks: [PlayerTrack] {
+        var orderedTracks: [PlayerTrack] = [PlayerTrack]()
         var currentPlaylistItem: PlayerPlaylistItem? = self.firstPlayListItem
 
         while currentPlaylistItem != nil {
             if let track = self.tracks.filter({ return $0.id == currentPlaylistItem!.id }).first {
-                orderedTracks.append(track)
+                let playerTrack = PlayerTrack(track: track, playlistItem: currentPlaylistItem!)
+                orderedTracks.append(playerTrack)
             }
 
             guard let nextTrackKey = currentPlaylistItem?.nextTrackKey else { break }

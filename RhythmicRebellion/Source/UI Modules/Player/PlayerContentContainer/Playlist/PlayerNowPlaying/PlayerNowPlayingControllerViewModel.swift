@@ -18,7 +18,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     private(set) weak var application: Application?
     private(set) weak var player: Player?
 
-    private var tracks: [Track] = [Track]()
+    private var tracks: [PlayerTrack] = [PlayerTrack]()
 
     // MARK: - Lifecycle -
 
@@ -32,6 +32,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.delegate = delegate
 
         self.loadTracks()
+        self.player?.addObserver(self)
     }
 
     func loadTracks() {
@@ -49,11 +50,20 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     func object(at indexPath: IndexPath) -> TrackViewModel? {
         guard indexPath.item < self.tracks.count else { return nil }
+        
+        var isCurrentInPlayer = false
+        var isPlaying = false
+        
+        let track = self.tracks[indexPath.item]
+        if let currentTrackId = player?.currentTrackId {
+            isCurrentInPlayer = track.playlistItem.trackKey == currentTrackId.key
+            isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
+        }
 
-        return TrackViewModel(track: self.tracks[indexPath.item])
+        return TrackViewModel(track: track.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying)
     }
 
-    func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
+    func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: PlayerTrack) -> Bool {
         switch actionType {
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .replaceCurrent, .playNext, .playLast: return false
@@ -61,13 +71,13 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         }
     }
 
-    func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: Track) {
+    func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: PlayerTrack) {
 
         switch actionType {
         case .playNow: self.player?.performAction(.playNow, for: track, completion: nil)
         case .delete: self.player?.performAction(.delete, for: track, completion: nil)
         case .toPlaylist:
-            self.router?.showAddToPlaylist(for: track)
+            self.router?.showAddToPlaylist(for: track.track)
             break
         default: break
         }
@@ -88,8 +98,28 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         }
 
         return TrackActionsViewModels.ViewModel(title: NSLocalizedString("Actions", comment: "Actions title"),
-                                                message: track.name,
+                                                message: track.track.name,
                                                 actions: trackActions)
 
+    }
+}
+
+
+extension PlayerNowPlayingControllerViewModel: PlayerObserver {
+    
+    func player(player: Player, didChangeStatus status: PlayerStatus) {
+        self.delegate?.reloadUI()
+    }
+    
+    func player(player: Player, didChangePlayState isPlaying: Bool) {
+        self.delegate?.reloadUI()
+    }
+    
+    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+        self.delegate?.reloadUI()
+    }
+    
+    func player(player: Player, didChangeBlockedState isBlocked: Bool) {
+        self.delegate?.reloadUI()
     }
 }

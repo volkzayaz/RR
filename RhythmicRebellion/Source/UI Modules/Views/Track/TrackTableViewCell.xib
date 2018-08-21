@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14270.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,14 +19,17 @@
                 <rect key="frame" x="0.0" y="0.0" width="512" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QEy-wo-Squ">
-                        <rect key="frame" x="15" y="4" width="42" height="20"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yJ1-MD-eZX" customClass="EqualizerView" customModule="RhythmicRebellion" customModuleProvider="target">
+                        <rect key="frame" x="15" y="9" width="18" height="25"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="Cbe-Y0-MXV"/>
+                            <constraint firstAttribute="width" constant="18" id="isf-5r-umP"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="0aB-fh-1TX"/>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hB-Ji-Kgi">
-                        <rect key="frame" x="15" y="23" width="35.5" height="17"/>
+                        <rect key="frame" x="48" y="23" width="35.5" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -44,25 +48,36 @@
                             <action selector="onActionButtonWithSender:" destination="IJd-ih-JrK" eventType="touchUpInside" id="f4r-Jw-sS6"/>
                         </connections>
                     </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QEy-wo-Squ">
+                        <rect key="frame" x="48" y="4" width="42" height="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="DcK-Lp-NH0" secondAttribute="trailing" constant="14" id="4qF-Kd-nY8"/>
                     <constraint firstItem="DcK-Lp-NH0" firstAttribute="centerY" secondItem="8J7-Te-UJB" secondAttribute="centerY" id="B7c-8K-IYH"/>
                     <constraint firstItem="8hB-Ji-Kgi" firstAttribute="top" secondItem="QEy-wo-Squ" secondAttribute="bottom" constant="-1" id="Fja-uk-5b7"/>
                     <constraint firstItem="8hB-Ji-Kgi" firstAttribute="leading" secondItem="QEy-wo-Squ" secondAttribute="leading" id="Jhb-jK-xzW"/>
+                    <constraint firstItem="yJ1-MD-eZX" firstAttribute="centerY" secondItem="8J7-Te-UJB" secondAttribute="centerY" id="Qe9-Yc-xLN"/>
                     <constraint firstAttribute="trailing" secondItem="kms-fH-bFS" secondAttribute="trailing" constant="51" id="i4E-Aa-R55"/>
                     <constraint firstItem="kms-fH-bFS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QEy-wo-Squ" secondAttribute="trailing" constant="15" id="plj-g1-uZH"/>
                     <constraint firstItem="kms-fH-bFS" firstAttribute="top" secondItem="8J7-Te-UJB" secondAttribute="top" id="q9x-Ut-OIC"/>
                     <constraint firstItem="kms-fH-bFS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8hB-Ji-Kgi" secondAttribute="trailing" constant="15" id="qWD-eI-Ft5"/>
                     <constraint firstItem="QEy-wo-Squ" firstAttribute="top" secondItem="8J7-Te-UJB" secondAttribute="top" constant="4" id="tL8-ZX-QEj"/>
-                    <constraint firstItem="QEy-wo-Squ" firstAttribute="leading" secondItem="8J7-Te-UJB" secondAttribute="leading" constant="15" id="wBr-5c-TDf"/>
+                    <constraint firstItem="yJ1-MD-eZX" firstAttribute="leading" secondItem="8J7-Te-UJB" secondAttribute="leading" constant="15" id="vcC-6o-2m2"/>
                     <constraint firstAttribute="bottom" secondItem="kms-fH-bFS" secondAttribute="bottom" id="wBx-cA-Wih"/>
+                    <constraint firstItem="QEy-wo-Squ" firstAttribute="leading" secondItem="yJ1-MD-eZX" secondAttribute="trailing" constant="15" id="y2u-0Q-idU"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="actionButton" destination="DcK-Lp-NH0" id="yhk-as-Nk7"/>
                 <outlet property="descriptionLabel" destination="8hB-Ji-Kgi" id="c9N-lw-Ndn"/>
+                <outlet property="equalizer" destination="yJ1-MD-eZX" id="2J6-6q-TGR"/>
+                <outlet property="equalizerLeadingConstraint" destination="vcC-6o-2m2" id="hSf-Hg-GGw"/>
+                <outlet property="equalizerWidthConstraint" destination="isf-5r-umP" id="Tbr-71-UOY"/>
                 <outlet property="titleLabel" destination="QEy-wo-Squ" id="hO8-R9-l8R"/>
             </connections>
         </tableViewCell>

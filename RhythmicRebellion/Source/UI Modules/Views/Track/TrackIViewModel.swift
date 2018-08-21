@@ -16,4 +16,7 @@ struct TrackViewModel: TrackTableViewCellViewModel {
     var description: String { return track.radioInfo }
 
     let track: Track
+    
+    var isCurrentInPlayer: Bool
+    var isPlaying: Bool
 }

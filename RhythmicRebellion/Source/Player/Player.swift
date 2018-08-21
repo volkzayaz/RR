@@ -142,7 +142,7 @@ class Player: NSObject, Observable {
     private let playlist: PlayerPlaylist = PlayerPlaylist()
     private var playerQueue: PlayerQueue = PlayerQueue()
 
-    private var currentTrackId: TrackId?
+    public var currentTrackId: TrackId?
     private var currentTrackState: TrackState?
 
     private var addonsPlayTimer: Timer?
@@ -1031,7 +1031,7 @@ extension Player {
 
 extension Player {
 
-    var tracks: [Track] { return self.playlist.orderedTracks }
+    var tracks: [PlayerTrack] { return self.playlist.orderedTracks }
 
     func performAdd(track: Track, to playlistPosition: PlaylistPosition, completion: ((Error?) -> Void)?) {
         guard let currentTrackId = self.currentTrackId else { return }
@@ -1107,8 +1107,29 @@ extension Player {
 
     }
 
+    func performAction(_ action: Player.Actions, for playerTrack: PlayerTrack, completion: ((Error?) -> Void)?) {
+        switch action {
+        case .add(let position):
+            //Assume player track come from player's playlist
+            self.performAdd(track: playerTrack.track, to: position, completion: completion)
+        case .delete:
+            self.performDelete(track: playerTrack.track, completion: completion)
+            
+        case .playNow:
+            self.player.pause()
+            let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: true)
+            self.set(trackId: TrackId(id: playerTrack.track.id, key: playerTrack.playlistItem.trackKey), trackState: trackState, completion: { [weak self] (error) in
+                guard error == nil else { completion?(error); return }
+                guard let `self` = self else { completion?(nil); return }
+                self.playerQueue.replace(track: playerTrack.track)
+                self.replace(playerItems: self.playerQueue.playerItems)
+                self.play()
+                completion?(nil)
+            })
+        }
+    }
+    
     func performAction(_ action: Player.Actions, for track: Track, completion: ((Error?) -> Void)?) {
-
         switch action {
         case .add(let position):
             guard self.playlist.contains(track: track) else {
