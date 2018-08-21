@@ -62,6 +62,20 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
         return TrackViewModel(track: track.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying)
     }
+    
+    func selectObject(at indexPath: IndexPath) {
+        if let viewmodel = object(at: indexPath) {
+            if !viewmodel.isCurrentInPlayer {
+                self.player?.performAction(.playNow, for: self.tracks[indexPath.item], completion: nil)
+            } else {
+                if viewmodel.isPlaying {
+                    player?.pause()
+                } else {
+                    player?.play()
+                }
+            }
+        }
+    }
 
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: PlayerTrack) -> Bool {
         switch actionType {

@@ -160,6 +160,11 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
 
         return trackItemTableViewCell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        viewModel.selectObject(at: indexPath)
+    }
 
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
