@@ -19,6 +19,7 @@ protocol PlayerNowPlayingViewModel: class {
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
     
     func selectObject(at indexPath: IndexPath)
+    func perform(action : PlayerNowPlayingTableHeaderView.Actions)
 }
 
 protocol PlayerNowPlayingViewModelDelegate: class {

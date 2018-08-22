@@ -38,6 +38,7 @@ protocol PlayerObserver: class {
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem)
     func player(player: Player, didChangePlayerItemCurrentTime Time: TimeInterval)
+    func playerDidChangePlaylist(player: Player)
 }
 
 extension PlayerObserver {
@@ -50,6 +51,8 @@ extension PlayerObserver {
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) { }
     func player(player: Player, didChangePlayerItemCurrentTime Time: TimeInterval) { }
+    
+    func playerDidChangePlaylist(player: Player) {}
 }
 
 class Player: NSObject, Observable {
@@ -457,6 +460,32 @@ class Player: NSObject, Observable {
             completion?()
         }
     }
+    
+    func clearPlaylist() {
+        //NOTE: 
+        var playlistItems: [String: PlayerPlaylistItem?] = [String: PlayerPlaylistItem?]()
+//        playlistItems = self.playlist.playListItems.mapValues { (item) -> PlayerPlaylistItem? in
+//            let nilItem: PlayerPlaylistItem? = nil
+//            return nilItem
+//        }
+        
+//        var item = self.playlist.playListItems["8ufOt"] ?? nil
+//        item?.nextTrackKey = nil
+//        playlistItems["8ufOt"] = item
+        playlistItems["dummy"] = PlayerPlaylistItem(id: 102, trackKey: "dummy")
+        
+        
+        self.updatePlaylist(playlistItems: playlistItems, flushing: true) { [weak self] (error) in
+            guard error == nil else { return }
+            self?.playlist.update(playListItems: playlistItems)
+            if let strongSelf = self {
+                strongSelf.observersContainer.invoke({ (observer) in
+                    observer.playerDidChangePlaylist(player: strongSelf)
+                })
+            }
+        }
+    }
+    
 
     func playForward(completion: (() -> ())? = nil) {
 
@@ -790,9 +819,11 @@ extension Player: WebSocketServiceObserver {
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
-    func updatePlaylist(playlistItems: [String: PlayerPlaylistItem], completion: ((Error?) -> ())? = nil) {
-        let webSocketCommand = WebSocketCommand.updatePlaylist(playlistsItems: playlistItems)
-
+    func updatePlaylist(playlistItems: [String: PlayerPlaylistItem?], flushing: Bool = false, completion: ((Error?) -> ())? = nil) {
+        var webSocketCommand = WebSocketCommand.updatePlaylist(playlistsItems: playlistItems)
+        if flushing {
+            webSocketCommand.flush = true
+        }
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
@@ -814,7 +845,6 @@ extension Player: WebSocketServiceObserver {
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) {
-
         if self.state.initialized {
             self.playlist.add(traksToAdd: tracks)
         } else {
@@ -822,13 +852,15 @@ extension Player: WebSocketServiceObserver {
         }
     }
 
-    func webSocketService(_ service: WebSocketService, didReceivePlaylist playListItems: [String: PlayerPlaylistItem]) {
-
+    func webSocketService(_ service: WebSocketService, didReceivePlaylist playListItems: [String: PlayerPlaylistItem?]) {
         if self.state.initialized {
             self.playlist.add(playListItems: playListItems)
         } else {
             self.playlist.reset(playListItems: playListItems)
         }
+        self.observersContainer.invoke({ (observer) in
+            observer.playerDidChangePlaylist(player: self)
+        })
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
@@ -1059,6 +1091,9 @@ extension Player {
             self.updatePlaylist(playlistItems: playlistItems) { [weak self] (error) in
                 guard let `self` = self, error == nil else { completion?(error); return }
                 self.playlist.add(playListItems: playlistItems)
+                self.observersContainer.invoke({ (observer) in
+                    observer.playerDidChangePlaylist(player: self)
+                })
                 completion?(nil)
             }
 
@@ -1077,37 +1112,47 @@ extension Player {
             self.updatePlaylist(playlistItems: playlistItems) { [weak self] (error) in
                 guard error == nil else { completion?(error); return }
                 self?.playlist.add(playListItems: playlistItems)
+                if let strongSelf = self {
+                    strongSelf.observersContainer.invoke({ (observer) in
+                        observer.playerDidChangePlaylist(player: strongSelf)
+                    })
+                }
                 completion?(nil)
             }
         }
     }
 
-    func performDelete(track: Track, completion: ((Error?) -> Void)?) {
-        guard let trackId = self.playlist.trackId(for: track),
-            let previousTrackId = self.playlist.previousTrackId(for: trackId),
-            let nextTrackId = self.playlist.nextTrackId(for: trackId) else { completion?(nil); return }
-
-        var previousPlaylistItem = self.playlist.playListItem(for: previousTrackId)
-        var trackPlaylistItem: PlayerPlaylistItem? = nil
-        var nextPlaylistItem = self.playlist.playListItem(for: nextTrackId)
-
-        previousPlaylistItem?.nextTrackKey = nextPlaylistItem?.trackKey
-        nextPlaylistItem?.previousTrackKey = previousPlaylistItem?.trackKey
-
+    func performDelete(track: PlayerTrack, completion: ((Error?) -> Void)?) {
+        let trackPlaylistItem: PlayerPlaylistItem? = nil
         var playlistItems: [String: PlayerPlaylistItem?] = [String: PlayerPlaylistItem?]()
-        if previousPlaylistItem != nil { playlistItems[previousPlaylistItem!.trackKey] = previousPlaylistItem }
-        if nextPlaylistItem != nil { playlistItems[nextPlaylistItem!.trackKey] = nextPlaylistItem }
-        playlistItems[trackId.key] = trackPlaylistItem
+        playlistItems[track.playlistItem.trackKey] = trackPlaylistItem
+        
+        var prevItem : PlayerPlaylistItem?
+        var nextItem : PlayerPlaylistItem?
+        if let prevKey = track.playlistItem.previousTrackKey, let prevCachedItem = self.playlist.playListItems[prevKey] {
+            prevItem = prevCachedItem
+        }
+        
+        if let nextKey = track.playlistItem.nextTrackKey, let nextCachedItem = self.playlist.playListItems[nextKey] {
+            nextItem = nextCachedItem
+        }
 
-
-
-//        self.updatePlaylist(playlistItems: playlistItems) { [weak self] (error) in
-//            guard error == nil else { completion?(error); return }
-//            self?.playlist.add(playListItems: playlistItems)
-//            self?.playlist.playListItems.re
-//            completion?(nil)
-//        }
-
+        prevItem?.nextTrackKey = nextItem?.trackKey
+        nextItem?.previousTrackKey = prevItem?.trackKey
+        
+        if prevItem != nil { playlistItems[prevItem!.trackKey] = prevItem }
+        if nextItem != nil { playlistItems[nextItem!.trackKey] = nextItem }
+        
+        self.updatePlaylist(playlistItems: playlistItems) { [weak self] (error) in
+            guard error == nil else { completion?(error); return }
+            self?.playlist.update(playListItems: playlistItems)
+            if let strongSelf = self {
+                strongSelf.observersContainer.invoke({ (observer) in
+                    observer.playerDidChangePlaylist(player: strongSelf)
+                })
+            }
+            completion?(nil)
+        }
     }
 
     func performAction(_ action: Player.Actions, for playerTrack: PlayerTrack, completion: ((Error?) -> Void)?) {
@@ -1116,8 +1161,7 @@ extension Player {
             //Assume player track come from player's playlist
             self.performAdd(track: playerTrack.track, to: position, completion: completion)
         case .delete:
-            self.performDelete(track: playerTrack.track, completion: completion)
-            
+            self.performDelete(track: playerTrack, completion: completion)
         case .playNow:
             self.player.pause()
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: true)
@@ -1147,7 +1191,8 @@ extension Player {
             self.performAdd(track: track, to: position, completion: completion)
 
         case .delete:
-            self.performDelete(track: track, completion: completion)
+            break
+//            self.performDelete(track: track, completion: completion)
 
         case .playNow:
             guard let trackId = self.playlist.trackId(for: track) else { completion?(nil); return }

@@ -26,5 +26,12 @@ struct PlayerPlaylistItem: Codable {
         self.id = id
         self.trackKey = trackKey
     }
-
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(trackKey, forKey: .trackKey)
+        try container.encode(nextTrackKey, forKey: .nextTrackKey)
+        try container.encode(previousTrackKey, forKey: .previousTrackKey)
+    }    
 }

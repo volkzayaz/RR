@@ -62,7 +62,7 @@ final class PlayerNowPlayingViewController: UIViewController {
     }
 
     func onTableViewHeaderAction(_ action: PlayerNowPlayingTableHeaderView.Actions) {
-
+        viewModel.perform(action: action)
     }
 }
 

@@ -86,7 +86,6 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 
     func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: PlayerTrack) {
-
         switch actionType {
         case .playNow: self.player?.performAction(.playNow, for: track, completion: nil)
         case .delete: self.player?.performAction(.delete, for: track, completion: nil)
@@ -94,6 +93,15 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
             self.router?.showAddToPlaylist(for: track.track)
             break
         default: break
+        }
+    }
+    
+    func perform(action : PlayerNowPlayingTableHeaderView.Actions) {
+        switch action {
+        case .clear:
+            self.player?.clearPlaylist()
+        default:
+            break
         }
     }
 
@@ -120,6 +128,10 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
 
 extension PlayerNowPlayingControllerViewModel: PlayerObserver {
+    
+    func playerDidChangePlaylist(player: Player) {
+        self.reload()
+    }
     
     func player(player: Player, didChangeStatus status: PlayerStatus) {
         self.delegate?.reloadUI()
