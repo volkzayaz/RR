@@ -160,6 +160,19 @@ class RestApiService {
         }
     }
     
+    func fanDelete(_ track: Track, from playlist: PlaylistShortInfo, completion: @escaping (Error?) -> Void) {
+        guard let removeTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/record/" + String(track.id)) else { return }
+        
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+        
+        Alamofire.request(removeTrackURL, method: .delete, headers: headers)
+            .validate()
+            .response { (response) in
+                completion(response.error)
+        }
+    }
+    
     func fanCreatePlaylist(with name: String, completion: @escaping (Result<PlaylistShort>) -> Void) {
         guard let createPlaylistURL = self.makeURL(with: "fan/playlist") else { return }
 

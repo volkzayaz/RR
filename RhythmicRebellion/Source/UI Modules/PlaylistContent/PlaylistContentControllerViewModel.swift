@@ -11,8 +11,6 @@ import Foundation
 import Alamofire
 
 final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
-
-
     // MARK: - Private properties -
 
     private(set) weak var delegate: PlaylistContentViewModelDelegate?
@@ -103,7 +101,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
         switch actionType {
         case .toPlaylist: return self.application?.user?.isGuest == false
-        case .replaceCurrent, .delete: return false
+        case .delete: return self.playlist.isFanPlaylist
+        case .replaceCurrent: return false
         default: return true
         }
     }
@@ -119,7 +118,17 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         case .playLast: self.player?.performAction(.add(.last), for: track, completion: nil)
         case .toPlaylist:
             self.router?.showAddToPlaylist(for: track)
-            break
+        case .delete:
+            self.restApiService?.fanDelete(track, from: self.playlist, completion: { (error) in
+                if let error = error {
+                    self.delegate?.show(error: error)
+                } else {
+                    if let index = self.playlistTracks.index(of: track) {
+                        self.playlistTracks.remove(at: index)
+                        self.delegate?.reloadUI()
+                    }
+                }
+            })
         default: break
         }
     }
