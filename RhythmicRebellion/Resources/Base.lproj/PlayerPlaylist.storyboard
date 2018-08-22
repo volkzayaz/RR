@@ -74,6 +74,7 @@
                         <outlet property="followingContainerView" destination="kb7-sj-p2K" id="7ar-eA-upg"/>
                         <outlet property="myPlaylistsContainerView" destination="JOK-jj-OfI" id="ASY-Pe-1Be"/>
                         <outlet property="nowPlayingContainerView" destination="kpm-74-YWA" id="TUJ-9n-Wdv"/>
+                        <outlet property="playlistTypeSegment" destination="cwE-Fu-7bn" id="1C7-h2-d6h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bAU-oz-gxf" userLabel="First Responder" sceneMemberID="firstResponder"/>

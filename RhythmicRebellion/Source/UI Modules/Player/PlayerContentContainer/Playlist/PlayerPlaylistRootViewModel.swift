@@ -12,6 +12,7 @@ import UIKit
 protocol PlayerPlaylistRootViewModel: class {
 
     func load(with delegate: PlayerPlaylistRootViewModelDelegate)
+    var showOnlyNowPlaying : Bool { get }
 }
 
 protocol PlayerPlaylistRootViewModelDelegate: class {

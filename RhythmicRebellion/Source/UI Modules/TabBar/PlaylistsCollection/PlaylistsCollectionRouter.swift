@@ -63,7 +63,7 @@ final class DefaultPlaylistsCollectionRouter:  PlaylistsCollectionRouter, SegueC
 
     func start(controller: PlaylistsCollectionViewController) {
         sourceController = controller
-        let vm = FanPlaylistsCollectionControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
+        let vm = FanPlaylistsCollectionControllerViewModel(router: self, restApiService: self.dependencies.restApiService, application : dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }
     

@@ -15,31 +15,36 @@ final class FanPlaylistsCollectionControllerViewModel: PlaylistsCollectionViewMo
 
     private(set) weak var delegate: PlaylistsCollectionViewModelDelegate?
     private(set) weak var router: PlaylistsCollectionRouter?
-    private(set) weak var restApiService: RestApiService?
+    private let restApiService: RestApiService
+    private let application: Application
 
     private(set) var playlists: [PlaylistShort] = [PlaylistShort]()
 
     // MARK: - Lifecycle -
 
-    init(router: PlaylistsCollectionRouter, restApiService: RestApiService) {
+    init(router: PlaylistsCollectionRouter, restApiService: RestApiService, application: Application) {
         self.router = router
         self.restApiService = restApiService
+        self.application = application
     }
 
     func load(with delegate: PlaylistsCollectionViewModelDelegate) {
         self.delegate = delegate
 
-        self.loadPlaylists()
-
-        self.delegate?.reloadUI()
+        if (!(self.application.user?.isGuest ?? true)) {
+            self.loadPlaylists()
+            self.delegate?.reloadUI()
+        }
     }
 
     func reload() {
-        self.loadPlaylists()
+        if (!(self.application.user?.isGuest ?? true)) {
+            self.loadPlaylists()
+        }
     }
 
     func loadPlaylists() {
-        self.restApiService?.fanPlaylists(completion: { [weak self] (playlistsResult) in
+        self.restApiService.fanPlaylists(completion: { [weak self] (playlistsResult) in
 
             switch playlistsResult {
             case .success(let playlists):

@@ -78,7 +78,7 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, SegueCom
 
     func start(controller: PlayerPlaylistRootViewController) {
         sourceController = controller
-        let vm = PlayerPlaylistRootControllerViewModel(router: self)
+        let vm = PlayerPlaylistRootControllerViewModel(router: self, application: dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }
 }

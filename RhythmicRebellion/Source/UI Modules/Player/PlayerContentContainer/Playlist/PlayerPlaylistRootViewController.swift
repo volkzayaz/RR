@@ -15,9 +15,9 @@ enum PlayerPlaylistSegment: Int {
     case following
 }
 
-
 final class PlayerPlaylistRootViewController: UIViewController {
 
+    @IBOutlet weak var playlistTypeSegment: UISegmentedControl!
     @IBOutlet weak var nowPlayingContainerView: UIView!
     @IBOutlet weak var myPlaylistsContainerView: UIView!
     @IBOutlet weak var followingContainerView: UIView!
@@ -40,18 +40,37 @@ final class PlayerPlaylistRootViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         viewModel.load(with: self)
+        updateSegment()
     }
 
     // MARK: - Acitions -
 
     @IBAction func segmentedControlChanged(sender: UISegmentedControl) {
-        guard let segmentType = PlayerPlaylistSegment.init(rawValue: sender.selectedSegmentIndex) else { return }
-
+        updateChildren()
+    }
+    
+    private func updateChildren() {
+        guard let segmentType = PlayerPlaylistSegment.init(rawValue: playlistTypeSegment.selectedSegmentIndex) else { return }
         self.nowPlayingContainerView.isHidden = segmentType != .nowPlaying
         self.myPlaylistsContainerView.isHidden = segmentType != .myPlaylists
         self.followingContainerView.isHidden = segmentType != .following
     }
-
+    
+    private func updateSegment() {
+        var lastSelectedIndex = playlistTypeSegment.selectedSegmentIndex
+        playlistTypeSegment.removeAllSegments()
+        playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("Now Playing", comment: "Now playing playlist title"), at: 0, animated: false)
+        
+        if !viewModel.showOnlyNowPlaying {
+            playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("My Playlists", comment: "My Playlists playlist title"), at: 1, animated: false)
+            playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("Following", comment: "Following playlist title"), at: 2, animated: false)
+        } else {
+            lastSelectedIndex = 0
+        }
+        
+        playlistTypeSegment.selectedSegmentIndex = lastSelectedIndex
+        updateChildren()
+    }
 }
 
 // MARK: - Router -
@@ -73,6 +92,6 @@ extension PlayerPlaylistRootViewController {
 
 extension PlayerPlaylistRootViewController: PlayerPlaylistRootViewModelDelegate {
     func refreshUI() {
-
+        updateSegment()
     }
 }
