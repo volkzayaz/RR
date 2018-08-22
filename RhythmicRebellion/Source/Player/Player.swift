@@ -837,7 +837,10 @@ extension Player: WebSocketServiceObserver {
             guard let trackId = trackId else { return }
             self.apply(currentTrackId: trackId)
         } else {
-            guard let trackId = trackId else { self.initializePlayer(); return }
+            guard let trackId = trackId else {
+                self.currentTrackId = nil
+                self.initializePlayer(); return
+            }
             self.apply(currentTrackId: trackId)
         }
     }
