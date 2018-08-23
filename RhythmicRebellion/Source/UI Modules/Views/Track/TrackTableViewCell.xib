@@ -36,7 +36,7 @@
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kms-fH-bFS">
                         <rect key="frame" x="460.5" y="0.0" width="0.5" height="43.5"/>
-                        <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="0.30122139084507044" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="0.5" id="OxT-X9-VPL"/>
                         </constraints>
