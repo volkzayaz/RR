@@ -23,8 +23,8 @@ protocol ActionSheetItemViewModel {
 
 
 struct ActionSheetViewModel<T: ActionSheetItemViewModel> {
-    let title: String
-    let message: String
+    let title: String?
+    let message: String?
     let actions: [T]
 }
 

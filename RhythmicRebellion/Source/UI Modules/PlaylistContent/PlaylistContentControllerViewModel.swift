@@ -147,8 +147,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
             self?.performeAction(with: actionType, for: track)
         }
 
-        return TrackActionsViewModels.ViewModel(title: NSLocalizedString("Actions", comment: "Actions title"),
-                                                message: track.name,
+        return TrackActionsViewModels.ViewModel(title: nil,
+                                                message: nil,
                                                 actions: trackActions)
     }
     

@@ -119,8 +119,8 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
             self?.performeAction(with: actionType, for: track)
         }
 
-        return TrackActionsViewModels.ViewModel(title: NSLocalizedString("Actions", comment: "Actions title"),
-                                                message: track.track.name,
+        return TrackActionsViewModels.ViewModel(title: nil,
+                                                message: nil,
                                                 actions: trackActions)
 
     }
