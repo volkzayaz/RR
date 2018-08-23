@@ -85,6 +85,7 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
             case .success(let playlist):
                 self?.playlists.insert(playlist, at: 0)
                 self?.delegate?.refreshUI()
+                self?.moveTrack(to: playlist)
             case .failure(let error):
                 self?.delegate?.show(error: error)
             }
