@@ -103,6 +103,11 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
             }
         }
     }
+    
+    func cancel() {
+        createPlaylistVM.createPlaylistCallback = nil
+        router?.dismiss()
+    }
 }
 
 class PlaylistTableViewCellViewModel : AddToPlaylistTableViewCellViewModel {

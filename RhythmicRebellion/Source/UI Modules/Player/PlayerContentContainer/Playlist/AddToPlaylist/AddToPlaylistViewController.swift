@@ -41,7 +41,7 @@ final class AddToPlaylistViewController: UIViewController, UITableViewDataSource
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        viewModel.cancel()        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

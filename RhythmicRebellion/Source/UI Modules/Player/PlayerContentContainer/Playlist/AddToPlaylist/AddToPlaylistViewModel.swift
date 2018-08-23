@@ -21,6 +21,8 @@ protocol AddToPlaylistViewModel: class {
     func numberOfItems() -> Int
     func object(at indexPath: IndexPath) -> AddToPlaylistTableViewCellViewModel?
     func selectObject(at indexPath: IndexPath)
+    
+    func cancel()
 }
 
 protocol AddToPlaylistViewModelDelegate: class, ErrorPresnting, ProgressPresenting {
