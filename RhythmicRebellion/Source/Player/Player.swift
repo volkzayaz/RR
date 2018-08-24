@@ -65,6 +65,7 @@ class Player: NSObject, Observable {
     enum Actions {
         case add(PlaylistPosition)
         case playNow
+        case setCurrent
         case delete
     }
 
@@ -1121,6 +1122,11 @@ extension Player {
         var playlistItems: [String: PlayerPlaylistItem?] = [String: PlayerPlaylistItem?]()
         playlistItems[track.playlistItem.trackKey] = trackPlaylistItem
         
+        var trackToPlay : PlayerTrack?
+        if self.currentTrackId?.key == track.playlistItem.trackKey {
+            trackToPlay = self.findPlayableTrack(after: track.trackId)
+        }
+        
         var prevItem : PlayerPlaylistItem?
         var nextItem : PlayerPlaylistItem?
         if let prevKey = track.playlistItem.previousTrackKey, let prevCachedItem = self.playlist.playListItems[prevKey] {
@@ -1145,6 +1151,11 @@ extension Player {
                     observer.playerDidChangePlaylist(player: strongSelf)
                 })
             }
+            
+            if let nextPlayTrack = trackToPlay {
+                self?.performAction(.setCurrent, for: nextPlayTrack, completion: nil)
+            }
+            
             completion?(nil)
         }
     }
@@ -1169,9 +1180,22 @@ extension Player {
                 self.play()
                 completion?(nil)
             })
+        case .setCurrent:
+            let wasPlaying = self.isPlaying
+            self.player.pause()
+            let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: wasPlaying)
+            self.set(trackId: playerTrack.trackId, trackState: trackState, completion: { [weak self] (error) in
+                guard error == nil else { completion?(error); return }
+                guard let `self` = self else { completion?(nil); return }
+                self.playerQueue.replace(track: playerTrack)
+                self.replace(playerItems: self.playerQueue.playerItems)
+                if wasPlaying {
+                    self.play()
+                }
+                completion?(nil)
+            })
         }
     }
-    
     
     func add(track: Track, at position: PlaylistPosition, completion: ((PlayerTrack?, Error?) -> Void)?) {
         guard self.playlist.contains(track: track) else {

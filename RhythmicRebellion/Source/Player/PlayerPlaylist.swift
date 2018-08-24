@@ -62,6 +62,13 @@ class PlayerPlaylist {
         }
         return nil
     }
+    
+    func track(for playlistItem: PlayerPlaylistItem) -> PlayerTrack? {
+        if let track = self.tracks.filter({ return $0.id == playlistItem.id }).first {
+            return PlayerTrack(track: track, playlistItem: playlistItem)
+        }
+        return nil
+    }
 
     func nextTrackId(for trackId: TrackId) -> TrackId? {
         guard let playListItem = self.playListItems[trackId.key] else { return nil }

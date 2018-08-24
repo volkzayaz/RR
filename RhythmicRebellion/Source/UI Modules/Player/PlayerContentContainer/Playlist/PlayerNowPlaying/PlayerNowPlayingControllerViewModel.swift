@@ -81,6 +81,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         switch actionType {
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .replaceCurrent, .playNext, .playLast: return false
+        case .delete: return self.tracks.count > 1
         default: return true
         }
     }
