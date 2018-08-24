@@ -29,7 +29,7 @@ class PlayerQueueItem {
 
 class PlayerQueue {
 
-    var track: Track?
+    var track: PlayerTrack?
     var addons: [Addon]?
 
     var isReadyToPlay: Bool {
@@ -64,13 +64,13 @@ class PlayerQueue {
             playerItems.append(AVPlayerItem(url: playerItemURL))
         }
 
-        if let track = self.track, let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
+        if let track = self.track?.track, let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
             itemsInfo[audioFile.urlString] = PlayerQueueItem(with: track)
             playerItems.append(AVPlayerItem(url: playerItemURL))
         }
     }
 
-    func replace(track: Track, addons: [Addon]? = nil) {
+    func replace(track: PlayerTrack, addons: [Addon]? = nil) {
 
         self.track = track
         self.addons = addons

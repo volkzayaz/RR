@@ -96,7 +96,7 @@ class Player: NSObject, Observable {
         }
     }
 
-    var playerCurrentTrack: Track? {
+    var playerCurrentTrack: PlayerTrack? {
         return self.playerQueue.track
     }
 
@@ -105,7 +105,7 @@ class Player: NSObject, Observable {
     }
 
     var playerCurrentTrackDuration: TimeInterval? {
-        guard let audioFile = self.playerQueue.track?.audioFile else { return nil }
+        guard let audioFile = self.playerQueue.track?.track.audioFile else { return nil }
         return TimeInterval(audioFile.duration)
     }
 
@@ -270,28 +270,27 @@ class Player: NSObject, Observable {
         }
     }
 
-    func findPlayableTrack(after trackId: TrackId) -> Track? {
+    func findPlayableTrack(after trackId: TrackId) -> PlayerTrack? {
 
         var currentTrackId = trackId
-        var track: Track?
+        var track: PlayerTrack?
         repeat {
-            guard let nextTrackId = self.playlist.nextTrackId(for: currentTrackId), nextTrackId.id != trackId.id else { track = nil; break }
+            guard let nextTrackId = self.playlist.nextTrackId(for: currentTrackId), nextTrackId.key != trackId.key else { track = nil; break }
             track = self.playlist.track(for: nextTrackId)
             currentTrackId = nextTrackId
-        } while track?.isPlayable == false
+        } while track?.track.isPlayable == false
 
         return track
     }
 
-    func findPlayableTrack(before trackId: TrackId) -> Track? {
-
+    func findPlayableTrack(before trackId: TrackId) -> PlayerTrack? {
         var currentTrackId = trackId
-        var track: Track?
+        var track: PlayerTrack?
         repeat {
-            guard let previousTrackId = self.playlist.previousTrackId(for: currentTrackId), previousTrackId.id != trackId.id else { track = nil; break }
+            guard let previousTrackId = self.playlist.previousTrackId(for: currentTrackId), previousTrackId.key != trackId.key else { track = nil; break }
             track = self.playlist.track(for: previousTrackId)
             currentTrackId = previousTrackId
-        } while track?.isPlayable == false
+        } while track?.track.isPlayable == false
 
         return track
     }
@@ -374,7 +373,7 @@ class Player: NSObject, Observable {
 
     func preparePlayerQueueToPlay(completion: ((Error?) -> ())? = nil) {
         guard self.state.initialized, let track = self.playerQueue.track else { completion?(AppError(.notInitialized)); return }
-        guard self.playerQueue.isReadyToPlay == true else { self.prepareAddons(for: track, completion: completion); return }
+        guard self.playerQueue.isReadyToPlay == true else { self.prepareAddons(for: track.track, completion: completion); return }
 
         completion?(nil)
     }
@@ -382,8 +381,7 @@ class Player: NSObject, Observable {
     // MARK: - Actions
     func play(completion: (() -> ())? = nil) {
         guard self.state.initialized,
-                let track = self.playerQueue.track,
-                let trackId = self.playlist.trackId(for: track)
+                let trackId = self.playerQueue.track?.trackId
                 else {
                     self.state.playing = true
                     self.player.play()
@@ -502,10 +500,8 @@ class Player: NSObject, Observable {
             return
         }
 
-        guard let currentTrack = self.playerQueue.track,
-            let currentTrackId = self.playlist.trackId(for: currentTrack),
-            let nextTrack = self.findPlayableTrack(after: currentTrackId),
-            let nextTrackId = self.playlist.trackId(for: nextTrack) else { completion?(); return }
+        guard let currentTrackId = self.playerQueue.track?.trackId,
+            let nextTrack = self.findPlayableTrack(after: currentTrackId) else { completion?(); return }
 
         let isPlaying = self.isPlaying
 
@@ -517,7 +513,7 @@ class Player: NSObject, Observable {
         }
 
         let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-        self.set(trackId: nextTrackId, trackState: trackState) { [weak self] (error) in
+        self.set(trackId: nextTrack.trackId, trackState: trackState) { [weak self] (error) in
             guard let strongSelf = self, error == nil else { completion?(); return }
 
             strongSelf.player.pause()
@@ -563,10 +559,8 @@ class Player: NSObject, Observable {
         }
 
         guard self.state.initialized else { completion?(); return }
-        guard let currentTrack = self.playerQueue.track,
-            let currentTrackId = self.playlist.trackId(for: currentTrack),
-            let previousTrack = self.findPlayableTrack(before: currentTrackId),
-            let previousTrackId = self.playlist.trackId(for: previousTrack) else { completion?(); return }
+        guard let currentTrackId = self.playerQueue.track?.trackId,
+            let previousTrack = self.findPlayableTrack(before: currentTrackId) else { completion?(); return }
 
         let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
             guard error == nil else { if self?.state.playing ?? false { self?.player.play() }; completion?(); return }
@@ -576,7 +570,7 @@ class Player: NSObject, Observable {
         }
 
         let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-        self.set(trackId: previousTrackId, trackState: trackState) { [weak self] (error) in
+        self.set(trackId: previousTrack.trackId, trackState: trackState) { [weak self] (error) in
             guard let strongSelf = self, error == nil else { completion?(); return }
 
             strongSelf.player.pause()
@@ -690,7 +684,7 @@ class Player: NSObject, Observable {
                     switch currentQueueItem.content {
                     case .addon(let addon):
                         if let track = self.playerCurrentTrack {
-                            self.playAddon(addon: addon, track: track)
+                            self.playAddon(addon: addon, track: track.track)
                         }
                     default: break
                     }
@@ -757,7 +751,7 @@ extension Player: WebSocketServiceObserver {
     func apply(addonsIds: [Int]) {
         guard self.state.waitingAddons == true,
             let track = self.playerQueue.track,
-            let addons = self.playlist.addons(for: track, addonsIds: addonsIds) else { return }
+            let addons = self.playlist.addons(for: track.track, addonsIds: addonsIds) else { return }
 
         self.playerQueue.replace(track: track, addons: addons)
         self.replace(playerItems: playerQueue.playerItems)
@@ -1053,7 +1047,7 @@ extension Player {
         if let currentTrack = self.playerCurrentTrack {
             var nowPlayingInfo = [String : Any]()
 
-            nowPlayingInfo[MPMediaItemPropertyTitle] = currentTrack.name + " - " + currentTrack.artist.name
+            nowPlayingInfo[MPMediaItemPropertyTitle] = currentTrack.track.name + " - " + currentTrack.track.artist.name
             nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.playerCurrentTrackCurrentTime ?? 0.0
             nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = self.playerCurrentTrackDuration ?? 0.0
             nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate
@@ -1069,7 +1063,7 @@ extension Player {
     var tracks: [PlayerTrack] { return self.playlist.orderedTracks }
 
     func performAdd(track: Track, to playlistPosition: PlaylistPosition, completion: ((Error?) -> Void)?) {
-        guard let currentTrackId = self.currentTrackId else { return }
+        guard let currentTrackId = self.currentTrackId else { return }        
 
         switch playlistPosition {
         case .next:
@@ -1168,7 +1162,7 @@ extension Player {
             self.set(trackId: TrackId(id: playerTrack.track.id, key: playerTrack.playlistItem.trackKey), trackState: trackState, completion: { [weak self] (error) in
                 guard error == nil else { completion?(error); return }
                 guard let `self` = self else { completion?(nil); return }
-                self.playerQueue.replace(track: playerTrack.track)
+                self.playerQueue.replace(track: playerTrack)
                 self.replace(playerItems: self.playerQueue.playerItems)
                 self.play()
                 completion?(nil)

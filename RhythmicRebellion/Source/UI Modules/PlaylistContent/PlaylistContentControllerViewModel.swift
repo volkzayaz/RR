@@ -77,7 +77,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         
         let track = self.playlistTracks[indexPath.item]
         if let currentTrack = player?.playerCurrentTrack {
-            isCurrentInPlayer = track.id == currentTrack.id
+            isCurrentInPlayer = track.id == currentTrack.track.id
             isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
         }
         

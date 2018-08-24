@@ -12,4 +12,8 @@ import Foundation
 struct PlayerTrack {
     let track: Track
     let playlistItem: PlayerPlaylistItem
+    
+    var trackId : TrackId {
+        return TrackId(id: track.id, key: playlistItem.trackKey)
+    }
 }

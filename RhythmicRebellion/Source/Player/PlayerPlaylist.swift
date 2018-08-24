@@ -45,11 +45,6 @@ class PlayerPlaylist {
         return TrackId(id: lastItem.id, key: lastItem.trackKey)
     }
 
-    var firstTrack: Track? {
-        guard let firstTrackId = self.firstTrackId else { return nil }
-        return self.track(for: firstTrackId)
-    }
-
     func reset(tracks: [Track]) {
         self.tracks = Set(tracks)
         self.playListItems.removeAll()
@@ -60,14 +55,12 @@ class PlayerPlaylist {
         self.tracks = self.tracks.union(Set(traksToAdd))
     }
 
-    func track(for trackId: TrackId) -> Track? {
-        return self.tracks.filter({ return $0.id == trackId.id }).first
-    }
-
-    func trackId(for track: Track) -> TrackId? {
-        guard let playListItem = self.playListItems.filter( { return $0.value?.id == track.id }).first,
-             let item = playListItem.value else { return nil }
-        return TrackId(id: item.id, key: item.trackKey)
+    func track(for trackId: TrackId) -> PlayerTrack? {
+        if let track = self.tracks.filter({ return $0.id == trackId.id }).first,
+            let playlistItem = self.playListItem(for: trackId) {
+            return PlayerTrack(track: track, playlistItem: playlistItem)
+        }
+        return nil
     }
 
     func nextTrackId(for trackId: TrackId) -> TrackId? {
@@ -77,7 +70,7 @@ class PlayerPlaylist {
             if let nextPlayListItem = self.playListItems[playListItemNextTrackKey] ?? nil {
                 return TrackId(id: nextPlayListItem.id, key: nextPlayListItem.trackKey)
             }
-        } else if let firstTrackId = self.firstTrackId, firstTrackId.id != trackId.id {
+        } else if let firstTrackId = self.firstTrackId, firstTrackId.key != trackId.key {
             return firstTrackId
         }
 
@@ -91,7 +84,7 @@ class PlayerPlaylist {
             if let previousPlayListItem = self.playListItems[playListItemPreviousTrackKey] ?? nil {
                 return TrackId(id: previousPlayListItem.id, key: previousPlayListItem.trackKey)
             }
-        } else if let lastTrackId = self.lastTrackId, lastTrackId.id != trackId.id {
+        } else if let lastTrackId = self.lastTrackId, lastTrackId.key != trackId.key {
             return lastTrackId
         }
 
