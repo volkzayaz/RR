@@ -87,7 +87,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     func selectObject(at indexPath: IndexPath) {
         if let viewmodel = object(at: indexPath) {
             if !viewmodel.isCurrentInPlayer {
-                self.player?.performAction(.playNow, for: self.playlistTracks[indexPath.item], completion: nil)
+                play(track: self.playlistTracks[indexPath.item])
             } else {
                 if viewmodel.isPlaying {
                     player?.pause()
@@ -106,16 +106,21 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         default: return true
         }
     }
+    
+    private func play(track: Track) {
+        self.player?.add(track: track, at: .next, completion: { [weak self] (playerTrack, error) in
+            guard error == nil, let trackToPlay = playerTrack else { return }
+            self?.player?.performAction(.playNow, for: trackToPlay, completion: nil)
+        })
+    }
 
     func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: Track) {
 
         switch actionType {
-        case .playNow: self.player?.performAction(.add(.next), for: track, completion: { [weak self] (error) in
-            guard  error == nil else { return }
-            self?.player?.performAction(.playNow, for: track, completion: nil)
-        })
-        case .playNext: self.player?.performAction(.add(.next), for: track, completion: nil)
-        case .playLast: self.player?.performAction(.add(.last), for: track, completion: nil)
+        case .playNow:
+            self.play(track: track)
+        case .playNext: self.player?.add(track: track, at: .next, completion: nil)
+        case .playLast: self.player?.add(track: track, at: .last, completion: nil)
         case .toPlaylist:
             self.router?.showAddToPlaylist(for: track)
         case .delete:
