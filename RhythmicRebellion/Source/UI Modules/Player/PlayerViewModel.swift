@@ -28,6 +28,7 @@ protocol PlayerViewModel: class {
 
     var canForward: Bool { get }
     var canBackward: Bool { get }
+    var canSetPlayerItemProgress: Bool { get }
 
     func load(with delegate: PlayerViewModelDelegate)
 
@@ -40,6 +41,7 @@ protocol PlayerViewModel: class {
     func pause()
     func forward()
     func backward()
+    func setPlayerItemProgress(progress: Float)
 }
 
 protocol PlayerViewModelDelegate: class {

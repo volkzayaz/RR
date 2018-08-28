@@ -97,6 +97,15 @@ class Player: NSObject, Observable {
         }
     }
 
+    var canSeek: Bool {
+        guard let currentQueueItem = self.playerQueue.currentItem else { return false }
+
+        switch currentQueueItem.content {
+        case .addon(_): return false
+        case .track(_): return self.state.waitingAddons == false
+        }
+    }
+
     var playerCurrentTrack: PlayerTrack? {
         return self.playerQueue.track
     }
@@ -582,6 +591,26 @@ class Player: NSObject, Observable {
                 strongSelf.state.playing = isPlaying
                 strongSelf.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
             }
+        }
+    }
+
+    func seek(to timeInterval: TimeInterval) {
+        guard self.canSeek else { return }
+
+        let isPlaying = self.isPlaying
+        let trackState = TrackState(hash: self.stateHash, progress: timeInterval, isPlaying: isPlaying)
+        self.currentTrackState = trackState
+
+        self.state.playing = false
+
+        self.set(trackState: trackState) { [weak self] (error) in
+            guard let `self` = self, error == nil else { return }
+
+            let time = CMTime(seconds: Double(timeInterval), preferredTimescale: Int32(kCMTimeMaxTimescale))
+            self.player.currentItem?.seek(to: time, completionHandler: { [weak self] (success) in
+                self?.state.playing = isPlaying
+                if isPlaying { self?.player.play() }
+            })
         }
     }
 

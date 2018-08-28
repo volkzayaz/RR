@@ -70,6 +70,10 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         return self.player.canBackward
     }
 
+    var canSetPlayerItemProgress: Bool {
+        return self.player.canSeek
+    }
+
     // MARK: - Private properties -
 
     private(set) weak var delegate: PlayerViewModelDelegate?
@@ -135,6 +139,12 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.player.playBackward()
     }
 
+    func setPlayerItemProgress(progress: Float) {
+
+        guard self.player.canSeek, let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0 else { return }
+
+        self.player.seek(to: TimeInterval(playerItemDuration * Double(progress)))
+    }
 }
 
 extension PlayerControllerViewModel: PlayerObserver {

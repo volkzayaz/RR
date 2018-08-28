@@ -51,7 +51,7 @@ final class PlayerViewController: UIViewController {
     @IBOutlet weak var playerItemCurrentTimeLabel: UILabel!
     @IBOutlet weak var playerItemDurationLabel: UILabel!
 
-    @IBOutlet weak var playerItemProgressView: UIProgressView!
+    @IBOutlet weak var playerItemProgressView: UISlider!
 
     @IBOutlet weak var compactTabBar: UITabBar!
     @IBOutlet weak var regularTabBar: TabBarRegular!
@@ -83,6 +83,12 @@ final class PlayerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.toolBar.setShadowImage(UIImage(), forToolbarPosition: .any)
+        self.toolBar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
+
+        self.regularTabBar.shadowImage = UIImage()
+        self.regularTabBar.backgroundImage = UIImage()
 
         viewModel.load(with: self)
     }
@@ -172,6 +178,19 @@ final class PlayerViewController: UIViewController {
 
         self.navigationDelegate.navigate(to: navigationItem)
     }
+
+    @IBAction func playerItemProgressViewValueChanged(sender: UISlider) {
+
+        self.viewModel.setPlayerItemProgress(progress: sender.value)
+    }
+
+    @IBAction func playerItemProgressViewTapGestureRecognizer(sender: UITapGestureRecognizer) {
+        let location = sender.location(in: sender.view)
+        let bounds = self.playerItemProgressView.bounds
+        let value = Float(location.x / bounds.width)
+
+        self.viewModel.setPlayerItemProgress(progress: value)
+    }
 }
 
 // MARK: - Router -
@@ -244,12 +263,16 @@ extension PlayerViewController: PlayerViewModelDelegate {
         self.forwardBarButtonItem.isEnabled = self.viewModel.canForward
         self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
 
+        self.playerItemProgressView.isUserInteractionEnabled = self.viewModel.canSetPlayerItemProgress
+
         self.refreshProgressUI()
     }
 
     func refreshProgressUI() {
         self.playerItemCurrentTimeLabel.text = self.viewModel.playerItemCurrentTimeString
-        self.playerItemProgressView.progress = self.viewModel.playerItemProgress
+        if self.playerItemProgressView.isTracking == false {
+            self.playerItemProgressView.setValue(self.viewModel.playerItemProgress, animated: true)
+        }
         self.updatePlayPauseState()
     }
 }
