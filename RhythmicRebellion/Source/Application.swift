@@ -159,13 +159,12 @@ class Application: Observable {
 
                 self?.user = user
                 self?.notifyListeningSettingsChanged()
-                completion?(.success(fanUser.listeningSettings))
+                completion?(.success(fanUser.profile.listeningSettings))
 
             case .failure(let error):
                 completion?(.failure(error))
             }
         }
-
     }
 }
 
@@ -181,7 +180,7 @@ extension Application {
         guard let fanUser = self.user as? FanUser else { return }
 
         self.observersContainer.invoke({ (observer) in
-            observer.application(self, didChange: fanUser.listeningSettings)
+            observer.application(self, didChange: fanUser.profile.listeningSettings)
         })
     }
 }

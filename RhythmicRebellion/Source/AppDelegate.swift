@@ -34,19 +34,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
                                                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
                                                                                                                 for: .selected)
-
-        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self])
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
             .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
                                      NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
-        UISegmentedControl.appearance(whenContainedInInstancesOf: [AuthorizationViewController.self])
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
             .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
                                      NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
 
-        UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationController.self])
-            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [SignUpContentView.self])
+            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1),
                                      NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
-        UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationController.self])
-            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [SignUpContentView.self])
+            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1),
                                      NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
 
     }

@@ -32,10 +32,13 @@ struct ErrorResponse: RestApiResponse {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let metaContainer = try container.nestedContainer(keyedBy: MetaCodingKeys.self, forKey: .meta)
-
         self.message = try container.decode(String.self, forKey: .message)
-        self.errors = try metaContainer.decode([String : [String]].self, forKey: .errors)
+
+        if let metaContainer = try? container.nestedContainer(keyedBy: MetaCodingKeys.self, forKey: .meta) {
+            self.errors = try metaContainer.decode([String : [String]].self, forKey: .errors)
+        } else {
+            self.errors = [:]
+        }
     }
 }
 
@@ -93,6 +96,24 @@ struct FanLoginResponse: RestApiResponse {
     }
 }
 
+struct FanRegistrationResponse: RestApiResponse {
+
+    let userProfile: UserProfile
+    let message: String
+
+    enum CodingKeys: String, CodingKey {
+        case userProfile = "user"
+        case message
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.message = try container.decode(String.self, forKey: .message)
+        self.userProfile = try container.decode(UserProfile.self, forKey: .userProfile)
+    }
+}
+
 struct FanProfileResponse: RestApiResponse {
 
     let user: User
@@ -107,6 +128,63 @@ struct FanProfileResponse: RestApiResponse {
     }
 }
 
+struct ConfigResponse: RestApiResponse {
+
+    let config: Config
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.config = try container.decode(Config.self, forKey: .data)
+    }
+}
+
+struct CountriesResponse: RestApiResponse {
+
+    let countries: [Country]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.countries = try container.decode([Country].self)
+    }
+}
+
+struct RegionsResponse: RestApiResponse {
+
+    let regions: [Region]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.regions = try container.decode([Region].self)
+    }
+}
+
+struct CitiesResponse: RestApiResponse {
+
+    let cities: [City]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.cities = try container.decode([City].self)
+    }
+}
+
+struct DetailedLocationResponse: RestApiResponse {
+
+    let detailedLocation: DetailedLocation
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.detailedLocation = try container.decode(DetailedLocation.self, forKey: .data)
+    }
+}
 
 struct AddonsForTracksResponse: EmptyRestApiResponse {
 

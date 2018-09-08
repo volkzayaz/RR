@@ -13,6 +13,7 @@ protocol AuthorizationViewModel: class {
 
     func load(with delegate: AuthorizationViewModelDelegate)
 
+    func change(authorizationType: AuthorizationType)
 }
 
 protocol AuthorizationViewModelDelegate: class {

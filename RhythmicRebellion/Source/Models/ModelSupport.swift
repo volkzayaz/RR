@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum Gender: Int {
+    case male = 1
+    case female = 2
+}
+
+
 public class ModelSupport {
     public static let sharedInstance = ModelSupport()
 

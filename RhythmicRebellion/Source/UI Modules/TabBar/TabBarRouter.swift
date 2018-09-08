@@ -137,10 +137,11 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
                 viewControllers.append(profileNavigationController)
 
             case .authorization:
-                guard let authorizationViwController = viewController as? AuthorizationViewController else { break }
+                guard let authorizationNavigationController = viewController as? UINavigationController,
+                    let authorizationViewController = authorizationNavigationController.viewControllers.first as? AuthorizationViewController else { break }
                 let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
-                authorizationRouter.start(controller: authorizationViwController)
-                viewControllers.append(authorizationViwController)
+                authorizationRouter.start(controller: authorizationViewController)
+                viewControllers.append(authorizationNavigationController)
 
 //            case .listeningSettings:
 //                guard let listeningSettingsViewController = viewController as? ListeningSettingsViewController else { break }
@@ -179,7 +180,8 @@ extension DefaultTabBarRouter: UITabBarControllerDelegate {
 
         switch viewiewControllerType {
         case .authorization:
-            guard let authorizationViwController = viewController as? AuthorizationViewController else { return }
+            guard let authorizationNavigationController = viewController as? UINavigationController,
+                let authorizationViwController = authorizationNavigationController.viewControllers.first as? AuthorizationViewController else { break }
             let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
             authorizationRouter.start(controller: authorizationViwController)
 

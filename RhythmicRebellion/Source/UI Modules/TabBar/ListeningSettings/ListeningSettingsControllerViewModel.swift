@@ -33,7 +33,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     private func checkDirtyState() {
         guard let fanUser = self.application?.user as? FanUser else { self.isDirty = false; return}
 
-        let isDirty = self.listeningSettings != fanUser.listeningSettings
+        let isDirty = self.listeningSettings != fanUser.profile.listeningSettings
 
         if self.isDirty != isDirty {
             self.isDirty = isDirty
@@ -47,7 +47,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         guard let fanUser = self.application?.user as? FanUser else { return }
 
-        self.listeningSettings = fanUser.listeningSettings
+        self.listeningSettings = fanUser.profile.listeningSettings
         self.listeningSettingsSections = self.makeListeningSettingsSections()
 
         self.delegate?.reloadUI()
@@ -62,7 +62,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
             case .success(let user):
                 guard let fanUser = user as? FanUser else { return }
-                self.listeningSettings = fanUser.listeningSettings
+                self.listeningSettings = fanUser.profile.listeningSettings
                 self.listeningSettingsSections = self.makeListeningSettingsSections()
                 self.checkDirtyState()
                 self.delegate?.reloadUI()
@@ -218,8 +218,8 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
         } else {
 
             if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.isSongCommentaryDate = fanUser.listeningSettings.isSongCommentaryDate
-                self.listeningSettings.songCommentaryDate = fanUser.listeningSettings.songCommentaryDate
+                self.listeningSettings.isSongCommentaryDate = fanUser.profile.listeningSettings.isSongCommentaryDate
+                self.listeningSettings.songCommentaryDate = fanUser.profile.listeningSettings.songCommentaryDate
             }
 
             let songComentarySectionItemsCount = songComentarySection.items.count
@@ -249,7 +249,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
         } else {
 
             if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.songCommentaryDate = fanUser.listeningSettings.songCommentaryDate
+                self.listeningSettings.songCommentaryDate = fanUser.profile.listeningSettings.songCommentaryDate
             }
 
             let songComentarySectionItemsCount = songComentarySection.items.count
@@ -308,8 +308,8 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
         } else {
 
             if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.isHearArtistsBioDate = fanUser.listeningSettings.isHearArtistsBioDate
-                self.listeningSettings.artistsBioDate = fanUser.listeningSettings.artistsBioDate
+                self.listeningSettings.isHearArtistsBioDate = fanUser.profile.listeningSettings.isHearArtistsBioDate
+                self.listeningSettings.artistsBioDate = fanUser.profile.listeningSettings.artistsBioDate
             }
 
             let artistsBIOSectionItemsCount = artistsBIOSection.items.count
@@ -338,7 +338,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
             if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.artistsBioDate = fanUser.listeningSettings.artistsBioDate
+                self.listeningSettings.artistsBioDate = fanUser.profile.listeningSettings.artistsBioDate
             }
 
             let artistsBIOSectionItemsCount = artistsBIOSection.items.count

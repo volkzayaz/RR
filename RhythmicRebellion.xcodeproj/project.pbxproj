@@ -13,6 +13,14 @@
 		7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD620FF471300D90D73 /* SignUpViewModel.swift */; };
 		760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760D793A210871FB00FD8D46 /* RestApiRequestPayloads.swift */; };
 		761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */; };
+		762271A3213D33E60018689E /* TextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762271A2213D33E60018689E /* TextFields.swift */; };
+		762271A8213D8D510018689E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762271A7213D8D510018689E /* Location.swift */; };
+		762DD779213FE14F0046A984 /* RegionsSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD778213FE14F0046A984 /* RegionsSelectableListControllerViewModel.swift */; };
+		762DD77B213FED700046A984 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD77A213FED700046A984 /* City.swift */; };
+		762DD77F213FFDC70046A984 /* CitiesSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD77E213FFDC70046A984 /* CitiesSelectableListControllerViewModel.swift */; };
+		762DD781214121500046A984 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD780214121500046A984 /* Config.swift */; };
+		762DD783214122FE0046A984 /* Hobby.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD782214122FE0046A984 /* Hobby.swift */; };
+		762DD7852141237B0046A984 /* HowHear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD7842141237B0046A984 /* HowHear.swift */; };
 		76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DC820F5E91100140D03 /* RestApiResponse.swift */; };
 		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
 		76310DCD20F6252200140D03 /* AddonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCC20F6252200140D03 /* AddonState.swift */; };
@@ -43,6 +51,9 @@
 		763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C905520FDDE96007C1F86 /* AuthorizationViewController.swift */; };
 		763C905A20FDDE96007C1F86 /* AuthorizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C905620FDDE96007C1F86 /* AuthorizationViewModel.swift */; };
 		763C905E20FDF5BA007C1F86 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C905D20FDF5BA007C1F86 /* Application.swift */; };
+		764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764B854A2137C80100071F30 /* ValidatebleField+Extension.swift */; };
+		764B854D2137E5C600071F30 /* DatePickerInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764B854C2137E5C600071F30 /* DatePickerInputView.swift */; };
+		764B854F2138043E00071F30 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764B854E2138043E00071F30 /* Country.swift */; };
 		764CC02A20F8D4FF009C3D28 /* PlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764CC02920F8D4FF009C3D28 /* PlayerState.swift */; };
 		7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961120E2615F00BF1F79 /* WebSocketService.swift */; };
 		7650961520E3A15D00BF1F79 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961420E3A15D00BF1F79 /* Track.swift */; };
@@ -56,6 +67,7 @@
 		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
 		7655476E20EB80DC004AC0BD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655476D20EB80DC004AC0BD /* Token.swift */; };
 		7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655477020EBA5A2004AC0BD /* String+Extension.swift */; };
+		765F2592213EC6B700F5C3D8 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765F2591213EC6B700F5C3D8 /* Region.swift */; };
 		7665332D20FE26A600FEC702 /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665332C20FE26A600FEC702 /* RestApiServiceError.swift */; };
 		7665333320FE470C00FEC702 /* HomeControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665332F20FE470C00FEC702 /* HomeControllerViewModel.swift */; };
 		7665333420FE470C00FEC702 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665333020FE470C00FEC702 /* HomeRouter.swift */; };
@@ -119,6 +131,19 @@
 		769F4EBE210B6706000DD23B /* PromoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBA210B6706000DD23B /* PromoRouter.swift */; };
 		769F4EBF210B6706000DD23B /* PromoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBB210B6706000DD23B /* PromoViewController.swift */; };
 		769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBC210B6706000DD23B /* PromoViewModel.swift */; };
+		76A45B40213926380080885D /* SelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B3C213926380080885D /* SelectableListControllerViewModel.swift */; };
+		76A45B41213926380080885D /* SelectableListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B3D213926380080885D /* SelectableListRouter.swift */; };
+		76A45B42213926380080885D /* SelectableListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B3E213926380080885D /* SelectableListViewController.swift */; };
+		76A45B43213926380080885D /* SelectableListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B3F213926380080885D /* SelectableListViewModel.swift */; };
+		76A45B46213927470080885D /* SelectableList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76A45B44213927470080885D /* SelectableList.storyboard */; };
+		76A45B48213939060080885D /* ContriesSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B47213939060080885D /* ContriesSelectableListControllerViewModel.swift */; };
+		76A45B4C213944180080885D /* SelectableListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B4B213944180080885D /* SelectableListItemTableViewCell.swift */; };
+		76A45B4E213952E40080885D /* SelectableListItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B4D213952E40080885D /* SelectableListItemViewModel.swift */; };
+		76C821A62141744100A6F5AE /* HowHearSelectableListItemsDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C821A52141744100A6F5AE /* HowHearSelectableListItemsDataProvider.swift */; };
+		76C821A821425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C821A721425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift */; };
+		76C821AC21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C821AB21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift */; };
+		76C821AF2142675F00A6F5AE /* Authorization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76C821AD2142675F00A6F5AE /* Authorization.storyboard */; };
+		76C821B12142ABAF00A6F5AE /* GenderSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C821B02142ABAF00A6F5AE /* GenderSegmentedControl.swift */; };
 		76C8DDFD211063E800773BB1 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DDFC211063E800773BB1 /* Playlist.swift */; };
 		76C8DE0121106FDF00773BB1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DE0021106FDF00773BB1 /* Image.swift */; };
 		76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DE02211090AA00773BB1 /* TrackWriter.swift */; };
@@ -177,6 +202,14 @@
 		7606BDD620FF471300D90D73 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		760D793A210871FB00FD8D46 /* RestApiRequestPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiRequestPayloads.swift; sourceTree = "<group>"; };
 		761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
+		762271A2213D33E60018689E /* TextFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFields.swift; sourceTree = "<group>"; };
+		762271A7213D8D510018689E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		762DD778213FE14F0046A984 /* RegionsSelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsSelectableListControllerViewModel.swift; sourceTree = "<group>"; };
+		762DD77A213FED700046A984 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
+		762DD77E213FFDC70046A984 /* CitiesSelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesSelectableListControllerViewModel.swift; sourceTree = "<group>"; };
+		762DD780214121500046A984 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		762DD782214122FE0046A984 /* Hobby.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hobby.swift; sourceTree = "<group>"; };
+		762DD7842141237B0046A984 /* HowHear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowHear.swift; sourceTree = "<group>"; };
 		76310DC820F5E91100140D03 /* RestApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiResponse.swift; sourceTree = "<group>"; };
 		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
 		76310DCC20F6252200140D03 /* AddonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddonState.swift; sourceTree = "<group>"; };
@@ -207,6 +240,9 @@
 		763C905520FDDE96007C1F86 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		763C905620FDDE96007C1F86 /* AuthorizationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewModel.swift; sourceTree = "<group>"; };
 		763C905D20FDF5BA007C1F86 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		764B854A2137C80100071F30 /* ValidatebleField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ValidatebleField+Extension.swift"; sourceTree = "<group>"; };
+		764B854C2137E5C600071F30 /* DatePickerInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerInputView.swift; sourceTree = "<group>"; };
+		764B854E2138043E00071F30 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		764CC02920F8D4FF009C3D28 /* PlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerState.swift; sourceTree = "<group>"; };
 		7650961120E2615F00BF1F79 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		7650961420E3A15D00BF1F79 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
@@ -220,6 +256,7 @@
 		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
 		7655476D20EB80DC004AC0BD /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		7655477020EBA5A2004AC0BD /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		765F2591213EC6B700F5C3D8 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		7665332C20FE26A600FEC702 /* RestApiServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiServiceError.swift; sourceTree = "<group>"; };
 		7665332F20FE470C00FEC702 /* HomeControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControllerViewModel.swift; sourceTree = "<group>"; };
 		7665333020FE470C00FEC702 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
@@ -283,6 +320,19 @@
 		769F4EBA210B6706000DD23B /* PromoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoRouter.swift; sourceTree = "<group>"; };
 		769F4EBB210B6706000DD23B /* PromoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoViewController.swift; sourceTree = "<group>"; };
 		769F4EBC210B6706000DD23B /* PromoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoViewModel.swift; sourceTree = "<group>"; };
+		76A45B3C213926380080885D /* SelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListControllerViewModel.swift; sourceTree = "<group>"; };
+		76A45B3D213926380080885D /* SelectableListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListRouter.swift; sourceTree = "<group>"; };
+		76A45B3E213926380080885D /* SelectableListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListViewController.swift; sourceTree = "<group>"; };
+		76A45B3F213926380080885D /* SelectableListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListViewModel.swift; sourceTree = "<group>"; };
+		76A45B45213927470080885D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SelectableList.storyboard; sourceTree = "<group>"; };
+		76A45B47213939060080885D /* ContriesSelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContriesSelectableListControllerViewModel.swift; sourceTree = "<group>"; };
+		76A45B4B213944180080885D /* SelectableListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListItemTableViewCell.swift; sourceTree = "<group>"; };
+		76A45B4D213952E40080885D /* SelectableListItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListItemViewModel.swift; sourceTree = "<group>"; };
+		76C821A52141744100A6F5AE /* HowHearSelectableListItemsDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowHearSelectableListItemsDataProvider.swift; sourceTree = "<group>"; };
+		76C821A721425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HobbiesSelectableListControllerViewModel.swift; sourceTree = "<group>"; };
+		76C821AB21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowHearSelectableListControllerViewModel.swift; sourceTree = "<group>"; };
+		76C821AE2142675F00A6F5AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Authorization.storyboard; sourceTree = "<group>"; };
+		76C821B02142ABAF00A6F5AE /* GenderSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenderSegmentedControl.swift; sourceTree = "<group>"; };
 		76C8DDFC211063E800773BB1 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		76C8DE0021106FDF00773BB1 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		76C8DE02211090AA00773BB1 /* TrackWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackWriter.swift; sourceTree = "<group>"; };
@@ -358,10 +408,10 @@
 		7606BDD220FF46CB00D90D73 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */,
 				7606BDD420FF471300D90D73 /* SignUpRouter.swift */,
-				7606BDD520FF471300D90D73 /* SignUpViewController.swift */,
 				7606BDD620FF471300D90D73 /* SignUpViewModel.swift */,
+				7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */,
+				7606BDD520FF471300D90D73 /* SignUpViewController.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -373,6 +423,14 @@
 				7650961820E3B35000BF1F79 /* WebSocketCommand.swift */,
 			);
 			path = WebSocketService;
+			sourceTree = "<group>";
+		};
+		762271A4213D3BC30018689E /* DataProviders */ = {
+			isa = PBXGroup;
+			children = (
+				76C821A52141744100A6F5AE /* HowHearSelectableListItemsDataProvider.swift */,
+			);
+			path = DataProviders;
 			sourceTree = "<group>";
 		};
 		763931DA21144A5300A65257 /* ActionsViewModels */ = {
@@ -464,6 +522,7 @@
 		763C905120FDDCF8007C1F86 /* UI Modules */ = {
 			isa = PBXGroup;
 			children = (
+				76A45B3B213925D50080885D /* SelectableList */,
 				763932012119ADB700A65257 /* Views */,
 				763931DA21144A5300A65257 /* ActionsViewModels */,
 				763C905C20FDF598007C1F86 /* App */,
@@ -517,6 +576,7 @@
 				7655477020EBA5A2004AC0BD /* String+Extension.swift */,
 				761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */,
 				768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */,
+				764B854A2137C80100071F30 /* ValidatebleField+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -550,6 +610,13 @@
 				7665E81E2105DB22007D8B98 /* ListeningSettings.swift */,
 				76C8DDFC211063E800773BB1 /* Playlist.swift */,
 				ABB42BD8212B634E00EABC61 /* PlayerTrack.swift */,
+				764B854E2138043E00071F30 /* Country.swift */,
+				765F2591213EC6B700F5C3D8 /* Region.swift */,
+				762DD77A213FED700046A984 /* City.swift */,
+				762271A7213D8D510018689E /* Location.swift */,
+				762DD782214122FE0046A984 /* Hobby.swift */,
+				762DD7842141237B0046A984 /* HowHear.swift */,
+				762DD780214121500046A984 /* Config.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -747,6 +814,41 @@
 			path = Promo;
 			sourceTree = "<group>";
 		};
+		76A45B3B213925D50080885D /* SelectableList */ = {
+			isa = PBXGroup;
+			children = (
+				762271A4213D3BC30018689E /* DataProviders */,
+				76A45B4A213943C10080885D /* ViewModels */,
+				76A45B49213943B50080885D /* Views */,
+				76A45B3D213926380080885D /* SelectableListRouter.swift */,
+				76A45B3F213926380080885D /* SelectableListViewModel.swift */,
+				76A45B3C213926380080885D /* SelectableListControllerViewModel.swift */,
+				76A45B3E213926380080885D /* SelectableListViewController.swift */,
+				76A45B47213939060080885D /* ContriesSelectableListControllerViewModel.swift */,
+				762DD778213FE14F0046A984 /* RegionsSelectableListControllerViewModel.swift */,
+				762DD77E213FFDC70046A984 /* CitiesSelectableListControllerViewModel.swift */,
+				76C821A721425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift */,
+				76C821AB21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift */,
+			);
+			path = SelectableList;
+			sourceTree = "<group>";
+		};
+		76A45B49213943B50080885D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				76A45B4B213944180080885D /* SelectableListItemTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		76A45B4A213943C10080885D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				76A45B4D213952E40080885D /* SelectableListItemViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		76D39CE62111F7AA00D47DFA /* PlaylistContent */ = {
 			isa = PBXGroup;
 			children = (
@@ -830,6 +932,8 @@
 				76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */,
 				76F1FA4120DBA8DE00C9191F /* Main.storyboard */,
 				763931E221185F3B00A65257 /* PlayerPlaylist.storyboard */,
+				76A45B44213927470080885D /* SelectableList.storyboard */,
+				76C821AD2142675F00A6F5AE /* Authorization.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -875,6 +979,9 @@
 				76D39CF32112F63B00D47DFA /* ErrorPresnting.swift */,
 				AB1423652124345700C926F5 /* UIImageView+Placeholder.swift */,
 				AB1423762125A58200C926F5 /* ProgressPresenting.swift */,
+				764B854C2137E5C600071F30 /* DatePickerInputView.swift */,
+				762271A2213D33E60018689E /* TextFields.swift */,
+				76C821B02142ABAF00A6F5AE /* GenderSegmentedControl.swift */,
 			);
 			path = "UI Components";
 			sourceTree = "<group>";
@@ -989,6 +1096,8 @@
 				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
 				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
 				763932062119AE3300A65257 /* TrackTableViewCell.xib in Resources */,
+				76C821AF2142675F00A6F5AE /* Authorization.storyboard in Resources */,
+				76A45B46213927470080885D /* SelectableList.storyboard in Resources */,
 				763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1055,6 +1164,7 @@
 				76D39CEE2111F7FA00D47DFA /* PlaylistContentViewModel.swift in Sources */,
 				7665E8292107224F007D8B98 /* CellsViewModels.swift in Sources */,
 				7665E81D2105BC84007D8B98 /* ListeningSettingsViewModel.swift in Sources */,
+				764B854F2138043E00071F30 /* Country.swift in Sources */,
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
 				7650962320E5238100BF1F79 /* PlayerPlaylistItem.swift in Sources */,
 				ABB42BD9212B634E00EABC61 /* PlayerTrack.swift in Sources */,
@@ -1069,10 +1179,14 @@
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
 				763931F72118831600A65257 /* PlayerMyPlaylistsViewModel.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
+				762271A3213D33E60018689E /* TextFields.swift in Sources */,
 				7639320021198C3600A65257 /* PlayerFollowingViewModel.swift in Sources */,
+				76A45B43213926380080885D /* SelectableListViewModel.swift in Sources */,
 				763C904E20FCBABD007C1F86 /* TabBarViewController.swift in Sources */,
 				7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */,
+				76A45B48213939060080885D /* ContriesSelectableListControllerViewModel.swift in Sources */,
 				763C904D20FCBABD007C1F86 /* TabBarRouter.swift in Sources */,
+				762DD77B213FED700046A984 /* City.swift in Sources */,
 				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,
 				767289C620ED1A13008A86B6 /* Player.swift in Sources */,
 				769F4EAF210B6631000DD23B /* VideoViewController.swift in Sources */,
@@ -1087,11 +1201,14 @@
 				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,
 				767BA57F2111AEEC00C390D8 /* CellIdentifiable.swift in Sources */,
 				AB33C986211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift in Sources */,
+				762DD783214122FE0046A984 /* Hobby.swift in Sources */,
 				7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
 				768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */,
 				769F4E8F210B03F1000DD23B /* PlayerContentPresentationController.swift in Sources */,
+				76C821B12142ABAF00A6F5AE /* GenderSegmentedControl.swift in Sources */,
 				769F4EAD210B6631000DD23B /* VideoControllerViewModel.swift in Sources */,
+				764B854D2137E5C600071F30 /* DatePickerInputView.swift in Sources */,
 				7665333620FE470C00FEC702 /* HomeViewModel.swift in Sources */,
 				7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */,
 				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
@@ -1106,6 +1223,7 @@
 				769F4EB5210B669F000DD23B /* LyricsControllerViewModel.swift in Sources */,
 				760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */,
 				763931F62118831600A65257 /* PlayerMyPlaylistsViewController.swift in Sources */,
+				762DD7852141237B0046A984 /* HowHear.swift in Sources */,
 				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
 				7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */,
 				7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */,
@@ -1113,6 +1231,7 @@
 				769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */,
 				769F4EA5210B65D8000DD23B /* FollowControllerViewModel.swift in Sources */,
 				7665E81F2105DB22007D8B98 /* ListeningSettings.swift in Sources */,
+				762271A8213D8D510018689E /* Location.swift in Sources */,
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				769F4E87210A143C000DD23B /* PlayerPlaylistRootControllerViewModel.swift in Sources */,
 				7665334620FF1CFA00FEC702 /* PagesRouter.swift in Sources */,
@@ -1121,6 +1240,8 @@
 				766B02FE21009505005AB2B6 /* PlayerError.swift in Sources */,
 				763931F52118831600A65257 /* PlayerMyPlaylistsRouter.swift in Sources */,
 				769F4E98210B5BA1000DD23B /* PlayerContentContainerRouter.swift in Sources */,
+				762DD781214121500046A984 /* Config.swift in Sources */,
+				762DD779213FE14F0046A984 /* RegionsSelectableListControllerViewModel.swift in Sources */,
 				AB1423772125A58200C926F5 /* ProgressPresenting.swift in Sources */,
 				7665334720FF1CFA00FEC702 /* PagesViewController.swift in Sources */,
 				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
@@ -1143,6 +1264,7 @@
 				AB14236F2124487F00C926F5 /* AddToPlaylistControllerViewModel.swift in Sources */,
 				763C905A20FDDE96007C1F86 /* AuthorizationViewModel.swift in Sources */,
 				7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */,
+				76A45B41213926380080885D /* SelectableListRouter.swift in Sources */,
 				7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */,
 				7665335820FF414300FEC702 /* SignInRouter.swift in Sources */,
 				763931FD21198C3600A65257 /* PlayerFollowingControllerViewModel.swift in Sources */,
@@ -1167,6 +1289,7 @@
 				7665335A20FF414300FEC702 /* SignInViewModel.swift in Sources */,
 				7665332D20FE26A600FEC702 /* RestApiServiceError.swift in Sources */,
 				767289C720ED1A13008A86B6 /* PlayerPlaylist.swift in Sources */,
+				765F2592213EC6B700F5C3D8 /* Region.swift in Sources */,
 				76D39CEB2111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift in Sources */,
 				7665E81B2105BC84007D8B98 /* ListeningSettingsRouter.swift in Sources */,
 				7665335120FF1DE300FEC702 /* ProfileViewModel.swift in Sources */,
@@ -1175,15 +1298,20 @@
 				769F4E89210A143C000DD23B /* PlayerPlaylistRootRouter.swift in Sources */,
 				AB1423662124345700C926F5 /* UIImageView+Placeholder.swift in Sources */,
 				76C8DE0121106FDF00773BB1 /* Image.swift in Sources */,
+				76A45B42213926380080885D /* SelectableListViewController.swift in Sources */,
 				AB33C984211DC5C9003B88DB /* PlaylistsCollectionViewController.swift in Sources */,
 				76D39CEC2111F7FA00D47DFA /* PlaylistContentRouter.swift in Sources */,
 				769F4EB7210B669F000DD23B /* LyricsViewController.swift in Sources */,
 				763931DC21144CF600A65257 /* TrackActions.swift in Sources */,
 				769F4EB0210B6631000DD23B /* VideoViewModel.swift in Sources */,
 				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
+				76A45B4C213944180080885D /* SelectableListItemTableViewCell.swift in Sources */,
+				76A45B40213926380080885D /* SelectableListControllerViewModel.swift in Sources */,
+				76C821AC21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift in Sources */,
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,
 				76D39CF12112EF3A00D47DFA /* TrackTableViewCell.swift in Sources */,
 				7665333320FE470C00FEC702 /* HomeControllerViewModel.swift in Sources */,
+				76A45B4E213952E40080885D /* SelectableListItemViewModel.swift in Sources */,
 				76D39CFA211353A200D47DFA /* PlaylistHeaderViewModel.swift in Sources */,
 				763931EC2118748200A65257 /* PlayerNowPlayingViewController.swift in Sources */,
 				763931F42118831600A65257 /* PlayerMyPlaylistsControllerViewModel.swift in Sources */,
@@ -1195,14 +1323,18 @@
 				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
 				769F4EAE210B6631000DD23B /* VideoRouter.swift in Sources */,
 				769F4EB8210B669F000DD23B /* LyricsViewModel.swift in Sources */,
+				762DD77F213FFDC70046A984 /* CitiesSelectableListControllerViewModel.swift in Sources */,
+				76C821A62141744100A6F5AE /* HowHearSelectableListItemsDataProvider.swift in Sources */,
 				76EDBD1B20F796FF0021297F /* WebSocketServiceError.swift in Sources */,
 				768EC2CB20F4FB1000629F1B /* Addon.swift in Sources */,
 				769F4EBE210B6706000DD23B /* PromoRouter.swift in Sources */,
 				7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */,
+				76C821A821425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift in Sources */,
 				AB14237421246AD500C926F5 /* CreatePlaylistTableViewCell.swift in Sources */,
 				763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */,
 				763C905720FDDE96007C1F86 /* AuthorizationControllerViewModel.swift in Sources */,
 				76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */,
+				764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */,
 				761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1216,6 +1348,22 @@
 				763931E321185F3C00A65257 /* Base */,
 			);
 			name = PlayerPlaylist.storyboard;
+			sourceTree = "<group>";
+		};
+		76A45B44213927470080885D /* SelectableList.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76A45B45213927470080885D /* Base */,
+			);
+			name = SelectableList.storyboard;
+			sourceTree = "<group>";
+		};
+		76C821AD2142675F00A6F5AE /* Authorization.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76C821AE2142675F00A6F5AE /* Base */,
+			);
+			name = Authorization.storyboard;
 			sourceTree = "<group>";
 		};
 		76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */ = {

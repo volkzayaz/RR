@@ -62,7 +62,7 @@ class RestApiService {
                 }
         }
     }
-    
+
     func fanLogout(completion: @escaping (Result<User>) -> Void) {
         guard let fanLogoutURL = self.makeURL(with: "fan/logout") else { return }
 
@@ -78,6 +78,36 @@ class RestApiService {
                 case .failure(let error): completion(.failure(error))
                 }
         }
+    }
+
+    func fanUser(register registrationPayload: RestApiFanUserRegistrationRequestPayload, completion: @escaping (Result<UserProfile>) -> Void) {
+        guard let fanProfileURL = self.makeURL(with: "fan/register") else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin": "http://rr.local"]
+
+        do {
+            let jsonData = try JSONEncoder().encode(registrationPayload)
+
+            var request = URLRequest(url: fanProfileURL)
+            request.httpMethod = HTTPMethod.post.rawValue
+            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
+            allHTTPHeaderFields += headers
+            request.allHTTPHeaderFields = allHTTPHeaderFields
+            request.httpBody = jsonData
+
+            Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<FanRegistrationResponse>) in
+                switch dataResponse.result {
+                case .success(let fanRegiatrationResponse): completion(.success(fanRegiatrationResponse.userProfile))
+                case .failure(let error): completion(.failure(error))
+                }
+            }
+
+        } catch {
+            completion(.failure(error))
+        }
+
     }
 
     func fanUser<T: RestApiProfileRequestPayload>(update profilePayload: T, completion: @escaping (Result<User>) -> Void) {
@@ -270,6 +300,99 @@ class RestApiService {
 
                 switch dataResponse.result {
                 case .success(let playlistTracksResponse): completion(.success(playlistTracksResponse.tracks))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    // MARK: - Config -
+
+    func config(completion: @escaping (Result<Config>) -> Void) {
+        guard let configURL = self.makeURL(with: "config") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(configURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<ConfigResponse>) in
+
+                switch dataResponse.result {
+                case .success(let configResponse): completion(.success(configResponse.config))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    // MARK: - Location -
+
+    func countries(completion: @escaping (Result<[Country]>) -> Void) {
+        guard let countriesURL = self.makeURL(with: "gis/country") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(countriesURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<CountriesResponse>) in
+
+                switch dataResponse.result {
+                case .success(let countriesResponse): completion(.success(countriesResponse.countries))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+
+    }
+
+    func regions(for country: Country, completion: @escaping (Result<[Region]>) -> Void) {
+        guard let statesURL = self.makeURL(with: "gis/country/" + country.code + "/state") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(statesURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<RegionsResponse>) in
+
+                switch dataResponse.result {
+                case .success(let regionsResponse): completion(.success(regionsResponse.regions))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    func cities(for region: Region, completion: @escaping (Result<[City]>) -> Void) {
+        guard let citiesURL = self.makeURL(with: "gis/country/" + region.countryCode + "/state/" + String(region.id)) else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(citiesURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<CitiesResponse>) in
+
+                switch dataResponse.result {
+                case .success(let citiesResponse): completion(.success(citiesResponse.cities))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    func location(for country: Country, zip: String, completion: @escaping (Result<DetailedLocation>) -> Void) {
+        guard let locationURL = self.makeURL(with: "gis/location") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        let parameters: Parameters = ["country_code": country.code,
+                                      "postal_code": zip]
+
+        Alamofire.request(locationURL, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<DetailedLocationResponse>) in
+
+                switch dataResponse.result {
+                case .success(let detatailedLocationResponse): completion(.success(detatailedLocationResponse.detailedLocation))
                 case .failure(let error): completion(.failure(error))
                 }
         }

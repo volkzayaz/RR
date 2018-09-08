@@ -21,7 +21,6 @@ import Foundation
 public protocol User: Decodable {
     var isGuest: Bool { get }
     var wsToken: String { get }
-
 }
 
 //func == (lhs: User, rhs: User) -> Bool {
@@ -47,23 +46,81 @@ extension GuestUser: Equatable {
     }
 }
 
-struct FanUser: User {
+struct UserProfile: Decodable {
 
     let id: Int
-    let wsToken: String
-    let isGuest: Bool = false
+    let email: String
+    let nickName: String
+    let firstName: String
+    let gender: Gender?
+    let birthDate: Date?
+//    let location: Location
+    let phone: String?
+    let hobbies: [Hobby]
+    let howHearId: Int
     var listeningSettings: ListeningSettings
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
-        case wsToken = "ws_token"
+        case email
+        case nickName = "nick_name"
+        case firstName = "real_name"
+        case gender
+        case birthDate = "birth_date"
+//        case location
+        case phone
+        case hobbies
+        case howHearId = "how_hear"
         case listeningSettings = "listening_settings"
     }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let dateFormatter = ModelSupport.sharedInstance.dateFormatter
+
+
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.email = try container.decode(String.self, forKey: .email)
+        self.nickName = try container.decode(String.self, forKey: .nickName)
+        self.firstName = try container.decode(String.self, forKey: .firstName)
+        if let genderRowValue = try? container.decode(Int.self, forKey: .gender) {
+            self.gender = Gender(rawValue: genderRowValue)
+        } else {
+            self.gender = nil
+        }
+
+        self.birthDate = try container.decodeAsDate(String.self, forKey: .birthDate, dateFormatter: dateFormatter)
+        //        self.location = try container.decode(Location.self, forKey: .location)
+        self.phone = try? container.decode(String.self, forKey: .phone)
+        self.hobbies = try container.decode([Hobby].self, forKey: .hobbies)
+        self.howHearId = try container.decode(Int.self, forKey: .howHearId)
+
+        self.listeningSettings = try container.decode(ListeningSettings.self, forKey: .listeningSettings)
+    }
+}
+
+struct FanUser: User {
+
+    let profile: UserProfile
+    let wsToken: String
+    let isGuest: Bool = false
+
+    enum CodingKeys: String, CodingKey {
+        case wsToken = "ws_token"
+    }
+
+    init(from decoder: Decoder) throws {
+        self.profile = try UserProfile(from: decoder)
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.wsToken = try container.decode(String.self, forKey: .wsToken)
+    }
+    
 }
 
 extension FanUser: Equatable {
     static func == (lhs: FanUser, rhs: FanUser) -> Bool {
-        guard lhs.id == rhs.id, lhs.wsToken == rhs.wsToken else { return false }
+        guard lhs.profile.id == rhs.profile.id, lhs.wsToken == rhs.wsToken else { return false }
         return true
     }
 }

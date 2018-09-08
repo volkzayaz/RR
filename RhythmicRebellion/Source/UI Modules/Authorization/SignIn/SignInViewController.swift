@@ -33,11 +33,23 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
     private(set) var router: FlowRouter!
 
     private var applicationWillEnterForegroundObserver: NSObjectProtocol?
+    private var keyboardWillShowObserver: NSObjectProtocol?
+    private var keyboardWillHideObserver: NSObjectProtocol?
 
     deinit {
         if let applicationWillEnterForegroundObserver = self.applicationWillEnterForegroundObserver {
             NotificationCenter.default.removeObserver(applicationWillEnterForegroundObserver)
             self.applicationWillEnterForegroundObserver = nil
+        }
+
+        if let keyboardWillShowObserver = self.keyboardWillShowObserver {
+            NotificationCenter.default.removeObserver(keyboardWillShowObserver)
+            self.keyboardWillShowObserver = nil
+        }
+
+        if let keyboardWillHideObserver = self.keyboardWillHideObserver {
+            NotificationCenter.default.removeObserver(keyboardWillHideObserver)
+            self.keyboardWillHideObserver = nil
         }
     }
 
@@ -65,9 +77,6 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.scrollView.isScrollEnabled = false
-        self.preferredContentSize = CGSize(width: self.view.bounds.size.width, height: 368.0)
-
         self.emailTextField.textColor = self.viewModel.defaultTextColor
         self.emailTextField.placeholderAnimatesOnFocus = true;
 
@@ -91,6 +100,14 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         self.applicationWillEnterForegroundObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.applicationWillEnterForeground(notification: notification)
         }
+
+        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+            self.keyboardDidShow(notification: notification)
+        }
+
+        self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+            self.keyboardWillHide(notification: notification)
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -99,6 +116,16 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         if let applicationWillEnterForegroundObserver = self.applicationWillEnterForegroundObserver {
             NotificationCenter.default.removeObserver(applicationWillEnterForegroundObserver)
             self.applicationWillEnterForegroundObserver = nil
+        }
+
+        if let keyboardWillShowObserver = self.keyboardWillShowObserver {
+            NotificationCenter.default.removeObserver(keyboardWillShowObserver)
+            self.keyboardWillShowObserver = nil
+        }
+
+        if let keyboardWillHideObserver = self.keyboardWillHideObserver {
+            NotificationCenter.default.removeObserver(keyboardWillHideObserver)
+            self.keyboardWillHideObserver = nil
         }
     }
 
@@ -132,6 +159,23 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
 
     func applicationWillEnterForeground(notification: Notification) {
         self.viewModel.restart()
+    }
+
+    func keyboardDidShow(notification: Notification) {
+        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
+
+        let bottomInset = self.view.bounds.maxY - keyboardFrame.minY
+        if bottomInset > 0 {
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
+            scrollView.contentInset = contentInsets
+            scrollView.scrollIndicatorInsets = contentInsets
+        }
+    }
+
+    func keyboardWillHide(notification: Notification) {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
     }
 }
 
