@@ -144,6 +144,7 @@
 		76C821AC21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C821AB21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift */; };
 		76C821AF2142675F00A6F5AE /* Authorization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76C821AD2142675F00A6F5AE /* Authorization.storyboard */; };
 		76C821B12142ABAF00A6F5AE /* GenderSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C821B02142ABAF00A6F5AE /* GenderSegmentedControl.swift */; };
+		76C821B521440E9E00A6F5AE /* HobbiesContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C821B421440E9E00A6F5AE /* HobbiesContainerView.swift */; };
 		76C8DDFD211063E800773BB1 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DDFC211063E800773BB1 /* Playlist.swift */; };
 		76C8DE0121106FDF00773BB1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DE0021106FDF00773BB1 /* Image.swift */; };
 		76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DE02211090AA00773BB1 /* TrackWriter.swift */; };
@@ -333,6 +334,7 @@
 		76C821AB21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowHearSelectableListControllerViewModel.swift; sourceTree = "<group>"; };
 		76C821AE2142675F00A6F5AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Authorization.storyboard; sourceTree = "<group>"; };
 		76C821B02142ABAF00A6F5AE /* GenderSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenderSegmentedControl.swift; sourceTree = "<group>"; };
+		76C821B421440E9E00A6F5AE /* HobbiesContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HobbiesContainerView.swift; sourceTree = "<group>"; };
 		76C8DDFC211063E800773BB1 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		76C8DE0021106FDF00773BB1 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		76C8DE02211090AA00773BB1 /* TrackWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackWriter.swift; sourceTree = "<group>"; };
@@ -982,6 +984,7 @@
 				764B854C2137E5C600071F30 /* DatePickerInputView.swift */,
 				762271A2213D33E60018689E /* TextFields.swift */,
 				76C821B02142ABAF00A6F5AE /* GenderSegmentedControl.swift */,
+				76C821B421440E9E00A6F5AE /* HobbiesContainerView.swift */,
 			);
 			path = "UI Components";
 			sourceTree = "<group>";
@@ -1114,6 +1117,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
+				"${BUILT_PRODUCTS_DIR}/CloudTagView/CloudTagView.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MaterialTextField/MaterialTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
@@ -1124,6 +1128,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CloudTagView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
@@ -1333,6 +1338,7 @@
 				AB14237421246AD500C926F5 /* CreatePlaylistTableViewCell.swift in Sources */,
 				763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */,
 				763C905720FDDE96007C1F86 /* AuthorizationControllerViewModel.swift in Sources */,
+				76C821B521440E9E00A6F5AE /* HobbiesContainerView.swift in Sources */,
 				76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */,
 				764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */,
 				761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */,

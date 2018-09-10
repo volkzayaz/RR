@@ -65,7 +65,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var phoneErrorLabel: UILabel!
 
     @IBOutlet weak var hobbiesTextFieldSelectionIndicator: UIImageView!
-    @IBOutlet weak var hobbiesTextField: HobbiesTextField!
+    @IBOutlet weak var hobbiesContainerView: HobbiesContainerView!
     @IBOutlet weak var hobbiesErrorLabel: UILabel!
 
     @IBOutlet weak var howHearTextFieldSelectionIndicator: UIImageView!
@@ -102,7 +102,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
             self.regionTextField.region = nil
             self.cityTextField.city = nil
             self.phoneTextField.text = nil
-            self.hobbiesTextField.hobbies = nil
+            self.hobbiesContainerView.hobbies = nil
             self.howHearTextField.howHear = nil
 
             self.bindViewModel()
@@ -124,7 +124,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.viewModel.registerRegionField(self.regionTextField)
         self.viewModel.registerCityField(self.cityTextField)
         self.viewModel.registerPhoneField(self.phoneTextField)
-        self.viewModel.registerHobbiesField(self.hobbiesTextField)
+        self.viewModel.registerHobbiesField(self.hobbiesContainerView)
         self.viewModel.registerHowHearField(self.howHearTextField)
     }
 
@@ -144,6 +144,8 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.hobbiesContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSelectHobbies(sender:))))
 
         self.emailTextField.textColor = self.viewModel.defaultTextColor
         self.emailTextField.placeholderAnimatesOnFocus = true;
@@ -167,8 +169,8 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.cityTextField.placeholderAnimatesOnFocus = true
         self.phoneTextField.textColor = self.viewModel.defaultTextColor
         self.phoneTextField.placeholderAnimatesOnFocus = true
-        self.hobbiesTextField.textColor = self.viewModel.defaultTextColor
-        self.hobbiesTextField.placeholderAnimatesOnFocus = true
+//        self.hobbiesTextField.textColor = self.viewModel.defaultTextColor
+//        self.hobbiesTextField.placeholderAnimatesOnFocus = true
         self.howHearTextField.textColor = self.viewModel.defaultTextColor
         self.howHearTextField.placeholderAnimatesOnFocus = true
 
@@ -235,6 +237,14 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.viewModel.validateField(sender)
     }
 
+    @IBAction func onSelectHobbies(sender: UITapGestureRecognizer) {
+        self.performSegue(withIdentifier: "HobbiesSelectableListSegueIdentifier", sender: sender)
+    }
+
+    @IBAction func hobbiesContainerViewValueChanges(sender: HobbiesContainerView) {
+        self.viewModel.validateField(sender)
+    }
+
     @IBAction func onSignUp(sender: Any?) {
 
         self.view.endEditing(true)
@@ -281,9 +291,6 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
             return false
         } else if textField === self.cityTextField {
             self.performSegue(withIdentifier: "CitiesSelectableListSegueIdentifier", sender: textField)
-            return false
-        } else if textField === self.hobbiesTextField {
-            self.performSegue(withIdentifier: "HobbiesSelectableListSegueIdentifier", sender: textField)
             return false
         } else if textField === self.howHearTextField {
             self.performSegue(withIdentifier: "HowHearSelectableListSegueIdentifier", sender: textField)
@@ -347,7 +354,7 @@ extension SignUpViewController: SignUpViewModelDelegate {
         else if field === self.regionTextField { return self.regionErrorLabel }
         else if field === self.cityTextField { return self.cityErrorLabel }
         else if field === self.phoneTextField { return self.phoneErrorLabel }
-        else if field === self.hobbiesTextField { return self.hobbiesErrorLabel }
+//        else if field === self.hobbiesTextField { return self.hobbiesErrorLabel }
         else if field === self.howHearTextField { return self.howHearErrorLabel }
 
         return nil
@@ -355,7 +362,7 @@ extension SignUpViewController: SignUpViewModelDelegate {
 
     func errorLabel(for control: UIControl) -> UILabel? {
         if control === self.genderControl { return self.genderErrorLabel }
-
+        else if control === self.hobbiesContainerView { return self.hobbiesErrorLabel }
         return nil
     }
 
@@ -380,6 +387,25 @@ extension SignUpViewController: SignUpViewModelDelegate {
         textField.placeholderColor = self.viewModel.errorColor
     }
 
+    func refresh(hobbiesContainerView: HobbiesContainerView, errorLabel: UILabel, withValidationError validationError: ValidationError?) {
+
+        guard let error = validationError else {
+            errorLabel.text = ""
+            errorLabel.isHidden = true
+
+//            hobbiesContainerView.tintColor = self.viewModel.defaultTintColor
+            hobbiesContainerView.placeHolderLabel.textColor = self.viewModel.defaultTextColor
+
+            return
+        }
+
+        errorLabel.text = error.errorMessage
+        errorLabel.isHidden = false
+
+//        textField.tintColor = self.viewModel.errorColor
+        hobbiesContainerView.placeHolderLabel.textColor = self.viewModel.errorColor
+    }
+
     func refresh(control: UIControl, errorLabel: UILabel, withValidationError validationError: ValidationError?) {
         guard let error = validationError else {
             errorLabel.text = ""
@@ -398,6 +424,10 @@ extension SignUpViewController: SignUpViewModelDelegate {
         case let textField as MFTextField:
             guard let textFieldErrorLabel = self.errorLabel(for: textField) else { return }
             self.refresh(textField: textField, errorLabel: textFieldErrorLabel, withValidationError: validationError)
+
+        case let hobbiesContainerView as HobbiesContainerView:
+            guard let controlErrorLabel = self.errorLabel(for: hobbiesContainerView) else { return }
+            self.refresh(hobbiesContainerView: hobbiesContainerView, errorLabel: controlErrorLabel, withValidationError: validationError)
 
         case let control as UIControl:
             guard let controlErrorLabel = self.errorLabel(for: control) else { return }
@@ -424,7 +454,7 @@ extension SignUpViewController: SignUpViewModelDelegate {
     }
 
     func refreshHobbiesField(with hobbies: [Hobby]) {
-        self.hobbiesTextField.hobbies = hobbies
+        self.hobbiesContainerView.hobbies = hobbies
     }
 
     func refreshHowHearField(with howHear: HowHear?) {

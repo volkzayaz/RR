@@ -56,7 +56,7 @@ final class HowHearSelectableListControllerViewModel: SelectableListControllerVi
 
     typealias ItemSelectionCallback = (HowHear) -> Void
 
-    override var title: String { return NSLocalizedString("Select City", comment: "Select City Title") }
+    override var title: String { return NSLocalizedString("Select How Hear", comment: "Select How Hear Title") }
 
     var itemSelectionCallback: ItemSelectionCallback?
 

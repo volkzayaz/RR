@@ -46,8 +46,12 @@ protocol HobbiesValidatableField: ValidatableField {
     var hobbies: [Hobby]? { get }
 }
 
-extension HobbiesTextField: HobbiesValidatableField {
+extension HobbiesContainerView: HobbiesValidatableField {
 
+    public var validationText: String {
+        guard let hobbies = self.hobbies else { return "" }
+        return hobbies.map { $0.name }.joined(separator: ", ")
+    }
 }
 
 protocol HowHearValidatableField: ValidatableField {
