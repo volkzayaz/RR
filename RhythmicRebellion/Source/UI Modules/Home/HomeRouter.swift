@@ -10,25 +10,24 @@
 import UIKit
 
 protocol HomeRouter: FlowRouter {
+    func showContent(of playlist: Playlist)
 }
 
-final class DefaultHomeRouter:  HomeRouter, SegueCompatible {
+final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
-        case playlistContentSegueIdentifier
+    enum SegueList: String, SegueDestinationList {
+        case playlistContent = "PlaylistContentSegueIdentifier"
+    }
 
-        var identifier: String {
+    enum SegueActions: SegueDestinations {
+        case showPlaylistContent(playlist: Playlist)
+
+        var identifier: SegueDestinationList {
             switch self {
-            case .playlistContentSegueIdentifier: return "PlaylistContentSegueIdentifier"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "PlaylistContentSegueIdentifier": return .playlistContentSegueIdentifier
-            default: return nil
+            case .showPlaylistContent: return SegueList.playlistContent
             }
         }
     }
@@ -42,13 +41,9 @@ final class DefaultHomeRouter:  HomeRouter, SegueCompatible {
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        case .playlistContentSegueIdentifier:
-            guard let playlist = sender as? Playlist else { fatalError("Incorrect sender for PlaylistContentSegueIdentifier") }
+    func prepare(for destination: DefaultHomeRouter.SegueActions, segue: UIStoryboardSegue) {
+        switch destination {
+        case .showPlaylistContent(let playlist):
             guard let playlistContentViewController = segue.destination as? PlaylistContentViewController else { fatalError("Incorrect controller for PlaylistContentSegueIdentifier") }
             let playlistContentRouter = DefaultPlaylistContentRouter(dependencies: self.dependencies)
             playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
@@ -64,5 +59,9 @@ final class DefaultHomeRouter:  HomeRouter, SegueCompatible {
         sourceController = controller
         let vm = HomeControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func showContent(of playlist: Playlist) {
+        self.perform(segue: .showPlaylistContent(playlist: playlist))
     }
 }

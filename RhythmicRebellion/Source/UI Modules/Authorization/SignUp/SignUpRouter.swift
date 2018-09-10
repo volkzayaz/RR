@@ -10,37 +10,41 @@
 import UIKit
 
 protocol SignUpRouter: FlowRouter {
+    func showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: @escaping (Country) -> Void)
+    func showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: @escaping (Region) -> Void)
+    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: @escaping (City) -> Void)
+    func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void)
+    func showHowHearSelectableList(dataSource: HowHearListDataSource, selectedItem: HowHear?, selectionCallback: @escaping (HowHear) -> Void)
 }
 
-final class DefaultSignUpRouter:  SignUpRouter, SegueCompatible {
+final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
-        case contriesSelectableList
-        case regionsSelectableList
-        case citiesSelectableList
-        case hobbiesSelectableList
-        case howHearSelectableList
+    enum SegueList: String, SegueDestinationList {
+        case contriesSelectableList = "ContriesSelectableListSegueIdentifier"
+        case regionsSelectableList = "RegionsSelectableListSegueIdentifier"
+        case citiesSelectableList = "CitiesSelectableListSegueIdentifier"
+        case hobbiesSelectableList = "HobbiesSelectableListSegueIdentifier"
+        case howHearSelectableList = "HowHearSelectableListSegueIdentifier"
 
-        var identifier: String {
+    }
+
+    enum SegueActions: SegueDestinations {
+        case showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: (Country) -> Void)
+        case showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: (Region) -> Void)
+        case showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: (City) -> Void)
+        case showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, selectionCallback: ([Hobby]) -> Void)
+        case showHowHearSelectableList(dataSource: HowHearListDataSource, selectedItem: HowHear?, selectionCallback: (HowHear) -> Void)
+
+        var identifier: SegueDestinationList {
             switch self {
-            case .contriesSelectableList: return "ContriesSelectableListSegueIdentifier"
-            case .regionsSelectableList: return "RegionsSelectableListSegueIdentifier"
-            case .citiesSelectableList: return "CitiesSelectableListSegueIdentifier"
-            case .hobbiesSelectableList: return "HobbiesSelectableListSegueIdentifier"
-            case .howHearSelectableList:return "HowHearSelectableListSegueIdentifier"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "ContriesSelectableListSegueIdentifier": return .contriesSelectableList
-            case "RegionsSelectableListSegueIdentifier": return .regionsSelectableList
-            case "CitiesSelectableListSegueIdentifier": return .citiesSelectableList
-            case "HobbiesSelectableListSegueIdentifier": return .hobbiesSelectableList
-            case "HowHearSelectableListSegueIdentifier":  return .howHearSelectableList
-            default: return nil
+            case .showContriesSelectableList: return SegueList.contriesSelectableList
+            case .showRegionsSelectableList: return SegueList.regionsSelectableList
+            case .showCitiesSelectableList: return SegueList.citiesSelectableList
+            case .showHobbiesSelectableList: return SegueList.hobbiesSelectableList
+            case .showHowHearSelectableList: return SegueList.howHearSelectableList
             }
         }
     }
@@ -54,68 +58,59 @@ final class DefaultSignUpRouter:  SignUpRouter, SegueCompatible {
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultSignUpRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
+        switch destination {
 
-        switch payload {
-        case .contriesSelectableList:
+        case .showContriesSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for contriesSelectableList") }
-            guard let signUpViewModel = self.viewModel else { return }
-
             let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
-
-            let countriesSelectableListControllerViewModel = ContriesSelectableListControllerViewModel(router: selectableListRouter, dataSource: signUpViewModel, selectedItem: signUpViewModel.selectedCountry) { [weak signUpViewModel] (country) in
-                signUpViewModel?.set(country: country)
-            }
+            let countriesSelectableListControllerViewModel = ContriesSelectableListControllerViewModel(router: selectableListRouter,
+                                                                                                       dataSource: dataSource,
+                                                                                                       selectedItem: selectedItem,
+                                                                                                       itemSelectionCallback: selectionCallback)
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: countriesSelectableListControllerViewModel)
 
-        case .regionsSelectableList:
+        case .showRegionsSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            guard let signUpViewModel = self.viewModel else { return }
-
             let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
-
-            let regionsSelectableListControllerViewModel = RegionsSelectableListControllerViewModel(router: selectableListRouter, dataSource: signUpViewModel, selectedItem: signUpViewModel.selectedRegion) { [weak signUpViewModel] (region) in
-                signUpViewModel?.set(region: region)
-            }
+            let regionsSelectableListControllerViewModel = RegionsSelectableListControllerViewModel(router: selectableListRouter,
+                                                                                                    dataSource: dataSource,
+                                                                                                    selectedItem: selectedItem,
+                                                                                                    itemSelectionCallback: selectionCallback)
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: regionsSelectableListControllerViewModel)
 
-        case .citiesSelectableList:
+        case .showCitiesSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            guard let signUpViewModel = self.viewModel else { return }
-
             let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
-
-            let citiesSelectableListControllerViewModel = CitiesSelectableListControllerViewModel(router: selectableListRouter, dataSource: signUpViewModel, selectedItem: signUpViewModel.selectedCity) { [weak signUpViewModel] (city) in
-                signUpViewModel?.set(city: city)
-            }
+            let citiesSelectableListControllerViewModel = CitiesSelectableListControllerViewModel(router: selectableListRouter,
+                                                                                                  dataSource: dataSource,
+                                                                                                  selectedItem: selectedItem,
+                                                                                                  itemSelectionCallback: selectionCallback)
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: citiesSelectableListControllerViewModel)
 
-        case .hobbiesSelectableList:
+        case .showHobbiesSelectableList(let dataSource, let selectedItems, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for hobbiesSelectableList") }
-            guard let signUpViewModel = self.viewModel else { return }
-
             let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
 
-            let hobbiesSelectableListControllerViewModel = HobbiesSelectableListControllerViewModel(router: selectableListRouter, dataSource: signUpViewModel, selectedItems: signUpViewModel.selectedHobbies) { [weak signUpViewModel] (hobbies) in
-                signUpViewModel?.set(hobbies: hobbies)
-            }
+            let hobbiesSelectableListControllerViewModel = HobbiesSelectableListControllerViewModel(router: selectableListRouter,
+                                                                                                    dataSource: dataSource,
+                                                                                                    selectedItems: selectedItems,
+                                                                                                    itemsSelectionCallback: selectionCallback)
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: hobbiesSelectableListControllerViewModel)
 
-        case .howHearSelectableList:
+        case .showHowHearSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            guard let signUpViewModel = self.viewModel else { return }
-
             let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
 
-            let howHearSelectableListControllerViewModel = HowHearSelectableListControllerViewModel(router: selectableListRouter, dataSource: signUpViewModel, selectedItem: signUpViewModel.selectedHowHear) { [weak signUpViewModel] (howHear) in
-                signUpViewModel?.set(howHear: howHear)
-            }
+            let howHearSelectableListControllerViewModel = HowHearSelectableListControllerViewModel(router: selectableListRouter,
+                                                                                                    dataSource: dataSource,
+                                                                                                    selectedItem: selectedItem,
+                                                                                                    itemSelectionCallback: selectionCallback)
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: howHearSelectableListControllerViewModel)
         }
@@ -131,4 +126,25 @@ final class DefaultSignUpRouter:  SignUpRouter, SegueCompatible {
         controller.configure(viewModel: vm, router: self)
         self.viewModel = vm
     }
+
+    func showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: @escaping (Country) -> Void) {
+        self.perform(segue: .showContriesSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
+    }
+
+    func showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: @escaping (Region) -> Void) {
+        self.perform(segue: .showRegionsSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
+    }
+
+    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: @escaping (City) -> Void) {
+        self.perform(segue: .showCitiesSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
+    }
+
+    func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void) {
+        self.perform(segue: .showHobbiesSelectableList(dataSource: dataSource, selectedItems: selectedItems, selectionCallback: selectionCallback))
+    }
+
+    func showHowHearSelectableList(dataSource: HowHearListDataSource, selectedItem: HowHear?, selectionCallback: @escaping (HowHear) -> Void) {
+        self.perform(segue: .showHowHearSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
+    }
+
 }

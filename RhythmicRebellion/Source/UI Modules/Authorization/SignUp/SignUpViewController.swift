@@ -238,7 +238,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func onSelectHobbies(sender: UITapGestureRecognizer) {
-        self.performSegue(withIdentifier: "HobbiesSelectableListSegueIdentifier", sender: sender)
+        self.viewModel.showHobbiesSelectableList()
     }
 
     @IBAction func hobbiesContainerViewValueChanges(sender: HobbiesContainerView) {
@@ -284,16 +284,16 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField === self.countryTextField {
-            self.performSegue(withIdentifier: "ContriesSelectableListSegueIdentifier", sender: textField)
+            self.viewModel.showContriesSelectableList()
             return false
         } else if textField === self.regionTextField {
-            self.performSegue(withIdentifier: "RegionsSelectableListSegueIdentifier", sender: textField)
+            self.viewModel.showRegionsSelectableList()
             return false
         } else if textField === self.cityTextField {
-            self.performSegue(withIdentifier: "CitiesSelectableListSegueIdentifier", sender: textField)
+            self.viewModel.showCitiesSelectableList()
             return false
         } else if textField === self.howHearTextField {
-            self.performSegue(withIdentifier: "HowHearSelectableListSegueIdentifier", sender: textField)
+            self.viewModel.showHowHearSelectableList()
             return false
         }
 

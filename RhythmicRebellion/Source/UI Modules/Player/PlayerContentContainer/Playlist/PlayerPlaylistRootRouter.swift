@@ -13,29 +13,36 @@ protocol PlayerPlaylistRootRouter: FlowRouter {
 
 }
 
-final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, SegueCompatible {
+final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
+    enum SegueList: String, SegueDestinationList {
+        case nowPlaying = "PlayerNowPlayingViewControllerSegueIdentifier"
+        case myPlaylists = "PlayerMyPlaylistsViewControllerSegueIdentifier"
+        case following = "PlayerFollowingViewControllerSegueIdentifier"
+    }
+
+    enum SegueActions: SegueDestinations {
         case nowPlaying
         case myPlaylists
         case following
 
-        var identifier: String {
+        var identifier: SegueDestinationList {
             switch self {
-            case .nowPlaying: return "PlayerNowPlayingViewControllerSegueIdentifier"
-            case .myPlaylists: return "PlayerMyPlaylistsViewControllerSegueIdentifier"
-            case .following: return "PlayerFollowingViewControllerSegueIdentifier"
+            case .nowPlaying: return SegueList.nowPlaying
+            case .myPlaylists: return SegueList.myPlaylists
+            case .following: return SegueList.following
             }
         }
 
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "PlayerNowPlayingViewControllerSegueIdentifier": return .nowPlaying
-            case "PlayerMyPlaylistsViewControllerSegueIdentifier": return .myPlaylists
-            case "PlayerFollowingViewControllerSegueIdentifier": return .following
-            default: return nil
+        init?(destinationList: SegueDestinationList) {
+            switch destinationList as? SegueList {
+            case .nowPlaying?: self = .nowPlaying
+            case .myPlaylists?: self = .myPlaylists
+            case .following?: self = .following
+            default: fatalError("UPS!")
             }
         }
     }
@@ -49,11 +56,9 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, SegueCom
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultPlayerPlaylistRootRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
+        switch destination {
         case .nowPlaying:
             guard let nowPlayingViewController = segue.destination as? PlayerNowPlayingViewController else { fatalError("Incorrect controller for PlayerNowPlayingViewControllerSegueIdentifier") }
             let nowPlayingRouter = DefaultPlayerNowPlayingRouter(dependencies: self.dependencies)

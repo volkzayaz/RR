@@ -387,6 +387,34 @@ final class SignUpControllerViewModel: SignUpViewModel {
         self.validateField(self.howHearField)
     }
 
+    func showContriesSelectableList() {
+        self.router?.showContriesSelectableList(dataSource: self, selectedItem: self.selectedCountry, selectionCallback: { [weak self] (country) in
+            self?.set(country: country)
+        })
+    }
+    func showRegionsSelectableList() {
+        self.router?.showRegionsSelectableList(dataSource: self, selectedItem: self.selectedRegion, selectionCallback: { [weak self] (region) in
+            self?.set(region: region)
+        })
+    }
+    func showCitiesSelectableList() {
+        self.router?.showCitiesSelectableList(dataSource: self, selectedItem: self.selectedCity, selectionCallback: { [weak self] (city) in
+            self?.set(city: city)
+        })
+    }
+
+    func showHobbiesSelectableList() {
+        self.router?.showHobbiesSelectableList(dataSource: self, selectedItems: self.selectedHobbies, selectionCallback: { [weak self] (hobbies) in
+            self?.set(hobbies: hobbies)
+        })
+    }
+
+    func showHowHearSelectableList() {
+        self.router?.showHowHearSelectableList(dataSource: self, selectedItem: self.selectedHowHear, selectionCallback: { [weak self] (howHear) in
+            self?.set(howHear: howHear)
+        })
+    }
+
     func getLocation() {
 
         guard let countryField = self.countryField, let zipField = self.zipField else { return }

@@ -54,23 +54,23 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
 final class HobbiesSelectableListControllerViewModel: SelectableListControllerViewModel<HobbiesSelectableListItemsDataProvider> {
 
-    typealias ItemSelectionCallback = ([Hobby]) -> Void
+    typealias ItemsSelectionCallback = ([Hobby]) -> Void
 
     override var title: String { return NSLocalizedString("Select Hobbies", comment: "Select Hobbies Title") }
 
-    var itemSelectionCallback: ItemSelectionCallback?
+    var itemsSelectionCallback: ItemsSelectionCallback?
 
 
-    init(router: SelectableListRouter, dataSource: HobbiesDataSource, selectedItems: [Hobby]?, itemSelectionCallback: ItemSelectionCallback?) {
+    init(router: SelectableListRouter, dataSource: HobbiesDataSource, selectedItems: [Hobby]?, itemsSelectionCallback: ItemsSelectionCallback?) {
 
         super.init(router: router, dataProvider:  HobbiesSelectableListItemsDataProvider(with: dataSource), selectedItems: selectedItems ?? [], isSearchable: true, selectionType: .multiple)
 
-        self.itemSelectionCallback = itemSelectionCallback
+        self.itemsSelectionCallback = itemsSelectionCallback
     }
 
     override func done() {
 
-        self.itemSelectionCallback?(self.selectedItems)
+        self.itemsSelectionCallback?(self.selectedItems)
 
         super.done()
     }

@@ -13,23 +13,21 @@ protocol AddToPlaylistRouter: FlowRouter {
     func dismiss()
 }
 
-final class DefaultAddToPlaylistRouter:  AddToPlaylistRouter, SegueCompatible {
+final class DefaultAddToPlaylistRouter:  AddToPlaylistRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
+    enum SegueList: String, SegueDestinationList {
+        case placeholder = "placeholder"
+    }
+
+    enum SegueActions: SegueDestinations {
         case placeholder
 
-        var identifier: String {
+        var identifier: SegueDestinationList {
             switch self {
-            case .placeholder: return "placeholder"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "placeholder" : return .placeholder
-            default: return nil
+            case .placeholder: return SegueList.placeholder
             }
         }
     }
@@ -43,13 +41,10 @@ final class DefaultAddToPlaylistRouter:  AddToPlaylistRouter, SegueCompatible {
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultAddToPlaylistRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        default:
-            break
+        switch destination {
+        default: break
         }
     }
 

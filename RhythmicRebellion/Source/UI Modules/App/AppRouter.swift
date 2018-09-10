@@ -12,26 +12,32 @@ import UIKit
 protocol AppRouter: FlowRouter {
 }
 
-final class DefaultAppRouter:  AppRouter, SegueCompatible {
+final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
+    enum SegueList: String, SegueDestinationList {
+        case player = "PlayerSegueIdentifier"
+        case tabBar = "TabBarSegueIdentifier"
+    }
+
+    enum SegueActions: SegueDestinations {
         case player
         case tabBar
 
-        var identifier: String {
+        var identifier: SegueDestinationList {
             switch self {
-            case .player: return "PlayerSegueIdentifier"
-            case .tabBar: return "TabBarSegueIdentifier"
+            case .player: return SegueList.player
+            case .tabBar: return SegueList.tabBar
             }
         }
 
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "PlayerSegueIdentifier": return .player
-            case "TabBarSegueIdentifier": return .tabBar
-            default: return nil
+        init?(destinationList: SegueDestinationList) {
+            switch destinationList as? SegueList {
+            case .player?: self = .player
+            case .tabBar?: self = .tabBar
+            default: fatalError("UPS!")
             }
         }
     }
@@ -48,11 +54,9 @@ final class DefaultAppRouter:  AppRouter, SegueCompatible {
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultAppRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
+        switch destination {
         case .player:
             guard let playerViewController = segue.destination as? PlayerViewController else { fatalError("Incorrect controller for PlayerSegueIdentifier") }
             let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies)
@@ -83,7 +87,7 @@ extension DefaultAppRouter: PlayerNavigationDelgate {
     func navigate(to playerNavigationItem: PlayerNavigationItem) {
 
         guard let playerContentContainerRouter = self.tabBarRouter?.playerContentContainerRouter else {
-            self.tabBarViewController?.performSegue(withIdentifier: "PlayerContantContainerSegueIdentifier", sender: playerNavigationItem)
+            self.tabBarRouter?.showPlayerContentContainer(playerNavigationItem: playerNavigationItem)
             return
         }
 

@@ -13,23 +13,21 @@ protocol PlaylistsCollectionRouter: FlowRouter {
     func showContent(of playlist: PlaylistShort)
 }
 
-final class DefaultPlaylistsCollectionRouter:  PlaylistsCollectionRouter, SegueCompatible {
+final class DefaultPlaylistsCollectionRouter:  PlaylistsCollectionRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
-        case playlistContentSegueIdentifier
+    enum SegueList: String, SegueDestinationList {
+        case playlistContent = "PlaylistContentSegueIdentifier"
+    }
 
-        var identifier: String {
+    enum SegueActions: SegueDestinations {
+        case showPlaylistContent(playlist: PlaylistShort)
+
+        var identifier: SegueDestinationList {
             switch self {
-            case .playlistContentSegueIdentifier: return "PlaylistContentSegueIdentifier"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "PlaylistContentSegueIdentifier": return .playlistContentSegueIdentifier
-            default: return nil
+            case .showPlaylistContent: return SegueList.playlistContent
             }
         }
     }
@@ -43,13 +41,9 @@ final class DefaultPlaylistsCollectionRouter:  PlaylistsCollectionRouter, SegueC
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        case .playlistContentSegueIdentifier:
-            guard let playlist = sender as? PlaylistShort else { fatalError("Incorrect sender for PlaylistContentSegueIdentifier") }
+    func prepare(for destination: DefaultPlaylistsCollectionRouter.SegueActions, segue: UIStoryboardSegue) {
+        switch destination {
+        case .showPlaylistContent(let playlist):
             guard let playlistContentViewController = segue.destination as? PlaylistContentViewController else { fatalError("Incorrect controller for PlaylistContentSegueIdentifier") }
             let playlistContentRouter = DefaultPlaylistContentRouter(dependencies: self.dependencies)
             playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
@@ -68,6 +62,6 @@ final class DefaultPlaylistsCollectionRouter:  PlaylistsCollectionRouter, SegueC
     }
     
     func showContent(of playlist: PlaylistShort) {
-        self.sourceController?.performSegue(withIdentifier: "PlaylistContentSegueIdentifier", sender: playlist)
+        self.perform(segue: .showPlaylistContent(playlist: playlist))
     }
 }

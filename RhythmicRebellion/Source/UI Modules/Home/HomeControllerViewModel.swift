@@ -61,4 +61,9 @@ final class HomeControllerViewModel: HomeViewModel {
 
         return PlaylistItemViewModel(playlist: self.playlists[indexPath.item])
     }
+
+    func selectObject(at indexPath: IndexPath) {
+        self.router?.showContent(of: self.playlists[indexPath.item])
+    }
+
 }

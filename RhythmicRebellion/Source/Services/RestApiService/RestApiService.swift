@@ -110,6 +110,16 @@ class RestApiService {
 
     }
 
+
+    func fanUser(restorePassword email: String, completion: @escaping (Result<User>) -> Void) {
+        guard let fanRestorePasswordURL = self.makeURL(with: "fan/fan/forgot-password") else { return }
+
+        
+
+    }
+
+
+
     func fanUser<T: RestApiProfileRequestPayload>(update profilePayload: T, completion: @escaping (Result<User>) -> Void) {
         guard let fanProfileURL = self.makeURL(with: "fan/profile") else { return }
 

@@ -13,22 +13,21 @@ protocol SelectableListRouter: FlowRouter {
     func done()
 }
 
-final class DefaultSelectableListRouter:  SelectableListRouter, SegueCompatible {
+final class DefaultSelectableListRouter:  SelectableListRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
+    enum SegueList: String, SegueDestinationList {
+        case placeholder = "placeholder"
+    }
+
+    enum SegueActions: SegueDestinations {
         case placeholder
 
-        var identifier: String {
+        var identifier: SegueDestinationList {
             switch self {
-            case .placeholder: return "placeholder"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            default: return nil
+            case .placeholder: return SegueList.placeholder
             }
         }
     }
@@ -42,13 +41,10 @@ final class DefaultSelectableListRouter:  SelectableListRouter, SegueCompatible 
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultSelectableListRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        case .placeholder:
-            break
+        switch destination {
+        case .placeholder: break
         }
     }
 

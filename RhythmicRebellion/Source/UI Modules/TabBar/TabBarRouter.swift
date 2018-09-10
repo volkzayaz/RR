@@ -26,27 +26,27 @@ protocol TabBarRouter: FlowRouter {
 
     var playerContentContainerRouter: PlayerContentContainerRouter? { get }
 
+    func showPlayerContentContainer(playerNavigationItem: PlayerNavigationItem)
+
     func updateTabs(for types: [TabType])
     func selectTab(for type: TabType)
 }
 
-final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
+final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
-    
-    enum SegueList: String, SegueDestinations {
-        case playerContentContainer
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-        var identifier: String {
+    enum SegueList: String, SegueDestinationList {
+        case playerContentContainer = "PlayerContantContainerSegueIdentifier"
+    }
+
+    enum SegueActions: SegueDestinations {
+        case shaowPlayerContentContainer(playerNavigationItem: PlayerNavigationItem)
+
+        var identifier: SegueDestinationList {
             switch self {
-            case .playerContentContainer: return "PlayerContantContainerSegueIdentifier"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "PlayerContantContainerSegueIdentifier": return .playerContentContainer
-            default: return nil
+            case .shaowPlayerContentContainer: return SegueList.playerContentContainer
             }
         }
     }
@@ -67,19 +67,17 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultTabBarRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        case .playerContentContainer:
+        switch destination {
+        case .shaowPlayerContentContainer(let playerNavigationItem):
             guard let playerContentContainerViewController = segue.destination as? PlayerContentContainerViewController else { fatalError("Incorrect controller for PlayerContantContainerSegueIdentifier") }
 
             playerContentContainerViewController.transitioningDelegate = self.playerContentTransitioningDelegate
             playerContentContainerViewController.modalPresentationStyle = .custom
 
             let playerContentContainerRouter = DefaultPlayerContentContainerRouter(dependencies: self.dependencies)
-            playerContentContainerRouter.start(controller: playerContentContainerViewController, navigationItem: sender as? PlayerNavigationItem)
+            playerContentContainerRouter.start(controller: playerContentContainerViewController, navigationItem: playerNavigationItem)
 
             self.playerContentContainerRouter = playerContentContainerRouter
 
@@ -170,6 +168,10 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, SegueCompatible {
             guard let tabBarItem = $0.tabBarItem, let childViewControllerType = TabType(rawValue: tabBarItem.tag) else { return false}
             return childViewControllerType == type
         }).first
+    }
+
+    func showPlayerContentContainer(playerNavigationItem: PlayerNavigationItem) {
+        self.perform(segue: .shaowPlayerContentContainer(playerNavigationItem: playerNavigationItem))
     }
 }
 

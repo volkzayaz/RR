@@ -65,6 +65,10 @@
 		7650962120E5029200BF1F79 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962020E5029200BF1F79 /* Observable.swift */; };
 		7650962320E5238100BF1F79 /* PlayerPlaylistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayerPlaylistItem.swift */; };
 		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
+		76525E682146722700C556D6 /* RestorePasswordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */; };
+		76525E692146722700C556D6 /* RestorePasswordRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E652146722700C556D6 /* RestorePasswordRouter.swift */; };
+		76525E6A2146722700C556D6 /* RestorePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E662146722700C556D6 /* RestorePasswordViewController.swift */; };
+		76525E6B2146722700C556D6 /* RestorePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E672146722700C556D6 /* RestorePasswordViewModel.swift */; };
 		7655476E20EB80DC004AC0BD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655476D20EB80DC004AC0BD /* Token.swift */; };
 		7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655477020EBA5A2004AC0BD /* String+Extension.swift */; };
 		765F2592213EC6B700F5C3D8 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765F2591213EC6B700F5C3D8 /* Region.swift */; };
@@ -255,6 +259,10 @@
 		7650962020E5029200BF1F79 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		7650962220E5238100BF1F79 /* PlayerPlaylistItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPlaylistItem.swift; sourceTree = "<group>"; };
 		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
+		76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordControllerViewModel.swift; sourceTree = "<group>"; };
+		76525E652146722700C556D6 /* RestorePasswordRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordRouter.swift; sourceTree = "<group>"; };
+		76525E662146722700C556D6 /* RestorePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordViewController.swift; sourceTree = "<group>"; };
+		76525E672146722700C556D6 /* RestorePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordViewModel.swift; sourceTree = "<group>"; };
 		7655476D20EB80DC004AC0BD /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		7655477020EBA5A2004AC0BD /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		765F2591213EC6B700F5C3D8 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
@@ -538,6 +546,7 @@
 		763C905220FDDD22007C1F86 /* Authorization */ = {
 			isa = PBXGroup;
 			children = (
+				76525E632146720700C556D6 /* RestorePassword */,
 				7665335220FF411E00FEC702 /* SignIn */,
 				7606BDD220FF46CB00D90D73 /* SignUp */,
 				763C905420FDDE96007C1F86 /* AuthorizationRouter.swift */,
@@ -621,6 +630,17 @@
 				762DD780214121500046A984 /* Config.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		76525E632146720700C556D6 /* RestorePassword */ = {
+			isa = PBXGroup;
+			children = (
+				76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */,
+				76525E652146722700C556D6 /* RestorePasswordRouter.swift */,
+				76525E662146722700C556D6 /* RestorePasswordViewController.swift */,
+				76525E672146722700C556D6 /* RestorePasswordViewModel.swift */,
+			);
+			path = RestorePassword;
 			sourceTree = "<group>";
 		};
 		7665332E20FE46DF00FEC702 /* Home */ = {
@@ -1245,6 +1265,7 @@
 				766B02FE21009505005AB2B6 /* PlayerError.swift in Sources */,
 				763931F52118831600A65257 /* PlayerMyPlaylistsRouter.swift in Sources */,
 				769F4E98210B5BA1000DD23B /* PlayerContentContainerRouter.swift in Sources */,
+				76525E682146722700C556D6 /* RestorePasswordControllerViewModel.swift in Sources */,
 				762DD781214121500046A984 /* Config.swift in Sources */,
 				762DD779213FE14F0046A984 /* RegionsSelectableListControllerViewModel.swift in Sources */,
 				AB1423772125A58200C926F5 /* ProgressPresenting.swift in Sources */,
@@ -1264,6 +1285,7 @@
 				AB14237221246AC700C926F5 /* AddToPlaylistTableViewCell.swift in Sources */,
 				7665333420FE470C00FEC702 /* HomeRouter.swift in Sources */,
 				7665335720FF414300FEC702 /* SignInControllerViewModel.swift in Sources */,
+				76525E6A2146722700C556D6 /* RestorePasswordViewController.swift in Sources */,
 				769F4EA8210B65D8000DD23B /* FollowViewModel.swift in Sources */,
 				7655476E20EB80DC004AC0BD /* Token.swift in Sources */,
 				AB14236F2124487F00C926F5 /* AddToPlaylistControllerViewModel.swift in Sources */,
@@ -1327,6 +1349,7 @@
 				76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */,
 				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
 				769F4EAE210B6631000DD23B /* VideoRouter.swift in Sources */,
+				76525E6B2146722700C556D6 /* RestorePasswordViewModel.swift in Sources */,
 				769F4EB8210B669F000DD23B /* LyricsViewModel.swift in Sources */,
 				762DD77F213FFDC70046A984 /* CitiesSelectableListControllerViewModel.swift in Sources */,
 				76C821A62141744100A6F5AE /* HowHearSelectableListItemsDataProvider.swift in Sources */,
@@ -1339,6 +1362,7 @@
 				763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */,
 				763C905720FDDE96007C1F86 /* AuthorizationControllerViewModel.swift in Sources */,
 				76C821B521440E9E00A6F5AE /* HobbiesContainerView.swift in Sources */,
+				76525E692146722700C556D6 /* RestorePasswordRouter.swift in Sources */,
 				76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */,
 				764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */,
 				761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */,

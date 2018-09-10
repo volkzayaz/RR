@@ -13,23 +13,21 @@ protocol PlaylistContentRouter: FlowRouter {
     func showAddToPlaylist(for track: Track)
 }
 
-final class DefaultPlaylistContentRouter:  PlaylistContentRouter, SegueCompatible {
+final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
-        case showAddToPlaylist
+    enum SegueList: String, SegueDestinationList {
+        case showAddToPlaylist = "showAddToPlaylist"
+    }
 
-        var identifier: String {
+    enum SegueActions: SegueDestinations {
+        case showAddToPlaylist(track: Track)
+
+        var identifier: SegueDestinationList {
             switch self {
-            case .showAddToPlaylist: return "showAddToPlaylist"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "showAddToPlaylist": return .showAddToPlaylist
-            default: return nil
+            case .showAddToPlaylist: return SegueList.showAddToPlaylist
             }
         }
     }
@@ -43,15 +41,13 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, SegueCompatibl
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        case .showAddToPlaylist:
+    func prepare(for destination: DefaultPlaylistContentRouter.SegueActions, segue: UIStoryboardSegue) {
+        switch destination {
+        case .showAddToPlaylist(let track):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
-            addToPlaylistRouter.start(controller: addToPlaylistViewController, track: sender as! Track)
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, track: track)
             break
         }
     }
@@ -73,7 +69,7 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, SegueCompatibl
     }
     
     func showAddToPlaylist(for track: Track) {
-        self.sourceController?.performSegue(withIdentifier: "showAddToPlaylist", sender: track)
+        self.perform(segue: .showAddToPlaylist(track: track))
     }
 }
 

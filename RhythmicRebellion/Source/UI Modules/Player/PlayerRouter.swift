@@ -12,22 +12,21 @@ import UIKit
 protocol PlayerRouter: FlowRouter {
 }
 
-final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
+final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
+    enum SegueList: String, SegueDestinationList {
+        case placeholder = "placeholder"
+    }
+
+    enum SegueActions: SegueDestinations {
         case placeholder
 
-        var identifier: String {
+        var identifier: SegueDestinationList {
             switch self {
-            case .placeholder: return "placeholder"
-            }
-        }
-
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            default: return nil
+            case .placeholder: return SegueList.placeholder
             }
         }
     }
@@ -41,13 +40,9 @@ final class DefaultPlayerRouter:  PlayerRouter, SegueCompatible {
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        case .placeholder:
-            break
+    func prepare(for destination: DefaultPlayerRouter.SegueActions, segue: UIStoryboardSegue) {
+        switch destination {
+        case .placeholder: break
         }
     }
 

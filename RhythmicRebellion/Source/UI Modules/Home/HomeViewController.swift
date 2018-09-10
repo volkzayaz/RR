@@ -87,9 +87,7 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
     // MARK: - UICollectionViewDelegate -
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let playlistItemViewModel = self.viewModel.object(at: indexPath)!
-
-        self.performSegue(withIdentifier: "PlaylistContentSegueIdentifier", sender: playlistItemViewModel.playlist)
+        self.viewModel.selectObject(at: indexPath)
     }
 
 }

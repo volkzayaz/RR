@@ -12,23 +12,28 @@ import UIKit
 protocol PlayerMyPlaylistsRouter: FlowRouter {
 }
 
-final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, SegueCompatible {
+final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
+    enum SegueList: String, SegueDestinationList {
+        case embedPlaylists = "embedPlaylists"
+    }
+
+    enum SegueActions: SegueDestinations {
         case embedPlaylists
 
-        var identifier: String {
+        var identifier: SegueDestinationList {
             switch self {
-            case .embedPlaylists: return "embedPlaylists"
+            case .embedPlaylists: return SegueList.embedPlaylists
             }
         }
 
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "embedPlaylists" : return .embedPlaylists
-            default: return nil
+        init?(destinationList: SegueDestinationList) {
+            switch destinationList as? SegueList {
+            case .embedPlaylists?: self = .embedPlaylists
+            default: fatalError("UPS!")
             }
         }
     }
@@ -42,11 +47,9 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, SegueCompa
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultPlayerMyPlaylistsRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
+        switch destination {
         case .embedPlaylists:
             guard let playlistsCollectionViewController = segue.destination as? PlaylistsCollectionViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let playlistCollectionRouter = DefaultPlaylistsCollectionRouter(dependencies: self.dependencies)

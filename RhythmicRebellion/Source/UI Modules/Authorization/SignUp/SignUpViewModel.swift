@@ -61,6 +61,12 @@ protocol SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataSour
     func set(hobbies: [Hobby])
     func set(howHear: HowHear)
 
+    func showContriesSelectableList()
+    func showRegionsSelectableList()
+    func showCitiesSelectableList()
+    func showHobbiesSelectableList()
+    func showHowHearSelectableList()
+
     func getLocation()
     func signUp()
 }

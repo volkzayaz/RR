@@ -1,18 +1,18 @@
 //
-//  FollowRouter.swift
+//  RestorePasswordRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/27/18.
+//  Created by Alexander Obolentsev on 9/10/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-protocol FollowRouter: FlowRouter {
+protocol RestorePasswordRouter: FlowRouter {
 }
 
-final class DefaultFollowRouter:  FollowRouter, FlowRouterSegueCompatible {
+final class DefaultRestorePasswordRouter:  RestorePasswordRouter, FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -31,30 +31,28 @@ final class DefaultFollowRouter:  FollowRouter, FlowRouterSegueCompatible {
         }
     }
 
-
     private(set) var dependencies: RouterDependencies
 
-    private(set) weak var viewModel: FollowViewModel?
+    private(set) weak var viewModel: RestorePasswordViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
     }
 
-    func prepare(for destination: DefaultFollowRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: DefaultRestorePasswordRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
         case .placeholder: break
         }
     }
 
-
     init(dependencies: RouterDependencies) {
         self.dependencies = dependencies
     }
 
-    func start(controller: FollowViewController) {
+    func start(controller: RestorePasswordViewController) {
         sourceController = controller
-        let vm = FollowControllerViewModel(router: self)
+        let vm = RestorePasswordControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

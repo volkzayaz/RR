@@ -16,6 +16,7 @@ protocol HomeViewModel: class {
 
     func numberOfItems(in section: Int) -> Int
     func object(at indexPath: IndexPath) -> PlaylistItemViewModel?
+    func selectObject(at indexPath: IndexPath)
 
 }
 

@@ -25,26 +25,32 @@ protocol AuthorizationRouter: FlowRouter {
     func change(authorizationType: AuthorizationType)
 }
 
-final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
+final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
+    enum SegueList: String, SegueDestinationList {
+        case signIn = "SignInSegueIdentifier"
+        case signUp = "SignUpSegueIdentifier"
+    }
+
+    enum SegueActions: SegueDestinations {
         case signIn
         case signUp
 
-        var identifier: String {
+        var identifier: SegueDestinationList {
             switch self {
-            case .signIn: return "SignInSegueIdentifier"
-            case .signUp: return "SignUpSegueIdentifier"
+            case .signIn: return SegueList.signIn
+            case .signUp: return SegueList.signUp
             }
         }
 
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "SignInSegueIdentifier": return .signIn
-            case "SignUpSegueIdentifier": return .signUp
-            default: return nil
+        init?(destinationList: SegueDestinationList) {
+            switch destinationList as? SegueList {
+            case .signIn?: self = .signIn
+            case .signUp?: self = .signUp
+            default: fatalError("UPS!")
             }
         }
     }
@@ -56,7 +62,6 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
 
     var sourceController: UIViewController? { return authorizationViewController }
 
-//    private(set) var authorizationViewControllers = [AuthorizationType : UIViewController]()
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -77,11 +82,9 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, SegueCompatible {
         }
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultAuthorizationRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
+        switch destination {
         case .signIn:
             guard let signInViewController = segue.destination as? SignInViewController else { fatalError("Incorrect controller for SignInSegueIdentifier") }
             prepare(viewController: signInViewController)

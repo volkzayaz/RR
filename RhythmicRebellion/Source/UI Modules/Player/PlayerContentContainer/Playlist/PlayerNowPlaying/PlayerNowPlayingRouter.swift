@@ -13,23 +13,21 @@ protocol PlayerNowPlayingRouter: FlowRouter {
     func showAddToPlaylist(for track: Track)
 }
 
-final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, SegueCompatible {
+final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSegueCompatible {
 
-    typealias Destinations = SegueList
+    typealias DestinationsList = SegueList
+    typealias Destinations = SegueActions
 
-    enum SegueList: String, SegueDestinations {
-        case showAddToPlaylist
-        
-        var identifier: String {
+    enum SegueList: String, SegueDestinationList {
+        case showAddToPlaylist = "showAddToPlaylist"
+    }
+
+    enum SegueActions: SegueDestinations {
+        case showAddToPlaylist(track: Track)
+
+        var identifier: SegueDestinationList {
             switch self {
-            case .showAddToPlaylist: return "showAddToPlaylist"
-            }
-        }
-        
-        static func from(identifier: String) -> SegueList? {
-            switch identifier {
-            case "showAddToPlaylist": return .showAddToPlaylist
-            default: return nil
+            case .showAddToPlaylist: return SegueList.showAddToPlaylist
             }
         }
     }
@@ -43,15 +41,13 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, SegueCompati
         return true
     }
 
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for destination: DefaultPlayerNowPlayingRouter.SegueActions, segue: UIStoryboardSegue) {
 
-        guard let payload = merge(segue: segue, with: sender) else { return }
-
-        switch payload {
-        case .showAddToPlaylist:
+        switch destination {
+        case .showAddToPlaylist(let track):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
-            addToPlaylistRouter.start(controller: addToPlaylistViewController, track: sender as! Track)            
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, track: track)
             break
         }
     }
@@ -67,6 +63,6 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, SegueCompati
     }
     
     func showAddToPlaylist(for track: Track) {
-        self.sourceController?.performSegue(withIdentifier: "showAddToPlaylist", sender: track)
+        self.perform(segue: .showAddToPlaylist(track: track))
     }
 }
