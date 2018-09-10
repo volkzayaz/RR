@@ -112,7 +112,7 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
         switch self.selectionType {
         case .single:
             var indexPathsToReload = self.selectedItems.compactMap { (selectableListItem) -> IndexPath? in
-                guard let selectedItemIndex = self.filteredItems.firstIndex(of: selectableListItem) else { return nil }
+                guard let selectedItemIndex = self.filteredItems.index(of: selectableListItem) else { return nil }
                 return IndexPath(row: selectedItemIndex, section: indexPath.section)
             }
             self.selectedItems.removeAll()
@@ -125,7 +125,7 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
             break
 
         case .multiple:
-            if let selectableListItemIndex = self.selectedItems.firstIndex(of: selectableListItem) {
+            if let selectableListItemIndex = self.selectedItems.index(of: selectableListItem) {
                 self.selectedItems.remove(at: selectableListItemIndex)
             } else {
                 self.selectedItems.append(selectableListItem)

@@ -75,7 +75,7 @@ class HobbiesContainerView: UIControl {
 extension HobbiesContainerView : TagViewDelegate {
 
     public func tagDismissed(_ tag: TagView) {
-        guard let tagIndex = self.cloudTagView.tags.firstIndex(of: tag) else { return }
+        guard let tagIndex = self.cloudTagView.tags.index(of: tag) else { return }
         self.internalHobbies?.remove(at:  tagIndex)
     }
 

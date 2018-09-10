@@ -226,7 +226,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     func nextField(for textField: UITextField) -> UITextField? {
 
-        guard let textFieldIndex = self.fields.firstIndex(of: textField), self.fields.count > textFieldIndex + 1 else { return nil }
+        guard let textFieldIndex = self.fields.index(of: textField), self.fields.count > textFieldIndex + 1 else { return nil }
 
         return self.fields[textFieldIndex + 1]
     }
