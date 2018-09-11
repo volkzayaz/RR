@@ -12,9 +12,11 @@ import Alamofire
 class RestApiService {
 
     let serverURL: URL
+    let originURI: String
 
-    public init(serverURL: URL) {
+    public init(serverURL: URL, originURI: String) {
         self.serverURL = serverURL
+        self.originURI = originURI
     }
 
     private func makeURL(with path: String) -> URL? {
@@ -85,7 +87,7 @@ class RestApiService {
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",
-                                    "Origin": "http://rr.local"]
+                                    "Origin": self.originURI]
 
         do {
             let jsonData = try JSONEncoder().encode(registrationPayload)
@@ -116,7 +118,7 @@ class RestApiService {
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",
-                                    "Origin" : "http://mobile.fan.rebellionretailsite.com"]
+                                    "Origin" : self.originURI]
 
         do {
             let jsonData = try JSONEncoder().encode(restorePasswordPayload)

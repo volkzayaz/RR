@@ -35,8 +35,9 @@ class Application: Observable {
 
         //http://mobile.fan.rebellionretailsite.com/
 
-        static let restApiService = "http://mobile.api.rebellionretailsite.com"
-        static let webSocketService = "ws://mobile.rebellionretailsite.com:3000/"
+        static let origin = "http://dev-mobile.fan.rebellionretailsite.com"
+        static let restApiService = "http://dev-mobile.api.rebellionretailsite.com"
+        static let webSocketService = "ws://dev-mobile.rebellionretailsite.com:3000/"
     }
 
     let restApiService: RestApiService
@@ -51,7 +52,7 @@ class Application: Observable {
     init?() {
         guard let restApiServiceURL = URL(string: URI.restApiService), let webSocketServiceURL = URL(string: URI.webSocketService) else { return nil }
 
-        self.restApiService = RestApiService(serverURL: restApiServiceURL)
+        self.restApiService = RestApiService(serverURL: restApiServiceURL, originURI: URI.origin)
         self.webSocketService = WebSocketService(socketURL: webSocketServiceURL)
         self.player = Player(restApiService: restApiService, webSocketService: webSocketService)
 
