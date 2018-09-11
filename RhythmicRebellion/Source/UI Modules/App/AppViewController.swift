@@ -70,7 +70,7 @@ final class AppViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if self.traitCollection.horizontalSizeClass == .compact {
-            self.playerContainerViewHeightConstraint?.constant = self.viewModel.isPlayerDisclosed ? 118.0 : 94.0
+            self.playerContainerViewHeightConstraint?.constant = self.viewModel.isPlayerDisclosed ? 139.0 : 94.0
             self.view.setNeedsUpdateConstraints()
         }
     }
@@ -79,7 +79,7 @@ final class AppViewController: UIViewController {
         super.updateViewConstraints()
 
         if self.traitCollection.horizontalSizeClass == .compact {
-            self.playerContainerViewHeightConstraint?.constant = self.viewModel.isPlayerDisclosed ? 118.0 : 94.0
+            self.playerContainerViewHeightConstraint?.constant = self.viewModel.isPlayerDisclosed ? 139.0 : 94.0
         }
     }
 
@@ -118,7 +118,7 @@ extension AppViewController: AppViewModelDelegate {
         let playerMenuButtonImageViewTransform = isDisclosed ? CGAffineTransform(rotationAngle: .pi) : CGAffineTransform(rotationAngle: .pi - 3.14159)
         let playerMenuButtonBackgroundColor = isDisclosed ?  #colorLiteral(red: 0.07252354175, green: 0.03960485011, blue: 0.2421343923, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
         let playerMenuButtonTintColor = isDisclosed ? #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1) : #colorLiteral(red: 0.07252354175, green: 0.03960485011, blue: 0.2421343923, alpha: 1)
-        self.playerContainerViewHeightConstraint?.constant = isDisclosed ? 118.0 : 94.0
+        self.playerContainerViewHeightConstraint?.constant = isDisclosed ? 139.0 : 94.0
 
         UIView.animate(withDuration: 0.25, animations: {
             self.view.layoutIfNeeded()
