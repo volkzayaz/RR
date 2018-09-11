@@ -111,11 +111,33 @@ class RestApiService {
     }
 
 
-    func fanUser(restorePassword email: String, completion: @escaping (Result<User>) -> Void) {
-        guard let fanRestorePasswordURL = self.makeURL(with: "fan/fan/forgot-password") else { return }
+    func fanUser(restorePassword restorePasswordPayload: RestApiFanUserRestorePasswordRequestPayload, completion: @escaping (Result<String>) -> Void) {
+        guard let fanRestorePasswordURL = self.makeURL(with: "fan/forgot-password") else { return }
 
-        
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : "http://mobile.fan.rebellionretailsite.com"]
 
+        do {
+            let jsonData = try JSONEncoder().encode(restorePasswordPayload)
+
+            var request = URLRequest(url: fanRestorePasswordURL)
+            request.httpMethod = HTTPMethod.post.rawValue
+            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
+            allHTTPHeaderFields += headers
+            request.allHTTPHeaderFields = allHTTPHeaderFields
+            request.httpBody = jsonData
+
+            Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<FanForgotPasswordResponse>) in
+                switch dataResponse.result {
+                case .success(let fanForgotPasswordResponse): completion(.success(fanForgotPasswordResponse.message))
+                case .failure(let error): completion(.failure(error))
+                }
+            }
+
+        } catch {
+            completion(.failure(error))
+        }
     }
 
 

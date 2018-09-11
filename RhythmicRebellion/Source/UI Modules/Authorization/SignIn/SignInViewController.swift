@@ -131,10 +131,14 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: - Actions
 
-    @IBAction func onSignIn(sender: Any) {
+    @IBAction func onSignIn(sender: Any?) {
 
         self.view.endEditing(true)
         self.viewModel.signIn()
+    }
+
+    @IBAction func onRestorePassword(sender: Any?) {
+        self.viewModel.resorePassword()
     }
 
     // MARK: - UITextFieldDelegate

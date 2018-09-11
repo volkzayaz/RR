@@ -50,9 +50,9 @@ final class DefaultRestorePasswordRouter:  RestorePasswordRouter, FlowRouterSegu
         self.dependencies = dependencies
     }
 
-    func start(controller: RestorePasswordViewController) {
+    func start(controller: RestorePasswordViewController, email: String?) {
         sourceController = controller
-        let vm = RestorePasswordControllerViewModel(router: self)
+        let vm = RestorePasswordControllerViewModel(router: self, restApiService: self.dependencies.restApiService, email: email)
         controller.configure(viewModel: vm, router: self)
     }
 }

@@ -71,7 +71,7 @@ protocol SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataSour
     func signUp()
 }
 
-protocol SignUpViewModelDelegate: class, ErrorPresnting{
+protocol SignUpViewModelDelegate: class, ErrorPresnting {
 
     func refreshUI()
     func refreshField(field: ValidatableField, didValidate error: ValidationError?)

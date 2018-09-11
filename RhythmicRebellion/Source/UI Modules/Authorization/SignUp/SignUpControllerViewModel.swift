@@ -15,18 +15,18 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     // MARK: - Public properties
 
-    var defaultTextColor: UIColor { return #colorLiteral(red: 0.1780987382, green: 0.2085041702, blue: 0.4644742608, alpha: 1) }
+    var defaultTextColor: UIColor { return #colorLiteral(red: 0.1780987382, green: 0.2085041404, blue: 0.4644742608, alpha: 1) }
     var defaultTintColor: UIColor { return #colorLiteral(red: 0.1468808055, green: 0.1904500723, blue: 0.8971034884, alpha: 1) }
 
     var errorColor: UIColor { return #colorLiteral(red: 0.9567829967, green: 0.2645464838, blue: 0.213359952, alpha: 1) }
 
+    var isSignUpSucced: Bool { return self.registeredUserProfile != nil }
+    
     // MARK: - Private properties -
 
     private(set) weak var delegate: SignUpViewModelDelegate?
     private(set) weak var router: SignUpRouter?
     private(set) weak var restApiService: RestApiService?
-
-    var isSignUpSucced: Bool { return self.registeredUserProfile != nil }
 
     private(set) var countries: [Country]
     var selectedCountry: Country? { return countryField?.country }

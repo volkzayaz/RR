@@ -90,6 +90,10 @@ final class SignInControllerViewModel: SignInViewModel {
         self.validator.validateField(field) { (validationError) in }
     }
 
+    func resorePassword() {
+        self.router?.showRestorePassword(email: self.emailField?.validationText)
+    }
+
     func signIn() {
         self.validator.validate { [unowned self] (error) in
             guard error.isEmpty else { return }

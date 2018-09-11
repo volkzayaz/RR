@@ -262,25 +262,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.viewModel.getLocation()
     }
 
-    // MARK: - Notifications
-    func keyboardDidShow(notification: Notification) {
-        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
-        let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
-
-        let bottomInset = self.view.bounds.maxY - keyboardFrame.minY
-        if bottomInset > 0 {
-            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
-            scrollView.contentInset = contentInsets
-            scrollView.scrollIndicatorInsets = contentInsets
-        }
-    }
-
-    func keyboardWillHide(notification: Notification) {
-        scrollView.contentInset = .zero
-        scrollView.scrollIndicatorInsets = .zero
-    }
-
-    // MARK: UITextFieldDelegate
+    // MARK: - UITextFieldDelegate -
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField === self.countryTextField {
@@ -313,6 +295,23 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         return false
     }
 
+    // MARK: - Notifications -
+    func keyboardDidShow(notification: Notification) {
+        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
+
+        let bottomInset = self.view.bounds.maxY - keyboardFrame.minY
+        if bottomInset > 0 {
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
+            scrollView.contentInset = contentInsets
+            scrollView.scrollIndicatorInsets = contentInsets
+        }
+    }
+
+    func keyboardWillHide(notification: Notification) {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
+    }
 }
 
 // MARK: - Router -

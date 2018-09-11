@@ -110,3 +110,22 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
     }
 
 }
+
+struct RestApiFanUserRestorePasswordRequestPayload: RestApiRequestPayload {
+
+    let email: String
+
+    enum CodingKeys: String, CodingKey {
+        case email
+    }
+
+    init(with email: String) {
+        self.email = email
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(self.email, forKey: .email)
+    }
+}

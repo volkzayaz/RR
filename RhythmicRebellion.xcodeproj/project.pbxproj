@@ -635,10 +635,10 @@
 		76525E632146720700C556D6 /* RestorePassword */ = {
 			isa = PBXGroup;
 			children = (
-				76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */,
 				76525E652146722700C556D6 /* RestorePasswordRouter.swift */,
-				76525E662146722700C556D6 /* RestorePasswordViewController.swift */,
 				76525E672146722700C556D6 /* RestorePasswordViewModel.swift */,
+				76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */,
+				76525E662146722700C556D6 /* RestorePasswordViewController.swift */,
 			);
 			path = RestorePassword;
 			sourceTree = "<group>";

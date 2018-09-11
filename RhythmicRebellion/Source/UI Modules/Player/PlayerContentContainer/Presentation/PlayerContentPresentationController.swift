@@ -26,16 +26,6 @@ class PlayerContentPresentationController: UIPresentationController {
 
     var tabBarViewController: UITabBarController? { return self.presentedViewController as? UITabBarController }
 
-    override var frameOfPresentedViewInContainerView: CGRect {
-        var frame = super.frameOfPresentedViewInContainerView
-
-//        guard let tabBarViewController = self.sourceViewController as? UITabBarController, tabBarViewController.tabBar.isHidden == false else { return frame }
-//
-//        frame.size.height -= tabBarViewController.tabBar.frame.height
-
-        return frame
-    }
-
     var containerViewFrame: CGRect {
         guard let tabBarViewController = self.sourceViewController as? UITabBarController else { return self.presentingViewController.view.bounds }
 

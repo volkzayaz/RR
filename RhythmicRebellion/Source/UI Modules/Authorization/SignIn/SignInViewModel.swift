@@ -28,6 +28,8 @@ protocol SignInViewModel: class {
 
     func signIn()
 
+    func resorePassword()
+
     func restart()
 }
 

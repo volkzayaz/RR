@@ -109,6 +109,8 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
         for childViewController in self.authorizationViewController?.childViewControllers ?? [] {
             self.prepare(viewController: childViewController)
         }
+
+        self.authorizationViewController?.navigationController?.popToRootViewController(animated: false)
     }
 
     func instantiateViewController(for authorizationType: AuthorizationType) -> UIViewController? {

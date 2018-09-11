@@ -32,6 +32,9 @@ class Application: Observable {
     let observersContainer = ObserversContainer<ApplicationObserver>()
 
     struct URI {
+
+        //http://mobile.fan.rebellionretailsite.com/
+
         static let restApiService = "http://mobile.api.rebellionretailsite.com"
         static let webSocketService = "ws://mobile.rebellionretailsite.com:3000/"
     }

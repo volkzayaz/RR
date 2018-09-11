@@ -11,6 +11,7 @@ import UIKit
 
 protocol SignInRouter: FlowRouter {
 
+    func showRestorePassword(email: String?)
     func restart()
 }
 
@@ -20,15 +21,15 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
     typealias Destinations = SegueActions
 
     enum SegueList: String, SegueDestinationList {
-        case placeholder = "placeholder"
+        case restorePassword = "RestorePasswordSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
-        case placeholder
+        case showRestorePassword(email: String?)
 
         var identifier: SegueDestinationList {
             switch self {
-            case .placeholder: return SegueList.placeholder
+            case .showRestorePassword: return SegueList.restorePassword
             }
         }
     }
@@ -46,7 +47,10 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
 
     func prepare(for destination: DefaultSignInRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
-        case .placeholder: break
+        case .showRestorePassword(let email):
+            guard let restorePasswordViewController = segue.destination as? RestorePasswordViewController else { fatalError("Incorrect controller for restorePassword") }
+            let restorePasswordRouter = DefaultRestorePasswordRouter(dependencies: dependencies)
+            restorePasswordRouter.start(controller: restorePasswordViewController, email: email)
         }
     }
 
@@ -58,6 +62,10 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
         signInViewController = controller
         let vm = SignInControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func showRestorePassword(email: String?) {
+        self.perform(segue: .showRestorePassword(email: email))
     }
 
     func restart() {
