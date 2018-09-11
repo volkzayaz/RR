@@ -166,79 +166,15 @@
             </objects>
             <point key="canvasLocation" x="948" y="1046"/>
         </scene>
-        <!--Profile-->
-        <scene sceneID="TBe-zJ-YoW">
+        <!--ProfileNavigationController-->
+        <scene sceneID="2rz-Ig-ksz">
             <objects>
-                <viewController id="X0v-Xz-XEx" customClass="ProfileViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ZYZ-e8-H2N">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="866"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ProfileViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7c9-Xj-3Ep">
-                                <rect key="frame" x="227.5" y="412" width="313" height="42"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xDw-ab-Hv6">
-                                <rect key="frame" x="309" y="366" width="150" height="45"/>
-                                <color key="backgroundColor" red="0.84885557087418306" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="cg4-kf-bdA"/>
-                                    <constraint firstAttribute="height" constant="45" id="haa-LW-Vsj"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Logout">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="onLogoutWithSender:" destination="X0v-Xz-XEx" eventType="touchUpInside" id="FlN-ye-Zgl"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="7c9-Xj-3Ep" firstAttribute="centerY" secondItem="ZYZ-e8-H2N" secondAttribute="centerY" id="C5u-ce-iSx"/>
-                            <constraint firstItem="7c9-Xj-3Ep" firstAttribute="top" secondItem="xDw-ab-Hv6" secondAttribute="bottom" constant="1" id="JOV-9u-vm6"/>
-                            <constraint firstItem="xDw-ab-Hv6" firstAttribute="centerX" secondItem="ZYZ-e8-H2N" secondAttribute="centerX" id="NYq-M4-gLO"/>
-                            <constraint firstItem="7c9-Xj-3Ep" firstAttribute="centerX" secondItem="ZYZ-e8-H2N" secondAttribute="centerX" id="xVn-yv-Gl9"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="7ZE-Nu-0Bh"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" tag="4" title="Profile" image="Profile" id="tRO-vE-bTk"/>
-                    <navigationItem key="navigationItem" title="Profile" id="qpk-Oz-Y2C">
-                        <barButtonItem key="backBarButtonItem" title="Profile" id="jKo-Me-o5g">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </barButtonItem>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="npb-lw-zQ1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="Settings" referencedIdentifier="ProfileNavigationController" id="dMN-EC-fFm" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="4" title="Profile" image="Profile" id="MeI-zK-4AK"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6hx-7T-Ahu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1664" y="2340"/>
-        </scene>
-        <!--Profile-->
-        <scene sceneID="XQI-ea-Mr3">
-            <objects>
-                <navigationController id="nRm-3q-vHO" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="4" title="Profile" image="Profile" id="jff-Nz-Chm"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="hWI-Yh-y4h">
-                        <rect key="frame" x="0.0" y="20" width="768" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        </textAttributes>
-                        <textAttributes key="largeTitleTextAttributes">
-                            <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="X0v-Xz-XEx" kind="relationship" relationship="rootViewController" id="PMo-So-7JI"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="T7t-VH-2eW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="951" y="2340"/>
+            <point key="canvasLocation" x="283" y="1038"/>
         </scene>
         <!--Home-->
         <scene sceneID="FwA-AQ-P4e">
@@ -954,7 +890,7 @@
                         <segue destination="yzX-4P-EFu" kind="relationship" relationship="viewControllers" id="VgU-tL-Azc"/>
                         <segue destination="3l1-Uo-jsR" kind="relationship" relationship="viewControllers" id="cer-am-Bmt"/>
                         <segue destination="2fS-6u-uEG" kind="relationship" relationship="viewControllers" id="lqy-Wb-loW"/>
-                        <segue destination="nRm-3q-vHO" kind="relationship" relationship="viewControllers" id="pqE-7l-SK8"/>
+                        <segue destination="dMN-EC-fFm" kind="relationship" relationship="viewControllers" id="5w3-vp-D9h"/>
                         <segue destination="PtX-54-04A" kind="relationship" relationship="viewControllers" id="Upt-Pn-Z3P"/>
                     </connections>
                 </tabBarController>
@@ -1566,7 +1502,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Aa-mk-sr1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="298" y="2758"/>
+            <point key="canvasLocation" x="412" y="1038"/>
         </scene>
         <!--Playlists Collection View Controller-->
         <scene sceneID="dY4-et-6fj">

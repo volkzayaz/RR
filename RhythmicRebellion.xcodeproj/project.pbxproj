@@ -152,6 +152,10 @@
 		76C8DDFD211063E800773BB1 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DDFC211063E800773BB1 /* Playlist.swift */; };
 		76C8DE0121106FDF00773BB1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DE0021106FDF00773BB1 /* Image.swift */; };
 		76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8DE02211090AA00773BB1 /* TrackWriter.swift */; };
+		76C9F64F2147D44D00054B44 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76C9F64E2147D44D00054B44 /* Settings.storyboard */; };
+		76C9F6512147DFFD00054B44 /* RoundedImageVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6502147DFFD00054B44 /* RoundedImageVIew.swift */; };
+		76C9F6572147F22B00054B44 /* ProfileItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6562147F22B00054B44 /* ProfileItemTableViewCell.swift */; };
+		76C9F6592147F50300054B44 /* ProfileItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6582147F50300054B44 /* ProfileItemViewModel.swift */; };
 		76D39CEB2111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */; };
 		76D39CEC2111F7FA00D47DFA /* PlaylistContentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */; };
 		76D39CED2111F7FA00D47DFA /* PlaylistContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */; };
@@ -346,6 +350,10 @@
 		76C8DDFC211063E800773BB1 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		76C8DE0021106FDF00773BB1 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		76C8DE02211090AA00773BB1 /* TrackWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackWriter.swift; sourceTree = "<group>"; };
+		76C9F64E2147D44D00054B44 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		76C9F6502147DFFD00054B44 /* RoundedImageVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageVIew.swift; sourceTree = "<group>"; };
+		76C9F6562147F22B00054B44 /* ProfileItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItemTableViewCell.swift; sourceTree = "<group>"; };
+		76C9F6582147F50300054B44 /* ProfileItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItemViewModel.swift; sourceTree = "<group>"; };
 		76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentControllerViewModel.swift; sourceTree = "<group>"; };
 		76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentRouter.swift; sourceTree = "<group>"; };
 		76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentViewController.swift; sourceTree = "<group>"; };
@@ -672,10 +680,12 @@
 		7665334920FF1DCE00FEC702 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				7665334A20FF1DE300FEC702 /* ProfileControllerViewModel.swift */,
+				76C9F6522147E96000054B44 /* Views */,
+				76C9F6552147F20700054B44 /* ViewsModels */,
 				7665334B20FF1DE300FEC702 /* ProfileRouter.swift */,
-				7665334C20FF1DE300FEC702 /* ProfileViewController.swift */,
 				7665334D20FF1DE300FEC702 /* ProfileViewModel.swift */,
+				7665334A20FF1DE300FEC702 /* ProfileControllerViewModel.swift */,
+				7665334C20FF1DE300FEC702 /* ProfileViewController.swift */,
 			);
 			name = Profile;
 			path = ../Profile;
@@ -871,6 +881,22 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		76C9F6522147E96000054B44 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				76C9F6562147F22B00054B44 /* ProfileItemTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		76C9F6552147F20700054B44 /* ViewsModels */ = {
+			isa = PBXGroup;
+			children = (
+				76C9F6582147F50300054B44 /* ProfileItemViewModel.swift */,
+			);
+			path = ViewsModels;
+			sourceTree = "<group>";
+		};
 		76D39CE62111F7AA00D47DFA /* PlaylistContent */ = {
 			isa = PBXGroup;
 			children = (
@@ -956,6 +982,7 @@
 				763931E221185F3B00A65257 /* PlayerPlaylist.storyboard */,
 				76A45B44213927470080885D /* SelectableList.storyboard */,
 				76C821AD2142675F00A6F5AE /* Authorization.storyboard */,
+				76C9F64E2147D44D00054B44 /* Settings.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -993,6 +1020,7 @@
 			isa = PBXGroup;
 			children = (
 				ABD79E85212C9E77004139F6 /* EqualizerView.swift */,
+				76C9F6502147DFFD00054B44 /* RoundedImageVIew.swift */,
 				76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */,
 				76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */,
 				76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */,
@@ -1118,6 +1146,7 @@
 				76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */,
 				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
 				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
+				76C9F64F2147D44D00054B44 /* Settings.storyboard in Resources */,
 				763932062119AE3300A65257 /* TrackTableViewCell.xib in Resources */,
 				76C821AF2142675F00A6F5AE /* Authorization.storyboard in Resources */,
 				76A45B46213927470080885D /* SelectableList.storyboard in Resources */,
@@ -1205,6 +1234,7 @@
 				763931F72118831600A65257 /* PlayerMyPlaylistsViewModel.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
 				762271A3213D33E60018689E /* TextFields.swift in Sources */,
+				76C9F6512147DFFD00054B44 /* RoundedImageVIew.swift in Sources */,
 				7639320021198C3600A65257 /* PlayerFollowingViewModel.swift in Sources */,
 				76A45B43213926380080885D /* SelectableListViewModel.swift in Sources */,
 				763C904E20FCBABD007C1F86 /* TabBarViewController.swift in Sources */,
@@ -1231,6 +1261,7 @@
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
 				768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */,
 				769F4E8F210B03F1000DD23B /* PlayerContentPresentationController.swift in Sources */,
+				76C9F6592147F50300054B44 /* ProfileItemViewModel.swift in Sources */,
 				76C821B12142ABAF00A6F5AE /* GenderSegmentedControl.swift in Sources */,
 				769F4EAD210B6631000DD23B /* VideoControllerViewModel.swift in Sources */,
 				764B854D2137E5C600071F30 /* DatePickerInputView.swift in Sources */,
@@ -1323,6 +1354,7 @@
 				7665334F20FF1DE300FEC702 /* ProfileRouter.swift in Sources */,
 				76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */,
 				769F4E89210A143C000DD23B /* PlayerPlaylistRootRouter.swift in Sources */,
+				76C9F6572147F22B00054B44 /* ProfileItemTableViewCell.swift in Sources */,
 				AB1423662124345700C926F5 /* UIImageView+Placeholder.swift in Sources */,
 				76C8DE0121106FDF00773BB1 /* Image.swift in Sources */,
 				76A45B42213926380080885D /* SelectableListViewController.swift in Sources */,

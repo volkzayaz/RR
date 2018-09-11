@@ -10,6 +10,10 @@
 import UIKit
 
 protocol ProfileRouter: FlowRouter {
+
+    func navigateToProfileSettings()
+    func navigateToChangeEmail()
+    func navigateToChangePassword()
 }
 
 final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
@@ -54,5 +58,17 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
         sourceController = controller
         let vm = ProfileControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func navigateToProfileSettings() {
+
+    }
+
+    func navigateToChangeEmail() {
+
+    }
+
+    func navigateToChangePassword() {
+
     }
 }

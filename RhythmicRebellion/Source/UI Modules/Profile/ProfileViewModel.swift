@@ -11,7 +11,13 @@ import UIKit
 
 protocol ProfileViewModel: class {
 
+    var userName: String { get }
+
     func load(with delegate: ProfileViewModelDelegate)
+
+    func numberOfItems(in section: Int) -> Int
+    func object(at indexPath: IndexPath) -> ProfileItemViewModel?
+    func selectObject(at indexPath: IndexPath)
 
     func logout()
 }
@@ -19,5 +25,6 @@ protocol ProfileViewModel: class {
 protocol ProfileViewModelDelegate: class {
 
     func refreshUI()
+    func reloadUI()
 
 }
