@@ -123,6 +123,8 @@ final class ProfileSettingsViewController: UIViewController {
         self.languageTextField.textColor = self.viewModel.defaultTextColor
         self.languageTextField.placeholderAnimatesOnFocus = true
 
+        self.viewModel.load(with: self)
+
         self.viewModel.registerFirstNameField(self.firstnameTextField)
         self.viewModel.registerNicknameField(self.nicknameTextField)
         self.viewModel.registerGenderField(self.genderControl)
@@ -136,7 +138,6 @@ final class ProfileSettingsViewController: UIViewController {
         self.viewModel.registerGenresField(self.genresContainerView)
         self.viewModel.registerLanguageField(self.languageTextField)
 
-        self.viewModel.load(with: self)
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -134,10 +134,10 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     func registerPasswordField(_ passwordField: ValidatableField) {
 
-        let passwordRules: [Rule] = [RequiredRule(message: NSLocalizedString("The password field is required.",
+        let passwordRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Password field is required.",
                                                                              comment: "Password validataion message")),
                                      MinLengthRule(length: 6,
-                                                   message: NSLocalizedString("The password must be at least %ld characters",
+                                                   message: NSLocalizedString("The assword must be at least %ld characters",
                                                                               comment: "Password validataion template"))]
         self.validator.registerField(passwordField, rules: passwordRules)
 

@@ -247,11 +247,11 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func onSelectHobbies(sender: UITapGestureRecognizer) {
+        self.view.endEditing(false)
         self.viewModel.showHobbiesSelectableList()
     }
 
     @IBAction func hobbiesContainerViewValueChanges(sender: HobbiesContainerView) {
-        self.view.endEditing(false)
         self.viewModel.validateField(sender)
     }
 
@@ -284,6 +284,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
             self.viewModel.showCitiesSelectableList()
             return false
         } else if textField === self.howHearTextField {
+            self.view.endEditing(false)
             self.viewModel.showHowHearSelectableList()
             return false
         }
