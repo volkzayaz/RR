@@ -171,6 +171,8 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
     }
 
     func showPlayerContentContainer(playerNavigationItem: PlayerNavigationItem) {
+
+        self.tabBarViewController?.selectedViewController?.view.endEditing(true)
         self.perform(segue: .shaowPlayerContentContainer(playerNavigationItem: playerNavigationItem))
     }
 }
