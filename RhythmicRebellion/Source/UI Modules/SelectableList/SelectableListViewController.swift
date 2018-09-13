@@ -105,10 +105,33 @@ final class SelectableListViewController: UIViewController {
 
         searchController.searchBar.layer.cornerRadius = 15.0
         searchController.searchBar.layer.masksToBounds = true
-        searchController.searchBar.barTintColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
-        searchController.searchBar.tintColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+        searchController.searchBar.barTintColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+        searchController.searchBar.tintColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
         searchController.searchBar.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+//        searchController.searchBar.barStyle = .black
+//        searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.clearsContextBeforeDrawing = true
+//        searchController.searchBar.isTranslucent = true
+
+        if let textFieldInsideSearchBar = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+            textFieldInsideSearchBar.textColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
+            textFieldInsideSearchBar.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+
+            let placeholder = NSLocalizedString("Search", comment: "Search plaholder")
+            let attributedPlaceholder = NSAttributedString(string: textFieldInsideSearchBar.placeholder ?? placeholder,
+                                                           attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)])
+            textFieldInsideSearchBar.attributedPlaceholder = attributedPlaceholder
+
+            if let imageView = textFieldInsideSearchBar.leftView as? UIImageView {
+                imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+                imageView.tintColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
+            }
+
+            if let imageView = textFieldInsideSearchBar.rightView as? UIImageView {
+                imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+                imageView.tintColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
+            }
+        }
 
         self.tableView.tableHeaderView = searchController.searchBar
         self.tableView.tableHeaderView?.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
@@ -156,14 +179,7 @@ extension SelectableListViewController: UITableViewDataSource, UITableViewDelega
         let selectableListItemTableViewCell = SelectableListItemTableViewCell.reusableCell(in: tableView, at: indexPath)
         let selectableListItemTableViewCellViewModel = self.viewModel.object(at: indexPath)
 
-        selectableListItemTableViewCell.setup(viewModel: selectableListItemTableViewCellViewModel!) { [unowned self, weak selectableListItemTableViewCell, weak tableView] action in
-            guard let selectableListItemTableViewCell = selectableListItemTableViewCell,
-                let indexPath = tableView?.indexPath(for: selectableListItemTableViewCell) else { return }
-
-            switch action {
-            case .select: self.viewModel.selectObject(at: indexPath)
-            }
-        }
+        selectableListItemTableViewCell.setup(viewModel: selectableListItemTableViewCellViewModel!)
 
         return selectableListItemTableViewCell
     }
