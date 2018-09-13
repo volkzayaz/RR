@@ -29,6 +29,10 @@ final class ProfileViewController: UIViewController {
     func configure(viewModel: ProfileViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
+
+        if self.isViewLoaded {
+            self.viewModel.load(with: self)
+        }
     }
 
     // MARK: - Lifecycle -
