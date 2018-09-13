@@ -97,6 +97,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
             self.firstnameTextField.text = nil
             self.genderControl.selectedSegmentIndex = -1
             self.birthdateTextField.date = nil
+            self.birthdateInputView.datePicker.date = Date()
             self.countryTextField.country = nil
             self.zipTextField.text = nil
             self.regionTextField.region = nil
