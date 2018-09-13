@@ -29,10 +29,10 @@ protocol ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Citie
 
     func load(with delegate: ProfileSettingsViewModelDelegate)
 
-    func registerFirstnameField(_ firstnameField: ValidatableField)
+    func registerFirstNameField(_ firstNameField: ValidatableField)
     func registerNicknameField(_ nicknameField: ValidatableField)
     func registerGenderField(_ genderField: GenderValidatableField)
-    func registerBirhdateField(_ birthdateField: DateValidatableField)
+    func registerBirhDateField(_ birthDateField: DateValidatableField)
 
     func registerCountryField(_ countryField: CountryValidatableField)
     func registerZipField(_ zipField: ValidatableField)

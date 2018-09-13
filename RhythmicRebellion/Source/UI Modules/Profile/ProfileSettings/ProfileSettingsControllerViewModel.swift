@@ -41,10 +41,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     private var userProfile: UserProfile?
 
-    private var firstnameField: ValidatableField?
+    private var firstNameField: ValidatableField?
     private var nicknameField: ValidatableField?
     private var genderField: GenderValidatableField?
-    private var birthdateField: DateValidatableField?
+    private var birthDateField: DateValidatableField?
 
     private var countryField: CountryValidatableField?
     private var zipField: ValidatableField?
@@ -86,7 +86,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.userProfile = fanUser.profile
 
         self.delegate?.refreshFirstNameField(with: fanUser.profile.firstName)
-        self.delegate?.refreshNickNameField(with: fanUser.profile.nickName)
+        self.delegate?.refreshNickNameField(with: fanUser.profile.nickname)
         self.delegate?.refreshGenderField(with: fanUser.profile.gender)
         self.delegate?.refreshBirthDateField(with: fanUser.profile.birthDate)
         self.delegate?.refreshCountryField(with: Country(with: fanUser.profile.location.country))
@@ -121,21 +121,23 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
 
-    func registerFirstnameField(_ firstnameField: ValidatableField) {
-        let firstnameRules: [Rule] = [RequiredRule(message: "The first name field is required.")]
-        self.validator.registerField(firstnameField, rules: firstnameRules)
+    func registerFirstNameField(_ firstNameField: ValidatableField) {
+        let firstNameRules: [Rule] = [RequiredRule(message: NSLocalizedString("The First Name field is required.",
+                                                                              comment: "First Name validataion message"))]
+        self.validator.registerField(firstNameField, rules: firstNameRules)
 
-        self.firstnameField = firstnameField
+        self.firstNameField = firstNameField
 
-        if firstnameField.validationText.isEmpty == true {
-            self.delegate?.refreshField(field: firstnameField, didValidate: nil)
+        if firstNameField.validationText.isEmpty == true {
+            self.delegate?.refreshField(field: firstNameField, didValidate: nil)
         } else {
-            self.validator.validateField(firstnameField) { (validationError) in }
+            self.validator.validateField(firstNameField) { (validationError) in }
         }
     }
 
     func registerNicknameField(_ nicknameField: ValidatableField) {
-        let nicknameRules: [Rule] = [RequiredRule(message: "The nick name field is required.")]
+        let nicknameRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Nickname field is required.",
+                                                                             comment: "Nickname validataion message"))]
         self.validator.registerField(nicknameField, rules: nicknameRules)
 
         self.nicknameField = nicknameField
@@ -148,7 +150,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerGenderField(_ genderField: GenderValidatableField) {
-        let genderRules: [Rule] = [RequiredRule(message: "The gender field is required.")]
+        let genderRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Gender field is required.",
+                                                                           comment: "Gender validataion message"))]
         self.validator.registerField(genderField, rules: genderRules)
 
         self.genderField = genderField
@@ -156,22 +159,24 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.delegate?.refreshField(field: genderField, didValidate: nil)
     }
 
-    func registerBirhdateField(_ birthdateField: DateValidatableField) {
-        let birthdateRules: [Rule] = [RequiredRule(message: "The birth date field is required.")]
+    func registerBirhDateField(_ birthDateField: DateValidatableField) {
+        let birthDateRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Birth Date field is required.",
+                                                                              comment: "Birth Date validataion message"))]
 
-        self.validator.registerField(birthdateField, rules: birthdateRules)
+        self.validator.registerField(birthDateField, rules: birthDateRules)
 
-        self.birthdateField = birthdateField
+        self.birthDateField = birthDateField
 
-        if birthdateField.validationText.isEmpty == true {
-            self.delegate?.refreshField(field: birthdateField, didValidate: nil)
+        if birthDateField.validationText.isEmpty == true {
+            self.delegate?.refreshField(field: birthDateField, didValidate: nil)
         } else {
-            self.validator.validateField(birthdateField) { (validationError) in }
+            self.validator.validateField(birthDateField) { (validationError) in }
         }
     }
 
     func registerCountryField(_ countryField: CountryValidatableField) {
-        let countryRules: [Rule] = [RequiredRule(message: "The country field is required")]
+        let countryRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Country field is required",
+                                                                            comment: "Country validataion message"))]
 
         self.validator.registerField(countryField, rules: countryRules)
 
@@ -185,9 +190,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerZipField(_ zipField: ValidatableField) {
-        let zipRules: [Rule] = [RequiredRule(message: "The zip field is required"),
-                                MaxLengthRule(length: 15, message: "The zip field must be at most %ld characters long")]
-
+        let zipRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Zip field is required",
+                                                                        comment: "Zip validataion message")),
+                                MaxLengthRule(length: 15, message: NSLocalizedString("Max length is %ld",
+                                                                                     comment: "Zip validataion template"))]
         self.validator.registerField(zipField, rules: zipRules)
 
         self.zipField = zipField
@@ -200,8 +206,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerRegionField(_ regionField: RegionValidatableField) {
-        let regionRules: [Rule] = [RequiredRule(message: "The state field is required.")]
-
+        let regionRules: [Rule] = [RequiredRule(message: NSLocalizedString("The State field is required.",
+                                                                           comment: "State validataion message"))]
         self.validator.registerField(regionField, rules: regionRules)
 
         self.regionField = regionField
@@ -214,8 +220,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerCityField(_ cityField: CityValidatableField) {
-        let cityRules: [Rule] = [RequiredRule(message: "The city field is required.")]
-
+        let cityRules: [Rule] = [RequiredRule(message: NSLocalizedString("The City field is required.",
+                                                                         comment: "City validataion message"))]
         self.validator.registerField(cityField, rules: cityRules )
 
         self.cityField = cityField
@@ -228,7 +234,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerPhoneField(_ phoneField: ValidatableField) {
-        let phoneRules: [Rule] = [/*PhoneNumberRule(message: "The phone is wrong")*/]
+        let phoneRules: [Rule] = []
 
         self.validator.registerField(phoneField, rules: phoneRules )
 
@@ -242,7 +248,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerHobbiesField(_ hobbiesField: HobbiesValidatableField) {
-        let hobbiesRules: [Rule] = [RequiredRule(message: "The hobbies field is required.")]
+        let hobbiesRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Hobbies field is required.",
+                                                                            comment: "Hobbies validataion message"))]
 
         self.validator.registerField(hobbiesField, rules: hobbiesRules)
 
@@ -286,10 +293,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     func checkCanSaveState() {
         guard let userProfile = self.userProfile else { return }
 
-        let isDirty = userProfile.firstName != self.firstnameField?.validationText ||
-                        userProfile.nickName != self.nicknameField?.validationText ||
+        let isDirty = userProfile.firstName != self.firstNameField?.validationText ||
+                        userProfile.nickname != self.nicknameField?.validationText ||
                         userProfile.gender != self.genderField?.gender ||
-                        userProfile.birthDate != self.birthdateField?.date ||
+                        userProfile.birthDate != self.birthDateField?.date ||
                         Country(with: userProfile.location.country) != self.countryField?.country ||
                         Region(with: userProfile.location.region) != self.regionField?.region ||
                         City(with: userProfile.location.city) != self.cityField?.city ||
@@ -463,10 +470,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     func validatebleField(for key: String) -> ValidatableField? {
 
         switch key {
-        case "real_name": return self.firstnameField
+        case "real_name": return self.firstNameField
         case "nick_name": return self.nicknameField
         case "gender": return self.genderField
-        case "birth_date": return self.birthdateField
+        case "birth_date": return self.birthDateField
         case "hobbies": return self.hobbiesField
         case "genres": return self.genderField
         case "language": return self.languageField
@@ -481,9 +488,9 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
         self.validator.validate { [unowned self] (error) in
             guard error.isEmpty else { return }
-            guard let firstName = self.firstnameField?.validationText,
-                let nickName = self.nicknameField?.validationText,
-                let birhDate = self.birthdateField?.date,
+            guard let firstName = self.firstNameField?.validationText,
+                let nickname = self.nicknameField?.validationText,
+                let birhDate = self.birthDateField?.date,
                 let gender = self.genderField?.gender,
                 let country = self.countryField?.country,
                 let region = self.regionField?.region,
@@ -494,7 +501,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
             var updatingUserProfile = userProfile
             updatingUserProfile.firstName = firstName
-            updatingUserProfile.nickName = nickName
+            updatingUserProfile.nickname = nickname
             updatingUserProfile.gender = gender
             updatingUserProfile.birthDate = birhDate
             updatingUserProfile.location = ProfileLocation(country: country, region: region, city: city, zip: zip)

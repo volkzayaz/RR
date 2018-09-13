@@ -42,7 +42,7 @@ struct UserProfile: Decodable {
 
     let id: Int
     let email: String
-    var nickName: String
+    var nickname: String
     var firstName: String
     var gender: Gender?
     var birthDate: Date?
@@ -58,7 +58,7 @@ struct UserProfile: Decodable {
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case email
-        case nickName = "nick_name"
+        case nickname = "nick_name"
         case firstName = "real_name"
         case gender
         case birthDate = "birth_date"
@@ -78,7 +78,7 @@ struct UserProfile: Decodable {
 
         self.id = try container.decode(Int.self, forKey: .id)
         self.email = try container.decode(String.self, forKey: .email)
-        self.nickName = try container.decode(String.self, forKey: .nickName)
+        self.nickname = try container.decode(String.self, forKey: .nickname)
         self.firstName = try container.decode(String.self, forKey: .firstName)
         if let genderRowValue = try? container.decode(Int.self, forKey: .gender) {
             self.gender = Gender(rawValue: genderRowValue)

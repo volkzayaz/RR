@@ -108,10 +108,10 @@ final class ProfileSettingsViewController: UIViewController {
         self.languageTextField.textColor = self.viewModel.defaultTextColor
         self.languageTextField.placeholderAnimatesOnFocus = true
 
-        self.viewModel.registerFirstnameField(self.firstnameTextField)
+        self.viewModel.registerFirstNameField(self.firstnameTextField)
         self.viewModel.registerNicknameField(self.nicknameTextField)
         self.viewModel.registerGenderField(self.genderControl)
-        self.viewModel.registerBirhdateField(self.birthdateTextField)
+        self.viewModel.registerBirhDateField(self.birthdateTextField)
         self.viewModel.registerCountryField(self.countryTextField)
         self.viewModel.registerZipField(self.zipTextField)
         self.viewModel.registerRegionField(self.regionTextField)

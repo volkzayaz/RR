@@ -25,7 +25,7 @@ struct RestApiProfileSettingsRequestPayload: RestApiProfileRequestPayload {
     }
 
     enum CodingKeys: String, CodingKey {
-        case nickName = "nick_name"
+        case nickname = "nick_name"
         case firstName = "real_name"
         case gender
         case birthDate = "birth_date"
@@ -41,7 +41,7 @@ struct RestApiProfileSettingsRequestPayload: RestApiProfileRequestPayload {
         let dateFormatter = ModelSupport.sharedInstance.dateFormatter
 
         try container.encode(self.userProfile.firstName, forKey: .firstName)
-        try container.encode(self.userProfile.nickName, forKey: .nickName)
+        try container.encode(self.userProfile.nickname, forKey: .nickname)
         try container.encodeAsString(self.userProfile.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)
         try container.encode(self.userProfile.gender?.rawValue, forKey: .gender)
         try container.encode(self.userProfile.phone, forKey: .phone)
@@ -75,7 +75,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
     let email: String
     let password: String
     var passwordConfirmation: String
-    var nickName: String
+    var nickname: String
     var realName: String
     var birthDate: Date
     var gender: Gender
@@ -89,7 +89,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
         case email
         case password
         case passwordConfirmation = "password_confirmation"
-        case nickName = "nick_name"
+        case nickname = "nick_name"
         case realName = "real_name"
         case birthDate = "birth_date"
         case gender
@@ -102,7 +102,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
     init(email: String,
          password: String,
          passwordConfirmation: String,
-         nickName: String,
+         nickname: String,
          realName: String,
          birthDate: Date,
          gender: Gender,
@@ -114,7 +114,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
         self.email = email
         self.password = password
         self.passwordConfirmation = passwordConfirmation
-        self.nickName = nickName
+        self.nickname = nickname
         self.realName = realName
         self.birthDate = birthDate
         self.gender = gender
@@ -131,7 +131,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
         try container.encode(self.email, forKey: .email)
         try container.encode(self.password, forKey: .password)
         try container.encode(self.passwordConfirmation, forKey: .passwordConfirmation)
-        try container.encode(self.nickName, forKey: .nickName)
+        try container.encode(self.nickname, forKey: .nickname)
         try container.encode(self.realName, forKey: .realName)
         try container.encodeAsString(self.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)
         try container.encode(self.gender.rawValue, forKey: .gender)

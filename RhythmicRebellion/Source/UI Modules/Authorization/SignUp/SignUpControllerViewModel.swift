@@ -43,9 +43,9 @@ final class SignUpControllerViewModel: SignUpViewModel {
     private var passwordField: ValidatableField?
     private var passwordConfirmationField: ValidatableField?
     private var nicknameField: ValidatableField?
-    private var firstnameField: ValidatableField?
+    private var firstNameField: ValidatableField?
     private var genderField: GenderValidatableField?
-    private var birthdateField: DateValidatableField?
+    private var birthDateField: DateValidatableField?
     private var countryField: CountryValidatableField?
     private var zipField: ValidatableField?
     private var regionField: RegionValidatableField?
@@ -117,8 +117,10 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     func registerEmailField(_ emailField: ValidatableField) {
 
-        let emailRules: [Rule] = [RequiredRule(message: "The email field is required."),
-                                  EmailRule(message: "The email is wrong")]
+        let emailRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Email field is required.",
+                                                                          comment: "Email validataion message")),
+                                  EmailRule(message: NSLocalizedString("The email is wrong",
+                                                                       comment: "Email validataion message"))]
         self.validator.registerField(emailField, rules: emailRules)
 
         self.emailField = emailField
@@ -132,8 +134,11 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     func registerPasswordField(_ passwordField: ValidatableField) {
 
-        let passwordRules: [Rule] = [RequiredRule(message: "The password field is required."),
-                                     MinLengthRule(length: 6, message: "The password must be at least %ld characters")]
+        let passwordRules: [Rule] = [RequiredRule(message: NSLocalizedString("The password field is required.",
+                                                                             comment: "Password validataion message")),
+                                     MinLengthRule(length: 6,
+                                                   message: NSLocalizedString("The password must be at least %ld characters",
+                                                                              comment: "Password validataion template"))]
         self.validator.registerField(passwordField, rules: passwordRules)
 
         self.passwordField = passwordField
@@ -142,8 +147,11 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerPasswordConfirmationField(_ passwordConfirmationField: ValidatableField, passwordField: ValidatableField) {
-        let passwordConfirmationRules: [Rule] = [RequiredRule(message: "The password confirmation field is required."),
-                                                 ConfirmationRule(confirmField: passwordField, message: "Your password and confirmation password do not match.")]
+        let passwordConfirmationRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Repeat Password field is required.",
+                                                                                         comment: "Repeat Password validataion message")),
+                                                 ConfirmationRule(confirmField: passwordField,
+                                                                  message: NSLocalizedString("Your password and repeat password do not match.",
+                                                                                             comment: "Repeat Password validataion message"))]
 
         self.validator.registerField(passwordConfirmationField, rules: passwordConfirmationRules)
 
@@ -153,7 +161,8 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerNicknameField(_ nicknameField: ValidatableField) {
-        let nicknameRules: [Rule] = [RequiredRule(message: "The nick name field is required.")]
+        let nicknameRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Nickname field is required.",
+                                                                             comment: "Nickname validataion message"))]
         self.validator.registerField(nicknameField, rules: nicknameRules)
 
         self.nicknameField = nicknameField
@@ -165,21 +174,23 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerFirstnameField(_ firstnameField: ValidatableField) {
-        let firstnameRules: [Rule] = [RequiredRule(message: "The first name field is required.")]
-        self.validator.registerField(firstnameField, rules: firstnameRules)
+    func registerFirstNameField(_ firstNameField: ValidatableField) {
+        let firstNameRules: [Rule] = [RequiredRule(message: NSLocalizedString("The First Name field is required.",
+                                                                              comment: "First Name validataion message"))]
+        self.validator.registerField(firstNameField, rules: firstNameRules)
 
-        self.firstnameField = firstnameField
+        self.firstNameField = firstNameField
 
-        if firstnameField.validationText.isEmpty == true {
-            self.delegate?.refreshField(field: firstnameField, didValidate: nil)
+        if firstNameField.validationText.isEmpty == true {
+            self.delegate?.refreshField(field: firstNameField, didValidate: nil)
         } else {
-            self.validator.validateField(firstnameField) { (validationError) in }
+            self.validator.validateField(firstNameField) { (validationError) in }
         }
     }
 
     func registerGenderField(_ genderField: GenderValidatableField) {
-        let genderRules: [Rule] = [RequiredRule(message: "The gender field is required.")]
+        let genderRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Gender field is required.",
+                                                                           comment: "Gender validataion message"))]
         self.validator.registerField(genderField, rules: genderRules)
 
         self.genderField = genderField
@@ -187,22 +198,24 @@ final class SignUpControllerViewModel: SignUpViewModel {
         self.delegate?.refreshField(field: genderField, didValidate: nil)
     }
 
-    func registerBirhdateField(_ birthdateField: DateValidatableField) {
-        let birthdateRules: [Rule] = [RequiredRule(message: "The birth date field is required.")]
+    func registerBirhDateField(_ birthDateField: DateValidatableField) {
+        let birthDateRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Birth Date field is required.",
+                                                                              comment: "Birth Date validataion message"))]
 
-        self.validator.registerField(birthdateField, rules: birthdateRules)
+        self.validator.registerField(birthDateField, rules: birthDateRules)
 
-        self.birthdateField = birthdateField
+        self.birthDateField = birthDateField
 
-        if birthdateField.validationText.isEmpty == true {
-            self.delegate?.refreshField(field: birthdateField, didValidate: nil)
+        if birthDateField.validationText.isEmpty == true {
+            self.delegate?.refreshField(field: birthDateField, didValidate: nil)
         } else {
-            self.validator.validateField(birthdateField) { (validationError) in }
+            self.validator.validateField(birthDateField) { (validationError) in }
         }
     }
 
     func registerCountryField(_ countryField: CountryValidatableField) {
-        let countryRules: [Rule] = [RequiredRule(message: "The country field is required")]
+        let countryRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Country field is required",
+                                                                            comment: "Country validataion message"))]
 
         self.validator.registerField(countryField, rules: countryRules)
 
@@ -216,8 +229,10 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerZipField(_ zipField: ValidatableField) {
-        let zipRules: [Rule] = [RequiredRule(message: "The zip field is required"),
-                                MaxLengthRule(length: 15, message: "The zip field must be at most %ld characters long")]
+        let zipRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Zip field is required",
+                                                                        comment: "Zip validataion message")),
+                                MaxLengthRule(length: 15, message: NSLocalizedString("Max length is %ld",
+                                                                                     comment: "Zip validataion template"))]
 
         self.validator.registerField(zipField, rules: zipRules)
 
@@ -231,7 +246,8 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerRegionField(_ regionField: RegionValidatableField) {
-        let regionRules: [Rule] = [RequiredRule(message: "The state field is required.")]
+        let regionRules: [Rule] = [RequiredRule(message: NSLocalizedString("The State field is required.",
+                                                                           comment: "State validataion message"))]
 
         self.validator.registerField(regionField, rules: regionRules)
 
@@ -245,7 +261,8 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerCityField(_ cityField: CityValidatableField) {
-        let cityRules: [Rule] = [RequiredRule(message: "The city field is required.")]
+        let cityRules: [Rule] = [RequiredRule(message: NSLocalizedString("The City field is required.",
+                                                                         comment: "City validataion message"))]
 
         self.validator.registerField(cityField, rules: cityRules )
 
@@ -259,7 +276,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerPhoneField(_ phoneField: ValidatableField) {
-        let phoneRules: [Rule] = [/*PhoneNumberRule(message: "The phone is wrong")*/]
+        let phoneRules: [Rule] = []
 
         self.validator.registerField(phoneField, rules: phoneRules )
 
@@ -273,7 +290,8 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerHobbiesField(_ hobbiesField: HobbiesValidatableField) {
-        let hobbiesRules: [Rule] = [RequiredRule(message: "The hobbies field is required.")]
+        let hobbiesRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Hobbies field is required.",
+                                                                            comment: "Hobbies validataion message"))]
 
         self.validator.registerField(hobbiesField, rules: hobbiesRules)
 
@@ -287,7 +305,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerHowHearField(_ howHearField: HowHearValidatableField) {
-        let howHearRules: [Rule] = [RequiredRule(message: "The how hear field is required.")]
+        let howHearRules: [Rule] = [RequiredRule(message: NSLocalizedString("The How Hear field is required.", comment: "How Hear validataion message"))]
 
         self.validator.registerField(howHearField, rules: howHearRules)
 
@@ -312,9 +330,9 @@ final class SignUpControllerViewModel: SignUpViewModel {
         case "password": return self.passwordField
         case "password_confirmation": return self.passwordConfirmationField
         case "nick_name": return self.nicknameField
-        case "real_name": return self.firstnameField
+        case "real_name": return self.firstNameField
         case "gender": return self.genderField
-        case "birth_date": return self.birthdateField
+        case "birth_date": return self.birthDateField
         case "hobbies": return self.hobbiesField
         case "how_hear": return self.howHearField
         default: break
@@ -465,9 +483,9 @@ final class SignUpControllerViewModel: SignUpViewModel {
             guard let email = self.emailField?.validationText,
                 let password = self.passwordField?.validationText,
                 let passwordConfirmation = self.passwordConfirmationField?.validationText,
-                let nickName = self.nicknameField?.validationText,
-                let firstName = self.firstnameField?.validationText,
-                let birhDate = self.birthdateField?.date,
+                let nickname = self.nicknameField?.validationText,
+                let firstName = self.firstNameField?.validationText,
+                let birhDate = self.birthDateField?.date,
                 let gender = self.genderField?.gender,
                 let country = self.countryField?.country,
                 let region = self.regionField?.region,
@@ -481,7 +499,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
             let registrationPayload = RestApiFanUserRegistrationRequestPayload(email: email,
                                                                                password: password,
                                                                                passwordConfirmation: passwordConfirmation,
-                                                                               nickName: nickName,
+                                                                               nickname: nickname,
                                                                                realName: firstName,
                                                                                birthDate: birhDate,
                                                                                gender: gender,

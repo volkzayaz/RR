@@ -25,7 +25,7 @@ enum ProfileItem: Int {
 
 final class ProfileControllerViewModel: ProfileViewModel {
 
-    var userName: String { return self.fanUser?.profile.nickName ?? "" }
+    var userName: String { return self.fanUser?.profile.nickname ?? "" }
 
     // MARK: - Private properties -
 
