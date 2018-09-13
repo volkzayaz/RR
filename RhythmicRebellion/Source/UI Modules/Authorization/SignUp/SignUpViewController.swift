@@ -305,6 +305,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
 
     // MARK: - Notifications -
+
     func keyboardDidShow(notification: Notification) {
         guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
