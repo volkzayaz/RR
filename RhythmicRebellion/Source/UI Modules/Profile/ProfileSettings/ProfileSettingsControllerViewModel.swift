@@ -85,6 +85,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
         self.userProfile = fanUser.profile
 
+        self.reloadConfig { (configResult) in }
+
         self.delegate?.refreshFirstNameField(with: fanUser.profile.firstName)
         self.delegate?.refreshNickNameField(with: fanUser.profile.nickname)
         self.delegate?.refreshGenderField(with: fanUser.profile.gender)
@@ -111,6 +113,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 if let selectedHobbies = self?.hobbiesField?.hobbies, selectedHobbies.count > 0 {
                     let filteredSelectedHobbies = selectedHobbies.filter( { return config.hobbies.contains($0) })
                     self?.delegate?.refreshHobbiesField(with: filteredSelectedHobbies)
+                }
+
+                if let selectedLanguageId = self?.userProfile?.language, let selectedLanguage = config.languages.filter( {$0.id == selectedLanguageId} ).first {
+                    self?.delegate?.refreshLanguageField(with: selectedLanguage)
                 }
 
             default: break
@@ -302,7 +308,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                         City(with: userProfile.location.city) != self.cityField?.city ||
                         userProfile.hobbies != self.hobbiesField?.hobbies ||
                         userProfile.genres != self.genresField?.genres ||
-                        userProfile.language != self.languageField?.language
+                        userProfile.language != self.languageField?.language?.id
 
 
 
@@ -508,7 +514,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
             updatingUserProfile.phone = phoneField.validationText.isEmpty ? nil : self.phoneField?.validationText
             updatingUserProfile.hobbies = hobbies
             updatingUserProfile.genres = self.genresField?.genres
-            updatingUserProfile.language = self.languageField?.language
+            updatingUserProfile.language = self.languageField?.language?.id
 
             self.application?.update(profileSettings: updatingUserProfile, completion: { [weak self] (userProfileResult) in
 

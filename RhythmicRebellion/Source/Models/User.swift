@@ -51,7 +51,7 @@ struct UserProfile: Decodable {
     var hobbies: [Hobby]
     let howHearId: Int
     var genres: [Genre]?
-    var language: Language?
+    var language: String?
 
     var listeningSettings: ListeningSettings
 
@@ -93,7 +93,7 @@ struct UserProfile: Decodable {
         self.howHearId = try container.decode(Int.self, forKey: .howHearId)
 
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
-        self.language = try container.decodeIfPresent(Language.self, forKey: .language)
+        self.language = try container.decodeIfPresent(String.self, forKey: .language)
 
         self.listeningSettings = try container.decode(ListeningSettings.self, forKey: .listeningSettings)
     }
