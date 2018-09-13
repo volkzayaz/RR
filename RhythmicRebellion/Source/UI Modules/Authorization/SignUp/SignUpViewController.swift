@@ -241,6 +241,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func hobbiesContainerViewValueChanges(sender: HobbiesContainerView) {
+        self.view.endEditing(false)
         self.viewModel.validateField(sender)
     }
 
@@ -253,11 +254,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func onGetLocation(sender: Any?) {
-
-        if self.zipTextField.isFirstResponder {
-            self.zipTextField.endEditing(false)
-        }
-
+        self.view.endEditing(true)
         self.viewModel.getLocation()
     }
 
@@ -265,12 +262,15 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField === self.countryTextField {
+            self.view.endEditing(false)
             self.viewModel.showContriesSelectableList()
             return false
         } else if textField === self.regionTextField {
+            self.view.endEditing(false)
             self.viewModel.showRegionsSelectableList()
             return false
         } else if textField === self.cityTextField {
+            self.view.endEditing(false)
             self.viewModel.showCitiesSelectableList()
             return false
         } else if textField === self.howHearTextField {
