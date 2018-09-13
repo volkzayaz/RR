@@ -225,6 +225,14 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(alongsideTransition: nil) { (context) in
+            self.hobbiesContainerView.invalidateIntrinsicContentSize()
+        }
+    }
+
     func nextField(for textField: UITextField) -> UITextField? {
 
         guard let textFieldIndex = self.fields.index(of: textField), self.fields.count > textFieldIndex + 1 else { return nil }

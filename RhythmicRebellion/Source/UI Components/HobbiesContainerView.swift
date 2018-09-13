@@ -34,9 +34,13 @@ class HobbiesContainerView: UIControl {
 
             self.placeHolderLabel.isHidden = self.internalHobbies?.count ?? 0 > 0
 
-            self.cloudTagView.invalidateIntrinsicContentSize()
             self.invalidateIntrinsicContentSize()
         }
+    }
+
+    override func invalidateIntrinsicContentSize() {
+        self.cloudTagView.invalidateIntrinsicContentSize()
+        super.invalidateIntrinsicContentSize()
     }
 
     private func reload(with hobbies: [Hobby]?) {

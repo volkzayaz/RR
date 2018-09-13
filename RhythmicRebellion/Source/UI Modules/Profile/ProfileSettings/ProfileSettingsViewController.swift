@@ -60,7 +60,6 @@ final class ProfileSettingsViewController: UIViewController {
     @IBOutlet weak var languageTextField: LanguageTextField!
     @IBOutlet weak var languageErrorLabel: UILabel!
 
-
     // MARK: - Public properties -
 
     private(set) var viewModel: ProfileSettingsViewModel!
@@ -122,6 +121,15 @@ final class ProfileSettingsViewController: UIViewController {
         self.viewModel.registerLanguageField(self.languageTextField)
 
         self.viewModel.load(with: self)
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(alongsideTransition: nil) { (context) in
+            self.hobbiesContainerView.invalidateIntrinsicContentSize()
+            self.genresContainerView.invalidateIntrinsicContentSize()
+        }
     }
 
     // MARK: - Actions -
