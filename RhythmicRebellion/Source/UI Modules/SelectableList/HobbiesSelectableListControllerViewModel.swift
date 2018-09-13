@@ -48,7 +48,7 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
     func filterItems(items: [Item], with searchText: String) -> [Item] {
         guard searchText.isEmpty == false else { return items }
-        return items.filter( {return $0.name.lowercased().starts(with: searchText.lowercased()) })
+        return items.filter( {return $0.name.lowercased().contains(searchText.lowercased()) })
     }
 }
 

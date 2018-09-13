@@ -48,7 +48,7 @@ class HowHearSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
     func filterItems(items: [Item], with searchText: String) -> [Item] {
         guard searchText.isEmpty == false else { return items }
-        return items.filter( {return $0.name.lowercased().starts(with: searchText.lowercased()) })
+        return items.filter( {return $0.name.lowercased().contains(searchText.lowercased()) })
     }
 }
 
@@ -68,7 +68,7 @@ final class HowHearSelectableListControllerViewModel: SelectableListControllerVi
             selectedItems.append(selectedItem)
         }
 
-        super.init(router: router, dataProvider:  HowHearSelectableListItemsDataProvider(with: dataSource), selectedItems: selectedItems, isSearchable: false, selectionType: .single)
+        super.init(router: router, dataProvider: HowHearSelectableListItemsDataProvider(with: dataSource), selectedItems: selectedItems, isSearchable: false, selectionType: .single)
 
         self.itemSelectionCallback = itemSelectionCallback
     }
