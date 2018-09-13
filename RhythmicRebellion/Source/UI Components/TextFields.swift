@@ -36,16 +36,6 @@ class CityTextField: MFTextField {
     }
 }
 
-class HobbiesTextField: MFTextField {
-
-    var hobbies: [Hobby]? {
-        didSet {
-            guard let hobbies = self.hobbies else { self.text = ""; return }
-            self.text = hobbies.map { $0.name }.joined(separator: ", ")
-        }
-    }
-}
-
 class HowHearTextField: MFTextField {
 
     var howHear: HowHear? {
@@ -53,4 +43,14 @@ class HowHearTextField: MFTextField {
             self.text = howHear?.name ?? ""
         }
     }
+}
+
+class LanguageTextField: MFTextField {
+
+    var language: Language? {
+        didSet {
+            self.text = language?.name ?? ""
+        }
+    }
+
 }

@@ -22,7 +22,7 @@ protocol PlaylistContentViewModel: class {
     func selectObject(at indexPath: IndexPath)
 }
 
-protocol PlaylistContentViewModelDelegate: class, ErrorPresnting {
+protocol PlaylistContentViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()

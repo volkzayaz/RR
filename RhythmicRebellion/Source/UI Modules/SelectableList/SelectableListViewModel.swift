@@ -37,7 +37,7 @@ protocol SelectableListViewModel: class {
     func done()
 }
 
-protocol SelectableListViewModelDelegate: class, ErrorPresnting {
+protocol SelectableListViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()

@@ -1,8 +1,8 @@
 //
-//  SignUpViewModel.swift
+//  ProfileSettingsViewModel.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/18/18.
+//  Created by Alexander Obolentsev on 9/12/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
@@ -10,67 +10,70 @@
 import UIKit
 import SwiftValidator
 
-protocol SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataSource, HobbiesDataSource, HowHearListDataSource {
+protocol ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, CitiesDataSource, HobbiesDataSource, GenresDataSource, LanguagesDataSource {
 
     var defaultTextColor: UIColor { get }
     var defaultTintColor: UIColor { get }
 
     var errorColor: UIColor { get }
 
-    var isSignUpSucced: Bool { get }
-
     var countries: [Country] { get }
     var regions: [Region] { get }
     var cities: [City] { get }
-    var hobbies: [Hobby] { get}
-    var howHearList: [HowHear] { get }
+    var hobbies: [Hobby] { get }
+    var genres: [Genre] { get }
+    var languages: [Language] { get }
 
-    var signUpErrorDescription: String? { get }
+    var canSave: Bool { get }
+    var profileSettingsErrorDescription: String? { get }
 
-    func load(with delegate: SignUpViewModelDelegate)
+    func load(with delegate: ProfileSettingsViewModelDelegate)
 
-    func registerEmailField(_ emailField: ValidatableField)
-    func registerPasswordField(_ passwordField: ValidatableField)
-    func registerPasswordConfirmationField(_ passwordConfirmationField: ValidatableField, passwordField: ValidatableField)
-    func registerNicknameField(_ nicknameField: ValidatableField)
     func registerFirstnameField(_ firstnameField: ValidatableField)
+    func registerNicknameField(_ nicknameField: ValidatableField)
     func registerGenderField(_ genderField: GenderValidatableField)
     func registerBirhdateField(_ birthdateField: DateValidatableField)
+
     func registerCountryField(_ countryField: CountryValidatableField)
     func registerZipField(_ zipField: ValidatableField)
     func registerRegionField(_ regionField: RegionValidatableField)
     func registerCityField(_ cityField: CityValidatableField)
     func registerPhoneField(_ phoneField: ValidatableField)
+
     func registerHobbiesField(_ hobbiesField: HobbiesValidatableField)
-    func registerHowHearField(_ howHearField: HowHearValidatableField)
+    func registerGenresField(_ genresField: GenresValidatableField)
+    func registerLanguageField(_ languageField: LanguageValidatableField)
 
     func validateField(_ validateField: ValidatableField?)
-
-    func set(country: Country)
-    func set(region: Region)
-    func set(city: City)
-    func set(hobbies: [Hobby])
-    func set(howHear: HowHear)
 
     func showContriesSelectableList()
     func showRegionsSelectableList()
     func showCitiesSelectableList()
     func showHobbiesSelectableList()
-    func showHowHearSelectableList()
+    func showGenresSelectableList()
+    func showLanguagesSelectableList()
 
     func getLocation()
-    func signUp()
+    func save()
 }
 
-protocol SignUpViewModelDelegate: class, ErrorPresenting {
+protocol ProfileSettingsViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func refreshField(field: ValidatableField, didValidate error: ValidationError?)
+
+    func refreshFirstNameField(with name: String?)
+    func refreshNickNameField(with name: String?)
+    func refreshGenderField(with gender: Gender?)
+    func refreshBirthDateField(with date: Date?)
 
     func refreshCountryField(with country: Country?)
     func refreshZipField(with zip: String?)
     func refreshRegionField(with region: Region?)
     func refreshCityField(with city: City?)
-    func refreshHobbiesField(with hobbies: [Hobby])
-    func refreshHowHearField(with howHear: HowHear?)
+    func refreshPhoneField(with phone: String?)
+
+    func refreshHobbiesField(with hobbies: [Hobby]?)
+    func refreshGenresField(with genres: [Genre]?)
+    func refreshLanguageField(with language: Language?)
 }

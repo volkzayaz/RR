@@ -19,7 +19,7 @@ protocol PlaylistsCollectionViewModel: class {
     func selectObject(at indexPath: IndexPath)
 }
 
-protocol PlaylistsCollectionViewModelDelegate: class, ErrorPresnting {
+protocol PlaylistsCollectionViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()

@@ -144,64 +144,6 @@ struct FanProfileResponse: RestApiResponse {
     }
 }
 
-struct ConfigResponse: RestApiResponse {
-
-    let config: Config
-
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.config = try container.decode(Config.self, forKey: .data)
-    }
-}
-
-struct CountriesResponse: RestApiResponse {
-
-    let countries: [Country]
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.countries = try container.decode([Country].self)
-    }
-}
-
-struct RegionsResponse: RestApiResponse {
-
-    let regions: [Region]
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.regions = try container.decode([Region].self)
-    }
-}
-
-struct CitiesResponse: RestApiResponse {
-
-    let cities: [City]
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.cities = try container.decode([City].self)
-    }
-}
-
-struct DetailedLocationResponse: RestApiResponse {
-
-    let detailedLocation: DetailedLocation
-
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.detailedLocation = try container.decode(DetailedLocation.self, forKey: .data)
-    }
-}
-
 struct AddonsForTracksResponse: EmptyRestApiResponse {
 
     let trackAddons: [Int : [Addon]]
@@ -309,5 +251,79 @@ struct TrackMoveResponse: RestApiResponse {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let recordsContainer = try container.nestedContainer(keyedBy: RecordsKeys.self, forKey: .data)
         self.recordIds = try recordsContainer.decode([Int].self, forKey: .recordIds)
+    }
+}
+
+// MARK: - Config -
+
+struct ConfigResponse: RestApiResponse {
+
+    let config: Config
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.config = try container.decode(Config.self, forKey: .data)
+    }
+}
+
+struct GenresResponse: RestApiResponse {
+
+    let genres: [Genre]
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.genres = try container.decode([Genre].self, forKey: .data)
+    }
+}
+
+struct CountriesResponse: RestApiResponse {
+
+    let countries: [Country]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.countries = try container.decode([Country].self)
+    }
+}
+
+struct RegionsResponse: RestApiResponse {
+
+    let regions: [Region]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.regions = try container.decode([Region].self)
+    }
+}
+
+struct CitiesResponse: RestApiResponse {
+
+    let cities: [City]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.cities = try container.decode([City].self)
+    }
+}
+
+struct DetailedLocationResponse: RestApiResponse {
+
+    let detailedLocation: DetailedLocation
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.detailedLocation = try container.decode(DetailedLocation.self, forKey: .data)
     }
 }

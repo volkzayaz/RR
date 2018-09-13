@@ -45,6 +45,10 @@ final class ProfileControllerViewModel: ProfileViewModel {
         self.profileItems = []
     }
 
+    deinit {
+        self.application?.removeObserver(self)
+    }
+
     func load(with delegate: ProfileViewModelDelegate) {
         self.delegate = delegate
 
@@ -54,6 +58,8 @@ final class ProfileControllerViewModel: ProfileViewModel {
         self.profileItems = [.profileSettings, .changeEmail, .changePassword]
 
         self.delegate?.reloadUI()
+
+        self.application?.addObserver(self)
     }
 
     func numberOfItems(in section: Int) -> Int {
@@ -79,5 +85,16 @@ final class ProfileControllerViewModel: ProfileViewModel {
     // MARK: - Actions
     func logout() {
         self.application?.logout()
+    }
+}
+
+extension ProfileControllerViewModel: ApplicationObserver {
+
+    func application(_ application: Application, didChange profile: UserProfile) {
+
+        guard let fanUser = application.user as? FanUser else { return }
+
+        self.fanUser = fanUser
+        self.delegate?.refreshUI()
     }
 }

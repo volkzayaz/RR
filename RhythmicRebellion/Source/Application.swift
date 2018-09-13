@@ -18,11 +18,13 @@ protocol UserCredentials {
 protocol ApplicationObserver: class {
     func application(_ application: Application, didChange user: User?)
     func application(_ application: Application, didChange listeningSettings: ListeningSettings)
+    func application(_ application: Application, didChange profile: UserProfile)
 }
 
 extension ApplicationObserver {
     func application(_ application: Application, didChange user: User?) { }
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
+    func application(_ application: Application, didChange profile: UserProfile) { }
 }
 
 class Application: Observable {
@@ -170,6 +172,29 @@ class Application: Observable {
             }
         }
     }
+
+    func update(profileSettings: UserProfile, completion: ((Result<UserProfile>) -> Void)? = nil) {
+
+        guard let user = self.user, user.isGuest == false else { return }
+
+        let profileSettingsRequestPayload = RestApiProfileSettingsRequestPayload(with: profileSettings)
+
+        self.restApiService.fanUser(update: profileSettingsRequestPayload) { [weak self] (updateUserResult) in
+
+            switch updateUserResult {
+            case .success(let user):
+                guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
+
+                self?.user = user
+                self?.notifyProfileSettingsChanged()
+                completion?(.success(fanUser.profile))
+
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+
 }
 
 extension Application {
@@ -187,4 +212,13 @@ extension Application {
             observer.application(self, didChange: fanUser.profile.listeningSettings)
         })
     }
+
+    func notifyProfileSettingsChanged() {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChange: fanUser.profile)
+        })
+    }
+
 }

@@ -30,7 +30,7 @@ protocol RestorePasswordViewModel: class {
     func restorePassword()
 }
 
-protocol RestorePasswordViewModelDelegate: class, ErrorPresnting {
+protocol RestorePasswordViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
 

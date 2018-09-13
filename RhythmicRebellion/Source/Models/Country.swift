@@ -8,48 +8,84 @@
 
 import Foundation
 
-struct Country: Codable {
+
+protocol CountryInfo {
+
+    var id: Int { get }
+    var code: String { get }
+    var name: String { get }
+
+    init(with country: CountryInfo)
+}
+
+struct Country: CountryInfo, Decodable {
 
     let id: Int
     let code: String
     let name: String
 
-    enum DecodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case code = "country_code"
         case name
     }
 
-    enum EncodingKeys: String, CodingKey {
+    init(with country: CountryInfo) {
+        self.id = country.id
+        self.code = country.code
+        self.name = country.name
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.code = try container.decode(String.self, forKey: .code)
+        self.name = try container.decode(String.self, forKey: .name)
+    }
+}
+
+extension Country: Hashable {
+
+    static func == (lhs: Country, rhs: Country) -> Bool {
+        return lhs.id == rhs.id && lhs.code == rhs.code
+    }
+    public var hashValue: Int { return self.id }
+}
+
+
+struct ProfileCountry: CountryInfo, Codable {
+
+    let id: Int
+    let code: String
+    let name: String
+
+    enum CodingKeys: String, CodingKey {
         case id
         case code = "countryCode"
         case name
     }
 
-    public init(from decoder: Decoder) throws {
-        
-        let container = try decoder.container(keyedBy: DecodingKeys.self)
+    init(with country: CountryInfo) {
+        self.id = country.id
+        self.code = country.code
+        self.name = country.name
+    }
 
-        self.id = try container.decode(Int.self, forKey: DecodingKeys.id)
-        self.code = try container.decode(String.self, forKey: DecodingKeys.code)
-        self.name = try container.decode(String.self, forKey: DecodingKeys.name)
+    public init(from decoder: Decoder) throws {
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.code = try container.decode(String.self, forKey: .code)
+        self.name = try container.decode(String.self, forKey: .name)
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: EncodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
 
-        try container.encode(self.id, forKey: EncodingKeys.id)
-        try container.encode(self.code, forKey: EncodingKeys.code)
-        try container.encode(self.name, forKey: EncodingKeys.name)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.code, forKey: .code)
+        try container.encode(self.name, forKey: .name)
     }
-}
-
-extension Country: Equatable {
-    static func == (lhs: Country, rhs: Country) -> Bool {
-        return lhs.id == rhs.id && lhs.code == rhs.code
-    }
-}
-
-extension Country: Hashable {
-    public var hashValue: Int { return self.id }
 }

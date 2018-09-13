@@ -169,8 +169,6 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.cityTextField.placeholderAnimatesOnFocus = true
         self.phoneTextField.textColor = self.viewModel.defaultTextColor
         self.phoneTextField.placeholderAnimatesOnFocus = true
-//        self.hobbiesTextField.textColor = self.viewModel.defaultTextColor
-//        self.hobbiesTextField.placeholderAnimatesOnFocus = true
         self.howHearTextField.textColor = self.viewModel.defaultTextColor
         self.howHearTextField.placeholderAnimatesOnFocus = true
 
@@ -353,7 +351,6 @@ extension SignUpViewController: SignUpViewModelDelegate {
         else if field === self.regionTextField { return self.regionErrorLabel }
         else if field === self.cityTextField { return self.cityErrorLabel }
         else if field === self.phoneTextField { return self.phoneErrorLabel }
-//        else if field === self.hobbiesTextField { return self.hobbiesErrorLabel }
         else if field === self.howHearTextField { return self.howHearErrorLabel }
 
         return nil
@@ -392,7 +389,6 @@ extension SignUpViewController: SignUpViewModelDelegate {
             errorLabel.text = ""
             errorLabel.isHidden = true
 
-//            hobbiesContainerView.tintColor = self.viewModel.defaultTintColor
             hobbiesContainerView.placeHolderLabel.textColor = self.viewModel.defaultTextColor
 
             return
@@ -401,7 +397,6 @@ extension SignUpViewController: SignUpViewModelDelegate {
         errorLabel.text = error.errorMessage
         errorLabel.isHidden = false
 
-//        textField.tintColor = self.viewModel.errorColor
         hobbiesContainerView.placeHolderLabel.textColor = self.viewModel.errorColor
     }
 

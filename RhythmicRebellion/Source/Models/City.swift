@@ -8,23 +8,68 @@
 
 import Foundation
 
-struct City: Codable {
+protocol CityInfo {
+
+    var id: Int { get }
+    var name: String { get }
+    var countryCode: String { get }
+    var regionCode: String { get }
+
+    init(with city: CityInfo)
+}
+
+struct City: CityInfo, Decodable {
 
     let id: Int
     let name: String
     let countryCode: String
-    let regionId: Int
     let regionCode: String
 
-    enum DecodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case name
         case countryCode = "country_code"
-        case regionId = "state_id"
         case regionCode = "admin1_code"
     }
 
-    enum EncodingKeys: String, CodingKey {
+    init(with city: CityInfo) {
+        self.id = city.id
+        self.name = city.name
+        self.countryCode = city.countryCode
+        self.regionCode = city.regionCode
+    }
+
+    public init(from decoder: Decoder) throws {
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
+
+        self.countryCode = try container.decode(String.self, forKey: .countryCode)
+        self.regionCode = try container.decode(String.self, forKey: .regionCode)
+    }
+}
+
+extension City: Equatable {
+    static func == (lhs: City, rhs: City) -> Bool {
+        return lhs.id == rhs.id && lhs.countryCode == rhs.countryCode && lhs.regionCode == rhs.regionCode
+    }
+}
+
+extension City: Hashable {
+    public var hashValue: Int { return self.id }
+}
+
+
+struct ProfileCity: CityInfo, Codable {
+
+    let id: Int
+    let name: String
+    let countryCode: String
+    let regionCode: String
+
+    enum CodingKeys: String, CodingKey {
         case id
         case name
         case countryCode = "countryCode"
@@ -32,36 +77,32 @@ struct City: Codable {
         case regionCode = "stateCode"
     }
 
+    init(with city: CityInfo) {
+        self.id = city.id
+        self.name = city.name
+        self.countryCode = city.countryCode
+        self.regionCode = city.regionCode
+    }
+
     public init(from decoder: Decoder) throws {
 
-        let container = try decoder.container(keyedBy: DecodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.id = try container.decode(Int.self, forKey: DecodingKeys.id)
-        self.name = try container.decode(String.self, forKey: DecodingKeys.name)
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
 
-        self.countryCode = try container.decode(String.self, forKey: DecodingKeys.countryCode)
-        self.regionId = try container.decode(Int.self, forKey: DecodingKeys.regionId)
-        self.regionCode = try container.decode(String.self, forKey: DecodingKeys.regionCode)
+        self.countryCode = try container.decode(String.self, forKey: .countryCode)
+        self.regionCode = try container.decode(String.self, forKey: .regionCode)
     }
-
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: EncodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
 
-        try container.encode(self.id, forKey: EncodingKeys.id)
-        try container.encode(self.name, forKey: EncodingKeys.name)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.name, forKey: .name)
 
-        try container.encode(self.countryCode, forKey: EncodingKeys.countryCode)
-        try container.encode(self.regionCode, forKey: EncodingKeys.regionCode)
+        try container.encode(self.countryCode, forKey: .countryCode)
+        try container.encode(self.regionCode, forKey: .regionCode)
     }
-}
 
-extension City: Equatable {
-    static func == (lhs: City, rhs: City) -> Bool {
-        return lhs.id == rhs.id && lhs.countryCode == rhs.countryCode && lhs.regionId == rhs.regionId
-    }
-}
-
-extension City: Hashable {
-    public var hashValue: Int { return self.id }
 }

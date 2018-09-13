@@ -8,14 +8,6 @@
 
 import Foundation
 
-//"data": {
-//    "_id": "5b36478e9caba4003a6a3252",
-//    "ws_token": "5ce24a949e95cd5cc2356e51d0691209d7de08c4f68b4b35ff8d4d414157e968",
-//    "updated_at": "2018-06-29T14:51:58+0000",
-//    "created_at": "2018-06-29T14:51:58+0000",
-//    "login_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1YjM2NDc4ZTljYWJhNDAwM2E2YTMyNTIiLCJndWVzdCI6dHJ1ZSwiaXNzIjoiaHR0cDovL3BsYXllci1uZ3J4Mi5hcGkucmViZWxsaW9ucmV0YWlsc2l0ZS5jb20vYXBpL2Zhbi91c2VyIiwiaWF0IjoxNTMwMjgzOTE4LCJleHAiOjE1MzExNDc5MTgsIm5iZiI6MTUzMDI4MzkxOCwianRpIjoiSTh3V0E0QzJyMUV3RFBHUiJ9._NFNWImTpPNeaZe2qmBsxKrYM9XM8ClS869P2fWCKuY",
-//    "guest": true
-//}
 
 
 public protocol User: Decodable {
@@ -50,14 +42,17 @@ struct UserProfile: Decodable {
 
     let id: Int
     let email: String
-    let nickName: String
-    let firstName: String
-    let gender: Gender?
-    let birthDate: Date?
-//    let location: Location
-    let phone: String?
-    let hobbies: [Hobby]
+    var nickName: String
+    var firstName: String
+    var gender: Gender?
+    var birthDate: Date?
+    var location: ProfileLocation
+    var phone: String?
+    var hobbies: [Hobby]
     let howHearId: Int
+    var genres: [Genre]?
+    var language: Language?
+
     var listeningSettings: ListeningSettings
 
     enum CodingKeys: String, CodingKey {
@@ -67,16 +62,18 @@ struct UserProfile: Decodable {
         case firstName = "real_name"
         case gender
         case birthDate = "birth_date"
-//        case location
+        case location
         case phone
         case hobbies
         case howHearId = "how_hear"
+        case genres
+        case language
         case listeningSettings = "listening_settings"
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let dateFormatter = ModelSupport.sharedInstance.dateFormatter
+        let dateFormatter = ModelSupport.sharedInstance.dateTimeFormattre
 
 
         self.id = try container.decode(Int.self, forKey: .id)
@@ -90,10 +87,13 @@ struct UserProfile: Decodable {
         }
 
         self.birthDate = try container.decodeAsDate(String.self, forKey: .birthDate, dateFormatter: dateFormatter)
-        //        self.location = try container.decode(Location.self, forKey: .location)
-        self.phone = try? container.decode(String.self, forKey: .phone)
+        self.location = try container.decode(ProfileLocation.self, forKey: .location)
+        self.phone = try container.decodeIfPresent(String.self, forKey: .phone)
         self.hobbies = try container.decode([Hobby].self, forKey: .hobbies)
         self.howHearId = try container.decode(Int.self, forKey: .howHearId)
+
+        self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
+        self.language = try container.decodeIfPresent(Language.self, forKey: .language)
 
         self.listeningSettings = try container.decode(ListeningSettings.self, forKey: .listeningSettings)
     }

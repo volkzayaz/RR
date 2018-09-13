@@ -16,16 +16,52 @@ protocol RestApiProfileRequestPayload: RestApiRequestPayload {
 
 }
 
+struct RestApiProfileSettingsRequestPayload: RestApiProfileRequestPayload {
+
+    let userProfile: UserProfile
+
+    init(with userProfile: UserProfile) {
+        self.userProfile = userProfile
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case nickName = "nick_name"
+        case firstName = "real_name"
+        case gender
+        case birthDate = "birth_date"
+        case location
+        case phone
+        case hobbies
+        case genres
+        case language
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let dateFormatter = ModelSupport.sharedInstance.dateFormatter
+
+        try container.encode(self.userProfile.firstName, forKey: .firstName)
+        try container.encode(self.userProfile.nickName, forKey: .nickName)
+        try container.encodeAsString(self.userProfile.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)
+        try container.encode(self.userProfile.gender?.rawValue, forKey: .gender)
+        try container.encode(self.userProfile.phone, forKey: .phone)
+        try container.encode(self.userProfile.location, forKey: .location)
+        try container.encode(self.userProfile.hobbies, forKey: .hobbies)
+        try container.encode(self.userProfile.genres, forKey: .genres)
+        try container.encode(self.userProfile.language, forKey: .language)
+    }
+}
+
 struct RestApiListeningSettingsRequestPayload: RestApiProfileRequestPayload {
 
     let listeningSettings: ListeningSettings
 
-    init(with listeningSettings: ListeningSettings) {
-        self.listeningSettings = listeningSettings
-    }
-
     enum CodingKeys: String, CodingKey {
         case listeningSettings = "listening_settings"
+    }
+
+    init(with listeningSettings: ListeningSettings) {
+        self.listeningSettings = listeningSettings
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -43,7 +79,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
     var realName: String
     var birthDate: Date
     var gender: Gender
-    var location: Location
+    var location: ProfileLocation
     var phone: String?
     var hobbies: [Hobby]
     var howHear: HowHear
@@ -70,7 +106,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
          realName: String,
          birthDate: Date,
          gender: Gender,
-         location: Location,
+         location: ProfileLocation,
          phone: String?,
          hobbies: [Hobby],
          howHear: HowHear) {
@@ -95,7 +131,6 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
         try container.encode(self.email, forKey: .email)
         try container.encode(self.password, forKey: .password)
         try container.encode(self.passwordConfirmation, forKey: .passwordConfirmation)
-        try container.encode(self.nickName, forKey: .nickName)
         try container.encode(self.nickName, forKey: .nickName)
         try container.encode(self.realName, forKey: .realName)
         try container.encodeAsString(self.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)

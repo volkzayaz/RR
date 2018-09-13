@@ -1,15 +1,15 @@
 //
-//  HobbiesCloudTagView.swift
+//  GenresContainerView.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 9/8/18.
+//  Created by Alexander Obolentsev on 9/12/18.
 //  Copyright © 2018 Patron Empowerment, LLC. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import CloudTagView
 
-class HobbiesContainerView: UIControl {
+class GenresContainerView: UIControl {
 
     @IBOutlet weak var cloudTagView: CloudTagView!
     @IBOutlet weak var placeHolderLabel: UILabel!
@@ -24,27 +24,27 @@ class HobbiesContainerView: UIControl {
         self.cloudTagView.delegate = self
     }
 
-    var hobbies: [Hobby]? {
+    var genres: [Genre]? {
         set { self.reload(with: newValue) }
-        get { return internalHobbies }
+        get { return internalGenres }
     }
 
-    private var internalHobbies: [Hobby]? {
+    private var internalGenres: [Genre]? {
         didSet {
 
-            self.placeHolderLabel.isHidden = self.internalHobbies?.count ?? 0 > 0
+            self.placeHolderLabel.isHidden = self.internalGenres?.count ?? 0 > 0
 
             self.cloudTagView.invalidateIntrinsicContentSize()
             self.invalidateIntrinsicContentSize()
         }
     }
 
-    private func reload(with hobbies: [Hobby]?) {
-        self.internalHobbies = hobbies
+    private func reload(with genres: [Genre]?) {
+        self.internalGenres = genres
 
-        if let hobbies = self.hobbies {
-            self.cloudTagView.tags = hobbies.map({ (hobby) -> TagView in
-                let tagView = TagView(text: hobby.name)
+        if let genres = self.genres {
+            self.cloudTagView.tags = genres.map({ (genre) -> TagView in
+                let tagView = TagView(text: genre.name)
                 tagView.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
                 return tagView
             })
@@ -54,11 +54,11 @@ class HobbiesContainerView: UIControl {
     }
 }
 
-extension HobbiesContainerView : TagViewDelegate {
+extension GenresContainerView : TagViewDelegate {
 
     public func tagDismissed(_ tag: TagView) {
         guard let tagIndex = self.cloudTagView.tags.index(of: tag) else { return }
-        self.internalHobbies?.remove(at:  tagIndex)
+        self.internalGenres?.remove(at:  tagIndex)
 
         self.sendActions(for: .valueChanged)
     }

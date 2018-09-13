@@ -1,5 +1,5 @@
 //
-//  ErrorPresnting.swift
+//  ErrorPresenting.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 8/2/18.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol ErrorPresnting {
+protocol ErrorPresenting {
     func show(error: Error)
 }
 
-extension ErrorPresnting where Self: UIViewController {
+extension ErrorPresenting where Self: UIViewController {
 
     func show(error: Error) {
         let errorAlertController = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)

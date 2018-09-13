@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14270.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -169,7 +166,7 @@
         <!--ProfileNavigationController-->
         <scene sceneID="2rz-Ig-ksz">
             <objects>
-                <viewControllerPlaceholder storyboardName="Settings" referencedIdentifier="ProfileNavigationController" id="dMN-EC-fFm" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="Profile" referencedIdentifier="ProfileNavigationController" id="dMN-EC-fFm" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="4" title="Profile" image="Profile" id="MeI-zK-4AK"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6hx-7T-Ahu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -213,7 +210,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="509"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="MainSwitchableTableViewCellIdentifier" rowHeight="44" id="cOK-Ne-INg" customClass="SwitchableTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="MainSwitchableTableViewCellIdentifier" rowHeight="44" id="cOK-Ne-INg" customClass="SwitchableTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cOK-Ne-INg" id="aHZ-tv-4Yc">
@@ -272,7 +269,7 @@
                                             <outlet property="toggle" destination="vXI-KS-s7G" id="k4O-ja-XT0"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SwitchableTableViewCellIdentifier" rowHeight="44" id="Gbe-XN-t1a" customClass="SwitchableTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SwitchableTableViewCellIdentifier" rowHeight="44" id="Gbe-XN-t1a" customClass="SwitchableTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="72" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Gbe-XN-t1a" id="oaG-a4-f9W">
@@ -331,7 +328,7 @@
                                             <outlet property="toggle" destination="kBb-Yu-rmx" id="Loy-D3-CEM"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DatePickerTableVieCellIdentifier" rowHeight="215" id="z7i-Bf-DF9" customClass="DatePickerTableVieCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DatePickerTableVieCellIdentifier" rowHeight="215" id="z7i-Bf-DF9" customClass="DatePickerTableVieCell" customModule="RhythmicRebellion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="116" width="414" height="215"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="z7i-Bf-DF9" id="7Et-WB-6OP">
@@ -708,7 +705,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="udV-La-GaU">
-                            <rect key="frame" x="197" y="144.66666666666666" width="20" height="20"/>
+                            <rect key="frame" x="197" y="144.33333333333334" width="20" height="20"/>
                         </activityIndicatorView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L5R-rG-uQf">
                             <rect key="frame" x="378" y="332.66666666666669" width="22" height="22"/>
@@ -768,7 +765,7 @@
                                 <color key="backgroundColor" red="0.089999999999999997" green="0.050000000000000003" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.68999999999999995" green="0.72999999999999998" blue="1" alpha="0.30419234154929575" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPlaylistCellId" id="kjB-3r-7VB" customClass="CreatePlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPlaylistCellId" id="kjB-3r-7VB" customClass="CreatePlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="54"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kjB-3r-7VB" id="TDm-Li-0X1">
@@ -776,7 +773,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addPlaylist" translatesAutoresizingMaskIntoConstraints="NO" id="Ix7-bJ-45o">
-                                                    <rect key="frame" x="15" y="5.6666666666666679" width="45" height="43"/>
+                                                    <rect key="frame" x="15" y="5.3333333333333321" width="45" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="45" id="ISr-eH-BkM"/>
                                                         <constraint firstAttribute="height" constant="43" id="Ygk-1K-vHf"/>
@@ -806,7 +803,7 @@
                                             <outlet property="playlistNametextField" destination="JA1-aw-hen" id="pXs-S5-Gu7"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="playlistCellId" id="Nhs-sD-YE2" customClass="AddToPlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="playlistCellId" id="Nhs-sD-YE2" customClass="AddToPlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="82" width="414" height="54"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Nhs-sD-YE2" id="VPC-NY-cWI">
@@ -814,7 +811,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2G5-m6-jNt">
-                                                    <rect key="frame" x="15" y="5.6666666666666679" width="45" height="43"/>
+                                                    <rect key="frame" x="15" y="5.3333333333333321" width="45" height="43"/>
                                                     <color key="backgroundColor" red="0.39000000000000001" green="0.39000000000000001" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="45" id="VZK-tz-dQJ"/>
@@ -1335,35 +1332,35 @@
                                         <exclude reference="cPS-1o-fAJ"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="gTo-x3-eCm"/>
                                         <exclude reference="03q-HL-guk"/>
                                         <exclude reference="Oz7-gk-rJG"/>
                                         <exclude reference="hf5-S4-zYK"/>
                                         <exclude reference="osG-MS-gcS"/>
+                                        <exclude reference="gTo-x3-eCm"/>
+                                        <exclude reference="HLK-z4-T6a"/>
+                                        <exclude reference="PdL-Hn-lzM"/>
+                                        <exclude reference="TUL-WH-Fjn"/>
+                                        <exclude reference="TW4-iy-NE0"/>
                                         <exclude reference="Cdh-ZA-m9d"/>
                                         <exclude reference="dJ6-bx-AhM"/>
                                         <exclude reference="siS-bp-mct"/>
                                         <exclude reference="uZN-no-G2R"/>
                                         <exclude reference="yug-Hm-bci"/>
+                                        <exclude reference="TUF-vA-Tef"/>
+                                        <exclude reference="g3h-nl-AGN"/>
+                                        <exclude reference="hHC-R5-PSc"/>
                                         <exclude reference="DCQ-gA-O0p"/>
                                         <exclude reference="fPQ-v9-YQt"/>
                                         <exclude reference="fvW-NB-GUB"/>
                                         <exclude reference="sR4-Xy-8c6"/>
                                         <exclude reference="y2o-Vr-w9A"/>
-                                        <exclude reference="TUF-vA-Tef"/>
-                                        <exclude reference="g3h-nl-AGN"/>
-                                        <exclude reference="hHC-R5-PSc"/>
-                                        <exclude reference="HLK-z4-T6a"/>
-                                        <exclude reference="PdL-Hn-lzM"/>
-                                        <exclude reference="TUL-WH-Fjn"/>
-                                        <exclude reference="TW4-iy-NE0"/>
                                         <exclude reference="GF6-l8-sbb"/>
                                         <exclude reference="LUC-AP-RlM"/>
                                         <exclude reference="Oa6-Ks-iEB"/>
+                                        <exclude reference="e6O-JE-Zu9"/>
                                         <exclude reference="0jV-f6-K3z"/>
                                         <exclude reference="FHL-Nh-5fP"/>
                                         <exclude reference="OTC-Cd-dx8"/>
-                                        <exclude reference="e6O-JE-Zu9"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -1372,19 +1369,19 @@
                                         <include reference="cPS-1o-fAJ"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="gTo-x3-eCm"/>
                                         <include reference="03q-HL-guk"/>
                                         <include reference="osG-MS-gcS"/>
-                                        <include reference="dJ6-bx-AhM"/>
-                                        <include reference="uZN-no-G2R"/>
-                                        <include reference="DCQ-gA-O0p"/>
-                                        <include reference="fvW-NB-GUB"/>
-                                        <include reference="TUF-vA-Tef"/>
-                                        <include reference="g3h-nl-AGN"/>
-                                        <include reference="hHC-R5-PSc"/>
+                                        <include reference="gTo-x3-eCm"/>
                                         <include reference="HLK-z4-T6a"/>
                                         <include reference="TUL-WH-Fjn"/>
                                         <include reference="TW4-iy-NE0"/>
+                                        <include reference="dJ6-bx-AhM"/>
+                                        <include reference="uZN-no-G2R"/>
+                                        <include reference="TUF-vA-Tef"/>
+                                        <include reference="g3h-nl-AGN"/>
+                                        <include reference="hHC-R5-PSc"/>
+                                        <include reference="DCQ-gA-O0p"/>
+                                        <include reference="fvW-NB-GUB"/>
                                         <include reference="GF6-l8-sbb"/>
                                         <include reference="LUC-AP-RlM"/>
                                         <include reference="Oa6-Ks-iEB"/>
@@ -1397,17 +1394,17 @@
                                     <mask key="constraints">
                                         <include reference="Oz7-gk-rJG"/>
                                         <include reference="hf5-S4-zYK"/>
+                                        <include reference="PdL-Hn-lzM"/>
                                         <include reference="Cdh-ZA-m9d"/>
                                         <include reference="siS-bp-mct"/>
                                         <include reference="yug-Hm-bci"/>
                                         <include reference="fPQ-v9-YQt"/>
                                         <include reference="sR4-Xy-8c6"/>
                                         <include reference="y2o-Vr-w9A"/>
-                                        <include reference="PdL-Hn-lzM"/>
+                                        <include reference="e6O-JE-Zu9"/>
                                         <include reference="0jV-f6-K3z"/>
                                         <include reference="FHL-Nh-5fP"/>
                                         <include reference="OTC-Cd-dx8"/>
-                                        <include reference="e6O-JE-Zu9"/>
                                     </mask>
                                 </variation>
                             </view>

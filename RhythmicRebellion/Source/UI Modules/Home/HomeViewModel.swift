@@ -20,7 +20,7 @@ protocol HomeViewModel: class {
 
 }
 
-protocol HomeViewModelDelegate: class, ErrorPresnting {
+protocol HomeViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()

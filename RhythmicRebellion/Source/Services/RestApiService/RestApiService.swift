@@ -358,7 +358,23 @@ class RestApiService {
         }
     }
 
-    // MARK: - Location -
+    func genres(completion: @escaping (Result<[Genre]>) -> Void) {
+
+        guard let countriesURL = self.makeURL(with: "song-characteristics/list-genre") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(countriesURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<GenresResponse>) in
+
+                switch dataResponse.result {
+                case .success(let genresResponse): completion(.success(genresResponse.genres))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
 
     func countries(completion: @escaping (Result<[Country]>) -> Void) {
         guard let countriesURL = self.makeURL(with: "gis/country") else { return }
@@ -375,7 +391,6 @@ class RestApiService {
                 case .failure(let error): completion(.failure(error))
                 }
         }
-
     }
 
     func regions(for country: Country, completion: @escaping (Result<[Region]>) -> Void) {

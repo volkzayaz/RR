@@ -1,8 +1,8 @@
 //
-//  SignUpControllerViewModel.swift
+//  ProfileSettingsControllerViewModel.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/18/18.
+//  Created by Alexander Obolentsev on 9/12/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
@@ -11,82 +11,91 @@ import Foundation
 import SwiftValidator
 import Alamofire
 
-final class SignUpControllerViewModel: SignUpViewModel {
+final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
-    // MARK: - Public properties
+    // MARK: - Public properties -
 
     var defaultTextColor: UIColor { return #colorLiteral(red: 0.1780987382, green: 0.2085041404, blue: 0.4644742608, alpha: 1) }
     var defaultTintColor: UIColor { return #colorLiteral(red: 0.1468808055, green: 0.1904500723, blue: 0.8971034884, alpha: 1) }
 
     var errorColor: UIColor { return #colorLiteral(red: 0.9567829967, green: 0.2645464838, blue: 0.213359952, alpha: 1) }
 
-    var isSignUpSucced: Bool { return self.registeredUserProfile != nil }
-    
     // MARK: - Private properties -
 
-    private(set) weak var delegate: SignUpViewModelDelegate?
-    private(set) weak var router: SignUpRouter?
+    private(set) weak var delegate: ProfileSettingsViewModelDelegate?
+    private(set) weak var router: ProfileSettingsRouter?
+    private(set) weak var application: Application?
     private(set) weak var restApiService: RestApiService?
 
     private(set) var countries: [Country]
     private(set) var regions: [Region]
     private(set) var cities: [City]
     private(set) var hobbies: [Hobby]
-    private(set) var howHearList: [HowHear]
+    private(set) var genres: [Genre]
+    private(set) var languages: [Language]
+
     private let validator: Validator
 
-    private(set) var signUpErrorDescription: String?
+    private(set) var canSave: Bool = false
+    private(set) var profileSettingsErrorDescription: String?
 
-    private var registeredUserProfile: UserProfile?
+    private var userProfile: UserProfile?
 
-    private var emailField: ValidatableField?
-    private var passwordField: ValidatableField?
-    private var passwordConfirmationField: ValidatableField?
-    private var nicknameField: ValidatableField?
     private var firstnameField: ValidatableField?
+    private var nicknameField: ValidatableField?
     private var genderField: GenderValidatableField?
     private var birthdateField: DateValidatableField?
+
     private var countryField: CountryValidatableField?
     private var zipField: ValidatableField?
     private var regionField: RegionValidatableField?
     private var cityField: CityValidatableField?
     private var phoneField: ValidatableField?
+
     private var hobbiesField: HobbiesValidatableField?
-    private var howHearField: HowHearValidatableField?
+    private var genresField: GenresValidatableField?
+    private var languageField: LanguageValidatableField?
 
     // MARK: - Lifecycle -
 
-    init(router: SignUpRouter, restApiService: RestApiService) {
+    init(router: ProfileSettingsRouter, application: Application, restApiService: RestApiService) {
         self.router = router
+        self.application = application
         self.restApiService = restApiService
-
-        self.countries = [Country]()
-        self.regions = [Region]()
-        self.cities = [City]()
-        self.hobbies = [Hobby]()
-        self.howHearList = [HowHear]()
-
         self.validator = Validator()
+
+        self.countries = []
+        self.regions = []
+        self.cities = []
+        self.hobbies = []
+        self.genres = []
+        self.languages = []
     }
 
-    func load(with delegate: SignUpViewModelDelegate) {
+    func load(with delegate: ProfileSettingsViewModelDelegate) {
         self.delegate = delegate
+
+        guard let fanUser = self.application?.user as? FanUser else { return }
 
         self.validator.styleTransformers(success:{ [unowned self] (validationRule) -> Void in
             self.delegate?.refreshField(field: validationRule.field, didValidate: nil)
             }, error:{ (validationError) -> Void in
-            self.delegate?.refreshField(field: validationError.field, didValidate: validationError)
+                self.delegate?.refreshField(field: validationError.field, didValidate: validationError)
         })
 
+        self.userProfile = fanUser.profile
 
-        self.reloadCountries { [weak self] (countriesResult) in
-            switch countriesResult {
-            case .success(let countries):
-                guard let unitedStatesCountry = countries.filter( { return $0.code == "US" } ).first else { return }
-                self?.set(country: unitedStatesCountry)
-            default: break
-            }
-        }
+        self.delegate?.refreshFirstNameField(with: fanUser.profile.firstName)
+        self.delegate?.refreshNickNameField(with: fanUser.profile.nickName)
+        self.delegate?.refreshGenderField(with: fanUser.profile.gender)
+        self.delegate?.refreshBirthDateField(with: fanUser.profile.birthDate)
+        self.delegate?.refreshCountryField(with: Country(with: fanUser.profile.location.country))
+        self.delegate?.refreshZipField(with: fanUser.profile.location.zip)
+        self.delegate?.refreshRegionField(with: Region(with: fanUser.profile.location.region))
+        self.delegate?.refreshCityField(with: City(with: fanUser.profile.location.city))
+        self.delegate?.refreshPhoneField(with: fanUser.profile.phone)
+        self.delegate?.refreshHobbiesField(with: fanUser.profile.hobbies)
+        self.delegate?.refreshGenresField(with: fanUser.profile.genres)
 
         self.delegate?.refreshUI()
     }
@@ -97,15 +106,11 @@ final class SignUpControllerViewModel: SignUpViewModel {
             switch configResult {
             case .success(let config):
                 self?.hobbies = config.hobbies
-                self?.howHearList = config.howHearList
+                self?.languages = config.languages
 
                 if let selectedHobbies = self?.hobbiesField?.hobbies, selectedHobbies.count > 0 {
                     let filteredSelectedHobbies = selectedHobbies.filter( { return config.hobbies.contains($0) })
                     self?.delegate?.refreshHobbiesField(with: filteredSelectedHobbies)
-                }
-
-                if let selectedHowHear = self?.howHearField?.howHear, config.howHearList.contains(selectedHowHear) == false {
-                    self?.delegate?.refreshHowHearField(with: nil)
                 }
 
             default: break
@@ -115,41 +120,18 @@ final class SignUpControllerViewModel: SignUpViewModel {
         })
     }
 
-    func registerEmailField(_ emailField: ValidatableField) {
 
-        let emailRules: [Rule] = [RequiredRule(message: "The email field is required."),
-                                  EmailRule(message: "The email is wrong")]
-        self.validator.registerField(emailField, rules: emailRules)
+    func registerFirstnameField(_ firstnameField: ValidatableField) {
+        let firstnameRules: [Rule] = [RequiredRule(message: "The first name field is required.")]
+        self.validator.registerField(firstnameField, rules: firstnameRules)
 
-        self.emailField = emailField
+        self.firstnameField = firstnameField
 
-        if emailField.validationText.isEmpty == true {
-            self.delegate?.refreshField(field: emailField, didValidate: nil)
+        if firstnameField.validationText.isEmpty == true {
+            self.delegate?.refreshField(field: firstnameField, didValidate: nil)
         } else {
-            self.validator.validateField(emailField) { (validationError) in }
+            self.validator.validateField(firstnameField) { (validationError) in }
         }
-    }
-
-    func registerPasswordField(_ passwordField: ValidatableField) {
-
-        let passwordRules: [Rule] = [RequiredRule(message: "The password field is required."),
-                                     MinLengthRule(length: 6, message: "The password must be at least %ld characters")]
-        self.validator.registerField(passwordField, rules: passwordRules)
-
-        self.passwordField = passwordField
-
-        self.delegate?.refreshField(field: passwordField, didValidate: nil)
-    }
-
-    func registerPasswordConfirmationField(_ passwordConfirmationField: ValidatableField, passwordField: ValidatableField) {
-        let passwordConfirmationRules: [Rule] = [RequiredRule(message: "The password confirmation field is required."),
-                                                 ConfirmationRule(confirmField: passwordField, message: "Your password and confirmation password do not match.")]
-
-        self.validator.registerField(passwordConfirmationField, rules: passwordConfirmationRules)
-
-        self.passwordConfirmationField = passwordConfirmationField
-
-        self.delegate?.refreshField(field: passwordConfirmationField, didValidate: nil)
     }
 
     func registerNicknameField(_ nicknameField: ValidatableField) {
@@ -162,19 +144,6 @@ final class SignUpControllerViewModel: SignUpViewModel {
             self.delegate?.refreshField(field: nicknameField, didValidate: nil)
         } else {
             self.validator.validateField(nicknameField) { (validationError) in }
-        }
-    }
-
-    func registerFirstnameField(_ firstnameField: ValidatableField) {
-        let firstnameRules: [Rule] = [RequiredRule(message: "The first name field is required.")]
-        self.validator.registerField(firstnameField, rules: firstnameRules)
-
-        self.firstnameField = firstnameField
-
-        if firstnameField.validationText.isEmpty == true {
-            self.delegate?.refreshField(field: firstnameField, didValidate: nil)
-        } else {
-            self.validator.validateField(firstnameField) { (validationError) in }
         }
     }
 
@@ -286,41 +255,62 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerHowHearField(_ howHearField: HowHearValidatableField) {
-        let howHearRules: [Rule] = [RequiredRule(message: "The how hear field is required.")]
+    func registerGenresField(_ genresField: GenresValidatableField) {
+        let genresRules: [Rule] = []
 
-        self.validator.registerField(howHearField, rules: howHearRules)
+        self.validator.registerField(genresField, rules: genresRules)
 
-        self.howHearField = howHearField
+        self.genresField = genresField
 
-        if howHearField.validationText.isEmpty == true {
-            self.delegate?.refreshField(field: howHearField, didValidate: nil)
+        if genresField.validationText.isEmpty == true {
+            self.delegate?.refreshField(field: genresField, didValidate: nil)
         } else {
-            self.validator.validateField(howHearField) { (validationError) in }
+            self.validator.validateField(genresField) { (validationError) in }
+        }
+    }
+
+    func registerLanguageField(_ languageField: LanguageValidatableField) {
+        let languageRules: [Rule] = []
+
+        self.validator.registerField(languageField, rules: languageRules)
+
+        self.languageField = languageField
+
+        if languageField.validationText.isEmpty == true {
+            self.delegate?.refreshField(field: languageField, didValidate: nil)
+        } else {
+            self.validator.validateField(languageField) { (validationError) in }
+        }
+    }
+
+    func checkCanSaveState() {
+        guard let userProfile = self.userProfile else { return }
+
+        let isDirty = userProfile.firstName != self.firstnameField?.validationText ||
+                        userProfile.nickName != self.nicknameField?.validationText ||
+                        userProfile.gender != self.genderField?.gender ||
+                        userProfile.birthDate != self.birthdateField?.date ||
+                        Country(with: userProfile.location.country) != self.countryField?.country ||
+                        Region(with: userProfile.location.region) != self.regionField?.region ||
+                        City(with: userProfile.location.city) != self.cityField?.city ||
+                        userProfile.hobbies != self.hobbiesField?.hobbies ||
+                        userProfile.genres != self.genresField?.genres ||
+                        userProfile.language != self.languageField?.language
+
+
+
+
+        if self.canSave != isDirty {
+            self.canSave = isDirty
+            self.delegate?.refreshUI()
         }
     }
 
     func validateField(_ validateField: ValidatableField?) {
         guard let validateField = validateField else { return }
         self.validator.validateField(validateField) { (validationError) in }
-    }
 
-    func validatebleField(for key: String) -> ValidatableField? {
-
-        switch key {
-        case "email": return self.emailField
-        case "password": return self.passwordField
-        case "password_confirmation": return self.passwordConfirmationField
-        case "nick_name": return self.nicknameField
-        case "real_name": return self.firstnameField
-        case "gender": return self.genderField
-        case "birth_date": return self.birthdateField
-        case "hobbies": return self.hobbiesField
-        case "how_hear": return self.howHearField
-        default: break
-        }
-
-        return nil
+        self.checkCanSaveState()
     }
 
     func set(country: Country) {
@@ -372,9 +362,14 @@ final class SignUpControllerViewModel: SignUpViewModel {
         self.validateField(self.hobbiesField)
     }
 
-    func set(howHear: HowHear) {
-        self.delegate?.refreshHowHearField(with: howHear)
-        self.validateField(self.howHearField)
+    func set(genres: [Genre]) {
+        self.delegate?.refreshGenresField(with: genres)
+        self.validateField(self.genresField)
+    }
+
+    func set(language: Language) {
+        self.delegate?.refreshLanguageField(with: language)
+        self.validateField(self.languageField)
     }
 
     func showContriesSelectableList() {
@@ -399,9 +394,15 @@ final class SignUpControllerViewModel: SignUpViewModel {
         })
     }
 
-    func showHowHearSelectableList() {
-        self.router?.showHowHearSelectableList(dataSource: self, selectedItem: self.howHearField?.howHear, selectionCallback: { [weak self] (howHear) in
-            self?.set(howHear: howHear)
+    func showGenresSelectableList() {
+        self.router?.showGenresSelectableList(dataSource: self, selectedItems: self.genresField?.genres, selectionCallback: { [weak self] (genres) in
+            self?.set(genres: genres)
+        })
+    }
+
+    func showLanguagesSelectableList() {
+        self.router?.showLanguagesSelectableList(dataSource: self, selectedItems: self.languageField?.language, selectionCallback: { [weak self] (language) in
+            self?.set(language: language)
         })
     }
 
@@ -458,45 +459,57 @@ final class SignUpControllerViewModel: SignUpViewModel {
         })
     }
 
-    func signUp() {
+
+    func validatebleField(for key: String) -> ValidatableField? {
+
+        switch key {
+        case "real_name": return self.firstnameField
+        case "nick_name": return self.nicknameField
+        case "gender": return self.genderField
+        case "birth_date": return self.birthdateField
+        case "hobbies": return self.hobbiesField
+        case "genres": return self.genderField
+        case "language": return self.languageField
+        default: break
+        }
+
+        return nil
+    }
+
+    func save() {
+        guard let userProfile = self.userProfile else { return }
 
         self.validator.validate { [unowned self] (error) in
             guard error.isEmpty else { return }
-            guard let email = self.emailField?.validationText,
-                let password = self.passwordField?.validationText,
-                let passwordConfirmation = self.passwordConfirmationField?.validationText,
+            guard let firstName = self.firstnameField?.validationText,
                 let nickName = self.nicknameField?.validationText,
-                let firstName = self.firstnameField?.validationText,
                 let birhDate = self.birthdateField?.date,
                 let gender = self.genderField?.gender,
                 let country = self.countryField?.country,
                 let region = self.regionField?.region,
                 let city = self.cityField?.city,
                 let zip = self.zipField?.validationText,
-                let phone = self.phoneField?.validationText,
                 let hobbies = self.hobbiesField?.hobbies,
-                let howHear = self.howHearField?.howHear else { return }
+                let phoneField = self.phoneField else { return }
 
-            let location = ProfileLocation(country: country, region: region, city: city, zip: zip)
-            let registrationPayload = RestApiFanUserRegistrationRequestPayload(email: email,
-                                                                               password: password,
-                                                                               passwordConfirmation: passwordConfirmation,
-                                                                               nickName: nickName,
-                                                                               realName: firstName,
-                                                                               birthDate: birhDate,
-                                                                               gender: gender,
-                                                                               location: location,
-                                                                               phone: phone,
-                                                                               hobbies: hobbies,
-                                                                               howHear: howHear)
+            var updatingUserProfile = userProfile
+            updatingUserProfile.firstName = firstName
+            updatingUserProfile.nickName = nickName
+            updatingUserProfile.gender = gender
+            updatingUserProfile.birthDate = birhDate
+            updatingUserProfile.location = ProfileLocation(country: country, region: region, city: city, zip: zip)
+            updatingUserProfile.phone = phoneField.validationText.isEmpty ? nil : self.phoneField?.validationText
+            updatingUserProfile.hobbies = hobbies
+            updatingUserProfile.genres = self.genresField?.genres
+            updatingUserProfile.language = self.languageField?.language
 
-            self.restApiService?.fanUser(register: registrationPayload, completion: { [weak self] (registrationResult) in
+            self.application?.update(profileSettings: updatingUserProfile, completion: { [weak self] (userProfileResult) in
 
-                switch (registrationResult) {
+                switch (userProfileResult) {
                 case .success(let userProfile):
-                    self?.registeredUserProfile = userProfile
+                    self?.userProfile = userProfile
                     self?.delegate?.refreshUI()
-                    
+
 
                 case .failure(let error):
                     guard let appError = error as? AppError, let appErrorGroup = appError.source else {
@@ -506,7 +519,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
                     switch appErrorGroup {
                     case RestApiServiceError.serverError( let errorDescription, let errors):
-                        self?.signUpErrorDescription = errorDescription
+                        self?.profileSettingsErrorDescription = errorDescription
                         for (key, errorStrings) in errors {
                             guard let validatebleField = self?.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
 
@@ -520,15 +533,12 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
                     self?.delegate?.refreshUI()
                 }
-
             })
         }
     }
 }
 
-// MARK: - CountriesDataProvider -
-
-extension SignUpControllerViewModel {
+extension ProfileSettingsControllerViewModel {
 
     func reloadCountries(completion: @escaping (Result<[Country]>) -> Void) {
         self.restApiService?.countries(completion: { [weak self] (contriesResult) in
@@ -590,14 +600,33 @@ extension SignUpControllerViewModel {
         }
     }
 
-    func reloadHowHearList(completion: @escaping (Result<[HowHear]>) -> Void) {
+    func reloadGenres(completion: @escaping (Result<[Genre]>) -> Void) {
+
+        self.restApiService?.genres(completion: { [weak self] (genresResult) in
+            switch genresResult {
+            case .success(let genres):
+                self?.genres = genres
+
+                if let selectedGenres = self?.genresField?.genres, selectedGenres.count > 0 {
+                    let filteredSelectedGenres = selectedGenres.filter( { return genres.contains($0) })
+                    self?.delegate?.refreshGenresField(with: filteredSelectedGenres)
+                }
+                completion(.success(genres))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
+    }
+
+    func reloadLanguages(completion: @escaping (Result<[Language]>) -> Void) {
         self.reloadConfig { (configResult) in
             switch configResult {
             case .success(let config):
-                completion(.success(config.howHearList))
+                completion(.success(config.languages))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
+
 }

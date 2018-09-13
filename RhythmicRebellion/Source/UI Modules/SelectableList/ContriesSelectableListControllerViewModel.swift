@@ -18,7 +18,7 @@ extension Country: SelectableListItem {
 protocol CountriesDataSource: class {
 
     var countries: [Country] { get }
-    func reloadContries(completion: @escaping (Result<[Country]>) -> Void)
+    func reloadCountries(completion: @escaping (Result<[Country]>) -> Void)
 }
 
 class CountriesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
@@ -34,7 +34,7 @@ class CountriesSelectableListItemsDataProvider: SelectableListItemsDataProvider 
     }
 
     func reload(completion: @escaping (Result<[Item]>) -> Void) {
-        self.dataSource.reloadContries { (contriesResult) in
+        self.dataSource.reloadCountries { (contriesResult) in
 
             switch contriesResult {
             case .success(let countries):

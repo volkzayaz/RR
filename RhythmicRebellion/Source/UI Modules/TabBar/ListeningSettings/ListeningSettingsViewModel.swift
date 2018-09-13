@@ -21,7 +21,7 @@ protocol ListeningSettingsViewModel: class {
     func save()
 }
 
-protocol ListeningSettingsViewModelDelegate: class, ErrorPresnting {
+protocol ListeningSettingsViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()

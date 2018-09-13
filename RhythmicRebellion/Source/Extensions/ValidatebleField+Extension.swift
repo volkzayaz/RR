@@ -18,6 +18,18 @@ extension DateTextField: DateValidatableField {
     
 }
 
+protocol GenderValidatableField: ValidatableField {
+    var gender: Gender? { get }
+}
+
+extension GenderSegmentedControl: GenderValidatableField {
+
+    public var validationText: String {
+        guard self.selectedSegmentIndex != -1 else { return "" }
+        return String(self.selectedSegmentIndex)
+    }
+}
+
 protocol CountryValidatableField: ValidatableField {
     var country: Country? { get }
 }
@@ -62,14 +74,23 @@ extension HowHearTextField: HowHearValidatableField {
 
 }
 
-protocol GenderValidatableField: ValidatableField {
-    var gender: Gender? { get }
+protocol GenresValidatableField: ValidatableField {
+    var genres: [Genre]? { get }
 }
 
-extension GenderSegmentedControl: GenderValidatableField {
+extension GenresContainerView: GenresValidatableField {
 
     public var validationText: String {
-        guard self.selectedSegmentIndex != -1 else { return "" }
-        return String(self.selectedSegmentIndex)
+        guard let genres = self.genres else { return "" }
+        return genres.map { $0.name }.joined(separator: ", ")
     }
 }
+
+protocol LanguageValidatableField: ValidatableField {
+    var language: Language? { get }
+}
+
+extension LanguageTextField: LanguageValidatableField {
+
+}
+

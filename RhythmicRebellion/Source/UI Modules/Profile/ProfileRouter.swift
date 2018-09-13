@@ -22,15 +22,15 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
     typealias Destinations = SegueActions
 
     enum SegueList: String, SegueDestinationList {
-        case placeholder = "placeholder"
+        case profileSettings = "ProfileSettingsSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
-        case placeholder
+        case profileSettings
 
         var identifier: SegueDestinationList {
             switch self {
-            case .placeholder: return SegueList.placeholder
+            case .profileSettings: return SegueList.profileSettings
             }
         }
     }
@@ -46,7 +46,10 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
 
     func prepare(for destination: DefaultProfileRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
-        case .placeholder: break
+        case .profileSettings:
+            guard let profileSettingsViewController = segue.destination as? ProfileSettingsViewController else { fatalError("Incorrect controller for ProfileSettingsSegueIdentifier") }
+            let profileSettingsRouter = DefaultProfileSettingsRouter(dependencies: self.dependencies)
+            profileSettingsRouter.start(controller: profileSettingsViewController)
         }
     }
 
@@ -61,7 +64,7 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
     }
 
     func navigateToProfileSettings() {
-
+        self.perform(segue: .profileSettings)
     }
 
     func navigateToChangeEmail() {

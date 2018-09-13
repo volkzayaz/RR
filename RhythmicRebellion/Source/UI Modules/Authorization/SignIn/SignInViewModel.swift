@@ -33,7 +33,7 @@ protocol SignInViewModel: class {
     func restart()
 }
 
-protocol SignInViewModelDelegate: class, ErrorPresnting {
+protocol SignInViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
 

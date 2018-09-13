@@ -12,9 +12,11 @@ struct Config: Decodable {
 
     let hobbies: [Hobby]
     let howHearList: [HowHear]
+    let languages: [Language]
 
     enum CodingKeys: String, CodingKey {
         case hobbies
         case howHearList = "how_hear"
+        case languages
     }
 }
