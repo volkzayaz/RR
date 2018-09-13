@@ -106,6 +106,8 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
             self.hobbiesContainerView.hobbies = nil
             self.howHearTextField.howHear = nil
 
+            self.scrollView.setContentOffset(CGPoint.zero, animated: false)
+
             self.bindViewModel()
         }
     }

@@ -321,6 +321,10 @@ final class SignUpControllerViewModel: SignUpViewModel {
     func validateField(_ validateField: ValidatableField?) {
         guard let validateField = validateField else { return }
         self.validator.validateField(validateField) { (validationError) in }
+
+        if validateField === self.passwordField, let passwordConfirmationField = self.passwordConfirmationField {
+            self.validator.validateField(passwordConfirmationField) { (validationError) in }
+        }
     }
 
     func validatebleField(for key: String) -> ValidatableField? {
