@@ -27,6 +27,9 @@ class DateTextField: MFTextField {
         dateFormatter.timeStyle = .none
     }
 
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return false
+    }
 }
 
 class DatePickerInputView: UIView {
