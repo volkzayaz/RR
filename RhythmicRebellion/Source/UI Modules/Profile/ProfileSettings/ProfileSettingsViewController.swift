@@ -261,14 +261,17 @@ extension ProfileSettingsViewController: UITextFieldDelegate {
         self.viewModel.validateField(textField)
     }
 
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//
-//        guard let nextTextField = self.nextField(for: textField) else { textField.resignFirstResponder(); return true }
-//
-//        nextTextField.becomeFirstResponder()
-//
-//        return false
-//    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        switch textField {
+        case self.firstnameTextField: self.nicknameTextField.becomeFirstResponder(); return false
+        case self.nicknameTextField: self.birthdateTextField.becomeFirstResponder(); return false
+        case self.birthdateTextField: self.birthdateTextField.resignFirstResponder(); return true
+        default: break
+        }
+
+        return true
+    }
 }
 
 // MARK: - Router -
@@ -411,7 +414,7 @@ extension ProfileSettingsViewController: ProfileSettingsViewModelDelegate {
     func refreshFirstNameField(with name: String?) { self.firstnameTextField.text = name }
     func refreshNickNameField(with name: String?) { self.nicknameTextField.text = name }
     func refreshGenderField(with gender: Gender?) { self.genderControl.gender = gender }
-    func refreshBirthDateField(with date: Date?) { self.birthdateTextField.date = date }
+    func refreshBirthDateField(with date: Date?) { self.birthdateTextField.date = date; self.birthdateInputView.datePicker.date = date ?? Date() }
 
     func refreshCountryField(with country: Country?) { self.countryTextField.country = country }
     func refreshZipField(with zip: String?) { self.zipTextField.text = zip }
