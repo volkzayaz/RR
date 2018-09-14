@@ -322,7 +322,9 @@ final class SignUpControllerViewModel: SignUpViewModel {
         guard let validateField = validateField else { return }
         self.validator.validateField(validateField) { (validationError) in }
 
-        if validateField === self.passwordField, let passwordConfirmationField = self.passwordConfirmationField {
+        if validateField === self.passwordField,
+            let passwordConfirmationField = self.passwordConfirmationField,
+            !passwordConfirmationField.validationText.isEmpty {
             self.validator.validateField(passwordConfirmationField) { (validationError) in }
         }
     }
