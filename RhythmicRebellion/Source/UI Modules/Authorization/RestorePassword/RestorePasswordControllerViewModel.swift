@@ -65,8 +65,10 @@ final class RestorePasswordControllerViewModel: RestorePasswordViewModel {
 
     func registerEmailField(_ emailField: ValidatableField) {
 
-        let emailRules: [Rule] = [RequiredRule(message: "The email field is required."),
-                                  EmailRule(message: "The email is wrong")]
+        let emailRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Email field is required.",
+                                                                          comment: "Email validataion message")),
+                                  EmailRule(message: NSLocalizedString("The Email is wrong",
+                                                                       comment: "Email validataion message"))]
         self.validator.registerField(emailField, rules: emailRules)
 
         self.emailField = emailField

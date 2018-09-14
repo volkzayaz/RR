@@ -119,7 +119,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
         let emailRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Email field is required.",
                                                                           comment: "Email validataion message")),
-                                  EmailRule(message: NSLocalizedString("The email is wrong",
+                                  EmailRule(message: NSLocalizedString("The Email is wrong",
                                                                        comment: "Email validataion message"))]
         self.validator.registerField(emailField, rules: emailRules)
 
@@ -137,7 +137,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         let passwordRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Password field is required.",
                                                                              comment: "Password validataion message")),
                                      MinLengthRule(length: 6,
-                                                   message: NSLocalizedString("The assword must be at least %ld characters",
+                                                   message: NSLocalizedString("The Password must be at least %ld characters",
                                                                               comment: "Password validataion template"))]
         self.validator.registerField(passwordField, rules: passwordRules)
 
@@ -150,7 +150,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         let passwordConfirmationRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Repeat Password field is required.",
                                                                                          comment: "Repeat Password validataion message")),
                                                  ConfirmationRule(confirmField: passwordField,
-                                                                  message: NSLocalizedString("Your password and repeat password do not match.",
+                                                                  message: NSLocalizedString("Your Password and Repeat Password do not match.",
                                                                                              comment: "Repeat Password validataion message"))]
 
         self.validator.registerField(passwordConfirmationField, rules: passwordConfirmationRules)
