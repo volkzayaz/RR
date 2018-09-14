@@ -84,7 +84,11 @@ final class ProfileControllerViewModel: ProfileViewModel {
 
     // MARK: - Actions
     func logout() {
-        self.application?.logout()
+        self.application?.logout(completion: { (error) in
+            guard let error = error else { return }
+
+            self.delegate?.show(error: error)
+        })
     }
 }
 

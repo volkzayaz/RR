@@ -134,7 +134,7 @@ class Application: Observable {
         })
     }
 
-    func logout() {
+    func logout(completion: ((Error?) -> Void)? = nil) {
         guard let user = self.user, user.isGuest == false else { return }
 
         self.restApiService.fanLogout { [weak self] (logoutUserResult) in
@@ -144,9 +144,10 @@ class Application: Observable {
                 self?.user = user
                 self?.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
                 self?.notifyUserChanged()
+                completion?(nil)
 
             case .failure(let error):
-                print("FanUser error: \(error)")
+                completion?(error)
             }
         }
     }

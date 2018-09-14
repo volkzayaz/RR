@@ -22,7 +22,7 @@ protocol ProfileViewModel: class {
     func logout()
 }
 
-protocol ProfileViewModelDelegate: class {
+protocol ProfileViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()
