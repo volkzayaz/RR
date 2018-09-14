@@ -89,3 +89,11 @@ struct ProfileCountry: CountryInfo, Codable {
         try container.encode(self.name, forKey: .name)
     }
 }
+
+extension ProfileCountry: Hashable {
+
+    static func == (lhs: ProfileCountry, rhs: ProfileCountry) -> Bool {
+        return lhs.id == rhs.id && lhs.code == rhs.code
+    }
+    public var hashValue: Int { return self.id }
+}

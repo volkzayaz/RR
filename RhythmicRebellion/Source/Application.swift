@@ -85,19 +85,38 @@ class Application: Observable {
         _ = try? self.restApiServiceReachability?.startNotifier()
     }
 
-    func fanUser(completion: ((Result<User>) -> Void)? = nil) {
-        guard let reachability = self.restApiServiceReachability, reachability.connection != .none else { return }
 
+
+    func set(user: User) {
+
+        let prevUser = self.user
+
+        self.user = user
+
+        if prevUser != user {
+            self.notifyUserChanged()
+        } else if let prevFanUser = prevUser as? FanUser,
+                    let fanUser = user as? FanUser,
+            prevFanUser.profile != fanUser.profile {
+            self.notifyUserProfileChanged()
+        }
+
+        if self.webSocketService.token?.token != user.wsToken {
+            self.webSocketService.disconnect()
+            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+        }
+    }
+
+    func fanUser(completion: ((Result<User>) -> Void)? = nil) {
         self.restApiService.fanUser { [weak self] (fanUserResult) in
 
             switch (fanUserResult) {
             case .success(let user):
-                self?.user = user
-                self?.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
-                self?.notifyUserChanged()
+                self?.set(user: user)
+                completion?(.success(user))
 
             case .failure(let error):
-                print("FanUser error: \(error)")
+                completion?(.failure(error))
             }
         }
 
@@ -187,7 +206,7 @@ class Application: Observable {
                 guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
 
                 self?.user = user
-                self?.notifyProfileSettingsChanged()
+                self?.notifyUserProfileChanged()
                 completion?(.success(fanUser.profile))
 
             case .failure(let error):
@@ -214,7 +233,7 @@ extension Application {
         })
     }
 
-    func notifyProfileSettingsChanged() {
+    func notifyUserProfileChanged() {
         guard let fanUser = self.user as? FanUser else { return }
 
         self.observersContainer.invoke({ (observer) in

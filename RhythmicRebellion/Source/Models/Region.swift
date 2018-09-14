@@ -53,13 +53,12 @@ struct Region: RegionInfo, Decodable {
 
 }
 
-extension Region: Equatable {
+extension Region: Hashable {
+
     static func == (lhs: Region, rhs: Region) -> Bool {
         return lhs.id == rhs.id && lhs.countryCode == rhs.countryCode
     }
-}
 
-extension Region: Hashable {
     public var hashValue: Int { return self.id }
 }
 
@@ -105,4 +104,13 @@ struct ProfileRegion: RegionInfo, Codable {
 
         try container.encode(self.countryCode, forKey: .countryCode)
     }
+}
+
+extension ProfileRegion: Hashable {
+
+    static func == (lhs: ProfileRegion, rhs: ProfileRegion) -> Bool {
+        return lhs.id == rhs.id && lhs.countryCode == rhs.countryCode
+    }
+
+    public var hashValue: Int { return self.id }
 }

@@ -42,21 +42,19 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     let observersContainer = ObserversContainer<WebSocketServiceObserver>()
 
-    var webSocket: WebSocket
+    private(set) var socketURL: URL
+
+    var webSocket: WebSocket?
     var token: Token?
 
     var isReachable: Bool = false
-    var isConnected: Bool { return self.webSocket.isConnected }
+    var isConnected: Bool { return self.webSocket?.isConnected ?? false}
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
     init(socketURL url: URL) {
 
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 1
-
-        self.webSocket = WebSocket(request: request)
-        self.webSocket.delegate = self
+        self.socketURL = url
     }
 
     func connect(with token: Token) {
@@ -64,22 +62,29 @@ class WebSocketService: WebSocketDelegate, Observable {
 
         print("self.token: \(String(describing: self.token))")
 
-        self.webSocket.connect()
+        var request = URLRequest(url: self.socketURL)
+        request.timeoutInterval = 1
+
+        self.webSocket = WebSocket(request: request)
+        self.webSocket?.delegate = self
+
+        self.webSocket?.connect()
     }
 
     func reconnect() {
         guard let _ = self.token else { return }
 
-        self.webSocket.connect()
+        self.webSocket?.connect()
     }
 
     func disconnect() {
-        self.webSocket.disconnect()
+        self.webSocket?.disconnect()
+        self.webSocket?.delegate = nil
     }
 
     func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {
 
-        guard self.webSocket.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
+        guard self.webSocket?.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
 
 
 //        #if DEBUG
@@ -92,7 +97,7 @@ class WebSocketService: WebSocketDelegate, Observable {
         do {
             let jsonData = try JSONEncoder().encode(command)
 
-            self.webSocket.write(data: jsonData, completion: { completion?(nil) })
+            self.webSocket?.write(data: jsonData, completion: { completion?(nil) })
         } catch (let error) {
             completion?(AppError(WebSocketServiceError.custom(error)))
         }

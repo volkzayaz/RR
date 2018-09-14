@@ -50,6 +50,12 @@ struct ProfileLocation: Codable {
     }
 }
 
+extension ProfileLocation: Equatable {
+    static func == (lhs: ProfileLocation, rhs: ProfileLocation) -> Bool {
+        return lhs.country == rhs.country && lhs.region == rhs.region && lhs.city == rhs.city && lhs.zip == rhs.zip
+    }
+}
+
 struct DetailedLocation: Decodable {
 
     let country: Country

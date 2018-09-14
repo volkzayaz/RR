@@ -50,16 +50,33 @@ final class ProfileControllerViewModel: ProfileViewModel {
     }
 
     func load(with delegate: ProfileViewModelDelegate) {
-        self.delegate = delegate
-
         guard let fanUser = self.application?.user as? FanUser else { return }
+
+        self.delegate = delegate
+        self.application?.addObserver(self)
 
         self.fanUser = fanUser
         self.profileItems = [.profileSettings, .changeEmail, .changePassword]
 
         self.delegate?.reloadUI()
 
-        self.application?.addObserver(self)
+        self.loadUser()
+
+    }
+
+    func loadUser() {
+        self.application?.fanUser(completion: { (fanUserResult) in
+            switch fanUserResult {
+            case .success(let user):
+                guard let fanUser = user as? FanUser else { return }
+
+                self.fanUser = fanUser
+                self.delegate?.refreshUI()
+
+            case .failure(let error):
+                self.delegate?.show(error: error)
+            }
+        })
     }
 
     func numberOfItems(in section: Int) -> Int {
@@ -83,6 +100,10 @@ final class ProfileControllerViewModel: ProfileViewModel {
     }
 
     // MARK: - Actions
+    func reload() {
+        self.loadUser()
+    }
+
     func logout() {
         self.application?.logout(completion: { (error) in
             guard let error = error else { return }

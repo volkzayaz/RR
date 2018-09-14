@@ -72,6 +72,23 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.languages = []
     }
 
+    func refreshDelegate(with userProfile: UserProfile) {
+
+        self.delegate?.refreshFirstNameField(with: userProfile.firstName)
+        self.delegate?.refreshNickNameField(with: userProfile.nickname)
+        self.delegate?.refreshGenderField(with: userProfile.gender)
+        self.delegate?.refreshBirthDateField(with: userProfile.birthDate)
+        self.delegate?.refreshCountryField(with: Country(with: userProfile.location.country))
+        self.delegate?.refreshZipField(with: userProfile.location.zip)
+        self.delegate?.refreshRegionField(with: Region(with: userProfile.location.region))
+        self.delegate?.refreshCityField(with: City(with: userProfile.location.city))
+        self.delegate?.refreshPhoneField(with: userProfile.phone)
+        self.delegate?.refreshHobbiesField(with: userProfile.hobbies)
+        self.delegate?.refreshGenresField(with: userProfile.genres)
+
+        self.delegate?.refreshUI()
+    }
+
     func load(with delegate: ProfileSettingsViewModelDelegate) {
         self.delegate = delegate
 
@@ -83,23 +100,26 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 self.delegate?.refreshField(field: validationError.field, didValidate: validationError)
         })
 
-        self.userProfile = fanUser.profile
-
         self.reloadConfig { (configResult) in }
+        self.loadUser()
 
-        self.delegate?.refreshFirstNameField(with: fanUser.profile.firstName)
-        self.delegate?.refreshNickNameField(with: fanUser.profile.nickname)
-        self.delegate?.refreshGenderField(with: fanUser.profile.gender)
-        self.delegate?.refreshBirthDateField(with: fanUser.profile.birthDate)
-        self.delegate?.refreshCountryField(with: Country(with: fanUser.profile.location.country))
-        self.delegate?.refreshZipField(with: fanUser.profile.location.zip)
-        self.delegate?.refreshRegionField(with: Region(with: fanUser.profile.location.region))
-        self.delegate?.refreshCityField(with: City(with: fanUser.profile.location.city))
-        self.delegate?.refreshPhoneField(with: fanUser.profile.phone)
-        self.delegate?.refreshHobbiesField(with: fanUser.profile.hobbies)
-        self.delegate?.refreshGenresField(with: fanUser.profile.genres)
+        self.userProfile = fanUser.profile
+        self.refreshDelegate(with: fanUser.profile)
+    }
 
-        self.delegate?.refreshUI()
+    func loadUser() {
+        self.application?.fanUser(completion: { (fanUserResult) in
+            switch fanUserResult {
+            case .success(let user):
+                guard let fanUser = user as? FanUser else { return }
+
+                self.userProfile = fanUser.profile
+                self.refreshDelegate(with: fanUser.profile)
+
+            case .failure(let error):
+                self.delegate?.show(error: error)
+            }
+        })
     }
 
     func reloadConfig(completion: @escaping (Result<Config>) -> Void) {

@@ -33,7 +33,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EfG-jY-YTN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="951" y="2340"/>
+            <point key="canvasLocation" x="673" y="2337"/>
         </scene>
         <!--Profile-->
         <scene sceneID="ZGZ-Mr-8PR">
@@ -104,6 +104,7 @@
                         <outlet property="nameLabel" destination="QVU-0m-Wpj" id="GbA-fa-tUn"/>
                         <outlet property="profileFooterView" destination="WyZ-hC-VjW" id="qaS-K0-iwb"/>
                         <outlet property="profileHeaderView" destination="rKn-gO-PwX" id="vDl-lA-E6M"/>
+                        <outlet property="refreshControl" destination="K8r-Ty-WnF" id="JZl-t3-fBQ"/>
                         <outlet property="tableView" destination="8UC-a2-vgZ" id="g32-QW-fdf"/>
                         <segue destination="Qtf-LH-mcC" kind="show" identifier="ProfileSettingsSegueIdentifier" id="H7S-2n-h7G"/>
                     </connections>
@@ -203,6 +204,16 @@
                             <include reference="sbH-TE-GYk"/>
                         </mask>
                     </variation>
+                </view>
+                <view contentMode="scaleToFill" id="K8r-Ty-WnF" customClass="UIRefreshControl">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <viewLayoutGuide key="safeArea" id="Blk-aO-2fp"/>
+                    <connections>
+                        <action selector="onRefreshWithSender:" destination="LG0-7t-Qu0" eventType="valueChanged" id="Lti-la-Tfe"/>
+                    </connections>
                 </view>
             </objects>
             <point key="canvasLocation" x="1973.5999999999999" y="2337.481259370315"/>
@@ -854,7 +865,7 @@
                     </connections>
                 </view>
             </objects>
-            <point key="canvasLocation" x="2892" y="2338.8305847076463"/>
+            <point key="canvasLocation" x="3297" y="2337"/>
         </scene>
         <!--SelectableListViewControllerIdentifer-->
         <scene sceneID="8Ko-QB-tue">

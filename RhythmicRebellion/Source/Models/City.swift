@@ -51,13 +51,12 @@ struct City: CityInfo, Decodable {
     }
 }
 
-extension City: Equatable {
+extension City: Hashable {
+
     static func == (lhs: City, rhs: City) -> Bool {
         return lhs.id == rhs.id && lhs.countryCode == rhs.countryCode && lhs.regionCode == rhs.regionCode
     }
-}
 
-extension City: Hashable {
     public var hashValue: Int { return self.id }
 }
 
@@ -104,5 +103,14 @@ struct ProfileCity: CityInfo, Codable {
         try container.encode(self.countryCode, forKey: .countryCode)
         try container.encode(self.regionCode, forKey: .regionCode)
     }
-
 }
+
+extension ProfileCity: Hashable {
+
+    static func == (lhs: ProfileCity, rhs: ProfileCity) -> Bool {
+        return lhs.id == rhs.id && lhs.countryCode == rhs.countryCode && lhs.regionCode == rhs.regionCode
+    }
+
+    public var hashValue: Int { return self.id }
+}
+

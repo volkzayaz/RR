@@ -19,6 +19,7 @@ protocol ProfileViewModel: class {
     func object(at indexPath: IndexPath) -> ProfileItemViewModel?
     func selectObject(at indexPath: IndexPath)
 
+    func reload()
     func logout()
 }
 

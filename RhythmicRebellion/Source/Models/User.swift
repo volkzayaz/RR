@@ -32,12 +32,6 @@ struct GuestUser: User {
     }
 }
 
-extension GuestUser: Equatable {
-    static func == (lhs: GuestUser, rhs: GuestUser) -> Bool {
-        return lhs.wsToken == rhs.wsToken
-    }
-}
-
 struct UserProfile: Decodable {
 
     let id: Int
@@ -99,6 +93,22 @@ struct UserProfile: Decodable {
     }
 }
 
+extension UserProfile: Equatable {
+    static func == (lhs: UserProfile, rhs: UserProfile) -> Bool {
+        return lhs.id == rhs.id &&
+                lhs.email == rhs.email &&
+                lhs.firstName == rhs.firstName &&
+                lhs.nickname == rhs.nickname &&
+                lhs.gender == rhs.gender &&
+                lhs.birthDate == rhs.birthDate &&
+                lhs.location == rhs.location &&
+                lhs.phone == rhs.phone &&
+                lhs.hobbies == rhs.hobbies &&
+                lhs.genres == rhs.genres &&
+                lhs.language == rhs.language
+    }
+}
+
 struct FanUser: User {
 
     let profile: UserProfile
@@ -120,12 +130,24 @@ struct FanUser: User {
 
 extension FanUser: Equatable {
     static func == (lhs: FanUser, rhs: FanUser) -> Bool {
-        guard lhs.profile.id == rhs.profile.id, lhs.wsToken == rhs.wsToken else { return false }
+        guard lhs.profile.id == rhs.profile.id else { return false }
         return true
     }
 }
 
+func == (lhs: User?, rhs: User?) -> Bool {
+    if let _ = lhs as? GuestUser, let _ = rhs as? GuestUser { return true }
+    if let lhsFanUser = lhs as? FanUser, let rhsFanUser = rhs as? FanUser { return lhsFanUser == rhsFanUser }
 
+    return false
+}
+
+func != (lhs: User?, rhs: User?) -> Bool {
+    if let _ = lhs as? GuestUser, let _ = rhs as? GuestUser { return false }
+    if let lhsFanUser = lhs as? FanUser, let rhsFanUser = rhs as? FanUser { return lhsFanUser.profile.id != rhsFanUser.profile.id }
+
+    return true
+}
 
 
 

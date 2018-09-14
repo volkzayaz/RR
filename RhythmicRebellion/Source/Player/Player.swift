@@ -936,6 +936,11 @@ extension Player: WebSocketServiceObserver {
 }
 
 extension Player: ApplicationObserver {
+    func application(_ application: Application, didChange user: User?) {
+        self.state.playing = false
+        self.player.pause()
+    }
+
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) {
         self.playlist.resetAddons()
     }

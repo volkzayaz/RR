@@ -11,6 +11,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
 
+    @IBOutlet weak var refreshControl: UIRefreshControl!
     @IBOutlet weak var profileHeaderView: UIView!
     @IBOutlet weak var profileFooterView: UIView!
 
@@ -44,6 +45,7 @@ final class ProfileViewController: UIViewController {
 
         self.tableView.backgroundView = UIView()
         self.tableView.backgroundView?.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+        self.tableView.addSubview(self.refreshControl)
         self.tableView.tableHeaderView = profileHeaderView
         self.tableView.tableFooterView = profileFooterView
 
@@ -51,6 +53,10 @@ final class ProfileViewController: UIViewController {
     }
 
     // MARK: - Actions
+
+    @IBAction func onRefresh(sender: UIRefreshControl) {
+        self.viewModel.reload()
+    }
 
     @IBAction func onLogout(sender: Any) {
         self.viewModel.logout()
@@ -103,6 +109,7 @@ extension ProfileViewController {
 extension ProfileViewController: ProfileViewModelDelegate {
 
     func refreshUI() {
+        self.refreshControl.endRefreshing()
         self.nameLabel.text = self.viewModel.userName
     }
 
