@@ -57,7 +57,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     func reload() {
 
-        self.application?.fanUser1(completion: { (fanUserResult) in
+        self.application?.fanUser(completion: { (fanUserResult) in
             switch fanUserResult {
 
             case .success(let user):

@@ -135,14 +135,14 @@ extension FanUser: Equatable {
     }
 }
 
-func == (lhs: User?, rhs: User?) -> Bool {
+func == (lhs: User, rhs: User) -> Bool {
     if let _ = lhs as? GuestUser, let _ = rhs as? GuestUser { return true }
     if let lhsFanUser = lhs as? FanUser, let rhsFanUser = rhs as? FanUser { return lhsFanUser == rhsFanUser }
 
     return false
 }
 
-func != (lhs: User?, rhs: User?) -> Bool {
+func != (lhs: User, rhs: User) -> Bool {
     if let _ = lhs as? GuestUser, let _ = rhs as? GuestUser { return false }
     if let lhsFanUser = lhs as? FanUser, let rhsFanUser = rhs as? FanUser { return lhsFanUser.profile.id != rhsFanUser.profile.id }
 

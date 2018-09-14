@@ -89,7 +89,11 @@ class Application: Observable {
 
     func set(user: User) {
 
-        let prevUser = self.user
+        guard let prevUser = self.user else {
+            self.notifyUserChanged()
+            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+            return
+        }
 
         self.user = user
 
@@ -122,20 +126,6 @@ class Application: Observable {
 
     }
 
-    func fanUser1(completion: ((Result<User>) -> Void)? = nil) {
-
-        self.restApiService.fanUser { [weak self] (fanUserResult) in
-
-            switch (fanUserResult) {
-            case .success(let user):
-                completion?(.success(user))
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
-
-
     func signIn(with credentials: UserCredentials, completion: ((Error?) -> Void)? = nil) {
 
         self.restApiService.fanLogin(email: credentials.email, password: credentials.password, completion: { [weak self] (loginUserResult) in
@@ -159,10 +149,7 @@ class Application: Observable {
         self.restApiService.fanLogout { [weak self] (logoutUserResult) in
             switch logoutUserResult {
             case .success(let user):
-                self?.webSocketService.disconnect()
-                self?.user = user
-                self?.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
-                self?.notifyUserChanged()
+                self?.set(user: user)
                 completion?(nil)
 
             case .failure(let error):
@@ -183,7 +170,7 @@ class Application: Observable {
             case .success(let user):
                 guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
 
-                self?.user = user
+                self?.set(user: user)
                 self?.notifyListeningSettingsChanged()
                 completion?(.success(fanUser.profile.listeningSettings))
 
@@ -205,8 +192,7 @@ class Application: Observable {
             case .success(let user):
                 guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
 
-                self?.user = user
-                self?.notifyUserProfileChanged()
+                self?.set(user: user)
                 completion?(.success(fanUser.profile))
 
             case .failure(let error):
