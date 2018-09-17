@@ -42,44 +42,51 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     let observersContainer = ObserversContainer<WebSocketServiceObserver>()
 
-    private(set) var socketURL: URL
-
     var webSocket: WebSocket?
     var token: Token?
 
+    var webSocketURL: URL
+
     var isReachable: Bool = false
-    var isConnected: Bool { return self.webSocket?.isConnected ?? false}
+    var isConnected: Bool { return self.webSocket?.isConnected ?? false }
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
     init(socketURL url: URL) {
 
-        self.socketURL = url
+        self.webSocketURL = url
+    }
+
+    func makeWebSocket() -> WebSocket {
+        var request = URLRequest(url: self.webSocketURL)
+        request.timeoutInterval = 1
+
+        let webSocket = WebSocket(request: request)
+        webSocket.delegate = self
+
+        return webSocket
     }
 
     func connect(with token: Token) {
         self.token = token
 
-        print("self.token: \(String(describing: self.token))")
+        print("connect with Token: \(self.token)")
 
-        var request = URLRequest(url: self.socketURL)
-        request.timeoutInterval = 1
-
-        self.webSocket = WebSocket(request: request)
-        self.webSocket?.delegate = self
-
+        self.webSocket = self.makeWebSocket()
         self.webSocket?.connect()
     }
 
     func reconnect() {
         guard let _ = self.token else { return }
 
+        print("reconnect with Token: \(self.token)")
+
+        self.webSocket = self.makeWebSocket()
         self.webSocket?.connect()
     }
 
     func disconnect() {
         self.webSocket?.disconnect()
-        self.webSocket?.delegate = nil
     }
 
     func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {

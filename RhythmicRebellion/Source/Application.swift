@@ -16,13 +16,13 @@ protocol UserCredentials {
 }
 
 protocol ApplicationObserver: class {
-    func application(_ application: Application, didChange user: User?)
+    func application(_ application: Application, didChange user: User)
     func application(_ application: Application, didChange listeningSettings: ListeningSettings)
     func application(_ application: Application, didChange profile: UserProfile)
 }
 
 extension ApplicationObserver {
-    func application(_ application: Application, didChange user: User?) { }
+    func application(_ application: Application, didChange user: User) { }
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
     func application(_ application: Application, didChange profile: UserProfile) { }
 }
@@ -90,8 +90,8 @@ class Application: Observable {
     func set(user: User) {
 
         guard let prevUser = self.user else {
+            self.user = user
             self.notifyUserChanged()
-            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
             return
         }
 
@@ -99,15 +99,17 @@ class Application: Observable {
 
         if prevUser != user {
             self.notifyUserChanged()
-        } else if let prevFanUser = prevUser as? FanUser,
+        } else {
+            if let prevFanUser = prevUser as? FanUser,
                     let fanUser = user as? FanUser,
-            prevFanUser.profile != fanUser.profile {
-            self.notifyUserProfileChanged()
-        }
+                prevFanUser.profile != fanUser.profile {
 
-        if self.webSocketService.token?.token != user.wsToken {
-            self.webSocketService.disconnect()
-            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+                self.notifyUserProfileChanged()
+            }
+
+            if self.webSocketService.token?.token != user.wsToken {
+                self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
+            }
         }
     }
 
@@ -132,9 +134,7 @@ class Application: Observable {
 
             switch (loginUserResult) {
             case .success(let user):
-                self?.user = user
-                self?.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
-                self?.notifyUserChanged()
+                self?.set(user: user)
                 completion?(nil)
 
             case .failure(let error):
@@ -206,8 +206,11 @@ class Application: Observable {
 extension Application {
 
     func notifyUserChanged() {
+
+        guard let user = self.user else { return }
+
         self.observersContainer.invoke({ (observer) in
-            observer.application(self, didChange: self.user)
+            observer.application(self, didChange: user)
         })
     }
 

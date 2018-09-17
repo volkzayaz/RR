@@ -895,6 +895,7 @@ extension Player: WebSocketServiceObserver {
         } else {
             guard let trackId = trackId else {
                 self.currentTrackId = nil
+                self.currentTrackState = nil
                 self.initializePlayer(); return
             }
             self.apply(currentTrackId: trackId)
@@ -902,6 +903,8 @@ extension Player: WebSocketServiceObserver {
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) {
+
+//        print("webSocketService trackState: \(trackState)")
 
         print("time: \(Date().timeIntervalSince(self.isMasterStateSendDate))")
         guard Date().timeIntervalSince(self.isMasterStateSendDate) > 1.0 else { print("BadTime"); return }
@@ -936,9 +939,50 @@ extension Player: WebSocketServiceObserver {
 }
 
 extension Player: ApplicationObserver {
-    func application(_ application: Application, didChange user: User?) {
+
+    func disconnect(isPlaying: Bool, isPlayingAddons: Bool) {
+
+        let pauseCompletion: (() -> ()) = { [weak self] () in
+            guard isPlayingAddons else {
+                self?.webSocketService.disconnect()
+                return
+
+            }
+            self?.set(trackBlocked: false) { [weak self] (error) in
+                self?.webSocketService.disconnect()
+            }
+        }
+
+        guard isPlaying else { pauseCompletion(); return }
+
+        let playerCurrentItemCurrentTime = self.currentTrackState?.progress ?? 0.0
+        let trackState = TrackState(hash: stateHash, progress: playerCurrentItemCurrentTime, isPlaying: false)
+        self.set(trackState: trackState) { [weak self] (error) in
+            pauseCompletion()
+        }
+    }
+
+    func application(_ application: Application, didChange user: User) {
+
+        guard self.webSocketService.isConnected == true else {
+            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+            return
+        }
+
+        let isOtherBlocked = self.state.waitingAddons || self.playerQueue.containsOnlyTrack == false
+        let isPlaying = self.state.playing
+
         self.state.playing = false
         self.player.pause()
+        self.addonsPlayTimer?.invalidate()
+        self.state.waitingAddons = false
+        self.state.initialized = false
+        self.state.blocked = false
+        self.playlist.resetAddons()
+
+        self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
+
+        self.disconnect(isPlaying: isPlaying, isPlayingAddons: isOtherBlocked)
     }
 
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) {

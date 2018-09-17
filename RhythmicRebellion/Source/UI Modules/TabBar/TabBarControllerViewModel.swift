@@ -57,9 +57,9 @@ final class TabBarControllerViewModel: TabBarViewModel {
 
 extension TabBarControllerViewModel: ApplicationObserver {
 
-    func application(_ application: Application, didChange user: User?) {
+    func application(_ application: Application, didChange user: User) {
 
-        let userType: UserType = user?.isGuest ?? true ? .guest : .authorized
+        let userType: UserType = user.isGuest ? .guest : .authorized
 
         self.router?.updateTabs(for: self.tabTypes(for: userType))
 
