@@ -20,6 +20,7 @@ public class ModelSupport {
     lazy var dateFormatter: DateFormatter = {
         let dateTimeFormattre = DateFormatter()
 
+        dateTimeFormattre.locale = Locale(identifier: "en_US_POSIX")
         dateTimeFormattre.timeZone = TimeZone(secondsFromGMT: 0)
         dateTimeFormattre.dateFormat = "yyyy-MM-dd"
 
@@ -29,6 +30,7 @@ public class ModelSupport {
     lazy var dateTimeFormattre: DateFormatter = {
         let dateTimeFormattre = DateFormatter()
 
+        dateTimeFormattre.locale = Locale(identifier: "en_US_POSIX")
         dateTimeFormattre.timeZone = TimeZone(secondsFromGMT: 0)
         dateTimeFormattre.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
 
