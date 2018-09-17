@@ -8,20 +8,34 @@
 
 import Foundation
 
-struct AudioFile: Codable {
+protocol AudioFile {
+    var duration: Int { get }
+    var urlString: String { get }
+}
+
+
+struct TrackAudioFile: AudioFile, Codable {
     let id: Int
-    let title: String
-    let original_name: String
     let bitrate: String
     let duration: Int
     let urlString: String
 
     enum CodingKeys: String, CodingKey {
         case id
-        case title
-        case original_name
         case bitrate
         case duration
         case urlString = "link"
     }
+}
+
+struct PlayerConfigAudioFile: AudioFile, Decodable {
+
+    let duration: Int
+    let urlString: String
+
+    enum CodingKeys: String, CodingKey {
+        case duration
+        case urlString = "link"
+    }
+
 }

@@ -79,7 +79,7 @@ class Player: NSObject, Observable {
         guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized }
 
         switch currentQueueItem.content {
-        case .addon(let addon): return addon.type == .ArtistBIO || addon.type == .SongCommentary
+        case .addon(let addon): return addon.type == .artistBIO || addon.type == .songCommentary
         default: break
         }
 
@@ -131,6 +131,7 @@ class Player: NSObject, Observable {
     }
     private var isMasterStateSendDate = Date(timeIntervalSinceNow: -2)
 
+    private(set) var config: PlayerConfig?
     private(set) var state: PlayerState = []
     private(set) var initializationAction: PlayerInitializationAction = .none
 
@@ -211,6 +212,15 @@ class Player: NSObject, Observable {
 
         NotificationCenter.default.removeObserver(self)
         self.webSocketService.removeObserver(self)
+    }
+
+    func loadConfig() {
+        self.restApiService.playerConfig { [weak self] (playerConfigResult) in
+            switch playerConfigResult {
+            case .success(let playerConfig): self?.config = playerConfig
+            default: break
+            }
+        }
     }
 
     func performeInitializationAction() {

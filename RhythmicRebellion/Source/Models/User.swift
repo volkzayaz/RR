@@ -46,6 +46,7 @@ struct UserProfile: Decodable {
     let howHearId: Int
     var genres: [Genre]?
     var language: String?
+//    var purchasedTracksIds: [Int]
 
     var listeningSettings: ListeningSettings
 

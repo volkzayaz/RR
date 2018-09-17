@@ -341,6 +341,24 @@ class RestApiService {
 
     // MARK: - Config -
 
+    func playerConfig(completion: @escaping (Result<PlayerConfig>) -> Void) {
+        guard let configURL = self.makeURL(with: "player/config") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json"]
+
+        Alamofire.request(configURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<PlayerConfigResponse>) in
+
+                switch dataResponse.result {
+                case .success(let playerConfigResponse): completion(.success(playerConfigResponse.playerConfig))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+
+    }
+
     func config(completion: @escaping (Result<Config>) -> Void) {
         guard let configURL = self.makeURL(with: "config") else { return }
 

@@ -256,6 +256,20 @@ struct TrackMoveResponse: RestApiResponse {
 
 // MARK: - Config -
 
+struct PlayerConfigResponse: RestApiResponse {
+
+    let playerConfig: PlayerConfig
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.playerConfig = try container.decode(PlayerConfig.self, forKey: .data)
+    }
+}
+
 struct ConfigResponse: RestApiResponse {
 
     let config: Config

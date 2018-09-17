@@ -174,6 +174,7 @@
 		76D39CF82113183200D47DFA /* PlaylistTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CF72113183200D47DFA /* PlaylistTableHeaderView.swift */; };
 		76D39CFA211353A200D47DFA /* PlaylistHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CF9211353A200D47DFA /* PlaylistHeaderViewModel.swift */; };
 		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
+		76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E9D86D214FE03800873A7C /* PlayerConfig.swift */; };
 		76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1420F73DCC0021297F /* PlayerQueue.swift */; };
 		76EDBD1920F78FCD0021297F /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1820F78FCD0021297F /* AppError.swift */; };
 		76EDBD1B20F796FF0021297F /* WebSocketServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1A20F796FF0021297F /* WebSocketServiceError.swift */; };
@@ -380,6 +381,7 @@
 		76D39CF72113183200D47DFA /* PlaylistTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTableHeaderView.swift; sourceTree = "<group>"; };
 		76D39CF9211353A200D47DFA /* PlaylistHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderViewModel.swift; sourceTree = "<group>"; };
 		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		76E9D86D214FE03800873A7C /* PlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerConfig.swift; sourceTree = "<group>"; };
 		76EDBD1420F73DCC0021297F /* PlayerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerQueue.swift; sourceTree = "<group>"; };
 		76EDBD1820F78FCD0021297F /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		76EDBD1A20F796FF0021297F /* WebSocketServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketServiceError.swift; sourceTree = "<group>"; };
@@ -657,6 +659,7 @@
 				764D6844214927F700F52730 /* Language.swift */,
 				762DD780214121500046A984 /* Config.swift */,
 				764D6842214920C300F52730 /* Genre.swift */,
+				76E9D86D214FE03800873A7C /* PlayerConfig.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1256,6 +1259,7 @@
 				AB33C985211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift in Sources */,
 				767BA578211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift in Sources */,
 				7665335020FF1DE300FEC702 /* ProfileViewController.swift in Sources */,
+				76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */,
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
 				763931F72118831600A65257 /* PlayerMyPlaylistsViewModel.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,

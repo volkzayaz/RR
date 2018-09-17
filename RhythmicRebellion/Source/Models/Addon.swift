@@ -10,10 +10,21 @@ import Foundation
 
 enum AddonType: Int {
     case unknown = 0
-    case SongIntroduction = 1
-    case SongCommentary = 2
-    case ArtistBIO = 3
-    case ArtistAnnouncements = 4
+    case songIntroduction = 1
+    case songCommentary = 2
+    case artistBIO = 3
+    case artistAnnouncements = 4
+
+    var title: String {
+        switch self {
+        case .songIntroduction: return NSLocalizedString("Intro", comment: "SongIntroduction addon title")
+        case .songCommentary: return NSLocalizedString("Commentary", comment: "SongCommentary addon title")
+        case .artistBIO: return NSLocalizedString("ArtistBIO", comment: "ArtistBIO addon title")
+        case .artistAnnouncements: return NSLocalizedString("Announcement", comment: "ArtistAnnouncements addon title")
+
+        default: return ""
+        }
+    }
 }
 
 struct Addon: Codable {
@@ -28,7 +39,7 @@ struct Addon: Codable {
     let endDate: Date?
     let createdDate: Date?
     let updatedDate: Date?
-    let audioFile: AudioFile
+    let audioFile: TrackAudioFile
 
     var type: AddonType { return AddonType(rawValue: typeValue) ?? .unknown}
 
@@ -62,7 +73,7 @@ struct Addon: Codable {
         self.createdDate = try container.decodeAsDate(String.self, forKey: .createdDate, dateFormatter: dateTimeFormatter)
         self.updatedDate = try container.decodeAsDate(String.self, forKey: .updatedDate, dateFormatter: dateTimeFormatter)
 
-        self.audioFile = try container.decode(AudioFile.self, forKey: .audioFile)
+        self.audioFile = try container.decode(TrackAudioFile.self, forKey: .audioFile)
     }
 
     public func encode(to encoder: Encoder) throws {

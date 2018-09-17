@@ -25,15 +25,15 @@ struct Track: Codable {
     let releaseDateFans: Date?
     let featuring: String?
     let images: [Image]
-    let audioFile: AudioFile?
-    let cleanAudioFile: AudioFile?
+    let audioFile: TrackAudioFile?
+    let cleanAudioFile: TrackAudioFile?
     let artist: Artist
     let fansLiked: Int
     let fansDisliked: Int
 //    let current_fan_listen: Any?
     let isReleasedForFans: Bool
     let writer: TrackWriter
-    let backingTrack: AudioFile?
+    let backingTrack: TrackAudioFile?
 
 
     var isPlayable: Bool { return self.audioFile != nil }
@@ -88,8 +88,8 @@ struct Track: Codable {
         self.featuring = try? container.decode(String.self, forKey: .featuring)
 
         self.images = try container.decode([Image].self, forKey: .images)
-        self.audioFile = try? container.decode(AudioFile.self, forKey: .audioFile)
-        self.cleanAudioFile = try? container.decode(AudioFile.self, forKey: .cleanAudioFile)
+        self.audioFile = try? container.decode(TrackAudioFile.self, forKey: .audioFile)
+        self.cleanAudioFile = try? container.decode(TrackAudioFile.self, forKey: .cleanAudioFile)
         self.artist = try container.decode(Artist.self, forKey: .artist)
 
         self.fansLiked = try container.decode(Int.self, forKey: .fansLiked)
@@ -97,7 +97,7 @@ struct Track: Codable {
         self.isReleasedForFans = try container.decode(Bool.self, forKey: .isReleasedForFans)
 
         self.writer = try container.decode(TrackWriter.self, forKey: .writer)
-        self.backingTrack = try? container.decode(AudioFile.self, forKey: .backingTrack)
+        self.backingTrack = try? container.decode(TrackAudioFile.self, forKey: .backingTrack)
     }
 
     public func encode(to encoder: Encoder) throws {

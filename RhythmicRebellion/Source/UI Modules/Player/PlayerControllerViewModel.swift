@@ -36,7 +36,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         switch playerCurrentQueueItem.content {
         case .addon(let addon):
-            return addon.audioFile.title
+            return addon.type.title
         case .track(let track):
             return track.name
         }

@@ -50,6 +50,7 @@ class Application: Observable {
     private let webSocketServiceReachability: Reachability?
 
     var user: User? = nil
+    var config: Config?
 
     init?() {
         guard let restApiServiceURL = URL(string: URI.restApiService), let webSocketServiceURL = URL(string: URI.webSocketService) else { return nil }
@@ -62,8 +63,9 @@ class Application: Observable {
         self.webSocketServiceReachability = Reachability(hostname: webSocketServiceURL.host!)
 
         self.restApiServiceReachability?.whenReachable = { [unowned self] _ in
-            guard self.user == nil else { return }
-            self.fanUser()
+            if self.config == nil { self.loadConfig() }
+            if self.player.config == nil { self.player.loadConfig() }
+            if self.user == nil { self.fanUser() }
         }
 
         self.webSocketServiceReachability?.whenReachable = { [unowned self] _ in
@@ -85,7 +87,20 @@ class Application: Observable {
         _ = try? self.restApiServiceReachability?.startNotifier()
     }
 
+    func loadConfig(completion: ((Result<Config>) -> Void)? = nil) {
 
+        self.restApiService.config { [weak self] (configResult) in
+
+            switch configResult {
+            case .success(let config):
+                self?.config = config
+
+            default: break
+            }
+
+            completion?(configResult)
+        }
+    }
 
     func set(user: User) {
 
