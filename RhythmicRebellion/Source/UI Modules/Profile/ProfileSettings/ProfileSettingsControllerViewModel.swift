@@ -324,11 +324,14 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                         userProfile.gender != self.genderField?.gender ||
                         userProfile.birthDate != self.birthDateField?.date ||
                         Country(with: userProfile.location.country) != self.countryField?.country ||
+                        userProfile.location.zip != self.zipField?.validationText ||
                         Region(with: userProfile.location.region) != self.regionField?.region ||
                         City(with: userProfile.location.city) != self.cityField?.city ||
+                        userProfile.phone ?? "" != self.phoneField?.validationText ||
                         userProfile.hobbies != self.hobbiesField?.hobbies ||
                         userProfile.genres != self.genresField?.genres ||
                         userProfile.language != self.languageField?.language?.id
+
 
 
 
@@ -473,6 +476,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 self.delegate?.refreshCityField(with: detailedLocation.city)
                 self.validator.validateField(cityField, callback: { (validationError) in })
 
+                self.checkCanSaveState()
+
             case .failure(let error):
                 guard let appError = error as? AppError, let appErrorGroup = appError.source else {
                     self.delegate?.show(error: error)
@@ -541,7 +546,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 switch (userProfileResult) {
                 case .success(let userProfile):
                     self?.userProfile = userProfile
-                    self?.delegate?.refreshUI()
+                    self?.refreshDelegate(with: userProfile)
+                    self?.checkCanSaveState()
 
 
                 case .failure(let error):
