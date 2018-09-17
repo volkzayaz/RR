@@ -19,7 +19,7 @@ enum AddonType: Int {
         switch self {
         case .songIntroduction: return NSLocalizedString("Intro", comment: "SongIntroduction addon title")
         case .songCommentary: return NSLocalizedString("Commentary", comment: "SongCommentary addon title")
-        case .artistBIO: return NSLocalizedString("ArtistBIO", comment: "ArtistBIO addon title")
+        case .artistBIO: return NSLocalizedString("BIO", comment: "ArtistBIO addon title")
         case .artistAnnouncements: return NSLocalizedString("Announcement", comment: "ArtistAnnouncements addon title")
 
         default: return ""
