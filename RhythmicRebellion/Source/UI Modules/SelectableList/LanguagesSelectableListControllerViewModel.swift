@@ -56,7 +56,7 @@ final class LanguagesSelectableListControllerViewModel: SelectableListController
 
     typealias ItemSelectionCallback = (Language) -> Void
 
-    override var title: String { return NSLocalizedString("Select City", comment: "Select City Title") }
+    override var title: String { return NSLocalizedString("Select Language", comment: "Select Language Title") }
 
     var itemSelectionCallback: ItemSelectionCallback?
 
