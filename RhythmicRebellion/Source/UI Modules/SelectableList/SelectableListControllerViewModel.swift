@@ -31,7 +31,7 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
     var doneButtonTitle: String { return NSLocalizedString("Done", comment: "Done BarButton ttile") }
 
     var isSearchable: Bool
-    var canDone: Bool { return self.selectedItems.count > 0 }
+    var canDone: Bool { return self.initialSelectedItems != Set(self.selectedItems) }
 
     private(set) weak var delegate: SelectableListViewModelDelegate?
     private(set) weak var router: SelectableListRouter?
@@ -39,6 +39,7 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
     private(set) var dataProvider: T
 
     private(set) var filteredItems: [T.Item]
+    private(set) var initialSelectedItems: Set<T.Item>
     private(set) var selectedItems: [T.Item]
 
     private(set) var selectionType: SelectionType
@@ -54,6 +55,7 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
         self.isSearchable = isSearchable
 
         self.filteredItems = dataProvider.items
+        self.initialSelectedItems = Set(selectedItems)
         self.selectedItems = selectedItems
     }
 
@@ -141,105 +143,5 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
         self.delegate?.refreshUI()
         self.router?.done()
     }
-
-
-
 }
 
-//class SelectableListControllerViewModel: SelectableListViewModel {
-//
-//    var title: String { return "" }
-//
-//    // MARK: - Private properties -
-//
-//    private(set) weak var delegate: SelectableListViewModelDelegate?
-//    private(set) weak var router: SelectableListRouter?
-//
-//    private(set) var itemsDataProvider: SelectableListItemsDataProvider
-//
-//    private(set) var selectionType: SelectionType
-//    // MARK: - Lifecycle -
-//
-//    init(router: SelectableListRouter, itemsDataSource: SelectableListItemsDataProvider, selectionType: SelectionType) {
-//        self.router = router
-//        self.itemsDataProvider = itemsDataSource
-//        self.selectionType = selectionType
-//    }
-//
-//    func load(with delegate: SelectableListViewModelDelegate) {
-//        self.delegate = delegate
-//
-//        if self.itemsDataProvider.items.count == 0 {
-//            self.reload()
-//        }
-//
-//        self.delegate?.reloadUI()
-//    }
-//
-//    func reload() {
-//        self.itemsDataProvider.reload { [weak self] (itemsResult) in
-//            guard let `self` = self else { return }
-//            switch itemsResult {
-//
-//            case .success(_ ):
-//                self.delegate?.reloadUI()
-//
-//            case .failure(let error):
-//                self.delegate?.reloadUI()
-//                self.delegate?.show(error: error)
-//            }
-//        }
-//    }
-//
-//    func filterItems(with searchText: String) {
-//        self.itemsDataProvider.filterItems(with: searchText)
-//        self.delegate?.reloadUI()
-//    }
-//
-//    func numberOfItems(in section: Int) -> Int {
-//        return self.itemsDataProvider.filteredItems.count
-//    }
-//
-//    func object(at indexPath: IndexPath) -> SelectableListItemViewModel? {
-//        guard self.itemsDataProvider.filteredItems.count > indexPath.row else { return nil }
-//
-//        let selectableListItem = self.itemsDataProvider.filteredItems[indexPath.row]
-//
-//        return SelectableListItemViewModel(with: selectableListItem, isSelected: self.itemsDataProvider.isItemSelected(selectableListItem))
-//    }
-//
-//    func selectObject(at indexPath: IndexPath) {
-//        guard self.itemsDataProvider.filteredItems.count > indexPath.row else { return }
-//
-//        let selectableListItem = self.itemsDataProvider.filteredItems[indexPath.row]
-//
-//        switch self.selectionType {
-//        case .single:
-//            var indexPathsToReload = [IndexPath]()
-//            let selectedItems = self.itemsDataProvider.selectedItems
-//            for selectedItem in selectedItems {
-//                if let selectedItemIndex = self.itemsDataProvider.index(of: selectedItem) {
-//                    indexPathsToReload.append(IndexPath(row: selectedItemIndex, section: indexPath.section))
-//                }
-//                self.itemsDataProvider.deselectItem(selectedItem)
-//            }
-//
-//            self.itemsDataProvider.selectItem(selectableListItem)
-//            indexPathsToReload.append(indexPath)
-//            self.delegate?.reloadItems(at: indexPathsToReload)
-//
-//            self.done()
-//            break
-//
-//        case .multiple:
-//            break
-//        }
-//
-//    }
-//
-//    func done() {
-//        self.delegate?.refreshUI()
-//        self.router?.done()
-//    }
-//
-//}
