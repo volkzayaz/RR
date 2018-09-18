@@ -11,16 +11,10 @@ import UIKit
 import MaterialTextField
 import SwiftValidator
 
-class SignInView: UIView {
-
-    override var intrinsicContentSize: CGSize {
-        return super.intrinsicContentSize
-    }
-}
-
 final class SignInViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var emailTextField: MFTextField!
     @IBOutlet weak var emailErrorLabel: UILabel!
     @IBOutlet weak var passwordTextField: MFTextField!
@@ -157,6 +151,16 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         }
 
         return true
+    }
+
+    @IBAction func textFieldEditingChange(textField: UITextField) {
+
+        let textFieldFrame = self.contentView.convert(textField.frame, to: self.scrollView)
+        let scrollViewBounds = UIEdgeInsetsInsetRect(self.scrollView.bounds, self.scrollView.contentInset)
+
+        if scrollViewBounds.contains(textFieldFrame) == false {
+            scrollView.scrollRectToVisible(textFieldFrame, animated: true)
+        }
     }
 
     // MARK: - Notifications

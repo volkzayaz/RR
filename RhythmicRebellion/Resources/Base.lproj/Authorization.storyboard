@@ -84,7 +84,7 @@
         <scene sceneID="Rct-2S-asb">
             <objects>
                 <viewController storyboardIdentifier="SignInViewControllerIdentifier" id="hos-JY-fvT" customClass="SignInViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="QH8-Oi-PQv" customClass="SignInView" customModule="RhythmicRebellion" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="QH8-Oi-PQv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -107,7 +107,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6fQ-Yl-Gmd" customClass="MFTextField">
-                                                <rect key="frame" x="19" y="97" width="337.5" height="18"/>
+                                                <rect key="frame" x="19" y="97" width="337.5" height="34"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="email"/>
@@ -117,11 +117,12 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="hos-JY-fvT" eventType="editingChanged" id="V7y-wl-mat"/>
                                                     <outlet property="delegate" destination="hos-JY-fvT" id="q2u-rv-l8M"/>
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EmailErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Uc-wD-aSC">
-                                                <rect key="frame" x="19" y="118" width="337.5" height="12"/>
+                                                <rect key="frame" x="19" y="134" width="337.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="12" id="x73-sc-DGP"/>
                                                 </constraints>
@@ -130,7 +131,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Biq-p8-eQ2" customClass="MFTextField">
-                                                <rect key="frame" x="19" y="140" width="337.5" height="18"/>
+                                                <rect key="frame" x="19" y="156" width="337.5" height="34"/>
                                                 <color key="backgroundColor" red="0.69411772489547729" green="0.72549021244049072" blue="0.99999994039535522" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -141,11 +142,12 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="hos-JY-fvT" eventType="editingChanged" id="uUS-5F-agP"/>
                                                     <outlet property="delegate" destination="hos-JY-fvT" id="EpT-bV-HLL"/>
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PasswordErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eXm-j1-s70">
-                                                <rect key="frame" x="19" y="161" width="337.5" height="12"/>
+                                                <rect key="frame" x="19" y="193" width="337.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="12" id="Dlb-6f-W5l"/>
                                                 </constraints>
@@ -154,7 +156,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CfQ-aD-NPM">
-                                                <rect key="frame" x="19" y="193" width="115" height="29"/>
+                                                <rect key="frame" x="19" y="225" width="115" height="29"/>
                                                 <state key="normal">
                                                     <attributedString key="attributedTitle">
                                                         <fragment content="Restore Password">
@@ -172,7 +174,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YkM-36-fLq">
-                                                <rect key="frame" x="19" y="257" width="337.5" height="44"/>
+                                                <rect key="frame" x="19" y="289" width="337.5" height="44"/>
                                                 <color key="backgroundColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="PlK-6x-0ts"/>
@@ -251,6 +253,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="FE4-BX-Sun"/>
                     <connections>
+                        <outlet property="contentView" destination="rvu-Mb-jKh" id="h1E-V7-q2D"/>
                         <outlet property="emailErrorLabel" destination="6Uc-wD-aSC" id="hkr-aq-8ff"/>
                         <outlet property="emailTextField" destination="6fQ-Yl-Gmd" id="Gdw-PA-fP4"/>
                         <outlet property="passwordErrorLabel" destination="eXm-j1-s70" id="eUx-f4-fzh"/>
@@ -295,6 +298,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="gYS-d3-Opb" eventType="editingChanged" id="63I-QG-Moh"/>
                                                     <outlet property="delegate" destination="gYS-d3-Opb" id="sck-I1-fJ5"/>
                                                 </connections>
                                             </textField>
@@ -385,6 +389,7 @@
                         <viewLayoutGuide key="safeArea" id="Q71-Ps-n20"/>
                     </view>
                     <connections>
+                        <outlet property="contentView" destination="93J-5S-BkM" id="AbI-fm-ohk"/>
                         <outlet property="emailErrorLabel" destination="msb-4C-o4P" id="FCE-Uo-i8v"/>
                         <outlet property="emailTextField" destination="lA7-FM-rP9" id="tMh-GF-bVr"/>
                         <outlet property="restorePasswordErrorLabel" destination="s9U-2k-KG3" id="n9a-ld-w4W"/>
@@ -427,6 +432,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="j8M-zO-2NM" eventType="editingChanged" id="7IF-qn-I2l"/>
                                                     <outlet property="delegate" destination="j8M-zO-2NM" id="gE8-xV-DwR"/>
                                                 </connections>
                                             </textField>
@@ -460,6 +466,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="j8M-zO-2NM" eventType="editingChanged" id="sHx-lB-KO0"/>
                                                     <outlet property="delegate" destination="j8M-zO-2NM" id="za6-CR-q3n"/>
                                                 </connections>
                                             </textField>
@@ -484,6 +491,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="j8M-zO-2NM" eventType="editingChanged" id="5Pb-pT-fQ9"/>
                                                     <outlet property="delegate" destination="j8M-zO-2NM" id="dlO-CN-e2O"/>
                                                 </connections>
                                             </textField>
@@ -508,6 +516,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="j8M-zO-2NM" eventType="editingChanged" id="1TG-HJ-yMm"/>
                                                     <outlet property="delegate" destination="j8M-zO-2NM" id="N4t-ca-URY"/>
                                                 </connections>
                                             </textField>
@@ -531,7 +540,7 @@
                                                     <action selector="genderSegmentedControlChangedWithSender:" destination="j8M-zO-2NM" eventType="valueChanged" id="SqS-rV-NtA"/>
                                                 </connections>
                                             </segmentedControl>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nick Name" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HcZ-Mr-xX3" customClass="MFTextField">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nickname" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HcZ-Mr-xX3" customClass="MFTextField">
                                                 <rect key="frame" x="19" y="273.5" width="337.5" height="34"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="textColor"/>
@@ -543,6 +552,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="j8M-zO-2NM" eventType="editingChanged" id="dIW-gn-CmG"/>
                                                     <outlet property="delegate" destination="j8M-zO-2NM" id="40c-VZ-rLV"/>
                                                 </connections>
                                             </textField>
@@ -616,6 +626,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="j8M-zO-2NM" eventType="editingChanged" id="rxh-aW-tKV"/>
                                                     <outlet property="delegate" destination="j8M-zO-2NM" id="4Lv-hB-f1g"/>
                                                 </connections>
                                             </textField>
@@ -702,6 +713,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="j8M-zO-2NM" eventType="editingChanged" id="iGV-tQ-esi"/>
                                                     <outlet property="delegate" destination="j8M-zO-2NM" id="VEn-iy-h4T"/>
                                                 </connections>
                                             </textField>
@@ -982,6 +994,7 @@
                         <outlet property="cityErrorLabel" destination="L1W-Ic-IA6" id="4nG-6y-Qml"/>
                         <outlet property="cityTextField" destination="ZdP-6U-L27" id="Kl9-cD-bQM"/>
                         <outlet property="cityTextFieldSelectionIndicator" destination="ROb-tn-JWO" id="UGr-eB-RN4"/>
+                        <outlet property="contentView" destination="TSB-TV-Gzy" id="xVP-i0-8o6"/>
                         <outlet property="countryErrorLabel" destination="gOU-S2-pcj" id="K37-9c-AE3"/>
                         <outlet property="countryTextField" destination="jSi-Mv-gjt" id="C5w-0O-wPj"/>
                         <outlet property="countryTextFieldSelectionIndicator" destination="Qcm-LB-YoZ" id="pmR-UM-ca2"/>
@@ -1009,7 +1022,6 @@
                         <outlet property="regionTextField" destination="SWt-3w-kl5" id="7Gd-eW-RkZ"/>
                         <outlet property="regionTextFieldSelectionIndicator" destination="RuC-pO-3YJ" id="YlG-Xf-t13"/>
                         <outlet property="scrollView" destination="nuS-6k-Vqe" id="8ba-Cj-Q4Z"/>
-                        <outlet property="signUpContentView" destination="TSB-TV-Gzy" id="5gX-Qf-vSd"/>
                         <outlet property="signUpErrorLabel" destination="mQ6-Qc-87z" id="Fxg-ZR-7pz"/>
                         <outlet property="signUpSuccedLabel" destination="l6N-4I-BRw" id="Bzq-Uv-Vrt"/>
                         <outlet property="zipErrorLabel" destination="A5g-xF-nyM" id="ZWO-lH-HSQ"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eKQ-7B-1NY">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -221,13 +221,13 @@
         <!--Profile Settings-->
         <scene sceneID="gJj-jf-yqx">
             <objects>
-                <viewController title="Profile Settings" id="Qtf-LH-mcC" customClass="ProfileSettingsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Profile Settings" automaticallyAdjustsScrollViewInsets="NO" id="Qtf-LH-mcC" customClass="ProfileSettingsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Gw-5f-9ka">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="960"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="900"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="dsJ-ZP-X2z">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="960"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="900"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="in7-EH-98j">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="900"/>
@@ -259,6 +259,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="Qtf-LH-mcC" eventType="editingChanged" id="a9s-Yu-hxt"/>
                                                     <outlet property="delegate" destination="Qtf-LH-mcC" id="poU-5u-vzQ"/>
                                                 </connections>
                                             </textField>
@@ -271,7 +272,7 @@
                                                 <color key="textColor" red="0.93333333330000001" green="0.16862745100000001" blue="0.1647058824" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nick Name" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Xx-7L-Dze" customClass="MFTextField">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nickname" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Xx-7L-Dze" customClass="MFTextField">
                                                 <rect key="frame" x="19" y="137" width="337.5" height="34"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="textColor"/>
@@ -283,6 +284,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="Qtf-LH-mcC" eventType="editingChanged" id="XRI-BC-IpH"/>
                                                     <outlet property="delegate" destination="Qtf-LH-mcC" id="U64-Ew-g2W"/>
                                                 </connections>
                                             </textField>
@@ -386,6 +388,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="Qtf-LH-mcC" eventType="editingChanged" id="ewK-qv-wQ5"/>
                                                     <outlet property="delegate" destination="Qtf-LH-mcC" id="uex-Z7-SES"/>
                                                 </connections>
                                             </textField>
@@ -476,6 +479,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="textFieldEditingChangeWithTextField:" destination="Qtf-LH-mcC" eventType="editingChanged" id="WGD-a7-8xA"/>
                                                     <outlet property="delegate" destination="Qtf-LH-mcC" id="mse-cT-vt9"/>
                                                 </connections>
                                             </textField>
@@ -762,7 +766,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <size key="freeformSize" width="375" height="1024"/>
+                    <size key="freeformSize" width="375" height="964"/>
                     <connections>
                         <outlet property="birthdateErrorLabel" destination="6gg-BW-dfd" id="kYV-PH-U7K"/>
                         <outlet property="birthdateInputView" destination="6nh-Gy-lTI" id="b93-iA-MbJ"/>
@@ -770,6 +774,7 @@
                         <outlet property="cityErrorLabel" destination="wke-Uk-PTx" id="rqc-MX-EWe"/>
                         <outlet property="cityTextField" destination="Lif-s4-Jct" id="ut5-V9-nKp"/>
                         <outlet property="cityTextFieldSelectionIndicator" destination="68t-os-BxI" id="Z8X-bq-kAR"/>
+                        <outlet property="contentView" destination="in7-EH-98j" id="wS5-Xq-Azx"/>
                         <outlet property="countryErrorLabel" destination="Pjs-No-VF4" id="Ik6-GB-mgH"/>
                         <outlet property="countryTextField" destination="QNI-XI-nyj" id="JHa-ao-bmH"/>
                         <outlet property="countryTextFieldSelectionIndicator" destination="xwJ-gJ-lnp" id="HWV-kB-Ll4"/>

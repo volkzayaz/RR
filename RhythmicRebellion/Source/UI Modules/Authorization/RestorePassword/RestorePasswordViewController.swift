@@ -16,6 +16,7 @@ final class RestorePasswordViewController: UIViewController {
     @IBOutlet weak var restorePasswordSuccedLabel: UILabel!
 
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
 
     @IBOutlet weak var restorePasswordErrorLabel: UILabel!
     @IBOutlet weak var emailTextField: MFTextField!
@@ -129,6 +130,16 @@ extension RestorePasswordViewController: UITextFieldDelegate {
         }
 
         return true
+    }
+
+    @IBAction func textFieldEditingChange(textField: UITextField) {
+
+        let textFieldFrame = self.contentView.convert(textField.frame, to: self.scrollView)
+        let scrollViewBounds = UIEdgeInsetsInsetRect(self.scrollView.bounds, self.scrollView.contentInset)
+
+        if scrollViewBounds.contains(textFieldFrame) == false {
+            scrollView.scrollRectToVisible(textFieldFrame, animated: true)
+        }
     }
 }
 

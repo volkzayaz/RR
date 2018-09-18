@@ -20,7 +20,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var signUpSuccedLabel: UILabel!
 
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var signUpContentView: SignUpContentView!
+    @IBOutlet weak var contentView: SignUpContentView!
 
     @IBOutlet weak var signUpErrorLabel: UILabel!
 
@@ -303,6 +303,16 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         nextTextField.becomeFirstResponder()
 
         return false
+    }
+
+    @IBAction func textFieldEditingChange(textField: UITextField) {
+
+        let textFieldFrame = self.contentView.convert(textField.frame, to: self.scrollView)
+        let scrollViewBounds = UIEdgeInsetsInsetRect(self.scrollView.bounds, self.scrollView.contentInset)
+
+        if scrollViewBounds.contains(textFieldFrame) == false {
+            scrollView.scrollRectToVisible(textFieldFrame, animated: true)
+        }
     }
 
     // MARK: - Notifications -

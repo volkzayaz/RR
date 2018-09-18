@@ -14,6 +14,7 @@ import SwiftValidator
 final class ProfileSettingsViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
 
     @IBOutlet weak var profileSettingsErrorLabel: UILabel!
 
@@ -218,7 +219,7 @@ final class ProfileSettingsViewController: UIViewController {
         guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
 
-        let bottomInset = self.view.bounds.maxY - keyboardFrame.minY
+        let bottomInset = self.scrollView.frame.maxY - keyboardFrame.minY
         if bottomInset > 0 {
             let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
             scrollView.contentInset = contentInsets
@@ -272,6 +273,16 @@ extension ProfileSettingsViewController: UITextFieldDelegate {
         }
 
         return true
+    }
+
+    @IBAction func textFieldEditingChange(textField: UITextField) {
+
+        let textFieldFrame = self.contentView.convert(textField.frame, to: self.scrollView)
+        let scrollViewBounds = UIEdgeInsetsInsetRect(self.scrollView.bounds, self.scrollView.contentInset)
+
+        if scrollViewBounds.contains(textFieldFrame) == false {
+            scrollView.scrollRectToVisible(textFieldFrame, animated: true)
+        }
     }
 }
 
