@@ -44,6 +44,8 @@ struct Track: Codable {
     let backingTrack: TrackAudioFile?
 
 
+
+    var previewType: PreviewType { return PreviewType(rawValue: self.previewTypeValue ?? 0) ?? .unknown }
     var isPlayable: Bool { return self.audioFile != nil }
 
     enum CodingKeys: String, CodingKey {

@@ -64,21 +64,22 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
     
     func selectObject(at indexPath: IndexPath) {
-        if let viewmodel = object(at: indexPath) {
-            if !viewmodel.isCurrentInPlayer {
-                self.player?.performAction(.playNow, for: self.tracks[indexPath.item], completion: nil)
+        guard let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
+
+        if !viewModel.isCurrentInPlayer {
+            self.player?.performAction(.playNow, for: self.tracks[indexPath.item], completion: nil)
+        } else {
+            if viewModel.isPlaying {
+                player?.pause()
             } else {
-                if viewmodel.isPlaying {
-                    player?.pause()
-                } else {
-                    player?.play()
-                }
+                player?.play()
             }
         }
     }
 
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: PlayerTrack) -> Bool {
         switch actionType {
+        case .playNow: return track.track.isPlayable
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .replaceCurrent, .playNext, .playLast: return false
         case .delete: return self.tracks.count > 1

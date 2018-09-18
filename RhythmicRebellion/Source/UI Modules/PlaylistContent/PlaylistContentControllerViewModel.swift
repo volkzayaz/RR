@@ -85,21 +85,22 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     }
     
     func selectObject(at indexPath: IndexPath) {
-        if let viewmodel = object(at: indexPath) {
-            if !viewmodel.isCurrentInPlayer {
-                play(track: self.playlistTracks[indexPath.item])
+        guard let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
+
+        if !viewModel.isCurrentInPlayer {
+            play(track: self.playlistTracks[indexPath.item])
+        } else {
+            if viewModel.isPlaying {
+                player?.pause()
             } else {
-                if viewmodel.isPlaying {
-                    player?.pause()
-                } else {
-                    player?.play()
-                }
+                player?.play()
             }
         }
     }
 
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
         switch actionType {
+        case .playNow, .playLast, .playNext: return track.isPlayable
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .delete: return self.playlist.isFanPlaylist
         case .replaceCurrent: return false
