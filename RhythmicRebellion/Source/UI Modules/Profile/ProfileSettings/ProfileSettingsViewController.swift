@@ -268,7 +268,9 @@ extension ProfileSettingsViewController: UITextFieldDelegate {
         switch textField {
         case self.firstnameTextField: self.nicknameTextField.becomeFirstResponder(); return false
         case self.nicknameTextField: self.birthdateTextField.becomeFirstResponder(); return false
-        case self.birthdateTextField: self.birthdateTextField.resignFirstResponder(); return true
+        case self.birthdateTextField: self.zipTextField.becomeFirstResponder(); return false
+        case self.zipTextField: self.phoneTextField.becomeFirstResponder(); return false
+        case self.phoneTextField: return self.phoneTextField.resignFirstResponder()
         default: break
         }
 
