@@ -167,11 +167,12 @@ final class ProfileSettingsViewController: UIViewController {
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+
         super.viewWillTransition(to: size, with: coordinator)
 
         coordinator.animate(alongsideTransition: nil) { (context) in
-            self.hobbiesContainerView.invalidateIntrinsicContentSize()
-            self.genresContainerView.invalidateIntrinsicContentSize()
+            self.hobbiesContainerView.setNeedsLayout()
+            self.genresContainerView.setNeedsLayout()
         }
     }
 

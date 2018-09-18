@@ -229,7 +229,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         super.viewWillTransition(to: size, with: coordinator)
 
         coordinator.animate(alongsideTransition: nil) { (context) in
-            self.hobbiesContainerView.invalidateIntrinsicContentSize()
+            self.hobbiesContainerView.setNeedsLayout()
         }
     }
 

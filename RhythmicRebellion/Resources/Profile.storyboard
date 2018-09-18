@@ -223,11 +223,11 @@
             <objects>
                 <viewController title="Profile Settings" id="Qtf-LH-mcC" customClass="ProfileSettingsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Gw-5f-9ka">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="dsJ-ZP-X2z">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="960"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="in7-EH-98j">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="900"/>
@@ -316,7 +316,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Birth Date" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TZc-j9-oJ4" customClass="DateTextField" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="19" y="249" width="337.5" height="33.5"/>
+                                                <rect key="frame" x="19" y="249" width="337.5" height="34"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -331,7 +331,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BirthDateErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6gg-BW-dfd">
-                                                <rect key="frame" x="19" y="285.5" width="337.5" height="12"/>
+                                                <rect key="frame" x="19" y="286" width="337.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="12" id="6SM-14-lce"/>
                                                 </constraints>
@@ -340,13 +340,13 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CONTACT INFO" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Bc-sO-lZv">
-                                                <rect key="frame" x="19" y="322.5" width="337.5" height="21"/>
+                                                <rect key="frame" x="19" y="323" width="337.5" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CountryErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pjs-No-VF4">
-                                                <rect key="frame" x="19" y="395.5" width="337.5" height="12"/>
+                                                <rect key="frame" x="19" y="396" width="337.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="12" id="jg8-1M-CCv"/>
                                                 </constraints>
@@ -355,7 +355,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Select Country" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-XI-nyj" customClass="CountryTextField" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="19" y="358.5" width="337.5" height="34"/>
+                                                <rect key="frame" x="19" y="359" width="337.5" height="34"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <gestureRecognizers/>
                                                 <nil key="textColor"/>
@@ -371,11 +371,11 @@
                                                 </connections>
                                             </textField>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectableFieldRightArrow" translatesAutoresizingMaskIntoConstraints="NO" id="xwJ-gJ-lnp">
-                                                <rect key="frame" x="330.5" y="361.5" width="18" height="28"/>
+                                                <rect key="frame" x="330.5" y="362" width="18" height="28"/>
                                                 <color key="tintColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="calibratedRGB"/>
                                             </imageView>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Zip" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZED-xi-ikm" customClass="MFTextField">
-                                                <rect key="frame" x="19" y="417.5" width="217.5" height="34"/>
+                                                <rect key="frame" x="19" y="418" width="217.5" height="34"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -390,7 +390,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ZipErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AmL-Sd-xMi">
-                                                <rect key="frame" x="19" y="454.5" width="337.5" height="12"/>
+                                                <rect key="frame" x="19" y="455" width="337.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="12" id="wz3-Qv-Vjs"/>
                                                 </constraints>
@@ -399,7 +399,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FXu-sF-ffO">
-                                                <rect key="frame" x="236.5" y="417.5" width="120" height="34"/>
+                                                <rect key="frame" x="236.5" y="418" width="120" height="34"/>
                                                 <color key="backgroundColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Get Location">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -409,7 +409,7 @@
                                                 </connections>
                                             </button>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Select State" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oIr-RA-b2k" customClass="RegionTextField" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="19" y="476.5" width="337.5" height="34"/>
+                                                <rect key="frame" x="19" y="477" width="337.5" height="33.5"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -433,7 +433,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectableFieldRightArrow" translatesAutoresizingMaskIntoConstraints="NO" id="eoH-mL-oMC">
-                                                <rect key="frame" x="330.5" y="479.5" width="18" height="28"/>
+                                                <rect key="frame" x="330.5" y="480" width="18" height="28"/>
                                                 <color key="tintColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="calibratedRGB"/>
                                             </imageView>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Select City" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lif-s4-Jct" customClass="CityTextField" customModule="RhythmicRebellion" customModuleProvider="target">
@@ -497,7 +497,7 @@
                                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="500" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="ESn-BO-gac" customClass="HobbiesContainerView" customModule="RhythmicRebellion" customModuleProvider="target">
                                                 <rect key="frame" x="19" y="704" width="337.5" height="41"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="8N0-i7-pqw" customClass="CloudTagView" customModule="CloudTagView">
+                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="8N0-i7-pqw" customClass="TagsView" customModule="RhythmicRebellion" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="313.5" height="41"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -520,8 +520,8 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="hobbiesContainerViewValueChangesWithSender:" destination="Qtf-LH-mcC" eventType="valueChanged" id="tow-wc-S9X"/>
-                                                    <outlet property="cloudTagView" destination="8N0-i7-pqw" id="ngV-7A-HmA"/>
                                                     <outlet property="placeHolderLabel" destination="ibk-qu-uT3" id="UQI-N0-NdB"/>
+                                                    <outlet property="tagsView" destination="8N0-i7-pqw" id="6Ph-ba-8rf"/>
                                                 </connections>
                                             </view>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectableFieldRightArrow" translatesAutoresizingMaskIntoConstraints="NO" id="cLe-t6-oMh">
@@ -540,7 +540,7 @@
                                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="500" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="Src-DE-IUK" customClass="GenresContainerView" customModule="RhythmicRebellion" customModuleProvider="target">
                                                 <rect key="frame" x="19" y="770" width="337.5" height="41"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="36s-1I-mWC" customClass="CloudTagView" customModule="CloudTagView">
+                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="36s-1I-mWC" customClass="TagsView" customModule="RhythmicRebellion" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="313.5" height="41"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -563,8 +563,8 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="genresContainerViewValueChangesWithSender:" destination="Qtf-LH-mcC" eventType="valueChanged" id="fwu-8Q-aYE"/>
-                                                    <outlet property="cloudTagView" destination="36s-1I-mWC" id="L3l-lw-Bk0"/>
                                                     <outlet property="placeHolderLabel" destination="6n6-1I-Lle" id="epg-tk-D8E"/>
+                                                    <outlet property="tagsView" destination="36s-1I-mWC" id="KK4-cc-rAF"/>
                                                 </connections>
                                             </view>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectableFieldRightArrow" translatesAutoresizingMaskIntoConstraints="NO" id="ngH-pG-bnO">
@@ -762,6 +762,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <size key="freeformSize" width="375" height="1024"/>
                     <connections>
                         <outlet property="birthdateErrorLabel" destination="6gg-BW-dfd" id="kYV-PH-U7K"/>
                         <outlet property="birthdateInputView" destination="6nh-Gy-lTI" id="b93-iA-MbJ"/>

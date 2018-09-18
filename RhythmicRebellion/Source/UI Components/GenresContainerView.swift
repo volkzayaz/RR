@@ -11,17 +11,17 @@ import CloudTagView
 
 class GenresContainerView: UIControl {
 
-    @IBOutlet weak var cloudTagView: CloudTagView!
+    @IBOutlet weak var tagsView: TagsView!
     @IBOutlet weak var placeHolderLabel: UILabel!
 
     open override var intrinsicContentSize: CGSize {
-        return cloudTagView.intrinsicContentSize
+        return tagsView.intrinsicContentSize
     }
 
     open override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.cloudTagView.delegate = self
+        self.tagsView.delegate = self
     }
 
     var genres: [Genre]? {
@@ -39,29 +39,36 @@ class GenresContainerView: UIControl {
     }
 
     override func invalidateIntrinsicContentSize() {
-        self.cloudTagView.invalidateIntrinsicContentSize()
+        self.tagsView.invalidateIntrinsicContentSize()
         super.invalidateIntrinsicContentSize()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.invalidateIntrinsicContentSize()
     }
 
     private func reload(with genres: [Genre]?) {
         self.internalGenres = genres
 
         if let genres = self.genres {
-            self.cloudTagView.tags = genres.map({ (genre) -> TagView in
+            self.tagsView.tags = genres.map({ (genre) -> TagView in
                 let tagView = TagView(text: genre.name)
                 tagView.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
                 return tagView
             })
         } else {
-            self.cloudTagView.tags.removeAll()
+            self.tagsView.tags.removeAll()
         }
+
+        self.invalidateIntrinsicContentSize()
     }
 }
 
 extension GenresContainerView : TagViewDelegate {
 
     public func tagDismissed(_ tag: TagView) {
-        guard let tagIndex = self.cloudTagView.tags.index(of: tag) else { return }
+        guard let tagIndex = self.tagsView.tags.index(of: tag) else { return }
         self.internalGenres?.remove(at:  tagIndex)
 
         self.sendActions(for: .valueChanged)

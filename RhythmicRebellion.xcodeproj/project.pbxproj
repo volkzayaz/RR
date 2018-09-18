@@ -81,6 +81,7 @@
 		7655476E20EB80DC004AC0BD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655476D20EB80DC004AC0BD /* Token.swift */; };
 		7655477120EBA5A2004AC0BD /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655477020EBA5A2004AC0BD /* String+Extension.swift */; };
 		765F2592213EC6B700F5C3D8 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765F2591213EC6B700F5C3D8 /* Region.swift */; };
+		766060F92150DFD700DFCE8C /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766060F82150DFD700DFCE8C /* TagsView.swift */; };
 		7665332D20FE26A600FEC702 /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665332C20FE26A600FEC702 /* RestApiServiceError.swift */; };
 		7665333320FE470C00FEC702 /* HomeControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665332F20FE470C00FEC702 /* HomeControllerViewModel.swift */; };
 		7665333420FE470C00FEC702 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665333020FE470C00FEC702 /* HomeRouter.swift */; };
@@ -288,6 +289,7 @@
 		7655476D20EB80DC004AC0BD /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		7655477020EBA5A2004AC0BD /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		765F2591213EC6B700F5C3D8 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
+		766060F82150DFD700DFCE8C /* TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = "<group>"; };
 		7665332C20FE26A600FEC702 /* RestApiServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiServiceError.swift; sourceTree = "<group>"; };
 		7665332F20FE470C00FEC702 /* HomeControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControllerViewModel.swift; sourceTree = "<group>"; };
 		7665333020FE470C00FEC702 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
@@ -1060,6 +1062,7 @@
 				76C821B02142ABAF00A6F5AE /* GenderSegmentedControl.swift */,
 				76C821B421440E9E00A6F5AE /* HobbiesContainerView.swift */,
 				764D684021491F3500F52730 /* GenresContainerView.swift */,
+				766060F82150DFD700DFCE8C /* TagsView.swift */,
 			);
 			path = "UI Components";
 			sourceTree = "<group>";
@@ -1280,6 +1283,7 @@
 				76310DCD20F6252200140D03 /* AddonState.swift in Sources */,
 				764D6845214927F700F52730 /* Language.swift in Sources */,
 				763931ED2118748200A65257 /* PlayerNowPlayingViewModel.swift in Sources */,
+				766060F92150DFD700DFCE8C /* TagsView.swift in Sources */,
 				7665333520FE470C00FEC702 /* HomeViewController.swift in Sources */,
 				7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,

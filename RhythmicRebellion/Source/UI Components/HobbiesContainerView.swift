@@ -11,17 +11,17 @@ import CloudTagView
 
 class HobbiesContainerView: UIControl {
 
-    @IBOutlet weak var cloudTagView: CloudTagView!
+    @IBOutlet weak var tagsView: TagsView!
     @IBOutlet weak var placeHolderLabel: UILabel!
 
     open override var intrinsicContentSize: CGSize {
-        return cloudTagView.intrinsicContentSize
+        return tagsView.intrinsicContentSize
     }
 
     open override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.cloudTagView.delegate = self
+        self.tagsView.delegate = self
     }
 
     var hobbies: [Hobby]? {
@@ -39,29 +39,37 @@ class HobbiesContainerView: UIControl {
     }
 
     override func invalidateIntrinsicContentSize() {
-        self.cloudTagView.invalidateIntrinsicContentSize()
+//        self.tagsView.invalidateIntrinsicContentSize()
         super.invalidateIntrinsicContentSize()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.invalidateIntrinsicContentSize()
     }
 
     private func reload(with hobbies: [Hobby]?) {
         self.internalHobbies = hobbies
 
         if let hobbies = self.hobbies {
-            self.cloudTagView.tags = hobbies.map({ (hobby) -> TagView in
+            self.tagsView.tags = hobbies.map({ (hobby) -> TagView in
                 let tagView = TagView(text: hobby.name)
+                tagView.translatesAutoresizingMaskIntoConstraints = false
                 tagView.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
                 return tagView
             })
         } else {
-            self.cloudTagView.tags.removeAll()
+            self.tagsView.tags.removeAll()
         }
+
+        self.invalidateIntrinsicContentSize()
     }
 }
 
 extension HobbiesContainerView : TagViewDelegate {
 
     public func tagDismissed(_ tag: TagView) {
-        guard let tagIndex = self.cloudTagView.tags.index(of: tag) else { return }
+        guard let tagIndex = self.tagsView.tags.index(of: tag) else { return }
         self.internalHobbies?.remove(at:  tagIndex)
 
         self.sendActions(for: .valueChanged)

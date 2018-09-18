@@ -107,7 +107,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6fQ-Yl-Gmd" customClass="MFTextField">
-                                                <rect key="frame" x="19" y="97" width="337.5" height="34"/>
+                                                <rect key="frame" x="19" y="97" width="337.5" height="18"/>
                                                 <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="email"/>
@@ -121,7 +121,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EmailErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Uc-wD-aSC">
-                                                <rect key="frame" x="19" y="134" width="337.5" height="12"/>
+                                                <rect key="frame" x="19" y="118" width="337.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="12" id="x73-sc-DGP"/>
                                                 </constraints>
@@ -130,7 +130,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Biq-p8-eQ2" customClass="MFTextField">
-                                                <rect key="frame" x="19" y="156" width="337.5" height="34"/>
+                                                <rect key="frame" x="19" y="140" width="337.5" height="18"/>
                                                 <color key="backgroundColor" red="0.69411772489547729" green="0.72549021244049072" blue="0.99999994039535522" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -145,7 +145,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PasswordErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eXm-j1-s70">
-                                                <rect key="frame" x="19" y="193" width="337.5" height="12"/>
+                                                <rect key="frame" x="19" y="161" width="337.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="12" id="Dlb-6f-W5l"/>
                                                 </constraints>
@@ -154,7 +154,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CfQ-aD-NPM">
-                                                <rect key="frame" x="19" y="225" width="115" height="29"/>
+                                                <rect key="frame" x="19" y="193" width="115" height="29"/>
                                                 <state key="normal">
                                                     <attributedString key="attributedTitle">
                                                         <fragment content="Restore Password">
@@ -172,7 +172,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YkM-36-fLq">
-                                                <rect key="frame" x="19" y="289" width="337.5" height="44"/>
+                                                <rect key="frame" x="19" y="257" width="337.5" height="44"/>
                                                 <color key="backgroundColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="PlK-6x-0ts"/>
@@ -717,7 +717,7 @@
                                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="500" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="Flq-d0-DTd" customClass="HobbiesContainerView" customModule="RhythmicRebellion" customModuleProvider="target">
                                                 <rect key="frame" x="19" y="798" width="337.5" height="41"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="NXA-Kh-3Eh" customClass="CloudTagView" customModule="CloudTagView">
+                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="41" translatesAutoresizingMaskIntoConstraints="NO" id="NXA-Kh-3Eh" customClass="TagsView" customModule="RhythmicRebellion" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="313.5" height="41"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -741,8 +741,8 @@
                                                 <connections>
                                                     <action selector="hobbiesContainerViewValueChangesWithSender:" destination="j8M-zO-2NM" eventType="valueChanged" id="NVS-4B-bgq"/>
                                                     <action selector="onSelectHobbiesWithSender:" destination="j8M-zO-2NM" eventType="touchUpInside" id="8h6-jg-s7q"/>
-                                                    <outlet property="cloudTagView" destination="NXA-Kh-3Eh" id="Dyr-q5-4B9"/>
                                                     <outlet property="placeHolderLabel" destination="KxY-rO-CDb" id="lkI-dx-cK2"/>
+                                                    <outlet property="tagsView" destination="NXA-Kh-3Eh" id="Ayv-gY-ZnE"/>
                                                 </connections>
                                             </view>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectableFieldRightArrow" translatesAutoresizingMaskIntoConstraints="NO" id="1UQ-F1-5dI">
