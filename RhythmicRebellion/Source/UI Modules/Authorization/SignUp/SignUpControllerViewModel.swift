@@ -26,13 +26,14 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     private(set) weak var delegate: SignUpViewModelDelegate?
     private(set) weak var router: SignUpRouter?
+    private(set) weak var application: Application?
     private(set) weak var restApiService: RestApiService?
 
     private(set) var countries: [Country]
     private(set) var regions: [Region]
     private(set) var cities: [City]
-    private(set) var hobbies: [Hobby]
-    private(set) var howHearList: [HowHear]
+    var hobbies: [Hobby] { return self.application?.config?.hobbies ?? [] }
+    var howHearList: [HowHear] { return self.application?.config?.howHearList ?? [] }
     private let validator: Validator
 
     private(set) var signUpErrorDescription: String?
@@ -56,15 +57,14 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: SignUpRouter, restApiService: RestApiService) {
+    init(router: SignUpRouter, application: Application, restApiService: RestApiService) {
         self.router = router
         self.restApiService = restApiService
+        self.application = application
 
         self.countries = [Country]()
         self.regions = [Region]()
         self.cities = [City]()
-        self.hobbies = [Hobby]()
-        self.howHearList = [HowHear]()
 
         self.validator = Validator()
     }
@@ -79,6 +79,10 @@ final class SignUpControllerViewModel: SignUpViewModel {
         })
 
 
+        if self.application?.config == nil {
+            self.loadConfig()
+        }
+
         self.reloadCountries { [weak self] (countriesResult) in
             switch countriesResult {
             case .success(let countries):
@@ -91,13 +95,11 @@ final class SignUpControllerViewModel: SignUpViewModel {
         self.delegate?.refreshUI()
     }
 
-    func reloadConfig(completion: @escaping (Result<Config>) -> Void) {
+    func loadConfig(completion: ((Result<Config>) -> Void)? = nil) {
 
-        self.restApiService?.config(completion: { [weak self] (configResult) in
+        self.application?.loadConfig(completion: { [weak self] (configResult) in
             switch configResult {
             case .success(let config):
-                self?.hobbies = config.hobbies
-                self?.howHearList = config.howHearList
 
                 if let selectedHobbies = self?.hobbiesField?.hobbies, selectedHobbies.count > 0 {
                     let filteredSelectedHobbies = selectedHobbies.filter( { return config.hobbies.contains($0) })
@@ -111,7 +113,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
             default: break
             }
 
-            completion(configResult)
+            completion?(configResult)
         })
     }
 
@@ -604,7 +606,7 @@ extension SignUpControllerViewModel {
     }
 
     func reloadHobbies(completion: @escaping (Result<[Hobby]>) -> Void) {
-        self.reloadConfig { (configResult) in
+        self.loadConfig { (configResult) in
             switch configResult {
             case .success(let config):
                 completion(.success(config.hobbies))
@@ -615,7 +617,7 @@ extension SignUpControllerViewModel {
     }
 
     func reloadHowHearList(completion: @escaping (Result<[HowHear]>) -> Void) {
-        self.reloadConfig { (configResult) in
+        self.loadConfig { (configResult) in
             switch configResult {
             case .success(let config):
                 completion(.success(config.howHearList))

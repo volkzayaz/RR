@@ -30,9 +30,9 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     private(set) var countries: [Country]
     private(set) var regions: [Region]
     private(set) var cities: [City]
-    private(set) var hobbies: [Hobby]
+    var hobbies: [Hobby] { return self.application?.config?.hobbies ?? [] }
     private(set) var genres: [Genre]
-    private(set) var languages: [Language]
+    var languages: [Language] { return self.application?.config?.languages ?? [] }
 
     private let validator: Validator
 
@@ -67,9 +67,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.countries = []
         self.regions = []
         self.cities = []
-        self.hobbies = []
         self.genres = []
-        self.languages = []
     }
 
     func refreshDelegate(with userProfile: UserProfile) {
@@ -86,6 +84,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.delegate?.refreshHobbiesField(with: userProfile.hobbies)
         self.delegate?.refreshGenresField(with: userProfile.genres)
 
+        if let selectedLanguageId = userProfile.language, let selectedLanguage = self.languages.filter( {$0.id == selectedLanguageId} ).first {
+            self.delegate?.refreshLanguageField(with: selectedLanguage)
+        }
+
         self.delegate?.refreshUI()
     }
 
@@ -100,11 +102,19 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 self.delegate?.refreshField(field: validationError.field, didValidate: validationError)
         })
 
-        self.reloadConfig { (configResult) in }
-        self.loadUser()
-
         self.userProfile = fanUser.profile
         self.refreshDelegate(with: fanUser.profile)
+
+        if self.application?.config == nil {
+            self.loadConfig { [weak self] (configResult) in
+                switch configResult {
+                case .success( _): self?.loadUser()
+                case .failure(let error): self?.delegate?.show(error: error)
+                }
+            }
+        } else {
+            self.loadUser()
+        }
     }
 
     func loadUser() {
@@ -122,13 +132,11 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         })
     }
 
-    func reloadConfig(completion: @escaping (Result<Config>) -> Void) {
+    func loadConfig(completion: @escaping (Result<Config>) -> Void) {
 
-        self.restApiService?.config(completion: { [weak self] (configResult) in
+        self.application?.loadConfig(completion: { [weak self] (configResult) in
             switch configResult {
             case .success(let config):
-                self?.hobbies = config.hobbies
-                self?.languages = config.languages
 
                 if let selectedHobbies = self?.hobbiesField?.hobbies, selectedHobbies.count > 0 {
                     let filteredSelectedHobbies = selectedHobbies.filter( { return config.hobbies.contains($0) })
@@ -145,7 +153,6 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
             completion(configResult)
         })
     }
-
 
     func registerFirstNameField(_ firstNameField: ValidatableField) {
         let firstNameRules: [Rule] = [RequiredRule(message: NSLocalizedString("The First Name field is required.",
@@ -629,7 +636,7 @@ extension ProfileSettingsControllerViewModel {
     }
 
     func reloadHobbies(completion: @escaping (Result<[Hobby]>) -> Void) {
-        self.reloadConfig { (configResult) in
+        self.loadConfig { (configResult) in
             switch configResult {
             case .success(let config):
                 completion(.success(config.hobbies))
@@ -658,7 +665,7 @@ extension ProfileSettingsControllerViewModel {
     }
 
     func reloadLanguages(completion: @escaping (Result<[Language]>) -> Void) {
-        self.reloadConfig { (configResult) in
+        self.loadConfig { (configResult) in
             switch configResult {
             case .success(let config):
                 completion(.success(config.languages))
