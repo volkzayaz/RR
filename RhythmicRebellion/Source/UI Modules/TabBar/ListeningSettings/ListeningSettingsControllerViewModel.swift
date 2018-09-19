@@ -57,9 +57,10 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     func reload() {
 
-        self.application?.fanUser(completion: { (fanUserResult) in
-            switch fanUserResult {
+        self.application?.fanUser(completion: { [weak self] (fanUserResult) in
+            guard let `self` = self else { return }
 
+            switch fanUserResult {
             case .success(let user):
                 guard let fanUser = user as? FanUser else { return }
                 self.listeningSettings = fanUser.profile.listeningSettings
@@ -68,14 +69,15 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
                 self.delegate?.reloadUI()
 
             case .failure(let error):
-                self.delegate?.show(error: error)
+                self.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
             }
         })
     }
 
     func save() {
 
-        self.application?.update(listeningSettings: self.listeningSettings, completion: { (updateListeningSettingsResult) in
+        self.application?.update(listeningSettings: self.listeningSettings, completion: { [weak self] (updateListeningSettingsResult) in
+            guard let `self` = self else { return }
 
             switch updateListeningSettingsResult {
             case .success(let listeningSettings):

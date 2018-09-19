@@ -51,7 +51,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
                 self?.playlistTracks = tracks
                 self?.delegate?.reloadUI()
             case .failure(let error):
-                self?.delegate?.show(error: error)
+                self?.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
             }
         }
         if self.playlist.isFanPlaylist {

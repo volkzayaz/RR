@@ -79,11 +79,10 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
             case .success(let items):
                 self.selectedItems = self.selectedItems.filter( { return items.contains($0)} )
                 self.filteredItems = self.dataProvider.filterItems(items: items, with: self.searchText)
+                self.delegate?.reloadUI()
             case .failure(let error):
-                self.delegate?.show(error: error)
+                self.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
             }
-
-            self.delegate?.reloadUI()
         }
     }
 

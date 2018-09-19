@@ -74,7 +74,7 @@ final class ProfileControllerViewModel: ProfileViewModel {
                 self.delegate?.refreshUI()
 
             case .failure(let error):
-                self.delegate?.show(error: error)
+                self.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.refreshUI() })
             }
         })
     }

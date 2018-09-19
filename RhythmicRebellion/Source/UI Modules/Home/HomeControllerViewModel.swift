@@ -47,7 +47,7 @@ final class HomeControllerViewModel: HomeViewModel {
                 self?.playlists = playlists
                 self?.delegate?.reloadUI()
             case .failure(let error):
-                self?.delegate?.show(error: error)
+                self?.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
             }
         })
     }
