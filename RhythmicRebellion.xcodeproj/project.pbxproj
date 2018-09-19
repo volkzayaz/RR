@@ -1102,10 +1102,10 @@
 		AB33C97E211DC4E8003B88DB /* PlaylistsCollection */ = {
 			isa = PBXGroup;
 			children = (
-				AB33C981211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift */,
 				AB33C97F211DC5C9003B88DB /* PlaylistsCollectionRouter.swift */,
-				AB33C980211DC5C9003B88DB /* PlaylistsCollectionViewController.swift */,
 				AB33C982211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift */,
+				AB33C981211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift */,
+				AB33C980211DC5C9003B88DB /* PlaylistsCollectionViewController.swift */,
 			);
 			path = PlaylistsCollection;
 			sourceTree = "<group>";
