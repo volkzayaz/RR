@@ -94,6 +94,8 @@ final class ProfileSettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(onBack(sender:)))
+
         self.firstnameTextField.textColor = self.viewModel.defaultTextColor
         self.firstnameTextField.placeholderAnimatesOnFocus = true
         self.nicknameTextField.textColor = self.viewModel.defaultTextColor
@@ -213,6 +215,15 @@ final class ProfileSettingsViewController: UIViewController {
         self.viewModel.save()
     }
 
+    @IBAction func onBack(sender: Any?) {
+        guard self.viewModel.isDirty == true else { self.viewModel.navigateBack(); return }
+
+        let confirmationViewModel = self.viewModel.unsavedChangesConfirmationViewModel()
+        let confirmationAlertViewController = UIAlertController.make(from: confirmationViewModel, style: .alert)
+
+        self.present(confirmationAlertViewController, animated: true, completion: nil)
+    }
+
     // MARK: - Notifications -
 
     func keyboardDidShow(notification: Notification) {
@@ -311,7 +322,7 @@ extension ProfileSettingsViewController: ProfileSettingsViewModelDelegate {
         self.profileSettingsErrorLabel.text = self.viewModel.profileSettingsErrorDescription
         self.profileSettingsErrorLabel.isHidden = self.profileSettingsErrorLabel.text?.isEmpty ?? true
 
-        self.navigationItem.rightBarButtonItem?.isEnabled = self.viewModel.canSave
+        self.navigationItem.rightBarButtonItem?.isEnabled = self.viewModel.isDirty
     }
 
     func errorLabel(for field: MFTextField) -> UILabel? {

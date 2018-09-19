@@ -36,7 +36,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     private let validator: Validator
 
-    private(set) var canSave: Bool = false
+    private(set) var isDirty: Bool = false
     private(set) var profileSettingsErrorDescription: String?
 
     private var userProfile: UserProfile?
@@ -151,6 +151,16 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
             }
 
             completion(configResult)
+        })
+    }
+
+    func unsavedChangesConfirmationViewModel() -> ConfirmationAlertViewModel.ViewModel {
+
+        return ConfirmationAlertViewModel.Factory.makeSkipProfileChangesViewModel(actionCallback: { [weak self] (actionType) in
+            switch actionType {
+            case .ok: self?.router?.navigateBack()
+            default: break
+            }
         })
     }
 
@@ -323,7 +333,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         }
     }
 
-    func checkCanSaveState() {
+    func checkDirtySate() {
         guard let userProfile = self.userProfile else { return }
 
         let isDirty = userProfile.firstName != self.firstNameField?.validationText ||
@@ -343,8 +353,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
 
 
-        if self.canSave != isDirty {
-            self.canSave = isDirty
+        if self.isDirty != isDirty {
+            self.isDirty = isDirty
             self.delegate?.refreshUI()
         }
     }
@@ -353,7 +363,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         guard let validateField = validateField else { return }
         self.validator.validateField(validateField) { (validationError) in }
 
-        self.checkCanSaveState()
+        self.checkDirtySate()
     }
 
     func set(country: Country) {
@@ -483,7 +493,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 self.delegate?.refreshCityField(with: detailedLocation.city)
                 self.validator.validateField(cityField, callback: { (validationError) in })
 
-                self.checkCanSaveState()
+                self.checkDirtySate()
 
             case .failure(let error):
                 guard let appError = error as? AppError, let appErrorGroup = appError.source else {
@@ -554,7 +564,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 case .success(let userProfile):
                     self?.userProfile = userProfile
                     self?.refreshDelegate(with: userProfile)
-                    self?.checkCanSaveState()
+                    self?.checkDirtySate()
 
 
                 case .failure(let error):
@@ -581,6 +591,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 }
             })
         }
+    }
+
+    func navigateBack() {
+        self.router?.navigateBack()
     }
 }
 

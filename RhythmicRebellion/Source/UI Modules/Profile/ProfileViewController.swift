@@ -41,6 +41,8 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+
         self.imageView.image = self.imageView.image?.withRenderingMode(.alwaysTemplate)
 
         self.tableView.backgroundView = UIView()

@@ -16,6 +16,8 @@ protocol ProfileSettingsRouter: FlowRouter {
     func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void)
     func showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, selectionCallback: @escaping ([Genre]) -> Void)
     func showLanguagesSelectableList(dataSource: LanguagesDataSource, selectedItems: Language?, selectionCallback: @escaping (Language) -> Void)
+
+    func navigateBack()
 }
 
 final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegueCompatible {
@@ -161,5 +163,9 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
     func showLanguagesSelectableList(dataSource: LanguagesDataSource, selectedItems: Language?, selectionCallback: @escaping (Language) -> Void) {
         self.perform(segue: .showLanguagesSelectableList(dataSource: dataSource, selectedItems: selectedItems, selectionCallback: selectionCallback))
+    }
+
+    func navigateBack() {
+        self.sourceController?.navigationController?.popViewController(animated: true)
     }
 }

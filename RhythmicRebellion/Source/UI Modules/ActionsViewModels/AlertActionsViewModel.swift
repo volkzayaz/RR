@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ActionSheetItemViewModel {
+protocol AlertActionItemViewModel {
 
     associatedtype ActionName
 
@@ -22,7 +22,7 @@ protocol ActionSheetItemViewModel {
 }
 
 
-struct ActionSheetViewModel<T: ActionSheetItemViewModel> {
+struct AlertActionsViewModel<T: AlertActionItemViewModel> {
     let title: String?
     let message: String?
     let actions: [T]
@@ -30,7 +30,7 @@ struct ActionSheetViewModel<T: ActionSheetItemViewModel> {
 
 extension UIAlertController {
 
-    class func make<T>(from viewModel: ActionSheetViewModel<T>,
+    class func make<T>(from viewModel: AlertActionsViewModel<T>,
                        style: UIAlertControllerStyle = .actionSheet,
                        onAction: @escaping (T) -> Void = { _ in}) -> UIAlertController {
 

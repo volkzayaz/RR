@@ -25,8 +25,9 @@
 		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
 		76310DCD20F6252200140D03 /* AddonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCC20F6252200140D03 /* AddonState.swift */; };
 		76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCE20F6343A00140D03 /* CheckAddons.swift */; };
+		7634783721527364001F85F6 /* ConfirmationAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */; };
 		763931DC21144CF600A65257 /* TrackActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DB21144CF600A65257 /* TrackActions.swift */; };
-		763931E121144E9300A65257 /* ActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DF21144E9300A65257 /* ActionSheetViewModel.swift */; };
+		763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DF21144E9300A65257 /* AlertActionsViewModel.swift */; };
 		763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 763931E221185F3B00A65257 /* PlayerPlaylist.storyboard */; };
 		763931EA2118748200A65257 /* PlayerNowPlayingControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931E62118748200A65257 /* PlayerNowPlayingControllerViewModel.swift */; };
 		763931EB2118748200A65257 /* PlayerNowPlayingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931E72118748200A65257 /* PlayerNowPlayingRouter.swift */; };
@@ -233,8 +234,9 @@
 		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
 		76310DCC20F6252200140D03 /* AddonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddonState.swift; sourceTree = "<group>"; };
 		76310DCE20F6343A00140D03 /* CheckAddons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAddons.swift; sourceTree = "<group>"; };
+		7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationAlertViewModel.swift; sourceTree = "<group>"; };
 		763931DB21144CF600A65257 /* TrackActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackActions.swift; sourceTree = "<group>"; };
-		763931DF21144E9300A65257 /* ActionSheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetViewModel.swift; sourceTree = "<group>"; };
+		763931DF21144E9300A65257 /* AlertActionsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertActionsViewModel.swift; sourceTree = "<group>"; };
 		763931E321185F3C00A65257 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PlayerPlaylist.storyboard; sourceTree = "<group>"; };
 		763931E62118748200A65257 /* PlayerNowPlayingControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingControllerViewModel.swift; sourceTree = "<group>"; };
 		763931E72118748200A65257 /* PlayerNowPlayingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingRouter.swift; sourceTree = "<group>"; };
@@ -466,8 +468,9 @@
 		763931DA21144A5300A65257 /* ActionsViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				763931DF21144E9300A65257 /* ActionSheetViewModel.swift */,
+				763931DF21144E9300A65257 /* AlertActionsViewModel.swift */,
 				763931DB21144CF600A65257 /* TrackActions.swift */,
+				7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */,
 			);
 			path = ActionsViewModels;
 			sourceTree = "<group>";
@@ -1254,7 +1257,7 @@
 				764D683E2148E86200F52730 /* ProfileSettingsViewController.swift in Sources */,
 				ABB42BD9212B634E00EABC61 /* PlayerTrack.swift in Sources */,
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
-				763931E121144E9300A65257 /* ActionSheetViewModel.swift in Sources */,
+				763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */,
 				764D683F2148E86200F52730 /* ProfileSettingsViewModel.swift in Sources */,
 				763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */,
 				AB33C983211DC5C9003B88DB /* PlaylistsCollectionRouter.swift in Sources */,
@@ -1265,6 +1268,7 @@
 				76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */,
 				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
 				763931F72118831600A65257 /* PlayerMyPlaylistsViewModel.swift in Sources */,
+				7634783721527364001F85F6 /* ConfirmationAlertViewModel.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
 				762271A3213D33E60018689E /* TextFields.swift in Sources */,
 				76C9F6512147DFFD00054B44 /* RoundedImageVIew.swift in Sources */,

@@ -10,7 +10,7 @@ import UIKit
 
 enum TrackActionsViewModels {
 
-    typealias ViewModel = ActionSheetViewModel<TrackActionsViewModels.ActionViewModel>
+    typealias ViewModel = AlertActionsViewModel<TrackActionsViewModels.ActionViewModel>
 
     static var allActionsTypes: [ActionViewModel.ActionType] {
         return [
@@ -34,10 +34,9 @@ enum TrackActionsViewModels {
         }
     }
 
-    struct ActionViewModel: ActionSheetItemViewModel {
+    struct ActionViewModel: AlertActionItemViewModel {
 
         typealias ActionName = ActionType
-        typealias Model      = Track
 
         enum ActionType {
             case playNow

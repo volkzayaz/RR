@@ -24,10 +24,12 @@ protocol ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Citie
     var genres: [Genre] { get }
     var languages: [Language] { get }
 
-    var canSave: Bool { get }
+    var isDirty: Bool { get }
     var profileSettingsErrorDescription: String? { get }
 
     func load(with delegate: ProfileSettingsViewModelDelegate)
+
+    func unsavedChangesConfirmationViewModel() -> ConfirmationAlertViewModel.ViewModel
 
     func registerFirstNameField(_ firstNameField: ValidatableField)
     func registerNicknameField(_ nicknameField: ValidatableField)
@@ -55,6 +57,7 @@ protocol ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Citie
 
     func getLocation()
     func save()
+    func navigateBack()
 }
 
 protocol ProfileSettingsViewModelDelegate: class, ErrorPresenting {
