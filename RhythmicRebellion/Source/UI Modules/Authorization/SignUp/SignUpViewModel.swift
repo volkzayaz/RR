@@ -40,7 +40,7 @@ protocol SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataSour
     func registerZipField(_ zipField: ValidatableField)
     func registerRegionField(_ regionField: RegionValidatableField)
     func registerCityField(_ cityField: CityValidatableField)
-    func registerPhoneField(_ phoneField: ValidatableField)
+    func registerPhoneField(_ phoneField: MaskedValidatebleField)
     func registerHobbiesField(_ hobbiesField: HobbiesValidatableField)
     func registerHowHearField(_ howHearField: HowHearValidatableField)
 

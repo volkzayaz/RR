@@ -94,3 +94,27 @@ extension LanguageTextField: LanguageValidatableField {
 
 }
 
+protocol MaskedValidatebleField: ValidatableField {
+    var text: String? { get }
+    var unmaskedText: String? { get }
+}
+
+protocol ValidatebleFieldWrapper {
+    var textField: UITextField? { get }
+}
+
+
+class MaskedValidatebleFieldWrapper: ValidatebleFieldWrapper, MaskedValidatebleField {
+
+    private(set) weak var maskedTextField: MaskedTextField?
+
+    public var textField: UITextField? { return self.maskedTextField }
+
+    public var text: String? { return self.maskedTextField?.text }
+    public var unmaskedText: String? { return self.maskedTextField?.unmaskedText }
+    public var validationText: String { return self.maskedTextField?.unmaskedText ?? "" }
+
+    init(with maskedTextField: MaskedTextField) {
+        self.maskedTextField = maskedTextField
+    }
+}

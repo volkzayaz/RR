@@ -26,6 +26,7 @@
 		76310DCD20F6252200140D03 /* AddonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCC20F6252200140D03 /* AddonState.swift */; };
 		76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCE20F6343A00140D03 /* CheckAddons.swift */; };
 		7634783721527364001F85F6 /* ConfirmationAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */; };
+		7634783D2153867E001F85F6 /* MaskedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783C2153867E001F85F6 /* MaskedTextField.swift */; };
 		763931DC21144CF600A65257 /* TrackActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DB21144CF600A65257 /* TrackActions.swift */; };
 		763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DF21144E9300A65257 /* AlertActionsViewModel.swift */; };
 		763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 763931E221185F3B00A65257 /* PlayerPlaylist.storyboard */; };
@@ -235,6 +236,7 @@
 		76310DCC20F6252200140D03 /* AddonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddonState.swift; sourceTree = "<group>"; };
 		76310DCE20F6343A00140D03 /* CheckAddons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAddons.swift; sourceTree = "<group>"; };
 		7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationAlertViewModel.swift; sourceTree = "<group>"; };
+		7634783C2153867E001F85F6 /* MaskedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskedTextField.swift; sourceTree = "<group>"; };
 		763931DB21144CF600A65257 /* TrackActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackActions.swift; sourceTree = "<group>"; };
 		763931DF21144E9300A65257 /* AlertActionsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertActionsViewModel.swift; sourceTree = "<group>"; };
 		763931E321185F3C00A65257 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PlayerPlaylist.storyboard; sourceTree = "<group>"; };
@@ -1066,6 +1068,7 @@
 				76C821B421440E9E00A6F5AE /* HobbiesContainerView.swift */,
 				764D684021491F3500F52730 /* GenresContainerView.swift */,
 				766060F82150DFD700DFCE8C /* TagsView.swift */,
+				7634783C2153867E001F85F6 /* MaskedTextField.swift */,
 			);
 			path = "UI Components";
 			sourceTree = "<group>";
@@ -1202,6 +1205,7 @@
 				"${BUILT_PRODUCTS_DIR}/CloudTagView/CloudTagView.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MaterialTextField/MaterialTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/NSStringMask/NSStringMask.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
@@ -1213,6 +1217,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CloudTagView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSStringMask.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
@@ -1285,6 +1290,7 @@
 				769F4EAF210B6631000DD23B /* VideoViewController.swift in Sources */,
 				764D683D2148E86200F52730 /* ProfileSettingsRouter.swift in Sources */,
 				76310DCD20F6252200140D03 /* AddonState.swift in Sources */,
+				7634783D2153867E001F85F6 /* MaskedTextField.swift in Sources */,
 				764D6845214927F700F52730 /* Language.swift in Sources */,
 				763931ED2118748200A65257 /* PlayerNowPlayingViewModel.swift in Sources */,
 				766060F92150DFD700DFCE8C /* TagsView.swift in Sources */,

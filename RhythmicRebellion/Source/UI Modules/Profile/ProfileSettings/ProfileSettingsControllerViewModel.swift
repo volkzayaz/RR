@@ -50,7 +50,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     private var zipField: ValidatableField?
     private var regionField: RegionValidatableField?
     private var cityField: CityValidatableField?
-    private var phoneField: ValidatableField?
+    private var phoneField: MaskedValidatebleField?
 
     private var hobbiesField: HobbiesValidatableField?
     private var genresField: GenresValidatableField?
@@ -276,7 +276,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         }
     }
 
-    func registerPhoneField(_ phoneField: ValidatableField) {
+    func registerPhoneField(_ phoneField: MaskedValidatebleField) {
         let phoneRules: [Rule] = []
 
         self.validator.registerField(phoneField, rules: phoneRules )
@@ -333,7 +333,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         }
     }
 
-    func checkDirtySate() {
+    func checkIsDirty() {
         guard let userProfile = self.userProfile else { return }
 
         let isDirty = userProfile.firstName != self.firstNameField?.validationText ||
@@ -363,7 +363,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         guard let validateField = validateField else { return }
         self.validator.validateField(validateField) { (validationError) in }
 
-        self.checkDirtySate()
+        self.checkIsDirty()
     }
 
     func set(country: Country) {
@@ -493,7 +493,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 self.delegate?.refreshCityField(with: detailedLocation.city)
                 self.validator.validateField(cityField, callback: { (validationError) in })
 
-                self.checkDirtySate()
+                self.checkIsDirty()
 
             case .failure(let error):
                 guard let appError = error as? AppError, let appErrorGroup = appError.source else {
@@ -564,7 +564,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 case .success(let userProfile):
                     self?.userProfile = userProfile
                     self?.refreshDelegate(with: userProfile)
-                    self?.checkDirtySate()
+                    self?.checkIsDirty()
 
 
                 case .failure(let error):

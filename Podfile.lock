@@ -5,6 +5,7 @@ PODS:
   - CloudTagView (3.0.0)
   - MaterialTextField (1.0.1)
   - MBProgressHUD (1.1.0)
+  - NSStringMask (1.2.2)
   - ReachabilitySwift (4.1.0)
   - Starscream (3.0.5)
   - SwiftValidator (4.0.0)
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - CloudTagView (~> 3.0.0)
   - MaterialTextField (~> 1.0)
   - MBProgressHUD (~> 1.1.0)
+  - NSStringMask
   - ReachabilitySwift
   - Starscream (~> 3.0.2)
   - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, branch `master`)
@@ -26,6 +28,7 @@ SPEC REPOS:
     - CloudTagView
     - MaterialTextField
     - MBProgressHUD
+    - NSStringMask
     - ReachabilitySwift
     - Starscream
 
@@ -45,10 +48,11 @@ SPEC CHECKSUMS:
   CloudTagView: c4eebbb9cf88d8de849e4ae0c3323e95ccc236b2
   MaterialTextField: f1a0786588e4d3610cb9bb62d2adbe9777cebbf9
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  NSStringMask: c0969955b28c4286418197696469665d9dcba313
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
 
-PODFILE CHECKSUM: 9dd0b199a7b948caa4314177e929142fd227ce87
+PODFILE CHECKSUM: 8a065b6a92ff2eff88adf027ab3d4924ca9427ac
 
 COCOAPODS: 1.5.3

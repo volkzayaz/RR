@@ -10,6 +10,7 @@
 import UIKit
 import MaterialTextField
 import SwiftValidator
+import NSStringMask
 
 class SignUpContentView: UIView {
 
@@ -61,7 +62,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var cityTextField: CityTextField!
     @IBOutlet weak var cityErrorLabel: UILabel!
 
-    @IBOutlet weak var phoneTextField: MFTextField!
+    @IBOutlet weak var phoneTextField: MaskedTextField!
     @IBOutlet weak var phoneErrorLabel: UILabel!
 
     @IBOutlet weak var hobbiesTextFieldSelectionIndicator: UIImageView!
@@ -126,7 +127,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.viewModel.registerZipField(self.zipTextField)
         self.viewModel.registerRegionField(self.regionTextField)
         self.viewModel.registerCityField(self.cityTextField)
-        self.viewModel.registerPhoneField(self.phoneTextField)
+        self.viewModel.registerPhoneField(MaskedValidatebleFieldWrapper(with: self.phoneTextField))
         self.viewModel.registerHobbiesField(self.hobbiesContainerView)
         self.viewModel.registerHowHearField(self.howHearTextField)
     }
@@ -172,6 +173,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.cityTextField.placeholderAnimatesOnFocus = true
         self.phoneTextField.textColor = self.viewModel.defaultTextColor
         self.phoneTextField.placeholderAnimatesOnFocus = true
+        self.phoneTextField.stringMask = NSStringMask(pattern: "\\(([1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]{1})\\) (\\d{3})-(\\d{4})", placeholder: "_")
         self.howHearTextField.textColor = self.viewModel.defaultTextColor
         self.howHearTextField.placeholderAnimatesOnFocus = true
 
@@ -438,6 +440,10 @@ extension SignUpViewController: SignUpViewModelDelegate {
     func refreshField(field: ValidatableField, didValidate validationError: ValidationError?) {
 
         switch field {
+        case let textFieldWrapper as ValidatebleFieldWrapper:
+            guard let textField = textFieldWrapper.textField as? MFTextField, let textFieldErrorLabel = self.errorLabel(for: textField) else { return }
+            self.refresh(textField: textField, errorLabel: textFieldErrorLabel, withValidationError: validationError)
+
         case let textField as MFTextField:
             guard let textFieldErrorLabel = self.errorLabel(for: textField) else { return }
             self.refresh(textField: textField, errorLabel: textFieldErrorLabel, withValidationError: validationError)

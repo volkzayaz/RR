@@ -11,6 +11,7 @@ pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', 
 pod 'MaterialTextField', '~> 1.0'
 pod 'MBProgressHUD', '~> 1.1.0'
 pod 'CloudTagView', '~> 3.0.0'
+pod 'NSStringMask'
 
 end
 

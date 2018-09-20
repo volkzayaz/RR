@@ -28,7 +28,6 @@ protocol ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Citie
     var profileSettingsErrorDescription: String? { get }
 
     func load(with delegate: ProfileSettingsViewModelDelegate)
-
     func unsavedChangesConfirmationViewModel() -> ConfirmationAlertViewModel.ViewModel
 
     func registerFirstNameField(_ firstNameField: ValidatableField)
@@ -40,12 +39,13 @@ protocol ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Citie
     func registerZipField(_ zipField: ValidatableField)
     func registerRegionField(_ regionField: RegionValidatableField)
     func registerCityField(_ cityField: CityValidatableField)
-    func registerPhoneField(_ phoneField: ValidatableField)
+    func registerPhoneField(_ phoneField: MaskedValidatebleField)
 
     func registerHobbiesField(_ hobbiesField: HobbiesValidatableField)
     func registerGenresField(_ genresField: GenresValidatableField)
     func registerLanguageField(_ languageField: LanguageValidatableField)
 
+    func checkIsDirty()
     func validateField(_ validateField: ValidatableField?)
 
     func showContriesSelectableList()

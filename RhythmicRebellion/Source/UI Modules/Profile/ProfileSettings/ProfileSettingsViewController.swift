@@ -10,6 +10,7 @@
 import UIKit
 import MaterialTextField
 import SwiftValidator
+import NSStringMask
 
 final class ProfileSettingsViewController: UIViewController {
 
@@ -46,7 +47,7 @@ final class ProfileSettingsViewController: UIViewController {
     @IBOutlet weak var cityTextField: CityTextField!
     @IBOutlet weak var cityErrorLabel: UILabel!
 
-    @IBOutlet weak var phoneTextField: MFTextField!
+    @IBOutlet weak var phoneTextField: MaskedTextField!
     @IBOutlet weak var phoneErrorLabel: UILabel!
 
     @IBOutlet weak var hobbiesTextFieldSelectionIndicator: UIImageView!
@@ -118,6 +119,7 @@ final class ProfileSettingsViewController: UIViewController {
         self.cityTextField.placeholderAnimatesOnFocus = true
         self.phoneTextField.textColor = self.viewModel.defaultTextColor
         self.phoneTextField.placeholderAnimatesOnFocus = true
+        self.phoneTextField.stringMask = NSStringMask(pattern: "\\(([1-9]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]{1})\\) (\\d{3})-(\\d{4})", placeholder: "_")
         self.hobbiesTextFieldSelectionIndicator.image = self.hobbiesTextFieldSelectionIndicator.image?.withRenderingMode(.alwaysTemplate)
         self.hobbiesContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSelectHobbies(sender:))))
         self.genresTextFieldSelectionIndicator.image = self.genresTextFieldSelectionIndicator.image?.withRenderingMode(.alwaysTemplate)
@@ -136,7 +138,7 @@ final class ProfileSettingsViewController: UIViewController {
         self.viewModel.registerZipField(self.zipTextField)
         self.viewModel.registerRegionField(self.regionTextField)
         self.viewModel.registerCityField(self.cityTextField)
-        self.viewModel.registerPhoneField(self.phoneTextField)
+        self.viewModel.registerPhoneField(MaskedValidatebleFieldWrapper(with: self.phoneTextField))
         self.viewModel.registerHobbiesField(self.hobbiesContainerView)
         self.viewModel.registerGenresField(self.genresContainerView)
         self.viewModel.registerLanguageField(self.languageTextField)
@@ -216,6 +218,7 @@ final class ProfileSettingsViewController: UIViewController {
     }
 
     @IBAction func onBack(sender: Any?) {
+
         guard self.viewModel.isDirty == true else { self.viewModel.navigateBack(); return }
 
         let confirmationViewModel = self.viewModel.unsavedChangesConfirmationViewModel()
@@ -296,6 +299,8 @@ extension ProfileSettingsViewController: UITextFieldDelegate {
         if scrollViewBounds.contains(textFieldFrame) == false {
             scrollView.scrollRectToVisible(textFieldFrame, animated: true)
         }
+
+        self.viewModel.checkIsDirty()
     }
 }
 
@@ -416,6 +421,10 @@ extension ProfileSettingsViewController: ProfileSettingsViewModelDelegate {
     func refreshField(field: ValidatableField, didValidate validationError: ValidationError?) {
 
         switch field {
+        case let textFieldWrapper as ValidatebleFieldWrapper:
+            guard let textField = textFieldWrapper.textField as? MFTextField, let textFieldErrorLabel = self.errorLabel(for: textField) else { return }
+            self.refresh(textField: textField, errorLabel: textFieldErrorLabel, withValidationError: validationError)
+            
         case let textField as MFTextField:
             guard let textFieldErrorLabel = self.errorLabel(for: textField) else { return }
             self.refresh(textField: textField, errorLabel: textFieldErrorLabel, withValidationError: validationError)

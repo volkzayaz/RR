@@ -51,7 +51,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     private var zipField: ValidatableField?
     private var regionField: RegionValidatableField?
     private var cityField: CityValidatableField?
-    private var phoneField: ValidatableField?
+    private var phoneField: MaskedValidatebleField?
     private var hobbiesField: HobbiesValidatableField?
     private var howHearField: HowHearValidatableField?
 
@@ -277,7 +277,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerPhoneField(_ phoneField: ValidatableField) {
+    func registerPhoneField(_ phoneField: MaskedValidatebleField) {
         let phoneRules: [Rule] = []
 
         self.validator.registerField(phoneField, rules: phoneRules )
