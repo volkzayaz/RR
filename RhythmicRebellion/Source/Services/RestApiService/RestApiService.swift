@@ -143,9 +143,17 @@ class RestApiService {
     }
 
 
-
     func fanUser<T: RestApiProfileRequestPayload>(update profilePayload: T, completion: @escaping (Result<User>) -> Void) {
-        guard let fanProfileURL = self.makeURL(with: "fan/profile") else { return }
+
+        func fanProfileURL(for profilePayload: RestApiProfileRequestPayload) -> URL? {
+            switch profilePayload {
+            case _ as RestApiProfileSettingsRequestPayload: return self.makeURL(with: "fan/profile")
+            case _ as RestApiListeningSettingsRequestPayload: return self.makeURL(with: "fan/profile/update-listening-settings")
+            default: return nil
+            }
+        }
+
+        guard let fanProfileURL = fanProfileURL(for: profilePayload) else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
                                     "Content-Type" : "application/json"]

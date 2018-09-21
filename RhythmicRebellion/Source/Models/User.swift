@@ -112,7 +112,7 @@ extension UserProfile: Equatable {
 
 struct FanUser: User {
 
-    let profile: UserProfile
+    var profile: UserProfile
     let wsToken: String
     let isGuest: Bool = false
 

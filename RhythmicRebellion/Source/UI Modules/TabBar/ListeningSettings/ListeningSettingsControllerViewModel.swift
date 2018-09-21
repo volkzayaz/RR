@@ -22,6 +22,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     private(set) var listeningSettingsSections: [ListeningSettingsSectionViewModel] = [ListeningSettingsSectionViewModel]()
 
     private(set) var isDirty: Bool = false
+    private(set) var isSaving: Bool = false
 
     // MARK: - Lifecycle -
 
@@ -46,6 +47,8 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
         self.delegate = delegate
 
         guard let fanUser = self.application?.user as? FanUser else { return }
+
+        self.application?.addObserver(self)
 
         self.listeningSettings = fanUser.profile.listeningSettings
         self.listeningSettingsSections = self.makeListeningSettingsSections()
@@ -76,8 +79,12 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     func save() {
 
+        self.isSaving = true
+
         self.application?.update(listeningSettings: self.listeningSettings, completion: { [weak self] (updateListeningSettingsResult) in
             guard let `self` = self else { return }
+
+            self.isSaving = false
 
             switch updateListeningSettingsResult {
             case .success(let listeningSettings):
@@ -94,7 +101,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     }
 
-    // MARK: - Listening Settigs Section
+    // MARK: - Listening Settigs Section -
 
     func makeListeningSettingsSections() -> [ListeningSettingsSectionViewModel] {
 
@@ -170,7 +177,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
         return listeningSettingsSections
     }
 
-    // MARK: - Song Commentary Section
+    // MARK: - Song Commentary Section -
     func songCommentarySectionIsDateItem(for songComentarySection: ListeningSettingsSectionViewModel) -> ListeningSettingsSwitchableSectionItemViewModel {
 
         return ListeningSettingsSwitchableSectionItemViewModel(parentSectionViewModel: songComentarySection,
@@ -260,7 +267,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
         }
     }
 
-    // MARK: - Artists BIO Section
+    // MARK: - Artists BIO Section -
 
     func artistsBIOSectionIsDateItem(for artistsBIOSection: ListeningSettingsSectionViewModel) -> ListeningSettingsSwitchableSectionItemViewModel {
 
@@ -347,5 +354,18 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
             artistsBIOSection.items.removeLast()
             self.delegate?.listeningSettingsSection(artistsBIOSection, didDeleteItem: artistsBIOSectionItemsCount - 1)
         }
+    }
+}
+
+extension ListeningSettingsControllerViewModel: ApplicationObserver {
+
+    func application(_ application: Application, didChange listeningSettings: ListeningSettings) {
+
+        guard self.isSaving == false else { return }
+
+        self.listeningSettings = listeningSettings
+        self.listeningSettingsSections = self.makeListeningSettingsSections()
+        self.checkDirtyState()
+        self.delegate?.reloadUI()
     }
 }

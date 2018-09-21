@@ -15,6 +15,8 @@ protocol WebSocketServiceObserver: class {
     func webSocketServiceDidConnect(_ service: WebSocketService)
     func webSocketServiceDidDisconnect(_ service: WebSocketService)
 
+    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings)
+
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
     func webSocketService(_ service: WebSocketService, didReceivePlaylist playList: [String: PlayerPlaylistItem?])
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
@@ -27,6 +29,8 @@ extension WebSocketServiceObserver {
 
     func webSocketServiceDidConnect(_ service: WebSocketService) { }
     func webSocketServiceDidDisconnect(_ service: WebSocketService) { }
+
+    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
     func webSocketService(_ service: WebSocketService, didReceivePlaylist playList: [String: PlayerPlaylistItem?]) { }
@@ -148,6 +152,12 @@ class WebSocketService: WebSocketDelegate, Observable {
 
                 case .userInit( _ ):
                     break
+
+                case .userSyncListeningSettings(let listeningSettings):
+
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveListeningSettings: listeningSettings)
+                    })
 
                 case .playListLoadTracks(let tracks):
 

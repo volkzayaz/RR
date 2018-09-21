@@ -80,6 +80,7 @@ class Application: Observable {
         }
 
         self.addObserver(self.player)
+        self.webSocketService.addObserver(self)
     }
 
     func start() {
@@ -186,6 +187,7 @@ class Application: Observable {
                 guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
 
                 self?.set(user: user)
+                self?.webSocketService.sendCommand(command: WebSocketCommand.syncListeningSettings(listeningSettings: fanUser.profile.listeningSettings))
                 self?.notifyListeningSettingsChanged()
                 completion?(.success(fanUser.profile.listeningSettings))
 
@@ -245,4 +247,17 @@ extension Application {
         })
     }
 
+}
+
+extension Application: WebSocketServiceObserver {
+
+    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) {
+        guard let currentFanUser = self.user as? FanUser else { return }
+
+        var fanUser = currentFanUser
+        fanUser.profile.listeningSettings = listeningSettings
+        self.user = fanUser
+
+        self.notifyListeningSettingsChanged()
+    }
 }
