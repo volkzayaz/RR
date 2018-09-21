@@ -11,7 +11,7 @@ import Alamofire
 
 extension Genre: SelectableListItem {
 
-    var identifier: String { return String(self.id) }
+    var identifier: String { return String(self.hashValue) }
     var title: String { return self.name }
 }
 
@@ -27,10 +27,16 @@ class GenresSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
     typealias Item = Genre
 
-    var items: [Item] { return dataSource.genres }
+    var items: [Item]
 
-    init(with dataSource: GenresDataSource) {
+    private var additionalItems: [Item]
+
+    init(with dataSource: GenresDataSource, additionalItems: [Item]?) {
         self.dataSource = dataSource
+        self.additionalItems = additionalItems ?? []
+
+        self.items = self.dataSource.genres
+        self.items.append(contentsOf: self.additionalItems)
     }
 
     func reload(completion: @escaping (Result<[Item]>) -> Void) {
@@ -38,7 +44,10 @@ class GenresSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
             switch genresResult {
             case .success(let genres):
-                completion(Result.success(genres))
+                self.items = genres
+                self.items.append(contentsOf: self.additionalItems)
+
+                completion(Result.success(self.items))
 
             case .failure(let error):
                 completion(Result.failure(error))
@@ -50,6 +59,17 @@ class GenresSelectableListItemsDataProvider: SelectableListItemsDataProvider {
         guard searchText.isEmpty == false else { return items }
         return items.filter( {return $0.name.lowercased().contains(searchText.lowercased()) })
     }
+
+    var isEditable: Bool { return true }
+
+    func addItem(with name: String) -> Item? {
+        let genre = Genre(with: name)
+        self.items.append(genre)
+        self.additionalItems.append(genre)
+
+        return genre
+    }
+
 }
 
 final class GenresSelectableListControllerViewModel: SelectableListControllerViewModel<GenresSelectableListItemsDataProvider> {
@@ -61,16 +81,16 @@ final class GenresSelectableListControllerViewModel: SelectableListControllerVie
     var itemsSelectionCallback: ItemsSelectionCallback?
 
 
-    init(router: SelectableListRouter, dataSource: GenresDataSource, selectedItems: [Genre]?, itemsSelectionCallback: ItemsSelectionCallback?) {
+    init(router: SelectableListRouter, dataSource: GenresDataSource, selectedItems: [Genre]?, additionalItems: [Genre]?, itemsSelectionCallback: ItemsSelectionCallback?) {
 
-        super.init(router: router, dataProvider: GenresSelectableListItemsDataProvider(with: dataSource), selectedItems: selectedItems ?? [], isSearchable: true, selectionType: .multiple)
+        super.init(router: router, dataProvider: GenresSelectableListItemsDataProvider(with: dataSource, additionalItems: additionalItems), selectedItems: selectedItems ?? [], isSearchable: true, selectionType: .multiple)
 
         self.itemsSelectionCallback = itemsSelectionCallback
     }
 
     override func done() {
 
-        self.itemsSelectionCallback?(self.selectedItems)
+        self.itemsSelectionCallback?(Array(self.selectedItems))
 
         super.done()
     }

@@ -27,6 +27,8 @@
 		76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCE20F6343A00140D03 /* CheckAddons.swift */; };
 		7634783721527364001F85F6 /* ConfirmationAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */; };
 		7634783D2153867E001F85F6 /* MaskedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783C2153867E001F85F6 /* MaskedTextField.swift */; };
+		7634783F2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783E2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift */; };
+		763478412153DECD001F85F6 /* AddNewSelectableListItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763478402153DECD001F85F6 /* AddNewSelectableListItemViewModel.swift */; };
 		763931DC21144CF600A65257 /* TrackActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DB21144CF600A65257 /* TrackActions.swift */; };
 		763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931DF21144E9300A65257 /* AlertActionsViewModel.swift */; };
 		763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 763931E221185F3B00A65257 /* PlayerPlaylist.storyboard */; };
@@ -237,6 +239,8 @@
 		76310DCE20F6343A00140D03 /* CheckAddons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAddons.swift; sourceTree = "<group>"; };
 		7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationAlertViewModel.swift; sourceTree = "<group>"; };
 		7634783C2153867E001F85F6 /* MaskedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskedTextField.swift; sourceTree = "<group>"; };
+		7634783E2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewSelectableListItemTableViewCell.swift; sourceTree = "<group>"; };
+		763478402153DECD001F85F6 /* AddNewSelectableListItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewSelectableListItemViewModel.swift; sourceTree = "<group>"; };
 		763931DB21144CF600A65257 /* TrackActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackActions.swift; sourceTree = "<group>"; };
 		763931DF21144E9300A65257 /* AlertActionsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertActionsViewModel.swift; sourceTree = "<group>"; };
 		763931E321185F3C00A65257 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PlayerPlaylist.storyboard; sourceTree = "<group>"; };
@@ -902,6 +906,7 @@
 			isa = PBXGroup;
 			children = (
 				76A45B4B213944180080885D /* SelectableListItemTableViewCell.swift */,
+				7634783E2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -910,6 +915,7 @@
 			isa = PBXGroup;
 			children = (
 				76A45B4D213952E40080885D /* SelectableListItemViewModel.swift */,
+				763478402153DECD001F85F6 /* AddNewSelectableListItemViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1446,7 +1452,9 @@
 				76C821B521440E9E00A6F5AE /* HobbiesContainerView.swift in Sources */,
 				76525E692146722700C556D6 /* RestorePasswordRouter.swift in Sources */,
 				76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */,
+				763478412153DECD001F85F6 /* AddNewSelectableListItemViewModel.swift in Sources */,
 				764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */,
+				7634783F2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift in Sources */,
 				761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

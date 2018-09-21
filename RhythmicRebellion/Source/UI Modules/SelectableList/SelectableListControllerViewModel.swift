@@ -10,10 +10,9 @@
 import Foundation
 import Alamofire
 
-
 protocol SelectableListItem: Hashable {
     var identifier: String { get }
-    var title: String { get }
+    var name: String { get }
 }
 
 protocol SelectableListItemsDataProvider {
@@ -23,14 +22,22 @@ protocol SelectableListItemsDataProvider {
     var items: [Item] { get }
     func reload(completion: @escaping (Result<[Item]>) -> Void)
     func filterItems(items: [Item], with searchText: String) -> [Item]
+
+    var isEditable: Bool { get }
+    func addItem(with name: String) -> Item?
 }
 
 class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: SelectableListViewModel {
 
+    enum Section: Int {
+        case items
+        case addNewItem
+    }
+
     var title: String { return "" }
     var doneButtonTitle: String { return NSLocalizedString("Done", comment: "Done BarButton ttile") }
 
-    var isSearchable: Bool
+    private(set) var isSearchable: Bool
     var canDone: Bool { return self.initialSelectedItems != Set(self.selectedItems) }
 
     private(set) weak var delegate: SelectableListViewModelDelegate?
@@ -40,11 +47,12 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
 
     private(set) var filteredItems: [T.Item]
     private(set) var initialSelectedItems: Set<T.Item>
-    private(set) var selectedItems: [T.Item]
+    private(set) var selectedItems: Set<T.Item>
 
     private(set) var selectionType: SelectionType
 
     private(set) var searchText: String = ""
+
 
     // MARK: - Lifecycle -
 
@@ -54,9 +62,10 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
         self.selectionType = selectionType
         self.isSearchable = isSearchable
 
+
         self.filteredItems = dataProvider.items
         self.initialSelectedItems = Set(selectedItems)
-        self.selectedItems = selectedItems
+        self.selectedItems = Set(selectedItems)
     }
 
     func load(with delegate: SelectableListViewModelDelegate) {
@@ -92,20 +101,37 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
         self.delegate?.reloadUI()
     }
 
+    func numberOfSections() -> Int {
+        return self.dataProvider.isEditable ? 2 : 1
+    }
+
     func numberOfItems(in section: Int) -> Int {
-        return self.filteredItems.count
+        guard let section = Section(rawValue: section) else { return 0 }
+
+        switch section {
+        case .items: return self.filteredItems.count
+        case .addNewItem:
+            return self.filteredItems.isEmpty &&
+                    !self.dataProvider.items.isEmpty &&
+                    !self.searchText.isEmpty ? 1 : 0
+        }
     }
 
     func object(at indexPath: IndexPath) -> SelectableListItemViewModel? {
-        guard self.filteredItems.count > indexPath.row else { return nil }
+        guard let section = Section(rawValue: indexPath.section) else { return nil }
 
-        let selectableListItem = self.filteredItems[indexPath.row]
+        switch section {
+        case .items:
+            guard self.filteredItems.count > indexPath.row else { return nil }
+            let selectableListItem = self.filteredItems[indexPath.row]
+            return DefaultSelectableListItemViewModel(with: selectableListItem, isSelected: self.selectedItems.contains(selectableListItem))
 
-        return SelectableListItemViewModel(with: selectableListItem, isSelected: self.selectedItems.contains(selectableListItem))
-
+        case .addNewItem:
+            return AddNewSelectableListItemViewModel(name: "\"" + self.searchText + "\"")
+        }
     }
 
-    func selectObject(at indexPath: IndexPath) {
+    private func selectItem(at indexPath: IndexPath) {
         guard self.filteredItems.count > indexPath.row else { return }
 
         let selectableListItem = self.filteredItems[indexPath.row]
@@ -118,7 +144,7 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
             }
             self.selectedItems.removeAll()
 
-            self.selectedItems.append(selectableListItem)
+            self.selectedItems.insert(selectableListItem)
             indexPathsToReload.append(indexPath)
 
             self.delegate?.reloadItems(at: indexPathsToReload)
@@ -129,11 +155,26 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
             if let selectableListItemIndex = self.selectedItems.index(of: selectableListItem) {
                 self.selectedItems.remove(at: selectableListItemIndex)
             } else {
-                self.selectedItems.append(selectableListItem)
+                self.selectedItems.insert(selectableListItem)
             }
 
             self.delegate?.reloadItems(at: [indexPath])
             break
+        }
+    }
+
+    func selectObject(at indexPath: IndexPath) {
+
+        guard let section = Section(rawValue: indexPath.section) else { return }
+
+        switch section {
+        case .items: self.selectItem(at: indexPath)
+
+        case .addNewItem:
+            guard let newItem = self.dataProvider.addItem(with: self.searchText) else { return }
+            self.selectedItems.insert(newItem)
+            self.filteredItems = self.dataProvider.filterItems(items: self.dataProvider.items, with: self.searchText)
+            self.delegate?.reloadUI()
         }
 
     }

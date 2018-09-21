@@ -11,7 +11,7 @@ import Alamofire
 
 extension Hobby: SelectableListItem {
 
-    var identifier: String { return String(self.id) }
+    var identifier: String { return String(self.hashValue) }
     var title: String { return self.name }
 }
 
@@ -27,10 +27,16 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
     typealias Item = Hobby
 
-    var items: [Item] { return dataSource.hobbies }
+    var items: [Item]
 
-    init(with dataSource: HobbiesDataSource) {
+    private var additionalItems: [Item]
+
+    init(with dataSource: HobbiesDataSource, additionalItems: [Item]?) {
         self.dataSource = dataSource
+        self.additionalItems = additionalItems ?? []
+
+        self.items = self.dataSource.hobbies
+        self.items.append(contentsOf: self.additionalItems)
     }
 
     func reload(completion: @escaping (Result<[Item]>) -> Void) {
@@ -38,7 +44,10 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
             switch hobbiesResult {
             case .success(let hobbies):
-                completion(Result.success(hobbies))
+                self.items = hobbies
+                self.items.append(contentsOf: self.additionalItems)
+
+                completion(Result.success(self.items))
 
             case .failure(let error):
                 completion(Result.failure(error))
@@ -50,6 +59,17 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
         guard searchText.isEmpty == false else { return items }
         return items.filter( {return $0.name.lowercased().contains(searchText.lowercased()) })
     }
+
+    var isEditable: Bool { return true }
+
+    func addItem(with name: String) -> Item? {
+        let hobby = Hobby(with: name)
+        self.items.append(hobby)
+        self.additionalItems.append(hobby)
+
+        return hobby
+    }
+
 }
 
 final class HobbiesSelectableListControllerViewModel: SelectableListControllerViewModel<HobbiesSelectableListItemsDataProvider> {
@@ -61,16 +81,16 @@ final class HobbiesSelectableListControllerViewModel: SelectableListControllerVi
     var itemsSelectionCallback: ItemsSelectionCallback?
 
 
-    init(router: SelectableListRouter, dataSource: HobbiesDataSource, selectedItems: [Hobby]?, itemsSelectionCallback: ItemsSelectionCallback?) {
+    init(router: SelectableListRouter, dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, itemsSelectionCallback: ItemsSelectionCallback?) {
 
-        super.init(router: router, dataProvider:  HobbiesSelectableListItemsDataProvider(with: dataSource), selectedItems: selectedItems ?? [], isSearchable: true, selectionType: .multiple)
+        super.init(router: router, dataProvider:  HobbiesSelectableListItemsDataProvider(with: dataSource, additionalItems: additionalItems), selectedItems: selectedItems ?? [], isSearchable: true, selectionType: .multiple)
 
         self.itemsSelectionCallback = itemsSelectionCallback
     }
 
     override func done() {
 
-        self.itemsSelectionCallback?(self.selectedItems)
+        self.itemsSelectionCallback?(Array(self.selectedItems))
 
         super.done()
     }

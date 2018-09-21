@@ -170,18 +170,32 @@ final class SelectableListViewController: UIViewController {
 
 extension SelectableListViewController: UITableViewDataSource, UITableViewDelegate {
 
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        return self.viewModel.numberOfSections()
+    }
+
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.numberOfItems(in: section)
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let selectableListItemTableViewCell = SelectableListItemTableViewCell.reusableCell(in: tableView, at: indexPath)
-        let selectableListItemTableViewCellViewModel = self.viewModel.object(at: indexPath)
+        let selectableListItemViewModel = self.viewModel.object(at: indexPath)!
 
-        selectableListItemTableViewCell.setup(viewModel: selectableListItemTableViewCellViewModel!)
+        switch selectableListItemViewModel {
+        case let defaultSelectableListItemViewModel as DefaultSelectableListItemViewModel:
+            let selectableListItemTableViewCell = SelectableListItemTableViewCell.reusableCell(in: tableView, at: indexPath)
+            selectableListItemTableViewCell.setup(viewModel: defaultSelectableListItemViewModel)
+            return selectableListItemTableViewCell
 
-        return selectableListItemTableViewCell
+
+        case let addNewSelectableListItemViewModel as AddNewSelectableListItemViewModel:
+            let addNewSelectableListItemTableViewCell = AddNewSelectableListItemTableViewCell.reusableCell(in: tableView, at: indexPath)
+            addNewSelectableListItemTableViewCell.setup(viewModel: addNewSelectableListItemViewModel)
+            return addNewSelectableListItemTableViewCell
+
+        default: fatalError("Unknown SelectableListItemViewModel!")
+        }
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

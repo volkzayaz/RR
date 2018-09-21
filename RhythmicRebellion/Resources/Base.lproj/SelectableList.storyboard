@@ -55,6 +55,47 @@
                                             <outlet property="titleLabel" destination="RS6-s0-PgP" id="irk-Tq-Vix"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="AddNewSelectableListItemTableViewCellIdentifier" id="yJq-GS-Opv" customClass="AddNewSelectableListItemTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yJq-GS-Opv" id="NqF-pU-H2Q">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mfl-HB-34g">
+                                                    <rect key="frame" x="15" y="11.5" width="68.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddSelectableListItem" translatesAutoresizingMaskIntoConstraints="NO" id="p8H-ds-flb">
+                                                    <rect key="frame" x="345" y="14.5" width="15" height="15"/>
+                                                    <color key="tintColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gxB-aB-E4D">
+                                                    <rect key="frame" x="91.5" y="11.5" width="83" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="p8H-ds-flb" firstAttribute="centerY" secondItem="Mfl-HB-34g" secondAttribute="centerY" id="8YV-wl-qfs"/>
+                                                <constraint firstItem="p8H-ds-flb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gxB-aB-E4D" secondAttribute="trailing" constant="15" id="Aaq-0b-JzP"/>
+                                                <constraint firstItem="Mfl-HB-34g" firstAttribute="centerY" secondItem="NqF-pU-H2Q" secondAttribute="centerY" id="BoN-4w-7IX"/>
+                                                <constraint firstItem="Mfl-HB-34g" firstAttribute="leading" secondItem="NqF-pU-H2Q" secondAttribute="leading" constant="15" id="JMz-aA-Rr9"/>
+                                                <constraint firstItem="gxB-aB-E4D" firstAttribute="centerY" secondItem="Mfl-HB-34g" secondAttribute="centerY" id="M4x-Od-QVG"/>
+                                                <constraint firstAttribute="trailing" secondItem="p8H-ds-flb" secondAttribute="trailing" constant="15" id="TwL-Sk-Ewe"/>
+                                                <constraint firstItem="gxB-aB-E4D" firstAttribute="leading" secondItem="Mfl-HB-34g" secondAttribute="trailing" constant="8" id="UJc-e4-EJp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <outlet property="addImageView" destination="p8H-ds-flb" id="wFw-uU-MmG"/>
+                                            <outlet property="itemNameLabel" destination="gxB-aB-E4D" id="DZQ-uz-i4O"/>
+                                            <outlet property="titleLabel" destination="Mfl-HB-34g" id="cAt-iI-8Ug"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="fj4-PA-oPj" id="bYw-0u-Rm0"/>
@@ -92,6 +133,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="AddSelectableListItem" width="15" height="15"/>
         <image name="SelectIndicator" width="24" height="24"/>
     </resources>
 </document>

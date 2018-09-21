@@ -13,8 +13,8 @@ protocol ProfileSettingsRouter: FlowRouter {
     func showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: @escaping (Country) -> Void)
     func showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: @escaping (Region) -> Void)
     func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: @escaping (City) -> Void)
-    func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void)
-    func showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, selectionCallback: @escaping ([Genre]) -> Void)
+    func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void)
+    func showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, additionalItems: [Genre]?, selectionCallback: @escaping ([Genre]) -> Void)
     func showLanguagesSelectableList(dataSource: LanguagesDataSource, selectedItems: Language?, selectionCallback: @escaping (Language) -> Void)
 
     func navigateBack()
@@ -38,8 +38,8 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
         case showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: (Country) -> Void)
         case showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: (Region) -> Void)
         case showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: (City) -> Void)
-        case showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, selectionCallback: ([Hobby]) -> Void)
-        case showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, selectionCallback: ([Genre]) -> Void)
+        case showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, selectionCallback: ([Hobby]) -> Void)
+        case showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, additionalItems: [Genre]?, selectionCallback: ([Genre]) -> Void)
         case showLanguagesSelectableList(dataSource: LanguagesDataSource, selectedItems: Language?, selectionCallback: (Language) -> Void)
 
         var identifier: SegueDestinationList {
@@ -96,24 +96,26 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: citiesSelectableListControllerViewModel)
 
-        case .showHobbiesSelectableList(let dataSource, let selectedItems, let selectionCallback):
+        case .showHobbiesSelectableList(let dataSource, let selectedItems, let additionalItems, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for hobbiesSelectableList") }
             let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
 
             let hobbiesSelectableListControllerViewModel = HobbiesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                     dataSource: dataSource,
                                                                                                     selectedItems: selectedItems,
+                                                                                                    additionalItems: additionalItems,
                                                                                                     itemsSelectionCallback: selectionCallback)
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: hobbiesSelectableListControllerViewModel)
 
-        case .showGenresSelectableList(let dataSource, let selectedItems, let selectionCallback):
+        case .showGenresSelectableList(let dataSource, let selectedItems, let additionalItems, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for GenresSelectableListSegueIdentifier") }
             let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
 
             let genresSelectableListControllerViewModel = GenresSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                    dataSource: dataSource,
                                                                                                    selectedItems: selectedItems,
+                                                                                                   additionalItems: additionalItems,
                                                                                                    itemsSelectionCallback: selectionCallback)
 
             selectableListRouter.start(controller: selectableListViewController, viewModel: genresSelectableListControllerViewModel)
@@ -153,12 +155,18 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
         self.perform(segue: .showCitiesSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
     }
 
-    func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void) {
-        self.perform(segue: .showHobbiesSelectableList(dataSource: dataSource, selectedItems: selectedItems, selectionCallback: selectionCallback))
+    func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void) {
+        self.perform(segue: .showHobbiesSelectableList(dataSource: dataSource,
+                                                       selectedItems: selectedItems,
+                                                       additionalItems: additionalItems,
+                                                       selectionCallback: selectionCallback))
     }
 
-    func showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, selectionCallback: @escaping ([Genre]) -> Void) {
-        self.perform(segue: .showGenresSelectableList(dataSource: dataSource, selectedItems: selectedItems, selectionCallback: selectionCallback))
+    func showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, additionalItems: [Genre]?, selectionCallback: @escaping ([Genre]) -> Void) {
+        self.perform(segue: .showGenresSelectableList(dataSource: dataSource,
+                                                      selectedItems: selectedItems,
+                                                      additionalItems: additionalItems,
+                                                      selectionCallback: selectionCallback))
     }
 
     func showLanguagesSelectableList(dataSource: LanguagesDataSource, selectedItems: Language?, selectionCallback: @escaping (Language) -> Void) {

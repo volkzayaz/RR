@@ -50,6 +50,9 @@ class LanguagesSelectableListItemsDataProvider: SelectableListItemsDataProvider 
         guard searchText.isEmpty == false else { return items }
         return items.filter( {return $0.name.lowercased().contains(searchText.lowercased()) })
     }
+
+    var isEditable: Bool { return false }
+    func addItem(with name: String) -> Language? { return nil }
 }
 
 final class LanguagesSelectableListControllerViewModel: SelectableListControllerViewModel<LanguagesSelectableListItemsDataProvider> {

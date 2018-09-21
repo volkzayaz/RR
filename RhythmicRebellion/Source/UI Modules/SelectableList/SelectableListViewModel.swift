@@ -14,6 +14,10 @@ enum SelectionType {
     case multiple
 }
 
+protocol SelectableListItemViewModel {
+    var name: String { get }
+}
+
 protocol SelectableListViewModel: class {
 
     var title: String { get }
@@ -29,6 +33,8 @@ protocol SelectableListViewModel: class {
     func reload()
 
     func filterItems(with searchText: String)
+
+    func numberOfSections() -> Int
     func numberOfItems(in section: Int) -> Int
     func object(at indexPath: IndexPath) -> SelectableListItemViewModel?
 

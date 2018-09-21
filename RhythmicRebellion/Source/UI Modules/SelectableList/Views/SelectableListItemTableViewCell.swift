@@ -12,7 +12,7 @@ protocol SelectableListItemTableViewCellViewModel {
 
     var id: String { get }
     
-    var title: String { get }
+    var name: String { get }
     var isSelected: Bool { get }
 }
 
@@ -33,7 +33,7 @@ class SelectableListItemTableViewCell: UITableViewCell, CellIdentifiable {
     func setup(viewModel: SelectableListItemTableViewCellViewModel) {
 
         self.viewModelId = viewModel.id
-        self.titleLabel.text = viewModel.title
+        self.titleLabel.text = viewModel.name
         self.selectIndicatorImageView.isHidden = viewModel.isSelected == false
 
     }

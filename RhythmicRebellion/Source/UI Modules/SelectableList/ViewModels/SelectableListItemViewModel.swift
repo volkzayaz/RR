@@ -8,16 +8,16 @@
 
 import Foundation
 
-struct SelectableListItemViewModel: SelectableListItemTableViewCellViewModel {
+struct DefaultSelectableListItemViewModel: SelectableListItemViewModel, SelectableListItemTableViewCellViewModel {
 
     var id: String
-    var title: String
+    var name: String
     var isSelected: Bool
 
     init<T:SelectableListItem>(with selectableListItem: T, isSelected: Bool) {
 
         self.id = selectableListItem.identifier
-        self.title = selectableListItem.title
+        self.name = selectableListItem.name
 
         self.isSelected = isSelected
     }

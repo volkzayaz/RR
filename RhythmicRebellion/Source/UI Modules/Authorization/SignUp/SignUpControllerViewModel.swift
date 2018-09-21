@@ -101,11 +101,6 @@ final class SignUpControllerViewModel: SignUpViewModel {
             switch configResult {
             case .success(let config):
 
-                if let selectedHobbies = self?.hobbiesField?.hobbies, selectedHobbies.count > 0 {
-                    let filteredSelectedHobbies = selectedHobbies.filter( { return config.hobbies.contains($0) })
-                    self?.delegate?.refreshHobbiesField(with: filteredSelectedHobbies)
-                }
-
                 if let selectedHowHear = self?.howHearField?.howHear, config.howHearList.contains(selectedHowHear) == false {
                     self?.delegate?.refreshHowHearField(with: nil)
                 }
@@ -420,9 +415,15 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func showHobbiesSelectableList() {
-        self.router?.showHobbiesSelectableList(dataSource: self, selectedItems: self.hobbiesField?.hobbies, selectionCallback: { [weak self] (hobbies) in
-            self?.set(hobbies: hobbies)
-        })
+
+        let userHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil }
+
+        self.router?.showHobbiesSelectableList(dataSource: self,
+                                               selectedItems: self.hobbiesField?.hobbies,
+                                               additionalItems: userHobbies,
+                                               selectionCallback: { [weak self] (hobbies) in
+                                                    self?.set(hobbies: hobbies)
+                                            })
     }
 
     func showHowHearSelectableList() {

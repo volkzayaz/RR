@@ -138,11 +138,6 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
             switch configResult {
             case .success(let config):
 
-                if let selectedHobbies = self?.hobbiesField?.hobbies, selectedHobbies.count > 0 {
-                    let filteredSelectedHobbies = selectedHobbies.filter( { return config.hobbies.contains($0) })
-                    self?.delegate?.refreshHobbiesField(with: filteredSelectedHobbies)
-                }
-
                 if let selectedLanguageId = self?.userProfile?.language, let selectedLanguage = config.languages.filter( {$0.id == selectedLanguageId} ).first {
                     self?.delegate?.refreshLanguageField(with: selectedLanguage)
                 }
@@ -442,15 +437,35 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func showHobbiesSelectableList() {
-        self.router?.showHobbiesSelectableList(dataSource: self, selectedItems: self.hobbiesField?.hobbies, selectionCallback: { [weak self] (hobbies) in
-            self?.set(hobbies: hobbies)
-        })
+
+        var additionalHobbiesSet = Set<Hobby>()
+        additionalHobbiesSet = additionalHobbiesSet.union(self.userProfile?.hobbies.filter { $0.id == nil } ?? [])
+        additionalHobbiesSet = additionalHobbiesSet.union(self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? [])
+
+        let additionalHobbies = Array(additionalHobbiesSet)
+
+        self.router?.showHobbiesSelectableList(dataSource: self,
+                                               selectedItems: self.hobbiesField?.hobbies,
+                                               additionalItems: additionalHobbies,
+                                               selectionCallback: { [weak self] (hobbies) in
+                                                    self?.set(hobbies: hobbies)
+                                            })
     }
 
     func showGenresSelectableList() {
-        self.router?.showGenresSelectableList(dataSource: self, selectedItems: self.genresField?.genres, selectionCallback: { [weak self] (genres) in
-            self?.set(genres: genres)
-        })
+
+        var additionalGenresSet = Set<Genre>()
+        additionalGenresSet = additionalGenresSet.union(self.userProfile?.genres?.filter { $0.id == nil } ?? [])
+        additionalGenresSet = additionalGenresSet.union(self.genresField?.genres?.filter { $0.id == nil } ?? [])
+
+        let additionalGenres = Array(additionalGenresSet)
+
+        self.router?.showGenresSelectableList(dataSource: self,
+                                              selectedItems: self.genresField?.genres,
+                                              additionalItems: additionalGenres,
+                                              selectionCallback: { [weak self] (genres) in
+                                                    self?.set(genres: genres)
+                                            })
     }
 
     func showLanguagesSelectableList() {
