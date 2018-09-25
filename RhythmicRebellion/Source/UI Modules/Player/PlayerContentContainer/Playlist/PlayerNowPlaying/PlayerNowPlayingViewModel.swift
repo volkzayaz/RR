@@ -22,7 +22,7 @@ protocol PlayerNowPlayingViewModel: class {
     func perform(action : PlayerNowPlayingTableHeaderView.Actions)
 }
 
-protocol PlayerNowPlayingViewModelDelegate: class {
+protocol PlayerNowPlayingViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()

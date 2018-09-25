@@ -17,6 +17,8 @@ protocol TrackTableViewCellViewModel {
     var isPlayable: Bool { get }
     var isCurrentInPlayer: Bool { get }
     var isPlaying: Bool { get }
+
+    var isCensorship: Bool { get }
 }
 
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
@@ -42,12 +44,20 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     @IBOutlet var stackViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var stackViewTrailingConstraint: NSLayoutConstraint!
 
+    @IBOutlet var censorshipMarkImageView: UIImageView!
+
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
     
     var viewModelId: String = ""
 
     var actionCallback: ActionCallback?
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        self.censorshipMarkImageView.image = self.censorshipMarkImageView.image?.withRenderingMode(.alwaysTemplate)
+    }
 
     func prepareToDisplay(viewModel: TrackTableViewCellViewModel) {
         if (!equalizer.isHidden) {
@@ -87,6 +97,11 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         } else {
             self.actionButtonConatinerViewTrailingConstraint.constant = 0
             self.actionButtonContainerView.isHidden = false
+
+            if viewModel.isCensorship {
+                self.stackView.addArrangedSubview(self.censorshipMarkImageView)
+            }
+
         }
 
         if self.stackView.subviews.isEmpty {

@@ -154,8 +154,9 @@ struct PresentationSource {
 }
 
 struct RouterDependencies {
+
+    var restApiService: RestApiService { return self.application.restApiService }
+
     let application: Application
-    let restApiService: RestApiService
-    let webSocketService: WebSocketService
     let player: Player
 }

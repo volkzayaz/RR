@@ -16,6 +16,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketServiceDidDisconnect(_ service: WebSocketService)
 
     func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings)
+    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
     func webSocketService(_ service: WebSocketService, didReceivePlaylist playList: [String: PlayerPlaylistItem?])
@@ -31,6 +32,7 @@ extension WebSocketServiceObserver {
     func webSocketServiceDidDisconnect(_ service: WebSocketService) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) { }
+    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
     func webSocketService(_ service: WebSocketService, didReceivePlaylist playList: [String: PlayerPlaylistItem?]) { }
@@ -56,9 +58,10 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
-    init(socketURL url: URL) {
-
-        self.webSocketURL = url
+    init?(webSocketURI: String) {
+        guard let webSocketURL = URL(string: webSocketURI) else { return nil }
+        
+        self.webSocketURL = webSocketURL
     }
 
     func makeWebSocket() -> WebSocket {
@@ -157,6 +160,11 @@ class WebSocketService: WebSocketDelegate, Observable {
 
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveListeningSettings: listeningSettings)
+                    })
+
+                case .userSyncForceToPlay(let trackForceToPlayState):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveTrackForceToPlayState: trackForceToPlayState)
                     })
 
                 case .playListLoadTracks(let tracks):

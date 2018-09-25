@@ -59,9 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if let application = Application() {
             let routerDependencies = RouterDependencies(application: application,
-                                                        restApiService: application.restApiService,
-                                                        webSocketService: application.webSocketService,
-                                                        player: application.player)
+                                                        player: Player(with: application))
 
             let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
             defaultAppRouter.start(controller: appViewController)

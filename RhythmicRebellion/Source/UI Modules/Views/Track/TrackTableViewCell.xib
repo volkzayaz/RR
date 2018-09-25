@@ -69,8 +69,17 @@
                             <constraint firstItem="kms-fH-bFS" firstAttribute="top" secondItem="uYt-43-1i4" secondAttribute="top" id="pvK-GD-zr2"/>
                         </constraints>
                     </view>
-                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="40H-JG-Yd1">
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="40H-JG-Yd1">
                         <rect key="frame" x="446" y="0.0" width="0.0" height="43.5"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ExclamationMark" translatesAutoresizingMaskIntoConstraints="NO" id="RAU-0B-fEq">
+                                <rect key="frame" x="0.0" y="0.0" width="6" height="43.5"/>
+                                <color key="tintColor" red="0.83529411764705885" green="0.56470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="22" id="bzY-K9-hLu"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <constraints>
                             <constraint firstAttribute="width" id="bhP-un-z2V"/>
                         </constraints>
@@ -99,6 +108,7 @@
                 <outlet property="actionButtonConatinerViewTrailingConstraint" destination="bpA-0t-6Ky" id="cIu-QL-Uzl"/>
                 <outlet property="actionButtonContainerView" destination="uYt-43-1i4" id="6N1-rN-2de"/>
                 <outlet property="actionButtonContainerViewWidthConstraint" destination="QAn-bb-HTS" id="r7r-sD-ZIP"/>
+                <outlet property="censorshipMarkImageView" destination="RAU-0B-fEq" id="TT3-nC-Csl"/>
                 <outlet property="descriptionLabel" destination="8hB-Ji-Kgi" id="c9N-lw-Ndn"/>
                 <outlet property="equalizer" destination="yJ1-MD-eZX" id="2J6-6q-TGR"/>
                 <outlet property="equalizerLeadingConstraint" destination="vcC-6o-2m2" id="hSf-Hg-GGw"/>
@@ -110,4 +120,7 @@
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="ExclamationMark" width="6" height="25"/>
+    </resources>
 </document>

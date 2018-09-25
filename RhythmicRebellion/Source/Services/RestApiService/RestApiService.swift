@@ -14,7 +14,9 @@ class RestApiService {
     let serverURL: URL
     let originURI: String
 
-    public init(serverURL: URL, originURI: String) {
+    public init?(serverURI: String, originURI: String) {
+        guard let serverURL = URL(string: serverURI) else { return nil }
+
         self.serverURL = serverURL
         self.originURI = originURI
     }
@@ -262,7 +264,41 @@ class RestApiService {
                 }
         }
     }
-    
+
+    func fanAllowPlayTrackWithExplicitMaterial(track: Track, completion: @escaping (Result<(TrackForceToPlayState)>) -> Void) {
+        guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(track.id) + "/force-to-play") else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(forceToPlayURL, method: .post, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<TrackForceToPlayResponse>) in
+                switch dataResponse.result {
+                case .success(let trackForceToPlayResponse): completion(.success(trackForceToPlayResponse.state))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    func fanDisallowPlayTrackWithExplicitMaterial(track: Track, completion: @escaping (Result<TrackForceToPlayState>) -> Void) {
+        guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(track.id) + "/force-to-play") else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(forceToPlayURL, method: .delete, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<TrackForceToPlayResponse>) in
+                switch dataResponse.result {
+                case .success(let trackForceToPlayResponse): completion(.success(trackForceToPlayResponse.state))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
     // MARK: - Player
 
     func audioAddons(for trackIds: [Int], completion: @escaping (Result<[Int : [Addon]]>) -> Void) {

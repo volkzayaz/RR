@@ -13,6 +13,7 @@ class PlayerQueueItem {
 
     enum Content {
         case addon(Addon)
+        case stub(AudioFile)
         case track(Track)
     }
 
@@ -25,12 +26,17 @@ class PlayerQueueItem {
     init(with track: Track) {
         self.content = .track(track)
     }
+
+    init(with audioFile: AudioFile) {
+        self.content = .stub(audioFile)
+    }
 }
 
 class PlayerQueue {
 
     var track: PlayerTrack?
     var addons: [Addon]?
+    var trackStub: AudioFile?
 
     var isReadyToPlay: Bool {
         return self.addons != nil
@@ -65,8 +71,14 @@ class PlayerQueue {
         }
 
         if let track = self.track?.track, let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
-            itemsInfo[audioFile.urlString] = PlayerQueueItem(with: track)
-            playerItems.append(AVPlayerItem(url: playerItemURL))
+
+            if let trackStub = self.trackStub, let trackStubURL = URL(string: trackStub.urlString) {
+                itemsInfo[trackStub.urlString] = PlayerQueueItem(with: trackStub)
+                playerItems.append(AVPlayerItem(url: trackStubURL))
+            } else {
+                itemsInfo[audioFile.urlString] = PlayerQueueItem(with: track)
+                playerItems.append(AVPlayerItem(url: playerItemURL))
+            }
         }
     }
 
@@ -74,6 +86,15 @@ class PlayerQueue {
 
         self.track = track
         self.addons = addons
+        self.trackStub = nil
+
+        self.makeItems()
+    }
+
+    func replace(track: PlayerTrack, trackStub: AudioFile) {
+        self.track = track
+        self.trackStub = trackStub
+        self.addons = []
 
         self.makeItems()
     }

@@ -20,4 +20,6 @@ struct TrackViewModel: TrackTableViewCellViewModel {
     
     var isCurrentInPlayer: Bool
     var isPlaying: Bool
+
+    var isCensorship: Bool
 }

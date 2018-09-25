@@ -91,7 +91,7 @@ class Player: NSObject, Observable {
 
         switch currentQueueItem.content {
         case .addon(_): return false
-        case .track(_):
+        case .track(_), .stub(_):
             guard let trackProgress = self.currentTrackState?.progress, trackProgress > 0.3 else { return self.state.initialized }
             return true
         }
@@ -101,7 +101,7 @@ class Player: NSObject, Observable {
         guard let currentQueueItem = self.playerQueue.currentItem else { return false }
 
         switch currentQueueItem.content {
-        case .addon(_): return false
+        case .addon(_), .stub(_): return false
         case .track(_): return self.state.waitingAddons == false
         }
     }
@@ -150,8 +150,8 @@ class Player: NSObject, Observable {
         return TimeInterval(CMTimeGetSeconds(duration)).rounded(.towardZero)
     }
 
-    private let restApiService: RestApiService
-    private let webSocketService: WebSocketService
+    private let application: Application
+    private var webSocketService: WebSocketService { return self.application.webSocketService }
 
     private let playlist: PlayerPlaylist = PlayerPlaylist()
     private var playerQueue: PlayerQueue = PlayerQueue()
@@ -162,12 +162,13 @@ class Player: NSObject, Observable {
     private var addonsPlayTimer: Timer?
 
 
-    init(restApiService: RestApiService, webSocketService: WebSocketService) {
-        self.restApiService = restApiService
-        self.webSocketService = webSocketService
+    init(with application: Application) {
+
+        self.application = application
 
         super.init()
 
+        self.application.addObserver(self)
         self.webSocketService.addObserver(self)
 
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
@@ -182,7 +183,6 @@ class Player: NSObject, Observable {
         } catch let error as NSError {
             print("an error occurred when audio session category.\n \(error)")
         }
-
 
         addObserver(self, forKeyPath: #keyPath(Player.player.rate), options: [.new, .initial], context: &playerKVOContext)
         addObserver(self, forKeyPath: #keyPath(Player.player.currentItem), options: [.new, .initial], context: &playerKVOContext)
@@ -215,7 +215,7 @@ class Player: NSObject, Observable {
     }
 
     func loadConfig() {
-        self.restApiService.playerConfig { [weak self] (playerConfigResult) in
+        self.application.restApiService.playerConfig { [weak self] (playerConfigResult) in
             switch playerConfigResult {
             case .success(let playerConfig): self?.config = playerConfig
             default: break
@@ -272,7 +272,7 @@ class Player: NSObject, Observable {
     }
 
     func updateCurrentTrackState(with timeElapsed:TimeInterval) {
-        if self.isMaster && self.state.playing == true && self.playerQueue.containsOnlyTrack {
+        if self.isMaster && self.state.playing == true && self.playerQueue.containsOnlyTrack && self.playerQueue.trackStub == nil {
             let currentTrackState = TrackState(hash: self.stateHash, progress: timeElapsed, isPlaying: self.state.playing)
             self.set(trackState: currentTrackState)
             self.currentTrackState = currentTrackState
@@ -283,7 +283,7 @@ class Player: NSObject, Observable {
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.previousTrackCommand.isEnabled = self.canBackward
 
-        if self.playerQueue.containsOnlyTrack {
+        if self.playerQueue.containsOnlyTrack && self.playerQueue.trackStub == nil{
             self.observersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerItemCurrentTime: timeElapsed)
             })
@@ -315,15 +315,14 @@ class Player: NSObject, Observable {
         return track
     }
 
-
     func loadAddons(for track: Track, completion: ((Error?) -> ())?) {
 
-        self.restApiService.audioAddons(for: [track.id]) { [weak self] (addonsResult) in
+        self.application.restApiService.audioAddons(for: [track.id]) { [weak self] (addonsResult) in
 
             switch addonsResult {
             case .success(let tracksAddons):
                     self?.playlist.add(tracksAddons: tracksAddons)
-                    self?.restApiService.artists(with: [track.artist.id], completion: { [weak self] (artistsResult) in
+                    self?.application.restApiService.artists(with: [track.artist.id], completion: { [weak self] (artistsResult) in
 
                         switch artistsResult {
                         case .success(let artists):
@@ -393,7 +392,40 @@ class Player: NSObject, Observable {
 
     func preparePlayerQueueToPlay(completion: ((Error?) -> ())? = nil) {
         guard self.state.initialized, let track = self.playerQueue.track else { completion?(AppError(.notInitialized)); return }
-        guard self.playerQueue.isReadyToPlay == true else { self.prepareAddons(for: track.track, completion: completion); return }
+
+//        let fanUser = self.application.user as? FanUser
+//        if track.track.isCensorship && fanUser?.profile.listeningSettings.isExplicitMaterialExcluded ?? true && fanUser?.profile.forceToPlay.contains(track.track.id) ?? false == false {
+//
+//            let infoAudioFileForTrack = self.config?.explicitMaterialAudioFile
+//
+//            self.playerQueue.replace(track: track, addons: addons)
+//            self.replace(playerItems: playerQueue.playerItems)
+//            self.state.waitingAddons = false
+//
+//            if self.state.playing == true { self.player.play() }
+//
+//        }
+
+        guard self.playerQueue.isReadyToPlay == true else {
+
+            guard let config = self.config, let stubTrackAudioFileReason = self.application.user?.stubTrackAudioFileReason(for: track.track) else {
+                self.prepareAddons(for: track.track, completion: completion)
+                return
+            }
+
+            switch stubTrackAudioFileReason {
+            case .noPreview:
+                self.playerQueue.replace(track: track, trackStub: config.noPreviewAudioFile)
+            case .censorship:
+                self.playerQueue.replace(track: track, trackStub: config.explicitMaterialAudioFile)
+            }
+
+            self.replace(playerItems: playerQueue.playerItems)
+            if self.state.playing == true { self.player.play() }
+
+            completion?(nil)
+            return
+        }
 
         completion?(nil)
     }
@@ -950,6 +982,12 @@ extension Player: WebSocketServiceObserver {
 
 extension Player: ApplicationObserver {
 
+    func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) {
+        guard isReachable == true, self.config == nil else { return }
+
+        self.loadConfig()
+    }
+
     func disconnect(isPlaying: Bool, isPlayingAddons: Bool) {
 
         let pauseCompletion: (() -> ()) = { [weak self] () in
@@ -967,7 +1005,7 @@ extension Player: ApplicationObserver {
 
         let playerCurrentItemCurrentTime = self.currentTrackState?.progress ?? 0.0
         let trackState = TrackState(hash: stateHash, progress: playerCurrentItemCurrentTime, isPlaying: false)
-        self.set(trackState: trackState) { [weak self] (error) in
+        self.set(trackState: trackState) { (error) in
             pauseCompletion()
         }
     }

@@ -16,7 +16,7 @@ enum PreviewType: Int {
     case limit90 = 4
 }
 
-struct Track: Codable {
+public struct Track: Codable {
 
     let id: Int
     let songId: Int
@@ -146,7 +146,7 @@ struct Track: Codable {
 }
 
 extension Track: Equatable {
-    static func == (lhs: Track, rhs: Track) -> Bool {
+    public static func == (lhs: Track, rhs: Track) -> Bool {
         return lhs.id == rhs.id
     }
 }

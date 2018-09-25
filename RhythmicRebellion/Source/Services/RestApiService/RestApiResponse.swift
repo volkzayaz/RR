@@ -254,6 +254,26 @@ struct TrackMoveResponse: RestApiResponse {
     }
 }
 
+struct TrackForceToPlayResponse: RestApiResponse {
+
+    let fanId: Int
+    let state: TrackForceToPlayState
+
+    enum CodingKeys: String, CodingKey {
+        case fanId = "fan_id"
+        case recordId = "record_id"
+        case forceToPlay = "force_to_play"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.fanId = try container.decode(Int.self, forKey: .fanId)
+        self.state = TrackForceToPlayState(trackId: try container.decode(Int.self, forKey: .recordId),
+                                           isForcedToPlay: try container.decode(Bool.self, forKey: .forceToPlay))
+    }
+}
+
 // MARK: - Config -
 
 struct PlayerConfigResponse: RestApiResponse {

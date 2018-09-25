@@ -14,6 +14,8 @@ enum TrackActionsViewModels {
 
     static var allActionsTypes: [ActionViewModel.ActionType] {
         return [
+                .forceToPlay,
+                .doNotPlay,
                 .playNow,
                 .playNext,
                 .playLast,
@@ -39,6 +41,8 @@ enum TrackActionsViewModels {
         typealias ActionName = ActionType
 
         enum ActionType {
+            case forceToPlay
+            case doNotPlay
             case playNow
             case playNext
             case playLast
@@ -58,6 +62,8 @@ enum TrackActionsViewModels {
 
         var title: String {
             switch type {
+            case .forceToPlay: return NSLocalizedString("Force To Play", comment: "Force To Play track action title")
+            case .doNotPlay: return NSLocalizedString("Do Not Play", comment: "Do Not Play track action title")
             case .playNow:  return NSLocalizedString("Play Now", comment: "Play Now track action title")
             case .playNext: return NSLocalizedString("Play Next", comment: "Play Next track action title")
             case .playLast: return NSLocalizedString("Play Last", comment: "playLast track action title")

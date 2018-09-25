@@ -76,12 +76,13 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         var isPlaying = false
         
         let track = self.playlistTracks[indexPath.item]
+        let isCensorship = self.application?.user?.isCensorshipTrack(track) ?? track.isCensorship
         if let currentTrack = player?.playerCurrentTrack {
             isCurrentInPlayer = track.id == currentTrack.track.id
             isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
         }
         
-        return TrackViewModel(track: track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying)
+        return TrackViewModel(track: track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship)
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -100,6 +101,12 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
         switch actionType {
+        case .forceToPlay:
+            guard let fanUser = self.application?.user as? FanUser else { return false }
+            return fanUser.isCensorshipTrack(track) && !fanUser.profile.forceToPlay.contains(track.id)
+        case .doNotPlay:
+            guard let fanUser = self.application?.user as? FanUser else { return false }
+            return fanUser.isCensorshipTrack(track) && fanUser.profile.forceToPlay.contains(track.id)
         case .playNow, .playLast, .playNext: return track.isPlayable
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .delete: return self.playlist.isFanPlaylist
@@ -118,6 +125,20 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: Track) {
 
         switch actionType {
+        case .forceToPlay:
+            self.application?.allowPlayTrackWithExplicitMaterial(track: track, completion: { (allowTrackResult) in
+                switch allowTrackResult {
+                case .failure(let error): self.delegate?.show(error: error)
+                default: break
+                }
+            })
+        case .doNotPlay:
+            self.application?.disallowPlayTrackWithExplicitMaterial(track: track, completion: { (allowTrackResult) in
+                switch allowTrackResult {
+                case .failure(let error): self.delegate?.show(error: error)
+                default: break
+                }
+            })
         case .playNow:
             self.play(track: track)
         case .playNext: self.player?.add(track: track, at: .next, completion: nil)

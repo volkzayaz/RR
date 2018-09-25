@@ -9,10 +9,19 @@
 import Foundation
 
 
+public enum UserStubTrackAudioFileReason {
+    case noPreview
+    case censorship
+}
+
 
 public protocol User: Decodable {
+
     var isGuest: Bool { get }
     var wsToken: String { get }
+
+    func isCensorshipTrack(_ track: Track) -> Bool
+    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason?
 }
 
 //func == (lhs: User, rhs: User) -> Bool {
@@ -30,6 +39,20 @@ struct GuestUser: User {
         case wsToken = "ws_token"
         case isGuest = "guest"
     }
+
+    func isCensorshipTrack(_ track: Track) -> Bool {
+        return track.isCensorship
+    }
+
+    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
+
+        switch track.previewType {
+        case .noPreview: return .noPreview
+        default:
+            if self.isCensorshipTrack(track) { return .censorship }
+            return nil
+        }
+    }
 }
 
 struct UserProfile: Decodable {
@@ -46,6 +69,7 @@ struct UserProfile: Decodable {
     let howHearId: Int
     var genres: [Genre]?
     var language: String?
+    var forceToPlay: Set<Int>
 //    var purchasedTracksIds: [Int]
 
     var listeningSettings: ListeningSettings
@@ -63,6 +87,7 @@ struct UserProfile: Decodable {
         case howHearId = "how_hear"
         case genres
         case language
+        case forceToPlay = "force_to_play"
         case listeningSettings = "listening_settings"
     }
 
@@ -90,7 +115,21 @@ struct UserProfile: Decodable {
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
         self.language = try container.decodeIfPresent(String.self, forKey: .language)
 
+        if let forceToPlay = try container.decodeIfPresent(Set<Int>.self, forKey: .forceToPlay) {
+            self.forceToPlay = forceToPlay
+        } else {
+            self.forceToPlay = Set<Int>()
+        }
+        
         self.listeningSettings = try container.decode(ListeningSettings.self, forKey: .listeningSettings)
+    }
+
+    mutating func updateForcedToPlay(with trackForceToPlayState: TrackForceToPlayState) {
+        if trackForceToPlayState.isForcedToPlay {
+            forceToPlay.insert(trackForceToPlayState.trackId)
+        } else {
+            forceToPlay.remove(trackForceToPlayState.trackId)
+        }
     }
 }
 
@@ -126,7 +165,21 @@ struct FanUser: User {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.wsToken = try container.decode(String.self, forKey: .wsToken)
     }
-    
+
+    func isCensorshipTrack(_ track: Track) -> Bool {
+        return track.isCensorship && self.profile.listeningSettings.isExplicitMaterialExcluded
+    }
+
+
+    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
+
+        switch track.previewType {
+        case .noPreview: return .noPreview
+        default:
+            if self.isCensorshipTrack(track) && !self.profile.forceToPlay.contains(track.id) { return .censorship }
+            return nil
+        }
+    }
 }
 
 extension FanUser: Equatable {

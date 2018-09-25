@@ -39,6 +39,9 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
             return addon.type.title
         case .track(let track):
             return track.name
+        case .stub(_):
+            return self.player.playerCurrentTrack?.track.name ?? ""
+
         }
     }
 

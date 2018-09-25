@@ -16,12 +16,17 @@ protocol UserCredentials {
 }
 
 protocol ApplicationObserver: class {
+
+    func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool)
+
     func application(_ application: Application, didChange user: User)
     func application(_ application: Application, didChange listeningSettings: ListeningSettings)
     func application(_ application: Application, didChange profile: UserProfile)
 }
 
 extension ApplicationObserver {
+    func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) { }
+    
     func application(_ application: Application, didChange user: User) { }
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
     func application(_ application: Application, didChange profile: UserProfile) { }
@@ -44,7 +49,6 @@ class Application: Observable {
 
     let restApiService: RestApiService
     let webSocketService: WebSocketService
-    let player: Player
 
     private let restApiServiceReachability: Reachability?
     private let webSocketServiceReachability: Reachability?
@@ -53,19 +57,27 @@ class Application: Observable {
     var config: Config?
 
     init?() {
-        guard let restApiServiceURL = URL(string: URI.restApiService), let webSocketServiceURL = URL(string: URI.webSocketService) else { return nil }
+        guard let restApiService = RestApiService(serverURI: URI.restApiService, originURI: URI.origin), let webSocketService = WebSocketService(webSocketURI: URI.webSocketService) else { return nil }
 
-        self.restApiService = RestApiService(serverURL: restApiServiceURL, originURI: URI.origin)
-        self.webSocketService = WebSocketService(socketURL: webSocketServiceURL)
-        self.player = Player(restApiService: restApiService, webSocketService: webSocketService)
+        self.restApiService = restApiService
+        self.webSocketService = webSocketService
 
-        self.restApiServiceReachability = Reachability(hostname: restApiServiceURL.host!)
-        self.webSocketServiceReachability = Reachability(hostname: webSocketServiceURL.host!)
+        self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
+        self.webSocketServiceReachability = Reachability(hostname: webSocketService.webSocketURL.host!)
 
         self.restApiServiceReachability?.whenReachable = { [unowned self] _ in
             if self.config == nil { self.loadConfig() }
-            if self.player.config == nil { self.player.loadConfig() }
             if self.user == nil { self.fanUser() }
+
+            self.observersContainer.invoke({ (observer) in
+                observer.application(self, restApiServiceDidChangeReachableState: true)
+            })
+        }
+
+        self.restApiServiceReachability?.whenUnreachable = { [unowned self] _ in
+            self.observersContainer.invoke({ (observer) in
+                observer.application(self, restApiServiceDidChangeReachableState: false)
+            })
         }
 
         self.webSocketServiceReachability?.whenReachable = { [unowned self] _ in
@@ -79,7 +91,6 @@ class Application: Observable {
             self.webSocketService.disconnect()
         }
 
-        self.addObserver(self.player)
         self.webSocketService.addObserver(self)
     }
 
@@ -218,6 +229,54 @@ class Application: Observable {
         }
     }
 
+    func allowPlayTrackWithExplicitMaterial(track: Track, completion: ((Result<[Int]>) -> Void)? = nil) {
+
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.restApiService.fanAllowPlayTrackWithExplicitMaterial(track: track) { [weak self] (allowPlayTrackResult) in
+
+            switch allowPlayTrackResult {
+            case .success(let trackForceToPlayState):
+                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
+
+                var nextFanUser = currentFanUser
+                nextFanUser.profile.updateForcedToPlay(with: trackForceToPlayState)
+                self?.user = nextFanUser
+
+                self?.webSocketService.sendCommand(command: WebSocketCommand.syncForceToPlay(trackForceToPlayState: trackForceToPlayState))
+
+                completion?(.success(Array(fanUser.profile.forceToPlay)))
+
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+
+    func disallowPlayTrackWithExplicitMaterial(track: Track, completion: ((Result<[Int]>) -> Void)? = nil) {
+
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.restApiService.fanDisallowPlayTrackWithExplicitMaterial(track: track) { [weak self] (allowPlayTrackResult) in
+
+            switch allowPlayTrackResult {
+            case .success(let trackForceToPlayState):
+                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
+
+                var nextFanUser = currentFanUser
+                nextFanUser.profile.updateForcedToPlay(with: trackForceToPlayState)
+                self?.user = nextFanUser
+
+                self?.webSocketService.sendCommand(command: WebSocketCommand.syncForceToPlay(trackForceToPlayState: trackForceToPlayState))
+
+                completion?(.success(Array(fanUser.profile.forceToPlay)))
+
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+
 }
 
 extension Application {
@@ -259,5 +318,13 @@ extension Application: WebSocketServiceObserver {
         self.user = fanUser
 
         self.notifyListeningSettingsChanged()
+    }
+
+    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) {
+        guard let currentFanUser = self.user as? FanUser else { return }
+
+        var fanUser = currentFanUser
+        fanUser.profile.updateForcedToPlay(with: trackForceToPlayState)
+        self.user = fanUser
     }
 }
