@@ -124,6 +124,11 @@ class Player: NSObject, Observable {
         return currentTrackState.progress
     }
 
+    var playerCurrentItemRestrictedTime: TimeInterval? {
+        guard let currentTrack = self.playerQueue.track?.track else { return nil }
+        return self.restrictedTime(for: currentTrack)
+    }
+
     private let stateHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
     private var isMaster: Bool {
         guard let currentTrackState = self.currentTrackState else { return false }
@@ -271,6 +276,43 @@ class Player: NSObject, Observable {
         })
     }
 
+    func restrictedTime(for track: Track) -> TimeInterval? {
+        guard track.isFreeForPlaylist == false else { return nil }
+        guard let _ = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
+
+
+        switch track.previewType {
+        case .full:
+            guard let previewLimitTimes = track.previewLimitTimes else { return nil }
+            guard let trackDuration = track.audioFile?.duration, previewLimitTimes > 0 else { return TimeInterval(45) }
+            guard let trackTotalPlayMSeconds = self.totalPlayMSeconds(for: track) else { return nil }
+
+            let trackMaxPlayMSeconds = UInt64(trackDuration * 1000 * previewLimitTimes)
+            guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { return nil }
+
+            return TimeInterval(45)
+
+        case .limit45: return TimeInterval(45)
+        case .limit90: return TimeInterval(90)
+
+        default: return nil
+        }
+
+    }
+
+    func guestRestrictedTime(for track: Track) -> TimeInterval? {
+        switch track.previewType {
+        case .full:
+            guard let _ = track.previewLimitTimes else { return nil }
+            return TimeInterval(45)
+        default: return TimeInterval(45)
+        }
+    }
+
+    func totalPlayMSeconds(for track: Track) -> UInt64? {
+        return self.playlist.totalPlayMSeconds(for: track)
+    }
+
     func updateCurrentTrackState(with timeElapsed:TimeInterval) {
         if self.isMaster && self.state.playing == true && self.playerQueue.containsOnlyTrack && self.playerQueue.trackStub == nil {
             let currentTrackState = TrackState(hash: self.stateHash, progress: timeElapsed, isPlaying: self.state.playing)
@@ -392,19 +434,6 @@ class Player: NSObject, Observable {
 
     func preparePlayerQueueToPlay(completion: ((Error?) -> ())? = nil) {
         guard self.state.initialized, let track = self.playerQueue.track else { completion?(AppError(.notInitialized)); return }
-
-//        let fanUser = self.application.user as? FanUser
-//        if track.track.isCensorship && fanUser?.profile.listeningSettings.isExplicitMaterialExcluded ?? true && fanUser?.profile.forceToPlay.contains(track.track.id) ?? false == false {
-//
-//            let infoAudioFileForTrack = self.config?.explicitMaterialAudioFile
-//
-//            self.playerQueue.replace(track: track, addons: addons)
-//            self.replace(playerItems: playerQueue.playerItems)
-//            self.state.waitingAddons = false
-//
-//            if self.state.playing == true { self.player.play() }
-//
-//        }
 
         guard self.playerQueue.isReadyToPlay == true else {
 
@@ -802,7 +831,6 @@ extension Player: WebSocketServiceObserver {
         self.currentTrackState = nil
         self.currentTrackId = currentTrackId
         self.playerQueue.replace(track: track)
-
         self.replace(playerItems: self.playerQueue.playerItems)
     }
 
@@ -976,7 +1004,10 @@ extension Player: WebSocketServiceObserver {
         case .addonsIds(let addonsIds): self.apply(addonsIds: addonsIds)
         default: break
         }
+    }
 
+    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64]) {
+        self.playlist.reset(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
     }
 }
 

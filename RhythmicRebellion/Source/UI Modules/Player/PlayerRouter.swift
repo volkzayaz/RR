@@ -52,7 +52,7 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
 
     func start(controller: PlayerViewController, navigationDelegate: PlayerNavigationDelgate) {
         sourceController = controller
-        let vm = PlayerControllerViewModel(router: self, player: self.dependencies.player)
+        let vm = PlayerControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self, navigationDelegate: navigationDelegate)
     }
 }

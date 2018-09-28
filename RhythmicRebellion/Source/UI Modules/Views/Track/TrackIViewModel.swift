@@ -6,7 +6,7 @@
 //  Copyright © 2018 Patron Empowerment, LLC. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct TrackViewModel: TrackTableViewCellViewModel {
 
@@ -22,4 +22,5 @@ struct TrackViewModel: TrackTableViewCellViewModel {
     var isPlaying: Bool
 
     var isCensorship: Bool
+    var previewOptionsImage: UIImage?
 }

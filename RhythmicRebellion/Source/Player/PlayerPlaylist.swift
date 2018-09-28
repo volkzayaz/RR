@@ -13,7 +13,7 @@ class PlayerPlaylist {
     private(set) var tracks = Set<Track>()
     private(set) var playListItems = [String : PlayerPlaylistItem?]()
     private(set) var tracksAddons = [Int : Set<Addon>]()
-
+    private(set) var tracksTotalPlayMSeconds = [Int : UInt64]()
 
     // MARK: - Tracks -
     var orderedTracks: [PlayerTrack] {
@@ -195,5 +195,15 @@ class PlayerPlaylist {
         return self.tracksAddons[track.id]?.map({ (addon) -> AddonState in
             return AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
         })
+    }
+
+    // MARK: Preview
+
+    func reset(tracksTotalPlayMSeconds: [Int : UInt64]) {
+        self.tracksTotalPlayMSeconds = tracksTotalPlayMSeconds
+    }
+
+    func totalPlayMSeconds(for track: Track) -> UInt64? {
+        return self.tracksTotalPlayMSeconds[track.id]
     }
 }

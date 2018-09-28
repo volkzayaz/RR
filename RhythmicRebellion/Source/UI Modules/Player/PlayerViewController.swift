@@ -51,7 +51,9 @@ final class PlayerViewController: UIViewController {
     @IBOutlet weak var playerItemCurrentTimeLabel: UILabel!
     @IBOutlet weak var playerItemDurationLabel: UILabel!
 
-    @IBOutlet weak var playerItemProgressView: UISlider!
+    @IBOutlet weak var playerItemProgressView: ProgressView!
+
+    @IBOutlet var playerItemPreviewOptionsImageView: UIImageView!
 
     @IBOutlet weak var compactTabBar: UITabBar!
     @IBOutlet weak var regularTabBar: TabBarRegular!
@@ -90,6 +92,9 @@ final class PlayerViewController: UIViewController {
         self.regularTabBar.shadowImage = UIImage()
         self.regularTabBar.backgroundImage = UIImage()
 
+        self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+
         viewModel.load(with: self)
     }
 
@@ -108,6 +113,14 @@ final class PlayerViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.refreshUI()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(alongsideTransition: nil) { (context) in
+            self.refreshUI()
+        }
     }
 
     func tabBarItem(with playerNavigationItemType: PlayerNavigationItemType, on tabBar: UITabBar) -> UITabBarItem? {
@@ -185,10 +198,14 @@ final class PlayerViewController: UIViewController {
     }
 
     @IBAction func playerItemProgressViewTapGestureRecognizer(sender: UITapGestureRecognizer) {
+
+        guard self.playerItemProgressView.isTracking == false else { return }
+
         let location = sender.location(in: sender.view)
         let bounds = self.playerItemProgressView.bounds
         let value = Float(location.x / bounds.width)
 
+        print("playerItemProgressViewTapGestureRecognizer: \(value)")
         self.viewModel.setPlayerItemProgress(progress: value)
     }
 }
@@ -265,13 +282,18 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
         self.playerItemProgressView.isUserInteractionEnabled = self.viewModel.canSetPlayerItemProgress
 
+        self.playerItemPreviewOptionsImageView.image = self.viewModel.playerItemPreviewOptionsImage
+
         self.refreshProgressUI()
     }
 
     func refreshProgressUI() {
+
+        self.playerItemProgressView.restrictedValue = self.viewModel.playerItemRestrictedValue
+
         self.playerItemCurrentTimeLabel.text = self.viewModel.playerItemCurrentTimeString
         if self.playerItemProgressView.isTracking == false {
-            self.playerItemProgressView.setValue(self.viewModel.playerItemProgress, animated: true)
+            self.playerItemProgressView.setValue(self.viewModel.playerItemProgressValue, animated: true)
         }
         self.updatePlayPauseState()
     }

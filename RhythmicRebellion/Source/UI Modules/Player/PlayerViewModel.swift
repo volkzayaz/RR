@@ -15,7 +15,10 @@ protocol PlayerViewModel: class {
 
     var playerItemCurrentTimeString: String { get }
 
-    var playerItemProgress: Float { get }
+    var playerItemProgressValue: Float { get }
+    var playerItemRestrictedValue: Float { get }
+
+    var playerItemPreviewOptionsImage: UIImage? { get }
 
     var playerItemNameString: String { get }
     var playerItemNameAttributedString: NSAttributedString { get }

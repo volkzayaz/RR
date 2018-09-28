@@ -24,11 +24,18 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         return playerItemCurrentTime.stringFormatted();
     }
 
-    var playerItemProgress: Float {
+    var playerItemProgressValue: Float {
         guard let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0,
             let playerItemCurrentTime = self.player.playerCurrentTrackCurrentTime else { return 0.0 }
 
         return Float(playerItemCurrentTime / playerItemDuration)
+    }
+
+    var playerItemRestrictedValue: Float {
+        guard let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0,
+            let playerItemRestrictedTime = self.player.playerCurrentItemRestrictedTime else { return 0.0 }
+
+        return Float(playerItemRestrictedTime / playerItemDuration)
     }
 
     var playerItemNameString: String {
@@ -62,6 +69,14 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
                                                NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
     }
 
+    var playerItemPreviewOptionsImage: UIImage? {
+        guard let track = self.player.playerCurrentTrack?.track else { return nil }
+
+        return self.trackPreviewOptionsImageGenerator.image(for: track,
+                                                            trackTotalPlayMSeconds: self.player.totalPlayMSeconds(for: track),
+                                                            user: self.application.user)?.withRenderingMode(.alwaysTemplate)
+    }
+
     var isPlayerBlocked: Bool { return self.player.isBlocked }
     var isPlaying: Bool { return self.player.isPlaying }
 
@@ -81,14 +96,19 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     private(set) weak var delegate: PlayerViewModelDelegate?
     private(set) weak var router: PlayerRouter?
-    
+    private(set) var application: Application
     private(set) var player: Player
+
+    private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
 
     // MARK: - Lifecycle -
 
-    init(router: PlayerRouter, player: Player) {
+    init(router: PlayerRouter, application: Application, player: Player) {
         self.router = router
+        self.application = application
         self.player = player
+
+        self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
 
         super.init()
     }

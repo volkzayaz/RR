@@ -18,9 +18,10 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     private(set) weak var application: Application?
     private(set) weak var player: Player?
     private(set) weak var restApiService: RestApiService?
+    private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
 
     private var playlist: PlaylistShortInfo
-    private var playlistTracks: [Track] = [Track]()    
+    private var playlistTracks: [Track] = [Track]()
 
     var playlistHeaderViewModel: PlaylistHeaderViewModel { return PlaylistHeaderViewModel(playlist: self.playlist) }
 
@@ -34,6 +35,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.restApiService = restApiService
 
         self.playlist = playlist
+        self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 7.0))
     }
 
     func load(with delegate: PlaylistContentViewModelDelegate) {
@@ -77,12 +79,15 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         
         let track = self.playlistTracks[indexPath.item]
         let isCensorship = self.application?.user?.isCensorshipTrack(track) ?? track.isCensorship
+        let previewOptionsImage = trackPreviewOptionsImageGenerator.image(for: track,
+                                                                          trackTotalPlayMSeconds: self.player?.totalPlayMSeconds(for: track),
+                                                                          user: self.application?.user)
         if let currentTrack = player?.playerCurrentTrack {
             isCurrentInPlayer = track.id == currentTrack.track.id
             isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
         }
         
-        return TrackViewModel(track: track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship)
+        return TrackViewModel(track: track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage)
     }
     
     func selectObject(at indexPath: IndexPath) {

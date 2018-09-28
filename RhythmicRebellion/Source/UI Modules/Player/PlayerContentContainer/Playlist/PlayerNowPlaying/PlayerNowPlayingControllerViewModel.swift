@@ -7,7 +7,7 @@
 //
 //
 
-import Foundation
+import UIKit
 
 final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
@@ -17,6 +17,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     private(set) weak var router: PlayerNowPlayingRouter?
     private(set) weak var application: Application?
     private(set) weak var player: Player?
+    private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
 
     private var tracks: [PlayerTrack] = [PlayerTrack]()
 
@@ -26,6 +27,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.router = router
         self.application = application
         self.player = player
+        self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     }
 
     func load(with delegate: PlayerNowPlayingViewModelDelegate) {
@@ -56,12 +58,16 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         
         let track = self.tracks[indexPath.item]
         let isCensorship = self.application?.user?.isCensorshipTrack(track.track) ?? track.track.isCensorship
+        let previewOptionsImage = self.trackPreviewOptionsImageGenerator.image(for: track.track,
+                                                                               trackTotalPlayMSeconds: self.player?.totalPlayMSeconds(for: track.track),
+                                                                               user: self.application?.user)
+
         if let currentTrackId = player?.currentTrackId {
             isCurrentInPlayer = track.playlistItem.trackKey == currentTrackId.key
             isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
         }
 
-        return TrackViewModel(track: track.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship)
+        return TrackViewModel(track: track.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage)
     }
     
     func selectObject(at indexPath: IndexPath) {

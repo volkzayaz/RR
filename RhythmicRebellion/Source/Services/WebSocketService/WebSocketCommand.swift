@@ -33,6 +33,7 @@ struct WebSocketCommand: Codable {
         case currentTrackBlock = "currentTrack-setBlock"
         case checkAddons = "addons-checkAddons"
         case playAddon = "addons-playAddon"
+        case tracksTotalPlayTime = "previewOpt-srts_previews"
         case unknown
     }
 
@@ -47,6 +48,7 @@ struct WebSocketCommand: Codable {
         case currentTrackBlock(Bool)
         case checkAddons(CheckAddons)
         case playAddon(AddonState)
+        case tracksTotalPlayTime([Int: UInt64])
     }
 
     enum CommandData {
@@ -102,6 +104,8 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.checkAddons(try container.decode(CheckAddons.self, forKey: .data)))
             case .playAddon:
                 self.data = .success(.playAddon(try container.decode(AddonState.self, forKey: .data)))
+            case .tracksTotalPlayTime:
+                self.data = .success(.tracksTotalPlayTime(try container.decode([Int : UInt64].self, forKey: .data)))
             case .unknown:
                 self.data = .unknown
             }
@@ -156,6 +160,7 @@ struct WebSocketCommand: Codable {
                 try container.encode(checkAddons, forKey: .data)
             case .playAddon(let addonState):
                 try container.encode(addonState, forKey: .data)
+            case .tracksTotalPlayTime(_): break
             }
         case .failure( let errorData):
             try container.encode(errorData, forKey: .data)

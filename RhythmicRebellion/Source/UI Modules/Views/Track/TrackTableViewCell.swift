@@ -19,6 +19,7 @@ protocol TrackTableViewCellViewModel {
     var isPlaying: Bool { get }
 
     var isCensorship: Bool { get }
+    var previewOptionsImage: UIImage? { get }
 }
 
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
@@ -45,6 +46,8 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     @IBOutlet weak var stackViewTrailingConstraint: NSLayoutConstraint!
 
     @IBOutlet var censorshipMarkImageView: UIImageView!
+    @IBOutlet var previewOptionsImageViewContainer: RoundedView!
+    @IBOutlet weak var previewOptionsImageView: UIImageView!
 
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
@@ -57,6 +60,9 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         super.awakeFromNib()
 
         self.censorshipMarkImageView.image = self.censorshipMarkImageView.image?.withRenderingMode(.alwaysTemplate)
+
+        self.previewOptionsImageViewContainer.layer.borderWidth = 0.65
+        self.previewOptionsImageViewContainer.layer.borderColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
     }
 
     func prepareToDisplay(viewModel: TrackTableViewCellViewModel) {
@@ -91,17 +97,20 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
             let commingSoonLabel = UILabel()
             commingSoonLabel.text = NSLocalizedString("Comming soon!", comment: "Comming soon text")
-            commingSoonLabel.textColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
+            commingSoonLabel.textColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 1)
             self.stackView.addArrangedSubview(commingSoonLabel)
 
         } else {
             self.actionButtonConatinerViewTrailingConstraint.constant = 0
             self.actionButtonContainerView.isHidden = false
 
+
             if viewModel.isCensorship {
                 self.stackView.addArrangedSubview(self.censorshipMarkImageView)
             }
 
+            self.stackView.addArrangedSubview(self.previewOptionsImageViewContainer)
+            self.previewOptionsImageView.image = viewModel.previewOptionsImage?.withRenderingMode(.alwaysTemplate)
         }
 
         if self.stackView.subviews.isEmpty {

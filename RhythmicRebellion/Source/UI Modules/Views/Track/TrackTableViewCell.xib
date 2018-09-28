@@ -69,11 +69,31 @@
                             <constraint firstItem="kms-fH-bFS" firstAttribute="top" secondItem="uYt-43-1i4" secondAttribute="top" id="pvK-GD-zr2"/>
                         </constraints>
                     </view>
-                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="40H-JG-Yd1">
-                        <rect key="frame" x="446" y="0.0" width="0.0" height="43.5"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="40H-JG-Yd1">
+                        <rect key="frame" x="446" y="-3.5" width="0.0" height="50.5"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fNe-7s-6Ma" customClass="RoundedView" customModule="RhythmicRebellion" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="50.5" height="50.5"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ExclamationMark" translatesAutoresizingMaskIntoConstraints="NO" id="tyC-hx-0co">
+                                        <rect key="frame" x="22.5" y="13" width="6" height="25"/>
+                                        <color key="tintColor" red="0.74509803921568629" green="0.78431372549019607" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="tyC-hx-0co" secondAttribute="bottom" constant="2" id="Fzq-tm-a0P"/>
+                                    <constraint firstItem="tyC-hx-0co" firstAttribute="centerX" secondItem="fNe-7s-6Ma" secondAttribute="centerX" id="G9M-1y-lLp"/>
+                                    <constraint firstItem="tyC-hx-0co" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fNe-7s-6Ma" secondAttribute="top" constant="2" id="JkI-qV-0cD"/>
+                                    <constraint firstAttribute="width" secondItem="fNe-7s-6Ma" secondAttribute="height" multiplier="1:1" id="MXm-Jr-kR1"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="tyC-hx-0co" secondAttribute="trailing" constant="2" id="QdC-Ng-pZU"/>
+                                    <constraint firstAttribute="width" constant="22" id="WfZ-ZB-sbf"/>
+                                    <constraint firstItem="tyC-hx-0co" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fNe-7s-6Ma" secondAttribute="leading" constant="2" id="j9c-0h-6G1"/>
+                                    <constraint firstItem="tyC-hx-0co" firstAttribute="centerY" secondItem="fNe-7s-6Ma" secondAttribute="centerY" id="uqO-h0-GnJ"/>
+                                </constraints>
+                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ExclamationMark" translatesAutoresizingMaskIntoConstraints="NO" id="RAU-0B-fEq">
-                                <rect key="frame" x="0.0" y="0.0" width="6" height="43.5"/>
+                                <rect key="frame" x="-22" y="0.0" width="22" height="50.5"/>
                                 <color key="tintColor" red="0.83529411764705885" green="0.56470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="22" id="bzY-K9-hLu"/>
@@ -91,13 +111,12 @@
                     <constraint firstItem="40H-JG-Yd1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8hB-Ji-Kgi" secondAttribute="trailing" constant="15" id="IMh-vo-b58"/>
                     <constraint firstItem="8hB-Ji-Kgi" firstAttribute="leading" secondItem="QEy-wo-Squ" secondAttribute="leading" id="Jhb-jK-xzW"/>
                     <constraint firstItem="uYt-43-1i4" firstAttribute="top" secondItem="8J7-Te-UJB" secondAttribute="top" id="LvN-T3-KPa"/>
-                    <constraint firstAttribute="bottom" secondItem="40H-JG-Yd1" secondAttribute="bottom" id="N01-1j-tDw"/>
                     <constraint firstItem="yJ1-MD-eZX" firstAttribute="centerY" secondItem="8J7-Te-UJB" secondAttribute="centerY" id="Qe9-Yc-xLN"/>
                     <constraint firstAttribute="trailing" secondItem="uYt-43-1i4" secondAttribute="trailing" id="bpA-0t-6Ky"/>
+                    <constraint firstItem="40H-JG-Yd1" firstAttribute="centerY" secondItem="8J7-Te-UJB" secondAttribute="centerY" id="iR2-iI-1mN"/>
                     <constraint firstItem="QEy-wo-Squ" firstAttribute="top" secondItem="8J7-Te-UJB" secondAttribute="top" constant="4" id="tL8-ZX-QEj"/>
                     <constraint firstItem="yJ1-MD-eZX" firstAttribute="leading" secondItem="8J7-Te-UJB" secondAttribute="leading" constant="15" id="vcC-6o-2m2"/>
                     <constraint firstAttribute="bottom" secondItem="uYt-43-1i4" secondAttribute="bottom" id="vkc-W5-Eck"/>
-                    <constraint firstItem="40H-JG-Yd1" firstAttribute="top" secondItem="8J7-Te-UJB" secondAttribute="top" id="vpA-H8-dl2"/>
                     <constraint firstItem="QEy-wo-Squ" firstAttribute="leading" secondItem="yJ1-MD-eZX" secondAttribute="trailing" constant="15" id="y2u-0Q-idU"/>
                     <constraint firstItem="uYt-43-1i4" firstAttribute="leading" secondItem="40H-JG-Yd1" secondAttribute="trailing" constant="15" id="yk1-5y-KeK"/>
                 </constraints>
@@ -113,6 +132,8 @@
                 <outlet property="equalizer" destination="yJ1-MD-eZX" id="2J6-6q-TGR"/>
                 <outlet property="equalizerLeadingConstraint" destination="vcC-6o-2m2" id="hSf-Hg-GGw"/>
                 <outlet property="equalizerWidthConstraint" destination="isf-5r-umP" id="Tbr-71-UOY"/>
+                <outlet property="previewOptionsImageView" destination="tyC-hx-0co" id="P5V-Qt-sLH"/>
+                <outlet property="previewOptionsImageViewContainer" destination="fNe-7s-6Ma" id="EJu-Fj-yqe"/>
                 <outlet property="stackView" destination="40H-JG-Yd1" id="n10-Va-Ri0"/>
                 <outlet property="stackViewTrailingConstraint" destination="yk1-5y-KeK" id="MqY-Vk-iZs"/>
                 <outlet property="stackViewWidthConstraint" destination="bhP-un-z2V" id="gHT-Bn-RBM"/>

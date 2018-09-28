@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PreviewType: Int {
+enum TrackPreviewType: Int {
     case unknown
     case noPreview = 1
     case full = 2
@@ -45,7 +45,7 @@ public struct Track: Codable {
 
 
 
-    var previewType: PreviewType { return PreviewType(rawValue: self.previewTypeValue ?? 0) ?? .unknown }
+    var previewType: TrackPreviewType { return TrackPreviewType(rawValue: self.previewTypeValue ?? 0) ?? .unknown }
     var isPlayable: Bool { return self.audioFile != nil }
 
     enum CodingKeys: String, CodingKey {
