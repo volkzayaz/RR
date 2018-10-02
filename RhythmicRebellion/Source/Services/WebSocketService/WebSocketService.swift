@@ -19,7 +19,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
-    func webSocketService(_ service: WebSocketService, didReceivePlaylist playList: [String: PlayerPlaylistItem?])
+    func webSocketService(_ service: WebSocketService, didReceivePlaylist playlistLinkedItems: [String: PlayerPlaylistLinkedItem?])
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
@@ -36,7 +36,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
-    func webSocketService(_ service: WebSocketService, didReceivePlaylist playList: [String: PlayerPlaylistItem?]) { }
+    func webSocketService(_ service: WebSocketService, didReceivePlaylist playlistLinkedItems: [String: PlayerPlaylistLinkedItem?]) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }

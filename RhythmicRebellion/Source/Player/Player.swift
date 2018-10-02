@@ -106,27 +106,31 @@ class Player: NSObject, Observable {
         }
     }
 
-    var playerCurrentTrack: PlayerTrack? {
-        return self.playerQueue.track
+    var currentItem: PlayerItem? {
+        return self.playerQueue.playerItem
     }
 
-    var playerCurrentQueueItem: PlayerQueueItem? {
+    var currentQueueItem: PlayerQueueItem? {
         return self.playerQueue.currentItem
     }
 
-    var playerCurrentTrackDuration: TimeInterval? {
-        guard let audioFile = self.playerQueue.track?.track.audioFile else { return nil }
+    var currentItemDuration: TimeInterval? {
+        guard let audioFile = self.playerQueue.playerItem?.playlistItem.track.audioFile else { return nil }
         return TimeInterval(audioFile.duration)
     }
 
-    var playerCurrentTrackCurrentTime: TimeInterval? {
-        guard let currentTrackState = self.currentTrackState else { return self.playerQueue.track != nil ? 0.0 : nil }
+    var currentItemTime: TimeInterval? {
+        guard let currentTrackState = self.currentTrackState else { return self.playerQueue.playerItem?.playlistItem.track != nil ? 0.0 : nil }
         return currentTrackState.progress
     }
 
-    var playerCurrentItemRestrictedTime: TimeInterval? {
-        guard let currentTrack = self.playerQueue.track?.track else { return nil }
-        return self.restrictedTime(for: currentTrack)
+    var currentItemRestrictedTime: TimeInterval? {
+        guard let currentQueueItem = self.playerQueue.currentItem, self.playerQueue.isReadyToPlay else { return nil }
+
+        switch currentQueueItem.content {
+        case .addon(_), .stub(_): return nil
+        case .track(_): return self.state.waitingAddons == true ? nil : self.playerQueue.playerItem?.restrictedTime
+        }
     }
 
     private let stateHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
@@ -254,9 +258,13 @@ class Player: NSObject, Observable {
         self.state.initialized = true
         self.audioSessionIsInterrupted = false
 
-        if self.currentTrackId == nil, let trackId = self.playlist.firstTrackId,
-            let track = self.playlist.track(for: trackId) {
-            self.playerQueue.replace(track: track, addons: self.currentTrackState != nil ? [] : nil)
+        if self.playerQueue.playerItem == nil,
+            let lastPlayListItem = self.playlist.lastPlayListItem,
+            let firstPlayablePlaylistItem = self.findPlayablePlaylistItem(after: lastPlayListItem) {
+
+            let currentPlayerItem = self.playerItem(for: firstPlayablePlaylistItem)
+
+            self.playerQueue.replace(playerItem: currentPlayerItem, addons: self.currentTrackState != nil ? [] : nil)
             self.replace(playerItems: self.playerQueue.playerItems)
         }
 
@@ -276,85 +284,62 @@ class Player: NSObject, Observable {
         })
     }
 
-    func restrictedTime(for track: Track) -> TimeInterval? {
-        guard track.isFreeForPlaylist == false else { return nil }
-        guard let _ = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
-
-
-        switch track.previewType {
-        case .full:
-            guard let previewLimitTimes = track.previewLimitTimes else { return nil }
-            guard let trackDuration = track.audioFile?.duration, previewLimitTimes > 0 else { return TimeInterval(45) }
-            guard let trackTotalPlayMSeconds = self.totalPlayMSeconds(for: track) else { return nil }
-
-            let trackMaxPlayMSeconds = UInt64(trackDuration * 1000 * previewLimitTimes)
-            guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { return nil }
-
-            return TimeInterval(45)
-
-        case .limit45: return TimeInterval(45)
-        case .limit90: return TimeInterval(90)
-
-        default: return nil
-        }
-
-    }
-
-    func guestRestrictedTime(for track: Track) -> TimeInterval? {
-        switch track.previewType {
-        case .full:
-            guard let _ = track.previewLimitTimes else { return nil }
-            return TimeInterval(45)
-        default: return TimeInterval(45)
-        }
-    }
-
-    func totalPlayMSeconds(for track: Track) -> UInt64? {
-        return self.playlist.totalPlayMSeconds(for: track)
-    }
 
     func updateCurrentTrackState(with timeElapsed:TimeInterval) {
-        if self.isMaster && self.state.playing == true && self.playerQueue.containsOnlyTrack && self.playerQueue.trackStub == nil {
+
+        var shouldPlayNext = false
+
+        if self.isMaster && self.state.playing == true && self.playerQueue.containsOnlyTrack && self.playerQueue.playerItem?.stubReason == nil {
             let currentTrackState = TrackState(hash: self.stateHash, progress: timeElapsed, isPlaying: self.state.playing)
             self.set(trackState: currentTrackState)
             self.currentTrackState = currentTrackState
+
+            if let restrictedTime = self.playerQueue.playerItem?.restrictedTime, timeElapsed > restrictedTime {
+                shouldPlayNext = true
+            }
         }
 
         self.updateMPRemoteInfo()
 
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.previousTrackCommand.isEnabled = self.canBackward
+        commandCenter.nextTrackCommand.isEnabled = self.canForward
 
-        if self.playerQueue.containsOnlyTrack && self.playerQueue.trackStub == nil{
+        if self.playerQueue.containsOnlyTrack && self.playerQueue.playerItem?.stubReason == nil{
             self.observersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerItemCurrentTime: timeElapsed)
             })
         }
+
+        if shouldPlayNext { self.playForward() }
     }
 
-    func findPlayableTrack(after trackId: TrackId) -> PlayerTrack? {
+    func findPlayablePlaylistItem(after playlistItem: PlayerPlaylistItem) -> PlayerPlaylistItem? {
 
-        var currentTrackId = trackId
-        var track: PlayerTrack?
+        var currentPlaylistItem = playlistItem
+        var trackStubReason: TrackStubReason?
         repeat {
-            guard let nextTrackId = self.playlist.nextTrackId(for: currentTrackId), nextTrackId.key != trackId.key else { track = nil; break }
-            track = self.playlist.track(for: nextTrackId)
-            currentTrackId = nextTrackId
-        } while track?.track.isPlayable == false
+            guard let nextPlaylistItem = self.playlist.nextPlaylistItem(for: currentPlaylistItem),
+                nextPlaylistItem.playlistLinkedItem != playlistItem.playlistLinkedItem else { return nil }
+            currentPlaylistItem = nextPlaylistItem
+            trackStubReason = self.stubReason(for: nextPlaylistItem.track)
+        } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile != nil)
 
-        return track
+        return currentPlaylistItem
     }
 
-    func findPlayableTrack(before trackId: TrackId) -> PlayerTrack? {
-        var currentTrackId = trackId
-        var track: PlayerTrack?
-        repeat {
-            guard let previousTrackId = self.playlist.previousTrackId(for: currentTrackId), previousTrackId.key != trackId.key else { track = nil; break }
-            track = self.playlist.track(for: previousTrackId)
-            currentTrackId = previousTrackId
-        } while track?.track.isPlayable == false
+    func findPlayablePlaylistItem(before playlistItem: PlayerPlaylistItem) -> PlayerPlaylistItem? {
 
-        return track
+        var currentPlaylistItem = playlistItem
+        var trackStubReason: TrackStubReason?
+        repeat {
+            guard let previousPlaylistItem = self.playlist.previousPlaylistItem(for: currentPlaylistItem),
+                previousPlaylistItem.playlistLinkedItem != playlistItem.playlistLinkedItem else { return nil }
+            currentPlaylistItem = previousPlaylistItem
+            trackStubReason = self.stubReason(for: previousPlaylistItem.track)
+        } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile != nil)
+
+        return currentPlaylistItem
     }
 
     func loadAddons(for track: Track, completion: ((Error?) -> ())?) {
@@ -389,15 +374,19 @@ class Player: NSObject, Observable {
 
         let checkAddonsCompletion: ((Error?) -> ())? = { [weak self] (error) in
             guard error == nil else { completion?(error); return }
+            guard let currentPlayerItem = self?.currentItem else { return }
 
             self?.state.waitingAddons = true
             self?.addonsPlayTimer = Timer.scheduledTimer(withTimeInterval: 1.0,
                                                          repeats: false,
                                                          block: { [weak self] (timer) in
-                                                            self?.state.waitingAddons = false
-                                                            self?.set(trackBlocked: false)
-                                                            self?.state.playing = true
-                                                            self?.player.play()
+                                                            guard currentPlayerItem.playlistItem.playlistLinkedItem == self?.currentItem?.playlistItem.playlistLinkedItem else { return }
+                                                            self?.apply(addonsIds: [])
+//                                                            self?.state.waitingAddons = false
+//                                                            self?.playerQueue.replace(addons: [])
+//                                                            self?.set(trackBlocked: false)
+//                                                            self?.state.playing = true
+//                                                            self?.player.play()
             })
 
             completion?(nil)
@@ -433,36 +422,82 @@ class Player: NSObject, Observable {
     }
 
     func preparePlayerQueueToPlay(completion: ((Error?) -> ())? = nil) {
-        guard self.state.initialized, let track = self.playerQueue.track else { completion?(AppError(.notInitialized)); return }
+        guard self.state.initialized, let playerItem = self.playerQueue.playerItem else { completion?(AppError(.notInitialized)); return }
 
         guard self.playerQueue.isReadyToPlay == true else {
-
-            guard let config = self.config, let stubTrackAudioFileReason = self.application.user?.stubTrackAudioFileReason(for: track.track) else {
-                self.prepareAddons(for: track.track, completion: completion)
-                return
-            }
-
-            switch stubTrackAudioFileReason {
-            case .noPreview:
-                self.playerQueue.replace(track: track, trackStub: config.noPreviewAudioFile)
-            case .censorship:
-                self.playerQueue.replace(track: track, trackStub: config.explicitMaterialAudioFile)
-            }
-
-            self.replace(playerItems: playerQueue.playerItems)
-            if self.state.playing == true { self.player.play() }
-
-            completion?(nil)
+            self.prepareAddons(for: playerItem.playlistItem.track, completion: completion)
             return
         }
 
         completion?(nil)
     }
 
+    // MARK: - PlayerItem
+
+    func playerItem(for playlistItem: PlayerPlaylistItem) -> PlayerItem {
+
+        return PlayerItem(playlistItem: playlistItem,
+                          stubReason: self.stubReason(for: playlistItem.track),
+                          restrictedTime: self.restrictedTime(for: playlistItem.track))
+    }
+
+    func restrictedTime(for track: Track) -> TimeInterval? {
+        guard track.isFreeForPlaylist == false else { return nil }
+        guard let _ = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
+
+        switch track.previewType {
+        case .full:
+            guard let previewLimitTimes = track.previewLimitTimes, previewLimitTimes > 0 else { return TimeInterval(45) }
+            guard let trackDuration = track.audioFile?.duration else { return TimeInterval(0) }
+            guard let trackTotalPlayMSeconds = self.totalPlayMSeconds(for: track) else { return nil }
+
+            let trackMaxPlayMSeconds = UInt64(trackDuration * 1000 * previewLimitTimes)
+            guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { return TimeInterval(45) }
+
+            return nil
+
+        case .limit45: return TimeInterval(45)
+        case .limit90: return TimeInterval(90)
+
+        default: return nil
+        }
+
+    }
+
+    func guestRestrictedTime(for track: Track) -> TimeInterval? {
+        switch track.previewType {
+        case .full:
+            guard let _ = track.previewLimitTimes else { return nil }
+            return TimeInterval(45)
+        default: return TimeInterval(45)
+        }
+    }
+
+    func totalPlayMSeconds(for track: Track) -> UInt64? {
+        return self.playlist.totalPlayMSeconds(for: track)
+    }
+
+    func stubReason(for track: Track) -> TrackStubReason? {
+        guard let _ = track.audioFile else { return .noAudoFile(nil) }
+        guard track.previewType != .noPreview else { return .noPreview(self.config?.noPreviewAudioFile) }
+        guard let userStubTrackAudioFileReason = self.application.user?.stubTrackAudioFileReason(for: track) else { return nil }
+
+        switch userStubTrackAudioFileReason {
+        case .censorship: return .containseExplicitMaterial(self.config?.explicitMaterialAudioFile)
+        }
+    }
+
+    func shouldSendTrackingTimeRequest(for track: Track) -> Bool {
+        guard track.isFreeForPlaylist == false else { return false }
+        guard track.previewType == .full, let previewLimitTimes = track.previewLimitTimes, previewLimitTimes > 0 else { return false }
+
+        return self.playlist.totalPlayMSeconds(for: track) == nil
+    }
+
     // MARK: - Actions
     func play(completion: (() -> ())? = nil) {
         guard self.state.initialized,
-                let trackId = self.playerQueue.track?.trackId
+                let currentPlayerItem = self.playerQueue.playerItem
                 else {
                     self.state.playing = true
                     self.player.play()
@@ -472,16 +507,28 @@ class Player: NSObject, Observable {
 
         self.state.playing = true
 
-        let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
+        let prepareQueueCompletion: ((Error?) -> ()) = { [weak self] (error) in
             guard error == nil else { self?.player.play(); completion?(); return }
             guard self?.state.waitingAddons == false else { completion?(); return }
             self?.player.play()
             completion?()
         }
 
-        guard self.currentTrackId != nil  else {
-            let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: self.state.playing)
-            self.set(trackId: trackId, trackState: trackState) { [weak self] (error) in
+        guard self.currentTrackId != currentPlayerItem.trackId  else {
+            let trackState = TrackState(hash: self.stateHash, progress: self.currentTrackState?.progress ?? 0.0, isPlaying: self.state.playing)
+            let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
+
+            self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
+                self?.preparePlayerQueueToPlay(completion: { [weak self] (error) in
+                    guard error == nil else { prepareQueueCompletion(error); return }
+                    guard let `self` = self else { prepareQueueCompletion(nil); return }
+                    guard let currentTrackState = self.currentTrackState else { prepareQueueCompletion(nil); return }
+
+                    let time = CMTime(seconds: Double(currentTrackState.progress), preferredTimescale: Int32(kCMTimeMaxTimescale))
+                    self.player.currentItem?.seek(to: time, completionHandler: { (success) in
+                        prepareQueueCompletion(nil)
+                    })
+                })
                 self?.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
             }
             return
@@ -542,7 +589,7 @@ class Player: NSObject, Observable {
     
     func clearPlaylist() {
         //NOTE: 
-        var playlistItems: [String: PlayerPlaylistItem?] = [String: PlayerPlaylistItem?]()
+        var playlistLinkedItems: [String: PlayerPlaylistLinkedItem?] = [String: PlayerPlaylistLinkedItem?]()
 //        playlistItems = self.playlist.playListItems.mapValues { (item) -> PlayerPlaylistItem? in
 //            let nilItem: PlayerPlaylistItem? = nil
 //            return nilItem
@@ -551,12 +598,12 @@ class Player: NSObject, Observable {
 //        var item = self.playlist.playListItems["8ufOt"] ?? nil
 //        item?.nextTrackKey = nil
 //        playlistItems["8ufOt"] = item
-        playlistItems["dummy"] = PlayerPlaylistItem(id: 102, trackKey: "dummy")
+        playlistLinkedItems["dummy"] = PlayerPlaylistLinkedItem(trackId: 102, key: "dummy")
+
         
-        
-        self.updatePlaylist(playlistItems: playlistItems, flushing: true) { [weak self] (error) in
+        self.updatePlaylist(playlistLinkedItems: playlistLinkedItems, flushing: true) { [weak self] (error) in
             guard error == nil else { return }
-            self?.playlist.update(playListItems: playlistItems)
+            self?.playlist.update(playlistLinkedItems: playlistLinkedItems)
             if let strongSelf = self {
                 strongSelf.observersContainer.invoke({ (observer) in
                     observer.playerDidChangePlaylist(player: strongSelf)
@@ -581,8 +628,8 @@ class Player: NSObject, Observable {
             return
         }
 
-        guard let currentTrackId = self.playerQueue.track?.trackId,
-            let nextTrack = self.findPlayableTrack(after: currentTrackId) else { completion?(); return }
+        guard let currentPlaylistItem = self.playerQueue.playerItem?.playlistItem,
+            let nextPlaylistItem = self.findPlayablePlaylistItem(after: currentPlaylistItem) else { completion?(); return }
 
         let isPlaying = self.isPlaying
 
@@ -593,12 +640,15 @@ class Player: NSObject, Observable {
             completion?()
         }
 
+        let currentPlayerItem = self.playerItem(for: nextPlaylistItem)
         let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-        self.set(trackId: nextTrack.trackId, trackState: trackState) { [weak self] (error) in
+        let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
+
+        self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
             guard let strongSelf = self, error == nil else { completion?(); return }
 
             strongSelf.player.pause()
-            strongSelf.playerQueue.replace(track: nextTrack)
+            strongSelf.playerQueue.replace(playerItem: currentPlayerItem)
             strongSelf.replace(playerItems: strongSelf.playerQueue.playerItems)
 
             strongSelf.state.playing = isPlaying
@@ -613,7 +663,7 @@ class Player: NSObject, Observable {
         guard self.canBackward else { completion?(); return }
 
         let isPlaying = self.isPlaying
-        let playerCurrentItemCurrentTime = self.playerCurrentTrackCurrentTime ?? 0.0
+        let playerCurrentItemCurrentTime = self.currentItemTime ?? 0.0
 
         guard playerCurrentItemCurrentTime <= TimeInterval(3.0) else {
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
@@ -640,8 +690,8 @@ class Player: NSObject, Observable {
         }
 
         guard self.state.initialized else { completion?(); return }
-        guard let currentTrackId = self.playerQueue.track?.trackId,
-            let previousTrack = self.findPlayableTrack(before: currentTrackId) else { completion?(); return }
+        guard let currentPlaylistItem = self.playerQueue.playerItem?.playlistItem,
+            let previousPlaylistItem = self.findPlayablePlaylistItem(before: currentPlaylistItem) else { completion?(); return }
 
         let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
             guard error == nil else { if self?.state.playing ?? false { self?.player.play() }; completion?(); return }
@@ -650,12 +700,15 @@ class Player: NSObject, Observable {
             completion?()
         }
 
+        let currentPlayerItem = self.playerItem(for: previousPlaylistItem)
         let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-        self.set(trackId: previousTrack.trackId, trackState: trackState) { [weak self] (error) in
+        let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
+
+        self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
             guard let strongSelf = self, error == nil else { completion?(); return }
 
             strongSelf.player.pause()
-            strongSelf.playerQueue.replace(track: previousTrack)
+            strongSelf.playerQueue.replace(playerItem: currentPlayerItem)
             strongSelf.replace(playerItems: strongSelf.playerQueue.playerItems)
 
             if isPlaying {
@@ -667,6 +720,13 @@ class Player: NSObject, Observable {
 
     func seek(to timeInterval: TimeInterval) {
         guard self.canSeek else { return }
+
+        if let currentPlayerItemRestrictedTime = self.currentItem?.restrictedTime,
+            timeInterval > currentPlayerItemRestrictedTime {
+
+            self.playForward()
+            return
+        }
 
         let isPlaying = self.isPlaying
         let trackState = TrackState(hash: self.stateHash, progress: timeInterval, isPlaying: isPlaying)
@@ -773,30 +833,30 @@ class Player: NSObject, Observable {
             })
 
         } else if keyPath == #keyPath(Player.player.currentItem) {
-            guard let currrentQueueItem = self.playerCurrentQueueItem else { return }
+            guard let currrentQueueItem = self.currentQueueItem else { return }
             self.observersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerQueueItem: currrentQueueItem)
             })
         } else if keyPath == #keyPath(Player.player.currentItem.status) {
             switch self.player.currentItem?.status {
-            case .readyToPlay?: if self.state.playing == true {
-
-                if let currentQueueItem = self.playerQueue.currentItem {
-                    switch currentQueueItem.content {
-                    case .addon(let addon):
-                        if let track = self.playerCurrentTrack {
-                            self.playAddon(addon: addon, track: track.track)
+            case .readyToPlay?:
+                if self.player.rate == 1.0 {
+                    if let currentQueueItem = self.playerQueue.currentItem {
+                        switch currentQueueItem.content {
+                        case .addon(let addon):
+                            if let currentItem = self.currentItem {
+                                self.playAddon(addon: addon, track: currentItem.playlistItem.track)
+                            }
+                        default: break
                         }
-                    default: break
                     }
-                }
 
-                self.player.play()
+                    self.player.play()
                 }
             default: break
             }
         } else if keyPath == #keyPath(Player.player.currentItem.duration) {
-            guard let currrentQueueItem = self.playerCurrentQueueItem else { return }
+            guard let currrentQueueItem = self.currentQueueItem else { return }
             self.observersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerQueueItem: currrentQueueItem)
             })
@@ -826,11 +886,13 @@ extension Player: WebSocketServiceObserver {
         self.state.playing = false
         self.player.pause()
 
-        guard let track = self.playlist.track(for: currentTrackId) else { return }
+        guard let playerPlaylistItem = self.playlist.playListItem(for: currentTrackId) else { return }
+
+        let currenPlayerItem = self.playerItem(for: playerPlaylistItem)
 
         self.currentTrackState = nil
-        self.currentTrackId = currentTrackId
-        self.playerQueue.replace(track: track)
+        self.currentTrackId = nil
+        self.playerQueue.replace(playerItem: currenPlayerItem)
         self.replace(playerItems: self.playerQueue.playerItems)
     }
 
@@ -850,12 +912,14 @@ extension Player: WebSocketServiceObserver {
 
     func apply(addonsIds: [Int]) {
         guard self.state.waitingAddons == true,
-            let track = self.playerQueue.track,
-            let addons = self.playlist.addons(for: track.track, addonsIds: addonsIds) else { return }
+            let playerItem = self.playerQueue.playerItem,
+            let addons = self.playlist.addons(for: playerItem.playlistItem.track, addonsIds: addonsIds) else { return }
 
-        self.playerQueue.replace(track: track, addons: addons)
+        self.playerQueue.replace(playerItem: playerItem, addons: addons)
         self.replace(playerItems: playerQueue.playerItems)
         self.state.waitingAddons = false
+
+        if addons.isEmpty { self.set(trackBlocked: false) }
 
         if self.state.playing == true { self.player.play() }
 
@@ -863,10 +927,15 @@ extension Player: WebSocketServiceObserver {
     }
 
     //MARK: - Set State
-    func set(trackId: TrackId, trackState: TrackState, completion: ((Error?) -> ())? = nil) {
+    func set(trackId: TrackId, trackState: TrackState, shouldSendTrackingTimeRequest: Bool, completion: ((Error?) -> ())? = nil) {
         let webSocketCommand = WebSocketCommand.setCurrentTrack(trackId: trackId)
         self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
             guard error == nil else { completion?(error); return }
+
+            if shouldSendTrackingTimeRequest {
+                let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackId)
+                self?.webSocketService.sendCommand(command: trackingTimeRequestCommand)
+            }
 
             self?.currentTrackId = trackId
             self?.isMasterStateSendDate = Date()
@@ -913,8 +982,8 @@ extension Player: WebSocketServiceObserver {
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
-    func updatePlaylist(playlistItems: [String: PlayerPlaylistItem?], flushing: Bool = false, completion: ((Error?) -> ())? = nil) {
-        var webSocketCommand = WebSocketCommand.updatePlaylist(playlistsItems: playlistItems)
+    func updatePlaylist(playlistLinkedItems: [String: PlayerPlaylistLinkedItem?], flushing: Bool = false, completion: ((Error?) -> ())? = nil) {
+        var webSocketCommand = WebSocketCommand.updatePlaylist(playlistLnkedItems: playlistLinkedItems)
         if flushing {
             webSocketCommand.flush = true
         }
@@ -946,11 +1015,11 @@ extension Player: WebSocketServiceObserver {
         }
     }
 
-    func webSocketService(_ service: WebSocketService, didReceivePlaylist playListItems: [String: PlayerPlaylistItem?]) {
+    func webSocketService(_ service: WebSocketService, didReceivePlaylist playlistLinkedItems: [String: PlayerPlaylistLinkedItem?]) {
         if self.state.initialized {
-            self.playlist.add(playListItems: playListItems)
+            self.playlist.update(playlistLinkedItems: playlistLinkedItems)
         } else {
-            self.playlist.reset(playListItems: playListItems)
+            self.playlist.reset(playlistLinkedItems: playlistLinkedItems)
         }
         self.observersContainer.invoke({ (observer) in
             observer.playerDidChangePlaylist(player: self)
@@ -1007,7 +1076,17 @@ extension Player: WebSocketServiceObserver {
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64]) {
+
         self.playlist.reset(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
+
+        if let currentPlayerItem = self.currentItem,
+            currentPlayerItem.restrictedTime == nil,
+            let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id],
+            let trackMaxPlayMSeconds = currentPlayerItem.trackMaxPlayMSeconds,
+            currentTrackTotalPlayMSeconds > trackMaxPlayMSeconds {
+
+            self.playForward()
+        }
     }
 }
 
@@ -1082,7 +1161,7 @@ extension Player {
                     self?.initializationAction = .playCurrent
                     self?.webSocketService.reconnect()
                     return .success
-                } else if let _ = self?.playerCurrentTrack {
+                } else if let _ = self?.currentItem {
                     if self?.player.rate == 0.0 {
                         self?.play()
                         return .success
@@ -1106,7 +1185,7 @@ extension Player {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .pause
                     return .success
-                } else if let _ = self?.playerCurrentTrack {
+                } else if let _ = self?.currentItem {
                     if self?.player.rate == 1.0 {
                         self?.pause(completion: { [weak self] in
                             if UIApplication.shared.applicationState == .background  {
@@ -1139,7 +1218,7 @@ extension Player {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .pause
                     return .success
-                } else if let _ = self?.playerCurrentTrack {
+                } else if let _ = self?.currentItem {
                     if self?.player.rate == 1.0 {
                         self?.pause(completion: { [weak self] in
                             if UIApplication.shared.applicationState == .background  {
@@ -1202,12 +1281,12 @@ extension Player {
     }
 
     func updateMPRemoteInfo() {
-        if let currentTrack = self.playerCurrentTrack {
+        if let currentItem = self.currentItem {
             var nowPlayingInfo = [String : Any]()
 
-            nowPlayingInfo[MPMediaItemPropertyTitle] = currentTrack.track.name + " - " + currentTrack.track.artist.name
-            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.playerCurrentTrackCurrentTime ?? 0.0
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = self.playerCurrentTrackDuration ?? 0.0
+            nowPlayingInfo[MPMediaItemPropertyTitle] = currentItem.playlistItem.track.name + " - " + currentItem.playlistItem.track.artist.name
+            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.currentItemTime ?? 0.0
+            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = self.playerCurrentItemDuration ?? 0.0
             nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate
 
             // Set the metadata
@@ -1218,133 +1297,135 @@ extension Player {
 
 extension Player {
 
-    var tracks: [PlayerTrack] { return self.playlist.orderedTracks }
+    var playlistItems: [PlayerPlaylistItem] { return self.playlist.orderedPlaylistItems }
 
-    private func performAdd(track: Track, to playlistPosition: PlaylistPosition, completion: ((PlayerTrack?, Error?) -> Void)?) {
-        guard let currentTrackId = self.currentTrackId ?? self.playlist.firstTrackId else { return }
+    private func performAdd(track: Track, to playlistPosition: PlaylistPosition, completion: ((PlayerPlaylistItem?, Error?) -> Void)?) {
+        guard let currentPlaylistLinkedItem = self.playerQueue.playerItem?.playlistItem.playlistLinkedItem ?? self.playlist.firstPlaylistLinkedItem else { return }
         
         switch playlistPosition {
         case .next:
-            var previousPlaylistItem = self.playlist.playListItem(for: currentTrackId)
-            var nextPlaylistItem = self.playlist.playListItem(for: self.playlist.nextTrackId(for: currentTrackId))
-            var trackPlaylistItem = self.playlist.makePlayListItem(for: track)
+            var previousPlaylistLinkedItem = self.playlist.previousPlaylistLinkedItem(for: currentPlaylistLinkedItem)
+            var nextPlaylistLinkedItem = self.playlist.nextPlaylistLinkedItem(for: currentPlaylistLinkedItem)
+            var trackPlaylistLinkedItem = self.playlist.makePlaylistLinkedItem(for: track)
 
-            previousPlaylistItem!.nextTrackKey = trackPlaylistItem.trackKey
-            trackPlaylistItem.previousTrackKey = previousPlaylistItem?.trackKey
+            previousPlaylistLinkedItem!.nextKey = trackPlaylistLinkedItem.key
+            trackPlaylistLinkedItem.previousKey = previousPlaylistLinkedItem?.key
 
-            trackPlaylistItem.nextTrackKey = nextPlaylistItem?.trackKey
-            nextPlaylistItem?.previousTrackKey = trackPlaylistItem.trackKey
+            trackPlaylistLinkedItem.nextKey = nextPlaylistLinkedItem?.key
+            nextPlaylistLinkedItem?.previousKey = trackPlaylistLinkedItem.key
 
-            var playlistItems: [String: PlayerPlaylistItem] = [String: PlayerPlaylistItem]()
-            if previousPlaylistItem != nil { playlistItems[previousPlaylistItem!.trackKey] = previousPlaylistItem }
-            if nextPlaylistItem != nil { playlistItems[nextPlaylistItem!.trackKey] = nextPlaylistItem }
-            playlistItems[trackPlaylistItem.trackKey] = trackPlaylistItem
+            var playlistLinkedItems: [String: PlayerPlaylistLinkedItem] = [String: PlayerPlaylistLinkedItem]()
+            if previousPlaylistLinkedItem != nil { playlistLinkedItems[previousPlaylistLinkedItem!.key] = previousPlaylistLinkedItem }
+            if nextPlaylistLinkedItem != nil { playlistLinkedItems[nextPlaylistLinkedItem!.key] = nextPlaylistLinkedItem }
+            playlistLinkedItems[trackPlaylistLinkedItem.key] = trackPlaylistLinkedItem
 
-            self.updatePlaylist(playlistItems: playlistItems) { [weak self] (error) in
+            self.updatePlaylist(playlistLinkedItems: playlistLinkedItems) { [weak self] (error) in
                 guard let `self` = self, error == nil else { completion?(nil, error); return }
-                self.playlist.add(playListItems: playlistItems)
+                self.playlist.add(playlistLinkedItems: playlistLinkedItems)
                 self.observersContainer.invoke({ (observer) in
                     observer.playerDidChangePlaylist(player: self)
                 })
-                completion?(PlayerTrack(track: track, playlistItem: trackPlaylistItem), nil)
+                completion?(PlayerPlaylistItem(track: track, playlistLinkedItem: trackPlaylistLinkedItem), nil)
             }
 
 
         case .last:
-            var previousPlaylistItem = self.playlist.lastPlayListItem
-            guard previousPlaylistItem != nil else { completion?(nil, nil); return } //Maybe we should add some error here
-            var trackPlaylistItem = self.playlist.makePlayListItem(for: track)
+            var previousPlaylistLinkedItem = self.playlist.lastPlaylistLinkedItem
+            guard previousPlaylistLinkedItem != nil else { completion?(nil, nil); return } //Maybe we should add some error here
+            var trackPlaylistLinkedItem = self.playlist.makePlaylistLinkedItem(for: track)
 
-            previousPlaylistItem!.nextTrackKey = trackPlaylistItem.trackKey
-            trackPlaylistItem.previousTrackKey = previousPlaylistItem?.trackKey
+            previousPlaylistLinkedItem!.nextKey = trackPlaylistLinkedItem.key
+            trackPlaylistLinkedItem.previousKey = previousPlaylistLinkedItem?.key
 
-            let playlistItems: [String: PlayerPlaylistItem] = [previousPlaylistItem!.trackKey : previousPlaylistItem!,
-                                                               trackPlaylistItem.trackKey : trackPlaylistItem]
+            let playlistLinkedItems: [String: PlayerPlaylistLinkedItem] = [previousPlaylistLinkedItem!.key : previousPlaylistLinkedItem!,
+                                                                           trackPlaylistLinkedItem.key : trackPlaylistLinkedItem]
 
-            self.updatePlaylist(playlistItems: playlistItems) { [weak self] (error) in
+            self.updatePlaylist(playlistLinkedItems: playlistLinkedItems) { [weak self] (error) in
                 guard error == nil else { completion?(nil, error); return }
-                self?.playlist.add(playListItems: playlistItems)
+                self?.playlist.add(playlistLinkedItems: playlistLinkedItems)
                 if let strongSelf = self {
                     strongSelf.observersContainer.invoke({ (observer) in
                         observer.playerDidChangePlaylist(player: strongSelf)
                     })
                 }
-                completion?(PlayerTrack(track: track, playlistItem: trackPlaylistItem), nil)
+                completion?(PlayerPlaylistItem(track: track, playlistLinkedItem: trackPlaylistLinkedItem), nil)
             }
         }
     }
 
-    func performDelete(track: PlayerTrack, completion: ((Error?) -> Void)?) {
-        let trackPlaylistItem: PlayerPlaylistItem? = nil
-        var playlistItems: [String: PlayerPlaylistItem?] = [String: PlayerPlaylistItem?]()
-        playlistItems[track.playlistItem.trackKey] = trackPlaylistItem
+    func performDelete(playlistItem: PlayerPlaylistItem, completion: ((Error?) -> Void)?) {
+        let playlistLinkedItem: PlayerPlaylistLinkedItem? = nil
+        var playlistLinkedItems: [String: PlayerPlaylistLinkedItem?] = [String: PlayerPlaylistLinkedItem?]()
+        playlistLinkedItems[playlistItem.playlistLinkedItem.key] = playlistLinkedItem
         
-        var trackToPlay : PlayerTrack?
-        if self.currentTrackId?.key == track.playlistItem.trackKey {
-            trackToPlay = self.findPlayableTrack(after: track.trackId)
-        }
-        
-        var prevItem : PlayerPlaylistItem?
-        var nextItem : PlayerPlaylistItem?
-        if let prevKey = track.playlistItem.previousTrackKey, let prevCachedItem = self.playlist.playListItems[prevKey] {
-            prevItem = prevCachedItem
-        }
-        
-        if let nextKey = track.playlistItem.nextTrackKey, let nextCachedItem = self.playlist.playListItems[nextKey] {
-            nextItem = nextCachedItem
+        var playlistItemToPlay : PlayerPlaylistItem?
+        if self.currentItem?.playlistItem.playlistLinkedItem == playlistItem.playlistLinkedItem {
+            playlistItemToPlay = self.findPlayablePlaylistItem(after: playlistItem)
         }
 
-        prevItem?.nextTrackKey = nextItem?.trackKey
-        nextItem?.previousTrackKey = prevItem?.trackKey
+        var previousPlaylistLinkedItem = self.playlist.previousPlaylistLinkedItem(for: playlistItem.playlistLinkedItem)
+        var nextPlaylistLinkedItem = self.playlist.nextPlaylistLinkedItem(for: playlistItem.playlistLinkedItem)
+
+        previousPlaylistLinkedItem?.nextKey = nextPlaylistLinkedItem?.key
+        nextPlaylistLinkedItem?.previousKey = previousPlaylistLinkedItem?.key
         
-        if prevItem != nil { playlistItems[prevItem!.trackKey] = prevItem }
-        if nextItem != nil { playlistItems[nextItem!.trackKey] = nextItem }
+        if previousPlaylistLinkedItem != nil { playlistLinkedItems[previousPlaylistLinkedItem!.key] = previousPlaylistLinkedItem }
+        if nextPlaylistLinkedItem != nil { playlistLinkedItems[nextPlaylistLinkedItem!.key] = nextPlaylistLinkedItem }
         
-        self.updatePlaylist(playlistItems: playlistItems) { [weak self] (error) in
+        self.updatePlaylist(playlistLinkedItems: playlistLinkedItems) { [weak self] (error) in
             guard error == nil else { completion?(error); return }
-            self?.playlist.update(playListItems: playlistItems)
+            self?.playlist.update(playlistLinkedItems: playlistLinkedItems)
             if let strongSelf = self {
                 strongSelf.observersContainer.invoke({ (observer) in
                     observer.playerDidChangePlaylist(player: strongSelf)
                 })
             }
             
-            if let nextPlayTrack = trackToPlay {
-                self?.performAction(.setCurrent, for: nextPlayTrack, completion: nil)
+            if let nextPlaylistItem = playlistItemToPlay {
+                self?.performAction(.setCurrent, for: nextPlaylistItem, completion: nil)
             }
             
             completion?(nil)
         }
     }
 
-    func performAction(_ action: Player.Actions, for playerTrack: PlayerTrack, completion: ((Error?) -> Void)?) {
+    func performAction(_ action: Player.Actions, for playlistItem: PlayerPlaylistItem, completion: ((Error?) -> Void)?) {
         switch action {
         case .add(let position):
             //Assume player track come from player's playlist
-            self.performAdd(track: playerTrack.track, to: position) { (playerTrack, error) in
+            self.performAdd(track: playlistItem.track, to: position) { (playerTrack, error) in
                 completion?(error)
             }
         case .delete:
-            self.performDelete(track: playerTrack, completion: completion)
+            self.performDelete(playlistItem: playlistItem, completion: completion)
         case .playNow:
             self.player.pause()
+
+            let currentPlayerItem = self.playerItem(for: playlistItem)
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: true)
-            self.set(trackId: playerTrack.trackId, trackState: trackState, completion: { [weak self] (error) in
+            let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
+
+            self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest, completion: { [weak self] (error) in
                 guard error == nil else { completion?(error); return }
                 guard let `self` = self else { completion?(nil); return }
-                self.playerQueue.replace(track: playerTrack)
+                self.playerQueue.replace(playerItem: currentPlayerItem)
                 self.replace(playerItems: self.playerQueue.playerItems)
                 self.play()
                 completion?(nil)
             })
         case .setCurrent:
+
             let wasPlaying = self.isPlaying
             self.player.pause()
+
+            let currentPlayerItem = self.playerItem(for: playlistItem)
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: wasPlaying)
-            self.set(trackId: playerTrack.trackId, trackState: trackState, completion: { [weak self] (error) in
+            let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
+
+            self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest, completion: { [weak self] (error) in
                 guard error == nil else { completion?(error); return }
                 guard let `self` = self else { completion?(nil); return }
-                self.playerQueue.replace(track: playerTrack)
+                self.playerQueue.replace(playerItem: currentPlayerItem)
                 self.replace(playerItems: self.playerQueue.playerItems)
                 if wasPlaying {
                     self.play()
@@ -1354,7 +1435,7 @@ extension Player {
         }
     }
     
-    func add(track: Track, at position: PlaylistPosition, completion: ((PlayerTrack?, Error?) -> Void)?) {
+    func add(track: Track, at position: PlaylistPosition, completion: ((PlayerPlaylistItem?, Error?) -> Void)?) {
         guard self.playlist.contains(track: track) else {
             self.loadTrack(track: track) { [weak self] (error) in
                 guard error == nil else { completion?(nil, error); return }

@@ -8,46 +8,40 @@
 
 import Foundation
 
+struct PlayerPlaylistItem {
+
+    let track: Track
+    let playlistLinkedItem: PlayerPlaylistLinkedItem
+}
+
 class PlayerPlaylist {    
 
     private(set) var tracks = Set<Track>()
-    private(set) var playListItems = [String : PlayerPlaylistItem?]()
+    private(set) var playlistLinkedItems = [String : PlayerPlaylistLinkedItem]()
     private(set) var tracksAddons = [Int : Set<Addon>]()
     private(set) var tracksTotalPlayMSeconds = [Int : UInt64]()
 
     // MARK: - Tracks -
-    var orderedTracks: [PlayerTrack] {
-        var orderedTracks: [PlayerTrack] = [PlayerTrack]()
-        var currentPlaylistItem: PlayerPlaylistItem? = self.firstPlayListItem
+    var orderedPlaylistItems: [PlayerPlaylistItem] {
+        var orderedPlaylistItems: [PlayerPlaylistItem] = [PlayerPlaylistItem]()
+        var currentPlaylistLinkedItem: PlayerPlaylistLinkedItem? = self.firstPlaylistLinkedItem
 
-        while currentPlaylistItem != nil {
-            if let track = self.tracks.filter({ return $0.id == currentPlaylistItem!.id }).first {
-                let playerTrack = PlayerTrack(track: track, playlistItem: currentPlaylistItem!)
-                orderedTracks.append(playerTrack)
+        while currentPlaylistLinkedItem != nil {
+            if let track = self.tracks.filter({ return $0.id == currentPlaylistLinkedItem!.trackId }).first {
+                let playlistItem = PlayerPlaylistItem(track: track, playlistLinkedItem: currentPlaylistLinkedItem!)
+                orderedPlaylistItems.append(playlistItem)
             }
 
-            guard let nextTrackKey = currentPlaylistItem?.nextTrackKey, let nextItem = self.playListItems[nextTrackKey] ?? nil else { break }
-            currentPlaylistItem = nextItem
+            guard let nextKey = currentPlaylistLinkedItem?.nextKey, let nextPlaylistLinkedItem = self.playlistLinkedItems[nextKey] ?? nil else { break }
+            currentPlaylistLinkedItem = nextPlaylistLinkedItem
         }
 
-        return orderedTracks
-    }
-
-    var firstTrackId: TrackId? {
-        guard let firstPlayListItem = self.playListItems.filter( { return $0.value?.previousTrackKey == nil }).first,
-                let firstItem = firstPlayListItem.value else { return nil }
-        return TrackId(id: firstItem.id, key: firstItem.trackKey)
-    }
-
-    var lastTrackId: TrackId? {
-        guard let lastPlayListItem = self.playListItems.filter( { return $0.value?.nextTrackKey == nil }).first,
-                 let lastItem = lastPlayListItem.value else { return nil }
-        return TrackId(id: lastItem.id, key: lastItem.trackKey)
+        return orderedPlaylistItems
     }
 
     func reset(tracks: [Track]) {
         self.tracks = Set(tracks)
-        self.playListItems.removeAll()
+        self.playlistLinkedItems.removeAll()
         self.resetAddons()
     }
 
@@ -55,46 +49,17 @@ class PlayerPlaylist {
         self.tracks = self.tracks.union(Set(traksToAdd))
     }
 
-    func track(for trackId: TrackId) -> PlayerTrack? {
-        if let track = self.tracks.filter({ return $0.id == trackId.id }).first,
-            let playlistItem = self.playListItem(for: trackId) {
-            return PlayerTrack(track: track, playlistItem: playlistItem)
-        }
-        return nil
-    }
-    
-    func track(for playlistItem: PlayerPlaylistItem) -> PlayerTrack? {
-        if let track = self.tracks.filter({ return $0.id == playlistItem.id }).first {
-            return PlayerTrack(track: track, playlistItem: playlistItem)
-        }
-        return nil
+    func playListItem(for trackId: TrackId?) -> PlayerPlaylistItem? {
+        guard let trackKey = trackId?.key, let playlistLinkedItem = self.playlistLinkedItems[trackKey] else { return nil }
+
+        return self.playlistItem(for: playlistLinkedItem)
     }
 
-    func nextTrackId(for trackId: TrackId) -> TrackId? {
-        guard let playListItem = self.playListItems[trackId.key] else { return nil }
 
-        if let playListItemNextTrackKey = playListItem?.nextTrackKey {
-            if let nextPlayListItem = self.playListItems[playListItemNextTrackKey] ?? nil {
-                return TrackId(id: nextPlayListItem.id, key: nextPlayListItem.trackKey)
-            }
-        } else if let firstTrackId = self.firstTrackId, firstTrackId.key != trackId.key {
-            return firstTrackId
+    func playlistItem(for playlistLinkedItem: PlayerPlaylistLinkedItem) -> PlayerPlaylistItem? {
+        if let track = self.tracks.filter({ return $0.id == playlistLinkedItem.trackId }).first {
+            return PlayerPlaylistItem(track: track, playlistLinkedItem: playlistLinkedItem)
         }
-
-        return nil
-    }
-
-    func previousTrackId(for trackId: TrackId) -> TrackId? {
-        guard let playListItem = self.playListItems[trackId.key] else { return nil }
-
-        if let playListItemPreviousTrackKey = playListItem?.previousTrackKey {
-            if let previousPlayListItem = self.playListItems[playListItemPreviousTrackKey] ?? nil {
-                return TrackId(id: previousPlayListItem.id, key: previousPlayListItem.trackKey)
-            }
-        } else if let lastTrackId = self.lastTrackId, lastTrackId.key != trackId.key {
-            return lastTrackId
-        }
-
         return nil
     }
 
@@ -104,55 +69,102 @@ class PlayerPlaylist {
 
     // MARK: - PlayerPlaylistItem -
     var firstPlayListItem: PlayerPlaylistItem? {
-        guard let firstPlayListItem = self.playListItems.filter( { return $0.value?.previousTrackKey == nil }).first else { return nil }
-        return firstPlayListItem.value
+        guard let firstPlayListLinkedItem = self.firstPlaylistLinkedItem else { return nil }
+        return self.playlistItem(for: firstPlayListLinkedItem)
     }
 
     var lastPlayListItem: PlayerPlaylistItem? {
-        guard let lastPlayListItem = self.playListItems.filter( { return $0.value?.nextTrackKey == nil }).first else { return nil }
+        guard let lastPlayListLinkedItem = self.lastPlaylistLinkedItem else { return nil }
+        return self.playlistItem(for: lastPlayListLinkedItem)
+    }
+
+    func nextPlaylistItem(for playlistItem: PlayerPlaylistItem) -> PlayerPlaylistItem? {
+        guard let playlistLinkedItemNextKey = playlistItem.playlistLinkedItem.nextKey ?? self.firstPlaylistLinkedItem?.key,
+            let nextPlaylistLinkedItem = self.playlistLinkedItems[playlistLinkedItemNextKey] else { return nil }
+
+        return self.playlistItem(for: nextPlaylistLinkedItem)
+    }
+
+    func previousPlaylistItem(for playlistItem: PlayerPlaylistItem) -> PlayerPlaylistItem? {
+        guard let playlistLinkedItemPreviousKey = playlistItem.playlistLinkedItem.previousKey ?? self.lastPlaylistLinkedItem?.key,
+            let previousPlaylistLinkedItem = self.playlistLinkedItems[playlistLinkedItemPreviousKey] else { return nil }
+
+        return self.playlistItem(for: previousPlaylistLinkedItem)
+    }
+
+    // MARK: - PlayerPlaylistLinkedItem -
+    var firstPlaylistLinkedItem: PlayerPlaylistLinkedItem? {
+        guard let firstPlayListItem = self.playlistLinkedItems.filter( { return $0.value.previousKey == nil }).first else { return nil }
+        return firstPlayListItem.value
+    }
+
+    var lastPlaylistLinkedItem: PlayerPlaylistLinkedItem? {
+        guard let lastPlayListItem = self.playlistLinkedItems.filter( { return $0.value.nextKey == nil }).first else { return nil }
         return lastPlayListItem.value
     }
 
-    func reset(playListItems: [String : PlayerPlaylistItem?]) {
-        self.playListItems = playListItems
+    func playlistLinkedItem(for trackId: TrackId?) -> PlayerPlaylistLinkedItem? {
+        guard let trackKey = trackId?.key else { return nil }
+        return self.playlistLinkedItems[trackKey] ?? nil
     }
 
-    func add(playListItems: [String : PlayerPlaylistItem?]) {
-        self.playListItems += playListItems
+    func nextPlaylistLinkedItem(for playlistLinkedItem: PlayerPlaylistLinkedItem) -> PlayerPlaylistLinkedItem? {
+        guard let playlistLinkedItemNextKey = playlistLinkedItem.nextKey,
+            let nextPlaylistLinkedItem = self.playlistLinkedItems[playlistLinkedItemNextKey] else { return nil }
+
+        return nextPlaylistLinkedItem
+    }
+
+    func previousPlaylistLinkedItem(for playlistLinkedItem: PlayerPlaylistLinkedItem) -> PlayerPlaylistLinkedItem? {
+        guard let playlistItemPreviousKey = playlistLinkedItem.previousKey,
+            let previousPlaylistLinkedItem = self.playlistLinkedItems[playlistItemPreviousKey] else { return nil }
+
+        return previousPlaylistLinkedItem
+    }
+
+    func reset(playlistLinkedItems: [String : PlayerPlaylistLinkedItem?]) {
+
+        self.playlistLinkedItems.removeAll()
+
+        playlistLinkedItems.forEach { (key, linkedItem) in
+            guard let linkedItem = linkedItem else { return }
+            self.playlistLinkedItems[key] = linkedItem
+        }
+    }
+
+    func add(playlistLinkedItems: [String : PlayerPlaylistLinkedItem?]) {
+
+        playlistLinkedItems.forEach { (key, linkedItem) in
+            guard let linkedItem = linkedItem else { return  }
+            self.playlistLinkedItems[key] = linkedItem
+        }
     }
     
-    func update(playListItems: [String : PlayerPlaylistItem?]) {
-        playListItems.forEach { (key, value) in
-            if (value == nil) {
-                self.playListItems.removeValue(forKey: key)
-            } else {
-                self.playListItems[key] = value
-            }
+    func update(playlistLinkedItems: [String : PlayerPlaylistLinkedItem?]) {
+
+        playlistLinkedItems.forEach { (key, linkedItem) in
+            guard let linkedItem = linkedItem else { self.playlistLinkedItems.removeValue(forKey: key); return }
+            self.playlistLinkedItems[key] = linkedItem
         }
     }
 
-    func playListItem(for trackId: TrackId?) -> PlayerPlaylistItem? {
-        guard let trackKey = trackId?.key else { return nil }
+    func generateLinkedKeyKey() -> String {
 
-        return self.playListItems[trackKey] ?? nil
-    }
+        var key: String = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
 
-    func generateTrackKey() -> String {
-
-        var trackKey: String = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
-
-        while self.playListItems[trackKey] != nil {
-            trackKey = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
+        while self.playlistLinkedItems[key] != nil {
+            key = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
         }
 
-        return trackKey
+        return key
     }
 
-    func makePlayListItem(for track: Track) -> PlayerPlaylistItem {
+    func makePlaylistLinkedItem(for track: Track) -> PlayerPlaylistLinkedItem {
 
-        let trackKey = self.generateTrackKey()
+        let key = self.generateLinkedKeyKey()
 
-        return PlayerPlaylistItem(id: track.id, trackKey: trackKey)
+        return PlayerPlaylistLinkedItem(trackId: track.id, key: key)
+
     }
 
     // MARK: - Addons -
@@ -182,13 +194,15 @@ class PlayerPlaylist {
     func addons(for track: Track, addonsIds: [Int]) -> [Addon]? {
         guard let allAddons = self.tracksAddons[track.id] else { return nil }
 
-        var addons = [Addon]()
-        for addonId in addonsIds {
-            guard let addon = allAddons.filter({ return $0.id == addonId }).first else { continue }
-            addons.append(addon)
-        }
+        return allAddons.filter{ addonsIds.contains($0.id) } 
 
-        return addons
+//        var addons = [Addon]()
+//        for addonId in addonsIds {
+//            guard let addon = allAddons.filter({ return $0.id == addonId }).first else { continue }
+//            addons.append(addon)
+//        }
+//
+//        return addons
     }
 
     func addonsStates(for track: Track) -> [AddonState]? {

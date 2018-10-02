@@ -34,9 +34,8 @@ class PlayerQueueItem {
 
 class PlayerQueue {
 
-    var track: PlayerTrack?
+    var playerItem: PlayerItem?
     var addons: [Addon]?
-    var trackStub: AudioFile?
 
     var isReadyToPlay: Bool {
         return self.addons != nil
@@ -64,37 +63,34 @@ class PlayerQueue {
         self.itemsInfo.removeAll()
         self.playerItems.removeAll()
 
+        guard self.playerItem?.stubReason == nil else {
+
+            self.addons = []
+
+            if let stubAudioFile = self.playerItem?.stubReason?.audioFile, let stubAudioFileURL = URL(string: stubAudioFile.urlString) {
+                itemsInfo[stubAudioFile.urlString] = PlayerQueueItem(with: stubAudioFile)
+                playerItems.append(AVPlayerItem(url: stubAudioFileURL))
+            }
+
+            return
+        }
+
         for addon in self.addons ?? [] {
             guard let playerItemURL = URL(string: addon.audioFile.urlString) else { continue }
             itemsInfo[addon.audioFile.urlString] = PlayerQueueItem(with: addon)
             playerItems.append(AVPlayerItem(url: playerItemURL))
         }
 
-        if let track = self.track?.track, let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
-
-            if let trackStub = self.trackStub, let trackStubURL = URL(string: trackStub.urlString) {
-                itemsInfo[trackStub.urlString] = PlayerQueueItem(with: trackStub)
-                playerItems.append(AVPlayerItem(url: trackStubURL))
-            } else {
-                itemsInfo[audioFile.urlString] = PlayerQueueItem(with: track)
-                playerItems.append(AVPlayerItem(url: playerItemURL))
-            }
+        if let track = self.playerItem?.playlistItem.track, let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
+            itemsInfo[audioFile.urlString] = PlayerQueueItem(with: track)
+            playerItems.append(AVPlayerItem(url: playerItemURL))
         }
     }
 
-    func replace(track: PlayerTrack, addons: [Addon]? = nil) {
+    func replace(playerItem: PlayerItem, addons: [Addon]? = nil) {
 
-        self.track = track
+        self.playerItem = playerItem
         self.addons = addons
-        self.trackStub = nil
-
-        self.makeItems()
-    }
-
-    func replace(track: PlayerTrack, trackStub: AudioFile) {
-        self.track = track
-        self.trackStub = trackStub
-        self.addons = []
 
         self.makeItems()
     }

@@ -19,7 +19,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     private(set) weak var player: Player?
     private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
 
-    private var tracks: [PlayerTrack] = [PlayerTrack]()
+    private var playlistItems: [PlayerPlaylistItem] = [PlayerPlaylistItem]()
 
     // MARK: - Lifecycle -
 
@@ -38,7 +38,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 
     func loadTracks() {
-        self.tracks = self.player?.tracks ?? []
+        self.playlistItems = self.player?.playlistItems ?? []
         self.delegate?.reloadUI()
     }
 
@@ -47,34 +47,34 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 
     func numberOfItems(in section: Int) -> Int {
-        return self.tracks.count
+        return self.playlistItems.count
     }
 
     func object(at indexPath: IndexPath) -> TrackViewModel? {
-        guard indexPath.item < self.tracks.count else { return nil }
+        guard indexPath.item < self.playlistItems.count else { return nil }
         
         var isCurrentInPlayer = false
         var isPlaying = false
         
-        let track = self.tracks[indexPath.item]
-        let isCensorship = self.application?.user?.isCensorshipTrack(track.track) ?? track.track.isCensorship
-        let previewOptionsImage = self.trackPreviewOptionsImageGenerator.image(for: track.track,
-                                                                               trackTotalPlayMSeconds: self.player?.totalPlayMSeconds(for: track.track),
+        let playlistItem = self.playlistItems[indexPath.item]
+        let isCensorship = self.application?.user?.isCensorshipTrack(playlistItem.track) ?? playlistItem.track.isCensorship
+        let previewOptionsImage = self.trackPreviewOptionsImageGenerator.image(for: playlistItem.track,
+                                                                               trackTotalPlayMSeconds: self.player?.totalPlayMSeconds(for: playlistItem.track),
                                                                                user: self.application?.user)
 
-        if let currentTrackId = player?.currentTrackId {
-            isCurrentInPlayer = track.playlistItem.trackKey == currentTrackId.key
+        if let currentPlaylistItem = player?.currentItem?.playlistItem {
+            isCurrentInPlayer = playlistItem.playlistLinkedItem == currentPlaylistItem.playlistLinkedItem
             isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
         }
 
-        return TrackViewModel(track: track.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage)
+        return TrackViewModel(track: playlistItem.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage)
     }
     
     func selectObject(at indexPath: IndexPath) {
         guard let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
 
         if !viewModel.isCurrentInPlayer {
-            self.player?.performAction(.playNow, for: self.tracks[indexPath.item], completion: nil)
+            self.player?.performAction(.playNow, for: self.playlistItems[indexPath.item], completion: nil)
         } else {
             if viewModel.isPlaying {
                 player?.pause()
@@ -84,42 +84,42 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         }
     }
 
-    func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: PlayerTrack) -> Bool {
+    func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor playlistItem: PlayerPlaylistItem) -> Bool {
         switch actionType {
         case .forceToPlay:
             guard let fanUser = self.application?.user as? FanUser else { return false }
-            return fanUser.isCensorshipTrack(track.track) && !fanUser.profile.forceToPlay.contains(track.track.id)
+            return fanUser.isCensorshipTrack(playlistItem.track) && !fanUser.profile.forceToPlay.contains(playlistItem.track.id)
         case .doNotPlay:
             guard let fanUser = self.application?.user as? FanUser else { return false }
-            return fanUser.isCensorshipTrack(track.track) && fanUser.profile.forceToPlay.contains(track.track.id)
-        case .playNow: return track.track.isPlayable
+            return fanUser.isCensorshipTrack(playlistItem.track) && fanUser.profile.forceToPlay.contains(playlistItem.track.id)
+        case .playNow: return playlistItem.track.isPlayable
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .replaceCurrent, .playNext, .playLast: return false
-        case .delete: return self.tracks.count > 1
+        case .delete: return self.playlistItems.count > 1
         default: return true
         }
     }
 
-    func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: PlayerTrack) {
+    func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for playlistItem: PlayerPlaylistItem) {
         switch actionType {
         case .forceToPlay:
-            self.application?.allowPlayTrackWithExplicitMaterial(track: track.track, completion: { (allowTrackResult) in
+            self.application?.allowPlayTrackWithExplicitMaterial(track: playlistItem.track, completion: { (allowTrackResult) in
                 switch allowTrackResult {
                 case .failure(let error): self.delegate?.show(error: error)
                 default: break
                 }
             })
         case .doNotPlay:
-            self.application?.disallowPlayTrackWithExplicitMaterial(track: track.track, completion: { (allowTrackResult) in
+            self.application?.disallowPlayTrackWithExplicitMaterial(track: playlistItem.track, completion: { (allowTrackResult) in
                 switch allowTrackResult {
                 case .failure(let error): self.delegate?.show(error: error)
                 default: break
                 }
             })
-        case .playNow: self.player?.performAction(.playNow, for: track, completion: nil)
-        case .delete: self.player?.performAction(.delete, for: track, completion: nil)
+        case .playNow: self.player?.performAction(.playNow, for: playlistItem, completion: nil)
+        case .delete: self.player?.performAction(.delete, for: playlistItem, completion: nil)
         case .toPlaylist:
-            self.router?.showAddToPlaylist(for: track.track)
+            self.router?.showAddToPlaylist(for: playlistItem.track)
             break
         default: break
         }
@@ -135,17 +135,17 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel? {
-        guard indexPath.row < self.tracks.count else { return nil }
-        let track = self.tracks[indexPath.row]
+        guard indexPath.row < self.playlistItems.count else { return nil }
+        let playlistItem = self.playlistItems[indexPath.row]
 
         let filteredTrackActionsTypes = TrackActionsViewModels.allActionsTypes.filter {
-            return self.isAction(with: $0, availableFor: track)
+            return self.isAction(with: $0, availableFor: playlistItem)
         }
 
         guard filteredTrackActionsTypes.count > 0 else { return nil }
 
-        let trackActions = TrackActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredTrackActionsTypes) { [weak self, track] (actionType) in
-            self?.performeAction(with: actionType, for: track)
+        let trackActions = TrackActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredTrackActionsTypes) { [weak self, playlistItem] (actionType) in
+            self?.performeAction(with: actionType, for: playlistItem)
         }
 
         return TrackActionsViewModels.ViewModel(title: nil,

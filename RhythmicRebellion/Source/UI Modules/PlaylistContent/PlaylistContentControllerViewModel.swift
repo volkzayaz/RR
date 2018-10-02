@@ -82,8 +82,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         let previewOptionsImage = trackPreviewOptionsImageGenerator.image(for: track,
                                                                           trackTotalPlayMSeconds: self.player?.totalPlayMSeconds(for: track),
                                                                           user: self.application?.user)
-        if let currentTrack = player?.playerCurrentTrack {
-            isCurrentInPlayer = track.id == currentTrack.track.id
+        if let currentTrack = player?.currentItem?.playlistItem.track {
+            isCurrentInPlayer = track.id == currentTrack.id
             isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
         }
         

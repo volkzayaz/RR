@@ -38,7 +38,7 @@ struct CheckAddons: Codable {
 
         self.trackId = try container.decode(Int.self, forKey: .trackId)
 
-        if let addonsStates = try? container.decode([AddonState].self, forKey: .addons) {
+        if let addonsStates = try? container.decode([AddonState].self, forKey: .addons), addonsStates.isEmpty == false {
             self.addons = .addonsStates(addonsStates)
             return
         }

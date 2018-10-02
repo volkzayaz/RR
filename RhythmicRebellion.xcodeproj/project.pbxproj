@@ -80,7 +80,7 @@
 		7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961C20E4E11C00BF1F79 /* TrackId.swift */; };
 		7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961E20E4E45000BF1F79 /* TrackState.swift */; };
 		7650962120E5029200BF1F79 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962020E5029200BF1F79 /* Observable.swift */; };
-		7650962320E5238100BF1F79 /* PlayerPlaylistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayerPlaylistItem.swift */; };
+		7650962320E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift */; };
 		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
 		76525E682146722700C556D6 /* RestorePasswordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */; };
 		76525E692146722700C556D6 /* RestorePasswordRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E652146722700C556D6 /* RestorePasswordRouter.swift */; };
@@ -215,7 +215,7 @@
 		AB33C984211DC5C9003B88DB /* PlaylistsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33C980211DC5C9003B88DB /* PlaylistsCollectionViewController.swift */; };
 		AB33C985211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33C981211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift */; };
 		AB33C986211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33C982211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift */; };
-		ABB42BD9212B634E00EABC61 /* PlayerTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB42BD8212B634E00EABC61 /* PlayerTrack.swift */; };
+		ABB42BD9212B634E00EABC61 /* PlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB42BD8212B634E00EABC61 /* PlayerItem.swift */; };
 		ABD79E86212C9E77004139F6 /* EqualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABD79E85212C9E77004139F6 /* EqualizerView.swift */; };
 		F36396C3EBC6647FA74987E9 /* Pods_RhythmicRebellion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */; };
 /* End PBXBuildFile section */
@@ -296,7 +296,7 @@
 		7650961C20E4E11C00BF1F79 /* TrackId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackId.swift; sourceTree = "<group>"; };
 		7650961E20E4E45000BF1F79 /* TrackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackState.swift; sourceTree = "<group>"; };
 		7650962020E5029200BF1F79 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
-		7650962220E5238100BF1F79 /* PlayerPlaylistItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPlaylistItem.swift; sourceTree = "<group>"; };
+		7650962220E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPlaylistLinkedItem.swift; sourceTree = "<group>"; };
 		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
 		76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordControllerViewModel.swift; sourceTree = "<group>"; };
 		76525E652146722700C556D6 /* RestorePasswordRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordRouter.swift; sourceTree = "<group>"; };
@@ -434,7 +434,7 @@
 		AB33C980211DC5C9003B88DB /* PlaylistsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistsCollectionViewController.swift; sourceTree = "<group>"; };
 		AB33C981211DC5C9003B88DB /* FanPlaylistsCollectionControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FanPlaylistsCollectionControllerViewModel.swift; sourceTree = "<group>"; };
 		AB33C982211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistsCollectionViewModel.swift; sourceTree = "<group>"; };
-		ABB42BD8212B634E00EABC61 /* PlayerTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTrack.swift; sourceTree = "<group>"; };
+		ABB42BD8212B634E00EABC61 /* PlayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerItem.swift; sourceTree = "<group>"; };
 		ABD79E85212C9E77004139F6 /* EqualizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EqualizerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -666,7 +666,7 @@
 				7650961A20E4DC7800BF1F79 /* Artist.swift */,
 				76C8DE0021106FDF00773BB1 /* Image.swift */,
 				76C8DE02211090AA00773BB1 /* TrackWriter.swift */,
-				7650962220E5238100BF1F79 /* PlayerPlaylistItem.swift */,
+				7650962220E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift */,
 				7650961C20E4E11C00BF1F79 /* TrackId.swift */,
 				7650961E20E4E45000BF1F79 /* TrackState.swift */,
 				7655476D20EB80DC004AC0BD /* Token.swift */,
@@ -1066,7 +1066,7 @@
 			children = (
 				767289C420ED1A13008A86B6 /* Player.swift */,
 				764CC02920F8D4FF009C3D28 /* PlayerState.swift */,
-				ABB42BD8212B634E00EABC61 /* PlayerTrack.swift */,
+				ABB42BD8212B634E00EABC61 /* PlayerItem.swift */,
 				767289C520ED1A13008A86B6 /* PlayerPlaylist.swift */,
 				76EDBD1420F73DCC0021297F /* PlayerQueue.swift */,
 			);
@@ -1285,9 +1285,9 @@
 				763170F1215BA3390053C719 /* TrackPreviewOptionsImageGenerator.swift in Sources */,
 				764B854F2138043E00071F30 /* Country.swift in Sources */,
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
-				7650962320E5238100BF1F79 /* PlayerPlaylistItem.swift in Sources */,
+				7650962320E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift in Sources */,
 				764D683E2148E86200F52730 /* ProfileSettingsViewController.swift in Sources */,
-				ABB42BD9212B634E00EABC61 /* PlayerTrack.swift in Sources */,
+				ABB42BD9212B634E00EABC61 /* PlayerItem.swift in Sources */,
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */,
 				764D683F2148E86200F52730 /* ProfileSettingsViewModel.swift in Sources */,

@@ -52,6 +52,7 @@ final class PlayerViewController: UIViewController {
     @IBOutlet weak var playerItemDurationLabel: UILabel!
 
     @IBOutlet weak var playerItemProgressView: ProgressView!
+    @IBOutlet weak var playerItemProgressViewTapGestureRecognizer: UITapGestureRecognizer!
 
     @IBOutlet var playerItemPreviewOptionsImageView: UIImageView!
 
@@ -94,6 +95,8 @@ final class PlayerViewController: UIViewController {
 
         self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .normal)
         self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+
+        self.playerItemProgressViewTapGestureRecognizer.delegate = self
 
         viewModel.load(with: self)
     }
@@ -193,7 +196,6 @@ final class PlayerViewController: UIViewController {
     }
 
     @IBAction func playerItemProgressViewValueChanged(sender: UISlider) {
-
         self.viewModel.setPlayerItemProgress(progress: sender.value)
     }
 
@@ -205,8 +207,20 @@ final class PlayerViewController: UIViewController {
         let bounds = self.playerItemProgressView.bounds
         let value = Float(location.x / bounds.width)
 
-        print("playerItemProgressViewTapGestureRecognizer: \(value)")
         self.viewModel.setPlayerItemProgress(progress: value)
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate -
+
+extension PlayerViewController: UIGestureRecognizerDelegate {
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+
+        switch gestureRecognizer {
+        case self.playerItemProgressViewTapGestureRecognizer: return self.playerItemProgressView.isTracking == false
+        default: return true
+        }
     }
 }
 

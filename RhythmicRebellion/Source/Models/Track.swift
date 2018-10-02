@@ -43,8 +43,6 @@ public struct Track: Codable {
     let writer: TrackWriter
     let backingTrack: TrackAudioFile?
 
-
-
     var previewType: TrackPreviewType { return TrackPreviewType(rawValue: self.previewTypeValue ?? 0) ?? .unknown }
     var isPlayable: Bool { return self.audioFile != nil }
 

@@ -15,31 +15,31 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     // MARK: - Public properties -
     var playerItemDurationString: String {
-        guard let playerItemDuration = self.player.playerCurrentTrackDuration else { return "--:--"}
+        guard let playerItemDuration = self.player.currentItemDuration else { return "--:--"}
         return playerItemDuration.stringFormatted();
     }
     
     var playerItemCurrentTimeString: String {
-        guard let playerItemCurrentTime = self.player.playerCurrentTrackCurrentTime else { return "--:--"}
+        guard let playerItemCurrentTime = self.player.currentItemTime else { return "--:--"}
         return playerItemCurrentTime.stringFormatted();
     }
 
     var playerItemProgressValue: Float {
-        guard let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0,
-            let playerItemCurrentTime = self.player.playerCurrentTrackCurrentTime else { return 0.0 }
+        guard let playerItemDuration = self.player.currentItemDuration, playerItemDuration != 0.0,
+            let playerItemCurrentTime = self.player.currentItemTime else { return 0.0 }
 
         return Float(playerItemCurrentTime / playerItemDuration)
     }
 
     var playerItemRestrictedValue: Float {
-        guard let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0,
-            let playerItemRestrictedTime = self.player.playerCurrentItemRestrictedTime else { return 0.0 }
+        guard let playerItemDuration = self.player.currentItemDuration, playerItemDuration != 0.0,
+            let playerItemRestrictedTime = self.player.currentItemRestrictedTime else { return 0.0 }
 
         return Float(playerItemRestrictedTime / playerItemDuration)
     }
 
     var playerItemNameString: String {
-        guard let playerCurrentQueueItem = self.player.playerCurrentQueueItem else { return "" }
+        guard let playerCurrentQueueItem = self.player.currentQueueItem else { return "" }
 
         switch playerCurrentQueueItem.content {
         case .addon(let addon):
@@ -47,7 +47,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         case .track(let track):
             return track.name
         case .stub(_):
-            return self.player.playerCurrentTrack?.track.name ?? ""
+            return self.player.currentItem?.playlistItem.track.name ?? ""
 
         }
     }
@@ -59,8 +59,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     var playerItemArtistNameString: String {
-        guard let currentTrack = self.player.playerCurrentTrack else { return "" }
-        return currentTrack.track.artist.name
+        guard let currentTrack = self.player.currentItem?.playlistItem.track else { return "" }
+        return currentTrack.artist.name
     }
 
     var playerItemArtistNameAttributedString: NSAttributedString {
@@ -70,7 +70,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     var playerItemPreviewOptionsImage: UIImage? {
-        guard let track = self.player.playerCurrentTrack?.track else { return nil }
+        guard let track = self.player.currentItem?.playlistItem.track else { return nil }
 
         return self.trackPreviewOptionsImageGenerator.image(for: track,
                                                             trackTotalPlayMSeconds: self.player.totalPlayMSeconds(for: track),
@@ -130,14 +130,14 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {
-        guard let currentTrack = self.player.playerCurrentTrack else { return NSAttributedString() }
+        guard let currentTrack = self.player.currentItem?.playlistItem.track else { return NSAttributedString() }
 
-        let currentTrackName = currentTrack.track.name + (traitCollection.horizontalSizeClass == .regular ?  "\n" : " - ")
+        let currentTrackName = currentTrack.name + (traitCollection.horizontalSizeClass == .regular ?  "\n" : " - ")
         let descriptionAttributedString = NSMutableAttributedString(string: currentTrackName,
                                                                     attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
 
-        descriptionAttributedString.append(NSAttributedString(string: currentTrack.track.artist.name,
+        descriptionAttributedString.append(NSAttributedString(string: currentTrack.artist.name,
                                                               attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 0.96),
                                                                            NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)]))
 
@@ -166,7 +166,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         guard self.player.canSeek, let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0 else { return }
 
-        self.player.seek(to: TimeInterval(playerItemDuration * Double(progress)))
+        self.player.seek(to: TimeInterval(playerItemDuration * Double(progress)).rounded())
     }
 }
 

@@ -10,7 +10,6 @@ import Foundation
 
 
 public enum UserStubTrackAudioFileReason {
-    case noPreview
     case censorship
 }
 
@@ -46,12 +45,8 @@ struct GuestUser: User {
 
     func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
 
-        switch track.previewType {
-        case .noPreview: return .noPreview
-        default:
-            if self.isCensorshipTrack(track) { return .censorship }
-            return nil
-        }
+        guard self.isCensorshipTrack(track) else { return nil}
+        return .censorship
     }
 }
 
@@ -173,12 +168,8 @@ struct FanUser: User {
 
     func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
 
-        switch track.previewType {
-        case .noPreview: return .noPreview
-        default:
-            if self.isCensorshipTrack(track) && !self.profile.forceToPlay.contains(track.id) { return .censorship }
-            return nil
-        }
+        guard self.isCensorshipTrack(track), !self.profile.forceToPlay.contains(track.id) else { return nil }
+        return .censorship
     }
 }
 
