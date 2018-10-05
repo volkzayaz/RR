@@ -9,7 +9,38 @@
 
 import UIKit
 
+public enum PlayerNavigationItemType: Int {
+    case video
+    case lyrics
+    case playlist
+    case promo
+}
+
+public class PlayerNavigationItem {
+
+    var type: PlayerNavigationItemType
+
+    private weak var playerViewController: PlayerViewController?
+
+    fileprivate init(playerViewController: PlayerViewController, type: PlayerNavigationItemType) {
+        self.type = type
+        self.playerViewController = playerViewController
+    }
+
+    deinit {
+        self.playerViewController?.unselect(self)
+    }
+}
+
+protocol PlayerNavigationDelgate: class {
+    func navigate(to playerNavigationItem: PlayerNavigationItem)
+    func navigateToAuthorization()
+}
+
 protocol PlayerRouter: FlowRouter {
+
+    func navigate(to playerNavigationItemType: PlayerNavigationItemType)
+    func navigateToAuthorization()
 }
 
 final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
@@ -34,7 +65,10 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
     var dependencies: RouterDependencies
 
     private(set) weak var viewModel: PlayerViewModel?
-    private(set) weak var sourceController: UIViewController?
+    private(set) weak var playerViewController: PlayerViewController?
+    private(set) weak var navigationDelegate: PlayerNavigationDelgate?
+
+    var sourceController: UIViewController? { return self.playerViewController }
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -46,13 +80,27 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies) {
+    init(dependencies: RouterDependencies, navigationDelegate: PlayerNavigationDelgate) {
         self.dependencies = dependencies
+        self.navigationDelegate = navigationDelegate
     }
 
-    func start(controller: PlayerViewController, navigationDelegate: PlayerNavigationDelgate) {
-        sourceController = controller
+    func start(controller: PlayerViewController) {
+        playerViewController = controller
         let vm = PlayerControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player)
-        controller.configure(viewModel: vm, router: self, navigationDelegate: navigationDelegate)
+        controller.configure(viewModel: vm, router: self)
     }
 }
+
+extension DefaultPlayerRouter {
+
+    func navigate(to playerNavigationItemType: PlayerNavigationItemType) {
+        guard let playerViewController = self.playerViewController else { return }
+        self.navigationDelegate?.navigate(to: PlayerNavigationItem(playerViewController: playerViewController, type: playerNavigationItemType))
+    }
+
+    func navigateToAuthorization() {
+        self.navigationDelegate?.navigateToAuthorization()
+    }
+}
+

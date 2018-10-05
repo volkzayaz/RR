@@ -9,7 +9,8 @@
 
 import UIKit
 
-protocol PlayerContentContainerRouter: FlowRouter, PlayerNavigationDelgate {
+protocol PlayerContentContainerRouter: FlowRouter {
+    func navigate(to playerNavigationItem: PlayerNavigationItem)
     func stop(_ animated: Bool)
 }
 
@@ -66,7 +67,6 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
             guard let navigationController = childViewController as? UINavigationController else { continue }
 
             switch childViewControllerNavigationItemType {
-            case .follow: break
             case .video:
                 guard let videoViewController = navigationController.viewControllers.first as? VideoViewController else { continue }
                 let videoRouter = DefaultVideoRouter(dependencies: self.dependencies)

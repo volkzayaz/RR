@@ -48,6 +48,8 @@ protocol PlayerViewModel: class {
     func backward()
     func setPlayerItemProgress(progress: Float)
     func toggleArtistFollowing()
+
+        func navigate(to playerNavigationItemType: PlayerNavigationItemType)
 }
 
 protocol PlayerViewModelDelegate: class {

@@ -59,8 +59,8 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
         switch destination {
         case .player:
             guard let playerViewController = segue.destination as? PlayerViewController else { fatalError("Incorrect controller for PlayerSegueIdentifier") }
-            let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies)
-            playerRouter.start(controller: playerViewController, navigationDelegate: self)
+            let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies, navigationDelegate: self)
+            playerRouter.start(controller: playerViewController)
 
         case .tabBar:
             guard let tabBarViewController = segue.destination as? TabBarViewController else { fatalError("Incorrect controller for TabBarViewController") }
@@ -92,6 +92,10 @@ extension DefaultAppRouter: PlayerNavigationDelgate {
         }
 
         playerContentContainerRouter.navigate(to: playerNavigationItem)
+    }
+
+    func navigateToAuthorization() {
+        self.tabBarRouter?.selectAuthorizationTab(with: .signIn)
     }
 
 }

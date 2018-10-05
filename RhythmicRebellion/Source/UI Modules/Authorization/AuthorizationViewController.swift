@@ -26,7 +26,15 @@ final class AuthorizationViewController: UIViewController {
     private(set) var viewModel: AuthorizationViewModel!
     private(set) var router: FlowRouter!
 
-    weak var selectedViewController: UIViewController?
+    weak var selectedViewController: (UIViewController & AuthorizationChildViewController)? {
+        didSet {
+            guard let selectedViewController = self.selectedViewController else { segmentedControl.selectedSegmentIndex = -1; return }
+            switch selectedViewController.authorizationType{
+            case .signIn: self.segmentedControl.selectedSegmentIndex = AuthorizationSegment.signIn.rawValue
+            case .signUp: self.segmentedControl.selectedSegmentIndex = AuthorizationSegment.signUp.rawValue
+            }
+        }
+    }
 
     // MARK: - Configuration -
 

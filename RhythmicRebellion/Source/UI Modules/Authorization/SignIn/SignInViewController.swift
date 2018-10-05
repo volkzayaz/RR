@@ -241,3 +241,9 @@ extension SignInViewController: SignInViewModelDelegate {
         self.refresh(textField: self.passwordTextField, errorLabel: self.passwordErrorLabel, withValidationError: validationError)
     }
 }
+
+// MARK: - AuthorizationChildViewController -
+extension SignInViewController: AuthorizationChildViewController {
+    var authorizationType: AuthorizationType { return .signIn }
+}
+

@@ -30,6 +30,8 @@ protocol TabBarRouter: FlowRouter {
 
     func updateTabs(for types: [TabType])
     func selectTab(for type: TabType)
+
+    func selectAuthorizationTab(with authorizationType: AuthorizationType)
 }
 
 final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatible {
@@ -175,6 +177,21 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
         self.tabBarViewController?.selectedViewController?.view.endEditing(true)
         self.perform(segue: .shaowPlayerContentContainer(playerNavigationItem: playerNavigationItem))
     }
+
+    func selectAuthorizationTab(with authorizationType: AuthorizationType) {
+
+        guard let authorizationNavigationController = self.viewController(for: .authorization, from: self.tabBarViewController?.viewControllers) as? UINavigationController,
+            let authorizationViwController = authorizationNavigationController.viewControllers.first as? AuthorizationViewController
+            else { return }
+
+        self.tabBarViewController?.selectedViewController = authorizationNavigationController
+        let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
+        authorizationRouter.start(controller: authorizationViwController)
+
+        authorizationRouter.change(authorizationType: authorizationType)
+
+        self.playerContentContainerRouter?.stop(true)
+    }
 }
 
 extension DefaultTabBarRouter: UITabBarControllerDelegate {
@@ -198,8 +215,6 @@ extension DefaultTabBarRouter: UITabBarControllerDelegate {
         default: break
         }
 
-        if let playerContentContainerRouter = self.playerContentContainerRouter {
-            playerContentContainerRouter.stop(true)
-        }
+        self.playerContentContainerRouter?.stop(true)
     }
 }

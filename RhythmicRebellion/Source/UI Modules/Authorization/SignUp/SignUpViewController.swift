@@ -484,3 +484,8 @@ extension SignUpViewController: SignUpViewModelDelegate {
         self.howHearTextField.howHear = howHear
     }
 }
+
+// MARK: - AuthorizationChildViewController -
+extension SignUpViewController: AuthorizationChildViewController {
+    var authorizationType: AuthorizationType { return .signUp }
+}

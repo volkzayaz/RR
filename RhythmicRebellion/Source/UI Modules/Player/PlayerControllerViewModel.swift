@@ -179,13 +179,18 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func toggleArtistFollowing() {
 
-        guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return }
+        guard let currentPlayerItem = self.player.currentItem else { return }
+        guard let fanUser = self.application.user as? FanUser else { self.router?.navigateToAuthorization(); return }
 
-        if user.isFollower(for: currentPlayerItem.playlistItem.track.artist) {
+        if fanUser.isFollower(for: currentPlayerItem.playlistItem.track.artist) {
             self.application.unfollow(artist: currentPlayerItem.playlistItem.track.artist)
         } else {
             self.application.follow(artist: currentPlayerItem.playlistItem.track.artist)
         }
+    }
+
+    func navigate(to playerNavigationItemType: PlayerNavigationItemType) {
+        self.router?.navigate(to: playerNavigationItemType)
     }
 }
 

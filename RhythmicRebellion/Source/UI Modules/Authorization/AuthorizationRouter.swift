@@ -21,11 +21,17 @@ enum AuthorizationType: Int {
     }
 }
 
+protocol AuthorizationChildViewController {
+    var authorizationType: AuthorizationType { get }
+}
+
 protocol AuthorizationRouter: FlowRouter {
     func change(authorizationType: AuthorizationType)
 }
 
 final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCompatible {
+
+    typealias ChildViewController = UIViewController & AuthorizationChildViewController
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -113,16 +119,16 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
         self.authorizationViewController?.navigationController?.popToRootViewController(animated: false)
     }
 
-    func instantiateViewController(for authorizationType: AuthorizationType) -> UIViewController? {
-        guard let viewController = self.authorizationViewController?.storyboard?.instantiateViewController(withIdentifier: authorizationType.identifier) else { return nil }
+    func instantiateViewController(for authorizationType: AuthorizationType) -> ChildViewController? {
+        guard let viewController = self.authorizationViewController?.storyboard?.instantiateViewController(withIdentifier: authorizationType.identifier) as? ChildViewController else { return nil }
         
         return viewController
     }
 
-    func viewController(for authorizaionType: AuthorizationType) -> UIViewController? {
+    func viewController(for authorizaionType: AuthorizationType) -> ChildViewController? {
         guard let authorizationViewController = self.authorizationViewController else { return nil }
 
-        guard let viewControllerForAuthorizationType = authorizationViewController.childViewControllers.first(where: { (viewController) -> Bool in
+        guard let childViewControllers = authorizationViewController.childViewControllers as? [ChildViewController], let viewControllerForAuthorizationType = childViewControllers.first(where: { (viewController) -> Bool in
             switch authorizaionType {
             case .signIn:
                 guard let _ = viewController as? SignInViewController else { return false }
@@ -143,7 +149,7 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
     func change(authorizationType: AuthorizationType) {
 
         guard let authorizationViewController = self.authorizationViewController, let selectedViewController = authorizationViewController.selectedViewController else { return }
-
+        guard selectedViewController.authorizationType != authorizationType else { return }
         guard let viewControllerForAuthorizationType = self.viewController(for: authorizationType) else { return }
 
         self.prepare(viewController: viewControllerForAuthorizationType)

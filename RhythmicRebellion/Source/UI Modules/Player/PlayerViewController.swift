@@ -9,34 +9,6 @@
 
 import UIKit
 
-enum PlayerNavigationItemType: Int {
-    case follow
-    case video
-    case lyrics
-    case playlist
-    case promo
-}
-
-class PlayerNavigationItem {
-
-    var type: PlayerNavigationItemType
-
-    private weak var playerViewController: PlayerViewController?
-
-    fileprivate init(playerViewController: PlayerViewController, type: PlayerNavigationItemType) {
-        self.type = type
-        self.playerViewController = playerViewController
-    }
-
-    deinit {
-        self.playerViewController?.unselect(self)
-    }
-}
-
-protocol PlayerNavigationDelgate: class {
-    func navigate(to playerNavigationItem: PlayerNavigationItem)
-}
-
 final class PlayerViewController: UIViewController {
 
     // MARK: - Outlet properties -
@@ -77,14 +49,12 @@ final class PlayerViewController: UIViewController {
 
     private(set) var viewModel: PlayerViewModel!
     private(set) var router: FlowRouter!
-    private(set) var navigationDelegate: PlayerNavigationDelgate!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: PlayerViewModel, router: FlowRouter, navigationDelegate: PlayerNavigationDelgate) {
+    func configure(viewModel: PlayerViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
-        self.navigationDelegate = navigationDelegate
     }
 
     // MARK: - Lifecycle -
@@ -145,7 +115,6 @@ final class PlayerViewController: UIViewController {
         }
 
         switch playerNavigationItem.type {
-        case .follow: break
         case .video: self.videoButton.isSelected = false
         case .lyrics: self.lyricsButton.isSelected = false
         case .playlist: self.playlistButton.isSelected = false
@@ -179,10 +148,10 @@ final class PlayerViewController: UIViewController {
         sender.isSelected = true
 
         switch sender {
-        case self.videoButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .video))
-        case self.lyricsButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .lyrics))
-        case self.playlistButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .playlist))
-        case self.promoButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .promo))
+        case self.videoButton: self.viewModel.navigate(to: .video)
+        case self.lyricsButton: self.viewModel.navigate(to: .lyrics)
+        case self.playlistButton: self.viewModel.navigate(to: .playlist)
+        case self.promoButton: self.viewModel.navigate(to: .promo)
 
         default: break
         }
@@ -316,6 +285,6 @@ extension PlayerViewController: UITabBarDelegate {
 
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let navigationType = PlayerNavigationItemType.init(rawValue: item.tag) else { return }
-        self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: navigationType))
+        self.viewModel.navigate(to: navigationType)
     }
 }
