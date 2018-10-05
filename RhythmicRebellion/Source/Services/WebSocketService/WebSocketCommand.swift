@@ -26,6 +26,7 @@ struct WebSocketCommand: Codable {
         case userInit = "user-init"
         case userSyncListeningSettings = "user-syncListeningSettings"
         case userSyncForceToPlay = "user-syncForceToPlay"
+        case userSyncFollowing = "user-syncFollowing"
         case playListLoadTracks = "playlist-loadTracks"
         case playListUpdate = "playlist-update"
         case currentTrackId = "currentTrack-setTrack"
@@ -41,6 +42,7 @@ struct WebSocketCommand: Codable {
         case userInit(Token)
         case userSyncListeningSettings(ListeningSettings)
         case userSyncForceToPlay(TrackForceToPlayState)
+        case userSyncFollowing(ArtistFollowingState)
         case playListLoadTracks([Track])
         case playListUpdate([String : PlayerPlaylistLinkedItem?])
         case currentTrackId(TrackId?)
@@ -90,6 +92,8 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.userSyncListeningSettings(try container.decode(ListeningSettings.self, forKey: .data)))
             case .userSyncForceToPlay:
                 self.data = .success(.userSyncForceToPlay(try container.decode(TrackForceToPlayState.self, forKey: .data)))
+            case .userSyncFollowing:
+                self.data = .success(.userSyncFollowing(try container.decode(ArtistFollowingState.self, forKey: .data)))
             case .playListLoadTracks:
                 self.data = .success(.playListLoadTracks(try container.decode([Track].self, forKey: .data)))
             case .playListUpdate:
@@ -146,6 +150,8 @@ struct WebSocketCommand: Codable {
                 try container.encode(listeningSettings, forKey: .data)
             case .userSyncForceToPlay(let trackForceToPlayState):
                 try container.encode(trackForceToPlayState, forKey: .data)
+            case .userSyncFollowing(let artistFollowingState):
+                try container.encode(artistFollowingState, forKey: .data)
             case .playListLoadTracks(let traks):
                 try container.encode(traks, forKey: .data)
             case .playListUpdate(let playerPlaylist):
@@ -183,6 +189,10 @@ extension WebSocketCommand {
 
     static func syncForceToPlay(trackForceToPlayState: TrackForceToPlayState) -> WebSocketCommand {
         return WebSocketCommand(channel: "user", command: "syncForceToPlay", data: .success(.userSyncForceToPlay(trackForceToPlayState)))
+    }
+
+    static func syncFollowing(artistFollowingState: ArtistFollowingState) -> WebSocketCommand {
+        return WebSocketCommand(channel: "user", command: "syncFollowing", data: .success(.userSyncFollowing(artistFollowingState)))
     }
 
     static func setCurrentTrack(trackId: TrackId) -> WebSocketCommand {

@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupAppearance() {
         UITabBar.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).unselectedItemTintColor = #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96)
-        UITabBar.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 0.96)
+        UITabBar.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3647058824, blue: 0.7137254902, alpha: 0.96)
         UITabBarItem.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
                                                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
                                                                                                                 for: .normal)
@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                                                                 for: .selected)
 
         UITabBar.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).unselectedItemTintColor = #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96)
-        UITabBar.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 0.96)
+        UITabBar.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3647058824, blue: 0.7137254902, alpha: 0.96)
         UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
                                                                                                                  NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
                                                                                                                 for: .normal)

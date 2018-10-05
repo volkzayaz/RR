@@ -274,6 +274,26 @@ struct TrackForceToPlayResponse: RestApiResponse {
     }
 }
 
+struct FollowArtistResponse: RestApiResponse {
+
+    let fanId: Int
+    let state: ArtistFollowingState
+
+    enum CodingKeys: String, CodingKey {
+        case fanId = "fan_id"
+        case artistId = "artist_id"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.fanId = try container.decode(Int.self, forKey: .fanId)
+        self.state = ArtistFollowingState(artistId: try container.decode(String.self, forKey: .artistId),
+                                          isFollowed: true)
+    }
+
+}
+
 // MARK: - Config -
 
 struct PlayerConfigResponse: RestApiResponse {

@@ -19,12 +19,14 @@ struct TrackAudioFile: AudioFile, Codable {
     let bitrate: String
     let duration: Int
     let urlString: String
+    let originalName: String
 
     enum CodingKeys: String, CodingKey {
         case id
         case bitrate
         case duration
         case urlString = "link"
+        case originalName = "original_name"
     }
 }
 

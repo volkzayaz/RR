@@ -23,4 +23,5 @@ struct TrackViewModel: TrackTableViewCellViewModel {
 
     var isCensorship: Bool
     var previewOptionsImage: UIImage?
+
 }

@@ -21,6 +21,8 @@ public protocol User: Decodable {
 
     func isCensorshipTrack(_ track: Track) -> Bool
     func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason?
+
+    func isFollower(for artist: Artist) -> Bool
 }
 
 //func == (lhs: User, rhs: User) -> Bool {
@@ -48,6 +50,10 @@ struct GuestUser: User {
         guard self.isCensorshipTrack(track) else { return nil}
         return .censorship
     }
+
+    func isFollower(for artist: Artist) -> Bool {
+        return false
+    }
 }
 
 struct UserProfile: Decodable {
@@ -65,6 +71,7 @@ struct UserProfile: Decodable {
     var genres: [Genre]?
     var language: String?
     var forceToPlay: Set<Int>
+    var followedArtistsIds: Set<String>
 //    var purchasedTracksIds: [Int]
 
     var listeningSettings: ListeningSettings
@@ -84,6 +91,7 @@ struct UserProfile: Decodable {
         case language
         case forceToPlay = "force_to_play"
         case listeningSettings = "listening_settings"
+        case followedArtistsIds = "artists_followed"
     }
 
     init(from decoder: Decoder) throws {
@@ -110,20 +118,34 @@ struct UserProfile: Decodable {
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
         self.language = try container.decodeIfPresent(String.self, forKey: .language)
 
+        self.listeningSettings = try container.decode(ListeningSettings.self, forKey: .listeningSettings)
+
         if let forceToPlay = try container.decodeIfPresent(Set<Int>.self, forKey: .forceToPlay) {
             self.forceToPlay = forceToPlay
         } else {
             self.forceToPlay = Set<Int>()
         }
-        
-        self.listeningSettings = try container.decode(ListeningSettings.self, forKey: .listeningSettings)
+
+        if let followedArtistsIds = try container.decodeIfPresent(Set<String>.self, forKey: .followedArtistsIds) {
+            self.followedArtistsIds = followedArtistsIds
+        } else {
+            self.followedArtistsIds = Set<String>()
+        }
     }
 
-    mutating func updateForcedToPlay(with trackForceToPlayState: TrackForceToPlayState) {
+    mutating func update(with trackForceToPlayState: TrackForceToPlayState) {
         if trackForceToPlayState.isForcedToPlay {
             forceToPlay.insert(trackForceToPlayState.trackId)
         } else {
             forceToPlay.remove(trackForceToPlayState.trackId)
+        }
+    }
+
+    mutating func update(with artistFollowingState: ArtistFollowingState) {
+        if artistFollowingState.isFollowed {
+            followedArtistsIds.insert(artistFollowingState.artistId)
+        } else {
+            followedArtistsIds.remove(artistFollowingState.artistId)
         }
     }
 }
@@ -171,6 +193,11 @@ struct FanUser: User {
         guard self.isCensorshipTrack(track), !self.profile.forceToPlay.contains(track.id) else { return nil }
         return .censorship
     }
+
+    func isFollower(for artist: Artist) -> Bool {
+        return self.profile.followedArtistsIds.contains(artist.id)
+    }
+
 }
 
 extension FanUser: Equatable {

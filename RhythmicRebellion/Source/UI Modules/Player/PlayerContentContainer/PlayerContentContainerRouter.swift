@@ -66,19 +66,16 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
             guard let navigationController = childViewController as? UINavigationController else { continue }
 
             switch childViewControllerNavigationItemType {
-            case .follow:
-                guard let followViewController = navigationController.viewControllers.first as? FollowViewController else { continue }
-                let followRouter = DefaultFollowRouter(dependencies: self.dependencies)
-                followRouter.start(controller: followViewController)
+            case .follow: break
             case .video:
                 guard let videoViewController = navigationController.viewControllers.first as? VideoViewController else { continue }
                 let videoRouter = DefaultVideoRouter(dependencies: self.dependencies)
                 videoRouter.start(controller: videoViewController)
-            case .lirycs:
+            case .lyrics:
                 guard let lyricsViewController = navigationController.viewControllers.first as? LyricsViewController else { continue }
                 let lyricsRouter = DefaultLyricsRouter(dependencies: self.dependencies)
                 lyricsRouter.start(controller: lyricsViewController)
-            case .playList:
+            case .playlist:
                 guard let playerPlaylistRootViewController = navigationController.viewControllers.first as? PlayerPlaylistRootViewController else { continue }
                 let playerPlaylistRootRouter = DefaultPlayerPlaylistRootRouter(dependencies: self.dependencies)
                 playerPlaylistRootRouter.start(controller: playerPlaylistRootViewController)

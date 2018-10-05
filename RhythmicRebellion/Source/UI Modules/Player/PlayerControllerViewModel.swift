@@ -92,6 +92,12 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         return self.player.canSeek
     }
 
+    var isArtistFollowed: Bool {
+        guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return false }
+
+        return user.isFollower(for: currentPlayerItem.playlistItem.track.artist)
+    }
+
     // MARK: - Private properties -
 
     private(set) weak var delegate: PlayerViewModelDelegate?
@@ -121,12 +127,14 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.delegate = delegate
     }
 
-    func startObservePlayer() {
+    func startObserve() {
         self.player.addObserver(self)
+        self.application.addObserver(self)
     }
 
-    func stopObservePlayer() {
+    func stopObserve() {
         self.player.removeObserver(self)
+        self.application.removeObserver(self)
     }
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {
@@ -168,6 +176,17 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         self.player.seek(to: TimeInterval(playerItemDuration * Double(progress)).rounded())
     }
+
+    func toggleArtistFollowing() {
+
+        guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return }
+
+        if user.isFollower(for: currentPlayerItem.playlistItem.track.artist) {
+            self.application.unfollow(artist: currentPlayerItem.playlistItem.track.artist)
+        } else {
+            self.application.follow(artist: currentPlayerItem.playlistItem.track.artist)
+        }
+    }
 }
 
 extension PlayerControllerViewModel: PlayerObserver {
@@ -193,3 +212,9 @@ extension PlayerControllerViewModel: PlayerObserver {
     }
 }
 
+extension PlayerControllerViewModel: ApplicationObserver {
+
+    func application(_ application: Application, didChange followedArtistsIds: [String]) {
+        self.delegate?.refreshUI()
+    }
+}

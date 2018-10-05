@@ -17,6 +17,7 @@ protocol WebSocketServiceObserver: class {
 
     func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings)
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
+    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState)
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
     func webSocketService(_ service: WebSocketService, didReceivePlaylist playlistLinkedItems: [String: PlayerPlaylistLinkedItem?])
@@ -34,6 +35,7 @@ extension WebSocketServiceObserver {
 
     func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) { }
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
+    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
     func webSocketService(_ service: WebSocketService, didReceivePlaylist playlistLinkedItems: [String: PlayerPlaylistLinkedItem?]) { }
@@ -167,6 +169,11 @@ class WebSocketService: WebSocketDelegate, Observable {
                 case .userSyncForceToPlay(let trackForceToPlayState):
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTrackForceToPlayState: trackForceToPlayState)
+                    })
+
+                case .userSyncFollowing(let artistFollowingState):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveArtistFollowingState: artistFollowingState)
                     })
 
                 case .playListLoadTracks(let tracks):

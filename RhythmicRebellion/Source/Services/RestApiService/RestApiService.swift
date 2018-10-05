@@ -299,6 +299,43 @@ class RestApiService {
         }
     }
 
+    func fanFollow(artist: Artist, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
+        guard let followArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artist.id)) else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(followArtistURL, method: .post, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<FollowArtistResponse>) in
+                switch dataResponse.result {
+                case .success(let followArtistResponse):
+                    guard artist.id == followArtistResponse.state.artistId else { completion(.failure(AppError(.unexpectedResponse))); return }
+                    completion(.success(followArtistResponse.state))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    func fanUnfollow(artist: Artist, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
+        guard let unfollowArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artist.id)) else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(unfollowArtistURL, method: .delete, headers: headers)
+            .validate()
+            .response { (response) in
+                guard let error = response.error else { completion(.success(ArtistFollowingState(artistId: artist.id, isFollowed: false)))
+                                                        return }
+
+                completion(.failure(error))
+        }
+    }
+
+
     // MARK: - Player
 
     func audioAddons(for trackIds: [Int], completion: @escaping (Result<[Int : [Addon]]>) -> Void) {

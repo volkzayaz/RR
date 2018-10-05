@@ -12,8 +12,8 @@ import UIKit
 enum PlayerNavigationItemType: Int {
     case follow
     case video
-    case lirycs
-    case playList
+    case lyrics
+    case playlist
     case promo
 }
 
@@ -23,9 +23,7 @@ class PlayerNavigationItem {
 
     private weak var playerViewController: PlayerViewController?
 
-    fileprivate init?(playerViewController: PlayerViewController, tag: Int) {
-        guard let type = PlayerNavigationItemType.init(rawValue: tag) else { return nil }
-
+    fileprivate init(playerViewController: PlayerViewController, type: PlayerNavigationItemType) {
         self.type = type
         self.playerViewController = playerViewController
     }
@@ -57,9 +55,16 @@ final class PlayerViewController: UIViewController {
     @IBOutlet var playerItemPreviewOptionsImageView: UIImageView!
 
     @IBOutlet weak var compactTabBar: UITabBar!
-    @IBOutlet weak var regularTabBar: TabBarRegular!
 
     @IBOutlet weak var compactFollowButton: UIButton!
+    @IBOutlet weak var regularFollowButton: UIButton!
+
+    @IBOutlet weak var videoButton: UIButton!
+    @IBOutlet weak var lyricsButton: UIButton!
+    @IBOutlet weak var playlistButton: UIButton!
+    @IBOutlet weak var promoButton: UIButton!
+
+    var playerContentButtons: [UIButton]!
 
     @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet var playBarButtonItem: UIBarButtonItem!
@@ -90,8 +95,7 @@ final class PlayerViewController: UIViewController {
         self.toolBar.setShadowImage(UIImage(), forToolbarPosition: .any)
         self.toolBar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
 
-        self.regularTabBar.shadowImage = UIImage()
-        self.regularTabBar.backgroundImage = UIImage()
+        self.playerContentButtons = [self.videoButton, self.lyricsButton, self.playlistButton, self.promoButton]
 
         self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .normal)
         self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
@@ -104,13 +108,13 @@ final class PlayerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.startObservePlayer()
+        viewModel.startObserve()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        viewModel.stopObservePlayer()
+        viewModel.stopObserve()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -136,35 +140,17 @@ final class PlayerViewController: UIViewController {
 
     func unselect(_ playerNavigationItem: PlayerNavigationItem) {
 
-        switch playerNavigationItem.type {
-        case .follow:
-
-            self.compactFollowButton.isSelected = false
-            self.compactFollowButton.tintColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
-
-            if let regularTabBarSelectedItem = self.regularTabBar.selectedItem,
-                let regularPlayerNavigationItemType = PlayerNavigationItemType(rawValue: regularTabBarSelectedItem.tag),
-                playerNavigationItem.type == regularPlayerNavigationItemType {
-
-                self.regularTabBar.selectedItem = nil
-            }
-
-        default:
-            if let compactTabBarSelectedItem = self.compactTabBar.selectedItem,
-                let compactPlayerNavigationItemType = PlayerNavigationItemType(rawValue: compactTabBarSelectedItem.tag),
-                playerNavigationItem.type == compactPlayerNavigationItemType {
-
-                self.compactTabBar.selectedItem = nil
-            }
-
-            if let regularTabBarSelectedItem = self.regularTabBar.selectedItem,
-                let regularPlayerNavigationItemType = PlayerNavigationItemType(rawValue: regularTabBarSelectedItem.tag),
-                playerNavigationItem.type == regularPlayerNavigationItemType {
-
-                self.regularTabBar.selectedItem = nil
-            }
+        if compactTabBar.selectedItem?.tag == playerNavigationItem.type.rawValue {
+            self.compactTabBar.selectedItem = nil
         }
 
+        switch playerNavigationItem.type {
+        case .follow: break
+        case .video: self.videoButton.isSelected = false
+        case .lyrics: self.lyricsButton.isSelected = false
+        case .playlist: self.playlistButton.isSelected = false
+        case .promo: self.promoButton.isSelected = false
+        }
     }
 
     // MARK: - Actions -
@@ -184,15 +170,22 @@ final class PlayerViewController: UIViewController {
         viewModel.backward()
     }
 
-    @IBAction func onFollowCompactButton(sender: UIButton) {
-        guard let navigationItem = PlayerNavigationItem(playerViewController: self, tag: 0) else { return }
+    @IBAction func onFollowButton(sender: UIButton) {
+        viewModel.toggleArtistFollowing()
+    }
 
-        self.compactFollowButton.isSelected = true
-        self.compactFollowButton.tintColor = #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1)
+    @IBAction func onPlayerContentButton(sender: UIButton) {
 
-        self.regularTabBar.selectedItem = self.tabBarItem(with: .follow, on: self.regularTabBar)
+        sender.isSelected = true
 
-        self.navigationDelegate.navigate(to: navigationItem)
+        switch sender {
+        case self.videoButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .video))
+        case self.lyricsButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .lyrics))
+        case self.playlistButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .playlist))
+        case self.promoButton: self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: .promo))
+
+        default: break
+        }
     }
 
     @IBAction func playerItemProgressViewValueChanged(sender: UISlider) {
@@ -296,6 +289,10 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
         self.playerItemProgressView.isUserInteractionEnabled = self.viewModel.canSetPlayerItemProgress
 
+        self.regularFollowButton.isSelected = self.viewModel.isArtistFollowed
+        self.compactFollowButton.isSelected = self.regularFollowButton.isSelected
+        self.compactFollowButton.tintColor = self.regularFollowButton.tintColor
+
         self.playerItemPreviewOptionsImageView.image = self.viewModel.playerItemPreviewOptionsImage
 
         self.refreshProgressUI()
@@ -318,22 +315,7 @@ extension PlayerViewController: PlayerViewModelDelegate {
 extension PlayerViewController: UITabBarDelegate {
 
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        guard let navigationItem = PlayerNavigationItem(playerViewController: self, tag: item.tag) else { return }
-
-
-        if tabBar == self.compactTabBar {
-            self.regularTabBar.selectedItem = self.tabBarItem(with: navigationItem.type, on: self.regularTabBar)
-        } else {
-            switch navigationItem.type {
-            case .follow:
-                self.compactFollowButton.isSelected = true
-                self.compactFollowButton.tintColor = #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1)
-
-            default:
-                self.compactTabBar.selectedItem = self.tabBarItem(with: navigationItem.type, on: self.compactTabBar)
-            }
-        }
-
-        self.navigationDelegate.navigate(to: navigationItem)
+        guard let navigationType = PlayerNavigationItemType.init(rawValue: item.tag) else { return }
+        self.navigationDelegate.navigate(to: PlayerNavigationItem(playerViewController: self, type: navigationType))
     }
 }

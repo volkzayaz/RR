@@ -8,6 +8,7 @@
 
 import UIKit
 
+@IBDesignable
 class TabBarRegular: UITabBar {
 
     override var traitCollection: UITraitCollection {

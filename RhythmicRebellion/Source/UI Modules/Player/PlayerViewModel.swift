@@ -33,10 +33,12 @@ protocol PlayerViewModel: class {
     var canBackward: Bool { get }
     var canSetPlayerItemProgress: Bool { get }
 
+    var isArtistFollowed: Bool { get }
+
     func load(with delegate: PlayerViewModelDelegate)
 
-    func startObservePlayer()
-    func stopObservePlayer()
+    func startObserve()
+    func stopObserve()
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString
 
@@ -45,6 +47,7 @@ protocol PlayerViewModel: class {
     func forward()
     func backward()
     func setPlayerItemProgress(progress: Float)
+    func toggleArtistFollowing()
 }
 
 protocol PlayerViewModelDelegate: class {

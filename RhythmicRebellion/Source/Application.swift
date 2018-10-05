@@ -22,6 +22,7 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, didChange user: User)
     func application(_ application: Application, didChange listeningSettings: ListeningSettings)
     func application(_ application: Application, didChange profile: UserProfile)
+    func application(_ application: Application, didChange followedArtistsIds: [String])
 }
 
 extension ApplicationObserver {
@@ -30,6 +31,7 @@ extension ApplicationObserver {
     func application(_ application: Application, didChange user: User) { }
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
     func application(_ application: Application, didChange profile: UserProfile) { }
+    func application(_ application: Application, didChange followedArtistsIds: [String]) { }
 }
 
 class Application: Observable {
@@ -240,12 +242,12 @@ class Application: Observable {
                 guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
 
                 var nextFanUser = currentFanUser
-                nextFanUser.profile.updateForcedToPlay(with: trackForceToPlayState)
+                nextFanUser.profile.update(with: trackForceToPlayState)
                 self?.user = nextFanUser
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncForceToPlay(trackForceToPlayState: trackForceToPlayState))
 
-                completion?(.success(Array(fanUser.profile.forceToPlay)))
+                completion?(.success(Array(nextFanUser.profile.forceToPlay)))
 
             case .failure(let error):
                 completion?(.failure(error))
@@ -264,12 +266,60 @@ class Application: Observable {
                 guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
 
                 var nextFanUser = currentFanUser
-                nextFanUser.profile.updateForcedToPlay(with: trackForceToPlayState)
+                nextFanUser.profile.update(with: trackForceToPlayState)
                 self?.user = nextFanUser
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncForceToPlay(trackForceToPlayState: trackForceToPlayState))
 
-                completion?(.success(Array(fanUser.profile.forceToPlay)))
+                completion?(.success(Array(nextFanUser.profile.forceToPlay)))
+
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+
+    func follow(artist: Artist, completion: ((Result<[String]>) -> Void)? = nil) {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.restApiService.fanFollow(artist: artist) { [weak self] (followArtistResult) in
+
+            switch followArtistResult {
+            case .success(let artistFollowingState):
+                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
+
+                var nextFanUser = currentFanUser
+                nextFanUser.profile.update(with: artistFollowingState)
+                self?.user = nextFanUser
+
+                self?.webSocketService.sendCommand(command: WebSocketCommand.syncFollowing(artistFollowingState: artistFollowingState))
+
+                self?.notifyUserFollowedArtistsIdsChanged()
+                completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
+
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+
+    func unfollow(artist: Artist, completion: ((Result<[String]>) -> Void)? = nil) {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.restApiService.fanUnfollow(artist: artist) { [weak self] (unfollowArtistResult) in
+
+            switch unfollowArtistResult {
+            case .success(let artistFollowingState):
+                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
+
+                var nextFanUser = currentFanUser
+                nextFanUser.profile.update(with: artistFollowingState)
+                self?.user = nextFanUser
+
+                self?.webSocketService.sendCommand(command: WebSocketCommand.syncFollowing(artistFollowingState: artistFollowingState))
+
+                self?.notifyUserFollowedArtistsIdsChanged()
+                completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
 
             case .failure(let error):
                 completion?(.failure(error))
@@ -306,6 +356,13 @@ extension Application {
         })
     }
 
+    func notifyUserFollowedArtistsIdsChanged() {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChange: Array(fanUser.profile.followedArtistsIds))
+        })
+    }
 }
 
 extension Application: WebSocketServiceObserver {
@@ -324,7 +381,18 @@ extension Application: WebSocketServiceObserver {
         guard let currentFanUser = self.user as? FanUser else { return }
 
         var fanUser = currentFanUser
-        fanUser.profile.updateForcedToPlay(with: trackForceToPlayState)
+        fanUser.profile.update(with: trackForceToPlayState)
         self.user = fanUser
+    }
+
+    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) {
+
+        guard let currentFanUser = self.user as? FanUser else { return }
+
+        var fanUser = currentFanUser
+        fanUser.profile.update(with: artistFollowingState)
+        self.user = fanUser
+
+        self.notifyUserFollowedArtistsIdsChanged()
     }
 }
