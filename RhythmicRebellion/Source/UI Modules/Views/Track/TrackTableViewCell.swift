@@ -95,10 +95,10 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
             self.actionButtonContainerView.isHidden = true
             self.actionButtonConatinerViewTrailingConstraint.constant = -self.actionButtonContainerViewWidthConstraint.constant
 
-            let commingSoonLabel = UILabel()
-            commingSoonLabel.text = NSLocalizedString("Comming soon!", comment: "Comming soon text")
-            commingSoonLabel.textColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 1)
-            self.stackView.addArrangedSubview(commingSoonLabel)
+            let comingSoonLabel = UILabel()
+            comingSoonLabel.text = NSLocalizedString("Coming soon!", comment: "Coming soon text")
+            comingSoonLabel.textColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 1)
+            self.stackView.addArrangedSubview(comingSoonLabel)
 
         } else {
             self.actionButtonConatinerViewTrailingConstraint.constant = 0
