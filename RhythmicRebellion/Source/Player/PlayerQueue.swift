@@ -87,6 +87,13 @@ class PlayerQueue {
         }
     }
 
+    func reset() {
+        self.playerItem = nil
+        self.addons = nil
+
+        self.makeItems()
+    }
+
     func replace(playerItem: PlayerItem, addons: [Addon]? = nil) {
 
         self.playerItem = playerItem

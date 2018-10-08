@@ -1137,6 +1137,8 @@ extension Player: ApplicationObserver {
         self.state.initialized = false
         self.state.blocked = false
         self.playlist.resetAddons()
+        self.playerQueue.reset()
+        self.player.removeAllItems()
 
         self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
 
