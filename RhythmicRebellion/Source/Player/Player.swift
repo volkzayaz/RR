@@ -90,7 +90,7 @@ class Player: NSObject, Observable {
         guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized }
 
         switch currentQueueItem.content {
-        case .addon(_): return false
+        case .addon(let addon): return addon.type == .artistBIO || addon.type == .songCommentary
         case .track(_), .stub(_):
             guard let trackProgress = self.currentTrackState?.progress, trackProgress > 0.3 else { return self.state.initialized }
             return true
@@ -323,7 +323,7 @@ class Player: NSObject, Observable {
                 nextPlaylistItem.playlistLinkedItem != playlistItem.playlistLinkedItem else { return nil }
             currentPlaylistItem = nextPlaylistItem
             trackStubReason = self.stubReason(for: nextPlaylistItem.track)
-        } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile != nil)
+        } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile == nil)
 
         return currentPlaylistItem
     }
@@ -337,7 +337,7 @@ class Player: NSObject, Observable {
                 previousPlaylistItem.playlistLinkedItem != playlistItem.playlistLinkedItem else { return nil }
             currentPlaylistItem = previousPlaylistItem
             trackStubReason = self.stubReason(for: previousPlaylistItem.track)
-        } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile != nil)
+        } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile == nil)
 
         return currentPlaylistItem
     }
