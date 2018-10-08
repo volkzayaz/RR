@@ -36,7 +36,6 @@ class GenresSelectableListItemsDataProvider: SelectableListItemsDataProvider {
         self.additionalItems = additionalItems ?? []
 
         self.items = self.dataSource.genres
-        self.items.append(contentsOf: self.additionalItems)
     }
 
     func reload(completion: @escaping (Result<[Item]>) -> Void) {
@@ -45,7 +44,6 @@ class GenresSelectableListItemsDataProvider: SelectableListItemsDataProvider {
             switch genresResult {
             case .success(let genres):
                 self.items = genres
-                self.items.append(contentsOf: self.additionalItems)
 
                 completion(Result.success(self.items))
 
@@ -61,6 +59,16 @@ class GenresSelectableListItemsDataProvider: SelectableListItemsDataProvider {
     }
 
     var isEditable: Bool { return true }
+
+    func canAddItem(with name: String) -> Bool {
+        guard self.isEditable == true else { return false }
+        guard self.items.count > 0 else { return false }
+        guard name.isEmpty == false else { return false }
+
+        let filteredAdditionalItems = self.additionalItems.filter { $0.name.lowercased() == name.lowercased() }
+
+        return filteredAdditionalItems.isEmpty
+    }
 
     func addItem(with name: String) -> Item? {
         let genre = Genre(with: name)

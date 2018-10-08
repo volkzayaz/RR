@@ -36,7 +36,7 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
         self.additionalItems = additionalItems ?? []
 
         self.items = self.dataSource.hobbies
-        self.items.append(contentsOf: self.additionalItems)
+//        self.items.append(contentsOf: self.additionalItems)
     }
 
     func reload(completion: @escaping (Result<[Item]>) -> Void) {
@@ -45,7 +45,7 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
             switch hobbiesResult {
             case .success(let hobbies):
                 self.items = hobbies
-                self.items.append(contentsOf: self.additionalItems)
+//                self.items.append(contentsOf: self.additionalItems)
 
                 completion(Result.success(self.items))
 
@@ -61,6 +61,16 @@ class HobbiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
     }
 
     var isEditable: Bool { return true }
+
+    func canAddItem(with name: String) -> Bool {
+        guard self.isEditable == true else { return false }
+        guard self.items.count > 0 else { return false }
+        guard name.isEmpty == false else { return false }
+
+        let filteredAdditionalItems = self.additionalItems.filter { $0.name.lowercased() == name.lowercased() }
+
+        return filteredAdditionalItems.isEmpty
+    }
 
     func addItem(with name: String) -> Item? {
         let hobby = Hobby(with: name)

@@ -40,7 +40,8 @@ struct Genre: Codable {
 
 extension Genre: Equatable {
     static func == (lhs: Genre, rhs: Genre) -> Bool {
-        return lhs.id == rhs.id
+        guard let lhsId = lhs.id, let rhsId = rhs.id else { return lhs.name == rhs.name }
+        return lhsId == rhsId
     }
 }
 

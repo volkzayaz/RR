@@ -389,7 +389,26 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func set(hobbies: [Hobby]) {
-        self.delegate?.refreshHobbiesField(with: hobbies)
+
+        let currentItems = self.hobbiesField?.hobbies ?? []
+        var newItems = hobbies
+        var mergedItems = [Hobby]()
+
+        for currentItem in currentItems {
+            guard let currentGenreIndex = newItems.index(of: currentItem) else {
+                guard currentItem.id == nil else { continue }
+                mergedItems.append(currentItem);
+                continue
+            }
+
+            mergedItems.append(currentItem);
+            newItems.remove(at: currentGenreIndex)
+        }
+
+        mergedItems.append(contentsOf: newItems)
+
+
+        self.delegate?.refreshHobbiesField(with: mergedItems)
         self.validateField(self.hobbiesField)
     }
 
@@ -416,11 +435,13 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     func showHobbiesSelectableList() {
 
-        let userHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil }
+        let selectedHobbies = self.hobbiesField?.hobbies?.filter { $0.id != nil }
+        let additionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? []
+
 
         self.router?.showHobbiesSelectableList(dataSource: self,
-                                               selectedItems: self.hobbiesField?.hobbies,
-                                               additionalItems: userHobbies,
+                                               selectedItems: selectedHobbies,
+                                               additionalItems: additionalHobbies,
                                                selectionCallback: { [weak self] (hobbies) in
                                                     self?.set(hobbies: hobbies)
                                             })

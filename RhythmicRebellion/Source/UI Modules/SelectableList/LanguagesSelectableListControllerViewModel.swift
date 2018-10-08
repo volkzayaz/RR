@@ -52,6 +52,8 @@ class LanguagesSelectableListItemsDataProvider: SelectableListItemsDataProvider 
     }
 
     var isEditable: Bool { return false }
+    
+    func canAddItem(with name: String) -> Bool { return false }
     func addItem(with name: String) -> Language? { return nil }
 }
 

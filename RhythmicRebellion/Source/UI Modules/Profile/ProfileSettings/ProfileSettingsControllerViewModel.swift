@@ -406,12 +406,49 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func set(hobbies: [Hobby]) {
-        self.delegate?.refreshHobbiesField(with: hobbies)
+
+        let currentItems = self.hobbiesField?.hobbies ?? []
+        var newItems = hobbies
+        var mergedItems = [Hobby]()
+
+        for currentItem in currentItems {
+            guard let currentGenreIndex = newItems.index(of: currentItem) else {
+                guard currentItem.id == nil else { continue }
+                mergedItems.append(currentItem);
+                continue
+            }
+
+            mergedItems.append(currentItem);
+            newItems.remove(at: currentGenreIndex)
+        }
+
+        mergedItems.append(contentsOf: newItems)
+
+
+        self.delegate?.refreshHobbiesField(with: mergedItems)
         self.validateField(self.hobbiesField)
     }
 
     func set(genres: [Genre]) {
-        self.delegate?.refreshGenresField(with: genres)
+
+        let currentItems = self.genresField?.genres ?? []
+        var newItems = genres
+        var mergedItems = [Genre]()
+
+        for currentItem in currentItems {
+            guard let currentGenreIndex = newItems.index(of: currentItem) else {
+                guard currentItem.id == nil else { continue }
+                mergedItems.append(currentItem);
+                continue
+            }
+
+            mergedItems.append(currentItem);
+            newItems.remove(at: currentGenreIndex)
+        }
+
+        mergedItems.append(contentsOf: newItems)
+
+        self.delegate?.refreshGenresField(with: mergedItems)
         self.validateField(self.genresField)
     }
 
@@ -438,14 +475,11 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     func showHobbiesSelectableList() {
 
-        var additionalHobbiesSet = Set<Hobby>()
-        additionalHobbiesSet = additionalHobbiesSet.union(self.userProfile?.hobbies.filter { $0.id == nil } ?? [])
-        additionalHobbiesSet = additionalHobbiesSet.union(self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? [])
-
-        let additionalHobbies = Array(additionalHobbiesSet)
+        let selectedHobbies = self.hobbiesField?.hobbies?.filter { $0.id != nil }
+        let additionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? []
 
         self.router?.showHobbiesSelectableList(dataSource: self,
-                                               selectedItems: self.hobbiesField?.hobbies,
+                                               selectedItems: selectedHobbies,
                                                additionalItems: additionalHobbies,
                                                selectionCallback: { [weak self] (hobbies) in
                                                     self?.set(hobbies: hobbies)
@@ -454,14 +488,11 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     func showGenresSelectableList() {
 
-        var additionalGenresSet = Set<Genre>()
-        additionalGenresSet = additionalGenresSet.union(self.userProfile?.genres?.filter { $0.id == nil } ?? [])
-        additionalGenresSet = additionalGenresSet.union(self.genresField?.genres?.filter { $0.id == nil } ?? [])
-
-        let additionalGenres = Array(additionalGenresSet)
+        let selectedGenres = self.genresField?.genres?.filter { $0.id != nil }
+        let additionalGenres = self.genresField?.genres?.filter { $0.id == nil } ?? []
 
         self.router?.showGenresSelectableList(dataSource: self,
-                                              selectedItems: self.genresField?.genres,
+                                              selectedItems: selectedGenres,
                                               additionalItems: additionalGenres,
                                               selectionCallback: { [weak self] (genres) in
                                                     self?.set(genres: genres)
@@ -681,11 +712,6 @@ extension ProfileSettingsControllerViewModel {
             switch genresResult {
             case .success(let genres):
                 self?.genres = genres
-
-                if let selectedGenres = self?.genresField?.genres, selectedGenres.count > 0 {
-                    let filteredSelectedGenres = selectedGenres.filter( { return genres.contains($0) })
-                    self?.delegate?.refreshGenresField(with: filteredSelectedGenres)
-                }
                 completion(.success(genres))
             case .failure(let error):
                 completion(.failure(error))

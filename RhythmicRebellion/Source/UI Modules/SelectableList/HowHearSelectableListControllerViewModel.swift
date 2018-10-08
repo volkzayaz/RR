@@ -52,6 +52,8 @@ class HowHearSelectableListItemsDataProvider: SelectableListItemsDataProvider {
     }
 
     var isEditable: Bool { return false }
+
+    func canAddItem(with name: String) -> Bool { return false }
     func addItem(with name: String) -> HowHear? { return nil }
 }
 

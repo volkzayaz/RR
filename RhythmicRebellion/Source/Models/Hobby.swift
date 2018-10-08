@@ -40,7 +40,8 @@ struct Hobby: Codable {
 
 extension Hobby: Equatable {
     static func == (lhs: Hobby, rhs: Hobby) -> Bool {
-        return lhs.id == rhs.id
+        guard let lhsId = lhs.id, let rhsId = rhs.id else { return lhs.name == rhs.name }
+        return lhsId == rhsId
     }
 }
 

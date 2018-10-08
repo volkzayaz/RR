@@ -24,6 +24,8 @@ protocol SelectableListItemsDataProvider {
     func filterItems(items: [Item], with searchText: String) -> [Item]
 
     var isEditable: Bool { get }
+    
+    func canAddItem(with name: String) -> Bool
     func addItem(with name: String) -> Item?
 }
 
@@ -111,9 +113,7 @@ class SelectableListControllerViewModel<T: SelectableListItemsDataProvider>: Sel
         switch section {
         case .items: return self.filteredItems.count
         case .addNewItem:
-            return self.filteredItems.isEmpty &&
-                    !self.dataProvider.items.isEmpty &&
-                    !self.searchText.isEmpty ? 1 : 0
+            return self.filteredItems.isEmpty && self.dataProvider.canAddItem(with: self.searchText) ? 1 : 0
         }
     }
 
