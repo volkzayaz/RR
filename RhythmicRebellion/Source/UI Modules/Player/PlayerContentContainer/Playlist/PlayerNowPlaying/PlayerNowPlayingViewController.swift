@@ -88,7 +88,9 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
 
             switch action {
             case .showFoliaActions:
-                self.showActions(itemAt: path, sourceRect: trackItemTableViewCell.actionButton.frame, sourceView: trackItemTableViewCell)
+                self.showActions(itemAt: path,
+                                 sourceRect: trackItemTableViewCell.actionButton.frame,
+                                 sourceView: trackItemTableViewCell.actionButtonContainerView)
             }
         }
 

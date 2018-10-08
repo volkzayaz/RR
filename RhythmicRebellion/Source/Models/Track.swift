@@ -42,6 +42,7 @@ public struct Track: Codable {
     let isReleasedForFans: Bool
     let writer: TrackWriter
     let backingTrack: TrackAudioFile?
+    let price: Money?
 
     var previewType: TrackPreviewType { return TrackPreviewType(rawValue: self.previewTypeValue ?? 0) ?? .unknown }
     var isPlayable: Bool { return self.audioFile != nil }
@@ -70,6 +71,7 @@ public struct Track: Codable {
         case isReleasedForFans = "is_released_for_fans"
         case writer = "songwriter"
         case backingTrack = "backing_track"
+        case price
     }
 
     public init(from decoder: Decoder) throws {
@@ -106,6 +108,12 @@ public struct Track: Codable {
 
         self.writer = try container.decode(TrackWriter.self, forKey: .writer)
         self.backingTrack = try? container.decode(TrackAudioFile.self, forKey: .backingTrack)
+
+        if let priceValue = try container.decodeIfPresent(Decimal.self, forKey: .price) {
+            self.price = Money(value: priceValue, currency: .USD)
+        } else {
+            self.price = nil
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -140,6 +148,10 @@ public struct Track: Codable {
 
         try container.encode(self.writer, forKey: .writer)
         try container.encode(self.backingTrack, forKey: .backingTrack)
+
+        if let priceValue = self.price?.amount {
+            try container.encode(priceValue, forKey: .price)
+        }
     }
 }
 

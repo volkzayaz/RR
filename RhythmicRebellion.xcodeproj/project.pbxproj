@@ -12,6 +12,7 @@
 		7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD520FF471300D90D73 /* SignUpViewController.swift */; };
 		7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD620FF471300D90D73 /* SignUpViewModel.swift */; };
 		760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760D793A210871FB00FD8D46 /* RestApiRequestPayloads.swift */; };
+		761873BC2167ACCD00F3997F /* Price.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761873BB2167ACCD00F3997F /* Price.swift */; };
 		761B6CB220EA75DE0019A71D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */; };
 		762271A3213D33E60018689E /* TextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762271A2213D33E60018689E /* TextFields.swift */; };
 		762271A8213D8D510018689E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762271A7213D8D510018689E /* Location.swift */; };
@@ -124,6 +125,7 @@
 		767BA57A21119B6500C390D8 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767BA57921119B6500C390D8 /* GradientView.swift */; };
 		767BA57D2111A15400C390D8 /* PlaylistItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767BA57C2111A15400C390D8 /* PlaylistItemViewModel.swift */; };
 		767BA57F2111AEEC00C390D8 /* CellIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767BA57E2111AEEC00C390D8 /* CellIdentifiable.swift */; };
+		768486E8216B4C51000D0F79 /* MoneyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768486E7216B4C51000D0F79 /* MoneyFormatter.swift */; };
 		7686D4DB21660D2A0001B061 /* VerticalButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7686D4DA21660D2A0001B061 /* VerticalButton.swift */; };
 		768EC2C820F4EBD000629F1B /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */; };
 		768EC2CB20F4FB1000629F1B /* Addon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768EC2CA20F4FB1000629F1B /* Addon.swift */; };
@@ -226,6 +228,7 @@
 		7606BDD520FF471300D90D73 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		7606BDD620FF471300D90D73 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		760D793A210871FB00FD8D46 /* RestApiRequestPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiRequestPayloads.swift; sourceTree = "<group>"; };
+		761873BB2167ACCD00F3997F /* Price.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Price.swift; sourceTree = "<group>"; };
 		761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		762271A2213D33E60018689E /* TextFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFields.swift; sourceTree = "<group>"; };
 		762271A7213D8D510018689E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -338,6 +341,7 @@
 		767BA57921119B6500C390D8 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		767BA57C2111A15400C390D8 /* PlaylistItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemViewModel.swift; sourceTree = "<group>"; };
 		767BA57E2111AEEC00C390D8 /* CellIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellIdentifiable.swift; sourceTree = "<group>"; };
+		768486E7216B4C51000D0F79 /* MoneyFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFormatter.swift; sourceTree = "<group>"; };
 		7686D4DA21660D2A0001B061 /* VerticalButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalButton.swift; sourceTree = "<group>"; };
 		768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		768EC2CA20F4FB1000629F1B /* Addon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Addon.swift; sourceTree = "<group>"; };
@@ -479,6 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				763170F0215BA3390053C719 /* TrackPreviewOptionsImageGenerator.swift */,
+				768486E7216B4C51000D0F79 /* MoneyFormatter.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -684,6 +689,7 @@
 				76E9D86D214FE03800873A7C /* PlayerConfig.swift */,
 				76347842215A5939001F85F6 /* TrackForceToPlayState.swift */,
 				762A240D2164C71D007FA1C1 /* ArtistFollowingState.swift */,
+				761873BB2167ACCD00F3997F /* Price.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1344,6 +1350,7 @@
 				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
 				7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */,
 				7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */,
+				761873BC2167ACCD00F3997F /* Price.swift in Sources */,
 				76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */,
 				769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */,
 				7665E81F2105DB22007D8B98 /* ListeningSettings.swift in Sources */,
@@ -1451,6 +1458,7 @@
 				76EDBD1B20F796FF0021297F /* WebSocketServiceError.swift in Sources */,
 				768EC2CB20F4FB1000629F1B /* Addon.swift in Sources */,
 				769F4EBE210B6706000DD23B /* PromoRouter.swift in Sources */,
+				768486E8216B4C51000D0F79 /* MoneyFormatter.swift in Sources */,
 				7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */,
 				76C821A821425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift in Sources */,
 				AB14237421246AD500C926F5 /* CreatePlaylistTableViewCell.swift in Sources */,

@@ -18,6 +18,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     private(set) weak var application: Application?
     private(set) weak var player: Player?
     private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
+    private(set) var trackPriceFormatter: MoneyFormatter
 
     private var playlistItems: [PlayerPlaylistItem] = [PlayerPlaylistItem]()
 
@@ -28,6 +29,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.application = application
         self.player = player
         self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
+        self.trackPriceFormatter = MoneyFormatter()
     }
 
     func load(with delegate: PlayerNowPlayingViewModelDelegate) {
@@ -138,8 +140,12 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         guard indexPath.row < self.playlistItems.count else { return nil }
         let playlistItem = self.playlistItems[indexPath.row]
 
-        let filteredTrackActionsTypes = TrackActionsViewModels.allActionsTypes.filter {
+        var filteredTrackActionsTypes = TrackActionsViewModels.allActionsTypes.filter {
             return self.isAction(with: $0, availableFor: playlistItem)
+        }
+
+        if let trackPrice = playlistItem.track.price, let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
+            filteredTrackActionsTypes.append(.addToCart(trackPriceString))
         }
 
         guard filteredTrackActionsTypes.count > 0 else { return nil }

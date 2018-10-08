@@ -50,6 +50,7 @@ enum TrackActionsViewModels {
             case toPlaylist
             case delete
             case cancel
+            case addToCart(String)
         }
 
         let type: ActionType
@@ -69,6 +70,9 @@ enum TrackActionsViewModels {
             case .playLast: return NSLocalizedString("Play Last", comment: "playLast track action title")
             case .replaceCurrent: return NSLocalizedString("Replace current", comment: "Replace current track action title")
             case .toPlaylist: return NSLocalizedString("To Playlist", comment: "To Playlist track action title")
+            case .addToCart(let priceStringValue):
+                let titleFormat = NSLocalizedString("Add To Cart %@", comment: "Add To Cart track action title format")
+                return String(format: titleFormat, priceStringValue)
             case .delete: return NSLocalizedString("Delete", comment: "Delete track action title")
             case .cancel: return NSLocalizedString("Cancel", comment: "Cancel action title")
             }
