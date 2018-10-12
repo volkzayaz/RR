@@ -12,6 +12,7 @@ pod 'MaterialTextField', '~> 1.0'
 pod 'MBProgressHUD', '~> 1.1.0'
 pod 'CloudTagView', '~> 3.0.0'
 pod 'NSStringMask'
+pod 'DownloadButton'
 
 end
 

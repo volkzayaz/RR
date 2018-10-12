@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+
 struct TrackViewModel: TrackTableViewCellViewModel {
 
     var id: String { return String(track.id) }
@@ -23,5 +25,7 @@ struct TrackViewModel: TrackTableViewCellViewModel {
 
     var isCensorship: Bool
     var previewOptionsImage: UIImage?
+
+    var downloadState: TrackDownloadState?
 
 }

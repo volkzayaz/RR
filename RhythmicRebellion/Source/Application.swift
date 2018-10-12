@@ -55,6 +55,8 @@ class Application: Observable {
     private let restApiServiceReachability: Reachability?
     private let webSocketServiceReachability: Reachability?
 
+    let audioFileLocalStorageService: AudioFileLocalStorageService
+
     var user: User? = nil
     var config: Config?
 
@@ -63,6 +65,8 @@ class Application: Observable {
 
         self.restApiService = restApiService
         self.webSocketService = webSocketService
+
+        self.audioFileLocalStorageService = AudioFileLocalStorageService()
 
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
         self.webSocketServiceReachability = Reachability(hostname: webSocketService.webSocketURL.host!)

@@ -23,6 +23,7 @@ public protocol User: Decodable {
     func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason?
 
     func isFollower(for artist: Artist) -> Bool
+    func hasPurchase(for track: Track) -> Bool
 }
 
 //func == (lhs: User, rhs: User) -> Bool {
@@ -54,6 +55,10 @@ struct GuestUser: User {
     func isFollower(for artist: Artist) -> Bool {
         return false
     }
+
+    func hasPurchase(for track: Track) -> Bool {
+        return false
+    }
 }
 
 struct UserProfile: Decodable {
@@ -72,7 +77,7 @@ struct UserProfile: Decodable {
     var language: String?
     var forceToPlay: Set<Int>
     var followedArtistsIds: Set<String>
-//    var purchasedTracksIds: [Int]
+    var purchasedTracksIds: Set<Int>
 
     var listeningSettings: ListeningSettings
 
@@ -92,6 +97,7 @@ struct UserProfile: Decodable {
         case forceToPlay = "force_to_play"
         case listeningSettings = "listening_settings"
         case followedArtistsIds = "artists_followed"
+        case purchasedTracksIds = "purchased_tracks_ids"
     }
 
     init(from decoder: Decoder) throws {
@@ -131,6 +137,8 @@ struct UserProfile: Decodable {
         } else {
             self.followedArtistsIds = Set<String>()
         }
+
+        self.purchasedTracksIds = try container.decode(Set<Int>.self, forKey: .purchasedTracksIds)
     }
 
     mutating func update(with trackForceToPlayState: TrackForceToPlayState) {
@@ -198,6 +206,9 @@ struct FanUser: User {
         return self.profile.followedArtistsIds.contains(artist.id)
     }
 
+    func hasPurchase(for track: Track) -> Bool {
+        return self.profile.purchasedTracksIds.contains(track.id)
+    }
 }
 
 extension FanUser: Equatable {

@@ -84,13 +84,15 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
         let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
 
         trackItemTableViewCell.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
-            guard let trackItemTableViewCell = trackItemTableViewCell, let path = tableView?.indexPath(for: trackItemTableViewCell) else { return }
+            guard let trackItemTableViewCell = trackItemTableViewCell, let indexPath = tableView?.indexPath(for: trackItemTableViewCell) else { return }
 
             switch action {
-            case .showFoliaActions:
-                self.showActions(itemAt: path,
+            case .showActions:
+                self.showActions(itemAt: indexPath,
                                  sourceRect: trackItemTableViewCell.actionButton.frame,
                                  sourceView: trackItemTableViewCell.actionButtonContainerView)
+            case .download: self.viewModel.downloadObject(at: indexPath)
+            case .cancelDownloading: self.viewModel.cancelDownloadingObject(at: indexPath)
             }
         }
 
@@ -135,4 +137,7 @@ extension PlayerNowPlayingViewController: PlayerNowPlayingViewModelDelegate {
         self.refreshUI()
     }
 
+    func reloadObjects(at indexPaths: [IndexPath]) {
+        self.tableView.reloadRows(at: indexPaths, with: .none)
+    }
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14270.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -70,13 +70,21 @@
                         </constraints>
                     </view>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="40H-JG-Yd1">
-                        <rect key="frame" x="446" y="-3.5" width="0.0" height="50.5"/>
+                        <rect key="frame" x="360" y="11" width="86" height="22"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zew-KL-CK3" customClass="PKDownloadButton">
+                                <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="22" id="7Bc-We-XnP"/>
+                                    <constraint firstAttribute="width" secondItem="Zew-KL-CK3" secondAttribute="height" multiplier="1:1" id="VEX-ec-Lue"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fNe-7s-6Ma" customClass="RoundedView" customModule="RhythmicRebellion" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="50.5" height="50.5"/>
+                                <rect key="frame" x="32" y="0.0" width="22" height="22"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ExclamationMark" translatesAutoresizingMaskIntoConstraints="NO" id="tyC-hx-0co">
-                                        <rect key="frame" x="22.5" y="13" width="6" height="25"/>
+                                        <rect key="frame" x="8" y="2" width="6" height="18"/>
                                         <color key="tintColor" red="0.74509803921568629" green="0.78431372549019607" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
                                 </subviews>
@@ -93,7 +101,7 @@
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ExclamationMark" translatesAutoresizingMaskIntoConstraints="NO" id="RAU-0B-fEq">
-                                <rect key="frame" x="-22" y="0.0" width="22" height="50.5"/>
+                                <rect key="frame" x="64" y="0.0" width="22" height="22"/>
                                 <color key="tintColor" red="0.83529411764705885" green="0.56470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="22" id="bzY-K9-hLu"/>
@@ -103,6 +111,11 @@
                         <constraints>
                             <constraint firstAttribute="width" id="bhP-un-z2V"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="bhP-un-z2V"/>
+                            </mask>
+                        </variation>
                     </stackView>
                 </subviews>
                 <constraints>
@@ -129,6 +142,7 @@
                 <outlet property="actionButtonContainerViewWidthConstraint" destination="QAn-bb-HTS" id="r7r-sD-ZIP"/>
                 <outlet property="censorshipMarkImageView" destination="RAU-0B-fEq" id="TT3-nC-Csl"/>
                 <outlet property="descriptionLabel" destination="8hB-Ji-Kgi" id="c9N-lw-Ndn"/>
+                <outlet property="downloadButton" destination="Zew-KL-CK3" id="DVT-5g-JF3"/>
                 <outlet property="equalizer" destination="yJ1-MD-eZX" id="2J6-6q-TGR"/>
                 <outlet property="equalizerLeadingConstraint" destination="vcC-6o-2m2" id="hSf-Hg-GGw"/>
                 <outlet property="equalizerWidthConstraint" destination="isf-5r-umP" id="Tbr-71-UOY"/>
@@ -139,6 +153,7 @@
                 <outlet property="stackViewWidthConstraint" destination="bhP-un-z2V" id="gHT-Bn-RBM"/>
                 <outlet property="titleLabel" destination="QEy-wo-Squ" id="hO8-R9-l8R"/>
             </connections>
+            <point key="canvasLocation" x="140.80000000000001" y="148.42578710644679"/>
         </tableViewCell>
     </objects>
     <resources>

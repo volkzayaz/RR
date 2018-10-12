@@ -17,6 +17,8 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     private(set) weak var router: PlayerNowPlayingRouter?
     private(set) weak var application: Application?
     private(set) weak var player: Player?
+    private(set) weak var audioFileLocalStorageService: AudioFileLocalStorageService?
+
     private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
     private(set) var trackPriceFormatter: MoneyFormatter
 
@@ -24,10 +26,11 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: PlayerNowPlayingRouter, application: Application, player: Player) {
+    init(router: PlayerNowPlayingRouter, application: Application, player: Player, audioFileLocalStorageService: AudioFileLocalStorageService) {
         self.router = router
         self.application = application
         self.player = player
+        self.audioFileLocalStorageService = audioFileLocalStorageService
         self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
         self.trackPriceFormatter = MoneyFormatter()
     }
@@ -37,6 +40,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
         self.loadTracks()
         self.player?.addObserver(self)
+        self.audioFileLocalStorageService?.addObserver(self)
     }
 
     func loadTracks() {
@@ -69,7 +73,22 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
             isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
         }
 
-        return TrackViewModel(track: playlistItem.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage)
+        var downloadState: TrackDownloadState? = nil
+        let userHasPurchase = self.application?.user?.hasPurchase(for: playlistItem.track) ?? false
+        if playlistItem.track.isFollowAllowFreeDownload || userHasPurchase {
+            downloadState = .disable
+            if userHasPurchase || self.application?.user?.isFollower(for: playlistItem.track.artist) ?? false {
+                downloadState = .ready
+                if let audioFile = playlistItem.track.audioFile, let state = self.audioFileLocalStorageService?.state(for: audioFile) {
+                    switch state {
+                    case .downloaded( _ ): downloadState = .downloaded
+                    case .downloading(_, let progress): downloadState = .downloading(progress)
+                    }
+                }
+            }
+        }
+
+        return TrackViewModel(track: playlistItem.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage, downloadState: downloadState)
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -159,6 +178,18 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
                                                 actions: trackActions)
 
     }
+
+    func downloadObject(at indexPath: IndexPath) {
+        guard indexPath.item < self.playlistItems.count, let trackAudioFile = self.playlistItems[indexPath.item].track.audioFile else { return }
+
+        self.audioFileLocalStorageService?.download(trackAudioFile: trackAudioFile)
+    }
+
+    func cancelDownloadingObject(at indexPath: IndexPath) {
+        guard indexPath.item < self.playlistItems.count, let trackAudioFile = self.playlistItems[indexPath.item].track.audioFile else { return }
+
+        self.audioFileLocalStorageService?.cancelDownloading(for: trackAudioFile)
+    }
 }
 
 
@@ -182,5 +213,49 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
     
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {
         self.delegate?.reloadUI()
+    }
+}
+
+extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObserver {
+
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFile: TrackAudioFile) {
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, playlistItem) in self.playlistItems.enumerated() {
+            guard let audioFile = playlistItem.track.audioFile, audioFile.id == trackAudioFile.id else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
+    }
+
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFile: TrackAudioFile) {
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, playlistItem) in self.playlistItems.enumerated() {
+            guard let audioFile = playlistItem.track.audioFile, audioFile.id == trackAudioFile.id else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
+    }
+
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFile: TrackAudioFile) {
+        var indexPaths: [IndexPath] = []
+
+        for (index, playlistItem) in self.playlistItems.enumerated() {
+            guard let audioFile = playlistItem.track.audioFile, audioFile.id == trackAudioFile.id else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
     }
 }

@@ -7,6 +7,15 @@
 //
 
 import UIKit
+import DownloadButton
+
+
+enum TrackDownloadState {
+    case disable
+    case ready
+    case downloading(Progress)
+    case downloaded
+}
 
 protocol TrackTableViewCellViewModel {
 
@@ -20,6 +29,8 @@ protocol TrackTableViewCellViewModel {
 
     var isCensorship: Bool { get }
     var previewOptionsImage: UIImage? { get }
+
+    var downloadState: TrackDownloadState? { get }
 }
 
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
@@ -27,7 +38,9 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     typealias ActionCallback = (Actions) -> Void
 
     enum Actions {
-        case showFoliaActions
+        case showActions
+        case download
+        case cancelDownloading
     }
 
     static let identifier = "TrackTableViewCellIdentifier"
@@ -49,6 +62,11 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     @IBOutlet var previewOptionsImageViewContainer: RoundedView!
     @IBOutlet weak var previewOptionsImageView: UIImageView!
 
+    @IBOutlet var downloadButton: PKDownloadButton!
+    var isDownloadAllowed: Bool = false
+    var progressObserver: NSKeyValueObservation?
+
+
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
     
@@ -63,6 +81,13 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
         self.previewOptionsImageViewContainer.layer.borderWidth = 0.65
         self.previewOptionsImageViewContainer.layer.borderColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+
+        self.downloadButton.delegate = self
+        self.downloadButton.startDownloadButton.cleanDefaultAppearance()
+        self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+        self.downloadButton.stopDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+        self.downloadButton.downloadedButton.cleanDefaultAppearance()
+        self.downloadButton.downloadedButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
     }
 
     func prepareToDisplay(viewModel: TrackTableViewCellViewModel) {
@@ -76,6 +101,9 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     }
         
     func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
+
+        self.progressObserver = nil
+        self.downloadButton.state = .startDownload
 
         self.viewModelId = viewModel.id
         if viewModel.isCurrentInPlayer && viewModel.isPlayable {
@@ -109,6 +137,38 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                 self.stackView.addArrangedSubview(self.censorshipMarkImageView)
             }
 
+            if let downloadState = viewModel.downloadState {
+                switch downloadState {
+                case .disable:
+                    self.isDownloadAllowed = false
+                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Follow")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.state = .startDownload
+                case .ready:
+                    self.isDownloadAllowed = true
+                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                case .downloading(let progress):
+                    self.isDownloadAllowed = true
+                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.state = .downloading
+
+                    self.progressObserver = progress.observe(\.fractionCompleted) { (pobject, _) in
+                        let value = pobject.fractionCompleted
+                        DispatchQueue.main.async {
+                            self.downloadButton.stopDownloadButton.progress = CGFloat(value)
+                        }
+                    }
+                case .downloaded:
+                    self.isDownloadAllowed = true
+                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.downloadedButton.setImage(UIImage(named: "OpenIn")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.state = .downloaded
+                }
+
+                self.stackView.addArrangedSubview(self.downloadButton)
+            } else {
+                self.isDownloadAllowed = false
+            }
+
             self.stackView.addArrangedSubview(self.previewOptionsImageViewContainer)
             self.previewOptionsImageView.image = viewModel.previewOptionsImage?.withRenderingMode(.alwaysTemplate)
         }
@@ -128,6 +188,29 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     // MARK: - Actions -
 
     @IBAction func onActionButton(sender: UIButton) {
-        actionCallback?(.showFoliaActions)
+        actionCallback?(.showActions)
     }
+}
+
+
+extension TrackTableViewCell: PKDownloadButtonDelegate {
+
+    func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
+
+        guard self.isDownloadAllowed == true else { return }
+
+        switch state {
+        case .startDownload:
+            self.downloadButton.state = .pending
+            actionCallback?(.download)
+        case .pending:
+            break
+        case .downloading:
+            self.downloadButton.state = .startDownload
+            actionCallback?(.cancelDownloading)
+        case .downloaded:
+            print("OpenIn for track")
+        }
+    }
+
 }

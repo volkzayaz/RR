@@ -10,6 +10,7 @@
 import UIKit
 
 protocol AppRouter: FlowRouter {
+    var dependencies: RouterDependencies { get }
 }
 
 final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {

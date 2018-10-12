@@ -20,10 +20,15 @@ protocol PlaylistContentViewModel: class {
     func object(at indexPath: IndexPath) -> TrackViewModel?
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
     func selectObject(at indexPath: IndexPath)
+
+    func downloadObject(at indexPath: IndexPath)
+    func cancelDownloadingObject(at indexPath: IndexPath)
 }
 
 protocol PlaylistContentViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()
+
+    func reloadObjects(at indexPaths: [IndexPath])
 }

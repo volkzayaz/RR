@@ -20,11 +20,16 @@ protocol PlayerNowPlayingViewModel: class {
     
     func selectObject(at indexPath: IndexPath)
     func perform(action : PlayerNowPlayingTableHeaderView.Actions)
+
+    func downloadObject(at indexPath: IndexPath)
+    func cancelDownloadingObject(at indexPath: IndexPath)
 }
 
 protocol PlayerNowPlayingViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()
+
+    func reloadObjects(at indexPaths: [IndexPath])
 
 }

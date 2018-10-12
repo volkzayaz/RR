@@ -63,6 +63,7 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
                                                     application: self.dependencies.application,
                                                     player: self.dependencies.player,
                                                     restApiService: self.dependencies.restApiService,
+                                                    audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService,
                                                     playlist: playlist)
 
         controller.configure(viewModel: vm, router: self)

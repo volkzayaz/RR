@@ -67,8 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.appRouter = defaultAppRouter
         }
 
-
-
         return self.appRouter != nil
     }
 
@@ -98,6 +96,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
 
+        guard self.appRouter?.dependencies.application.audioFileLocalStorageService.downloadSessionIdentifier == identifier else { return }
+
+        self.appRouter?.dependencies.application.audioFileLocalStorageService.downloadSessionBackgroundCompletionHandler = completionHandler
+    }
 }
 
