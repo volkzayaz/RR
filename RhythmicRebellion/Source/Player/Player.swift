@@ -1302,15 +1302,16 @@ extension Player {
     var playlistItems: [PlayerPlaylistItem] { return self.playlist.orderedPlaylistItems }
 
     private func performAdd(track: Track, to playlistPosition: PlaylistPosition, completion: ((PlayerPlaylistItem?, Error?) -> Void)?) {
-        guard let currentPlaylistLinkedItem = self.playerQueue.playerItem?.playlistItem.playlistLinkedItem ?? self.playlist.firstPlaylistLinkedItem else { return }
-        
         switch playlistPosition {
         case .next:
-            var previousPlaylistLinkedItem = self.playlist.previousPlaylistLinkedItem(for: currentPlaylistLinkedItem)
-            var nextPlaylistLinkedItem = self.playlist.nextPlaylistLinkedItem(for: currentPlaylistLinkedItem)
+            var nextPlaylistLinkedItem: PlayerPlaylistLinkedItem? = nil
+            var previousPlaylistLinkedItem = self.playerQueue.playerItem?.playlistItem.playlistLinkedItem ?? self.playlist.firstPlaylistLinkedItem
+            if let previousPlaylistLinkedItem = previousPlaylistLinkedItem {
+                nextPlaylistLinkedItem = self.playlist.nextPlaylistLinkedItem(for: previousPlaylistLinkedItem)
+            }
             var trackPlaylistLinkedItem = self.playlist.makePlaylistLinkedItem(for: track)
 
-            previousPlaylistLinkedItem!.nextKey = trackPlaylistLinkedItem.key
+            previousPlaylistLinkedItem?.nextKey = trackPlaylistLinkedItem.key
             trackPlaylistLinkedItem.previousKey = previousPlaylistLinkedItem?.key
 
             trackPlaylistLinkedItem.nextKey = nextPlaylistLinkedItem?.key
@@ -1333,14 +1334,14 @@ extension Player {
 
         case .last:
             var previousPlaylistLinkedItem = self.playlist.lastPlaylistLinkedItem
-            guard previousPlaylistLinkedItem != nil else { completion?(nil, nil); return } //Maybe we should add some error here
             var trackPlaylistLinkedItem = self.playlist.makePlaylistLinkedItem(for: track)
 
-            previousPlaylistLinkedItem!.nextKey = trackPlaylistLinkedItem.key
+            previousPlaylistLinkedItem?.nextKey = trackPlaylistLinkedItem.key
             trackPlaylistLinkedItem.previousKey = previousPlaylistLinkedItem?.key
 
-            let playlistLinkedItems: [String: PlayerPlaylistLinkedItem] = [previousPlaylistLinkedItem!.key : previousPlaylistLinkedItem!,
-                                                                           trackPlaylistLinkedItem.key : trackPlaylistLinkedItem]
+            var playlistLinkedItems: [String: PlayerPlaylistLinkedItem] = [String: PlayerPlaylistLinkedItem]()
+            if previousPlaylistLinkedItem != nil { playlistLinkedItems[previousPlaylistLinkedItem!.key] = previousPlaylistLinkedItem }
+            playlistLinkedItems[trackPlaylistLinkedItem.key] = trackPlaylistLinkedItem
 
             self.updatePlaylist(playlistLinkedItems: playlistLinkedItems) { [weak self] (error) in
                 guard error == nil else { completion?(nil, error); return }
