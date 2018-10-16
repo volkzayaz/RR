@@ -443,7 +443,8 @@ class Player: NSObject, Observable {
 
     func restrictedTime(for track: Track) -> TimeInterval? {
         guard track.isFreeForPlaylist == false else { return nil }
-        guard let _ = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
+        guard let fanUser = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
+        guard fanUser.hasPurchase(for: track) == false else { return nil }
 
         switch track.previewType {
         case .full:
@@ -1083,7 +1084,8 @@ extension Player: WebSocketServiceObserver {
             currentPlayerItem.restrictedTime == nil,
             let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id],
             let trackMaxPlayMSeconds = currentPlayerItem.trackMaxPlayMSeconds,
-            currentTrackTotalPlayMSeconds > trackMaxPlayMSeconds {
+            currentTrackTotalPlayMSeconds > trackMaxPlayMSeconds,
+            self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false {
 
             self.playForward()
         }

@@ -164,7 +164,10 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
             return self.isAction(with: $0, availableFor: playlistItem)
         }
 
-        if let trackPrice = playlistItem.track.price, let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
+        if self.application?.user?.hasPurchase(for: playlistItem.track) == false,
+            let trackPrice = playlistItem.track.price,
+            let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
+
             filteredTrackActionsTypes.append(.addToCart(trackPriceString))
         }
 

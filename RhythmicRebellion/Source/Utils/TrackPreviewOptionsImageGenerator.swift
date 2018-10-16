@@ -22,7 +22,8 @@ class TrackPreviewOptionsImageGenerator {
     func image(for track: Track, trackTotalPlayMSeconds: UInt64?, user: User?) -> UIImage? {
 
         guard track.isFreeForPlaylist == false else { return UIImage(named: "InfinityMark") }
-        guard let _ = user as? FanUser else { return self.guestImage(for: track) }
+        guard let fanUser = user as? FanUser else { return self.guestImage(for: track) }
+        guard fanUser.hasPurchase(for: track) == false else { return UIImage(named: "InfinityMark") }
 
 
         switch track.previewType {

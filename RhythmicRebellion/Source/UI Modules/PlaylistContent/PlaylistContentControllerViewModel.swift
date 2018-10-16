@@ -195,7 +195,10 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
             return self.isAction(with: $0, availableFor: track)
         }
 
-        if let trackPrice = track.price, let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
+        if self.application?.user?.hasPurchase(for: track) == false,
+            let trackPrice = track.price,
+            let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
+
             filteredTrackActionsTypes.append(.addToCart(trackPriceString))
         }
 
