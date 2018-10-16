@@ -4,7 +4,7 @@ use_frameworks!
 target 'RhythmicRebellion' do
 
 pod 'ReachabilitySwift'
-pod 'Starscream', '~> 3.0.2'
+pod 'Starscream', '3.0.5'
 pod 'Alamofire', '~> 4.7'
 pod 'AlamofireImage', '~> 3.3'
 pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', :branch => 'master'

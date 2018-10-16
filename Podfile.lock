@@ -8,7 +8,7 @@ PODS:
   - MBProgressHUD (1.1.0)
   - NSStringMask (1.2.2)
   - ReachabilitySwift (4.3.0)
-  - Starscream (3.0.6)
+  - Starscream (3.0.5)
   - SwiftValidator (4.0.0)
 
 DEPENDENCIES:
@@ -20,7 +20,7 @@ DEPENDENCIES:
   - MBProgressHUD (~> 1.1.0)
   - NSStringMask
   - ReachabilitySwift
-  - Starscream (~> 3.0.2)
+  - Starscream (= 3.0.5)
   - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, branch `master`)
 
 SPEC REPOS:
@@ -54,9 +54,9 @@ SPEC CHECKSUMS:
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   NSStringMask: c0969955b28c4286418197696469665d9dcba313
   ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
-  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
 
-PODFILE CHECKSUM: 9bb04ecab12de49b7bd16f9d7d5fd6d4c76418e2
+PODFILE CHECKSUM: 5d85cd218425876a9d4163b079c73f18f4be011d
 
 COCOAPODS: 1.5.3
