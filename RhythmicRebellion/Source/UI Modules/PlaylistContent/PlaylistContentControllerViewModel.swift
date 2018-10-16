@@ -138,6 +138,9 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .delete: return self.playlist.isFanPlaylist
         case .replaceCurrent: return false
+        case .addToCart(_):
+            guard let fanUser = self.application?.user as? FanUser else { return false }
+            return fanUser.hasPurchase(for: track) == false
         default: return true
         }
     }
@@ -191,15 +194,14 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         guard indexPath.row < playlistTracks.count else { return nil }
         let track = playlistTracks[indexPath.row]
 
-        var filteredTrackActionsTypes = TrackActionsViewModels.allActionsTypes.filter {
-            return self.isAction(with: $0, availableFor: track)
+        var trackActionsTypes = TrackActionsViewModels.allActionsTypes
+        if  let trackPrice = track.price,
+            let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
+            trackActionsTypes.append(.addToCart(trackPriceString))
         }
 
-        if self.application?.user?.hasPurchase(for: track) == false,
-            let trackPrice = track.price,
-            let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
-
-            filteredTrackActionsTypes.append(.addToCart(trackPriceString))
+        let filteredTrackActionsTypes = trackActionsTypes.filter {
+            return self.isAction(with: $0, availableFor: track)
         }
 
         guard filteredTrackActionsTypes.count > 0 else { return nil }
