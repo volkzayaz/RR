@@ -96,6 +96,7 @@ final class ProfileSettingsViewController: UIViewController {
         super.viewDidLoad()
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "BackButton"), style: .plain, target: self, action: #selector(onBack(sender:)))
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         self.firstnameTextField.textColor = self.viewModel.defaultTextColor
         self.firstnameTextField.placeholderAnimatesOnFocus = true
