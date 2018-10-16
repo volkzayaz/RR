@@ -41,6 +41,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         case showActions
         case download
         case cancelDownloading
+        case openIn
     }
 
     static let identifier = "TrackTableViewCellIdentifier"
@@ -209,7 +210,7 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
             self.downloadButton.state = .startDownload
             actionCallback?(.cancelDownloading)
         case .downloaded:
-            print("OpenIn for track")
+            actionCallback?(.openIn)
         }
     }
 

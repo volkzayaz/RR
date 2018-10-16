@@ -83,6 +83,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
                     switch state {
                     case .downloaded( _ ): downloadState = .downloaded
                     case .downloading(_, let progress): downloadState = .downloading(progress)
+                    case .unknown: break
                     }
                 }
             }
@@ -189,6 +190,16 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         guard indexPath.item < self.playlistItems.count, let trackAudioFile = self.playlistItems[indexPath.item].track.audioFile else { return }
 
         self.audioFileLocalStorageService?.cancelDownloading(for: trackAudioFile)
+    }
+
+    func objectLoaclURL(at indexPath: IndexPath) -> URL? {
+        guard indexPath.item < self.playlistItems.count, let trackAudioFile = self.playlistItems[indexPath.item].track.audioFile,
+            let state = self.audioFileLocalStorageService?.state(for: trackAudioFile) else { return nil }
+
+        switch state {
+        case .downloaded(let localURL): return localURL
+        default: return nil
+        }
     }
 }
 

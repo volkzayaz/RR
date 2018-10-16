@@ -23,6 +23,7 @@ protocol PlaylistContentViewModel: class {
 
     func downloadObject(at indexPath: IndexPath)
     func cancelDownloadingObject(at indexPath: IndexPath)
+    func objectLoaclURL(at indexPath: IndexPath) -> URL?
 }
 
 protocol PlaylistContentViewModelDelegate: class, ErrorPresenting {

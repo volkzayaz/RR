@@ -61,6 +61,18 @@ final class PlayerNowPlayingViewController: UIViewController {
         self.present(actionSheet, animated: true, completion: nil)
     }
 
+    func showOpenIn(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
+
+        guard let downloadedURL = self.viewModel.objectLoaclURL(at: indexPath) else { return }
+
+        let activityViewController = UIActivityViewController(activityItems: [downloadedURL], applicationActivities: nil)
+
+        activityViewController.popoverPresentationController?.sourceView = sourceView
+        activityViewController.popoverPresentationController?.sourceRect = sourceRect
+
+        self.present(activityViewController, animated: true, completion: nil)
+    }
+
     func onTableViewHeaderAction(_ action: PlayerNowPlayingTableHeaderView.Actions) {
         viewModel.perform(action: action)
     }
@@ -93,6 +105,9 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
                                  sourceView: trackItemTableViewCell.actionButtonContainerView)
             case .download: self.viewModel.downloadObject(at: indexPath)
             case .cancelDownloading: self.viewModel.cancelDownloadingObject(at: indexPath)
+            case .openIn: self.showOpenIn(itemAt: indexPath,
+                                          sourceRect: trackItemTableViewCell.actionButton.frame,
+                                          sourceView: trackItemTableViewCell.actionButtonContainerView)
             }
         }
 

@@ -11,7 +11,8 @@ import Foundation
 
 
 enum TrackAudioFileLocalItemState {
-    case downloaded(String)
+    case unknown
+    case downloaded(URL)
     case downloading(Int, Progress)
 }
 
@@ -22,7 +23,7 @@ class TrackAudioFileLocalItem: Codable {
 
     enum CodingKeys: String, CodingKey {
         case trackAudioFile
-        case loacalURLString
+        case localFileName
         case taskId
     }
 
@@ -38,23 +39,24 @@ class TrackAudioFileLocalItem: Codable {
 
         if let taskId = try container.decodeIfPresent(Int.self, forKey: .taskId) {
             self.state = .downloading(taskId, Progress(totalUnitCount: 0))
-        } else if let localURLString = try container.decodeIfPresent(String.self, forKey: .loacalURLString) {
-            self.state = .downloaded(localURLString)
+        } else if let localFileName = try container.decodeIfPresent(String.self, forKey: .localFileName) {
+            self.state = .downloaded(ModelSupport.sharedInstance.documentDirectoryURL.appendingPathComponent(localFileName))
         } else {
-            self.state = .downloaded("")
+            self.state = .unknown
         }
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
 
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.trackAudioFile, forKey: .trackAudioFile)
 
         switch self.state {
-        case .downloaded(let localURlString):
-            try container.encode(localURlString, forKey: .loacalURLString)
+        case .downloaded(let localURL):
+            try container.encode(localURL.lastPathComponent, forKey: .localFileName)
         case .downloading(let taskId, _):
             try container.encode(taskId, forKey: .taskId)
+        case .unknown: break
         }
     }
 }

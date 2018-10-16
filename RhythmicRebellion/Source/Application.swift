@@ -124,6 +124,9 @@ class Application: Observable {
 
         guard let prevUser = self.user else {
             self.user = user
+            if user.isGuest {
+                self.audioFileLocalStorageService.reset()
+            }
             self.notifyUserChanged()
             return
         }
@@ -131,6 +134,7 @@ class Application: Observable {
         self.user = user
 
         if prevUser != user {
+            self.audioFileLocalStorageService.reset()
             self.notifyUserChanged()
         } else {
             if let prevFanUser = prevUser as? FanUser,

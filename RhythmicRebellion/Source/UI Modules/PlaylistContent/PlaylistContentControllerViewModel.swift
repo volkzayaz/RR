@@ -103,6 +103,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
                     switch state {
                     case .downloaded( _ ): downloadState = .downloaded
                     case .downloading(_, let progress): downloadState = .downloading(progress)
+                    case .unknown: break
                     }
                 }
             }
@@ -219,6 +220,16 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         guard indexPath.item < self.playlistTracks.count, let trackAudioFile = self.playlistTracks[indexPath.item].audioFile else { return }
 
         self.audioFileLocalStorageService?.cancelDownloading(for: trackAudioFile)
+    }
+
+    func objectLoaclURL(at indexPath: IndexPath) -> URL? {
+        guard indexPath.item < self.playlistTracks.count, let trackAudioFile = self.playlistTracks[indexPath.item].audioFile,
+            let state = self.audioFileLocalStorageService?.state(for: trackAudioFile) else { return nil }
+
+        switch state {
+        case .downloaded(let localURL): return localURL
+        default: return nil
+        }
     }
 }
 

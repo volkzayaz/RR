@@ -52,19 +52,30 @@ class AudioFileLocalStorageService: NSObject, Observable {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
 
-    lazy var downloadSession: URLSession = {
-        var sessionConfiguration = URLSessionConfiguration.background(withIdentifier: self.downloadSessionIdentifier)
-        sessionConfiguration.sessionSendsLaunchEvents = true
-        sessionConfiguration.allowsCellularAccess = true
+    private var internalDownloadSession: URLSession?
+    var downloadSession: URLSession {
+        get {
+            guard let downloadSession = internalDownloadSession else {
+                let sessionConfiguration = URLSessionConfiguration.background(withIdentifier: self.downloadSessionIdentifier)
+                sessionConfiguration.sessionSendsLaunchEvents = true
+                sessionConfiguration.allowsCellularAccess = true
+                let downloadSession = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
 
-        return URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
-    }()
+                internalDownloadSession = downloadSession
+
+                return downloadSession
+            }
+
+            return downloadSession
+        }
+    }
 
     var downloadSessionBackgroundCompletionHandler: (() -> Void)?
 
     let downloadSessionPolicyManager = ServerTrustPolicyManager(policies: [ : ])
 
     override init() {
+
         self.syncQueue = DispatchQueue(label: Bundle.main.bundleIdentifier ?? "RhythmicRebellion" + "." + "AudioFileLocalStorage")
         self.items = [ : ]
         self.tasks = [ : ]
@@ -88,8 +99,32 @@ class AudioFileLocalStorageService: NSObject, Observable {
         }
     }
 
-    func load() {
+    func reset() {
+        self.syncQueue.sync {
+            self.downloadSession.invalidateAndCancel()
+            self.tasks.removeAll()
+            self.items.removeAll()
 
+            do {
+                let fileManager = FileManager.default
+                let localAudioFilesURLs = try fileManager.contentsOfDirectory(at: ModelSupport.sharedInstance.documentDirectoryURL,
+                                                                              includingPropertiesForKeys: nil,
+                                                                              options: [.skipsSubdirectoryDescendants])
+
+                for localAudioFileURL in localAudioFilesURLs {
+                    try fileManager.removeItem(at: localAudioFileURL)
+                }
+
+            } catch {
+                print("Error: error")
+            }
+
+            self.save()
+            self.internalDownloadSession = nil
+        }
+    }
+
+    func load() {
         guard FileManager.default.fileExists(atPath: self.fileURL.path) else { return }
 
         do {
@@ -195,7 +230,7 @@ class AudioFileLocalStorageService: NSObject, Observable {
             index += 1
 
             suggestedFileURL.appendPathComponent(lastPathComponent + String(index))
-            suggestedFileURL.appendingPathExtension(extention)
+            suggestedFileURL.appendPathExtension(extention)
         }
 
         return suggestedFileURL
@@ -208,7 +243,19 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
     // MARK: NSURLSessionDelegate
     func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
 //        self.removeAllSessionDownloadTaskDelegate()
-        print("URLSessiondidBecomeInvalidWithError: \(error)")
+        print("URLSessiondidBecomeInvalidWithError: \(String(describing: error))")
+
+        self.syncQueue.sync {
+            self.tasks.removeAll()
+            self.items = self.items.filter {
+                switch $0.value.state {
+                    case .downloaded(_): return true
+                default: return false
+                }
+            }
+
+            self.save()
+        }
     }
 
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
@@ -293,7 +340,19 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         self.syncQueue.sync {
+            guard let _ = self.tasks[task.taskIdentifier] else { return }
+
             self.tasks[task.taskIdentifier] = nil
+
+            guard error != nil, let item = self.items.filter ({
+                switch $0.value.state {
+                case .downloading(let taskIdentifier, _): return taskIdentifier == task.taskIdentifier
+                default: return false
+                }
+            }).first?.value else { self.save(); return }
+
+            self.items[item.trackAudioFile.id] = nil
+            self.save()
         }
     }
 
@@ -311,10 +370,11 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
             }).first?.value else { return }
 
             do {
-                let audioFileLocalURL = self.suggestedFileURL(for: self.documentDirectoryURL.appendingPathComponent(item.trackAudioFile.originalName))
-                try FileManager.default.copyItem(at: location, to: audioFileLocalURL)
+                let itemLocalURL = ModelSupport.sharedInstance.documentDirectoryURL.appendingPathComponent(item.trackAudioFile.originalName)
+                let itemSuggestedLocalURL = self.suggestedFileURL(for: itemLocalURL)
+                try FileManager.default.copyItem(at: location, to: itemSuggestedLocalURL)
 
-                item.state = .downloaded(audioFileLocalURL.path)
+                item.state = .downloaded(itemSuggestedLocalURL)
             } catch {
                 self.items[item.trackAudioFile.id] = nil
                 print(print("AudioFileLocalStorageService copy item error: \(error)"))

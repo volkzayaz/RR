@@ -17,6 +17,10 @@ enum Gender: Int {
 public class ModelSupport {
     public static let sharedInstance = ModelSupport()
 
+    var documentDirectoryURL: URL {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    }
+
     lazy var dateFormatter: DateFormatter = {
         let dateTimeFormattre = DateFormatter()
 
