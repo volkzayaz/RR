@@ -77,6 +77,11 @@ final class PlayerViewController: UIViewController {
         self.toolBar.setShadowImage(UIImage(), forToolbarPosition: .any)
         self.toolBar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
 
+        self.regularFollowButton.setTitle(self.regularFollowButton.title(for: .normal), for: [.normal, .highlighted])
+        self.regularFollowButton.setTitleColor(self.regularFollowButton.titleColor(for: .normal), for: [.normal, .highlighted])
+        self.regularFollowButton.setTitle(self.regularFollowButton.title(for: .selected), for: [.selected, .highlighted])
+        self.regularFollowButton.setTitleColor(self.regularFollowButton.titleColor(for: .selected), for: [.selected, .highlighted])
+
         self.playerContentButtons = [self.videoButton, self.lyricsButton, self.playlistButton, self.promoButton]
 
         self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .normal)
