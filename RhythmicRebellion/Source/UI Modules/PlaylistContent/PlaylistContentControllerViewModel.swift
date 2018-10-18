@@ -19,7 +19,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     private(set) weak var player: Player?
     private(set) weak var restApiService: RestApiService?
     private(set) weak var audioFileLocalStorageService: AudioFileLocalStorageService?
-    private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
+    private(set) var textImageGenerator: TextImageGenerator
     private(set) var trackPriceFormatter: MoneyFormatter
 
     private var playlist: PlaylistShortInfo
@@ -38,7 +38,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.audioFileLocalStorageService = audioFileLocalStorageService
         
         self.playlist = playlist
-        self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 7.0))
+        self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 7.0))
 
         self.trackPriceFormatter = MoneyFormatter()
     }
@@ -80,36 +80,14 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     func object(at indexPath: IndexPath) -> TrackViewModel? {
         guard indexPath.item < self.playlistTracks.count else { return nil }
 
-        var isCurrentInPlayer = false
-        var isPlaying = false
-        
         let track = self.playlistTracks[indexPath.item]
-        let isCensorship = self.application?.user?.isCensorshipTrack(track) ?? track.isCensorship
-        let previewOptionsImage = trackPreviewOptionsImageGenerator.image(for: track,
-                                                                          trackTotalPlayMSeconds: self.player?.totalPlayMSeconds(for: track),
-                                                                          user: self.application?.user)
-        if let currentTrack = player?.currentItem?.playlistItem.track {
-            isCurrentInPlayer = track.id == currentTrack.id
-            isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
-        }
 
-        var downloadState: TrackDownloadState? = nil
-        let userHasPurchase = self.application?.user?.hasPurchase(for: track) ?? false
-        if track.isFollowAllowFreeDownload || userHasPurchase {
-            downloadState = .disable
-            if userHasPurchase || self.application?.user?.isFollower(for: track.artist) ?? false {
-                downloadState = .ready
-                if let audioFile = track.audioFile, let state = self.audioFileLocalStorageService?.state(for: audioFile) {
-                    switch state {
-                    case .downloaded( _ ): downloadState = .downloaded
-                    case .downloading(_, let progress): downloadState = .downloading(progress)
-                    case .unknown: break
-                    }
-                }
-            }
-        }
-        
-        return TrackViewModel(track: track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage, downloadState: downloadState)
+
+        return TrackViewModel(track: track,
+                              user: self.application?.user,
+                              player: self.player,
+                              audioFileLocalStorageService: self.audioFileLocalStorageService,
+                              textImageGenerator: self.textImageGenerator)
     }
     
     func selectObject(at indexPath: IndexPath) {

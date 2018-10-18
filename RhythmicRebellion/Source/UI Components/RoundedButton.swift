@@ -12,8 +12,23 @@ import UIKit
 open class RoundedButton: UIButton {
 
     @IBInspectable
-    public var cornerRadius: CGFloat {
-        get { return self.layer.cornerRadius }
-        set { self.layer.cornerRadius = newValue }
+    public var isRounded: Bool = true {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
+
+    open override var clipsToBounds: Bool {
+        get {
+            guard isRounded == false else { return super.clipsToBounds }
+            return true
+        }
+
+        set { super.clipsToBounds = newValue }
+    }
+
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = isRounded ? self.bounds.midX : 0
     }
 }

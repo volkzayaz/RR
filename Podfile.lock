@@ -4,6 +4,7 @@ PODS:
     - Alamofire (~> 4.7)
   - CloudTagView (3.0.0)
   - DownloadButton (0.1.0)
+  - EasyTipView (2.0.0)
   - MaterialTextField (1.0.1)
   - MBProgressHUD (1.1.0)
   - NSStringMask (1.2.2)
@@ -16,6 +17,7 @@ DEPENDENCIES:
   - AlamofireImage (~> 3.3)
   - CloudTagView (~> 3.0.0)
   - DownloadButton
+  - EasyTipView (~> 2.0.0)
   - MaterialTextField (~> 1.0)
   - MBProgressHUD (~> 1.1.0)
   - NSStringMask
@@ -29,6 +31,7 @@ SPEC REPOS:
     - AlamofireImage
     - CloudTagView
     - DownloadButton
+    - EasyTipView
     - MaterialTextField
     - MBProgressHUD
     - NSStringMask
@@ -50,6 +53,7 @@ SPEC CHECKSUMS:
   AlamofireImage: 78d67ccbb763d87ba44b21583d2153500a195630
   CloudTagView: c4eebbb9cf88d8de849e4ae0c3323e95ccc236b2
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
+  EasyTipView: f24313ded34b20c6e63811e218016ee3baaa7ee5
   MaterialTextField: f1a0786588e4d3610cb9bb62d2adbe9777cebbf9
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   NSStringMask: c0969955b28c4286418197696469665d9dcba313
@@ -57,6 +61,6 @@ SPEC CHECKSUMS:
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
 
-PODFILE CHECKSUM: 5d85cd218425876a9d4163b079c73f18f4be011d
+PODFILE CHECKSUM: 49a361a181ec5ca245264ece62b32885c2df4979
 
 COCOAPODS: 1.5.3

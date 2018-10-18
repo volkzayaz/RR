@@ -52,7 +52,7 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DcK-Lp-NH0">
                                 <rect key="frame" x="15" y="11" width="22" height="22"/>
-                                <color key="tintColor" red="0.63350826501846313" green="0.65617352724075317" blue="0.99902111291885376" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.63529411764705879" green="0.65490196078431373" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="onActionButtonWithSender:" destination="IJd-ih-JrK" eventType="touchUpInside" id="f4r-Jw-sS6"/>
                                 </connections>
@@ -72,41 +72,44 @@
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="40H-JG-Yd1">
                         <rect key="frame" x="360" y="11" width="86" height="22"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zew-KL-CK3" customClass="PKDownloadButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5TR-vn-hlb" customClass="RoundedButton" customModule="RhythmicRebellion" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="5TR-vn-hlb" secondAttribute="height" multiplier="1:1" id="NhA-5C-WZK"/>
+                                    <constraint firstAttribute="width" constant="22" id="o6c-7H-wF3"/>
+                                </constraints>
+                                <color key="tintColor" red="0.63529411764705879" green="0.65490196078431373" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="contentEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="11"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isRounded" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onPreviewOptionsButtonWithSender:" destination="IJd-ih-JrK" eventType="touchUpInside" id="F6Y-IY-Oyh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZK-aW-L43">
+                                <rect key="frame" x="32" y="0.0" width="22" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="22" id="Ng4-Zx-VPg"/>
+                                    <constraint firstAttribute="width" secondItem="bZK-aW-L43" secondAttribute="height" multiplier="1:1" id="Roj-eL-iU4"/>
+                                </constraints>
+                                <color key="tintColor" red="0.83529411764705885" green="0.56470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" image="ExclamationMark"/>
+                                <connections>
+                                    <action selector="onCensorshipMarkButtonWithSender:" destination="IJd-ih-JrK" eventType="touchUpInside" id="35P-2G-yWV"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zew-KL-CK3" customClass="PKDownloadButton">
+                                <rect key="frame" x="64" y="0.0" width="22" height="22"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="22" id="7Bc-We-XnP"/>
                                     <constraint firstAttribute="width" secondItem="Zew-KL-CK3" secondAttribute="height" multiplier="1:1" id="VEX-ec-Lue"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fNe-7s-6Ma" customClass="RoundedView" customModule="RhythmicRebellion" customModuleProvider="target">
-                                <rect key="frame" x="32" y="0.0" width="22" height="22"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ExclamationMark" translatesAutoresizingMaskIntoConstraints="NO" id="tyC-hx-0co">
-                                        <rect key="frame" x="8" y="2" width="6" height="18"/>
-                                        <color key="tintColor" red="0.74509803921568629" green="0.78431372549019607" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="tyC-hx-0co" secondAttribute="bottom" constant="2" id="Fzq-tm-a0P"/>
-                                    <constraint firstItem="tyC-hx-0co" firstAttribute="centerX" secondItem="fNe-7s-6Ma" secondAttribute="centerX" id="G9M-1y-lLp"/>
-                                    <constraint firstItem="tyC-hx-0co" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fNe-7s-6Ma" secondAttribute="top" constant="2" id="JkI-qV-0cD"/>
-                                    <constraint firstAttribute="width" secondItem="fNe-7s-6Ma" secondAttribute="height" multiplier="1:1" id="MXm-Jr-kR1"/>
-                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="tyC-hx-0co" secondAttribute="trailing" constant="2" id="QdC-Ng-pZU"/>
-                                    <constraint firstAttribute="width" constant="22" id="WfZ-ZB-sbf"/>
-                                    <constraint firstItem="tyC-hx-0co" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fNe-7s-6Ma" secondAttribute="leading" constant="2" id="j9c-0h-6G1"/>
-                                    <constraint firstItem="tyC-hx-0co" firstAttribute="centerY" secondItem="fNe-7s-6Ma" secondAttribute="centerY" id="uqO-h0-GnJ"/>
-                                </constraints>
-                            </view>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ExclamationMark" translatesAutoresizingMaskIntoConstraints="NO" id="RAU-0B-fEq">
-                                <rect key="frame" x="64" y="0.0" width="22" height="22"/>
-                                <color key="tintColor" red="0.83529411764705885" green="0.56470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="22" id="bzY-K9-hLu"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="width" id="bhP-un-z2V"/>
@@ -140,14 +143,13 @@
                 <outlet property="actionButtonConatinerViewTrailingConstraint" destination="bpA-0t-6Ky" id="cIu-QL-Uzl"/>
                 <outlet property="actionButtonContainerView" destination="uYt-43-1i4" id="6N1-rN-2de"/>
                 <outlet property="actionButtonContainerViewWidthConstraint" destination="QAn-bb-HTS" id="r7r-sD-ZIP"/>
-                <outlet property="censorshipMarkImageView" destination="RAU-0B-fEq" id="TT3-nC-Csl"/>
+                <outlet property="censorshipMarkButton" destination="bZK-aW-L43" id="XYv-IZ-kSJ"/>
                 <outlet property="descriptionLabel" destination="8hB-Ji-Kgi" id="c9N-lw-Ndn"/>
                 <outlet property="downloadButton" destination="Zew-KL-CK3" id="DVT-5g-JF3"/>
                 <outlet property="equalizer" destination="yJ1-MD-eZX" id="2J6-6q-TGR"/>
                 <outlet property="equalizerLeadingConstraint" destination="vcC-6o-2m2" id="hSf-Hg-GGw"/>
                 <outlet property="equalizerWidthConstraint" destination="isf-5r-umP" id="Tbr-71-UOY"/>
-                <outlet property="previewOptionsImageView" destination="tyC-hx-0co" id="P5V-Qt-sLH"/>
-                <outlet property="previewOptionsImageViewContainer" destination="fNe-7s-6Ma" id="EJu-Fj-yqe"/>
+                <outlet property="previewOptionsButton" destination="5TR-vn-hlb" id="ARc-AF-fz3"/>
                 <outlet property="stackView" destination="40H-JG-Yd1" id="n10-Va-Ri0"/>
                 <outlet property="stackViewTrailingConstraint" destination="yk1-5y-KeK" id="MqY-Vk-iZs"/>
                 <outlet property="stackViewWidthConstraint" destination="bhP-un-z2V" id="gHT-Bn-RBM"/>

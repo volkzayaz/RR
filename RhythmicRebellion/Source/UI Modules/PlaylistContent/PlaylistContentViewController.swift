@@ -9,6 +9,7 @@
 
 import UIKit
 import AlamofireImage
+import EasyTipView
 
 final class PlaylistContentViewController: UIViewController {
 
@@ -34,6 +35,17 @@ final class PlaylistContentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        var tipViewPreferences = EasyTipView.Preferences()
+        tipViewPreferences.drawing.font = UIFont.systemFont(ofSize: 12.0)
+        tipViewPreferences.drawing.foregroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        tipViewPreferences.drawing.backgroundColor = #colorLiteral(red: 0.2462022569, green: 0.509765625, blue: 0.7065972222, alpha: 1)
+        tipViewPreferences.animating.showInitialAlpha = 0
+        tipViewPreferences.animating.showDuration = 1.5
+        tipViewPreferences.animating.dismissDuration = 1.5
+        tipViewPreferences.positioning.textHInset = 5.0
+        tipViewPreferences.positioning.textVInset = 5.0
+        EasyTipView.globalPreferences = tipViewPreferences
 
         self.tableView.addSubview(self.refreshControl)
         self.setupTableHeaderView()
@@ -145,6 +157,13 @@ final class PlaylistContentViewController: UIViewController {
 
         self.present(activityViewController, animated: true, completion: nil)
     }
+
+    func showHint(sourceView: UIView, text: String) {
+
+        let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
+        tipView.showTouched(forView: sourceView, withinSuperview: self.tableView)
+    }
+
 }
 
 
@@ -179,7 +198,7 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
             case .openIn: self.showOpenIn(itemAt: indexPath,
                                           sourceRect: trackItemTableViewCell.actionButton.frame,
                                           sourceView: trackItemTableViewCell.actionButtonContainerView)
-
+            case .showHint(let sourceView, let hintText): self.showHint(sourceView: sourceView, text: hintText)
             }
         }
 

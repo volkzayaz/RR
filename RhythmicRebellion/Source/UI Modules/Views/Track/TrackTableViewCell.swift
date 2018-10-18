@@ -23,14 +23,20 @@ protocol TrackTableViewCellViewModel {
 
     var title: String { get }
     var description: String { get }
+
     var isPlayable: Bool { get }
+
     var isCurrentInPlayer: Bool { get }
     var isPlaying: Bool { get }
 
     var isCensorship: Bool { get }
-    var previewOptionsImage: UIImage? { get }
+    var censorshipHintText: String? { get }
+
+    var previewOptionImage: UIImage? { get }
+    var previewOptionHintText: String? { get }
 
     var downloadState: TrackDownloadState? { get }
+    var downloadHintText: String? { get }
 }
 
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
@@ -42,6 +48,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         case download
         case cancelDownloading
         case openIn
+        case showHint(UIView, String)
     }
 
     static let identifier = "TrackTableViewCellIdentifier"
@@ -59,11 +66,14 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     @IBOutlet var stackViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var stackViewTrailingConstraint: NSLayoutConstraint!
 
-    @IBOutlet var censorshipMarkImageView: UIImageView!
-    @IBOutlet var previewOptionsImageViewContainer: RoundedView!
-    @IBOutlet weak var previewOptionsImageView: UIImageView!
-
+    @IBOutlet var censorshipMarkButton: UIButton!
+    @IBOutlet var previewOptionsButton: UIButton!
     @IBOutlet var downloadButton: PKDownloadButton!
+
+    var censorshipMarkButtonHintText: String?
+    var previewOptionsButtonHintText: String?
+    var downloadButtonHintText: String?
+
     var isDownloadAllowed: Bool = false
     var progressObserver: NSKeyValueObservation?
 
@@ -78,10 +88,10 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.censorshipMarkImageView.image = self.censorshipMarkImageView.image?.withRenderingMode(.alwaysTemplate)
+        self.censorshipMarkButton.setImage(self.censorshipMarkButton.image(for: .normal)?.withRenderingMode(.alwaysTemplate), for: .normal)
 
-        self.previewOptionsImageViewContainer.layer.borderWidth = 0.65
-        self.previewOptionsImageViewContainer.layer.borderColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+        self.previewOptionsButton.layer.borderWidth = 0.65
+        self.previewOptionsButton.layer.borderColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
 
         self.downloadButton.delegate = self
         self.downloadButton.startDownloadButton.cleanDefaultAppearance()
@@ -135,7 +145,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
 
             if viewModel.isCensorship {
-                self.stackView.addArrangedSubview(self.censorshipMarkImageView)
+                self.stackView.addArrangedSubview(self.censorshipMarkButton)
             }
 
             if let downloadState = viewModel.downloadState {
@@ -170,8 +180,8 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                 self.isDownloadAllowed = false
             }
 
-            self.stackView.addArrangedSubview(self.previewOptionsImageViewContainer)
-            self.previewOptionsImageView.image = viewModel.previewOptionsImage?.withRenderingMode(.alwaysTemplate)
+            self.previewOptionsButton.setImage(viewModel.previewOptionImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            self.stackView.addArrangedSubview(self.previewOptionsButton)
         }
 
         if self.stackView.subviews.isEmpty {
@@ -183,6 +193,10 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         self.titleLabel.text = viewModel.title
         self.descriptionLabel.text = viewModel.description
 
+        self.censorshipMarkButtonHintText = viewModel.censorshipHintText
+        self.previewOptionsButtonHintText = viewModel.previewOptionHintText
+        self.downloadButtonHintText = viewModel.downloadHintText
+
         self.actionCallback = actionCallback
     }
 
@@ -191,6 +205,17 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     @IBAction func onActionButton(sender: UIButton) {
         actionCallback?(.showActions)
     }
+
+    @IBAction func onCensorshipMarkButton(sender: UIButton) {
+        guard let censorshipMarkButtonHintText = self.censorshipMarkButtonHintText, censorshipMarkButtonHintText.isEmpty == false else { return }
+        actionCallback?(.showHint(sender, censorshipMarkButtonHintText))
+    }
+
+    @IBAction func onPreviewOptionsButton(sender: UIButton) {
+        guard let previewOptionsButtonHintText = self.previewOptionsButtonHintText, previewOptionsButtonHintText.isEmpty == false else { return }
+
+        actionCallback?(.showHint(sender, previewOptionsButtonHintText))
+    }
 }
 
 
@@ -198,7 +223,11 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
 
     func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
 
-        guard self.isDownloadAllowed == true else { return }
+        guard self.isDownloadAllowed == true else {
+            guard let downloadButtonHintText = self.downloadButtonHintText, downloadButtonHintText.isEmpty == false else { return }
+            actionCallback?(.showHint(downloadButton, downloadButtonHintText))
+            return
+        }
 
         switch state {
         case .startDownload:

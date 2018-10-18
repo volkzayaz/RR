@@ -69,13 +69,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
                                                NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
     }
 
-    var playerItemPreviewOptionsImage: UIImage? {
-        guard let track = self.player.currentItem?.playlistItem.track else { return nil }
-
-        return self.trackPreviewOptionsImageGenerator.image(for: track,
-                                                            trackTotalPlayMSeconds: self.player.totalPlayMSeconds(for: track),
-                                                            user: self.application.user)?.withRenderingMode(.alwaysTemplate)
-    }
+    var playerItemPreviewOptionViewModel: TrackPreviewOptionViewModel?
 
     var isPlayerBlocked: Bool { return self.player.isBlocked }
     var isPlaying: Bool { return self.player.isPlaying }
@@ -105,7 +99,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     private(set) var application: Application
     private(set) var player: Player
 
-    private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
+    private(set) var textImageGenerator: TextImageGenerator
 
     // MARK: - Lifecycle -
 
@@ -114,7 +108,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.application = application
         self.player = player
 
-        self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
+        self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
 
         super.init()
     }
@@ -124,6 +118,14 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     func load(with delegate: PlayerViewModelDelegate) {
+
+        if let track = self.player.currentItem?.playlistItem.track {
+            self.playerItemPreviewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
+                                                                                                   user: self.application.user,
+                                                                                                   player: self.player,
+                                                                                                   textImageGenerator: self.textImageGenerator)
+        }
+
         self.delegate = delegate
     }
 
@@ -205,6 +207,15 @@ extension PlayerControllerViewModel: PlayerObserver {
     }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+
+        self.playerItemPreviewOptionViewModel = nil
+        if let track = self.player.currentItem?.playlistItem.track {
+            self.playerItemPreviewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
+                                                                                                   user: self.application.user,
+                                                                                                   player: self.player,
+                                                                                                   textImageGenerator: self.textImageGenerator)
+        }
+
         self.delegate?.refreshUI()
     }
 

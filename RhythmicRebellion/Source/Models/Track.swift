@@ -8,15 +8,15 @@
 
 import Foundation
 
-enum TrackPreviewType: Int {
-    case unknown
-    case noPreview = 1
-    case full = 2
-    case limit45 = 3
-    case limit90 = 4
-}
-
 public struct Track: Codable {
+
+    enum TrackPreviewType: Int {
+        case unknown
+        case noPreview = 1
+        case full = 2
+        case limit45 = 3
+        case limit90 = 4
+    }
 
     let id: Int
     let songId: Int

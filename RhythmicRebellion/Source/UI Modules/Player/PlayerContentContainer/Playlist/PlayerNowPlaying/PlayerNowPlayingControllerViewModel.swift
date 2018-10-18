@@ -19,7 +19,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     private(set) weak var player: Player?
     private(set) weak var audioFileLocalStorageService: AudioFileLocalStorageService?
 
-    private(set) var trackPreviewOptionsImageGenerator: TrackPreviewOptionsImageGenerator
+    private(set) var textImageGenerator: TextImageGenerator
     private(set) var trackPriceFormatter: MoneyFormatter
 
     private var playlistItems: [PlayerPlaylistItem] = [PlayerPlaylistItem]()
@@ -31,7 +31,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.application = application
         self.player = player
         self.audioFileLocalStorageService = audioFileLocalStorageService
-        self.trackPreviewOptionsImageGenerator = TrackPreviewOptionsImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
+        self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
         self.trackPriceFormatter = MoneyFormatter()
     }
 
@@ -58,38 +58,15 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     func object(at indexPath: IndexPath) -> TrackViewModel? {
         guard indexPath.item < self.playlistItems.count else { return nil }
-        
-        var isCurrentInPlayer = false
-        var isPlaying = false
-        
+                
         let playlistItem = self.playlistItems[indexPath.item]
-        let isCensorship = self.application?.user?.isCensorshipTrack(playlistItem.track) ?? playlistItem.track.isCensorship
-        let previewOptionsImage = self.trackPreviewOptionsImageGenerator.image(for: playlistItem.track,
-                                                                               trackTotalPlayMSeconds: self.player?.totalPlayMSeconds(for: playlistItem.track),
-                                                                               user: self.application?.user)
 
-        if let currentPlaylistItem = player?.currentItem?.playlistItem {
-            isCurrentInPlayer = playlistItem.playlistLinkedItem == currentPlaylistItem.playlistLinkedItem
-            isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
-        }
+        return TrackViewModel(track: playlistItem.track,
+                              user: self.application?.user,
+                              player: self.player,
+                              audioFileLocalStorageService: self.audioFileLocalStorageService,
+                              textImageGenerator: self.textImageGenerator)
 
-        var downloadState: TrackDownloadState? = nil
-        let userHasPurchase = self.application?.user?.hasPurchase(for: playlistItem.track) ?? false
-        if playlistItem.track.isFollowAllowFreeDownload || userHasPurchase {
-            downloadState = .disable
-            if userHasPurchase || self.application?.user?.isFollower(for: playlistItem.track.artist) ?? false {
-                downloadState = .ready
-                if let audioFile = playlistItem.track.audioFile, let state = self.audioFileLocalStorageService?.state(for: audioFile) {
-                    switch state {
-                    case .downloaded( _ ): downloadState = .downloaded
-                    case .downloading(_, let progress): downloadState = .downloading(progress)
-                    case .unknown: break
-                    }
-                }
-            }
-        }
-
-        return TrackViewModel(track: playlistItem.track, isCurrentInPlayer: isCurrentInPlayer, isPlaying: isPlaying, isCensorship: isCensorship, previewOptionsImage: previewOptionsImage, downloadState: downloadState)
     }
     
     func selectObject(at indexPath: IndexPath) {
