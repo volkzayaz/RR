@@ -22,7 +22,7 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, didChange user: User)
     func application(_ application: Application, didChange listeningSettings: ListeningSettings)
     func application(_ application: Application, didChange profile: UserProfile)
-    func application(_ application: Application, didChange followedArtistsIds: [String])
+    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
 }
 
 extension ApplicationObserver {
@@ -31,7 +31,7 @@ extension ApplicationObserver {
     func application(_ application: Application, didChange user: User) { }
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
     func application(_ application: Application, didChange profile: UserProfile) { }
-    func application(_ application: Application, didChange followedArtistsIds: [String]) { }
+    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
 }
 
 class Application: Observable {
@@ -302,7 +302,7 @@ class Application: Observable {
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncFollowing(artistFollowingState: artistFollowingState))
 
-                self?.notifyUserFollowedArtistsIdsChanged()
+                self?.notifyUserFollowedArtistsIdsChanged(with: artistFollowingState)
                 completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
 
             case .failure(let error):
@@ -326,7 +326,7 @@ class Application: Observable {
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncFollowing(artistFollowingState: artistFollowingState))
 
-                self?.notifyUserFollowedArtistsIdsChanged()
+                self?.notifyUserFollowedArtistsIdsChanged(with: artistFollowingState)
                 completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
 
             case .failure(let error):
@@ -364,11 +364,11 @@ extension Application {
         })
     }
 
-    func notifyUserFollowedArtistsIdsChanged() {
+    func notifyUserFollowedArtistsIdsChanged(with artistFollowingState: ArtistFollowingState) {
         guard let fanUser = self.user as? FanUser else { return }
 
         self.observersContainer.invoke({ (observer) in
-            observer.application(self, didChange: Array(fanUser.profile.followedArtistsIds))
+            observer.application(self, didChange: Array(fanUser.profile.followedArtistsIds), with: artistFollowingState)
         })
     }
 }
@@ -401,6 +401,6 @@ extension Application: WebSocketServiceObserver {
         fanUser.profile.update(with: artistFollowingState)
         self.user = fanUser
 
-        self.notifyUserFollowedArtistsIdsChanged()
+        self.notifyUserFollowedArtistsIdsChanged(with: artistFollowingState)
     }
 }

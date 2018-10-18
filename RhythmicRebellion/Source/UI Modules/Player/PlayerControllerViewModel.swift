@@ -230,7 +230,7 @@ extension PlayerControllerViewModel: PlayerObserver {
 
 extension PlayerControllerViewModel: ApplicationObserver {
 
-    func application(_ application: Application, didChange followedArtistsIds: [String]) {
+    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         self.delegate?.refreshUI()
     }
 }

@@ -29,6 +29,12 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
     // MARK: - Lifecycle -
 
+    deinit {
+        self.application?.removeObserver(self)
+        self.player?.removeObserver(self)
+        self.audioFileLocalStorageService?.removeObserver(self)
+    }
+
     init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, audioFileLocalStorageService: AudioFileLocalStorageService, playlist: PlaylistShortInfo) {
         self.router = router
         self.application = application
@@ -48,6 +54,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
         self.loadTracks()
         self.delegate?.reloadUI()
+        self.application?.addObserver(self)
         self.player?.addObserver(self)
         self.audioFileLocalStorageService?.addObserver(self)
     }
@@ -212,6 +219,23 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         switch state {
         case .downloaded(let localURL): return localURL
         default: return nil
+        }
+    }
+}
+
+extension PlaylistContentControllerViewModel: ApplicationObserver {
+
+    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, track) in self.playlistTracks.enumerated() {
+            guard track.artist.id == artistFollowingState.artistId else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
         }
     }
 }

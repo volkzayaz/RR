@@ -26,6 +26,12 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     // MARK: - Lifecycle -
 
+    deinit {
+        self.application?.removeObserver(self)
+        self.player?.removeObserver(self)
+        self.audioFileLocalStorageService?.removeObserver(self)
+    }
+
     init(router: PlayerNowPlayingRouter, application: Application, player: Player, audioFileLocalStorageService: AudioFileLocalStorageService) {
         self.router = router
         self.application = application
@@ -39,6 +45,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.delegate = delegate
 
         self.loadTracks()
+        self.application?.addObserver(self)
         self.player?.addObserver(self)
         self.audioFileLocalStorageService?.addObserver(self)
     }
@@ -185,6 +192,22 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 }
 
+extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
+
+    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, playlistItem) in self.playlistItems.enumerated() {
+            guard playlistItem.track.artist.id == artistFollowingState.artistId else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
+    }
+}
 
 extension PlayerNowPlayingControllerViewModel: PlayerObserver {
     
