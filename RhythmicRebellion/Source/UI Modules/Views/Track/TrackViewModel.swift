@@ -14,7 +14,7 @@ struct TrackViewModel: TrackTableViewCellViewModel {
     var id: String { return String(track.id) }
 
     var title: String { return track.name }
-    var description: String { return track.radioInfo }
+    var description: String { return track.artist.name }
 
     var isPlayable: Bool { return track.isPlayable }
 
