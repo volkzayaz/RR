@@ -20,10 +20,11 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool)
 
     func application(_ application: Application, didChange user: User)
-    func application(_ application: Application, didChange listeningSettings: ListeningSettings)
-    func application(_ application: Application, didChange profile: UserProfile)
-    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
 
+    func application(_ application: Application, didChangeUserProfile userProfile: UserProfile)
+    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings)
+    func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState)
+    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int])
 }
 
@@ -31,10 +32,11 @@ extension ApplicationObserver {
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) { }
     
     func application(_ application: Application, didChange user: User) { }
-    func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
-    func application(_ application: Application, didChange profile: UserProfile) { }
-    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
 
+    func application(_ application: Application, didChangeUserProfile userProfile: UserProfile) { }
+    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) { }
+    func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) { }
+    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) { }
 }
 
@@ -213,7 +215,7 @@ class Application: Observable {
 
                 self?.set(user: user)
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncListeningSettings(listeningSettings: fanUser.profile.listeningSettings))
-                self?.notifyListeningSettingsChanged()
+                self?.notifyUserProfileListeningSettingsChanged()
                 completion?(.success(fanUser.profile.listeningSettings))
 
             case .failure(let error):
@@ -259,6 +261,7 @@ class Application: Observable {
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncForceToPlay(trackForceToPlayState: trackForceToPlayState))
 
+                self?.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
                 completion?(.success(Array(nextFanUser.profile.forceToPlay)))
 
             case .failure(let error):
@@ -283,6 +286,7 @@ class Application: Observable {
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncForceToPlay(trackForceToPlayState: trackForceToPlayState))
 
+                self?.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
                 completion?(.success(Array(nextFanUser.profile.forceToPlay)))
 
             case .failure(let error):
@@ -306,7 +310,7 @@ class Application: Observable {
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncFollowing(artistFollowingState: artistFollowingState))
 
-                self?.notifyUserFollowedArtistsIdsChanged(with: artistFollowingState)
+                self?.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
                 completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
 
             case .failure(let error):
@@ -330,7 +334,7 @@ class Application: Observable {
 
                 self?.webSocketService.sendCommand(command: WebSocketCommand.syncFollowing(artistFollowingState: artistFollowingState))
 
-                self?.notifyUserFollowedArtistsIdsChanged(with: artistFollowingState)
+                self?.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
                 completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
 
             case .failure(let error):
@@ -352,27 +356,35 @@ extension Application {
         })
     }
 
-    func notifyListeningSettingsChanged() {
-        guard let fanUser = self.user as? FanUser else { return }
-
-        self.observersContainer.invoke({ (observer) in
-            observer.application(self, didChange: fanUser.profile.listeningSettings)
-        })
-    }
-
     func notifyUserProfileChanged() {
         guard let fanUser = self.user as? FanUser else { return }
 
         self.observersContainer.invoke({ (observer) in
-            observer.application(self, didChange: fanUser.profile)
+            observer.application(self, didChangeUserProfile: fanUser.profile)
         })
     }
 
-    func notifyUserFollowedArtistsIdsChanged(with artistFollowingState: ArtistFollowingState) {
+    func notifyUserProfileListeningSettingsChanged() {
         guard let fanUser = self.user as? FanUser else { return }
 
         self.observersContainer.invoke({ (observer) in
-            observer.application(self, didChange: Array(fanUser.profile.followedArtistsIds), with: artistFollowingState)
+            observer.application(self, didChangeUserProfile: fanUser.profile.listeningSettings)
+        })
+    }
+
+    func notifyUserProfileForceToPlayChanged(with trackForceToPlayState: TrackForceToPlayState) {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChangeUserProfile: Array(fanUser.profile.forceToPlay), with: trackForceToPlayState)
+        })
+    }
+
+    func notifyUserProfileFollowedArtistsIdsChanged(with artistFollowingState: ArtistFollowingState) {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChangeUserProfile: Array(fanUser.profile.followedArtistsIds), with: artistFollowingState)
         })
     }
 
@@ -398,7 +410,7 @@ extension Application: WebSocketServiceObserver {
         fanUser.profile.listeningSettings = listeningSettings
         self.user = fanUser
 
-        self.notifyListeningSettingsChanged()
+        self.notifyUserProfileListeningSettingsChanged()
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) {
@@ -407,6 +419,8 @@ extension Application: WebSocketServiceObserver {
         var fanUser = currentFanUser
         fanUser.profile.update(with: trackForceToPlayState)
         self.user = fanUser
+
+        self.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) {
@@ -417,7 +431,7 @@ extension Application: WebSocketServiceObserver {
         fanUser.profile.update(with: artistFollowingState)
         self.user = fanUser
 
-        self.notifyUserFollowedArtistsIdsChanged(with: artistFollowingState)
+        self.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
     }
 
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {

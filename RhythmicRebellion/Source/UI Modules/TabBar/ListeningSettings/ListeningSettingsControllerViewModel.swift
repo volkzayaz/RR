@@ -359,7 +359,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
 extension ListeningSettingsControllerViewModel: ApplicationObserver {
 
-    func application(_ application: Application, didChange listeningSettings: ListeningSettings) {
+    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
 
         guard self.isSaving == false else { return }
 

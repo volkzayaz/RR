@@ -225,7 +225,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
 extension PlaylistContentControllerViewModel: ApplicationObserver {
 
-    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
 
         var indexPaths: [IndexPath] = []
 

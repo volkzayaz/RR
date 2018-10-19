@@ -1050,7 +1050,7 @@ extension Player: WebSocketServiceObserver {
 
 //        print("webSocketService trackState: \(trackState)")
 
-        print("time: \(Date().timeIntervalSince(self.isMasterStateSendDate))")
+//        print("time: \(Date().timeIntervalSince(self.isMasterStateSendDate))")
         guard Date().timeIntervalSince(self.isMasterStateSendDate) > 1.0 else { print("BadTime"); return }
 
         self.apply(currentTrackState: trackState)
@@ -1159,8 +1159,16 @@ extension Player: ApplicationObserver {
         self.disconnect(isPlaying: isPlaying, isPlayingAddons: isOtherBlocked)
     }
 
-    func application(_ application: Application, didChange listeningSettings: ListeningSettings) {
+    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
         self.playlist.resetAddons()
+    }
+
+    func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) {
+        guard self.currentItem?.playlistItem.track.id == trackForceToPlayState.trackId,
+            trackForceToPlayState.isForcedToPlay == false,
+            self.isMaster == true else { return }
+
+        self.playForward()
     }
 }
 

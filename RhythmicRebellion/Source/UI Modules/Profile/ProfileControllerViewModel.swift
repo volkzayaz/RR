@@ -115,7 +115,7 @@ final class ProfileControllerViewModel: ProfileViewModel {
 
 extension ProfileControllerViewModel: ApplicationObserver {
 
-    func application(_ application: Application, didChange profile: UserProfile) {
+    func application(_ application: Application, didChangeUserProfile profile: UserProfile) {
 
         guard let fanUser = application.user as? FanUser else { return }
 

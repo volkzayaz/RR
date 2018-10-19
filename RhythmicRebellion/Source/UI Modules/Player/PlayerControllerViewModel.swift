@@ -232,7 +232,7 @@ extension PlayerControllerViewModel: PlayerObserver {
 
 extension PlayerControllerViewModel: ApplicationObserver {
 
-    func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         self.loadPlayerItemPreviewOptionViewModel()
         self.delegate?.refreshUI()
     }
