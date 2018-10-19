@@ -1151,6 +1151,7 @@ extension Player: ApplicationObserver {
         self.state.initialized = false
         self.state.blocked = false
         self.playlist.resetAddons()
+        self.playlist.reset(tracksTotalPlayMSeconds: [ : ])
         self.playerQueue.reset()
         self.player.removeAllItems()
 
