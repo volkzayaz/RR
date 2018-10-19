@@ -27,6 +27,7 @@ struct WebSocketCommand: Codable {
         case userSyncListeningSettings = "user-syncListeningSettings"
         case userSyncForceToPlay = "user-syncForceToPlay"
         case userSyncFollowing = "user-syncFollowing"
+        case userSyncPurchases = "user-syncPurchases"
         case playListLoadTracks = "playlist-loadTracks"
         case playListUpdate = "playlist-update"
         case currentTrackId = "currentTrack-setTrack"
@@ -43,6 +44,7 @@ struct WebSocketCommand: Codable {
         case userSyncListeningSettings(ListeningSettings)
         case userSyncForceToPlay(TrackForceToPlayState)
         case userSyncFollowing(ArtistFollowingState)
+        case userSyncPurchases([Purchase])
         case playListLoadTracks([Track])
         case playListUpdate([String : PlayerPlaylistLinkedItem?])
         case currentTrackId(TrackId?)
@@ -94,6 +96,8 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.userSyncForceToPlay(try container.decode(TrackForceToPlayState.self, forKey: .data)))
             case .userSyncFollowing:
                 self.data = .success(.userSyncFollowing(try container.decode(ArtistFollowingState.self, forKey: .data)))
+            case .userSyncPurchases:
+                self.data = .success(.userSyncPurchases(try container.decode([Purchase].self, forKey: .data)))
             case .playListLoadTracks:
                 self.data = .success(.playListLoadTracks(try container.decode([Track].self, forKey: .data)))
             case .playListUpdate:
@@ -152,6 +156,8 @@ struct WebSocketCommand: Codable {
                 try container.encode(trackForceToPlayState, forKey: .data)
             case .userSyncFollowing(let artistFollowingState):
                 try container.encode(artistFollowingState, forKey: .data)
+            case .userSyncPurchases(let purchases):
+                try container.encode(purchases, forKey: .data)
             case .playListLoadTracks(let traks):
                 try container.encode(traks, forKey: .data)
             case .playListUpdate(let playerPlaylist):

@@ -207,6 +207,24 @@ extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
             self.delegate?.reloadObjects(at: indexPaths)
         }
     }
+
+    func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
+
+        var changedPurchasedTracksIds = Array(added)
+        changedPurchasedTracksIds.append(contentsOf: removed)
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, playlistItem) in self.playlistItems.enumerated() {
+            guard changedPurchasedTracksIds.contains(playlistItem.track.id) else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
+    }
+
 }
 
 extension PlayerNowPlayingControllerViewModel: PlayerObserver {

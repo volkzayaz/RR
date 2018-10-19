@@ -187,6 +187,7 @@
 		76D39CFA211353A200D47DFA /* PlaylistHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CF9211353A200D47DFA /* PlaylistHeaderViewModel.swift */; };
 		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
 		76E6CB8021787AAC00283CA1 /* TrackPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB7F21787AAC00283CA1 /* TrackPreviewViewModel.swift */; };
+		76E6CB822179D9BB00283CA1 /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB812179D9BB00283CA1 /* Purchase.swift */; };
 		76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E9D86D214FE03800873A7C /* PlayerConfig.swift */; };
 		76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1420F73DCC0021297F /* PlayerQueue.swift */; };
 		76EDBD1920F78FCD0021297F /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1820F78FCD0021297F /* AppError.swift */; };
@@ -407,6 +408,7 @@
 		76D39CF9211353A200D47DFA /* PlaylistHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderViewModel.swift; sourceTree = "<group>"; };
 		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76E6CB7F21787AAC00283CA1 /* TrackPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPreviewViewModel.swift; sourceTree = "<group>"; };
+		76E6CB812179D9BB00283CA1 /* Purchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
 		76E9D86D214FE03800873A7C /* PlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerConfig.swift; sourceTree = "<group>"; };
 		76EDBD1420F73DCC0021297F /* PlayerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerQueue.swift; sourceTree = "<group>"; };
 		76EDBD1820F78FCD0021297F /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
@@ -709,6 +711,7 @@
 				76347842215A5939001F85F6 /* TrackForceToPlayState.swift */,
 				762A240D2164C71D007FA1C1 /* ArtistFollowingState.swift */,
 				761873BB2167ACCD00F3997F /* Price.swift */,
+				76E6CB812179D9BB00283CA1 /* Purchase.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1368,6 +1371,7 @@
 				AB14236D2124487F00C926F5 /* AddToPlaylistViewController.swift in Sources */,
 				763C905820FDDE96007C1F86 /* AuthorizationRouter.swift in Sources */,
 				76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */,
+				76E6CB822179D9BB00283CA1 /* Purchase.swift in Sources */,
 				769F4EB5210B669F000DD23B /* LyricsControllerViewModel.swift in Sources */,
 				764D684121491F3500F52730 /* GenresContainerView.swift in Sources */,
 				760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */,

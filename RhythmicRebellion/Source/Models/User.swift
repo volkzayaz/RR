@@ -156,6 +156,15 @@ struct UserProfile: Decodable {
             followedArtistsIds.remove(artistFollowingState.artistId)
         }
     }
+
+    mutating func update(with purchases: [Purchase]) {
+
+        let purchasedTracksIds = purchases.filter { $0.modelType == .track }.map { return $0.modelId }
+        guard purchasedTracksIds.isEmpty == false else { return }
+
+        self.purchasedTracksIds = Set(purchasedTracksIds).union(self.purchasedTracksIds)
+
+    }
 }
 
 extension UserProfile: Equatable {

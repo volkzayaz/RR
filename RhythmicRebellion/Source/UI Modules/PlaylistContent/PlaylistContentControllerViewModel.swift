@@ -238,6 +238,23 @@ extension PlaylistContentControllerViewModel: ApplicationObserver {
             self.delegate?.reloadObjects(at: indexPaths)
         }
     }
+
+    func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
+
+        var changedPurchasedTracksIds = Array(added)
+        changedPurchasedTracksIds.append(contentsOf: removed)
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, track) in self.playlistTracks.enumerated() {
+            guard changedPurchasedTracksIds.contains(track.id) else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
+    }
 }
 
 extension PlaylistContentControllerViewModel: PlayerObserver {

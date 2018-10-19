@@ -23,6 +23,8 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, didChange listeningSettings: ListeningSettings)
     func application(_ application: Application, didChange profile: UserProfile)
     func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
+
+    func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int])
 }
 
 extension ApplicationObserver {
@@ -32,6 +34,8 @@ extension ApplicationObserver {
     func application(_ application: Application, didChange listeningSettings: ListeningSettings) { }
     func application(_ application: Application, didChange profile: UserProfile) { }
     func application(_ application: Application, didChange followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
+
+    func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) { }
 }
 
 class Application: Observable {
@@ -371,6 +375,18 @@ extension Application {
             observer.application(self, didChange: Array(fanUser.profile.followedArtistsIds), with: artistFollowingState)
         })
     }
+
+    func notifyUserProfileChanged(purchasedTracksIds: Set<Int>, previousPurchasedTracksIds: Set<Int>) {
+
+        guard purchasedTracksIds != previousPurchasedTracksIds else { return }
+
+        let addedPurchasedTracksIds = Array(purchasedTracksIds.subtracting(previousPurchasedTracksIds))
+        let removedPurchasedTracksIds = Array(previousPurchasedTracksIds.subtracting(purchasedTracksIds))
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChangeUserProfile: Array(purchasedTracksIds), added: addedPurchasedTracksIds, removed: removedPurchasedTracksIds)
+        })
+    }
 }
 
 extension Application: WebSocketServiceObserver {
@@ -402,5 +418,16 @@ extension Application: WebSocketServiceObserver {
         self.user = fanUser
 
         self.notifyUserFollowedArtistsIdsChanged(with: artistFollowingState)
+    }
+
+    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {
+        guard let currentFanUser = self.user as? FanUser else { return }
+
+        var fanUser = currentFanUser
+        fanUser.profile.update(with: purchases)
+        self.user = fanUser
+
+        notifyUserProfileChanged(purchasedTracksIds: fanUser.profile.purchasedTracksIds,
+                                 previousPurchasedTracksIds: currentFanUser.profile.purchasedTracksIds)
     }
 }
