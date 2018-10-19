@@ -37,7 +37,9 @@ protocol PlayerObserver: class {
     func player(player: Player, didChangePlayState isPlaying: Bool)
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem)
-    func player(player: Player, didChangePlayerItemCurrentTime Time: TimeInterval)
+    func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval)
+    func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval)
+
     func playerDidChangePlaylist(player: Player)
 }
 
@@ -50,7 +52,8 @@ extension PlayerObserver {
     func player(player: Player, didChangePlayState isPlaying: Bool) { }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) { }
-    func player(player: Player, didChangePlayerItemCurrentTime Time: TimeInterval) { }
+    func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval) { }
+    func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) { }
     
     func playerDidChangePlaylist(player: Player) {}
 }
@@ -445,6 +448,7 @@ class Player: NSObject, Observable {
         guard track.isFreeForPlaylist == false else { return nil }
         guard let fanUser = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
         guard fanUser.hasPurchase(for: track) == false else { return nil }
+        guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist)) == false else { return nil }
 
         switch track.previewType {
         case .full:
@@ -515,7 +519,7 @@ class Player: NSObject, Observable {
             completion?()
         }
 
-        guard self.currentTrackId != currentPlayerItem.trackId  else {
+        guard self.currentTrackId == currentPlayerItem.trackId  else {
             let trackState = TrackState(hash: self.stateHash, progress: self.currentTrackState?.progress ?? 0.0, isPlaying: self.state.playing)
             let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
 
@@ -1080,13 +1084,17 @@ extension Player: WebSocketServiceObserver {
 
         self.playlist.reset(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
 
-        if let currentPlayerItem = self.currentItem,
+        guard let currentPlayerItem = self.currentItem,
+            self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false,
             currentPlayerItem.restrictedTime == nil,
-            let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id],
-            let trackMaxPlayMSeconds = currentPlayerItem.trackMaxPlayMSeconds,
-            currentTrackTotalPlayMSeconds > trackMaxPlayMSeconds,
-            self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false {
+            let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id] else { return }
 
+        self.observersContainer.invoke({ (observer) in
+            observer.player(player: self, didChangePlayerItemTotalPlayTime: TimeInterval(currentTrackTotalPlayMSeconds / 1000))
+        })
+
+        if let trackMaxPlayMSeconds = currentPlayerItem.trackMaxPlayMSeconds,
+            currentTrackTotalPlayMSeconds > trackMaxPlayMSeconds {
             self.playForward()
         }
     }

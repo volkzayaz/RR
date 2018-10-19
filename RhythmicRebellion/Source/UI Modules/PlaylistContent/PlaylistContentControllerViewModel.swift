@@ -89,12 +89,12 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
         let track = self.playlistTracks[indexPath.item]
 
-
         return TrackViewModel(track: track,
                               user: self.application?.user,
                               player: self.player,
                               audioFileLocalStorageService: self.audioFileLocalStorageService,
-                              textImageGenerator: self.textImageGenerator)
+                              textImageGenerator: self.textImageGenerator,
+                              isCurrentInPlayer: player?.currentItem?.playlistItem.track.id == track.id)
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -252,6 +252,21 @@ extension PlaylistContentControllerViewModel: PlayerObserver {
     
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
         self.delegate?.reloadUI()
+    }
+
+    func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) {
+        guard let playerCurrentTrack = self.player?.currentItem?.playlistItem.track else { return }
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, track) in self.playlistTracks.enumerated() {
+            guard track.id == playerCurrentTrack.id else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
     }
     
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {

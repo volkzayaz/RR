@@ -50,10 +50,10 @@ struct TrackViewModel: TrackTableViewCellViewModel {
 
 extension TrackViewModel {
 
-    init(track: Track, user: User?, player: Player?, audioFileLocalStorageService: AudioFileLocalStorageService?, textImageGenerator: TextImageGenerator) {
+    init(track: Track, user: User?, player: Player?, audioFileLocalStorageService: AudioFileLocalStorageService?, textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool) {
 
         self.track = track
-        self.isCurrentInPlayer = player?.currentItem?.playlistItem.track.id == track.id
+        self.isCurrentInPlayer = isCurrentInPlayer
         self.isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
 
         self.isCensorship = user?.isCensorshipTrack(track) ?? track.isCensorship

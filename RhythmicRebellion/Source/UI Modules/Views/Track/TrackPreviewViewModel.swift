@@ -17,6 +17,7 @@ struct TrackPreviewOptionViewModel {
             guard track.isFreeForPlaylist == false else { return .freeForPlaylist }
             guard let fanUser = user as? FanUser else { return .authorizationNeeded }
             guard fanUser.hasPurchase(for: track) == false else { return .freeForPlaylist }
+            guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist)) == false else { return .freeForPlaylist }
 
             switch track.previewType {
             case .full:
@@ -83,7 +84,7 @@ struct TrackPreviewOptionViewModel {
         case .freeForPlaylist: return NSLocalizedString("Free add to playlist", comment: "Free add to playlist hint text")
         case .fullLimitTimes(let limitTimes):
             guard limitTimes >= 0 else { return NSLocalizedString("Buy this song to get full version", comment: "Buy this song to get full version hint text") }
-            let limitTimesLocalizedTemplate = NSLocalizedString("%d full preview available", comment: "Limit times full preview available hint template")
+            let limitTimesLocalizedTemplate = NSLocalizedString("%d full previews available", comment: "Limit times full previews available hint template")
             return String(format: limitTimesLocalizedTemplate, limitTimes)
         case .limitSeconds(let seconds):
             let firstSecondsLocalizedTemplate = NSLocalizedString("First %d seconds preview", comment: "First seconds preview hint template")

@@ -72,8 +72,8 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
                               user: self.application?.user,
                               player: self.player,
                               audioFileLocalStorageService: self.audioFileLocalStorageService,
-                              textImageGenerator: self.textImageGenerator)
-
+                              textImageGenerator: self.textImageGenerator,
+                              isCurrentInPlayer: self.player?.currentItem?.playlistItem.playlistLinkedItem == playlistItem.playlistLinkedItem)
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -226,6 +226,23 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
         self.delegate?.reloadUI()
     }
+
+
+    func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) {
+        guard let playerCurrentTrack = self.player?.currentItem?.playlistItem.track else { return }
+
+        var indexPaths: [IndexPath] = []
+
+        for (index, playlistItem) in self.playlistItems.enumerated() {
+            guard playlistItem.track.id == playerCurrentTrack.id else { continue }
+            indexPaths.append(IndexPath(row: index, section: 0))
+        }
+
+        if indexPaths.isEmpty == false {
+            self.delegate?.reloadObjects(at: indexPaths)
+        }
+    }
+
     
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {
         self.delegate?.reloadUI()
