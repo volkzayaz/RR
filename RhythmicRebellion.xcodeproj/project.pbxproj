@@ -27,7 +27,7 @@
 		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
 		76310DCD20F6252200140D03 /* AddonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCC20F6252200140D03 /* AddonState.swift */; };
 		76310DCF20F6343A00140D03 /* CheckAddons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCE20F6343A00140D03 /* CheckAddons.swift */; };
-		763170F1215BA3390053C719 /* TrackPreviewOptionsImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763170F0215BA3390053C719 /* TrackPreviewOptionsImageGenerator.swift */; };
+		763170F1215BA3390053C719 /* TextImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763170F0215BA3390053C719 /* TextImageGenerator.swift */; };
 		76336A86215CBE8100AE9001 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76336A85215CBE8100AE9001 /* RoundedView.swift */; };
 		76336A88215CD5E400AE9001 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76336A87215CD5E400AE9001 /* ProgressView.swift */; };
 		7633F31B216CD4DB009A1834 /* AudioFileLocalStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7633F31A216CD4DB009A1834 /* AudioFileLocalStorageService.swift */; };
@@ -247,7 +247,7 @@
 		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
 		76310DCC20F6252200140D03 /* AddonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddonState.swift; sourceTree = "<group>"; };
 		76310DCE20F6343A00140D03 /* CheckAddons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAddons.swift; sourceTree = "<group>"; };
-		763170F0215BA3390053C719 /* TrackPreviewOptionsImageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPreviewOptionsImageGenerator.swift; sourceTree = "<group>"; };
+		763170F0215BA3390053C719 /* TextImageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextImageGenerator.swift; sourceTree = "<group>"; };
 		76336A85215CBE8100AE9001 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
 		76336A87215CD5E400AE9001 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		7633F31A216CD4DB009A1834 /* AudioFileLocalStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileLocalStorageService.swift; sourceTree = "<group>"; };
@@ -490,7 +490,7 @@
 		763170F2215BBED80053C719 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				763170F0215BA3390053C719 /* TrackPreviewOptionsImageGenerator.swift */,
+				763170F0215BA3390053C719 /* TextImageGenerator.swift */,
 				768486E7216B4C51000D0F79 /* MoneyFormatter.swift */,
 			);
 			path = Utils;
@@ -1299,7 +1299,7 @@
 				7665E8292107224F007D8B98 /* CellsViewModels.swift in Sources */,
 				7665E81D2105BC84007D8B98 /* ListeningSettingsViewModel.swift in Sources */,
 				76775FD521774562008265AA /* TipView.swift in Sources */,
-				763170F1215BA3390053C719 /* TrackPreviewOptionsImageGenerator.swift in Sources */,
+				763170F1215BA3390053C719 /* TextImageGenerator.swift in Sources */,
 				764B854F2138043E00071F30 /* Country.swift in Sources */,
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
 				7650962320E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift in Sources */,

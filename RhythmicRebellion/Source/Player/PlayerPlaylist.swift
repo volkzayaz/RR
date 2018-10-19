@@ -217,6 +217,10 @@ class PlayerPlaylist {
         self.tracksTotalPlayMSeconds = tracksTotalPlayMSeconds
     }
 
+    func update(tracksTotalPlayMSeconds: [Int : UInt64]) {
+        self.tracksTotalPlayMSeconds += tracksTotalPlayMSeconds
+    }
+
     func totalPlayMSeconds(for track: Track) -> UInt64? {
         return self.tracksTotalPlayMSeconds[track.id]
     }

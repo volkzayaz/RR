@@ -25,7 +25,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
     func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons)
-    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64])
+    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool)
 }
 
 extension WebSocketServiceObserver {
@@ -43,7 +43,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
     func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) { }
-    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64]) { }
+    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) { }
 }
 
 class WebSocketService: WebSocketDelegate, Observable {
@@ -213,7 +213,7 @@ class WebSocketService: WebSocketDelegate, Observable {
 
                 case .tracksTotalPlayTime(let tracksTotalPlayMSeconds):
                     self.observersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveTracksTotalPlayTime: tracksTotalPlayMSeconds)
+                        observer.webSocketService(self, didReceiveTracksTotalPlayTime: tracksTotalPlayMSeconds, flush: webSoketCommand.flush ?? false)
                     })
                 }
 

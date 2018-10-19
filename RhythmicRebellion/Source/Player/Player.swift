@@ -1080,9 +1080,13 @@ extension Player: WebSocketServiceObserver {
         }
     }
 
-    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64]) {
+    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) {
 
-        self.playlist.reset(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
+        if flush {
+            self.playlist.reset(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
+        } else {
+            self.playlist.update(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
+        }
 
         guard let currentPlayerItem = self.currentItem,
             self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false,

@@ -29,6 +29,7 @@ struct TrackPreviewOptionViewModel {
                 guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { return .fullLimitTimes(-1) }
 
                 let previewTimes = Int((trackMaxPlayMSeconds - trackTotalPlayMSeconds) / UInt64(trackAudioFile.duration * 1000))
+
                 return .fullLimitTimes(previewTimes)
 
             case .limit45: return .limitSeconds(45)
