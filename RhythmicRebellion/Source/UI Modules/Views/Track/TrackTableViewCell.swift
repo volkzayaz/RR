@@ -109,6 +109,10 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                 equalizer.pause()
             }
         }
+
+        if self.downloadButton.state == .pending {
+            self.downloadButton.pendingView.startSpin()
+        }
     }
         
     func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
@@ -129,6 +133,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
 
         self.stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        self.downloadButton.state = .startDownload
 
         if viewModel.isPlayable == false {
             self.actionButtonContainerView.isHidden = true
@@ -149,6 +154,9 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
             }
 
             if let downloadState = viewModel.downloadState {
+
+                self.stackView.addArrangedSubview(self.downloadButton)
+
                 switch downloadState {
                 case .disable:
                     self.isDownloadAllowed = false
@@ -160,11 +168,14 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                 case .downloading(let progress):
                     self.isDownloadAllowed = true
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.downloadButton.state = .downloading
+                    self.downloadButton.state = progress.fractionCompleted == 0.0 ? .pending : .downloading
 
                     self.progressObserver = progress.observe(\.fractionCompleted) { (pobject, _) in
                         let value = pobject.fractionCompleted
                         DispatchQueue.main.async {
+                            if self.downloadButton.state != .downloading {
+                                self.downloadButton.state = .downloading
+                            }
                             self.downloadButton.stopDownloadButton.progress = CGFloat(value)
                         }
                     }
@@ -175,7 +186,6 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                     self.downloadButton.state = .downloaded
                 }
 
-                self.stackView.addArrangedSubview(self.downloadButton)
             } else {
                 self.isDownloadAllowed = false
             }
@@ -232,8 +242,11 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
         switch state {
         case .startDownload:
             self.downloadButton.state = .pending
+            self.downloadButton.pendingView.startSpin()
             actionCallback?(.download)
         case .pending:
+            self.downloadButton.state = .startDownload
+            actionCallback?(.cancelDownloading)
             break
         case .downloading:
             self.downloadButton.state = .startDownload
