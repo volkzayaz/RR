@@ -11,7 +11,13 @@ import Foundation
 struct PlayerPlaylistItem {
 
     let track: Track
-    let playlistLinkedItem: PlayerPlaylistLinkedItem
+    let linkedItemKey: String
+}
+
+extension PlayerPlaylistItem: Equatable {
+    static func == (lhs: PlayerPlaylistItem, rhs: PlayerPlaylistItem) -> Bool {
+        return lhs.linkedItemKey == rhs.linkedItemKey && lhs.track.id == rhs.track.id
+    }
 }
 
 class PlayerPlaylist {    
@@ -28,7 +34,7 @@ class PlayerPlaylist {
 
         while currentPlaylistLinkedItem != nil {
             if let track = self.tracks.filter({ return $0.id == currentPlaylistLinkedItem!.trackId }).first {
-                let playlistItem = PlayerPlaylistItem(track: track, playlistLinkedItem: currentPlaylistLinkedItem!)
+                let playlistItem = PlayerPlaylistItem(track: track, linkedItemKey: currentPlaylistLinkedItem!.key)
                 orderedPlaylistItems.append(playlistItem)
             }
 
@@ -58,7 +64,7 @@ class PlayerPlaylist {
 
     func playlistItem(for playlistLinkedItem: PlayerPlaylistLinkedItem) -> PlayerPlaylistItem? {
         if let track = self.tracks.filter({ return $0.id == playlistLinkedItem.trackId }).first {
-            return PlayerPlaylistItem(track: track, playlistLinkedItem: playlistLinkedItem)
+            return PlayerPlaylistItem(track: track, linkedItemKey: playlistLinkedItem.key)
         }
         return nil
     }
@@ -79,14 +85,16 @@ class PlayerPlaylist {
     }
 
     func nextPlaylistItem(for playlistItem: PlayerPlaylistItem) -> PlayerPlaylistItem? {
-        guard let playlistLinkedItemNextKey = playlistItem.playlistLinkedItem.nextKey ?? self.firstPlaylistLinkedItem?.key,
+        guard let playlistLinkedItem = self.playlistLinkedItems[playlistItem.linkedItemKey],
+            let playlistLinkedItemNextKey = playlistLinkedItem.nextKey ?? self.firstPlaylistLinkedItem?.key,
             let nextPlaylistLinkedItem = self.playlistLinkedItems[playlistLinkedItemNextKey] else { return nil }
 
         return self.playlistItem(for: nextPlaylistLinkedItem)
     }
 
     func previousPlaylistItem(for playlistItem: PlayerPlaylistItem) -> PlayerPlaylistItem? {
-        guard let playlistLinkedItemPreviousKey = playlistItem.playlistLinkedItem.previousKey ?? self.lastPlaylistLinkedItem?.key,
+        guard let playlistLinkedItem = self.playlistLinkedItems[playlistItem.linkedItemKey],
+            let playlistLinkedItemPreviousKey = playlistLinkedItem.previousKey ?? self.lastPlaylistLinkedItem?.key,
             let previousPlaylistLinkedItem = self.playlistLinkedItems[playlistLinkedItemPreviousKey] else { return nil }
 
         return self.playlistItem(for: previousPlaylistLinkedItem)
@@ -107,6 +115,12 @@ class PlayerPlaylist {
         guard let trackKey = trackId?.key else { return nil }
         return self.playlistLinkedItems[trackKey] ?? nil
     }
+
+    func playlistLinkedItem(for linkedItemKey: PlayerPlaylistItem?) -> PlayerPlaylistLinkedItem? {
+        guard let linkedItemKey = linkedItemKey?.linkedItemKey else { return nil }
+        return self.playlistLinkedItems[linkedItemKey] ?? nil
+    }
+
 
     func nextPlaylistLinkedItem(for playlistLinkedItem: PlayerPlaylistLinkedItem) -> PlayerPlaylistLinkedItem? {
         guard let playlistLinkedItemNextKey = playlistLinkedItem.nextKey,

@@ -323,7 +323,7 @@ class Player: NSObject, Observable {
         var trackStubReason: TrackStubReason?
         repeat {
             guard let nextPlaylistItem = self.playlist.nextPlaylistItem(for: currentPlaylistItem),
-                nextPlaylistItem.playlistLinkedItem != playlistItem.playlistLinkedItem else { return nil }
+                nextPlaylistItem != playlistItem else { return nil }
             currentPlaylistItem = nextPlaylistItem
             trackStubReason = self.stubReason(for: nextPlaylistItem.track)
         } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile == nil)
@@ -337,7 +337,7 @@ class Player: NSObject, Observable {
         var trackStubReason: TrackStubReason?
         repeat {
             guard let previousPlaylistItem = self.playlist.previousPlaylistItem(for: currentPlaylistItem),
-                previousPlaylistItem.playlistLinkedItem != playlistItem.playlistLinkedItem else { return nil }
+                previousPlaylistItem != playlistItem else { return nil }
             currentPlaylistItem = previousPlaylistItem
             trackStubReason = self.stubReason(for: previousPlaylistItem.track)
         } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile == nil)
@@ -383,7 +383,7 @@ class Player: NSObject, Observable {
             self?.addonsPlayTimer = Timer.scheduledTimer(withTimeInterval: 1.0,
                                                          repeats: false,
                                                          block: { [weak self] (timer) in
-                                                            guard currentPlayerItem.playlistItem.playlistLinkedItem == self?.currentItem?.playlistItem.playlistLinkedItem else { return }
+                                                            guard currentPlayerItem.playlistItem == self?.currentItem?.playlistItem else { return }
                                                             self?.apply(addonsIds: [])
 //                                                            self?.state.waitingAddons = false
 //                                                            self?.playerQueue.replace(addons: [])
@@ -1319,7 +1319,7 @@ extension Player {
         switch playlistPosition {
         case .next:
             var nextPlaylistLinkedItem: PlayerPlaylistLinkedItem? = nil
-            var previousPlaylistLinkedItem = self.playerQueue.playerItem?.playlistItem.playlistLinkedItem ?? self.playlist.firstPlaylistLinkedItem
+            var previousPlaylistLinkedItem = self.playlist.playlistLinkedItem(for: self.playerQueue.playerItem?.playlistItem) ?? self.playlist.firstPlaylistLinkedItem
             if let previousPlaylistLinkedItem = previousPlaylistLinkedItem {
                 nextPlaylistLinkedItem = self.playlist.nextPlaylistLinkedItem(for: previousPlaylistLinkedItem)
             }
@@ -1342,7 +1342,7 @@ extension Player {
                 self.observersContainer.invoke({ (observer) in
                     observer.playerDidChangePlaylist(player: self)
                 })
-                completion?(PlayerPlaylistItem(track: track, playlistLinkedItem: trackPlaylistLinkedItem), nil)
+                completion?(PlayerPlaylistItem(track: track, linkedItemKey: trackPlaylistLinkedItem.key), nil)
             }
 
 
@@ -1365,23 +1365,26 @@ extension Player {
                         observer.playerDidChangePlaylist(player: strongSelf)
                     })
                 }
-                completion?(PlayerPlaylistItem(track: track, playlistLinkedItem: trackPlaylistLinkedItem), nil)
+                completion?(PlayerPlaylistItem(track: track, linkedItemKey: trackPlaylistLinkedItem.key), nil)
             }
         }
     }
 
     func performDelete(playlistItem: PlayerPlaylistItem, completion: ((Error?) -> Void)?) {
+
+        guard let playlistLinkedItemForDelete = self.playlist.playlistLinkedItem(for: playlistItem) else { completion?(nil); return }
+
         let playlistLinkedItem: PlayerPlaylistLinkedItem? = nil
         var playlistLinkedItems: [String: PlayerPlaylistLinkedItem?] = [String: PlayerPlaylistLinkedItem?]()
-        playlistLinkedItems[playlistItem.playlistLinkedItem.key] = playlistLinkedItem
+        playlistLinkedItems[playlistItem.linkedItemKey] = playlistLinkedItem
         
         var playlistItemToPlay : PlayerPlaylistItem?
-        if self.currentItem?.playlistItem.playlistLinkedItem == playlistItem.playlistLinkedItem {
+        if self.currentItem?.playlistItem == playlistItem {
             playlistItemToPlay = self.findPlayablePlaylistItem(after: playlistItem)
         }
 
-        var previousPlaylistLinkedItem = self.playlist.previousPlaylistLinkedItem(for: playlistItem.playlistLinkedItem)
-        var nextPlaylistLinkedItem = self.playlist.nextPlaylistLinkedItem(for: playlistItem.playlistLinkedItem)
+        var previousPlaylistLinkedItem = self.playlist.previousPlaylistLinkedItem(for: playlistLinkedItemForDelete)
+        var nextPlaylistLinkedItem = self.playlist.nextPlaylistLinkedItem(for: playlistLinkedItemForDelete)
 
         previousPlaylistLinkedItem?.nextKey = nextPlaylistLinkedItem?.key
         nextPlaylistLinkedItem?.previousKey = previousPlaylistLinkedItem?.key
