@@ -26,14 +26,7 @@ struct TrackViewModel: TrackTableViewCellViewModel {
         return NSLocalizedString("Contains explisit material", comment: "Contains explisit material hint text")
     }
 
-    var downloadHintText: String? {
-        guard let downloadState = self.downloadState else { return nil }
-
-        switch downloadState {
-        case .disable: return NSLocalizedString("Free download for followers", comment: "Free download for followers hint text")
-        default: return nil
-        }
-    }
+    var downloadHintText: String?
 
     let track: Track
 
@@ -65,15 +58,28 @@ extension TrackViewModel {
 
         let userHasPurchase = user?.hasPurchase(for: track) ?? false
         if track.isFollowAllowFreeDownload || userHasPurchase {
+
             self.downloadState = .disable
             if userHasPurchase || user?.isFollower(for: track.artist) ?? false {
                 self.downloadState = .ready
                 if let audioFile = track.audioFile, let state = audioFileLocalStorageService?.state(for: audioFile) {
                     switch state {
-                    case .downloaded( _ ): downloadState = .downloaded
-                    case .downloading(_, let progress): downloadState = .downloading(progress)
+                    case .downloaded( _ ): self.downloadState = .downloaded
+                    case .downloading(_, let progress): self.downloadState = .downloading(progress)
                     case .unknown: break
                     }
+                }
+            }
+
+            if let downloadState = self.downloadState {
+                switch downloadState {
+                case .disable:
+                    if user?.isGuest ?? true {
+                        self.downloadHintText = NSLocalizedString("Free download for fans", comment: "Free download for fans hint text")
+                    } else {
+                        self.downloadHintText = NSLocalizedString("Free download for followers", comment: "Free download for followers hint text")
+                    }
+                default: break
                 }
             }
         }
