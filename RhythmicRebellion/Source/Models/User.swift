@@ -138,7 +138,11 @@ struct UserProfile: Decodable {
             self.followedArtistsIds = Set<String>()
         }
 
-        self.purchasedTracksIds = try container.decode(Set<Int>.self, forKey: .purchasedTracksIds)
+        if let purchasedTracksIds = try container.decodeIfPresent(Set<Int>.self, forKey: .purchasedTracksIds) {
+            self.purchasedTracksIds = purchasedTracksIds
+        } else {
+            self.purchasedTracksIds = Set<Int>()
+        }
     }
 
     mutating func update(with trackForceToPlayState: TrackForceToPlayState) {
