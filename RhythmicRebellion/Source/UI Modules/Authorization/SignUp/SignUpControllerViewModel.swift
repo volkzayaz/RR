@@ -32,7 +32,6 @@ final class SignUpControllerViewModel: SignUpViewModel {
     private(set) var countries: [Country]
     private(set) var regions: [Region]
     private(set) var cities: [City]
-    var hobbies: [Hobby] { return self.application?.config?.hobbies ?? [] }
     var howHearList: [HowHear] { return self.application?.config?.howHearList ?? [] }
     private let validator: Validator
 
@@ -389,26 +388,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func set(hobbies: [Hobby]) {
-
-        let currentItems = self.hobbiesField?.hobbies ?? []
-        var newItems = hobbies
-        var mergedItems = [Hobby]()
-
-        for currentItem in currentItems {
-            guard let currentGenreIndex = newItems.index(of: currentItem) else {
-                guard currentItem.id == nil else { continue }
-                mergedItems.append(currentItem);
-                continue
-            }
-
-            mergedItems.append(currentItem);
-            newItems.remove(at: currentGenreIndex)
-        }
-
-        mergedItems.append(contentsOf: newItems)
-
-
-        self.delegate?.refreshHobbiesField(with: mergedItems)
+        self.delegate?.refreshHobbiesField(with: hobbies)
         self.validateField(self.hobbiesField)
     }
 
@@ -435,13 +415,11 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     func showHobbiesSelectableList() {
 
-        let selectedHobbies = self.hobbiesField?.hobbies?.filter { $0.id != nil }
-        let additionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? []
-
+        let selectedHobbies = self.hobbiesField?.hobbies
 
         self.router?.showHobbiesSelectableList(dataSource: self,
                                                selectedItems: selectedHobbies,
-                                               additionalItems: additionalHobbies,
+                                               additionalItems: [],
                                                selectionCallback: { [weak self] (hobbies) in
                                                     self?.set(hobbies: hobbies)
                                             })
@@ -627,11 +605,27 @@ extension SignUpControllerViewModel {
         })
     }
 
+    // MARK: - HobbiesDataSource -
+    var hobbies: [Hobby] { return self.hobbies(for: self.application?.config?.hobbies ?? []) }
+
+    func hobbies(for loadedHobbies: [Hobby]) -> [Hobby] {
+        let selectedAdditionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? []
+
+        var hobbies = loadedHobbies
+        hobbies.append(contentsOf: selectedAdditionalHobbies)
+
+        return hobbies
+    }
+
     func reloadHobbies(completion: @escaping (Result<[Hobby]>) -> Void) {
-        self.loadConfig { (configResult) in
+        self.loadConfig { [weak self] (configResult) in
+
+            guard let `self` = self else { return }
+
             switch configResult {
             case .success(let config):
-                completion(.success(config.hobbies))
+                let hobbies = self.hobbies(for: config.hobbies)
+                completion(.success(hobbies))
             case .failure(let error):
                 completion(.failure(error))
             }

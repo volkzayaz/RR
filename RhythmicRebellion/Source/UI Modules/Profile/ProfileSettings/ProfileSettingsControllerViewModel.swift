@@ -30,8 +30,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     private(set) var countries: [Country]
     private(set) var regions: [Region]
     private(set) var cities: [City]
-    var hobbies: [Hobby] { return self.application?.config?.hobbies ?? [] }
-    private(set) var genres: [Genre]
+    private(set) var loadedGenres: [Genre]
     var languages: [Language] { return self.application?.config?.languages ?? [] }
 
     private let validator: Validator
@@ -67,7 +66,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.countries = []
         self.regions = []
         self.cities = []
-        self.genres = []
+        self.loadedGenres = []
     }
 
     func refreshDelegate(with userProfile: UserProfile) {
@@ -407,13 +406,14 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     func set(hobbies: [Hobby]) {
 
+        let additionalHobbies = self.userProfile?.hobbies.filter { $0.id == nil} ?? []
         let currentItems = self.hobbiesField?.hobbies ?? []
         var newItems = hobbies
         var mergedItems = [Hobby]()
 
         for currentItem in currentItems {
             guard let currentGenreIndex = newItems.index(of: currentItem) else {
-                guard currentItem.id == nil else { continue }
+                guard currentItem.id == nil, additionalHobbies.contains(currentItem) else { continue }
                 mergedItems.append(currentItem);
                 continue
             }
@@ -431,13 +431,14 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     func set(genres: [Genre]) {
 
+        let additionalGenress = self.userProfile?.genres?.filter { $0.id == nil} ?? []
         let currentItems = self.genresField?.genres ?? []
         var newItems = genres
         var mergedItems = [Genre]()
 
         for currentItem in currentItems {
             guard let currentGenreIndex = newItems.index(of: currentItem) else {
-                guard currentItem.id == nil else { continue }
+                guard currentItem.id == nil, additionalGenress.contains(currentItem) else { continue }
                 mergedItems.append(currentItem);
                 continue
             }
@@ -475,8 +476,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     func showHobbiesSelectableList() {
 
-        let selectedHobbies = self.hobbiesField?.hobbies?.filter { $0.id != nil }
-        let additionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? []
+        let additionalHobbies = self.userProfile?.hobbies.filter { $0.id == nil && self.hobbiesField?.hobbies?.contains($0) ?? false }
+        let selectedHobbies = self.hobbiesField?.hobbies?.filter { $0.id != nil || additionalHobbies?.contains($0) == false }
 
         self.router?.showHobbiesSelectableList(dataSource: self,
                                                selectedItems: selectedHobbies,
@@ -488,8 +489,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     func showGenresSelectableList() {
 
-        let selectedGenres = self.genresField?.genres?.filter { $0.id != nil }
-        let additionalGenres = self.genresField?.genres?.filter { $0.id == nil } ?? []
+        let additionalGenres = self.userProfile?.genres?.filter { $0.id == nil && self.genresField?.genres?.contains($0) ?? false }
+        let selectedGenres = self.genresField?.genres?.filter { $0.id != nil || additionalGenres?.contains($0) == false } ?? []
 
         self.router?.showGenresSelectableList(dataSource: self,
                                               selectedItems: selectedGenres,
@@ -695,23 +696,60 @@ extension ProfileSettingsControllerViewModel {
         })
     }
 
+    // MARK: - HobbiesDataSource -
+    var hobbies: [Hobby] { return self.hobbies(for: self.application?.config?.hobbies ?? []) }
+
+    func hobbies(for loadedHobbies: [Hobby]) -> [Hobby] {
+        let additionalHobbies = self.userProfile?.hobbies.filter { $0.id == nil}
+        let selectedAdditionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil && additionalHobbies?.contains($0) == false } ?? []
+
+        var hobbies = loadedHobbies
+        hobbies.append(contentsOf: selectedAdditionalHobbies)
+
+        return hobbies
+    }
+
     func reloadHobbies(completion: @escaping (Result<[Hobby]>) -> Void) {
-        self.loadConfig { (configResult) in
+        self.loadConfig { [weak self] (configResult) in
+
+            guard let `self` = self else { return }
+
             switch configResult {
             case .success(let config):
-                completion(.success(config.hobbies))
+                let hobbies = self.hobbies(for: config.hobbies)
+                completion(.success(hobbies))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
 
+    // MARK: - GenresDataSource -
+    var genres: [Genre] {
+        return self.genres(for: self.loadedGenres)
+    }
+
+    func genres(for loadedGenres: [Genre]) -> [Genre] {
+        let additionalGenres = self.userProfile?.genres?.filter { $0.id == nil}
+        let selectedAdditionalGenres = self.genresField?.genres?.filter { $0.id == nil && additionalGenres?.contains($0) == false } ?? []
+
+        var genres = loadedGenres
+        genres.append(contentsOf: selectedAdditionalGenres)
+
+        return genres
+
+    }
+
     func reloadGenres(completion: @escaping (Result<[Genre]>) -> Void) {
 
         self.restApiService?.genres(completion: { [weak self] (genresResult) in
+
+            guard let `self` = self else { return }
+
             switch genresResult {
-            case .success(let genres):
-                self?.genres = genres
+            case .success(let loadedGenres):
+                self.loadedGenres = loadedGenres
+                let genres = self.genres(for: loadedGenres)
                 completion(.success(genres))
             case .failure(let error):
                 completion(.failure(error))
