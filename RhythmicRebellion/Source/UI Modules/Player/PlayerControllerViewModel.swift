@@ -10,6 +10,7 @@
 import Foundation
 import CoreMedia
 import UIKit
+import Alamofire
 
 final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
@@ -189,10 +190,19 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         guard let currentPlayerItem = self.player.currentItem else { return }
         guard let fanUser = self.application.user as? FanUser else { self.router?.navigateToAuthorization(); return }
 
+        let followingCompletion: (Result<[String]>) -> Void = { [weak self] (followingResult) in
+
+            switch followingResult {
+            case .failure(let error):
+                self?.delegate?.show(error: error)
+            default: break
+            }
+        }
+
         if fanUser.isFollower(for: currentPlayerItem.playlistItem.track.artist) {
-            self.application.unfollow(artist: currentPlayerItem.playlistItem.track.artist)
+            self.application.unfollow(artist: currentPlayerItem.playlistItem.track.artist, completion: followingCompletion)
         } else {
-            self.application.follow(artist: currentPlayerItem.playlistItem.track.artist)
+            self.application.follow(artist: currentPlayerItem.playlistItem.track.artist, completion: followingCompletion)
         }
     }
 

@@ -52,7 +52,7 @@ protocol PlayerViewModel: class {
         func navigate(to playerNavigationItemType: PlayerNavigationItemType)
 }
 
-protocol PlayerViewModelDelegate: class {
+protocol PlayerViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func refreshProgressUI()
