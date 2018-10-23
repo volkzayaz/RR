@@ -188,6 +188,10 @@
 		76DB5ABD20E684A60008D2FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB5ABC20E684A60008D2FE /* User.swift */; };
 		76E6CB8021787AAC00283CA1 /* TrackPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB7F21787AAC00283CA1 /* TrackPreviewViewModel.swift */; };
 		76E6CB822179D9BB00283CA1 /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB812179D9BB00283CA1 /* Purchase.swift */; };
+		76E6CB88217E0EC200283CA1 /* ChangePasswordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB84217E0EC100283CA1 /* ChangePasswordControllerViewModel.swift */; };
+		76E6CB89217E0EC200283CA1 /* ChangePasswordRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB85217E0EC100283CA1 /* ChangePasswordRouter.swift */; };
+		76E6CB8A217E0EC200283CA1 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB86217E0EC100283CA1 /* ChangePasswordViewController.swift */; };
+		76E6CB8B217E0EC200283CA1 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB87217E0EC100283CA1 /* ChangePasswordViewModel.swift */; };
 		76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E9D86D214FE03800873A7C /* PlayerConfig.swift */; };
 		76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1420F73DCC0021297F /* PlayerQueue.swift */; };
 		76EDBD1920F78FCD0021297F /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1820F78FCD0021297F /* AppError.swift */; };
@@ -409,6 +413,10 @@
 		76DB5ABC20E684A60008D2FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76E6CB7F21787AAC00283CA1 /* TrackPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPreviewViewModel.swift; sourceTree = "<group>"; };
 		76E6CB812179D9BB00283CA1 /* Purchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
+		76E6CB84217E0EC100283CA1 /* ChangePasswordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordControllerViewModel.swift; sourceTree = "<group>"; };
+		76E6CB85217E0EC100283CA1 /* ChangePasswordRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordRouter.swift; sourceTree = "<group>"; };
+		76E6CB86217E0EC100283CA1 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		76E6CB87217E0EC100283CA1 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
 		76E9D86D214FE03800873A7C /* PlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerConfig.swift; sourceTree = "<group>"; };
 		76EDBD1420F73DCC0021297F /* PlayerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerQueue.swift; sourceTree = "<group>"; };
 		76EDBD1820F78FCD0021297F /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
@@ -756,6 +764,7 @@
 		7665334920FF1DCE00FEC702 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				76E6CB83217E0E9300283CA1 /* ChangePassword */,
 				764D68372148E7E000F52730 /* ProfileSettings */,
 				76C9F6522147E96000054B44 /* Views */,
 				76C9F6552147F20700054B44 /* ViewsModels */,
@@ -992,6 +1001,17 @@
 				76D39CF9211353A200D47DFA /* PlaylistHeaderViewModel.swift */,
 			);
 			path = ViewsModels;
+			sourceTree = "<group>";
+		};
+		76E6CB83217E0E9300283CA1 /* ChangePassword */ = {
+			isa = PBXGroup;
+			children = (
+				76E6CB85217E0EC100283CA1 /* ChangePasswordRouter.swift */,
+				76E6CB87217E0EC100283CA1 /* ChangePasswordViewModel.swift */,
+				76E6CB84217E0EC100283CA1 /* ChangePasswordControllerViewModel.swift */,
+				76E6CB86217E0EC100283CA1 /* ChangePasswordViewController.swift */,
+			);
+			path = ChangePassword;
 			sourceTree = "<group>";
 		};
 		76EDBD1720F78F0A0021297F /* Errors */ = {
@@ -1308,6 +1328,8 @@
 				7650962320E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift in Sources */,
 				764D683E2148E86200F52730 /* ProfileSettingsViewController.swift in Sources */,
 				ABB42BD9212B634E00EABC61 /* PlayerItem.swift in Sources */,
+				76E6CB88217E0EC200283CA1 /* ChangePasswordControllerViewModel.swift in Sources */,
+				76E6CB8B217E0EC200283CA1 /* ChangePasswordViewModel.swift in Sources */,
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */,
 				764D683F2148E86200F52730 /* ProfileSettingsViewModel.swift in Sources */,
@@ -1348,6 +1370,7 @@
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
 				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,
 				767BA57F2111AEEC00C390D8 /* CellIdentifiable.swift in Sources */,
+				76E6CB89217E0EC200283CA1 /* ChangePasswordRouter.swift in Sources */,
 				AB33C986211DC5C9003B88DB /* PlaylistsCollectionViewModel.swift in Sources */,
 				762DD783214122FE0046A984 /* Hobby.swift in Sources */,
 				7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */,
@@ -1448,6 +1471,7 @@
 				767289C720ED1A13008A86B6 /* PlayerPlaylist.swift in Sources */,
 				765F2592213EC6B700F5C3D8 /* Region.swift in Sources */,
 				76D39CEB2111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift in Sources */,
+				76E6CB8A217E0EC200283CA1 /* ChangePasswordViewController.swift in Sources */,
 				7665E81B2105BC84007D8B98 /* ListeningSettingsRouter.swift in Sources */,
 				7665335120FF1DE300FEC702 /* ProfileViewModel.swift in Sources */,
 				76336A88215CD5E400AE9001 /* ProgressView.swift in Sources */,

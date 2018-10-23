@@ -164,3 +164,30 @@ struct RestApiFanUserRestorePasswordRequestPayload: RestApiRequestPayload {
         try container.encode(self.email, forKey: .email)
     }
 }
+
+struct RestApiFanUserChangePasswordRequestPayload: RestApiRequestPayload {
+
+    let currentPassword: String
+    let newPassword: String
+    let newPasswordConfirmation: String
+
+    enum CodingKeys: String, CodingKey {
+        case currentPassword = "current_password"
+        case newPassword = "new_password"
+        case newPasswordConfirmation = "new_password_confirmation"
+    }
+
+    init(currentPassword: String, newPassword: String, newPasswordConfirmation: String) {
+        self.currentPassword = currentPassword
+        self.newPassword = newPassword
+        self.newPasswordConfirmation = newPasswordConfirmation
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(self.currentPassword, forKey: .currentPassword)
+        try container.encode(self.newPassword, forKey: .newPassword)
+        try container.encode(self.newPasswordConfirmation, forKey: .newPasswordConfirmation)
+    }
+}

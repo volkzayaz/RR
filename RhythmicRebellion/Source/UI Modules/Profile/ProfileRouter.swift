@@ -23,14 +23,17 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
 
     enum SegueList: String, SegueDestinationList {
         case profileSettings = "ProfileSettingsSegueIdentifier"
+        case changePassword = "ChangePasswordSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
         case profileSettings
+        case changePassword
 
         var identifier: SegueDestinationList {
             switch self {
             case .profileSettings: return SegueList.profileSettings
+            case .changePassword: return SegueList.changePassword
             }
         }
     }
@@ -50,6 +53,11 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
             guard let profileSettingsViewController = segue.destination as? ProfileSettingsViewController else { fatalError("Incorrect controller for ProfileSettingsSegueIdentifier") }
             let profileSettingsRouter = DefaultProfileSettingsRouter(dependencies: self.dependencies)
             profileSettingsRouter.start(controller: profileSettingsViewController)
+
+        case .changePassword:
+            guard let changePasswordViewController = segue.destination as? ChangePasswordViewController else { fatalError("Incorrect controller for ChangePasswordSegueIdentifier") }
+            let changePasswordRouter = DefaultChangePasswordRouter(dependencies: self.dependencies)
+            changePasswordRouter.start(controller: changePasswordViewController)
         }
     }
 
@@ -72,7 +80,7 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
     }
 
     func navigateToChangePassword() {
-
+        self.perform(segue: .changePassword)
     }
 }
 

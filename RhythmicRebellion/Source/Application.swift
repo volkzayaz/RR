@@ -245,6 +245,28 @@ class Application: Observable {
         }
     }
 
+    func changePassword(currentPassword: String, newPassword: String, newPasswordConfirmation: String, completion: ((Result<User>) -> Void)? = nil) {
+        guard let user = self.user, user.isGuest == false else { return }
+
+        let changePasswordRequestPayload = RestApiFanUserChangePasswordRequestPayload(currentPassword: currentPassword,
+                                                                                      newPassword: newPassword,
+                                                                                      newPasswordConfirmation: newPasswordConfirmation)
+
+        self.restApiService.fanUser(changePassword: changePasswordRequestPayload) { [weak self] (changePasswordResult) in
+
+            switch changePasswordResult {
+            case .success(let user):
+                guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
+
+                self?.set(user: fanUser)
+                completion?(.success(fanUser))
+
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        }
+    }
+
     func allowPlayTrackWithExplicitMaterial(track: Track, completion: ((Result<[Int]>) -> Void)? = nil) {
 
         guard let fanUser = self.user as? FanUser else { return }
