@@ -190,10 +190,10 @@ final class PlayerViewController: UIViewController {
     }
 
     @IBAction func onPlayerItemPreviewOptionButton(sender: UIButton) {
-        guard let previewOptionHintText = self.viewModel.playerItemPreviewOptionViewModel?.hintText, previewOptionHintText.isEmpty == false else { return }
+        guard let parentView = self.parent?.view, let previewOptionHintText = self.viewModel.playerItemPreviewOptionViewModel?.hintText, previewOptionHintText.isEmpty == false else { return }
 
         let tipView = TipView(text: previewOptionHintText, preferences: EasyTipView.globalPreferences)
-        tipView.showTouched(forView: sender, withinSuperview: self.view.superview!)
+        tipView.showTouched(forView: sender, withinSuperview: parentView)
     }
 }
 
