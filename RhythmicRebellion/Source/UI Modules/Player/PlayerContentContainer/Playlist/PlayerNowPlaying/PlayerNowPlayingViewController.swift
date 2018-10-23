@@ -17,6 +17,8 @@ final class PlayerNowPlayingViewController: UIViewController {
 
     // MARK: - Public properties -
 
+    private(set) weak var tipView: TipView?
+
     private(set) var viewModel: PlayerNowPlayingViewModel!
     private(set) var router: FlowRouter!
 
@@ -54,6 +56,26 @@ final class PlayerNowPlayingViewController: UIViewController {
         viewModel.load(with: self)
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
+            self.tipView?.updateFrame()
+        }) { (transitionCoordinatorContext) in
+            self.tipView?.dismissTouched()
+        }
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+
+        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
+            self.tipView?.updateFrame()
+        }) { (transitionCoordinatorContext) in
+            self.tipView?.dismissTouched()
+        }
+    }
+
     // MARK: - Actions -
     @IBAction func onRefresh(sender: UIRefreshControl) {
         self.viewModel.reload()
@@ -89,6 +111,8 @@ final class PlayerNowPlayingViewController: UIViewController {
 
         let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
         tipView.showTouched(forView: sourceView, withinSuperview: self.tableView)
+
+        self.tipView = tipView
     }
 
     func onTableViewHeaderAction(_ action: PlayerNowPlayingTableHeaderView.Actions) {

@@ -21,6 +21,8 @@ final class PlaylistContentViewController: UIViewController {
 
     // MARK: - Public properties -
 
+    private(set) weak var tipView: TipView?
+
     private(set) var viewModel: PlaylistContentViewModel!
     private(set) var router: FlowRouter!
 
@@ -100,6 +102,26 @@ final class PlaylistContentViewController: UIViewController {
         self.tableView.tableHeaderView = self.tableHeaderView
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
+            self.tipView?.updateFrame()
+        }) { (transitionCoordinatorContext) in
+            self.tipView?.dismissTouched()
+        }
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+
+        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
+            self.tipView?.updateFrame()
+        }) { (transitionCoordinatorContext) in
+            self.tipView?.dismissTouched()
+        }
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -162,6 +184,8 @@ final class PlaylistContentViewController: UIViewController {
 
         let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
         tipView.showTouched(forView: sourceView, withinSuperview: self.tableView)
+
+        self.tipView = tipView
     }
 
 }
