@@ -115,7 +115,7 @@ final class ChangePasswordControllerViewModel: ChangePasswordViewModel {
         switch key {
         case "current_password": return self.currentPasswordField
         case "new_password": return self.newPasswordField
-        case "confirm_password": return self.confirmPasswordField
+        case "new_password_confirmation": return self.confirmPasswordField
         default: break
         }
 
