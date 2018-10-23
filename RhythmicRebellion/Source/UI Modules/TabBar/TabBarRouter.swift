@@ -212,6 +212,13 @@ extension DefaultTabBarRouter: UITabBarControllerDelegate {
             let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
             listeningSettingsRouter.start(controller: listeningSettingsViewController)
 
+        case .profile:
+            guard let profileNavigationController = viewController as? UINavigationController,
+                let profileViewController = profileNavigationController.viewControllers.first as? ProfileViewController else { break }
+            let profileRouter = DefaultProfileRouter(dependencies: self.dependencies)
+            profileRouter.start(controller: profileViewController)
+
+
         default: break
         }
 

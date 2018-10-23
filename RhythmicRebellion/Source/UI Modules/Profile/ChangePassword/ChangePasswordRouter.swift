@@ -10,6 +10,7 @@
 import UIKit
 
 protocol ChangePasswordRouter: FlowRouter {
+    func restart()
 }
 
 final class DefaultChangePasswordRouter:  ChangePasswordRouter, FlowRouterSegueCompatible {
@@ -34,7 +35,9 @@ final class DefaultChangePasswordRouter:  ChangePasswordRouter, FlowRouterSegueC
     private(set) var dependencies: RouterDependencies
     
     private(set) weak var viewModel: ChangePasswordViewModel?
-    private(set) weak var sourceController: UIViewController?
+    private(set) weak var changePasswordViewController: ChangePasswordViewController?
+
+    var sourceController: UIViewController? { return self.changePasswordViewController }
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -52,8 +55,13 @@ final class DefaultChangePasswordRouter:  ChangePasswordRouter, FlowRouterSegueC
     }
     
     func start(controller: ChangePasswordViewController) {
-        sourceController = controller
+        changePasswordViewController = controller
         let vm = ChangePasswordControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func restart() {
+        let vm = ChangePasswordControllerViewModel(router: self, application: self.dependencies.application)
+        self.changePasswordViewController?.configure(viewModel: vm, router: self)
     }
 }

@@ -30,6 +30,8 @@ protocol ChangePasswordViewModel: class {
     func validateField(_ validateField: ValidatableField?)
     
     func changePassword()
+
+    func restart()
 }
 
 protocol ChangePasswordViewModelDelegate: class, ErrorPresenting {

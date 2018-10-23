@@ -31,6 +31,7 @@ final class ChangePasswordViewController: UIViewController {
     private(set) var viewModel: ChangePasswordViewModel!
     private(set) var router: FlowRouter!
 
+    private var applicationWillEnterForegroundObserver: NSObjectProtocol?
     private var keyboardWillShowObserver: NSObjectProtocol?
     private var keyboardWillHideObserver: NSObjectProtocol?
 
@@ -40,11 +41,34 @@ final class ChangePasswordViewController: UIViewController {
     func configure(viewModel: ChangePasswordViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
+
+        if self.isViewLoaded {
+            
+            self.currentPasswordTextField.text = nil
+            self.newPasswordTextField.text = nil
+            self.confirmPasswordTextField.text = nil
+
+            self.bindViewModel()
+        }
     }
+
+    func bindViewModel() {
+        viewModel.load(with: self)
+
+        self.viewModel.registerCurrentPasswordField(self.currentPasswordTextField)
+        self.viewModel.registerNewPasswordField(self.newPasswordTextField)
+        self.viewModel.registerConfirmPasswordField(self.confirmPasswordTextField, newPasswordField: self.newPasswordTextField)
+    }
+
 
     // MARK: - Lifecycle -
 
     deinit {
+        if let applicationWillEnterForegroundObserver = self.applicationWillEnterForegroundObserver {
+            NotificationCenter.default.removeObserver(applicationWillEnterForegroundObserver)
+            self.applicationWillEnterForegroundObserver = nil
+        }
+
         if let keyboardWillShowObserver = self.keyboardWillShowObserver {
             NotificationCenter.default.removeObserver(keyboardWillShowObserver)
             self.keyboardWillShowObserver = nil
@@ -62,15 +86,15 @@ final class ChangePasswordViewController: UIViewController {
         self.currentPasswordTextField.textColor = self.viewModel.defaultTextColor
         self.currentPasswordTextField.placeholderAnimatesOnFocus = true;
 
-        viewModel.load(with: self)
-
-        self.viewModel.registerCurrentPasswordField(self.currentPasswordTextField)
-        self.viewModel.registerNewPasswordField(self.newPasswordTextField)
-        self.viewModel.registerConfirmPasswordField(self.confirmPasswordTextField, newPasswordField: self.newPasswordTextField)
+        self.bindViewModel()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        self.applicationWillEnterForegroundObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+            self.applicationWillEnterForeground(notification: notification)
+        }
 
         self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.keyboardDidShow(notification: notification)
@@ -83,6 +107,11 @@ final class ChangePasswordViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+
+        if let applicationWillEnterForegroundObserver = self.applicationWillEnterForegroundObserver {
+            NotificationCenter.default.removeObserver(applicationWillEnterForegroundObserver)
+            self.applicationWillEnterForegroundObserver = nil
+        }
 
         if let keyboardWillShowObserver = self.keyboardWillShowObserver {
             NotificationCenter.default.removeObserver(keyboardWillShowObserver)
@@ -104,6 +133,10 @@ final class ChangePasswordViewController: UIViewController {
     }
 
     // MARK: - Notifications -
+    func applicationWillEnterForeground(notification: Notification) {
+        self.viewModel.restart()
+    }
+
     func keyboardDidShow(notification: Notification) {
 
         guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }

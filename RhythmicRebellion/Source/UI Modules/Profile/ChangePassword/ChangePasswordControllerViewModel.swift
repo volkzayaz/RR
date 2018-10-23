@@ -164,4 +164,8 @@ final class ChangePasswordControllerViewModel: ChangePasswordViewModel {
             })
         }
     }
+
+    func restart() {
+        self.router?.restart()
+    }
 }

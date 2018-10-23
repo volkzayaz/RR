@@ -69,6 +69,16 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
         sourceController = controller
         let vm = ProfileControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
+
+        for viewController in controller.navigationController?.viewControllers ?? [] {
+            switch viewController {
+            case let changePasswordViewController as ChangePasswordViewController:
+                let changePasswordRouter = DefaultChangePasswordRouter(dependencies: self.dependencies)
+                changePasswordRouter.start(controller: changePasswordViewController)
+
+            default: break
+            }
+        }
     }
 
     func navigateToProfileSettings() {
