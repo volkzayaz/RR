@@ -219,9 +219,9 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
                                  sourceView: trackItemTableViewCell.actionButtonContainerView)
             case .download: self.viewModel.downloadObject(at: indexPath)
             case .cancelDownloading: self.viewModel.cancelDownloadingObject(at: indexPath)
-            case .openIn: self.showOpenIn(itemAt: indexPath,
-                                          sourceRect: trackItemTableViewCell.actionButton.frame,
-                                          sourceView: trackItemTableViewCell.actionButtonContainerView)
+            case .openIn(let sourceRect, let sourceView): self.showOpenIn(itemAt: indexPath,
+                                          sourceRect: sourceRect,
+                                          sourceView: sourceView)
             case .showHint(let sourceView, let hintText): self.showHint(sourceView: sourceView, text: hintText)
             }
         }

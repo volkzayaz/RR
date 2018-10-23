@@ -47,7 +47,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         case showActions
         case download
         case cancelDownloading
-        case openIn
+        case openIn(CGRect, UIView)
         case showHint(UIView, String)
     }
 
@@ -256,7 +256,7 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
             self.downloadButton.state = .startDownload
             actionCallback?(.cancelDownloading)
         case .downloaded:
-            actionCallback?(.openIn)
+            actionCallback?(.openIn(downloadButton.frame, self.stackView))
         }
     }
 
