@@ -15,6 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var appRouter: AppRouter?
 
     func setupAppearance() {
+
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .top, barMetrics: .default)
+        UINavigationBar.appearance().shadowImage = #colorLiteral(red: 0.2509803922, green: 0.2352941176, blue: 0.431372549, alpha: 1).image(CGSize(width: 0.5, height: 0.5))
+
         UITabBar.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).unselectedItemTintColor = #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96)
         UITabBar.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3647058824, blue: 0.7137254902, alpha: 0.96)
         UITabBarItem.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
@@ -45,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1),
                                      NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
         UISegmentedControl.appearance(whenContainedInInstancesOf: [SignUpContentView.self])
-            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1),
+            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1),
                                      NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
 
     }

@@ -35,7 +35,7 @@ final class PlayerNowPlayingViewController: UIViewController {
         var tipViewPreferences = EasyTipView.Preferences()
         tipViewPreferences.drawing.font = UIFont.systemFont(ofSize: 12.0)
         tipViewPreferences.drawing.foregroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        tipViewPreferences.drawing.backgroundColor = #colorLiteral(red: 0.2462022569, green: 0.509765625, blue: 0.7065972222, alpha: 1)
+        tipViewPreferences.drawing.backgroundColor = #colorLiteral(red: 0.2089539468, green: 0.1869146228, blue: 0.349752754, alpha: 1)
         tipViewPreferences.animating.showInitialAlpha = 0
         tipViewPreferences.animating.showDuration = 1.5
         tipViewPreferences.animating.dismissDuration = 1.5

@@ -32,7 +32,7 @@
                                     <constraint firstAttribute="width" constant="29.5" id="eaA-0x-KLk"/>
                                     <constraint firstAttribute="height" constant="28" id="rGy-TS-Lhx"/>
                                 </constraints>
-                                <color key="tintColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="12" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" image="DisclosureIndicator"/>
                                 <userDefinedRuntimeAttributes>
@@ -69,7 +69,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="MKU-JK-xnh" firstAttribute="centerX" secondItem="hEM-oW-wfr" secondAttribute="centerX" id="BTH-nu-dIL"/>
                             <constraint firstItem="hEM-oW-wfr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="MGA-G8-XVV"/>
@@ -148,7 +148,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="2zp-53-XtO">
                         <rect key="frame" x="0.0" y="20" width="768" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </textAttributes>
@@ -183,7 +183,7 @@
                         <rect key="frame" x="0.0" y="20" width="768" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </textAttributes>
@@ -337,7 +337,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <datePicker clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="QMc-yL-E0d">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="215"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="768" height="215"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="554109184.751068">
@@ -348,14 +348,14 @@
                                                     </connections>
                                                 </datePicker>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4I0-4k-st7">
-                                                    <rect key="frame" x="0.0" y="90" width="414" height="1"/>
+                                                    <rect key="frame" x="0.0" y="90" width="768" height="1"/>
                                                     <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="vzy-3X-EMB"/>
                                                     </constraints>
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PyA-eR-T0D">
-                                                    <rect key="frame" x="0.0" y="125" width="414" height="1"/>
+                                                    <rect key="frame" x="0.0" y="125" width="768" height="1"/>
                                                     <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="fIs-YX-Jq0"/>
@@ -375,7 +375,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="4I0-4k-st7" secondAttribute="trailing" id="ysF-i7-ZHB"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="datePicker" destination="QMc-yL-E0d" id="Cq6-VH-4Mx"/>
                                         </connections>
@@ -435,7 +435,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4G1-Bx-ATf">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="823"/>
-                                <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gZk-kI-oO1">
                                     <size key="itemSize" width="177.5" height="160.5"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -569,7 +569,7 @@
                 <view contentMode="scaleToFill" id="5lV-sX-u3n" customClass="UIRefreshControl">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="tintColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <viewLayoutGuide key="safeArea" id="7iS-5H-bCr"/>
                     <connections>
@@ -620,7 +620,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="ZpN-09-PTb" firstAttribute="trailing" secondItem="Ctl-dI-oob" secondAttribute="trailing" id="4Pg-Kz-tNz"/>
                             <constraint firstItem="ClA-Z4-rLN" firstAttribute="leading" secondItem="ZpN-09-PTb" secondAttribute="leading" id="7XA-kK-JIB"/>
@@ -668,7 +668,7 @@
                 <view contentMode="scaleToFill" id="8Ek-gw-P99" customClass="UIRefreshControl">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="tintColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <viewLayoutGuide key="safeArea" id="Bbk-7k-6c3"/>
                     <connections>
@@ -713,7 +713,7 @@
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="dNr-95-tqM" firstAttribute="width" secondItem="upv-Gx-oyy" secondAttribute="width" multiplier="0.6" id="CHc-xw-p3h"/>
                         <constraint firstItem="lmZ-Pv-1LC" firstAttribute="trailing" secondItem="L5R-rG-uQf" secondAttribute="trailing" constant="14" id="JZd-HG-S2X"/>
@@ -880,7 +880,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" red="0.058823529411764705" green="0.10196078431372549" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.058823529411764705" green="0.10196078431372549" blue="0.30196078431372547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="sJe-mq-f8h" kind="custom" identifier="PlayerContantContainerSegueIdentifier" customClass="PlayerContentStoryboardSegue" customModule="RhythmicRebellion" customModuleProvider="target" id="8Sw-v0-QlV"/>
@@ -1080,7 +1080,7 @@
                                     <tabBarItem tag="2" title="Playlist" image="Playlist" id="Qkk-wC-Kev"/>
                                     <tabBarItem tag="3" title="Promo" image="Promo" id="0dX-Qg-wUq"/>
                                 </items>
-                                <color key="barTintColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="delegate" destination="zss-td-B1y" id="Edv-jW-Bza"/>
                                 </connections>
@@ -1102,7 +1102,7 @@
                                     </label>
                                     <toolbar opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i8t-9k-jQM">
                                         <rect key="frame" x="272.5" y="21" width="223" height="38"/>
-                                        <color key="backgroundColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="38" id="vG2-W7-hX5"/>
                                             <constraint firstAttribute="width" constant="223" id="vng-av-aCS"/>
@@ -1137,7 +1137,7 @@
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             </barButtonItem>
                                         </items>
-                                        <color key="barTintColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="barTintColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="vng-av-aCS"/>
@@ -1239,8 +1239,8 @@
                                                     <action selector="onFollowButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="eu8-LR-GYo"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCb-Dt-HFM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="54" y="0.0" width="50.5" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCb-Dt-HFM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="70.5" y="0.0" width="32.5" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Video" image="Video">
@@ -1253,8 +1253,8 @@
                                                     <action selector="onPlayerContentButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="Hx5-n3-mhs"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-U5-L93" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="104.5" y="0.0" width="48" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-U5-L93" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="119" y="0.0" width="33.5" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Lyrics" image="Lyrics">
@@ -1267,8 +1267,8 @@
                                                     <action selector="onPlayerContentButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="lSJ-al-veO"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utM-t0-WMm" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="152.5" y="0.0" width="58" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utM-t0-WMm" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="169" y="0.0" width="40.5" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Playlist" image="Playlist">
@@ -1281,8 +1281,8 @@
                                                     <action selector="onPlayerContentButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="vjW-eb-oyg"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxQ-Wp-1dM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="210.5" y="0.0" width="52" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxQ-Wp-1dM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="225.5" y="0.0" width="37" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Promo" image="Promo">
@@ -1301,7 +1301,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.058823529411764705" green="0.023529411764705882" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="nG7-6n-58q" secondAttribute="trailing" constant="9" id="03q-HL-guk"/>
                                     <constraint firstItem="rnt-6h-dAN" firstAttribute="baseline" secondItem="60f-jB-7iz" secondAttribute="baseline" id="3cH-TK-sSp"/>

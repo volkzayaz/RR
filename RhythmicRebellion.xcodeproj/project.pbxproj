@@ -192,6 +192,7 @@
 		76E6CB89217E0EC200283CA1 /* ChangePasswordRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB85217E0EC100283CA1 /* ChangePasswordRouter.swift */; };
 		76E6CB8A217E0EC200283CA1 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB86217E0EC100283CA1 /* ChangePasswordViewController.swift */; };
 		76E6CB8B217E0EC200283CA1 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB87217E0EC100283CA1 /* ChangePasswordViewModel.swift */; };
+		76E6CB8D217F2FAC00283CA1 /* UIColor+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E6CB8C217F2FAC00283CA1 /* UIColor+Extention.swift */; };
 		76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E9D86D214FE03800873A7C /* PlayerConfig.swift */; };
 		76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1420F73DCC0021297F /* PlayerQueue.swift */; };
 		76EDBD1920F78FCD0021297F /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EDBD1820F78FCD0021297F /* AppError.swift */; };
@@ -417,6 +418,7 @@
 		76E6CB85217E0EC100283CA1 /* ChangePasswordRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordRouter.swift; sourceTree = "<group>"; };
 		76E6CB86217E0EC100283CA1 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		76E6CB87217E0EC100283CA1 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
+		76E6CB8C217F2FAC00283CA1 /* UIColor+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extention.swift"; sourceTree = "<group>"; };
 		76E9D86D214FE03800873A7C /* PlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerConfig.swift; sourceTree = "<group>"; };
 		76EDBD1420F73DCC0021297F /* PlayerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerQueue.swift; sourceTree = "<group>"; };
 		76EDBD1820F78FCD0021297F /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
@@ -673,6 +675,7 @@
 				761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */,
 				768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */,
 				764B854A2137C80100071F30 /* ValidatebleField+Extension.swift */,
+				76E6CB8C217F2FAC00283CA1 /* UIColor+Extention.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1329,6 +1332,7 @@
 				764D683E2148E86200F52730 /* ProfileSettingsViewController.swift in Sources */,
 				ABB42BD9212B634E00EABC61 /* PlayerItem.swift in Sources */,
 				76E6CB88217E0EC200283CA1 /* ChangePasswordControllerViewModel.swift in Sources */,
+				76E6CB8D217F2FAC00283CA1 /* UIColor+Extention.swift in Sources */,
 				76E6CB8B217E0EC200283CA1 /* ChangePasswordViewModel.swift in Sources */,
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */,

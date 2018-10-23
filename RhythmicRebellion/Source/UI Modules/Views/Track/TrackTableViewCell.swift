@@ -161,13 +161,16 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                 case .disable:
                     self.isDownloadAllowed = false
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Follow")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
                     self.downloadButton.state = .startDownload
                 case .ready:
                     self.isDownloadAllowed = true
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
                 case .downloading(let progress):
                     self.isDownloadAllowed = true
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
                     self.downloadButton.state = progress.fractionCompleted == 0.0 ? .pending : .downloading
 
                     self.progressObserver = progress.observe(\.fractionCompleted) { (pobject, _) in
@@ -182,6 +185,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                 case .downloaded:
                     self.isDownloadAllowed = true
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
                     self.downloadButton.downloadedButton.setImage(UIImage(named: "OpenIn")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.downloadButton.state = .downloaded
                 }

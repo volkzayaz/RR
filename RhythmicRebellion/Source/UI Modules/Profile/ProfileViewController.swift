@@ -45,8 +45,8 @@ final class ProfileViewController: UIViewController {
 
         self.imageView.image = self.imageView.image?.withRenderingMode(.alwaysTemplate)
 
-        self.tableView.backgroundView = UIView()
-        self.tableView.backgroundView?.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+//        self.tableView.backgroundView = UIView()
+//        self.tableView.backgroundView?.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
         self.tableView.addSubview(self.refreshControl)
         self.tableView.tableHeaderView = profileHeaderView
         self.tableView.tableFooterView = profileFooterView

@@ -34,7 +34,10 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .top, barMetrics: .default)
+        self.navigationController?.navigationBar.shadowImage = #colorLiteral(red: 0.2509803922, green: 0.2352941176, blue: 0.431372549, alpha: 1).image(CGSize(width: 0.5, height: 0.5))
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+
         self.collectionView.addSubview(self.refreshControl)
         self.setupCollectionViewLayout()
 
