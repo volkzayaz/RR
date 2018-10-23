@@ -1090,6 +1090,7 @@ extension Player: WebSocketServiceObserver {
 
         guard let currentPlayerItem = self.currentItem,
             self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false,
+            (currentPlayerItem.playlistItem.track.isFollowAllowFreeDownload && self.application.user?.isFollower(for: currentPlayerItem.playlistItem.track.artist) ?? false) == false,
             currentPlayerItem.restrictedTime == nil,
             let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id] else { return }
 
@@ -1171,6 +1172,34 @@ extension Player: ApplicationObserver {
 
         self.playForward()
     }
+
+    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+        guard let currentItem = self.currentItem, currentItem.playlistItem.track.artist.id == artistFollowingState.artistId else { return }
+
+        self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
+
+        if let currentQueueItem = self.playerQueue.currentItem {
+            self.observersContainer.invoke({ (observer) in
+                observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
+            })
+        }
+
+    }
+
+    func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
+        let changedIdsSet = Set(added).union(removed)
+        guard let currentItem = self.currentItem, changedIdsSet.contains(currentItem.playlistItem.track.id) else { return }
+
+        self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
+
+        if let currentQueueItem = self.playerQueue.currentItem {
+            self.observersContainer.invoke({ (observer) in
+                observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
+            })
+        }
+
+    }
+
 }
 
 extension Player {
