@@ -28,6 +28,28 @@ class RestApiService {
         return componets?.url
     }
 
+    private func makeRequest<T: RestApiRequestPayload>(with url: URL,
+                                                       httpMethod: HTTPMethod,
+                                                       headers: HTTPHeaders? = nil,
+                                                       requestPayload: T? = nil) throws -> URLRequest {
+
+        var request = URLRequest(url: url)
+        request.httpMethod = httpMethod.rawValue
+
+        if let headers = headers {
+            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
+            allHTTPHeaderFields += headers
+            request.allHTTPHeaderFields = allHTTPHeaderFields
+        }
+
+        if let requestPayload = requestPayload {
+            let jsonData = try JSONEncoder().encode(requestPayload)
+            request.httpBody = jsonData
+        }
+
+        return request
+    }
+
     // MARK: - User
 
     func fanUser(completion: @escaping (Result<User>) -> Void) {
@@ -92,14 +114,11 @@ class RestApiService {
                                     "Origin": self.originURI]
 
         do {
-            let jsonData = try JSONEncoder().encode(registrationPayload)
 
-            var request = URLRequest(url: fanProfileURL)
-            request.httpMethod = HTTPMethod.post.rawValue
-            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
-            allHTTPHeaderFields += headers
-            request.allHTTPHeaderFields = allHTTPHeaderFields
-            request.httpBody = jsonData
+            let request = try self.makeRequest(with: fanProfileURL,
+                                               httpMethod: HTTPMethod.post,
+                                               headers: headers,
+                                               requestPayload: registrationPayload)
 
             Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<FanRegistrationResponse>) in
                 switch dataResponse.result {
@@ -123,14 +142,11 @@ class RestApiService {
                                     "Origin" : self.originURI]
 
         do {
-            let jsonData = try JSONEncoder().encode(restorePasswordPayload)
 
-            var request = URLRequest(url: fanRestorePasswordURL)
-            request.httpMethod = HTTPMethod.post.rawValue
-            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
-            allHTTPHeaderFields += headers
-            request.allHTTPHeaderFields = allHTTPHeaderFields
-            request.httpBody = jsonData
+            let request = try self.makeRequest(with: fanRestorePasswordURL,
+                                               httpMethod: HTTPMethod.post,
+                                               headers: headers,
+                                               requestPayload: restorePasswordPayload)
 
             Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<FanForgotPasswordResponse>) in
                 switch dataResponse.result {
@@ -144,6 +160,31 @@ class RestApiService {
         }
     }
 
+    func fanUser(changeEmail changeEmailPayload: RestApiFanUserChangeEmailRequestPayload, completion: @escaping (Result<Void>) -> Void) {
+        guard let fanChangeEmailURL = self.makeURL(with: "fan/profile/change-email") else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+
+        do {
+            let request = try self.makeRequest(with: fanChangeEmailURL,
+                                               httpMethod: HTTPMethod.put,
+                                               headers: headers,
+                                               requestPayload: changeEmailPayload)
+
+            Alamofire.request(request).validate().response { (response) in
+                guard let error = response.error else { completion(.success(())); return }
+                completion(.failure(error))
+            }
+
+        } catch {
+            completion(.failure(error))
+        }
+
+    }
+
     func fanUser(changePassword changePasswordPayload: RestApiFanUserChangePasswordRequestPayload, completion: @escaping (Result<User>) -> Void) {
         guard let fanChangePasswordURL = self.makeURL(with: "fan/profile/change-password") else { return }
 
@@ -152,14 +193,10 @@ class RestApiService {
                                     "Origin" : self.originURI]
 
         do {
-            let jsonData = try JSONEncoder().encode(changePasswordPayload)
-
-            var request = URLRequest(url: fanChangePasswordURL)
-            request.httpMethod = HTTPMethod.put.rawValue
-            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
-            allHTTPHeaderFields += headers
-            request.allHTTPHeaderFields = allHTTPHeaderFields
-            request.httpBody = jsonData
+            let request = try self.makeRequest(with: fanChangePasswordURL,
+                                               httpMethod: HTTPMethod.put,
+                                               headers: headers,
+                                               requestPayload: changePasswordPayload)
 
             Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<FanProfileResponse>) in
                 switch dataResponse.result {
@@ -190,14 +227,10 @@ class RestApiService {
                                     "Content-Type" : "application/json"]
 
         do {
-            let jsonData = try JSONEncoder().encode(profilePayload)
-
-            var request = URLRequest(url: fanProfileURL)
-            request.httpMethod = HTTPMethod.put.rawValue
-            var allHTTPHeaderFields: HTTPHeaders = request.allHTTPHeaderFields ?? HTTPHeaders()
-            allHTTPHeaderFields += headers
-            request.allHTTPHeaderFields = allHTTPHeaderFields
-            request.httpBody = jsonData
+            let request = try self.makeRequest(with: fanProfileURL,
+                                               httpMethod: HTTPMethod.put,
+                                               headers: headers,
+                                               requestPayload: profilePayload)
 
             Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<FanProfileResponse>) in
                 switch dataResponse.result {
