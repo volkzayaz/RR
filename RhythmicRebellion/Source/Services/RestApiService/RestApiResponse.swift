@@ -16,6 +16,11 @@ public protocol EmptyRestApiResponse: RestApiResponse {
     init()
 }
 
+struct DefaultEmptyRestApiResponse: EmptyRestApiResponse {
+    init() {
+    }
+}
+
 struct ErrorResponse: RestApiResponse {
 
     let message: String

@@ -10,6 +10,7 @@
 import UIKit
 
 protocol ChangeEmailRouter: FlowRouter {
+    func restart()
 }
 
 final class DefaultChangeEmailRouter:  ChangeEmailRouter, FlowRouterSegueCompatible {
@@ -56,7 +57,12 @@ final class DefaultChangeEmailRouter:  ChangeEmailRouter, FlowRouterSegueCompati
 
     func start(controller: ChangeEmailViewController) {
         changeEmailViewController = controller
-        let vm = ChangeEmailControllerViewModel(router: self)
+        let vm = ChangeEmailControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func restart() {
+        let vm = ChangeEmailControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
+        self.changeEmailViewController?.configure(viewModel: vm, router: self)
     }
 }

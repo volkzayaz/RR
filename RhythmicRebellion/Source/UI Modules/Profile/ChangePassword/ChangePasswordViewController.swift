@@ -85,6 +85,10 @@ final class ChangePasswordViewController: UIViewController {
 
         self.currentPasswordTextField.textColor = self.viewModel.defaultTextColor
         self.currentPasswordTextField.placeholderAnimatesOnFocus = true;
+        self.newPasswordTextField.textColor = self.viewModel.defaultTextColor
+        self.newPasswordTextField.placeholderAnimatesOnFocus = true;
+        self.confirmPasswordTextField.textColor = self.viewModel.defaultTextColor
+        self.confirmPasswordTextField.placeholderAnimatesOnFocus = true;
 
         self.bindViewModel()
     }

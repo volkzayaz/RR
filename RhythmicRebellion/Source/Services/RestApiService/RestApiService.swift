@@ -174,9 +174,11 @@ class RestApiService {
                                                headers: headers,
                                                requestPayload: changeEmailPayload)
 
-            Alamofire.request(request).validate().response { (response) in
-                guard let error = response.error else { completion(.success(())); return }
-                completion(.failure(error))
+            Alamofire.request(request).validate().restApiResponse { (dataResponse: DataResponse<DefaultEmptyRestApiResponse>) in
+                switch dataResponse.result {
+                case .success(_): completion(.success(()))
+                case .failure(let error): completion(.failure(error))
+                }
             }
 
         } catch {

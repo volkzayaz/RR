@@ -168,23 +168,23 @@ struct RestApiFanUserRestorePasswordRequestPayload: RestApiRequestPayload {
 struct RestApiFanUserChangeEmailRequestPayload: RestApiRequestPayload {
 
     let email: String
-    let password: String
+    let currentPassword: String
 
     enum CodingKeys: String, CodingKey {
         case email
-        case password = "current_password"
+        case currentPassword = "current_password"
     }
 
-    init(with email: String, password: String) {
+    init(with email: String, currentPassword: String) {
         self.email = email
-        self.password = password
+        self.currentPassword = currentPassword
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(self.email, forKey: .email)
-        try container.encode(self.password, forKey: .password)
+        try container.encode(self.currentPassword, forKey: .currentPassword)
     }
 
 }

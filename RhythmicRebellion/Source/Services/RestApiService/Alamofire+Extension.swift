@@ -46,7 +46,14 @@ extension Request {
         }
 
         guard let validData = data, validData.count > 0 else {
-            return .failure(AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength))
+            guard T.self is EmptyRestApiResponse.Type else {
+                return .failure(AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength))
+            }
+
+            let emptyRestApiResponseType = T.self as! EmptyRestApiResponse.Type
+            let emptyResponse = emptyRestApiResponseType.init() as! T
+
+            return .success(emptyResponse)
         }
 
         do {

@@ -128,6 +128,7 @@
 		76769A86218079A900DCB146 /* ChangeEmailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76769A82218079A900DCB146 /* ChangeEmailRouter.swift */; };
 		76769A87218079A900DCB146 /* ChangeEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76769A83218079A900DCB146 /* ChangeEmailViewController.swift */; };
 		76769A88218079A900DCB146 /* ChangeEmailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76769A84218079A900DCB146 /* ChangeEmailViewModel.swift */; };
+		76769A8A2180981B00DCB146 /* ScrollableContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76769A892180981B00DCB146 /* ScrollableContentViewController.swift */; };
 		76775FD521774562008265AA /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76775FD421774562008265AA /* TipView.swift */; };
 		767BA578211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767BA577211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift */; };
 		767BA57A21119B6500C390D8 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767BA57921119B6500C390D8 /* GradientView.swift */; };
@@ -359,6 +360,7 @@
 		76769A82218079A900DCB146 /* ChangeEmailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailRouter.swift; sourceTree = "<group>"; };
 		76769A83218079A900DCB146 /* ChangeEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailViewController.swift; sourceTree = "<group>"; };
 		76769A84218079A900DCB146 /* ChangeEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailViewModel.swift; sourceTree = "<group>"; };
+		76769A892180981B00DCB146 /* ScrollableContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContentViewController.swift; sourceTree = "<group>"; };
 		76775FD421774562008265AA /* TipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipView.swift; sourceTree = "<group>"; };
 		767BA577211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemCollectionVIewCell.swift; sourceTree = "<group>"; };
 		767BA57921119B6500C390D8 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -1156,6 +1158,7 @@
 				76336A87215CD5E400AE9001 /* ProgressView.swift */,
 				7686D4DA21660D2A0001B061 /* VerticalButton.swift */,
 				76775FD421774562008265AA /* TipView.swift */,
+				76769A892180981B00DCB146 /* ScrollableContentViewController.swift */,
 			);
 			path = "UI Components";
 			sourceTree = "<group>";
@@ -1549,6 +1552,7 @@
 				7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */,
 				76C821A821425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift in Sources */,
 				AB14237421246AD500C926F5 /* CreatePlaylistTableViewCell.swift in Sources */,
+				76769A8A2180981B00DCB146 /* ScrollableContentViewController.swift in Sources */,
 				763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */,
 				763C905720FDDE96007C1F86 /* AuthorizationControllerViewModel.swift in Sources */,
 				76C821B521440E9E00A6F5AE /* HobbiesContainerView.swift in Sources */,
