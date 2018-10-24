@@ -763,10 +763,10 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="54" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2Gp-Ld-g8C">
                                 <rect key="frame" x="0.0" y="116" width="414" height="519"/>
-                                <color key="backgroundColor" red="0.089999999999999997" green="0.050000000000000003" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.68999999999999995" green="0.72999999999999998" blue="1" alpha="0.30419234154929575" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPlaylistCellId" id="kjB-3r-7VB" customClass="CreatePlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPlaylistCellId" id="kjB-3r-7VB" customClass="CreatePlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="54"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kjB-3r-7VB" id="TDm-Li-0X1">
@@ -781,7 +781,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JA1-aw-hen">
-                                                    <rect key="frame" x="84" y="15" width="71" height="24"/>
+                                                    <rect key="frame" x="84" y="15" width="295" height="24"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -796,14 +796,14 @@
                                                 <constraint firstItem="Ix7-bJ-45o" firstAttribute="centerY" secondItem="TDm-Li-0X1" secondAttribute="centerY" id="tWE-0M-3KF"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.089999999999999997" green="0.050000000000000003" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="separatorInset" minX="66" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="addImage" destination="Ix7-bJ-45o" id="k56-Ha-W3w"/>
                                             <outlet property="playlistNametextField" destination="JA1-aw-hen" id="pXs-S5-Gu7"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="playlistCellId" id="Nhs-sD-YE2" customClass="AddToPlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="playlistCellId" id="Nhs-sD-YE2" customClass="AddToPlaylistTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="82" width="414" height="54"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Nhs-sD-YE2" id="VPC-NY-cWI">
@@ -833,7 +833,7 @@
                                                 <constraint firstItem="DgE-40-ydb" firstAttribute="centerY" secondItem="VPC-NY-cWI" secondAttribute="centerY" id="zjQ-oe-ets"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.089999999999999997" green="0.050000000000000003" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="separatorInset" minX="66" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="playlistThumbnail" destination="2G5-m6-jNt" id="Iej-EZ-sac"/>
@@ -847,7 +847,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="0.68297991071428577" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="qyU-uJ-Ttt" firstAttribute="trailing" secondItem="2Gp-Ld-g8C" secondAttribute="trailing" id="0Ag-2j-AvS"/>
                             <constraint firstItem="qyU-uJ-Ttt" firstAttribute="bottom" secondItem="2Gp-Ld-g8C" secondAttribute="bottom" id="3Pm-u0-BQt"/>
@@ -1699,7 +1699,7 @@
                         <rect key="frame" x="0.0" y="20" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.68999999999999995" green="0.72999999999999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.089999999999999997" green="0.050000000000000003" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="0.68999999999999995" green="0.72999999999999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </textAttributes>
