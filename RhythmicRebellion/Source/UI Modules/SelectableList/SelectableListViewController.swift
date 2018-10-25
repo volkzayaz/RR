@@ -53,7 +53,7 @@ final class SelectableListViewController: UIViewController {
         self.navigationItem.title = self.viewModel.title
 
         self.tableView.backgroundView = UIView()
-        self.tableView.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+        self.tableView.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
 
         if self.viewModel.isSearchable {
             self.setupSearchController()
@@ -105,9 +105,10 @@ final class SelectableListViewController: UIViewController {
 
         searchController.searchBar.layer.cornerRadius = 15.0
         searchController.searchBar.layer.masksToBounds = true
-        searchController.searchBar.barTintColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+        searchController.searchBar.barTintColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
         searchController.searchBar.tintColor = #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
-        searchController.searchBar.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+        searchController.searchBar.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
+        searchController.searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
 //        searchController.searchBar.barStyle = .black
 //        searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.clearsContextBeforeDrawing = true
@@ -134,7 +135,7 @@ final class SelectableListViewController: UIViewController {
         }
 
         self.tableView.tableHeaderView = searchController.searchBar
-        self.tableView.tableHeaderView?.backgroundColor = #colorLiteral(red: 0.04402898997, green: 0.1072343066, blue: 0.2928951979, alpha: 1)
+        self.tableView.tableHeaderView?.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
 
         self.searchController = searchController
     }
