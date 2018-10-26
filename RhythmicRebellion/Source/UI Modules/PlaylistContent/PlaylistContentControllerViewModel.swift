@@ -131,9 +131,9 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     }
     
     private func play(track: Track) {
-        self.player?.add(track: track, at: .next, completion: { [weak self] (playerTrack, error) in
-            guard error == nil, let trackToPlay = playerTrack else { return }
-            self?.player?.performAction(.playNow, for: trackToPlay, completion: nil)
+        self.player?.add(track: track, at: .next, completion: { [weak self] (playlistItem, error) in
+            guard error == nil, let playlistItem = playlistItem else { return }
+            self?.player?.performAction(.playNow, for: playlistItem, completion: nil)
         })
     }
 

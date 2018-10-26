@@ -21,7 +21,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase])
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
-    func webSocketService(_ service: WebSocketService, didReceivePlaylist playlistLinkedItems: [String: PlayerPlaylistLinkedItem?])
+    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
@@ -40,7 +40,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
-    func webSocketService(_ service: WebSocketService, didReceivePlaylist playlistLinkedItems: [String: PlayerPlaylistLinkedItem?]) { }
+    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
@@ -106,16 +106,15 @@ class WebSocketService: WebSocketDelegate, Observable {
 
         guard self.webSocket?.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
 
-
-//        #if DEBUG
-//        if command.commandType == .playAddon {
-//            completion?(nil)
-//            return
-//        }
-//        #endif
-
         do {
             let jsonData = try JSONEncoder().encode(command)
+
+//            #if DEBUG
+//            if command.commandType == .playListUpdate {
+//                print("send playListUpdate: \(String(data: jsonData, encoding: .utf8))")
+//            }
+//            #endif
+
 
             self.webSocket?.write(data: jsonData, completion: { completion?(nil) })
         } catch (let error) {
@@ -153,6 +152,10 @@ class WebSocketService: WebSocketDelegate, Observable {
     public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 
         do {
+//            #if DEBUG
+//            print("playListUpdate: \(String(data: data, encoding: .utf8))")
+//            #endif
+
             let webSoketCommand = try JSONDecoder().decode(WebSocketCommand.self, from: data)
 
             switch webSoketCommand.data {
@@ -190,9 +193,14 @@ class WebSocketService: WebSocketDelegate, Observable {
                         observer.webSocketService(self, didReceiveTracks: tracks)
                     })
 
-                case .playListUpdate(let playerPlaylist):
+                case .playListUpdate(let playerPlaylistUpdate):
+
+//                #if DEBUG
+//                    print("recieve playListUpdate: \(String(data: data, encoding: .utf8))")
+//                #endif
+
                     self.observersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceivePlaylist: playerPlaylist)
+                        observer.webSocketService(self, didReceivePlaylistUpdate: playerPlaylistUpdate, flush: webSoketCommand.flush ?? false)
                     })
 
                 case .currentTrackId(let trackId):

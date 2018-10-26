@@ -29,7 +29,7 @@ class PlayerItem {
     let restrictedTime: TimeInterval?
 
     var trackId: TrackId {
-        return TrackId(id: self.playlistItem.track.id, key: self.playlistItem.linkedItemKey, skipStat: stubReason == nil ? nil : true)
+        return TrackId(id: self.playlistItem.track.id, key: self.playlistItem.key, skipStat: stubReason == nil ? nil : true)
     }
 
     var isPlayable: Bool {

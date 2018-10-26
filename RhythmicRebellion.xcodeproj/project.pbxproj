@@ -23,6 +23,7 @@
 		762DD781214121500046A984 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD780214121500046A984 /* Config.swift */; };
 		762DD783214122FE0046A984 /* Hobby.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD782214122FE0046A984 /* Hobby.swift */; };
 		762DD7852141237B0046A984 /* HowHear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762DD7842141237B0046A984 /* HowHear.swift */; };
+		7630FA3F2183015100F795EA /* OptionalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630FA3E2183015100F795EA /* OptionalValue.swift */; };
 		76310DC920F5E91100140D03 /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DC820F5E91100140D03 /* RestApiResponse.swift */; };
 		76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */; };
 		76310DCD20F6252200140D03 /* AddonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76310DCC20F6252200140D03 /* AddonState.swift */; };
@@ -84,7 +85,7 @@
 		7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961C20E4E11C00BF1F79 /* TrackId.swift */; };
 		7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961E20E4E45000BF1F79 /* TrackState.swift */; };
 		7650962120E5029200BF1F79 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962020E5029200BF1F79 /* Observable.swift */; };
-		7650962320E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift */; };
+		7650962320E5238100BF1F79 /* PlayerPlaylistItemPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayerPlaylistItemPatch.swift */; };
 		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
 		76525E682146722700C556D6 /* RestorePasswordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */; };
 		76525E692146722700C556D6 /* RestorePasswordRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E652146722700C556D6 /* RestorePasswordRouter.swift */; };
@@ -249,6 +250,7 @@
 		762DD780214121500046A984 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		762DD782214122FE0046A984 /* Hobby.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hobby.swift; sourceTree = "<group>"; };
 		762DD7842141237B0046A984 /* HowHear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowHear.swift; sourceTree = "<group>"; };
+		7630FA3E2183015100F795EA /* OptionalValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalValue.swift; sourceTree = "<group>"; };
 		76310DC820F5E91100140D03 /* RestApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiResponse.swift; sourceTree = "<group>"; };
 		76310DCA20F5F30800140D03 /* Alamofire+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
 		76310DCC20F6252200140D03 /* AddonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddonState.swift; sourceTree = "<group>"; };
@@ -310,7 +312,7 @@
 		7650961C20E4E11C00BF1F79 /* TrackId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackId.swift; sourceTree = "<group>"; };
 		7650961E20E4E45000BF1F79 /* TrackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackState.swift; sourceTree = "<group>"; };
 		7650962020E5029200BF1F79 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
-		7650962220E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPlaylistLinkedItem.swift; sourceTree = "<group>"; };
+		7650962220E5238100BF1F79 /* PlayerPlaylistItemPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPlaylistItemPatch.swift; sourceTree = "<group>"; };
 		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
 		76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordControllerViewModel.swift; sourceTree = "<group>"; };
 		76525E652146722700C556D6 /* RestorePasswordRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordRouter.swift; sourceTree = "<group>"; };
@@ -694,12 +696,13 @@
 			isa = PBXGroup;
 			children = (
 				7665E8202105E448007D8B98 /* ModelSupport.swift */,
+				7630FA3E2183015100F795EA /* OptionalValue.swift */,
 				7650961420E3A15D00BF1F79 /* Track.swift */,
 				7650961620E3A8C600BF1F79 /* AudioFile.swift */,
 				7650961A20E4DC7800BF1F79 /* Artist.swift */,
 				76C8DE0021106FDF00773BB1 /* Image.swift */,
 				76C8DE02211090AA00773BB1 /* TrackWriter.swift */,
-				7650962220E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift */,
+				7650962220E5238100BF1F79 /* PlayerPlaylistItemPatch.swift */,
 				7650961C20E4E11C00BF1F79 /* TrackId.swift */,
 				7650961E20E4E45000BF1F79 /* TrackState.swift */,
 				7655476D20EB80DC004AC0BD /* Token.swift */,
@@ -1328,7 +1331,7 @@
 				763170F1215BA3390053C719 /* TextImageGenerator.swift in Sources */,
 				764B854F2138043E00071F30 /* Country.swift in Sources */,
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
-				7650962320E5238100BF1F79 /* PlayerPlaylistLinkedItem.swift in Sources */,
+				7650962320E5238100BF1F79 /* PlayerPlaylistItemPatch.swift in Sources */,
 				764D683E2148E86200F52730 /* ProfileSettingsViewController.swift in Sources */,
 				ABB42BD9212B634E00EABC61 /* PlayerItem.swift in Sources */,
 				76E6CB88217E0EC200283CA1 /* ChangePasswordControllerViewModel.swift in Sources */,
@@ -1528,6 +1531,7 @@
 				7686D4DB21660D2A0001B061 /* VerticalButton.swift in Sources */,
 				76525E692146722700C556D6 /* RestorePasswordRouter.swift in Sources */,
 				76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */,
+				7630FA3F2183015100F795EA /* OptionalValue.swift in Sources */,
 				763478412153DECD001F85F6 /* AddNewSelectableListItemViewModel.swift in Sources */,
 				764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */,
 				7634783F2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift in Sources */,

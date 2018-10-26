@@ -154,6 +154,10 @@ final class PlaylistContentViewController: UIViewController {
         self.viewModel.reload()
     }
 
+    @IBAction func onPlaylistAction(sender: UIButton) {
+        
+    }
+
     func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
 
         guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else {

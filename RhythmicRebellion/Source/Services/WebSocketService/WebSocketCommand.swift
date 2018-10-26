@@ -46,7 +46,7 @@ struct WebSocketCommand: Codable {
         case userSyncFollowing(ArtistFollowingState)
         case userSyncPurchases([Purchase])
         case playListLoadTracks([Track])
-        case playListUpdate([String : PlayerPlaylistLinkedItem?])
+        case playListUpdate([String : PlayerPlaylistItemPatch?])
         case currentTrackId(TrackId?)
         case currentTrackState(TrackState)
         case currentTrackBlock(Bool)
@@ -101,7 +101,7 @@ struct WebSocketCommand: Codable {
             case .playListLoadTracks:
                 self.data = .success(.playListLoadTracks(try container.decode([Track].self, forKey: .data)))
             case .playListUpdate:
-                self.data = .success(.playListUpdate(try container.decode([String : PlayerPlaylistLinkedItem?].self, forKey: .data)))
+                self.data = .success(.playListUpdate(try container.decode([String : PlayerPlaylistItemPatch?].self, forKey: .data)))
             case .currentTrackId:
                 self.data = .success(.currentTrackId(try container.decode(TrackId.self, forKey: .data)))
             case .currentTrackState:
@@ -225,8 +225,8 @@ extension WebSocketCommand {
         return WebSocketCommand(channel: "playlist", command: "loadTracks", data: .success(.playListLoadTracks([track])))
     }
 
-    static func updatePlaylist(playlistLnkedItems: [String: PlayerPlaylistLinkedItem?]) -> WebSocketCommand {
-        return WebSocketCommand(channel: "playlist", command: "update", data: .success(.playListUpdate(playlistLnkedItems)))
+    static func updatePlaylist(playlistItemsPatches: [String: PlayerPlaylistItemPatch?]) -> WebSocketCommand {
+        return WebSocketCommand(channel: "playlist", command: "update", data: .success(.playListUpdate(playlistItemsPatches)))
     }
 
     static func trackingTimeRequest(for trackId: TrackId) -> WebSocketCommand {
