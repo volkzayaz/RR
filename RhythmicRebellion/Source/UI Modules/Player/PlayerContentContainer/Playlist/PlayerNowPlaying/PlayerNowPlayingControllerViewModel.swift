@@ -134,7 +134,21 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         default: break
         }
     }
-    
+
+    func confirmation(for action : PlayerNowPlayingTableHeaderView.Actions) -> ConfirmationAlertViewModel.ViewModel? {
+
+        switch action {
+        case .clear:
+            return ConfirmationAlertViewModel.Factory.makeClearNowPlaylistViewModel(actionCallback: { [weak self] (actionType) in
+                switch actionType {
+                case .ok: self?.player?.clearPlaylist()
+                default: break
+                }
+            })
+        default: return nil
+        }
+    }
+
     func perform(action : PlayerNowPlayingTableHeaderView.Actions) {
         switch action {
         case .clear:

@@ -19,6 +19,8 @@ protocol PlayerNowPlayingViewModel: class {
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
     
     func selectObject(at indexPath: IndexPath)
+
+    func confirmation(for action : PlayerNowPlayingTableHeaderView.Actions) -> ConfirmationAlertViewModel.ViewModel?
     func perform(action : PlayerNowPlayingTableHeaderView.Actions)
 
     func downloadObject(at indexPath: IndexPath)

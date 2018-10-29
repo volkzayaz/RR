@@ -124,7 +124,11 @@ final class PlayerNowPlayingViewController: UIViewController {
     }
 
     func onTableViewHeaderAction(_ action: PlayerNowPlayingTableHeaderView.Actions) {
-        viewModel.perform(action: action)
+
+        guard let actionConfirmationViewModel = self.viewModel.confirmation(for: action) else { viewModel.perform(action: action); return }
+
+        let confirmationAlertViewController = UIAlertController.make(from: actionConfirmationViewModel, style: .alert)
+        self.present(confirmationAlertViewController, animated: true, completion: nil)
     }
 }
 
