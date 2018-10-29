@@ -114,6 +114,11 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
             self.downloadButton.pendingView.startSpin()
         }
     }
+
+    func prepareToEndDisplay() {
+         equalizer.pause()
+    }
+
         
     func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 

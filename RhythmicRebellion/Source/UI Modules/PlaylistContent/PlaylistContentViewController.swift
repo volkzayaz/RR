@@ -209,6 +209,10 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
         (cell as! TrackTableViewCell).prepareToDisplay(viewModel: trackItemTableViewCellViewModel)
     }
 
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        (cell as! TrackTableViewCell).prepareToEndDisplay()
+    }
+
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let trackItemTableViewCell = TrackTableViewCell.reusableCell(in: tableView, at: indexPath)
         let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
