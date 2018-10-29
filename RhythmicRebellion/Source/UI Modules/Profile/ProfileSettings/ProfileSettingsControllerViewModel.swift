@@ -612,6 +612,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                     self?.userProfile = userProfile
                     self?.refreshDelegate(with: userProfile)
                     self?.checkIsDirty()
+                    self?.navigateBack()
 
 
                 case .failure(let error):
