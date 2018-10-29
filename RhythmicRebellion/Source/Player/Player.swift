@@ -36,6 +36,8 @@ protocol PlayerObserver: class {
 
     func player(player: Player, didChangePlayState isPlaying: Bool)
 
+    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?)
+
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem)
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval)
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval)
@@ -50,6 +52,8 @@ extension PlayerObserver {
     func player(player: Player, didChange status: PlayerStatus) { }
 
     func player(player: Player, didChangePlayState isPlaying: Bool) { }
+
+    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) { }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) { }
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval) { }
@@ -79,7 +83,7 @@ class Player: NSObject, Observable {
     var isBlocked: Bool = false
 
     var canForward: Bool {
-        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized }
+        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems }
 
         switch currentQueueItem.content {
         case .addon(let addon): return addon.type == .artistBIO || addon.type == .songCommentary
@@ -90,7 +94,7 @@ class Player: NSObject, Observable {
     }
 
     var canBackward: Bool {
-        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized }
+        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems}
 
         switch currentQueueItem.content {
         case .addon(let addon): return addon.type == .artistBIO || addon.type == .songCommentary
@@ -118,12 +122,13 @@ class Player: NSObject, Observable {
     }
 
     var currentItemDuration: TimeInterval? {
-        guard let audioFile = self.playerQueue.playerItem?.playlistItem.track.audioFile else { return nil }
+        guard let audioFile = self.currentItem?.playlistItem.track.audioFile else { return nil }
         return TimeInterval(audioFile.duration)
     }
 
     var currentItemTime: TimeInterval? {
-        guard let currentTrackState = self.currentTrackState else { return self.playerQueue.playerItem?.playlistItem.track != nil ? 0.0 : nil }
+        guard self.currentItem != nil else { return nil }
+        guard let currentTrackState = self.currentTrackState else { return 0.0 }
         return currentTrackState.progress
     }
 
@@ -593,27 +598,31 @@ class Player: NSObject, Observable {
     }
     
     func clearPlaylist() {
-        //NOTE: 
-        var playlistItemsPatches: [String: PlayerPlaylistItemPatch?] = [String: PlayerPlaylistItemPatch?]()
-//        playlistItems = self.playlist.playListItems.mapValues { (item) -> PlayerPlaylistItem? in
-//            let nilItem: PlayerPlaylistItem? = nil
-//            return nilItem
-//        }
-        
-//        var item = self.playlist.playListItems["8ufOt"] ?? nil
-//        item?.nextTrackKey = nil
-//        playlistItems["8ufOt"] = item
-        playlistItemsPatches["dummy"] = PlayerPlaylistItemPatch(trackId: 102, key: "dummy")
 
-        
-        self.updatePlaylist(playlistItemsPatches: playlistItemsPatches, flushing: true) { [weak self] (error) in
-            guard error == nil else { return }
-            self?.playlist.reset(with: playlistItemsPatches)
-            if let strongSelf = self {
-                strongSelf.observersContainer.invoke({ (observer) in
-                    observer.playerDidChangePlaylist(player: strongSelf)
+        guard self.state.initialized else { return }
+
+        let trackId = TrackId(id: 0, key: "")
+        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: false)
+        self.set(trackId: trackId, trackState: trackState, shouldSendTrackingTimeRequest: false) { [weak self] (error) in
+            guard let `self` = self, error == nil else { return }
+
+            self.playerQueue.reset()
+            self.replace(playerItems: self.playerQueue.playerItems)
+
+            self.observersContainer.invoke({ (observer) in
+                observer.player(player: self, didChangePlayerItem: nil)
+            })
+
+            let playlistItemsPatches = [String: PlayerPlaylistItemPatch?]()
+            self.updatePlaylist(playlistItemsPatches: playlistItemsPatches, flushing: true, completion: { [weak self] (error) in
+                guard let `self` = self, error == nil else { return }
+
+                self.playlist.update(with: playlistItemsPatches)
+
+                self.observersContainer.invoke({ (observer) in
+                    observer.playerDidChangePlaylist(player: self)
                 })
-            }
+            })
         }
     }
     
@@ -891,14 +900,19 @@ extension Player: WebSocketServiceObserver {
         self.state.playing = false
         self.player.pause()
 
-        guard let playerPlaylistItem = self.playlist.playListItem(for: currentTrackId) else { return }
-
-        let currenPlayerItem = self.playerItem(for: playerPlaylistItem)
+        var currentPlayerItem: PlayerItem? = nil
+        if let playerPlaylistItem = self.playlist.playListItem(for: currentTrackId) {
+            currentPlayerItem = self.playerItem(for: playerPlaylistItem)
+        }
 
         self.currentTrackState = nil
         self.currentTrackId = nil
-        self.playerQueue.replace(playerItem: currenPlayerItem)
+        self.playerQueue.replace(playerItem: currentPlayerItem)
         self.replace(playerItems: self.playerQueue.playerItems)
+
+        self.observersContainer.invoke({ (observer) in
+            observer.player(player: self, didChangePlayerItem: self.currentItem)
+        })
     }
 
     func apply(currentTrackState: TrackState) {
@@ -1032,6 +1046,8 @@ extension Player: WebSocketServiceObserver {
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
+
+        print("webSocketService didReceiveCurrentTrackId trackId: \(trackId)")
 
         if self.state.initialized {
             guard let trackId = trackId else { return }
@@ -1178,12 +1194,9 @@ extension Player: ApplicationObserver {
 
         self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
 
-        if let currentQueueItem = self.playerQueue.currentItem {
-            self.observersContainer.invoke({ (observer) in
-                observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
-            })
-        }
-
+        self.observersContainer.invoke({ (observer) in
+            observer.player(player: self, didChangePlayerItem: self.currentItem)
+        })
     }
 
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
@@ -1192,14 +1205,10 @@ extension Player: ApplicationObserver {
 
         self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
 
-        if let currentQueueItem = self.playerQueue.currentItem {
-            self.observersContainer.invoke({ (observer) in
-                observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
-            })
-        }
-
+        self.observersContainer.invoke({ (observer) in
+            observer.player(player: self, didChangePlayerItem: self.currentItem)
+        })
     }
-
 }
 
 extension Player {

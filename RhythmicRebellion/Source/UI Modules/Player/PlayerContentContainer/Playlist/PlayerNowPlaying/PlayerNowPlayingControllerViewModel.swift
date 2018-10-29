@@ -52,6 +52,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     func loadTracks() {
         self.playlistItems = self.player?.playlistItems ?? []
+        print("self.playlistItems.count: \(self.playlistItems.count)")
         self.delegate?.reloadUI()
     }
 
@@ -241,10 +242,9 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
         self.delegate?.reloadUI()
     }
     
-    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
         self.delegate?.reloadUI()
     }
-
 
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) {
         guard let playerCurrentTrack = self.player?.currentItem?.playlistItem.track else { return }
@@ -261,7 +261,7 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
         }
     }
 
-    
+
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {
         self.delegate?.reloadUI()
     }

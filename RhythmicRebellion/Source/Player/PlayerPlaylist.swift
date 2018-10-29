@@ -77,6 +77,8 @@ class PlayerPlaylist {
     }
 
     // MARK: - PlayerPlaylistItem -
+    var hasPlaylisItems: Bool { return self.playlistItems.isEmpty == false }
+
     var firstPlaylistItem: PlayerPlaylistItem? {
         guard let firstPlayListItem = self.playlistItems.filter( { return $0.value.previousKey == nil }).first else { return nil }
         return firstPlayListItem.value
@@ -127,6 +129,8 @@ class PlayerPlaylist {
     }
 
     func update(with playlistItemsPaths: [String : PlayerPlaylistItemPatch?]) {
+
+        guard playlistItemsPaths.count > 0 else { self.playlistItems.removeAll(); return }
 
         playlistItemsPaths.forEach { (key, playListItemPath) in
             guard let playListItemPatch = playListItemPath else { self.playlistItems.removeValue(forKey: key); return }

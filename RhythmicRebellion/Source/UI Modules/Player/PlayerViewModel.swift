@@ -27,12 +27,15 @@ protocol PlayerViewModel: class {
     var playerItemArtistNameAttributedString: NSAttributedString { get }
 
     var isPlayerBlocked: Bool { get }
+
+    var canChangePlayState: Bool { get }
     var isPlaying: Bool { get }
 
     var canForward: Bool { get }
     var canBackward: Bool { get }
     var canSetPlayerItemProgress: Bool { get }
 
+    var canFollowArtist: Bool { get }
     var isArtistFollowed: Bool { get }
 
     func load(with delegate: PlayerViewModelDelegate)
@@ -49,7 +52,8 @@ protocol PlayerViewModel: class {
     func setPlayerItemProgress(progress: Float)
     func toggleArtistFollowing()
 
-        func navigate(to playerNavigationItemType: PlayerNavigationItemType)
+    func canNavigate(to playerNavigationItemType: PlayerNavigationItemType) -> Bool
+    func navigate(to playerNavigationItemType: PlayerNavigationItemType)
 }
 
 protocol PlayerViewModelDelegate: class, ErrorPresenting {

@@ -267,7 +267,7 @@ extension PlaylistContentControllerViewModel: PlayerObserver {
         self.delegate?.reloadUI()
     }
     
-    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
         self.delegate?.reloadUI()
     }
 

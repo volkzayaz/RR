@@ -73,19 +73,16 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     var playerItemPreviewOptionViewModel: TrackPreviewOptionViewModel?
 
     var isPlayerBlocked: Bool { return self.player.isBlocked }
+
+    var canChangePlayState: Bool { return self.player.currentItem != nil }
     var isPlaying: Bool { return self.player.isPlaying }
 
-    var canForward: Bool {
-        return self.player.canForward
-    }
+    var canForward: Bool { return self.player.canForward }
+    var canBackward: Bool { return self.player.canBackward }
 
-    var canBackward: Bool {
-        return self.player.canBackward
-    }
+    var canSetPlayerItemProgress: Bool { return self.player.canSeek }
 
-    var canSetPlayerItemProgress: Bool {
-        return self.player.canSeek
-    }
+    var canFollowArtist: Bool { return self.player.currentItem != nil }
 
     var isArtistFollowed: Bool {
         guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return false }
@@ -206,12 +203,23 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         }
     }
 
+    func canNavigate(to playerNavigationItemType: PlayerNavigationItemType) -> Bool {
+        switch playerNavigationItemType {
+        case .lyrics, .promo, .video: return self.player.currentItem != nil
+        case .playlist: return true
+        }
+    }
+
     func navigate(to playerNavigationItemType: PlayerNavigationItemType) {
         self.router?.navigate(to: playerNavigationItemType)
     }
 }
 
 extension PlayerControllerViewModel: PlayerObserver {
+
+    func playerDidChangePlaylist(player: Player) {
+        self.delegate?.refreshUI()
+    }
 
     func player(player: Player, didChangeStatus status: PlayerStatus) {
         self.delegate?.refreshUI()
@@ -221,8 +229,12 @@ extension PlayerControllerViewModel: PlayerObserver {
         self.delegate?.refreshUI()
     }
 
-    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
         self.loadPlayerItemPreviewOptionViewModel()
+        self.delegate?.refreshUI()
+    }
+
+    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
         self.delegate?.refreshUI()
     }
 

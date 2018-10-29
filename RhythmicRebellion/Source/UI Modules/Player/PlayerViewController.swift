@@ -42,7 +42,6 @@ final class PlayerViewController: UIViewController {
     @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet var playBarButtonItem: UIBarButtonItem!
     @IBOutlet var pauseBarButtonItem: UIBarButtonItem!
-
     @IBOutlet var forwardBarButtonItem: UIBarButtonItem!
     @IBOutlet var backwardBarButtonItem: UIBarButtonItem!
 
@@ -118,11 +117,7 @@ final class PlayerViewController: UIViewController {
     }
 
     func tabBarItem(with playerNavigationItemType: PlayerNavigationItemType, on tabBar: UITabBar) -> UITabBarItem? {
-        return tabBar.items?.filter({
-            guard let tabBarItemNavigationItemType = PlayerNavigationItemType(rawValue: $0.tag),
-                tabBarItemNavigationItemType == playerNavigationItemType else { return false }
-            return true
-        }).first
+        return tabBar.items?.filter({ $0.tag == playerNavigationItemType.rawValue }).first
     }
 
     func unselect(_ playerNavigationItem: PlayerNavigationItem) {
@@ -250,6 +245,7 @@ extension PlayerViewController: PlayerViewModelDelegate {
         }
         self.toolBar.items = playerToolBarItems
 
+        self.playBarButtonItem.isEnabled = self.viewModel.canChangePlayState
     }
 
     func refreshUI() {
@@ -285,6 +281,19 @@ extension PlayerViewController: PlayerViewModelDelegate {
         self.regularFollowButton.isSelected = self.viewModel.isArtistFollowed
         self.compactFollowButton.isSelected = self.regularFollowButton.isSelected
         self.compactFollowButton.tintColor = self.regularFollowButton.tintColor
+
+        self.regularFollowButton.isEnabled = self.viewModel.canFollowArtist
+        self.compactFollowButton.isEnabled = self.viewModel.canFollowArtist
+
+        self.lyricsButton.isEnabled = self.viewModel.canNavigate(to: .lyrics)
+        self.videoButton.isEnabled = self.viewModel.canNavigate(to: .video)
+        self.playlistButton.isEnabled = self.viewModel.canNavigate(to: .playlist)
+        self.promoButton.isEnabled = self.viewModel.canNavigate(to: .promo)
+
+        self.compactTabBar.items?.forEach({ (tabBarItem) in
+            guard let navigationItemType = PlayerNavigationItemType(rawValue: tabBarItem.tag) else { return }
+            tabBarItem.isEnabled = self.viewModel.canNavigate(to: navigationItemType)
+        })
 
         self.playerItemPreviewOptionButton.setImage(self.viewModel.playerItemPreviewOptionViewModel?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
 
