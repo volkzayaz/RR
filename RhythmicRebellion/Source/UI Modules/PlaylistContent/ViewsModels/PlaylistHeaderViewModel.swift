@@ -17,5 +17,7 @@ struct PlaylistHeaderViewModel: PlaylistTableHeaderViewModel {
 
     var thumbnailURL: URL? { return playlist.thumbnailURL }
 
-    let playlist: PlaylistShortInfo
+    var canClear: Bool { return playlist.isFanPlaylist }
+
+    let playlist: Playlist
 }

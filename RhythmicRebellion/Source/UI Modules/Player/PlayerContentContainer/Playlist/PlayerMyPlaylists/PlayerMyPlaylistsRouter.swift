@@ -10,6 +10,7 @@
 import UIKit
 
 protocol PlayerMyPlaylistsRouter: FlowRouter {
+    func showContent(of playlist: FanPlaylist)
 }
 
 final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouterSegueCompatible {
@@ -18,28 +19,21 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouter
     typealias Destinations = SegueActions
 
     enum SegueList: String, SegueDestinationList {
-        case embedPlaylists = "embedPlaylists"
+        case playlistContent = "PlaylistContentSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
-        case embedPlaylists
+        case showPlaylistContent(playlist: FanPlaylist)
 
         var identifier: SegueDestinationList {
             switch self {
-            case .embedPlaylists: return SegueList.embedPlaylists
-            }
-        }
-
-        init?(destinationList: SegueDestinationList) {
-            switch destinationList as? SegueList {
-            case .embedPlaylists?: self = .embedPlaylists
-            default: fatalError("UPS!")
+            case .showPlaylistContent: return SegueList.playlistContent
             }
         }
     }
 
     private(set) var dependencies: RouterDependencies
-    
+
     private(set) weak var viewModel: PlayerMyPlaylistsViewModel?
     private(set) weak var sourceController: UIViewController?
 
@@ -48,12 +42,11 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouter
     }
 
     func prepare(for destination: DefaultPlayerMyPlaylistsRouter.SegueActions, segue: UIStoryboardSegue) {
-
         switch destination {
-        case .embedPlaylists:
-            guard let playlistsCollectionViewController = segue.destination as? PlaylistsCollectionViewController else { fatalError("Incorrect controller for embedPlaylists") }
-            let playlistCollectionRouter = DefaultPlaylistsCollectionRouter(dependencies: self.dependencies)
-            playlistCollectionRouter.start(controller: playlistsCollectionViewController)
+        case .showPlaylistContent(let playlist):
+            guard let playlistContentViewController = segue.destination as? PlaylistContentViewController else { fatalError("Incorrect controller for PlaylistContentSegueIdentifier") }
+            let playlistContentRouter = DefaultPlaylistContentRouter(dependencies: self.dependencies)
+            playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
             break
         }
     }
@@ -64,7 +57,11 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouter
 
     func start(controller: PlayerMyPlaylistsViewController) {
         sourceController = controller
-        let vm = PlayerMyPlaylistsControllerViewModel(router: self)
+        let vm = PlayerMyPlaylistsControllerViewModel(router: self, restApiService: self.dependencies.restApiService, application : dependencies.application)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func showContent(of playlist: FanPlaylist) {
+        self.perform(segue: .showPlaylistContent(playlist: playlist))
     }
 }

@@ -12,11 +12,15 @@ import UIKit
 protocol PlayerMyPlaylistsViewModel: class {
 
     func load(with delegate: PlayerMyPlaylistsViewModelDelegate)
+    func reload()
 
+    func numberOfItems(in section: Int) -> Int
+    func object(at indexPath: IndexPath) -> PlaylistItemCollectionViewCellViewModel?
+    func selectObject(at indexPath: IndexPath)
 }
 
-protocol PlayerMyPlaylistsViewModelDelegate: class {
+protocol PlayerMyPlaylistsViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
-
+    func reloadUI()
 }

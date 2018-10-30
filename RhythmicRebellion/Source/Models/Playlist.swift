@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol PlaylistShortInfo {
+protocol Playlist {
     var id: Int {get}
     var name: String {get}
     var isDefault: Bool {get}
@@ -20,7 +20,7 @@ protocol PlaylistShortInfo {
     var isFanPlaylist: Bool {get}
 }
 
-struct Playlist: PlaylistShortInfo, Codable {
+struct DefinedPlaylist: Playlist, Codable {
     let id: Int
     let name: String
     let createdDate: Date?
@@ -88,19 +88,19 @@ struct Playlist: PlaylistShortInfo, Codable {
     }
 }
 
-extension Playlist: Equatable {
-    static func == (lhs: Playlist, rhs: Playlist) -> Bool {
+extension DefinedPlaylist: Equatable {
+    static func == (lhs: DefinedPlaylist, rhs: DefinedPlaylist) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-extension Playlist: Hashable {
+extension DefinedPlaylist: Hashable {
     public var hashValue: Int { return self.id }
 }
 
 
 
-struct PlaylistShort: PlaylistShortInfo, Codable {
+struct FanPlaylist: Playlist, Codable {
     let id: Int
     let name: String
     let isDefault: Bool
@@ -109,11 +109,7 @@ struct PlaylistShort: PlaylistShortInfo, Codable {
     let thumbnailURL: URL?
     
     let isFanPlaylist: Bool = true
-//    var thumbnailURL: URL? {
-//        guard let thumbnailURLString = self.thumbnailURLString else { return nil }
-//        return URL(string: thumbnailURLString)
-//    }
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -141,13 +137,13 @@ struct PlaylistShort: PlaylistShortInfo, Codable {
     }
 }
 
-extension PlaylistShort: Equatable {
-    static func == (lhs: PlaylistShort, rhs: PlaylistShort) -> Bool {
+extension FanPlaylist: Equatable {
+    static func == (lhs: FanPlaylist, rhs: FanPlaylist) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-extension PlaylistShort: Hashable {
+extension FanPlaylist: Hashable {
     public var hashValue: Int { return self.id }
 }
 

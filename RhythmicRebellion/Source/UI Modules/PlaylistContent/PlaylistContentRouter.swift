@@ -56,7 +56,7 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
         self.dependencies = dependencies
     }
 
-    func start(controller: PlaylistContentViewController, playlist: PlaylistShortInfo) {
+    func start(controller: PlaylistContentViewController, playlist: Playlist) {
         sourceController = controller
 
         let vm = PlaylistContentControllerViewModel(router: self,

@@ -246,7 +246,7 @@ class RestApiService {
         }
     }
     
-    func fanPlaylists(completion: @escaping (Result<[PlaylistShort]>) -> Void) {
+    func fanPlaylists(completion: @escaping (Result<[FanPlaylist]>) -> Void) {
         guard let playlistsURL = self.makeURL(with: "fan/playlist") else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
@@ -254,7 +254,7 @@ class RestApiService {
         
         Alamofire.request(playlistsURL, method: .get, headers: headers)
             .validate()
-            .restApiResponse { (dataResponse: DataResponse<PlaylistsShortResponse>) in
+            .restApiResponse { (dataResponse: DataResponse<FanPlaylistsResponse>) in
                 
                 switch dataResponse.result {
                 case .success(let playlistsResponse): completion(.success(playlistsResponse.playlists))
@@ -280,7 +280,7 @@ class RestApiService {
         }
     }
 
-    func fanMove(_ track: Track, to playlist: PlaylistShort, completion: @escaping (Result<[Int]>) -> Void) {
+    func fanMove(_ track: Track, to playlist: FanPlaylist, completion: @escaping (Result<[Int]>) -> Void) {
         guard let moveTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-items") else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
@@ -298,7 +298,7 @@ class RestApiService {
         }
     }
     
-    func fanDelete(_ track: Track, from playlist: PlaylistShortInfo, completion: @escaping (Error?) -> Void) {
+    func fanDelete(_ track: Track, from playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
         guard let removeTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/record/" + String(track.id)) else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
@@ -310,8 +310,22 @@ class RestApiService {
                 completion(response.error)
         }
     }
+
+    func fanClear(playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
+        guard let clearPlaylistURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/clear") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(clearPlaylistURL, method: .post, headers: headers)
+            .validate()
+            .response { (response) in
+                completion(response.error)
+        }
+    }
     
-    func fanCreatePlaylist(with name: String, completion: @escaping (Result<PlaylistShort>) -> Void) {
+    func fanCreatePlaylist(with name: String, completion: @escaping (Result<FanPlaylist>) -> Void) {
         guard let createPlaylistURL = self.makeURL(with: "fan/playlist") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
@@ -321,7 +335,7 @@ class RestApiService {
 
         Alamofire.request(createPlaylistURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
-            .restApiResponse { (dataResponse: DataResponse<PlaylistsCreateShortResponse>) in
+            .restApiResponse { (dataResponse: DataResponse<FanPlaylistResponse>) in
                 switch dataResponse.result {
                 case .success(let playlistsResponse): completion(.success(playlistsResponse.playlist))
                 case .failure(let error): completion(.failure(error))
@@ -456,12 +470,12 @@ class RestApiService {
         }
     }
 
-    func playlists(completion: @escaping (Result<[Playlist]>) -> Void) {
+    func playlists(completion: @escaping (Result<[DefinedPlaylist]>) -> Void) {
         guard let playlistsURL = self.makeURL(with: "player/playlists") else { return }
 
         Alamofire.request(playlistsURL, method: .get)
             .validate()
-            .restApiResponse { (dataResponse: DataResponse<PlaylistsResponse>) in
+            .restApiResponse { (dataResponse: DataResponse<DefinedPlaylistsResponse>) in
 
                 switch dataResponse.result {
                 case .success(let playlistsResponse): completion(.success(playlistsResponse.playlists))

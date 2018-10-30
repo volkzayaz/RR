@@ -66,7 +66,7 @@ extension Request {
 
             return .success(restApiResponse)
         } catch {
-            print("Decode Failed for data: \(String(data: validData, encoding: .utf8))")
+            print("Decode \(T.self) failed for data: \(String(data: validData, encoding: .utf8))")
             return .failure(AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: error)))
         }
     }

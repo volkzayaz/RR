@@ -17,16 +17,33 @@ protocol PlaylistTableHeaderViewModel {
     var description: String? { get }
 
     var thumbnailURL: URL? { get }
+
+    var canClear: Bool { get }
 }
 
 class PlaylistTableHeaderView: UIView {
+
+    typealias ActionCallback = (Actions) -> Void
+    
+    enum Actions {
+        case showActions
+        case clear
+    }
+
+    @IBOutlet weak var infoView: UIView!
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
+    @IBOutlet weak var clearPlaylistButtonTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var clearPlaylistButtonHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var clearPlaylistButtonBottomConstraint: NSLayoutConstraint!
+
     var viewModelId: String = ""
+
+    var actionCallback: ActionCallback?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,12 +52,17 @@ class PlaylistTableHeaderView: UIView {
         self.imageView.layer.masksToBounds = true
     }
 
-    func setup(viewModel: PlaylistTableHeaderViewModel) {
+    func setup(viewModel: PlaylistTableHeaderViewModel, actionCallback:  @escaping ActionCallback) {
 
         self.viewModelId = viewModel.id
         self.titleLabel.text = viewModel.title
         self.descriptionLabel.text = viewModel.description
-        
+
+        self.clearPlaylistButtonBottomConstraint.constant = viewModel.canClear ? 0 : -(clearPlaylistButtonHeightConstraint.constant + clearPlaylistButtonTopConstraint.constant)
+
+        self.infoView.setNeedsLayout()
+        self.infoView.layoutIfNeeded()
+
         if let thumbnailURL = viewModel.thumbnailURL {
             self.activityIndicatorView.startAnimating()
             self.imageView.af_setImage(withURL: thumbnailURL,
@@ -62,5 +84,28 @@ class PlaylistTableHeaderView: UIView {
             self.imageView.makePlaylistPlaceholder()
             self.activityIndicatorView.stopAnimating()
         }
+
+        self.actionCallback = actionCallback
+    }
+
+    func updateFrame(in view: UIView, for traitCollection: UITraitCollection) {
+
+        var frame = self.frame
+        if traitCollection.horizontalSizeClass == .compact {
+            frame.size.height = view.frame.size.width * 0.85
+        } else if traitCollection.horizontalSizeClass == .regular {
+            frame.size.height = max(self.infoView.frame.height + 57.0, 93.0)
+        }
+        self.frame = frame
+    }
+
+    // MARK: - Actions -
+
+    @IBAction func onActionButton(sender: UIButton) {
+        self.actionCallback?(.showActions)
+    }
+
+    @IBAction func onClearPlaylistButton(sender: UIButton) {
+        self.actionCallback?(.clear)
     }
 }

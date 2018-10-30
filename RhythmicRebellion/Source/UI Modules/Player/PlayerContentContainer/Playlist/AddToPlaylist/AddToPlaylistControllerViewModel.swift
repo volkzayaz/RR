@@ -19,7 +19,7 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     private let restApiService : RestApiService
     private let track : Track
     
-    private var playlists: [PlaylistShort] = [PlaylistShort]()
+    private var playlists: [FanPlaylist] = [FanPlaylist]()
     private let createPlaylistVM : CreatePlaylistTableViewCellViewModel
     
     // MARK: - Lifecycle -
@@ -92,7 +92,7 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
         }
     }
     
-    func moveTrack(to playlist: PlaylistShort) {
+    func moveTrack(to playlist: FanPlaylist) {
         self.delegate?.showProgress()
         restApiService.fanMove(self.track, to: playlist) {[weak self] (result) in
             self?.delegate?.hideProgress()
@@ -112,9 +112,9 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 }
 
 class PlaylistTableViewCellViewModel : AddToPlaylistTableViewCellViewModel {
-    private let playlist : PlaylistShort
+    private let playlist : FanPlaylist
     
-    init(playlist: PlaylistShort) {
+    init(playlist: FanPlaylist) {
         self.playlist = playlist
     }
     

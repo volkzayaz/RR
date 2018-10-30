@@ -62,7 +62,12 @@ final class PlaylistContentViewController: UIViewController {
 
         let playlistHeaderViewModel = self.viewModel.playlistHeaderViewModel
 
-        self.tableHeaderView.setup(viewModel: playlistHeaderViewModel)
+        self.tableHeaderView.setup(viewModel: self.viewModel.playlistHeaderViewModel) { (action) in
+            switch action {
+            case .showActions: break
+            case .clear: self.onPlaylistAction()
+            }
+        }
 
         if let thumbnailURL = playlistHeaderViewModel.thumbnailURL, self.imageView.superview != nil {
             self.activityIndicatorView.startAnimating()
@@ -98,7 +103,7 @@ final class PlaylistContentViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.layoutTableHeaderView()
+        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
         self.tableView.tableHeaderView = self.tableHeaderView
     }
 
@@ -125,37 +130,27 @@ final class PlaylistContentViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        self.layoutTableHeaderView()
+        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
         self.tableView.tableHeaderView = self.tableHeaderView
     }
 
     func setupTableHeaderView() {
 
-        self.layoutTableHeaderView()
-        self.tableHeaderView.translatesAutoresizingMaskIntoConstraints = true
+        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
+//        self.tableHeaderView.translatesAutoresizingMaskIntoConstraints = true
         self.tableView.tableHeaderView = self.tableHeaderView
     }
 
-    func layoutTableHeaderView() {
-
-        var tableHeaderViewFrame = self.tableHeaderView.frame
-        if self.traitCollection.horizontalSizeClass == .compact {
-            tableHeaderViewFrame.size.height = self.tableView.frame.size.width * 0.85
-        } else if self.traitCollection.horizontalSizeClass == .regular {
-            tableHeaderViewFrame.size.height = 93.0
-        }
-        self.tableHeaderView.frame = tableHeaderViewFrame
-    }
+//    func layoutTableHeaderView() {
+//
+//        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
+//    }
 
 
     // MARK: - Actions -
 
     @IBAction func onRefresh(sender: UIRefreshControl) {
         self.viewModel.reload()
-    }
-
-    @IBAction func onPlaylistAction(sender: UIButton) {
-        
     }
 
     func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
@@ -190,6 +185,13 @@ final class PlaylistContentViewController: UIViewController {
         tipView.showTouched(forView: sourceView, withinSuperview: self.tableView)
 
         self.tipView = tipView
+    }
+
+    func onPlaylistAction() {
+        guard let actionConfirmationViewModel = self.viewModel.clearPlaylistConfirmation() else { viewModel.clearPlaylist(); return }
+
+        let confirmationAlertViewController = UIAlertController.make(from: actionConfirmationViewModel, style: .alert)
+        self.present(confirmationAlertViewController, animated: true, completion: nil)
     }
 
 }

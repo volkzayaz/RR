@@ -22,7 +22,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     private(set) var textImageGenerator: TextImageGenerator
     private(set) var trackPriceFormatter: MoneyFormatter
 
-    private var playlist: PlaylistShortInfo
+    private var playlist: Playlist
     private var playlistTracks: [Track] = [Track]()
 
     var playlistHeaderViewModel: PlaylistHeaderViewModel { return PlaylistHeaderViewModel(playlist: self.playlist) }
@@ -35,7 +35,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.audioFileLocalStorageService?.removeObserver(self)
     }
 
-    init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, audioFileLocalStorageService: AudioFileLocalStorageService, playlist: PlaylistShortInfo) {
+    init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, audioFileLocalStorageService: AudioFileLocalStorageService, playlist: Playlist) {
         self.router = router
         self.application = application
         self.player = player
@@ -161,7 +161,9 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         case .toPlaylist:
             self.router?.showAddToPlaylist(for: track)
         case .delete:
-            self.restApiService?.fanDelete(track, from: self.playlist, completion: { (error) in
+            guard let fanPlaylist = self.playlist as? FanPlaylist else { return }
+
+            self.restApiService?.fanDelete(track, from: fanPlaylist, completion: { (error) in
                 if let error = error {
                     self.delegate?.show(error: error)
                 } else {
@@ -220,6 +222,30 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         case .downloaded(let localURL): return localURL
         default: return nil
         }
+    }
+
+    func clearPlaylistConfirmation() -> ConfirmationAlertViewModel.ViewModel? {
+
+        return ConfirmationAlertViewModel.Factory.makeClearNowPlaylistViewModel(actionCallback: { [weak self] (actionType) in
+            switch actionType {
+            case .ok: self?.clearPlaylist()
+            default: break
+            }
+        })
+    }
+
+    func clearPlaylist() {
+        guard let fanPlaylist = self.playlist as? FanPlaylist else { return }
+
+        self.restApiService?.fanClear(playlist: fanPlaylist, completion: { [weak self] (error) in
+            guard let error = error else {
+                self?.playlistTracks.removeAll()
+                self?.delegate?.reloadUI()
+                return
+            }
+
+            self?.delegate?.show(error: error)
+        })
     }
 }
 

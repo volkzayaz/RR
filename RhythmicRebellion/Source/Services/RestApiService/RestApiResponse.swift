@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-public protocol RestApiResponse: Decodable {
+public protocol RestApiResponse: Decodable {    
 }
 
 public protocol EmptyRestApiResponse: RestApiResponse {
@@ -197,23 +197,23 @@ struct ArtistsResponse: RestApiResponse {
 }
 
 
-struct PlaylistsResponse: RestApiResponse {
+struct DefinedPlaylistsResponse: RestApiResponse {
 
-    let playlists: [Playlist]
+    let playlists: [DefinedPlaylist]
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.playlists = try container.decode([Playlist].self)
+        self.playlists = try container.decode([DefinedPlaylist].self)
     }
 }
 
-struct PlaylistsShortResponse: RestApiResponse {
+struct FanPlaylistsResponse: RestApiResponse {
     
-    let playlists: [PlaylistShort]
+    let playlists: [FanPlaylist]
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.playlists = try container.decode([PlaylistShort].self)
+        self.playlists = try container.decode([FanPlaylist].self)
     }
 }
 
@@ -231,13 +231,13 @@ struct PlaylistTracksResponse: RestApiResponse {
     }
 }
 
-struct PlaylistsCreateShortResponse: RestApiResponse {
+struct FanPlaylistResponse: RestApiResponse {
     
-    let playlist: PlaylistShort
+    let playlist: FanPlaylist
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.playlist = try container.decode(PlaylistShort.self)
+        self.playlist = try container.decode(FanPlaylist.self)
     }
 }
 
