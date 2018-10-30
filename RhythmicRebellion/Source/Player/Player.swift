@@ -659,15 +659,19 @@ class Player: NSObject, Observable {
         let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
 
         self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
-            guard let strongSelf = self, error == nil else { completion?(); return }
+            guard let `self` = self, error == nil else { completion?(); return }
 
-            strongSelf.player.pause()
-            strongSelf.playerQueue.replace(playerItem: currentPlayerItem)
-            strongSelf.replace(playerItems: strongSelf.playerQueue.playerItems)
+            self.player.pause()
+            self.playerQueue.replace(playerItem: currentPlayerItem)
+            self.replace(playerItems: self.playerQueue.playerItems)
 
-            strongSelf.state.playing = isPlaying
+            self.observersContainer.invoke({ (observer) in
+                observer.player(player: self, didChangePlayerItem: self.currentItem)
+            })
+
+            self.state.playing = isPlaying
             if isPlaying {
-                strongSelf.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
+                self.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
             }
         }
     }
@@ -719,15 +723,19 @@ class Player: NSObject, Observable {
         let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
 
         self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
-            guard let strongSelf = self, error == nil else { completion?(); return }
+            guard let `self` = self, error == nil else { completion?(); return }
 
-            strongSelf.player.pause()
-            strongSelf.playerQueue.replace(playerItem: currentPlayerItem)
-            strongSelf.replace(playerItems: strongSelf.playerQueue.playerItems)
+            self.player.pause()
+            self.playerQueue.replace(playerItem: currentPlayerItem)
+            self.replace(playerItems: self.playerQueue.playerItems)
+
+            self.observersContainer.invoke({ (observer) in
+                observer.player(player: self, didChangePlayerItem: self.currentItem)
+            })
 
             if isPlaying {
-                strongSelf.state.playing = isPlaying
-                strongSelf.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
+                self.state.playing = isPlaying
+                self.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
             }
         }
     }
@@ -1484,6 +1492,11 @@ extension Player {
                 guard let `self` = self else { completion?(nil); return }
                 self.playerQueue.replace(playerItem: currentPlayerItem)
                 self.replace(playerItems: self.playerQueue.playerItems)
+
+                self.observersContainer.invoke({ (observer) in
+                    observer.player(player: self, didChangePlayerItem: self.currentItem)
+                })
+
                 self.play()
                 completion?(nil)
             })
@@ -1501,6 +1514,11 @@ extension Player {
                 guard let `self` = self else { completion?(nil); return }
                 self.playerQueue.replace(playerItem: currentPlayerItem)
                 self.replace(playerItems: self.playerQueue.playerItems)
+
+                self.observersContainer.invoke({ (observer) in
+                    observer.player(player: self, didChangePlayerItem: self.currentItem)
+                })
+
                 if wasPlaying {
                     self.play()
                 }
