@@ -58,8 +58,19 @@ struct ImageLink: Codable {
             self.path = .url(pathString)
         }
 
-        self.width = try container.decode(Float.self, forKey: .width)
-        self.height = try container.decode(Float.self, forKey: .height)
+        var tempWidth: Float = 0.0
+        var tempHeight: Float = 0.0
+        do {
+            tempWidth = try container.decode(Float.self, forKey: .width)
+            tempHeight = try container.decode(Float.self, forKey: .height)
+        } catch {
+            tempWidth = Float(try container.decode(String.self, forKey: .width)) ?? 0.0
+            tempHeight = Float(try container.decode(String.self, forKey: .height)) ?? 0.0
+        }
+
+        self.width = tempWidth
+        self.height = tempHeight
+        
     }
 
     public func encode(to encoder: Encoder) throws {
