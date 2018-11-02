@@ -44,6 +44,8 @@ final class PlayerViewController: UIViewController {
     @IBOutlet var pauseBarButtonItem: UIBarButtonItem!
     @IBOutlet var forwardBarButtonItem: UIBarButtonItem!
     @IBOutlet var backwardBarButtonItem: UIBarButtonItem!
+    @IBOutlet var likeBarButtonItem: UIBarButtonItem!
+    @IBOutlet var dislikeBarButtonItem: UIBarButtonItem!
 
     // MARK: - Public properties -
 
@@ -149,6 +151,14 @@ final class PlayerViewController: UIViewController {
 
     @IBAction func onBackwardButton(sender: UIBarButtonItem) {
         viewModel.backward()
+    }
+
+    @IBAction func onLikeButton(sender: UIBarButtonItem) {
+        self.viewModel.toggleLike()
+    }
+
+    @IBAction func onDislikeButton(sender: UIBarButtonItem) {
+        self.viewModel.toggleDislike()
     }
 
     @IBAction func onFollowButton(sender: UIButton) {
@@ -275,6 +285,12 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
         self.forwardBarButtonItem.isEnabled = self.viewModel.canForward
         self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
+
+        let playerItemTrackLikeState = self.viewModel.playerItemTrackLikeState
+        self.likeBarButtonItem.tintColor = playerItemTrackLikeState.isLiked ? #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
+        self.likeBarButtonItem.isEnabled = self.viewModel.canChangePlayerItemTrackLikeState
+        self.dislikeBarButtonItem.tintColor = playerItemTrackLikeState.isDisliked ? #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
+        self.dislikeBarButtonItem.isEnabled = self.viewModel.canChangePlayerItemTrackLikeState
 
         self.playerItemProgressView.isUserInteractionEnabled = self.viewModel.canSetPlayerItemProgress
 

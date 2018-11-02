@@ -70,6 +70,15 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
                                                NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0)])
     }
 
+    var playerItemTrackLikeState: Track.LikeStates {
+        guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return .none }
+        return user.likeState(for: currentPlayerItem.playlistItem.track)
+    }
+
+    var canChangePlayerItemTrackLikeState: Bool {
+        return self.player.currentItem != nil
+    }
+
     var playerItemPreviewOptionViewModel: TrackPreviewOptionViewModel?
 
     var isPlayerBlocked: Bool { return self.player.isBlocked }
@@ -175,6 +184,24 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.player.playBackward()
     }
 
+    func toggleLike() {
+        guard let track = self.player.currentItem?.playlistItem.track else { return }
+
+        self.application.update(track: track, likeState: .liked) { [weak self] (error) in
+            guard let error = error else { return }
+            self?.delegate?.show(error: error)
+        }
+    }
+
+    func toggleDislike() {
+        guard let track = self.player.currentItem?.playlistItem.track else { return }
+
+        self.application.update(track: track, likeState: .disliked) { [weak self] (error) in
+            guard let error = error else { return }
+            self?.delegate?.show(error: error)
+        }
+    }
+
     func setPlayerItemProgress(progress: Float) {
 
         guard self.player.canSeek, let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0 else { return }
@@ -255,7 +282,13 @@ extension PlayerControllerViewModel: PlayerObserver {
 extension PlayerControllerViewModel: ApplicationObserver {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+        guard let artist = self.player.currentItem?.playlistItem.track.artist, artist.id == artistFollowingState.artistId else { return }
         self.loadPlayerItemPreviewOptionViewModel()
+        self.delegate?.refreshUI()
+    }
+
+    func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState) {
+        guard let track = self.player.currentItem?.playlistItem.track, track.id == trackLikeState.id else { return }
         self.delegate?.refreshUI()
     }
 }

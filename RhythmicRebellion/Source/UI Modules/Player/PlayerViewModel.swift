@@ -26,6 +26,9 @@ protocol PlayerViewModel: class {
     var playerItemArtistNameString: String { get }
     var playerItemArtistNameAttributedString: NSAttributedString { get }
 
+    var playerItemTrackLikeState: Track.LikeStates { get }
+    var canChangePlayerItemTrackLikeState: Bool { get }
+
     var isPlayerBlocked: Bool { get }
 
     var canChangePlayState: Bool { get }
@@ -49,6 +52,8 @@ protocol PlayerViewModel: class {
     func pause()
     func forward()
     func backward()
+    func toggleLike()
+    func toggleDislike()
     func setPlayerItemProgress(progress: Float)
     func toggleArtistFollowing()
 

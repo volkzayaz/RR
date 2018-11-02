@@ -427,6 +427,25 @@ class RestApiService {
         }
     }
 
+    func fanUpdate(track: Track, likeState: Track.LikeStates, completion: @escaping (Result<TrackLikeState>) -> Void) {
+        guard let trackLikeURL = self.makeURL(with: "fan/record-like/" + String(track.id)) else { return }
+
+        let parameters: Parameters = ["type" : likeState.rawValue]
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(trackLikeURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<TrackLikeStateResponse>) in
+                switch dataResponse.result {
+                case .success(let trackLikeStateResponse): completion(.success(trackLikeStateResponse.state))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+
+    }
 
     // MARK: - Player
 

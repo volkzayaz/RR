@@ -183,6 +183,7 @@
 		76C9F6512147DFFD00054B44 /* RoundedImageVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6502147DFFD00054B44 /* RoundedImageVIew.swift */; };
 		76C9F6572147F22B00054B44 /* ProfileItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6562147F22B00054B44 /* ProfileItemTableViewCell.swift */; };
 		76C9F6592147F50300054B44 /* ProfileItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6582147F50300054B44 /* ProfileItemViewModel.swift */; };
+		76CE92A8218C7B9A00956882 /* TrackLikeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92A7218C7B9900956882 /* TrackLikeState.swift */; };
 		76D39CEB2111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */; };
 		76D39CEC2111F7FA00D47DFA /* PlaylistContentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */; };
 		76D39CED2111F7FA00D47DFA /* PlaylistContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */; };
@@ -413,6 +414,7 @@
 		76C9F6502147DFFD00054B44 /* RoundedImageVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageVIew.swift; sourceTree = "<group>"; };
 		76C9F6562147F22B00054B44 /* ProfileItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItemTableViewCell.swift; sourceTree = "<group>"; };
 		76C9F6582147F50300054B44 /* ProfileItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItemViewModel.swift; sourceTree = "<group>"; };
+		76CE92A7218C7B9900956882 /* TrackLikeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackLikeState.swift; sourceTree = "<group>"; };
 		76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentControllerViewModel.swift; sourceTree = "<group>"; };
 		76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentRouter.swift; sourceTree = "<group>"; };
 		76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentViewController.swift; sourceTree = "<group>"; };
@@ -733,6 +735,7 @@
 				761873BB2167ACCD00F3997F /* Price.swift */,
 				76E6CB812179D9BB00283CA1 /* Purchase.swift */,
 				76FA64C0218B2ECB00A132E9 /* FanPlaylistState.swift */,
+				76CE92A7218C7B9900956882 /* TrackLikeState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1402,6 +1405,7 @@
 				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
 				763931EA2118748200A65257 /* PlayerNowPlayingControllerViewModel.swift in Sources */,
 				7665E8212105E448007D8B98 /* ModelSupport.swift in Sources */,
+				76CE92A8218C7B9A00956882 /* TrackLikeState.swift in Sources */,
 				76D39CF82113183200D47DFA /* PlaylistTableHeaderView.swift in Sources */,
 				764D683C2148E86200F52730 /* ProfileSettingsControllerViewModel.swift in Sources */,
 				7633F31D216CD6A6009A1834 /* TrackAudioFileLocalItem.swift in Sources */,

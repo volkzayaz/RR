@@ -24,6 +24,8 @@ public protocol User: Decodable {
 
     func isFollower(for artist: Artist) -> Bool
     func hasPurchase(for track: Track) -> Bool
+
+    func likeState(for track: Track) -> Track.LikeStates
 }
 
 //func == (lhs: User, rhs: User) -> Bool {
@@ -52,13 +54,9 @@ struct GuestUser: User {
         return .censorship
     }
 
-    func isFollower(for artist: Artist) -> Bool {
-        return false
-    }
-
-    func hasPurchase(for track: Track) -> Bool {
-        return false
-    }
+    func isFollower(for artist: Artist) -> Bool { return false }
+    func hasPurchase(for track: Track) -> Bool { return false }
+    func likeState(for track: Track) -> Track.LikeStates { return .none }
 }
 
 struct UserProfile: Decodable {
@@ -78,6 +76,7 @@ struct UserProfile: Decodable {
     var forceToPlay: Set<Int>
     var followedArtistsIds: Set<String>
     var purchasedTracksIds: Set<Int>
+    var tracksLikeStates: [Int : Track.LikeStates]
 
     var listeningSettings: ListeningSettings
 
@@ -98,6 +97,7 @@ struct UserProfile: Decodable {
         case listeningSettings = "listening_settings"
         case followedArtistsIds = "artists_followed"
         case purchasedTracksIds = "purchased_tracks_ids"
+        case tracksLikeStates = "likes"
     }
 
     init(from decoder: Decoder) throws {
@@ -143,6 +143,12 @@ struct UserProfile: Decodable {
         } else {
             self.purchasedTracksIds = Set<Int>()
         }
+
+        if let tracksLikeStates = try container.decodeIfPresent([Int : Track.LikeStates].self, forKey: .tracksLikeStates) {
+            self.tracksLikeStates = tracksLikeStates
+        } else {
+            self.tracksLikeStates = [:]
+        }
     }
 
     mutating func update(with trackForceToPlayState: TrackForceToPlayState) {
@@ -169,6 +175,11 @@ struct UserProfile: Decodable {
         self.purchasedTracksIds = Set(purchasedTracksIds).union(self.purchasedTracksIds)
 
     }
+
+    mutating func update(with trackLikeState: TrackLikeState) {
+        self.tracksLikeStates[trackLikeState.id] = trackLikeState.state
+    }
+
 }
 
 extension UserProfile: Equatable {
@@ -221,6 +232,11 @@ struct FanUser: User {
 
     func hasPurchase(for track: Track) -> Bool {
         return self.profile.purchasedTracksIds.contains(track.id)
+    }
+
+    func likeState(for track: Track) -> Track.LikeStates {
+        guard let trackLikeState = self.profile.tracksLikeStates[track.id] else { return .none }
+        return trackLikeState
     }
 }
 

@@ -19,6 +19,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
     func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState)
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase])
+    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState)
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool)
@@ -40,6 +41,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
     func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) { }
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) { }
+    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) { }
@@ -190,6 +192,10 @@ class WebSocketService: WebSocketDelegate, Observable {
                         observer.webSocketService(self, didReceivePurchases: purchases)
                     })
 
+                case .userSyncTrackLikeState(let trackLikeState):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveTrackLikeState: trackLikeState)
+                    })
 
                 case .playListLoadTracks(let tracks):
 

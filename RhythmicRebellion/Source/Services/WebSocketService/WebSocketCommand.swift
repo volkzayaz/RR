@@ -28,6 +28,7 @@ struct WebSocketCommand: Codable {
         case userSyncForceToPlay = "user-syncForceToPlay"
         case userSyncFollowing = "user-syncFollowing"
         case userSyncPurchases = "user-syncPurchases"
+        case userSyncTrackLikeState = "user-syncLike"
         case playListLoadTracks = "playlist-loadTracks"
         case playListUpdate = "playlist-update"
         case currentTrackId = "currentTrack-setTrack"
@@ -46,6 +47,7 @@ struct WebSocketCommand: Codable {
         case userSyncForceToPlay(TrackForceToPlayState)
         case userSyncFollowing(ArtistFollowingState)
         case userSyncPurchases([Purchase])
+        case userSyncTrackLikeState(TrackLikeState)
         case playListLoadTracks([Track])
         case playListUpdate([String : PlayerPlaylistItemPatch?])
         case currentTrackId(TrackId?)
@@ -100,6 +102,8 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.userSyncFollowing(try container.decode(ArtistFollowingState.self, forKey: .data)))
             case .userSyncPurchases:
                 self.data = .success(.userSyncPurchases(try container.decode([Purchase].self, forKey: .data)))
+            case .userSyncTrackLikeState:
+                self.data = .success(.userSyncTrackLikeState(try container.decode(TrackLikeState.self, forKey: .data)))
             case .playListLoadTracks:
                 self.data = .success(.playListLoadTracks(try container.decode([Track].self, forKey: .data)))
             case .playListUpdate:
@@ -162,6 +166,8 @@ struct WebSocketCommand: Codable {
                 try container.encode(artistFollowingState, forKey: .data)
             case .userSyncPurchases(let purchases):
                 try container.encode(purchases, forKey: .data)
+            case .userSyncTrackLikeState(let trackLikeState):
+                try container.encode(trackLikeState, forKey: .data)
             case .playListLoadTracks(let traks):
                 try container.encode(traks, forKey: .data)
             case .playListUpdate(let playerPlaylist):
@@ -205,6 +211,10 @@ extension WebSocketCommand {
 
     static func syncFollowing(artistFollowingState: ArtistFollowingState) -> WebSocketCommand {
         return WebSocketCommand(channel: "user", command: "syncFollowing", data: .success(.userSyncFollowing(artistFollowingState)))
+    }
+
+    static func syncTrackLikeState(trackLikeState: TrackLikeState) -> WebSocketCommand {
+        return WebSocketCommand(channel: "user", command: "syncLike", data: .success(.userSyncTrackLikeState(trackLikeState)))
     }
 
     static func setCurrentTrack(trackId: TrackId) -> WebSocketCommand {

@@ -10,6 +10,26 @@ import Foundation
 
 public struct Track: Codable {
 
+    public enum LikeStates: Int, Codable {
+        case disliked = -1
+        case none = 0
+        case liked = 1
+
+        var isLiked: Bool {
+            switch self {
+            case .liked: return true
+            default: return false
+            }
+        }
+
+        var isDisliked: Bool {
+            switch self {
+            case .disliked: return true
+            default: return false
+            }
+        }
+    }
+
     enum TrackPreviewType: Int {
         case unknown
         case noPreview = 1

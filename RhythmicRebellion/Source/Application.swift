@@ -26,6 +26,7 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState)
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int])
+    func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState)
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState)
 }
@@ -40,6 +41,7 @@ extension ApplicationObserver {
     func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) { }
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) { }
+    func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState) { }
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) { }
 }
@@ -269,6 +271,8 @@ class Application: Observable {
         }
     }
 
+    // MARK: Tracks
+
     func allowPlayTrackWithExplicitMaterial(track: Track, completion: ((Result<[Int]>) -> Void)? = nil) {
 
         guard let fanUser = self.user as? FanUser else { return }
@@ -319,6 +323,29 @@ class Application: Observable {
         }
     }
 
+    func update(track: Track, likeState: Track.LikeStates, completion: ((Error?) -> Void)? = nil) {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.restApiService.fanUpdate(track: track, likeState: likeState) { [weak self] (trackLikeStateResult) in
+            switch trackLikeStateResult {
+            case .success(let trackLikeState):
+                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
+
+                var nextFanUser = currentFanUser
+                nextFanUser.profile.update(with: trackLikeState)
+                self?.user = nextFanUser
+
+                self?.webSocketService.sendCommand(command: WebSocketCommand.syncTrackLikeState(trackLikeState: trackLikeState))
+
+                self?.notifyUserProfileTraksLikeStetesChanged(with: trackLikeState)
+                completion?(nil)
+
+            case .failure(let error): completion?(error)
+            }
+        }
+    }
+
+    // MARK: Artists
     func follow(artist: Artist, completion: ((Result<[String]>) -> Void)? = nil) {
         guard let fanUser = self.user as? FanUser else { return }
 
@@ -465,6 +492,14 @@ extension Application {
             observer.application(self, didChangeFanPlaylist: fanPlaylistState)
         })
     }
+
+    func notifyUserProfileTraksLikeStetesChanged(with trackLikeState: TrackLikeState) {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChangeUserProfile: fanUser.profile.tracksLikeStates, with: trackLikeState)
+        })
+    }
 }
 
 extension Application: WebSocketServiceObserver {
@@ -515,5 +550,15 @@ extension Application: WebSocketServiceObserver {
         guard (self.user as? FanUser) != nil else { return }
 
         notifyFanPlaylistChanged(with: fanPlaylistState)
+    }
+
+    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) {
+        guard let currentFanUser = self.user as? FanUser else { return }
+
+        var fanUser = currentFanUser
+        fanUser.profile.update(with: trackLikeState)
+        self.user = fanUser
+
+        self.notifyUserProfileTraksLikeStetesChanged(with: trackLikeState)
     }
 }
