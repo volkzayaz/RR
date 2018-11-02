@@ -18,20 +18,22 @@ protocol PlaylistContentViewModel: class {
 
     func numberOfItems(in section: Int) -> Int
     func object(at indexPath: IndexPath) -> TrackViewModel?
-    func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
     func selectObject(at indexPath: IndexPath)
+
+    func playlistActions() -> PlaylistActionsViewModels.ViewModel?
+    func clearPlaylist()
+
+    func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
 
     func downloadObject(at indexPath: IndexPath)
     func cancelDownloadingObject(at indexPath: IndexPath)
     func objectLoaclURL(at indexPath: IndexPath) -> URL?
-
-    func clearPlaylistConfirmation() -> ConfirmationAlertViewModel.ViewModel?
-    func clearPlaylist()
 }
 
-protocol PlaylistContentViewModelDelegate: class, ErrorPresenting {
+protocol PlaylistContentViewModelDelegate: class, ErrorPresenting, AlertActionsViewModelPersenting, ConfirmationPresenting {
 
     func refreshUI()
+    func reloadPlaylistUI()
     func reloadUI()
 
     func reloadObjects(at indexPaths: [IndexPath])

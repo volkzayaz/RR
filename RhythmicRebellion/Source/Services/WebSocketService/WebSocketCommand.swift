@@ -36,6 +36,7 @@ struct WebSocketCommand: Codable {
         case checkAddons = "addons-checkAddons"
         case playAddon = "addons-playAddon"
         case tracksTotalPlayTime = "previewOpt-srts_previews"
+        case fanPlaylistsStates = "states-customPlaylistsStates"
         case unknown
     }
 
@@ -53,6 +54,7 @@ struct WebSocketCommand: Codable {
         case checkAddons(CheckAddons)
         case playAddon(AddonState)
         case tracksTotalPlayTime([Int: UInt64])
+        case fanPlaylistsStates(FanPlaylistState)
     }
 
     enum CommandData {
@@ -114,6 +116,8 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.playAddon(try container.decode(AddonState.self, forKey: .data)))
             case .tracksTotalPlayTime:
                 self.data = .success(.tracksTotalPlayTime(try container.decode([Int : UInt64].self, forKey: .data)))
+            case .fanPlaylistsStates:
+                self.data = .success(.fanPlaylistsStates(try container.decode(FanPlaylistState.self, forKey: .data)))
             case .unknown:
                 self.data = .unknown
             }
@@ -174,6 +178,8 @@ struct WebSocketCommand: Codable {
                 try container.encode(addonState, forKey: .data)
             case .tracksTotalPlayTime(let tracksTotalPlayTime):
                 try container.encode(Array(tracksTotalPlayTime.keys), forKey: .data)
+            case .fanPlaylistsStates(let fanPlaylistState):
+                try container.encode(fanPlaylistState, forKey: .data)
             }
         case .failure( let errorData):
             try container.encode(errorData, forKey: .data)
@@ -221,8 +227,8 @@ extension WebSocketCommand {
         return WebSocketCommand(channel: "addons", command: "playAddon", data: .success(.playAddon(addonState)))
     }
 
-    static func loadTrack(track: Track) -> WebSocketCommand {
-        return WebSocketCommand(channel: "playlist", command: "loadTracks", data: .success(.playListLoadTracks([track])))
+    static func loadTracks(tracks: [Track]) -> WebSocketCommand {
+        return WebSocketCommand(channel: "playlist", command: "loadTracks", data: .success(.playListLoadTracks(tracks)))
     }
 
     static func updatePlaylist(playlistItemsPatches: [String: PlayerPlaylistItemPatch?]) -> WebSocketCommand {
@@ -231,6 +237,10 @@ extension WebSocketCommand {
 
     static func trackingTimeRequest(for trackId: TrackId) -> WebSocketCommand {
         return WebSocketCommand(channel: "previewOpt", command: "srts_previews", data: .success(.tracksTotalPlayTime([trackId.id: 0])))
+    }
+
+    static func fanPlaylistsStates(for fanPlaylistState: FanPlaylistState) -> WebSocketCommand {
+        return WebSocketCommand(channel: "states", command: "customPlaylistsStates", data: .success(.fanPlaylistsStates(fanPlaylistState)))
     }
 
 }

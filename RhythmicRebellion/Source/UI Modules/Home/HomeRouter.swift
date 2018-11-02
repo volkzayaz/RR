@@ -11,6 +11,8 @@ import UIKit
 
 protocol HomeRouter: FlowRouter {
     func showContent(of playlist: Playlist)
+
+    func showAddToPlaylist(for tracks: [Track])
 }
 
 final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
@@ -20,14 +22,17 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
 
     enum SegueList: String, SegueDestinationList {
         case playlistContent = "PlaylistContentSegueIdentifier"
+        case addToPlaylist = "AddToPlaylistSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
         case showPlaylistContent(playlist: Playlist)
+        case showAddToPlaylist(tracks: [Track])
 
         var identifier: SegueDestinationList {
             switch self {
             case .showPlaylistContent: return SegueList.playlistContent
+            case .showAddToPlaylist: return SegueList.addToPlaylist
             }
         }
     }
@@ -47,7 +52,11 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
             guard let playlistContentViewController = segue.destination as? PlaylistContentViewController else { fatalError("Incorrect controller for PlaylistContentSegueIdentifier") }
             let playlistContentRouter = DefaultPlaylistContentRouter(dependencies: self.dependencies)
             playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
-            break
+
+        case .showAddToPlaylist(let tracks):
+            guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
+            let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
         }
     }
 
@@ -57,11 +66,15 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
 
     func start(controller: HomeViewController) {
         sourceController = controller
-        let vm = HomeControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
+        let vm = HomeControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player, restApiService: self.dependencies.restApiService)
         controller.configure(viewModel: vm, router: self)
     }
 
     func showContent(of playlist: Playlist) {
         self.perform(segue: .showPlaylistContent(playlist: playlist))
+    }
+
+    func showAddToPlaylist(for tracks: [Track]) {
+        self.perform(segue: .showAddToPlaylist(tracks: tracks))
     }
 }

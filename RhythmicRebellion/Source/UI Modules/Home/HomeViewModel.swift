@@ -18,9 +18,11 @@ protocol HomeViewModel: class {
     func object(at indexPath: IndexPath) -> PlaylistItemViewModel?
     func selectObject(at indexPath: IndexPath)
 
+    func actions(forObjectAt indexPath: IndexPath) -> PlaylistActionsViewModels.ViewModel?
+
 }
 
-protocol HomeViewModelDelegate: class, ErrorPresenting {
+protocol HomeViewModelDelegate: class, ErrorPresenting, AlertActionsViewModelPersenting, ConfirmationPresenting {
 
     func refreshUI()
     func reloadUI()

@@ -104,9 +104,10 @@ struct FanPlaylist: Playlist, Codable {
     let id: Int
     let name: String
     let isDefault: Bool
-    let description: String?
-    let title: String?
-    let thumbnailURL: URL?
+
+    var description: String? { return nil }
+    var title: String? { return nil }
+    var thumbnailURL: URL? { return nil }
     
     let isFanPlaylist: Bool = true
 
@@ -123,9 +124,6 @@ struct FanPlaylist: Playlist, Codable {
         self.name = try container.decode(String.self, forKey: .name)
         
         self.isDefault = (try? container.decode(Bool.self, forKey: .isDefault)) ?? false
-        self.description = nil
-        self.title = nil        
-        self.thumbnailURL = nil
     }
     
     public func encode(to encoder: Encoder) throws {

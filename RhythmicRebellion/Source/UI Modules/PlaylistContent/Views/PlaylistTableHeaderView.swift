@@ -31,6 +31,7 @@ class PlaylistTableHeaderView: UIView {
     }
 
     @IBOutlet weak var infoView: UIView!
+    @IBOutlet weak var actionButton: UIButton!
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -93,6 +94,10 @@ class PlaylistTableHeaderView: UIView {
         var frame = self.frame
         if traitCollection.horizontalSizeClass == .compact {
             frame.size.height = view.frame.size.width * 0.85
+            if self.clearPlaylistButtonBottomConstraint.constant == 0 {
+                frame.size.height += 57.0
+            }
+
         } else if traitCollection.horizontalSizeClass == .regular {
             frame.size.height = max(self.infoView.frame.height + 57.0, 93.0)
         }

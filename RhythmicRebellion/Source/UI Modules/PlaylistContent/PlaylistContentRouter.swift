@@ -10,7 +10,9 @@
 import UIKit
 
 protocol PlaylistContentRouter: FlowRouter {
-    func showAddToPlaylist(for track: Track)
+    func showAddToPlaylist(for tracks: [Track])
+
+    func dismiss()
 }
 
 final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegueCompatible {
@@ -19,15 +21,15 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     typealias Destinations = SegueActions
 
     enum SegueList: String, SegueDestinationList {
-        case showAddToPlaylist = "showAddToPlaylist"
+        case addToPlaylist = "AddToPlaylistSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
-        case showAddToPlaylist(track: Track)
+        case showAddToPlaylist(tracks: [Track])
 
         var identifier: SegueDestinationList {
             switch self {
-            case .showAddToPlaylist: return SegueList.showAddToPlaylist
+            case .showAddToPlaylist: return SegueList.addToPlaylist
             }
         }
     }
@@ -44,11 +46,10 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
 
     func prepare(for destination: DefaultPlaylistContentRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
-        case .showAddToPlaylist(let track):
+        case .showAddToPlaylist(let tracks):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
-            addToPlaylistRouter.start(controller: addToPlaylistViewController, track: track)
-            break
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
         }
     }
 
@@ -69,8 +70,12 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
         controller.configure(viewModel: vm, router: self)
     }
     
-    func showAddToPlaylist(for track: Track) {
-        self.perform(segue: .showAddToPlaylist(track: track))
+    func showAddToPlaylist(for tracks: [Track]) {
+        self.perform(segue: .showAddToPlaylist(tracks: tracks))
+    }
+
+    func dismiss() {
+        self.sourceController?.navigationController?.popViewController(animated: true)
     }
 }
 

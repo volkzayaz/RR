@@ -70,7 +70,7 @@ class Player: NSObject, Observable {
     }
 
     enum Actions {
-        case add(PlaylistPosition)
+//        case add(PlaylistPosition)
         case playNow
         case setCurrent
         case delete
@@ -1003,9 +1003,8 @@ extension Player: WebSocketServiceObserver {
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
-    func loadTrack(track: Track, completion: ((Error?) -> ())? = nil) {
-        let webSocketCommand = WebSocketCommand.loadTrack(track: track)
-
+    func loadTracks(tracks: [Track], completion: ((Error?) -> ())? = nil) {
+        let webSocketCommand = WebSocketCommand.loadTracks(tracks: tracks)
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
@@ -1370,63 +1369,62 @@ extension Player {
 
     var playlistItems: [PlayerPlaylistItem] { return self.playlist.orderedPlaylistItems }
 
-    private func performAdd(track: Track, to playlistPosition: PlaylistPosition, completion: ((PlayerPlaylistItem?, Error?) -> Void)?) {
-        switch playlistPosition {
-        case .next:
-            let previousPlaylistItem = self.playerQueue.playerItem?.playlistItem ?? self.playlist.firstPlaylistItem
-            var nextPlaylistItem: PlayerPlaylistItem? = nil
-            if let previousPlaylistItem = previousPlaylistItem {
-                nextPlaylistItem = self.playlist.nextPlaylistItem(for: previousPlaylistItem)
+
+    private func performAdd(tracks: [Track], to playlistPosition: PlaylistPosition, completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
+
+        func playlistItem(for playlistPosition: PlaylistPosition) -> PlayerPlaylistItem? {
+            switch playlistPosition {
+            case .next: return self.playerQueue.playerItem?.playlistItem ?? self.playlist.firstPlaylistItem
+            case .last: return self.playlist.lastPlaylistItem
+            }
+        }
+
+        var tracksPlaylistItemsPatches = self.playlist.playlistItemPatches(for: tracks)
+        guard tracksPlaylistItemsPatches.isEmpty == false else { completion?(nil, nil); return }
+
+        var playlistItemsPatches = [String : PlayerPlaylistItemPatch]()
+
+        if let previousPlaylistItem = playlistItem(for: playlistPosition) {
+            if let firstTrackPlaylistItemPatch = tracksPlaylistItemsPatches.first {
+                var updatedFirstTrackPlaylistItemPatch = firstTrackPlaylistItemPatch
+                updatedFirstTrackPlaylistItemPatch.previousKey = PlayerPlaylistItemPatch.KeyType(previousPlaylistItem.key)
+                tracksPlaylistItemsPatches[0] = updatedFirstTrackPlaylistItemPatch
+
+                playlistItemsPatches[previousPlaylistItem.key] = PlayerPlaylistItemPatch.patch(for: previousPlaylistItem,
+                                                                                               nextPlaylistItemKey: updatedFirstTrackPlaylistItemPatch.key)
             }
 
-            let playlistItemKey = self.playlist.generatePlaylistItemKey()
+            if let nextPlaylistItem = self.playlist.nextPlaylistItem(for: previousPlaylistItem) {
+                if let lastTrackPlaylistItemPatch = tracksPlaylistItemsPatches.last {
+                    var updatedTrackPlaylistItemPatch = lastTrackPlaylistItemPatch
+                    updatedTrackPlaylistItemPatch.nextKey = PlayerPlaylistItemPatch.KeyType(nextPlaylistItem.key)
+                    tracksPlaylistItemsPatches[tracksPlaylistItemsPatches.count - 1] = updatedTrackPlaylistItemPatch
 
-            var playlistItemsPatches: [String: PlayerPlaylistItemPatch?] = [String: PlayerPlaylistItemPatch?]()
-            if let previousPlaylistItem = previousPlaylistItem {
-                playlistItemsPatches[previousPlaylistItem.key] = PlayerPlaylistItemPatch(nextKey: PlayerPlaylistItemPatch.KeyType(playlistItemKey))
+                    playlistItemsPatches[nextPlaylistItem.key] = PlayerPlaylistItemPatch.patch(for: nextPlaylistItem,
+                                                                                               previousPlaylistItemKey: updatedTrackPlaylistItemPatch.key)
+
+                }
             }
+        }
 
-            if let nextPlaylistItem = nextPlaylistItem {
-                playlistItemsPatches[nextPlaylistItem.key] = PlayerPlaylistItemPatch(previousKey: PlayerPlaylistItemPatch.KeyType(playlistItemKey))
+        tracksPlaylistItemsPatches.forEach { playlistItemsPatches[$0.key!] = $0 }
+
+        self.updatePlaylist(playlistItemsPatches: playlistItemsPatches) { [weak self] (error) in
+
+            let tracksKeys = tracksPlaylistItemsPatches.compactMap { return $0.key }
+
+            guard error == nil else {
+                self?.playlist.free(reservedPlaylistItemsKeys: tracksKeys)
+                completion?(nil, error)
+                return
             }
+            guard let `self` = self else { completion?(nil , nil); return }
 
-            playlistItemsPatches[playlistItemKey] = PlayerPlaylistItemPatch(trackId: track.id,
-                                                                            key: playlistItemKey,
-                                                                            nextKey: PlayerPlaylistItemPatch.KeyType(nextPlaylistItem?.key),
-                                                                            previousKey: PlayerPlaylistItemPatch.KeyType(previousPlaylistItem?.key))
-
-            self.updatePlaylist(playlistItemsPatches: playlistItemsPatches) { [weak self] (error) in
-                guard let `self` = self, error == nil else { completion?(nil, error); return }
-                self.playlist.update(with: playlistItemsPatches)
-                self.observersContainer.invoke({ (observer) in
-                    observer.playerDidChangePlaylist(player: self)
-                })
-                completion?(self.playlist.playlistItems[playlistItemKey], nil)
-            }
-
-
-        case .last:
-            let previousPlaylistItem = self.playlist.lastPlaylistItem
-            let playlistItemKey = self.playlist.generatePlaylistItemKey()
-
-            var playlistItemsPatches: [String: PlayerPlaylistItemPatch?] = [String: PlayerPlaylistItemPatch?]()
-            if let previousPlaylistItem = previousPlaylistItem {
-                playlistItemsPatches[previousPlaylistItem.key] = PlayerPlaylistItemPatch(nextKey: PlayerPlaylistItemPatch.KeyType(playlistItemKey))
-            }
-
-            playlistItemsPatches[playlistItemKey] = PlayerPlaylistItemPatch(trackId: track.id,
-                                                                            key: playlistItemKey,
-                                                                            nextKey: PlayerPlaylistItemPatch.KeyType(nil),
-                                                                            previousKey: PlayerPlaylistItemPatch.KeyType(previousPlaylistItem?.key))
-
-            self.updatePlaylist(playlistItemsPatches: playlistItemsPatches) { [weak self] (error) in
-                guard let `self` = self, error == nil else { completion?(nil, error); return }
-                self.playlist.update(with: playlistItemsPatches)
-                self.observersContainer.invoke({ (observer) in
-                    observer.playerDidChangePlaylist(player: self)
-                })
-                completion?(self.playlist.playlistItems[playlistItemKey], nil)
-            }
+            self.playlist.update(with: playlistItemsPatches)
+            self.observersContainer.invoke({ (observer) in
+                observer.playerDidChangePlaylist(player: self)
+            })
+            completion?(self.playlist.playlistItems(for: tracksKeys), nil)
         }
     }
 
@@ -1472,14 +1470,10 @@ extension Player {
     }
 
     func performAction(_ action: Player.Actions, for playlistItem: PlayerPlaylistItem, completion: ((Error?) -> Void)?) {
+        guard self.state.initialized == true else { completion?(AppError(.notInitialized)); return }
+
         switch action {
-        case .add(let position):
-            //Assume player track come from player's playlist
-            self.performAdd(track: playlistItem.track, to: position) { (playerTrack, error) in
-                completion?(error)
-            }
-        case .delete:
-            self.performDelete(playlistItem: playlistItem, completion: completion)
+        case .delete: self.performDelete(playlistItem: playlistItem, completion: completion)
         case .playNow:
             self.player.pause()
 
@@ -1527,15 +1521,59 @@ extension Player {
         }
     }
     
-    func add(track: Track, at position: PlaylistPosition, completion: ((PlayerPlaylistItem?, Error?) -> Void)?) {
-        guard self.playlist.contains(track: track) else {
-            self.loadTrack(track: track) { [weak self] (error) in
-                guard error == nil else { completion?(nil, error); return }
-                self?.playlist.add(traksToAdd: [track])
-                self?.performAdd(track: track, to: position, completion: completion)
-            }
-            return
+    func add(tracks: [Track], at position: PlaylistPosition, completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
+        guard self.state.initialized == true else { completion?(nil, AppError(.notInitialized)); return }
+
+        self.loadTracks(tracks: tracks) { [weak self] (error) in
+            guard error == nil else { completion?(nil, error); return }
+            self?.playlist.add(traksToAdd: tracks)
+            self?.performAdd(tracks: tracks, to: position, completion: completion)
         }
-        self.performAdd(track: track, to: position, completion: completion)
+    }
+
+    func performReplace(with tracks: [Track], completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
+
+        guard self.state.initialized == true else { completion?(nil, AppError(.notInitialized)); return }
+
+        let tracksPlaylistItemsPatches = self.playlist.playlistItemPatches(for: tracks)
+        guard tracksPlaylistItemsPatches.isEmpty == false else { completion?(nil, nil); return }
+
+        var playlistItemsPatches = [String : PlayerPlaylistItemPatch]()
+
+        tracksPlaylistItemsPatches.forEach { playlistItemsPatches[$0.key!] = $0 }
+
+        self.updatePlaylist(playlistItemsPatches: playlistItemsPatches, flushing: true) { [weak self] (error) in
+
+            let tracksKeys = tracksPlaylistItemsPatches.compactMap { return $0.key }
+
+            guard error == nil else {
+                self?.playlist.free(reservedPlaylistItemsKeys: tracksKeys)
+                completion?(nil, error)
+                return
+            }
+            guard let `self` = self else { completion?(nil , nil); return }
+
+            self.playlist.reset(with: playlistItemsPatches)
+            self.observersContainer.invoke({ (observer) in
+                observer.playerDidChangePlaylist(player: self)
+            })
+
+            if let playlistItemToPlay = self.playlist.firstPlaylistItem {
+                self.performAction(.playNow, for: playlistItemToPlay, completion: nil)
+            }
+
+            completion?(self.playlist.playlistItems(for: tracksKeys), nil)
+        }
+    }
+
+    func replace(with tracks: [Track], completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
+
+        guard self.state.initialized == true else { completion?(nil, AppError(.notInitialized)); return }
+
+        self.loadTracks(tracks: tracks) { [weak self] (error) in
+            guard error == nil else { completion?(nil, error); return }
+            self?.playlist.add(traksToAdd: tracks)
+            self?.performReplace(with: tracks, completion: completion)
+        }
     }
 }

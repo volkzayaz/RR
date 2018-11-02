@@ -27,4 +27,5 @@ protocol AddToPlaylistViewModel: class {
 
 protocol AddToPlaylistViewModelDelegate: class, ErrorPresenting, ProgressPresenting {
     func refreshUI()
+    func reloadUI()
 }

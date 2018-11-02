@@ -49,3 +49,46 @@ extension UIAlertController {
         return alertController
     }
 }
+
+protocol AlertActionsViewModelPersenting {
+
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>)
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle)
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle, completion: (() -> Void)?)
+
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView)
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView, completion: (() -> Void)?)
+}
+
+extension AlertActionsViewModelPersenting where Self: UIViewController {
+
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>) {
+        show(alertActionsviewModel: alertActionsviewModel, style: .actionSheet)
+    }
+
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle) {
+        show(alertActionsviewModel: alertActionsviewModel, style: style, completion: nil)
+    }
+
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle, completion: (() -> Void)? = nil) {
+
+        let alertActionsController = UIAlertController.make(from: alertActionsviewModel, style: style)
+
+        self.present(alertActionsController, animated: true, completion: completion)
+    }
+
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView) {
+        show(alertActionsviewModel: alertActionsviewModel, sourceRect: sourceRect, sourceView: sourceView, completion: nil)
+    }
+
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView, completion: (() -> Void)?) {
+
+        let alertActionsController = UIAlertController.make(from: alertActionsviewModel, style: .actionSheet)
+
+        alertActionsController.popoverPresentationController?.sourceRect = sourceRect
+        alertActionsController.popoverPresentationController?.sourceView = sourceView
+
+        self.present(alertActionsController, animated: true, completion: completion)
+    }
+
+}

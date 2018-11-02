@@ -10,7 +10,7 @@
 import UIKit
 
 protocol PlayerNowPlayingRouter: FlowRouter {
-    func showAddToPlaylist(for track: Track)
+    func showAddToPlaylist(for tracks: [Track])
 }
 
 final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSegueCompatible {
@@ -19,11 +19,11 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
     typealias Destinations = SegueActions
 
     enum SegueList: String, SegueDestinationList {
-        case showAddToPlaylist = "showAddToPlaylist"
+        case showAddToPlaylist = "AddToPlaylistSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
-        case showAddToPlaylist(track: Track)
+        case showAddToPlaylist(tracks: [Track])
 
         var identifier: SegueDestinationList {
             switch self {
@@ -44,10 +44,10 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
     func prepare(for destination: DefaultPlayerNowPlayingRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
-        case .showAddToPlaylist(let track):
+        case .showAddToPlaylist(let tracks):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
-            addToPlaylistRouter.start(controller: addToPlaylistViewController, track: track)
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
             break
         }
     }
@@ -62,7 +62,7 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
         controller.configure(viewModel: vm, router: self)
     }
     
-    func showAddToPlaylist(for track: Track) {
-        self.perform(segue: .showAddToPlaylist(track: track))
+    func showAddToPlaylist(for tracks: [Track]) {
+        self.perform(segue: .showAddToPlaylist(tracks: tracks))
     }
 }

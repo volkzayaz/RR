@@ -59,40 +59,6 @@ final class PlaylistContentViewController: UIViewController {
         self.tableView.register(UINib(nibName: "TrackTableViewCell", bundle: nil), forCellReuseIdentifier: TrackTableViewCell.identifier)
 
         viewModel.load(with: self)
-
-        let playlistHeaderViewModel = self.viewModel.playlistHeaderViewModel
-
-        self.tableHeaderView.setup(viewModel: self.viewModel.playlistHeaderViewModel) { (action) in
-            switch action {
-            case .showActions: break
-            case .clear: self.onPlaylistAction()
-            }
-        }
-
-        if let thumbnailURL = playlistHeaderViewModel.thumbnailURL, self.imageView.superview != nil {
-            self.activityIndicatorView.startAnimating()
-            self.imageView.af_setImage(withURL: thumbnailURL,
-                                       filter: ScaledToSizeFilter(size: CGSize(width: 360, height: 360))) { [weak self] (thumbnailImageResponse) in
-
-                                        guard let `self` = self else {
-                                            return
-                                        }
-                                        switch thumbnailImageResponse.result {
-                                        case .success(let thumbnailImage):
-                                            self.imageView.image = thumbnailImage
-
-                                        default: break
-                                        }
-
-                                        self.activityIndicatorView.stopAnimating()
-            }
-        } else {
-            self.imageView.makePlaylistPlaceholder()
-            self.activityIndicatorView.stopAnimating()
-        }
-
-        self.navigationItem.title = playlistHeaderViewModel.title
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -137,15 +103,8 @@ final class PlaylistContentViewController: UIViewController {
     func setupTableHeaderView() {
 
         self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
-//        self.tableHeaderView.translatesAutoresizingMaskIntoConstraints = true
         self.tableView.tableHeaderView = self.tableHeaderView
     }
-
-//    func layoutTableHeaderView() {
-//
-//        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
-//    }
-
 
     // MARK: - Actions -
 
@@ -153,18 +112,16 @@ final class PlaylistContentViewController: UIViewController {
         self.viewModel.reload()
     }
 
+    func showPlaylistActions(sourceRect: CGRect, sourceView: UIView) {
+        guard let actionsModel = viewModel.playlistActions() else {  return }
+
+        self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
+    }
+
     func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
+        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else { return }
 
-        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else {
-            return
-        }
-
-        let actionSheet = UIAlertController.make(from: actionsModel)
-
-        actionSheet.popoverPresentationController?.sourceView = sourceView
-        actionSheet.popoverPresentationController?.sourceRect = sourceRect
-
-        self.present(actionSheet, animated: true, completion: nil)
+        self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
     }
 
     func showOpenIn(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
@@ -186,14 +143,6 @@ final class PlaylistContentViewController: UIViewController {
 
         self.tipView = tipView
     }
-
-    func onPlaylistAction() {
-        guard let actionConfirmationViewModel = self.viewModel.clearPlaylistConfirmation() else { viewModel.clearPlaylist(); return }
-
-        let confirmationAlertViewController = UIAlertController.make(from: actionConfirmationViewModel, style: .alert)
-        self.present(confirmationAlertViewController, animated: true, completion: nil)
-    }
-
 }
 
 
@@ -271,6 +220,42 @@ extension PlaylistContentViewController: PlaylistContentViewModelDelegate {
 
     func refreshUI() {
 
+    }
+
+    func reloadPlaylistUI() {
+        let playlistHeaderViewModel = self.viewModel.playlistHeaderViewModel
+
+        self.tableHeaderView.setup(viewModel: self.viewModel.playlistHeaderViewModel) { [unowned self] (action) in
+
+            switch action {
+            case .showActions: self.showPlaylistActions(sourceRect: self.tableHeaderView.actionButton.frame, sourceView: self.tableHeaderView.infoView)
+            case .clear: self.viewModel.clearPlaylist()
+            }
+        }
+
+        if let thumbnailURL = playlistHeaderViewModel.thumbnailURL, self.imageView.superview != nil {
+            self.activityIndicatorView.startAnimating()
+            self.imageView.af_setImage(withURL: thumbnailURL,
+                                       filter: ScaledToSizeFilter(size: CGSize(width: 360, height: 360))) { [weak self] (thumbnailImageResponse) in
+
+                                        guard let `self` = self else {
+                                            return
+                                        }
+                                        switch thumbnailImageResponse.result {
+                                        case .success(let thumbnailImage):
+                                            self.imageView.image = thumbnailImage
+
+                                        default: break
+                                        }
+
+                                        self.activityIndicatorView.stopAnimating()
+            }
+        } else {
+            self.imageView.makePlaylistPlaceholder()
+            self.activityIndicatorView.stopAnimating()
+        }
+
+        self.navigationItem.title = playlistHeaderViewModel.title
     }
 
     func reloadUI() {

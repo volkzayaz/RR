@@ -52,9 +52,9 @@ final class DefaultAddToPlaylistRouter:  AddToPlaylistRouter, FlowRouterSegueCom
         self.dependencies = dependencies
     }
 
-    func start(controller: AddToPlaylistViewController, track: Track) {
+    func start(controller: AddToPlaylistViewController, tracks: [Track]) {
         sourceController = controller
-        let vm = AddToPlaylistControllerViewModel(router: self, restApiService: self.dependencies.restApiService, track: track)
+        let vm = AddToPlaylistControllerViewModel(router: self, application: self.dependencies.application, restApiService: self.dependencies.restApiService, tracks: tracks)
         controller.configure(viewModel: vm, router: self)
     }
     

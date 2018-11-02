@@ -70,6 +70,11 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
         self.viewModel.reload()
     }
 
+    func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
+        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else { return }
+        self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
+    }
+
     // MARK: - UICollectionViewDataSource -
 
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -81,7 +86,13 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
         let playlistItemCollectionViewCell = PlaylistItemCollectionViewCell.reusableCell(in: collectionView, at: indexPath)
         let playlistItemViewModel = self.viewModel.object(at: indexPath)!
 
-        playlistItemCollectionViewCell.setup(viewModel: playlistItemViewModel)
+        playlistItemCollectionViewCell.setup(viewModel: playlistItemViewModel) { [unowned self, weak playlistItemCollectionViewCell, weak collectionView] action in
+            guard let playlistItemCollectionViewCell = playlistItemCollectionViewCell, let indexPath = collectionView?.indexPath(for: playlistItemCollectionViewCell) else { return }
+
+            switch action {
+            case .showActions(let sourceRect, let sourcreView): self.showActions(itemAt: indexPath, sourceRect: sourceRect, sourceView: sourcreView)
+            }
+        }
 
         return playlistItemCollectionViewCell
     }

@@ -40,6 +40,7 @@ class PlayerPlaylist {
 
     private(set) var tracks = Set<Track>()
     private(set) var playlistItems = [String : PlayerPlaylistItem]()
+    private(set) var reservedPlaylistItemsKeys = Set<String>()
     private(set) var tracksAddons = [Int : Set<Addon>]()
     private(set) var tracksTotalPlayMSeconds = [Int : UInt64]()
 
@@ -59,6 +60,7 @@ class PlayerPlaylist {
     func reset(tracks: [Track]) {
         self.tracks = Set(tracks)
         self.playlistItems.removeAll()
+        self.reservedPlaylistItemsKeys.removeAll()
         self.resetAddons()
         self.resetTracksTotalPlayMSeconds()
     }
@@ -104,10 +106,23 @@ class PlayerPlaylist {
         return self.playlistItems[playlistItemKey]
     }
 
+    func playlistItems(for keys: [String]) -> [PlayerPlaylistItem] {
+
+        var filteredPlaylisyItems = [PlayerPlaylistItem]()
+
+        for key in keys {
+            guard let playlistItem = self.playlistItems[key] else { continue }
+            filteredPlaylisyItems.append(playlistItem)
+        }
+
+        return filteredPlaylisyItems
+    }
+
     // MARK: - PlayerPlaylistLinkedItem -
 
     func reset(with playlistItemsPaths: [String : PlayerPlaylistItemPatch?]) {
 
+        self.reservedPlaylistItemsKeys.removeAll()
         self.playlistItems.removeAll()
 
         var newPlayListItems = [String : PlayerPlaylistItem]()
@@ -124,6 +139,7 @@ class PlayerPlaylist {
 
         if newPlayListItems.count == playlistItemsPaths.count {
             self.playlistItems = newPlayListItems
+            self.reservedPlaylistItemsKeys = Set(self.playlistItems.keys)
         }
 
     }
@@ -133,7 +149,9 @@ class PlayerPlaylist {
         guard playlistItemsPaths.count > 0 else { self.playlistItems.removeAll(); return }
 
         playlistItemsPaths.forEach { (key, playListItemPath) in
-            guard let playListItemPatch = playListItemPath else { self.playlistItems.removeValue(forKey: key); return }
+            guard let playListItemPatch = playListItemPath else { self.playlistItems.removeValue(forKey: key)
+                                                                  self.reservedPlaylistItemsKeys.remove(key)
+                                                                  return }
             guard let playlistItem = self.playlistItems[key] else {
 
                 guard let trackId = playListItemPatch.trackId,
@@ -143,6 +161,7 @@ class PlayerPlaylist {
                                                              key: key,
                                                              nextKey: playListItemPatch.nextKey?.value,
                                                              previousKey: playListItemPatch.previousKey?.value)
+                self.reservedPlaylistItemsKeys.insert(key)
                 return
             }
 
@@ -150,15 +169,23 @@ class PlayerPlaylist {
         }
     }
 
-    func generatePlaylistItemKey() -> String {
+    func generatePlaylistItemKey(reserve: Bool = true) -> String {
 
         var key: String = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
 
-        while self.playlistItems[key] != nil {
+        while self.reservedPlaylistItemsKeys.contains(key) {
             key = String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
         }
 
+        if reserve { self.reservedPlaylistItemsKeys.insert(key) }
+
         return key
+    }
+
+    func free(reservedPlaylistItemsKeys: [String]) {
+        var setToFree = Set(reservedPlaylistItemsKeys)
+        setToFree.subtract(Set(self.playlistItems.keys))
+        self.reservedPlaylistItemsKeys.subtract(setToFree)
     }
 
     func makePlaylistItem(for track: Track) -> PlayerPlaylistItem {
@@ -227,6 +254,31 @@ class PlayerPlaylist {
 
     func totalPlayMSeconds(for track: Track) -> UInt64? {
         return self.tracksTotalPlayMSeconds[track.id]
+    }
+
+}
+
+extension PlayerPlaylist {
+
+    func playlistItemPatches(for tracks: [Track]) -> [PlayerPlaylistItemPatch] {
+        var patches = [PlayerPlaylistItemPatch]()
+
+        for track in tracks {
+            let playListItemKey = self.generatePlaylistItemKey()
+            var playlistItemPatch = PlayerPlaylistItemPatch(trackId: track.id, key: playListItemKey, nextKey: nil, previousKey: nil)
+
+            if let lastPatchItem = patches.last {
+                var previousPatchItem = lastPatchItem
+                previousPatchItem.nextKey = PlayerPlaylistItemPatch.KeyType(playListItemKey)
+                patches[patches.count - 1] = previousPatchItem
+
+                playlistItemPatch.previousKey = PlayerPlaylistItemPatch.KeyType(previousPatchItem.key)
+            }
+
+            patches.append(playlistItemPatch)
+        }
+
+        return patches
     }
 }
 

@@ -30,12 +30,20 @@ enum ConfirmationAlertViewModel {
             return ViewModel(title: Title.warning.text, message: Message.profileUnsavedChanges.text, actions: actions)
         }
 
-        static func makeClearNowPlaylistViewModel(actionCallback: @escaping (ActionViewModel.ActionType) -> Void) -> ViewModel {
+        static func makeClearPlaylistViewModel(actionCallback: @escaping (ActionViewModel.ActionType) -> Void) -> ViewModel {
 
             let actions = makeActionsViewModels(actionTypes: [.ok], actionCallback: actionCallback)
 
-            return ViewModel(title: Title.warning.text, message: Message.clearNowPlaylist.text, actions: actions)
+            return ViewModel(title: Title.warning.text, message: Message.clearPlaylist.text, actions: actions)
         }
+
+        static func makeDeletePlaylistViewModel(actionCallback: @escaping (ActionViewModel.ActionType) -> Void) -> ViewModel {
+
+            let actions = makeActionsViewModels(actionTypes: [.ok], actionCallback: actionCallback)
+
+            return ViewModel(title: Title.warning.text, message: Message.deletePlaylist.text, actions: actions)
+        }
+
     }
 
     struct Title {
@@ -60,8 +68,11 @@ enum ConfirmationAlertViewModel {
         static let profileUnsavedChanges = Message(NSLocalizedString("You have unsaved changes. Press Cancel to go back and save these changes,or OK to lose these changes.",
                                                                      comment: "Unsaved changes message"))
 
-        static let clearNowPlaylist = Message(NSLocalizedString("Are you sure you want to clear playlist? All data from it will be removed.",
-                                                                comment: "Unsaved changes message"))
+        static let clearPlaylist = Message(NSLocalizedString("Are you sure you want to clear playlist? All data from it will be removed.",
+                                                             comment: "Unsaved changes message"))
+
+        static let deletePlaylist = Message(NSLocalizedString("Are you sure you want to delete playlist? All data from it will be removed.",
+                                                              comment: "Unsaved changes message"))
     }
 
     struct ActionViewModel: AlertActionItemViewModel {
@@ -96,7 +107,25 @@ enum ConfirmationAlertViewModel {
             default: return .default
             }
         }
+    }
+}
 
-        
+protocol ConfirmationPresenting {
+
+    func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>)
+    func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>, completion: (() -> Void)?)
+}
+
+extension AlertActionsViewModelPersenting where Self: UIViewController {
+
+    func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>) {
+        self.showConfirmation(confirmationViewModel: confirmationViewModel, completion: nil)
+    }
+
+    func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>, completion: (() -> Void)?) {
+        let alertActionsController = UIAlertController.make(from: confirmationViewModel, style: .alert)
+
+        self.present(alertActionsController, animated: true, completion: completion)
+
     }
 }

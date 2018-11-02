@@ -52,7 +52,6 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     func loadTracks() {
         self.playlistItems = self.player?.playlistItems ?? []
-        print("self.playlistItems.count: \(self.playlistItems.count)")
         self.delegate?.reloadUI()
     }
 
@@ -129,7 +128,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         case .playNow: self.player?.performAction(.playNow, for: playlistItem, completion: nil)
         case .delete: self.player?.performAction(.delete, for: playlistItem, completion: nil)
         case .toPlaylist:
-            self.router?.showAddToPlaylist(for: playlistItem.track)
+            self.router?.showAddToPlaylist(for: [playlistItem.track])
             break
         default: break
         }
@@ -139,7 +138,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
         switch action {
         case .clear:
-            return ConfirmationAlertViewModel.Factory.makeClearNowPlaylistViewModel(actionCallback: { [weak self] (actionType) in
+            return ConfirmationAlertViewModel.Factory.makeClearPlaylistViewModel(actionCallback: { [weak self] (actionType) in
                 switch actionType {
                 case .ok: self?.player?.clearPlaylist()
                 default: break

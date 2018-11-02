@@ -26,6 +26,8 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState)
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int])
+
+    func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState)
 }
 
 extension ApplicationObserver {
@@ -38,6 +40,8 @@ extension ApplicationObserver {
     func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) { }
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) { }
+
+    func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) { }
 }
 
 class Application: Observable {
@@ -116,9 +120,7 @@ class Application: Observable {
         self.restApiService.config { [weak self] (configResult) in
 
             switch configResult {
-            case .success(let config):
-                self?.config = config
-
+            case .success(let config): self?.config = config
             default: break
             }
 
@@ -365,6 +367,42 @@ class Application: Observable {
         }
     }
 
+    // MARK: Fan Playlists
+
+    func createPlaylist(with name: String, completion: @escaping (Result<FanPlaylist>) -> Void) {
+        guard (self.user as? FanUser) != nil else { return }
+
+        self.restApiService.fanCreatePlaylist(with: name) { [weak self] (fanPlaylistResult) in
+            switch fanPlaylistResult {
+            case .success(let fanPlaylist):
+
+                let fanPlaylistState = FanPlaylistState(id: fanPlaylist.id, playlist: fanPlaylist)
+                self?.webSocketService.sendCommand(command: WebSocketCommand.fanPlaylistsStates(for: fanPlaylistState))
+
+                self?.notifyFanPlaylistChanged(with: fanPlaylistState)
+
+            default: break
+            }
+
+            completion(fanPlaylistResult)
+        }
+    }
+
+    func delete(playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
+        guard (self.user as? FanUser) != nil else { return }
+
+        self.restApiService.fanDelete(playlist: playlist) { [weak self] (error) in
+            guard error == nil else { completion(error); return }
+
+            let fanPlaylistState = FanPlaylistState(id: playlist.id, playlist: nil)
+            self?.webSocketService.sendCommand(command: WebSocketCommand.fanPlaylistsStates(for: fanPlaylistState))
+
+            self?.notifyFanPlaylistChanged(with: fanPlaylistState)
+
+            completion(nil)
+        }
+    }
+
 }
 
 extension Application {
@@ -421,6 +459,12 @@ extension Application {
             observer.application(self, didChangeUserProfile: Array(purchasedTracksIds), added: addedPurchasedTracksIds, removed: removedPurchasedTracksIds)
         })
     }
+
+    func notifyFanPlaylistChanged(with fanPlaylistState: FanPlaylistState) {
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChangeFanPlaylist: fanPlaylistState)
+        })
+    }
 }
 
 extension Application: WebSocketServiceObserver {
@@ -465,5 +509,11 @@ extension Application: WebSocketServiceObserver {
 
         notifyUserProfileChanged(purchasedTracksIds: fanUser.profile.purchasedTracksIds,
                                  previousPurchasedTracksIds: currentFanUser.profile.purchasedTracksIds)
+    }
+
+    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) {
+        guard (self.user as? FanUser) != nil else { return }
+
+        notifyFanPlaylistChanged(with: fanPlaylistState)
     }
 }

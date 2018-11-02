@@ -18,3 +18,16 @@ func + <K,V>(left: Dictionary<K,V>, right: Dictionary<K,V>) -> Dictionary<K,V> {
 func += <K,V>(left: inout Dictionary<K,V>, right: Dictionary<K,V>) {
     for (k, v) in right { left[k] = v }
 }
+
+
+extension Sequence {
+    public func toDictionary<K: Hashable, V>(_ selector: (Iterator.Element) throws -> (K, V)?) rethrows -> [K: V] {
+        var dict = [K: V]()
+        for element in self {
+            if let (key, value) = try selector(element) {
+                dict[key] = value
+            }
+        }
+        return dict
+    }
+}

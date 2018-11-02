@@ -23,6 +23,13 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
     static let identifier = "PlaylistItemCollectionViewCellIdentifier"
 
+    typealias ActionCallback = (Actions) -> Void
+
+    enum Actions {
+        case showActions(CGRect, UIView)
+    }
+
+
     @IBOutlet weak var shadowContainerView: UIView!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var imageView: UIImageView!
@@ -31,8 +38,11 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var actionButton: UIButton!
 
     var viewModelId: String = ""
+
+    var actionCallback: ActionCallback?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -59,7 +69,7 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
                                                                  cornerRadius: self.containerView.layer.cornerRadius).cgPath
     }
 
-    func setup(viewModel: PlaylistItemCollectionViewCellViewModel) {
+    func setup(viewModel: PlaylistItemCollectionViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
         self.viewModelId = viewModel.id
 
@@ -87,5 +97,11 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
             self.activityIndicatorView.stopAnimating()
         }
 
+        self.actionCallback = actionCallback
+    }
+
+    // MARK: - Actions -
+    @IBAction func onActionButton(sender: Any?) {
+        self.actionCallback?(.showActions(self.actionButton.frame, self.gradientView))
     }
 }

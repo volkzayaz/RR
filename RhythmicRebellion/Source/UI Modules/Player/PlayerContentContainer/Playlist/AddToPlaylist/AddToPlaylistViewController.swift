@@ -101,6 +101,10 @@ extension AddToPlaylistViewController {
 extension AddToPlaylistViewController: AddToPlaylistViewModelDelegate {
 
     func refreshUI() {
+
+    }
+
+    func reloadUI() {
         tableView.reloadData()
     }
 

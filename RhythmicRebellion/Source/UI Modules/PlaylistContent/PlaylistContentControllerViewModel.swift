@@ -53,7 +53,10 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.delegate = delegate
 
         self.loadTracks()
+
         self.delegate?.reloadUI()
+        self.delegate?.reloadPlaylistUI()
+
         self.application?.addObserver(self)
         self.player?.addObserver(self)
         self.audioFileLocalStorageService?.addObserver(self)
@@ -101,7 +104,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         guard let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
 
         if !viewModel.isCurrentInPlayer {
-            play(track: self.playlistTracks[indexPath.item])
+            play(tracks: [self.playlistTracks[indexPath.item]])
         } else {
             if viewModel.isPlaying {
                 player?.pause()
@@ -110,6 +113,114 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
             }
         }
     }
+
+    // MARK: - Playlist Actions -
+    
+    func actionTypes(for playlist: Playlist) -> [PlaylistActionsViewModels.ActionViewModel.ActionType] {
+        switch playlist {
+        case _ as FanPlaylist:
+            return [.playNow, .playNext, .playLast, .replaceCurrent, .toPlaylist, .delete]
+        case _ as DefinedPlaylist:
+            return [.playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent]
+        default: return []
+        }
+    }
+
+    func confirmation(for actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, with playlist: Playlist) -> ConfirmationAlertViewModel.ViewModel? {
+
+        switch actionType {
+        case .clear: return ConfirmationAlertViewModel.Factory.makeClearPlaylistViewModel(actionCallback: { [weak self] (actionConfirmationType) in
+                                        switch actionConfirmationType {
+                                        case .ok: self?.performeAction(with: actionType, for: playlist)
+                                        default: break
+                                        }
+                            })
+
+        case .delete: return ConfirmationAlertViewModel.Factory.makeDeletePlaylistViewModel(actionCallback: { [weak self] (actionConfirmationType) in
+                                        switch actionConfirmationType {
+                                        case .ok: self?.performeAction(with: actionType, for: playlist)
+                                        default: break
+                                        }
+                            })
+
+        default: return nil
+        }
+    }
+
+    func performeAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, for playlist: Playlist) {
+
+        switch actionType {
+        case .playNow: self.play(tracks: self.playlistTracks)
+        case .playNext: self.player?.add(tracks: self.playlistTracks, at: .next, completion: nil)
+        case .playLast: self.player?.add(tracks: self.playlistTracks, at: .last, completion: nil)
+        case .toPlaylist: self.router?.showAddToPlaylist(for: self.playlistTracks)
+        case .replaceCurrent: self.player?.replace(with: self.playlistTracks, completion: nil)
+        case .clear:
+            guard let fanPlaylist = self.playlist as? FanPlaylist else { return }
+
+            self.restApiService?.fanClear(playlist: fanPlaylist, completion: { [weak self] (error) in
+                guard let error = error else {
+                    self?.playlistTracks.removeAll()
+                    self?.delegate?.reloadUI()
+                    return
+                }
+
+                self?.delegate?.show(error: error)
+            })
+
+        case .delete:
+            guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.isDefault == false else { return }
+
+            self.application?.delete(playlist: fanPlaylist, completion: { [weak self] (error) in
+                guard let error = error else { return }
+                self?.delegate?.show(error: error)
+            })
+
+        case .cancel: break
+        }
+    }
+
+    func isAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, availableFor playlist: Playlist) -> Bool {
+        switch actionType {
+        case .playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent: return true
+        case .delete: return playlist.isFanPlaylist && playlist.isDefault == false
+        case .clear: return false
+        default: return true
+        }
+    }
+
+    func playlistActions() -> PlaylistActionsViewModels.ViewModel? {
+
+        let filteredPlaylistActionsTypes = self.actionTypes(for: self.playlist).filter {
+            return self.isAction(with: $0, availableFor: self.playlist)
+        }
+
+        guard filteredPlaylistActionsTypes.count > 0 else { return nil }
+
+        let playlistActions = PlaylistActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredPlaylistActionsTypes) { [weak self] (actionType) in
+            guard let `self` = self else { return }
+            guard let confirmationViewModel = self.confirmation(for: actionType, with: self.playlist) else {
+                self.performeAction(with: actionType, for: self.playlist)
+                return
+            }
+
+            self.delegate?.showConfirmation(confirmationViewModel: confirmationViewModel)
+        }
+
+        return PlaylistActionsViewModels.ViewModel(title: nil,
+                                                   message: nil,
+                                                   actions: playlistActions)
+    }
+
+    func clearPlaylist() {
+        guard let confirmationViewModel = self.confirmation(for: .clear, with: self.playlist) else {
+            self.performeAction(with: .clear, for: self.playlist)
+            return
+        }
+
+        self.delegate?.showConfirmation(confirmationViewModel: confirmationViewModel)
+    }
+    // MARK: - Track Actions -
 
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
         switch actionType {
@@ -130,9 +241,9 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         }
     }
     
-    private func play(track: Track) {
-        self.player?.add(track: track, at: .next, completion: { [weak self] (playlistItem, error) in
-            guard error == nil, let playlistItem = playlistItem else { return }
+    private func play(tracks: [Track]) {
+        self.player?.add(tracks: tracks, at: .next, completion: { [weak self] (playlistItems, error) in
+            guard error == nil, let playlistItem = playlistItems?.first else { return }
             self?.player?.performAction(.playNow, for: playlistItem, completion: nil)
         })
     }
@@ -155,11 +266,10 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
                 }
             })
         case .playNow:
-            self.play(track: track)
-        case .playNext: self.player?.add(track: track, at: .next, completion: nil)
-        case .playLast: self.player?.add(track: track, at: .last, completion: nil)
-        case .toPlaylist:
-            self.router?.showAddToPlaylist(for: track)
+            self.play(tracks: [track])
+        case .playNext: self.player?.add(tracks: [track], at: .next, completion: nil)
+        case .playLast: self.player?.add(tracks: [track], at: .last, completion: nil)
+        case .toPlaylist: self.router?.showAddToPlaylist(for: [track])
         case .delete:
             guard let fanPlaylist = self.playlist as? FanPlaylist else { return }
 
@@ -223,33 +333,16 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         default: return nil
         }
     }
-
-    func clearPlaylistConfirmation() -> ConfirmationAlertViewModel.ViewModel? {
-
-        return ConfirmationAlertViewModel.Factory.makeClearNowPlaylistViewModel(actionCallback: { [weak self] (actionType) in
-            switch actionType {
-            case .ok: self?.clearPlaylist()
-            default: break
-            }
-        })
-    }
-
-    func clearPlaylist() {
-        guard let fanPlaylist = self.playlist as? FanPlaylist else { return }
-
-        self.restApiService?.fanClear(playlist: fanPlaylist, completion: { [weak self] (error) in
-            guard let error = error else {
-                self?.playlistTracks.removeAll()
-                self?.delegate?.reloadUI()
-                return
-            }
-
-            self?.delegate?.show(error: error)
-        })
-    }
 }
 
 extension PlaylistContentControllerViewModel: ApplicationObserver {
+
+    func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
+        guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.id == fanPlaylistState.id else { return }
+        guard let updatedFanPlaylist = fanPlaylistState.playlist else { self.router?.dismiss(); return }
+        self.playlist = updatedFanPlaylist
+        self.delegate?.reloadPlaylistUI()
+    }
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
 

@@ -27,6 +27,8 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
     func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons)
     func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool)
+
+    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState)
 }
 
 extension WebSocketServiceObserver {
@@ -46,6 +48,8 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
     func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) { }
     func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) { }
+
+    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) { }
 }
 
 class WebSocketService: WebSocketDelegate, Observable {
@@ -109,11 +113,11 @@ class WebSocketService: WebSocketDelegate, Observable {
         do {
             let jsonData = try JSONEncoder().encode(command)
 
-//            #if DEBUG
-//            if command.commandType == .playListUpdate {
-//                print("send playListUpdate: \(String(data: jsonData, encoding: .utf8))")
-//            }
-//            #endif
+            #if DEBUG
+            if command.commandType == .fanPlaylistsStates {
+                print("send fanPlaylistsStates: \(String(data: jsonData, encoding: .utf8))")
+            }
+            #endif
 
 
             self.webSocket?.write(data: jsonData, completion: { completion?(nil) })
@@ -230,6 +234,11 @@ class WebSocketService: WebSocketDelegate, Observable {
                 case .tracksTotalPlayTime(let tracksTotalPlayMSeconds):
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTracksTotalPlayTime: tracksTotalPlayMSeconds, flush: webSoketCommand.flush ?? false)
+                    })
+
+                case .fanPlaylistsStates(let fanPlaylistState):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didRecieveFanPlaylistState: fanPlaylistState)
                     })
                 }
 

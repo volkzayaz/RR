@@ -138,7 +138,7 @@
                     <connections>
                         <outlet property="tableHeaderView" destination="y3W-SX-n73" id="4hd-sa-geM"/>
                         <outlet property="tableView" destination="nCw-tO-NCr" id="vY7-L2-kse"/>
-                        <segue destination="hHC-a4-YxJ" kind="presentation" identifier="showAddToPlaylist" id="5tr-9z-dcA"/>
+                        <segue destination="ueP-ye-VOQ" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="Mea-Mx-KER"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0uq-Zw-YB3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -175,14 +175,6 @@
                 </view>
             </objects>
             <point key="canvasLocation" x="1891" y="-2176"/>
-        </scene>
-        <!--AddToPlaylistContainer-->
-        <scene sceneID="2tm-My-a9k">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="AddToPlaylistContainer" id="hHC-a4-YxJ" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UG9-Wy-Edy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2454" y="-2231"/>
         </scene>
         <!--Player Following View Controller-->
         <scene sceneID="OD6-11-bUP">
@@ -267,6 +259,9 @@
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nOI-gA-1F2">
                                                                     <rect key="frame" x="145" y="12" width="22" height="22"/>
                                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <connections>
+                                                                        <action selector="onActionButtonWithSender:" destination="ZIC-Cb-sIz" eventType="touchUpInside" id="0fV-19-rAk"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xft-de-fsD">
                                                                     <rect key="frame" x="10" y="9.5" width="33" height="27"/>
@@ -327,6 +322,7 @@
                                         </constraints>
                                         <size key="customSize" width="177" height="160"/>
                                         <connections>
+                                            <outlet property="actionButton" destination="nOI-gA-1F2" id="3qR-gZ-QCA"/>
                                             <outlet property="activityIndicatorView" destination="Cyy-Pw-Ov9" id="bwC-5X-XQc"/>
                                             <outlet property="containerView" destination="o4B-yq-mjM" id="tST-q4-3bW"/>
                                             <outlet property="descriptionLabel" destination="Hkf-pl-EYp" id="08G-am-et3"/>
@@ -357,6 +353,7 @@
                         <outlet property="collectionView" destination="UoS-GF-A2Z" id="akM-Js-w32"/>
                         <outlet property="refreshControl" destination="CWl-DR-VP6" id="UUo-4a-Gju"/>
                         <segue destination="HsM-5U-XZs" kind="show" identifier="PlaylistContentSegueIdentifier" id="ib8-GL-IGH"/>
+                        <segue destination="ueP-ye-VOQ" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="uXx-bE-cQT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zDn-ST-XYS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -381,9 +378,20 @@
             </objects>
             <point key="canvasLocation" x="2486" y="-1504"/>
         </scene>
+        <!--AddToPlaylistContainer-->
+        <scene sceneID="atH-2w-tie">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="AddToPlaylistContainer" id="ueP-ye-VOQ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fAD-CY-ZbE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2470" y="-1970"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Playlist" width="17" height="17"/>
         <image name="playlistPlaceholder" width="77" height="77"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Mea-Mx-KER"/>
+    </inferredMetricsTieBreakers>
 </document>

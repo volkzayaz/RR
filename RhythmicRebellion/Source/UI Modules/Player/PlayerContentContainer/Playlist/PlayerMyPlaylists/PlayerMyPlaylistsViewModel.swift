@@ -17,9 +17,11 @@ protocol PlayerMyPlaylistsViewModel: class {
     func numberOfItems(in section: Int) -> Int
     func object(at indexPath: IndexPath) -> PlaylistItemCollectionViewCellViewModel?
     func selectObject(at indexPath: IndexPath)
+
+    func actions(forObjectAt indexPath: IndexPath) -> PlaylistActionsViewModels.ViewModel?
 }
 
-protocol PlayerMyPlaylistsViewModelDelegate: class, ErrorPresenting {
+protocol PlayerMyPlaylistsViewModelDelegate: class, ErrorPresenting, AlertActionsViewModelPersenting, ConfirmationPresenting {
 
     func refreshUI()
     func reloadUI()

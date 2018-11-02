@@ -280,13 +280,13 @@ class RestApiService {
         }
     }
 
-    func fanMove(_ track: Track, to playlist: FanPlaylist, completion: @escaping (Result<[Int]>) -> Void) {
+    func fanMove(_ tracks: [Track], to playlist: FanPlaylist, completion: @escaping (Result<[Int]>) -> Void) {
         guard let moveTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-items") else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
                                     "Content-Type" : "application/json"]
-        
-        let parameters: Parameters = ["records" :[["id" : track.id]]]
+
+        let parameters: Parameters = ["records" : tracks.map { ["id" : $0.id] }]
         
         Alamofire.request(moveTrackURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
@@ -340,6 +340,20 @@ class RestApiService {
                 case .success(let playlistsResponse): completion(.success(playlistsResponse.playlist))
                 case .failure(let error): completion(.failure(error))
                 }
+        }
+    }
+
+    func fanDelete(playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
+        guard let deletePlaylistURL = self.makeURL(with: "fan/playlist/" + String(playlist.id)) else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(deletePlaylistURL, method: .delete, headers: headers)
+            .validate()
+            .response { (response) in
+                completion(response.error)
         }
     }
 

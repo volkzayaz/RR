@@ -467,6 +467,9 @@
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DLO-bQ-mAk">
                                                                     <rect key="frame" x="145" y="32.333333333333329" width="22" height="22"/>
                                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <connections>
+                                                                        <action selector="onActionButtonWithSender:" destination="ooi-Q2-j10" eventType="touchUpInside" id="eiW-LV-rTp"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAS-YH-I6v">
                                                                     <rect key="frame" x="10.000000000000002" y="34.333333333333329" width="26.666666666666671" height="12"/>
@@ -533,6 +536,7 @@
                                         </constraints>
                                         <size key="customSize" width="177" height="160"/>
                                         <connections>
+                                            <outlet property="actionButton" destination="DLO-bQ-mAk" id="LK7-18-1zu"/>
                                             <outlet property="activityIndicatorView" destination="Ub3-GM-Ywc" id="NvY-YY-OH2"/>
                                             <outlet property="containerView" destination="Kbq-8E-ohd" id="h9X-6P-DVQ"/>
                                             <outlet property="descriptionLabel" destination="vzZ-JK-yx9" id="O2F-ak-KgZ"/>
@@ -563,6 +567,7 @@
                         <outlet property="collectionView" destination="4G1-Bx-ATf" id="rIo-GD-JHE"/>
                         <outlet property="refreshControl" destination="5lV-sX-u3n" id="37L-XX-SEc"/>
                         <segue destination="QTJ-hD-c31" kind="show" identifier="PlaylistContentSegueIdentifier" id="mBa-Wo-lW0"/>
+                        <segue destination="BLg-mo-FYo" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="kAD-GO-v6x"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JN3-8q-qMX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -661,7 +666,7 @@
                         <outlet property="refreshControl" destination="8Ek-gw-P99" id="SXK-IA-QZK"/>
                         <outlet property="tableHeaderView" destination="upv-Gx-oyy" id="eTw-3y-DVK"/>
                         <outlet property="tableView" destination="Ctl-dI-oob" id="q35-ud-VzV"/>
-                        <segue destination="BLg-mo-FYo" kind="presentation" identifier="showAddToPlaylist" modalPresentationStyle="formSheet" id="tg1-kY-VU3"/>
+                        <segue destination="BLg-mo-FYo" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="tg1-kY-VU3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IZT-3q-7wg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -783,6 +788,7 @@
                         </mask>
                     </variation>
                     <connections>
+                        <outlet property="actionButton" destination="L5R-rG-uQf" id="rIi-Jq-YtU"/>
                         <outlet property="activityIndicatorView" destination="udV-La-GaU" id="AhV-bq-a2H"/>
                         <outlet property="clearPlaylistButtonBottomConstraint" destination="YB1-Mb-An3" id="emJ-BF-8G6"/>
                         <outlet property="clearPlaylistButtonHeightConstraint" destination="1LY-JS-Y71" id="VXi-lm-lXE"/>
@@ -1595,7 +1601,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3XU-b2-vj9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3346" y="409"/>
+            <point key="canvasLocation" x="3391" y="460"/>
         </scene>
     </scenes>
     <resources>
@@ -1619,4 +1625,7 @@
         <image name="Video" width="18" height="13"/>
         <image name="addPlaylist" width="27" height="27"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="tg1-kY-VU3"/>
+    </inferredMetricsTieBreakers>
 </document>

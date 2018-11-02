@@ -16,18 +16,24 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
     private(set) weak var delegate: AddToPlaylistViewModelDelegate?
     private(set) weak var router: AddToPlaylistRouter?
+    private let application: Application
     private let restApiService : RestApiService
-    private let track : Track
+    private let tracks : [Track]
     
     private var playlists: [FanPlaylist] = [FanPlaylist]()
     private let createPlaylistVM : CreatePlaylistTableViewCellViewModel
     
     // MARK: - Lifecycle -
 
-    init(router: AddToPlaylistRouter, restApiService: RestApiService, track : Track) {
+    deinit {
+        self.application.removeObserver(self)
+    }
+
+    init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, tracks : [Track]) {
         self.router = router
+        self.application = application
         self.restApiService = restApiService
-        self.track = track
+        self.tracks = tracks
         
         createPlaylistVM = CreatePlaylistTableViewCellViewModel()
     }
@@ -35,7 +41,9 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     func load(with delegate: AddToPlaylistViewModelDelegate) {
         self.delegate = delegate
         self.loadPlaylists()
-        self.delegate?.refreshUI()
+        self.delegate?.reloadUI()
+
+        self.application.addObserver(self)
     }
     
     func loadPlaylists() {
@@ -44,7 +52,7 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
             switch playlistsResult {
             case .success(let playlists):
                 self?.playlists = playlists
-                self?.delegate?.refreshUI()
+                self?.delegate?.reloadUI()
             case .failure(let error):
                 self?.delegate?.show(error: error)
             }
@@ -79,12 +87,12 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     
     func createPlaylist(with name: String) {
         self.delegate?.showProgress()
-        restApiService.fanCreatePlaylist(with: name) {[weak self] (result) in
+        application.createPlaylist(with: name) {[weak self] (result) in
             self?.delegate?.hideProgress()
             switch result {
             case .success(let playlist):
                 self?.playlists.insert(playlist, at: 0)
-                self?.delegate?.refreshUI()
+                self?.delegate?.reloadUI()
                 self?.moveTrack(to: playlist)
             case .failure(let error):
                 self?.delegate?.show(error: error)
@@ -94,7 +102,7 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     
     func moveTrack(to playlist: FanPlaylist) {
         self.delegate?.showProgress()
-        restApiService.fanMove(self.track, to: playlist) {[weak self] (result) in
+        restApiService.fanMove(self.tracks, to: playlist) {[weak self] (result) in
             self?.delegate?.hideProgress()
             switch result {
             case .success(_):
@@ -108,6 +116,28 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     func cancel() {
         createPlaylistVM.createPlaylistCallback = nil
         router?.dismiss()
+    }
+}
+
+extension AddToPlaylistControllerViewModel: ApplicationObserver {
+
+    func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
+        guard let playlist = self.playlists.filter( { return $0.id == fanPlaylistState.id } ).first,
+            let playlistIndex = self.playlists.index(of: playlist) else {
+
+                guard let updatedPlaylist = fanPlaylistState.playlist else { return }
+                self.playlists.append(updatedPlaylist)
+                self.delegate?.reloadUI()
+                return
+        }
+
+        if let updatedPlaylist = fanPlaylistState.playlist {
+            self.playlists[playlistIndex] = updatedPlaylist
+        } else {
+            self.playlists.remove(at: playlistIndex)
+        }
+
+        self.delegate?.reloadUI()
     }
 }
 
