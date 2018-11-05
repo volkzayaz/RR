@@ -81,7 +81,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     var playerItemPreviewOptionViewModel: TrackPreviewOptionViewModel?
 
-    var isPlayerBlocked: Bool { return self.player.isBlocked }
+    var isPlayerBlocked: Bool { return self.player.state.blocked }
 
     var canChangePlayState: Bool { return self.player.currentItem != nil }
     var isPlaying: Bool { return self.player.isPlaying }

@@ -80,8 +80,6 @@ class Player: NSObject, Observable {
 
     let observersContainer = ObserversContainer<PlayerObserver>()
 
-    var isBlocked: Bool = false
-
     var canForward: Bool {
         guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems }
 
@@ -913,7 +911,7 @@ extension Player: WebSocketServiceObserver {
             currentPlayerItem = self.playerItem(for: playerPlaylistItem)
         }
 
-        self.currentTrackState = nil
+//        self.currentTrackState = nil
         self.currentTrackId = nil
         self.playerQueue.replace(playerItem: currentPlayerItem)
         self.replace(playerItems: self.playerQueue.playerItems)
@@ -1084,7 +1082,7 @@ extension Player: WebSocketServiceObserver {
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) {
 
-        self.isBlocked = isBlocked
+        self.state.blocked = isBlocked
 
         if isBlocked == false {
             self.playerQueue.replace(addons: [])
