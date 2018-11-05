@@ -640,38 +640,12 @@ class Player: NSObject, Observable {
             return
         }
 
-        guard let currentPlaylistItem = self.playerQueue.playerItem?.playlistItem,
-            let nextPlaylistItem = self.findPlayablePlaylistItem(after: currentPlaylistItem) else { completion?(); return }
-
-        let isPlaying = self.isPlaying
-
-        let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
-            guard error == nil else { if self?.state.playing ?? false { self?.player.play() }; completion?(); return }
-            guard self?.state.waitingAddons == false else { completion?(); return }
-            if self?.state.playing ?? false { self?.player.play() }
-            completion?()
+        var nextPlaylistItem: PlayerPlaylistItem? = nil
+        if let currentPlaylistItem = self.playerQueue.playerItem?.playlistItem {
+            nextPlaylistItem = self.findPlayablePlaylistItem(after: currentPlaylistItem)
         }
 
-        let currentPlayerItem = self.playerItem(for: nextPlaylistItem)
-        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-        let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
-
-        self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
-            guard let `self` = self, error == nil else { completion?(); return }
-
-            self.player.pause()
-            self.playerQueue.replace(playerItem: currentPlayerItem)
-            self.replace(playerItems: self.playerQueue.playerItems)
-
-            self.observersContainer.invoke({ (observer) in
-                observer.player(player: self, didChangePlayerItem: self.currentItem)
-            })
-
-            self.state.playing = isPlaying
-            if isPlaying {
-                self.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
-            }
-        }
+        self.setCurrent(playlistItem: nextPlaylistItem, completion: completion)
     }
 
     func playBackward(completion: (() -> ())? = nil) {
@@ -705,37 +679,12 @@ class Player: NSObject, Observable {
             return
         }
 
-        guard self.state.initialized else { completion?(); return }
-        guard let currentPlaylistItem = self.playerQueue.playerItem?.playlistItem,
-            let previousPlaylistItem = self.findPlayablePlaylistItem(before: currentPlaylistItem) else { completion?(); return }
-
-        let prepareQueueCompletion: ((Error?) -> ())? = { [weak self] (error) in
-            guard error == nil else { if self?.state.playing ?? false { self?.player.play() }; completion?(); return }
-            guard self?.state.waitingAddons == false else { completion?(); return }
-            if self?.state.playing ?? false { self?.player.play() }
-            completion?()
+        var previousPlaylistItem: PlayerPlaylistItem? = nil
+        if let currentPlaylistItem = self.playerQueue.playerItem?.playlistItem {
+            previousPlaylistItem = self.findPlayablePlaylistItem(before: currentPlaylistItem)
         }
 
-        let currentPlayerItem = self.playerItem(for: previousPlaylistItem)
-        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-        let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
-
-        self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
-            guard let `self` = self, error == nil else { completion?(); return }
-
-            self.player.pause()
-            self.playerQueue.replace(playerItem: currentPlayerItem)
-            self.replace(playerItems: self.playerQueue.playerItems)
-
-            self.observersContainer.invoke({ (observer) in
-                observer.player(player: self, didChangePlayerItem: self.currentItem)
-            })
-
-            if isPlaying {
-                self.state.playing = isPlaying
-                self.preparePlayerQueueToPlay(completion: prepareQueueCompletion)
-            }
-        }
+        self.setCurrent(playlistItem: previousPlaylistItem, completion: completion)
     }
 
     func seek(to timeInterval: TimeInterval) {
@@ -762,6 +711,53 @@ class Player: NSObject, Observable {
                 self?.state.playing = isPlaying
                 if isPlaying { self?.player.play() }
             })
+        }
+    }
+
+    func setCurrent(playlistItem: PlayerPlaylistItem?, completion: (() -> ())? = nil) {
+
+        guard let playlistItem = playlistItem else {
+            let trackId = TrackId(id: 0, key: "")
+            let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: false)
+            self.set(trackId: trackId, trackState: trackState, shouldSendTrackingTimeRequest: false) { [weak self] (error) in
+                guard let `self` = self, error == nil else { return }
+
+                self.player.pause()
+                self.playerQueue.reset()
+                self.replace(playerItems: self.playerQueue.playerItems)
+
+                self.observersContainer.invoke({ (observer) in
+                    observer.player(player: self, didChangePlayerItem: nil)
+                })
+            }
+            return
+        }
+
+        let currentPlayerItem = self.playerItem(for: playlistItem)
+        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: self.isPlaying)
+        let shouldSendTrackingTimeRequest = self.shouldSendTrackingTimeRequest(for: currentPlayerItem.playlistItem.track)
+
+        self.set(trackId: currentPlayerItem.trackId, trackState: trackState, shouldSendTrackingTimeRequest: shouldSendTrackingTimeRequest) { [weak self] (error) in
+            guard let `self` = self, error == nil else { completion?(); return }
+
+            self.player.pause()
+            self.playerQueue.replace(playerItem: currentPlayerItem)
+            self.replace(playerItems: self.playerQueue.playerItems)
+
+            self.observersContainer.invoke({ (observer) in
+                observer.player(player: self, didChangePlayerItem: self.currentItem)
+            })
+
+            if self.isPlaying {
+                self.state.playing = self.isPlaying
+                self.preparePlayerQueueToPlay(completion: { [weak self] (error) in
+                    guard error == nil else { if self?.state.playing ?? false { self?.player.play() }; completion?(); return }
+                    guard self?.state.waitingAddons == false else { completion?(); return }
+                    if self?.state.playing ?? false { self?.player.play() }
+                    completion?()
+
+                })
+            }
         }
     }
 
@@ -1042,9 +1038,18 @@ extension Player: WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) {
         if self.state.initialized && flush == false {
             self.playlist.update(with: playlistItemsPatches)
+
+            guard let currentPlaylistItem = self.currentItem?.playlistItem else { return }
+            guard self.playlist.contains(playlistItem: currentPlaylistItem) == false else { return }
+
+            let nextPlaylistitem = self.findPlayablePlaylistItem(after: currentPlaylistItem) ?? self.playlist.firstPlaylistItem
+            self.setCurrent(playlistItem: nextPlaylistitem)
+
+
         } else {
             self.playlist.reset(with: playlistItemsPatches)
         }
+
         self.observersContainer.invoke({ (observer) in
             observer.playerDidChangePlaylist(player: self)
         })
@@ -1458,11 +1463,12 @@ extension Player {
             self.observersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
-            
-            if let playlistItemToPlay = playlistItemToPlay {
-                self.performAction(.setCurrent, for: playlistItemToPlay, completion: nil)
-            }
-            
+
+            guard let currentPlaylistItem = self.currentItem?.playlistItem else { completion?(nil); return }
+            guard self.playlist.contains(playlistItem: currentPlaylistItem) == false else { completion?(nil); return }
+            let playlistItemToPlay = self.findPlayablePlaylistItem(after: currentPlaylistItem)
+
+            self.setCurrent(playlistItem: playlistItemToPlay, completion: nil)
             completion?(nil)
         }
     }
@@ -1555,6 +1561,8 @@ extension Player {
             self.observersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
+
+            self.state.blocked = false
 
             if let playlistItemToPlay = self.playlist.firstPlaylistItem {
                 self.performAction(.playNow, for: playlistItemToPlay, completion: nil)

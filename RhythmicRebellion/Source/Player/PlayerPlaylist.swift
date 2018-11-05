@@ -81,6 +81,10 @@ class PlayerPlaylist {
     // MARK: - PlayerPlaylistItem -
     var hasPlaylisItems: Bool { return self.playlistItems.isEmpty == false }
 
+    func contains(playlistItem: PlayerPlaylistItem) -> Bool {
+        return self.playlistItems[playlistItem.key] != nil
+    }
+
     var firstPlaylistItem: PlayerPlaylistItem? {
         guard let firstPlayListItem = self.playlistItems.filter( { return $0.value.previousKey == nil }).first else { return nil }
         return firstPlayListItem.value

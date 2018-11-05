@@ -52,6 +52,9 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     func loadTracks() {
         self.playlistItems = self.player?.playlistItems ?? []
+
+        print("self.playlistItems: \(self.playlistItems)")
+
         self.delegate?.reloadUI()
     }
 
@@ -101,7 +104,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         case .playNow: return playlistItem.track.isPlayable
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .replaceCurrent, .playNext, .playLast: return false
-        case .delete: return self.playlistItems.count > 1
+        case .delete: return true
         case .addToCart(_):
             guard let fanUser = self.application?.user as? FanUser else { return false}
             return fanUser.hasPurchase(for: playlistItem.track) == false
