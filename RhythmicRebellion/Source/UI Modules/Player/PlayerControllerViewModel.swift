@@ -186,6 +186,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func toggleLike() {
         guard let track = self.player.currentItem?.playlistItem.track else { return }
+        guard (self.application.user as? FanUser) != nil else { self.router?.navigateToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked) { [weak self] (error) in
             guard let error = error else { return }
@@ -195,6 +196,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func toggleDislike() {
         guard let track = self.player.currentItem?.playlistItem.track else { return }
+        guard (self.application.user as? FanUser) != nil else { self.router?.navigateToAuthorization(); return }
 
         self.application.update(track: track, likeState: .disliked) { [weak self] (error) in
             guard let error = error else { return }
