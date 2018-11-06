@@ -240,6 +240,10 @@ extension SignInViewController: SignInViewModelDelegate {
     func refreshPasswordField(field: ValidatableField, didValidate validationError: ValidationError?) {
         self.refresh(textField: self.passwordTextField, errorLabel: self.passwordErrorLabel, withValidationError: validationError)
     }
+
+    func refreshEmailField(with email: String?) {
+        self.emailTextField.text = email
+    }
 }
 
 // MARK: - AuthorizationChildViewController -

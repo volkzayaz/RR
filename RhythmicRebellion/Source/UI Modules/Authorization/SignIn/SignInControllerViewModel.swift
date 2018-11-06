@@ -72,6 +72,7 @@ final class SignInControllerViewModel: SignInViewModel {
         self.validator.registerField(emailField, rules: emailRules)
 
         if emailField.validationText.isEmpty == true {
+            self.delegate?.refreshEmailField(with: Defaults.lastSignedUserEmail)
             self.delegate?.refreshEmailField(field: emailField, didValidate: nil)
         } else {
             self.validator.validateField(emailField) { (validationError) in }

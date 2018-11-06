@@ -39,4 +39,6 @@ protocol SignInViewModelDelegate: class, ErrorPresenting {
 
     func refreshEmailField(field: ValidatableField, didValidate error: ValidationError?)
     func refreshPasswordField(field: ValidatableField, didValidate error: ValidationError?)
+
+    func refreshEmailField(with email: String?)
 }

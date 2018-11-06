@@ -134,9 +134,10 @@ class Application: Observable {
 
         guard let prevUser = self.user else {
             self.user = user
-            if user.isGuest {
-                self.audioFileLocalStorageService.reset()
+            if let fanUser = user as? FanUser {
+                Defaults.lastSignedUserEmail = fanUser.profile.email
             }
+            self.audioFileLocalStorageService.reset()
             self.notifyUserChanged()
             return
         }
@@ -144,6 +145,10 @@ class Application: Observable {
         self.user = user
 
         if prevUser != user {
+            if let fanUser = user as? FanUser {
+                Defaults.lastSignedUserEmail = fanUser.profile.email
+            }
+
             self.audioFileLocalStorageService.reset()
             self.notifyUserChanged()
         } else {

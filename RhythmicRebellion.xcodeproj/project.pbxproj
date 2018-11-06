@@ -186,6 +186,7 @@
 		76CE92A8218C7B9A00956882 /* TrackLikeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92A7218C7B9900956882 /* TrackLikeState.swift */; };
 		76CE92AA21917C1000956882 /* AddTracksToPlaylistControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92A921917C0F00956882 /* AddTracksToPlaylistControllerViewModel.swift */; };
 		76CE92AC2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92AB2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift */; };
+		76CE92AE2191CA3500956882 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92AD2191CA3500956882 /* Defaults.swift */; };
 		76D39CEB2111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */; };
 		76D39CEC2111F7FA00D47DFA /* PlaylistContentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */; };
 		76D39CED2111F7FA00D47DFA /* PlaylistContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */; };
@@ -419,6 +420,7 @@
 		76CE92A7218C7B9900956882 /* TrackLikeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackLikeState.swift; sourceTree = "<group>"; };
 		76CE92A921917C0F00956882 /* AddTracksToPlaylistControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTracksToPlaylistControllerViewModel.swift; sourceTree = "<group>"; };
 		76CE92AB2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistToPlaylistControllerViewModel.swift; sourceTree = "<group>"; };
+		76CE92AD2191CA3500956882 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentControllerViewModel.swift; sourceTree = "<group>"; };
 		76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentRouter.swift; sourceTree = "<group>"; };
 		76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentViewController.swift; sourceTree = "<group>"; };
@@ -1122,6 +1124,7 @@
 				76F1FA4620DBA8DE00C9191F /* AppDelegate.swift */,
 				76F1FA4F20DBA96200C9191F /* RhythmicRebellion.swift */,
 				7650962020E5029200BF1F79 /* Observable.swift */,
+				76CE92AD2191CA3500956882 /* Defaults.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -1530,6 +1533,7 @@
 				763931F42118831600A65257 /* PlayerMyPlaylistsControllerViewModel.swift in Sources */,
 				764E7EDD2188C99300952182 /* PlaylistActions.swift in Sources */,
 				769F4E8D210A16CF000DD23B /* PlayerContentStoryboardSegue.swift in Sources */,
+				76CE92AE2191CA3500956882 /* Defaults.swift in Sources */,
 				769F4E91210B1574000DD23B /* PlayerContentPresentationAnimator.swift in Sources */,
 				764CC02A20F8D4FF009C3D28 /* PlayerState.swift in Sources */,
 				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,
