@@ -374,6 +374,10 @@ extension PlaylistContentControllerViewModel: ApplicationObserver {
             self.delegate?.reloadObjects(at: indexPaths)
         }
     }
+
+    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
+        self.delegate?.reloadUI()
+    }
 }
 
 extension PlaylistContentControllerViewModel: PlayerObserver {
