@@ -11,7 +11,7 @@ import UIKit
 
 protocol PlayerMyPlaylistsRouter: FlowRouter {
     func showContent(of playlist: FanPlaylist)
-    func showAddToPlaylist(for tracks: [Track])
+    func showAddToPlaylist(for playlist: FanPlaylist)
 }
 
 final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouterSegueCompatible {
@@ -26,7 +26,7 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouter
 
     enum SegueActions: SegueDestinations {
         case showPlaylistContent(playlist: FanPlaylist)
-        case showAddToPlaylist(tracks: [Track])
+        case showAddToPlaylist(playlist: FanPlaylist)
 
         var identifier: SegueDestinationList {
             switch self {
@@ -52,10 +52,10 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouter
             let playlistContentRouter = DefaultPlaylistContentRouter(dependencies: self.dependencies)
             playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
 
-        case .showAddToPlaylist(let tracks):
+        case .showAddToPlaylist(let playlist):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
-            addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, playlist: playlist)
         }
     }
 
@@ -73,7 +73,7 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouter
         self.perform(segue: .showPlaylistContent(playlist: playlist))
     }
 
-    func showAddToPlaylist(for tracks: [Track]) {
-        self.perform(segue: .showAddToPlaylist(tracks: tracks))
+    func showAddToPlaylist(for playlist: FanPlaylist) {
+        self.perform(segue: .showAddToPlaylist(playlist: playlist))
     }
 }

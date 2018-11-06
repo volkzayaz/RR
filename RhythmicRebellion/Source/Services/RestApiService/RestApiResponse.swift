@@ -241,7 +241,7 @@ struct FanPlaylistResponse: RestApiResponse {
     }
 }
 
-struct TrackMoveResponse: RestApiResponse {
+struct AttachTracksResponse: RestApiResponse {
     let recordIds: [Int]
     
     enum CodingKeys: String, CodingKey {
@@ -256,6 +256,29 @@ struct TrackMoveResponse: RestApiResponse {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let recordsContainer = try container.nestedContainer(keyedBy: RecordsKeys.self, forKey: .data)
         self.recordIds = try recordsContainer.decode([Int].self, forKey: .recordIds)
+    }
+}
+
+struct AttachDefinedPlaylistResponse: RestApiResponse {
+    let recordIds: [Int: Int]
+
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+
+    enum RecordsKeys: String, CodingKey {
+        case recordIds
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let recordsContainer = try container.nestedContainer(keyedBy: RecordsKeys.self, forKey: .data)
+
+        let recordsOrderInfo = try recordsContainer.decode([Int : [String : Int] ].self, forKey: .recordIds)
+        self.recordIds = recordsOrderInfo.reduce(into: [:]) { (result , keyValue) in
+            let (key, value) = keyValue
+            result[key] = value["sort_order"]
+        }
     }
 }
 

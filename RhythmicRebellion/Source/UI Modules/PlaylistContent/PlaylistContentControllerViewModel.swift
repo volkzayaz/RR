@@ -153,7 +153,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         case .playNow: self.play(tracks: self.playlistTracks)
         case .playNext: self.player?.add(tracks: self.playlistTracks, at: .next, completion: nil)
         case .playLast: self.player?.add(tracks: self.playlistTracks, at: .last, completion: nil)
-        case .toPlaylist: self.router?.showAddToPlaylist(for: self.playlistTracks)
+        case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .replaceCurrent: self.player?.replace(with: self.playlistTracks, completion: nil)
         case .clear:
             guard let fanPlaylist = self.playlist as? FanPlaylist else { return }
@@ -265,8 +265,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
                 default: break
                 }
             })
-        case .playNow:
-            self.play(tracks: [track])
+        case .playNow: self.play(tracks: [track])
         case .playNext: self.player?.add(tracks: [track], at: .next, completion: nil)
         case .playLast: self.player?.add(tracks: [track], at: .last, completion: nil)
         case .toPlaylist: self.router?.showAddToPlaylist(for: [track])

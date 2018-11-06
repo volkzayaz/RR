@@ -280,7 +280,66 @@ class RestApiService {
         }
     }
 
-    func fanMove(_ tracks: [Track], to playlist: FanPlaylist, completion: @escaping (Result<[Int]>) -> Void) {
+//    func fanAttach(playlist attachingPlaylist: DefinedPlaylist, to playlist: FanPlaylist, completion: @escaping (Result<[Int : Int]>) -> Void) {
+//        guard let fanAttachPlaylistURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-playlists") else { return }
+//
+//        let headers: HTTPHeaders = ["Accept" : "application/json",
+//                                    "Content-Type" : "application/json",
+//                                    "Origin" : self.originURI]
+//
+//        let parameters: Parameters = ["playlist_id" : playlist.id]
+//
+//
+//        Alamofire.request(fanAttachPlaylistURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+//            .validate()
+//            .restApiResponse { (dataResponse: DataResponse<AttachDefinedPlaylistResponse>) in
+//                switch dataResponse.result {
+//                case .success(let attachDefinedPlaylistResponse): completion(.success(attachDefinedPlaylistResponse.recordIds))
+//                case .failure(let error): completion(.failure(error))
+//                }
+//        }
+//    }
+
+    func fanAttach(playlist attachingPlaylist: DefinedPlaylist, to playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
+        guard let fanAttachPlaylistURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-playlists") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
+
+        let parameters: Parameters = ["playlist_id" : attachingPlaylist.id]
+
+
+        Alamofire.request(fanAttachPlaylistURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .response { (response) in
+                completion(response.error)
+        }
+
+    }
+
+
+    func fanAttach(playlist attachingPlaylist: FanPlaylist, to playlist: FanPlaylist, completion: @escaping (Result<[Int]>) -> Void) {
+        guard let fanAttachPlaylistURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-fan-playlists") else { return }
+
+        let headers: HTTPHeaders = ["Accept" : "application/json",
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
+
+        let parameters: Parameters = ["playlist_id" : attachingPlaylist.id]
+
+
+        Alamofire.request(fanAttachPlaylistURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<AttachTracksResponse>) in
+                switch dataResponse.result {
+                case .success(let attachTracksResponse): completion(.success(attachTracksResponse.recordIds))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
+    func fanAttach(_ tracks: [Track], to playlist: FanPlaylist, completion: @escaping (Result<[Int]>) -> Void) {
         guard let moveTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-items") else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
@@ -290,9 +349,9 @@ class RestApiService {
         
         Alamofire.request(moveTrackURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
-            .restApiResponse { (dataResponse: DataResponse<TrackMoveResponse>) in
+            .restApiResponse { (dataResponse: DataResponse<AttachTracksResponse>) in
                 switch dataResponse.result {
-                case .success(let moveTrackResponse): completion(.success(moveTrackResponse.recordIds))
+                case .success(let attachTracksResponse): completion(.success(attachTracksResponse.recordIds))
                 case .failure(let error): completion(.failure(error))
                 }
         }

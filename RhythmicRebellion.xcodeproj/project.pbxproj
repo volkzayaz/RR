@@ -184,6 +184,8 @@
 		76C9F6572147F22B00054B44 /* ProfileItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6562147F22B00054B44 /* ProfileItemTableViewCell.swift */; };
 		76C9F6592147F50300054B44 /* ProfileItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C9F6582147F50300054B44 /* ProfileItemViewModel.swift */; };
 		76CE92A8218C7B9A00956882 /* TrackLikeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92A7218C7B9900956882 /* TrackLikeState.swift */; };
+		76CE92AA21917C1000956882 /* AddTracksToPlaylistControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92A921917C0F00956882 /* AddTracksToPlaylistControllerViewModel.swift */; };
+		76CE92AC2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CE92AB2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift */; };
 		76D39CEB2111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */; };
 		76D39CEC2111F7FA00D47DFA /* PlaylistContentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */; };
 		76D39CED2111F7FA00D47DFA /* PlaylistContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */; };
@@ -415,6 +417,8 @@
 		76C9F6562147F22B00054B44 /* ProfileItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItemTableViewCell.swift; sourceTree = "<group>"; };
 		76C9F6582147F50300054B44 /* ProfileItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItemViewModel.swift; sourceTree = "<group>"; };
 		76CE92A7218C7B9900956882 /* TrackLikeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackLikeState.swift; sourceTree = "<group>"; };
+		76CE92A921917C0F00956882 /* AddTracksToPlaylistControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTracksToPlaylistControllerViewModel.swift; sourceTree = "<group>"; };
+		76CE92AB2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaylistToPlaylistControllerViewModel.swift; sourceTree = "<group>"; };
 		76D39CE72111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentControllerViewModel.swift; sourceTree = "<group>"; };
 		76D39CE82111F7FA00D47DFA /* PlaylistContentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentRouter.swift; sourceTree = "<group>"; };
 		76D39CE92111F7FA00D47DFA /* PlaylistContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistContentViewController.swift; sourceTree = "<group>"; };
@@ -1178,6 +1182,8 @@
 				AB14236A2124487E00C926F5 /* AddToPlaylistPlaylistsRouter.swift */,
 				AB1423682124487E00C926F5 /* AddToPlaylistViewModel.swift */,
 				AB14236B2124487F00C926F5 /* AddToPlaylistControllerViewModel.swift */,
+				76CE92A921917C0F00956882 /* AddTracksToPlaylistControllerViewModel.swift */,
+				76CE92AB2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift */,
 				AB1423692124487E00C926F5 /* AddToPlaylistViewController.swift */,
 			);
 			path = AddToPlaylist;
@@ -1352,6 +1358,7 @@
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				76769A87218079A900DCB146 /* ChangeEmailViewController.swift in Sources */,
 				763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */,
+				76CE92AC2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */,
 				764D683F2148E86200F52730 /* ProfileSettingsViewModel.swift in Sources */,
 				763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */,
 				767BA578211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift in Sources */,
@@ -1528,6 +1535,7 @@
 				76F1FA4C20DBA8DE00C9191F /* AppDelegate.swift in Sources */,
 				76F1FA5020DBA96200C9191F /* RhythmicRebellion.swift in Sources */,
 				76F1FA5E20DBA9FF00C9191F /* AppRouter.swift in Sources */,
+				76CE92AA21917C1000956882 /* AddTracksToPlaylistControllerViewModel.swift in Sources */,
 				769F4EAE210B6631000DD23B /* VideoRouter.swift in Sources */,
 				76525E6B2146722700C556D6 /* RestorePasswordViewModel.swift in Sources */,
 				769F4EB8210B669F000DD23B /* LyricsViewModel.swift in Sources */,

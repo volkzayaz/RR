@@ -112,7 +112,6 @@ final class HomeControllerViewModel: HomeViewModel {
         case .playNow: self.play(tracks: tracks)
         case .playNext: self.player.add(tracks: tracks, at: .next, completion: nil)
         case .playLast: self.player.add(tracks: tracks, at: .last, completion: nil)
-        case .toPlaylist: self.router?.showAddToPlaylist(for: tracks)
         case .replaceCurrent: self.player.replace(with: tracks, completion: nil)
         default: break
         }
@@ -121,13 +120,14 @@ final class HomeControllerViewModel: HomeViewModel {
     func performeAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, for playlist: DefinedPlaylist) {
 
         switch actionType {
-        case .playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent:
+        case .playNow, .playNext, .playLast, .replaceCurrent:
             self.restApiService.tracks(for: playlist.id) { [weak self] (tracksResult) in
                 switch tracksResult {
                 case .success(let tracks): self?.performeAction(with: actionType, for: tracks)
                 case .failure(let error): self?.delegate?.show(error: error)
                 }
             }
+        case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .clear: break
         case .delete: break
         case .cancel: break

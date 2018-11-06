@@ -12,7 +12,8 @@ import UIKit
 protocol HomeRouter: FlowRouter {
     func showContent(of playlist: Playlist)
 
-    func showAddToPlaylist(for tracks: [Track])
+    func showAddToPlaylist(for playlist: Playlist)
+    
 }
 
 final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
@@ -27,7 +28,7 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
 
     enum SegueActions: SegueDestinations {
         case showPlaylistContent(playlist: Playlist)
-        case showAddToPlaylist(tracks: [Track])
+        case showAddToPlaylist(playlist: Playlist)
 
         var identifier: SegueDestinationList {
             switch self {
@@ -53,10 +54,10 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
             let playlistContentRouter = DefaultPlaylistContentRouter(dependencies: self.dependencies)
             playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
 
-        case .showAddToPlaylist(let tracks):
+        case .showAddToPlaylist(let playlist):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
-            addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, playlist: playlist)
         }
     }
 
@@ -74,7 +75,7 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
         self.perform(segue: .showPlaylistContent(playlist: playlist))
     }
 
-    func showAddToPlaylist(for tracks: [Track]) {
-        self.perform(segue: .showAddToPlaylist(tracks: tracks))
+    func showAddToPlaylist(for playlist: Playlist) {
+        self.perform(segue: .showAddToPlaylist(playlist: playlist))
     }
 }

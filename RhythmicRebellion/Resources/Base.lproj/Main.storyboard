@@ -667,6 +667,7 @@
                         <outlet property="tableHeaderView" destination="upv-Gx-oyy" id="eTw-3y-DVK"/>
                         <outlet property="tableView" destination="Ctl-dI-oob" id="q35-ud-VzV"/>
                         <segue destination="BLg-mo-FYo" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="tg1-kY-VU3"/>
+                        <segue destination="BLg-mo-FYo" kind="presentation" identifier="AttachPlaylistToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="tB5-cT-enA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IZT-3q-7wg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1634,6 +1635,6 @@
         <image name="addPlaylist" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tg1-kY-VU3"/>
+        <segue reference="tB5-cT-enA"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -10,18 +10,18 @@
 import Foundation
 import UIKit
 
-final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
+class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
     // MARK: - Private properties -
 
     private(set) weak var delegate: AddToPlaylistViewModelDelegate?
     private(set) weak var router: AddToPlaylistRouter?
-    private let application: Application
-    private let restApiService : RestApiService
-    private let tracks : [Track]
+    private(set) var application: Application
+    private(set) var restApiService : RestApiService
     
-    private var playlists: [FanPlaylist] = [FanPlaylist]()
-    private let createPlaylistVM : CreatePlaylistTableViewCellViewModel
+    private(set) var playlists: [FanPlaylist] = [FanPlaylist]()
+    private let excludedPlaylists: [FanPlaylist]
+    private(set) var createPlaylistVM : CreatePlaylistTableViewCellViewModel
     
     // MARK: - Lifecycle -
 
@@ -29,12 +29,13 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
         self.application.removeObserver(self)
     }
 
-    init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, tracks : [Track]) {
+    init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, excludedPlaylists: [FanPlaylist]) {
         self.router = router
         self.application = application
         self.restApiService = restApiService
-        self.tracks = tracks
-        
+
+        self.excludedPlaylists = excludedPlaylists
+
         createPlaylistVM = CreatePlaylistTableViewCellViewModel()
     }
 
@@ -48,13 +49,14 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     
     func loadPlaylists() {
         self.restApiService.fanPlaylists(completion: { [weak self] (playlistsResult) in
-            
+            guard let `self` = self else { return }
+
             switch playlistsResult {
             case .success(let playlists):
-                self?.playlists = playlists
-                self?.delegate?.reloadUI()
+                self.playlists = playlists.filter { self.excludedPlaylists.contains($0) == false }
+                self.delegate?.reloadUI()
             case .failure(let error):
-                self?.delegate?.show(error: error)
+                self.delegate?.show(error: error)
             }
         })
     }
@@ -76,15 +78,19 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
         let playlist =  self.playlists[indexPath.row - 1]
         return PlaylistTableViewCellViewModel(playlist: playlist)
     }
-    
+
     func selectObject(at indexPath: IndexPath) {
-        guard indexPath.row != 0 else {
-            return
-        }
+        guard indexPath.row != 0 else { return }
+
         let playlist =  self.playlists[indexPath.row - 1]
-        moveTrack(to: playlist)
+        self.select(playlist: playlist)
     }
-    
+
+    open func select(playlist: FanPlaylist) {
+        fatalError("select(playlist) showld be implemented in subclasses")
+    }
+
+
     func createPlaylist(with name: String) {
         self.delegate?.showProgress()
         application.createPlaylist(with: name) {[weak self] (result) in
@@ -93,26 +99,13 @@ final class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
             case .success(let playlist):
                 self?.playlists.insert(playlist, at: 0)
                 self?.delegate?.reloadUI()
-                self?.moveTrack(to: playlist)
+                self?.select(playlist: playlist)
             case .failure(let error):
                 self?.delegate?.show(error: error)
             }
         }
     }
-    
-    func moveTrack(to playlist: FanPlaylist) {
-        self.delegate?.showProgress()
-        restApiService.fanMove(self.tracks, to: playlist) {[weak self] (result) in
-            self?.delegate?.hideProgress()
-            switch result {
-            case .success(_):
-                self?.router?.dismiss()
-            case .failure(let error):
-                self?.delegate?.show(error: error)
-            }
-        }
-    }
-    
+
     func cancel() {
         createPlaylistVM.createPlaylistCallback = nil
         router?.dismiss()

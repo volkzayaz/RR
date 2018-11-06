@@ -11,6 +11,7 @@ import UIKit
 
 protocol PlaylistContentRouter: FlowRouter {
     func showAddToPlaylist(for tracks: [Track])
+    func showAddToPlaylist(for playlist: Playlist)
 
     func dismiss()
 }
@@ -21,15 +22,18 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     typealias Destinations = SegueActions
 
     enum SegueList: String, SegueDestinationList {
-        case addToPlaylist = "AddToPlaylistSegueIdentifier"
+        case addTracksToPlaylist = "AddToPlaylistSegueIdentifier"
+        case addPlaylistToPlaylist = "AttachPlaylistToPlaylistSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
-        case showAddToPlaylist(tracks: [Track])
+        case showAddTracksToPlaylist(tracks: [Track])
+        case showAddPlaylistToPlaylist(playlist: Playlist)
 
         var identifier: SegueDestinationList {
             switch self {
-            case .showAddToPlaylist: return SegueList.addToPlaylist
+            case .showAddTracksToPlaylist: return SegueList.addTracksToPlaylist
+            case .showAddPlaylistToPlaylist: return SegueList.addPlaylistToPlaylist
             }
         }
     }
@@ -46,10 +50,15 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
 
     func prepare(for destination: DefaultPlaylistContentRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
-        case .showAddToPlaylist(let tracks):
+        case .showAddTracksToPlaylist(let tracks):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
             let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
             addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
+
+        case .showAddPlaylistToPlaylist(let playlist):
+            guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
+            let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
+            addToPlaylistRouter.start(controller: addToPlaylistViewController, playlist: playlist)
         }
     }
 
@@ -71,7 +80,11 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     }
     
     func showAddToPlaylist(for tracks: [Track]) {
-        self.perform(segue: .showAddToPlaylist(tracks: tracks))
+        self.perform(segue: .showAddTracksToPlaylist(tracks: tracks))
+    }
+
+    func showAddToPlaylist(for playlist: Playlist) {
+        self.perform(segue: .showAddPlaylistToPlaylist(playlist: playlist))
     }
 
     func dismiss() {

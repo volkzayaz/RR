@@ -53,7 +53,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     func loadTracks() {
         self.playlistItems = self.player?.playlistItems ?? []
 
-        print("self.playlistItems: \(self.playlistItems)")
+//        print("self.playlistItems: \(self.playlistItems)")
 
         self.delegate?.reloadUI()
     }
