@@ -130,9 +130,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
             })
         case .playNow: self.player?.performAction(.playNow, for: playlistItem, completion: nil)
         case .delete: self.player?.performAction(.delete, for: playlistItem, completion: nil)
-        case .toPlaylist:
-            self.router?.showAddToPlaylist(for: [playlistItem.track])
-            break
+        case .toPlaylist: self.router?.showAddToPlaylist(for: [playlistItem.track])
         default: break
         }
     }

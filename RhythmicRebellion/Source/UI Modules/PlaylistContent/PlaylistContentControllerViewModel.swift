@@ -182,7 +182,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
     func isAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, availableFor playlist: Playlist) -> Bool {
         switch actionType {
-        case .playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent: return true
+        case .playNow, .playNext, .playLast, .replaceCurrent: return true
+        case .toPlaylist: return self.application?.user?.isGuest == false
         case .delete: return playlist.isFanPlaylist && playlist.isDefault == false
         case .clear: return false
         default: return true

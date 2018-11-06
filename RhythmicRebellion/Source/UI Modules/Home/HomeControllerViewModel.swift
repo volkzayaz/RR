@@ -136,7 +136,8 @@ final class HomeControllerViewModel: HomeViewModel {
 
     func isAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, availableFor playlist: DefinedPlaylist) -> Bool {
         switch actionType {
-        case .playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent: return true
+        case .playNow, .playNext, .playLast, .replaceCurrent: return true
+        case .toPlaylist: return self.application.user?.isGuest == false
         case .delete: return false
         case .clear: return false
         default: return true
