@@ -43,10 +43,25 @@ class TipView: EasyTipView {
         self.touchView?.removeFromSuperview()
     }
 
-    func showTouched(forView view: UIView, withinSuperview superview: UIView) {
+    func touchViewFrame(in view: UIView) -> CGRect {
+
+        switch view {
+        case let scrollView as UIScrollView:
+            return scrollView.bounds
+
+        default: return view.bounds
+        }
+
+
+    }
+
+    func showTouched(forView view: UIView, in superview: UIView) {
         guard self.touchView == nil else { return }
 
-        let touchView = TipTouchView(frame: superview.bounds, tipView: self)
+        let refViewFrame = view.convert(view.bounds, to: superview)
+        print("refViewFrame: \(refViewFrame)")
+
+        let touchView = TipTouchView(frame: self.touchViewFrame(in: superview), tipView: self)
         superview.addSubview(touchView)
 
         self.show(forView: view, withinSuperview: superview)

@@ -118,7 +118,7 @@ final class PlayerNowPlayingViewController: UIViewController {
     func showHint(sourceView: UIView, text: String) {
 
         let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
-        tipView.showTouched(forView: sourceView, withinSuperview: self.tableView)
+        tipView.showTouched(forView: sourceView, in: self.tableView)
 
         self.tipView = tipView
     }
