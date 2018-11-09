@@ -1,23 +1,26 @@
 //
-//  PlayerContentContainerViewController.swift
+//  ApplicationContentContainerViewController.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/27/18.
+//  Created by Alexander Obolentsev on 11/7/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-final class PlayerContentContainerViewController: UITabBarController {
+final class ApplicationContentContainerViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: PlayerContentContainerViewModel!
+    var tabBarViewController: TabBarViewController!
+
+    private(set) var viewModel: ApplicationContentContainerViewModel!
     private(set) var router: FlowRouter!
+
     // MARK: - Configuration -
 
-    func configure(viewModel: PlayerContentContainerViewModel, router: FlowRouter) {
+    func configure(viewModel: ApplicationContentContainerViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -30,23 +33,14 @@ final class PlayerContentContainerViewController: UITabBarController {
         viewModel.load(with: self)
     }
 
-    override func willMove(toParentViewController parent: UIViewController?) {
-        super.willMove(toParentViewController: parent)
-
-        print("willMove toParentViewController: \(parent)")
-    }
-
     override func targetViewController(forAction action: Selector, sender: Any?) -> UIViewController? {
-
-        print("targetViewController action: \(action) sender: \(sender)")
 
         return super.targetViewController(forAction: action, sender: sender)
     }
-
 }
 
 // MARK: - Router -
-extension PlayerContentContainerViewController {
+extension ApplicationContentContainerViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -62,7 +56,7 @@ extension PlayerContentContainerViewController {
 
 }
 
-extension PlayerContentContainerViewController: PlayerContentContainerViewModelDelegate {
+extension ApplicationContentContainerViewController: ApplicationContentContainerViewModelDelegate {
 
     func refreshUI() {
 

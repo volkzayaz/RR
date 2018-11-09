@@ -40,6 +40,13 @@ final class TabBarViewController: UITabBarController {
 
     }
 
+    override func targetViewController(forAction action: Selector, sender: Any?) -> UIViewController? {
+
+        print("targetViewController action: \(action) sender: \(sender)")
+
+        return super.targetViewController(forAction: action, sender: sender)
+    }
+
 }
 
 // MARK: - Router -

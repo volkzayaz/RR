@@ -9,24 +9,21 @@
 import UIKit
 
 class PlayerContentTransitioningDelegate: NSObject {
+    weak var presentingViewController: PlayerContentPresentingController?
 
+    init(with presentingViewController: PlayerContentPresentingController?) {
+        self.presentingViewController = presentingViewController
+    }
 }
 
 extension PlayerContentTransitioningDelegate: UIViewControllerTransitioningDelegate {
 
-    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        //        let presentationController = PlayerContentPresentationController(presentedViewController: presented, presentingViewController: presenting, sourceViewController: sourceViewController)
-
-        let presentationController = PlayerContentPresentationController(presentedViewController: presented, presentingViewController: source, sourceViewController: source)
-
-        return presentationController
-    }
-
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return PlayerContentPresentationAnimator(isPresentation: true)
+
+        return PlayerContentPresentationAnimator(presentingViewController: presentingViewController, isPresentation: true)
     }
 
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return PlayerContentPresentationAnimator(isPresentation: false)
+        return PlayerContentPresentationAnimator(presentingViewController: presentingViewController, isPresentation: false)
     }
 }

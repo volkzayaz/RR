@@ -20,25 +20,25 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
 
     enum SegueList: String, SegueDestinationList {
         case player = "PlayerSegueIdentifier"
-        case tabBar = "TabBarSegueIdentifier"
+        case contentContainer = "ContentContainerSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
         case player
-        case tabBar
+        case contentContainer
 
         var identifier: SegueDestinationList {
             switch self {
             case .player: return SegueList.player
-            case .tabBar: return SegueList.tabBar
+            case .contentContainer: return SegueList.contentContainer
             }
         }
 
         init?(destinationList: SegueDestinationList) {
             switch destinationList as? SegueList {
             case .player?: self = .player
-            case .tabBar?: self = .tabBar
-            default: fatalError("UPS!")
+            case .contentContainer?: self = .contentContainer
+            default: fatalError("Unknown destination!")
             }
         }
     }
@@ -48,8 +48,8 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
     private(set) weak var viewModel: AppViewModel?
     private(set) weak var sourceController: UIViewController?
 
-    private(set) weak var tabBarViewController: TabBarViewController?
-    private(set) weak var tabBarRouter: TabBarRouter?
+    private(set) weak var contentContainerViewController: ApplicationContentContainerViewController?
+    private(set) weak var contentContainerRouter: ApplicationContentContainerRouter?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -63,12 +63,12 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
             let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies, navigationDelegate: self)
             playerRouter.start(controller: playerViewController)
 
-        case .tabBar:
-            guard let tabBarViewController = segue.destination as? TabBarViewController else { fatalError("Incorrect controller for TabBarViewController") }
-            let tabBarRouter = DefaultTabBarRouter(dependencies: self.dependencies, playerContentTransitioningDelegate: PlayerContentTransitioningDelegate())
-            tabBarRouter.start(controller: tabBarViewController)
-            self.tabBarRouter = tabBarRouter
-            self.tabBarViewController = tabBarViewController
+        case .contentContainer:
+            guard let contentContainerViewController = segue.destination as? ApplicationContentContainerViewController else { fatalError("Incorrect controller for ContentContainerSegueIdentifier") }
+            let contentContainerRouter = DefaultApplicationContentContainerRouter(dependencies: self.dependencies)
+            contentContainerRouter.start(controller: contentContainerViewController)
+            self.contentContainerRouter = contentContainerRouter
+            self.contentContainerViewController = contentContainerViewController
         }
     }
 
@@ -86,18 +86,11 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
 extension DefaultAppRouter: PlayerNavigationDelgate {
 
     func navigate(to playerNavigationItem: PlayerNavigationItem) {
-
-        guard let playerContentContainerRouter = self.tabBarRouter?.playerContentContainerRouter else {
-            self.tabBarRouter?.showPlayerContentContainer(playerNavigationItem: playerNavigationItem)
-            return
-        }
-
-        playerContentContainerRouter.navigate(to: playerNavigationItem)
+        self.contentContainerRouter?.navigate(to: playerNavigationItem)
     }
 
     func navigateToAuthorization() {
-        self.tabBarRouter?.selectAuthorizationTab(with: .signIn)
+        self.contentContainerRouter?.navigateToAuthorization()
     }
-
 }
 
