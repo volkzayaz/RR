@@ -176,6 +176,9 @@ class Player: NSObject, Observable {
 
     private var addonsPlayTimer: Timer?
 
+    private var deferredPlaylistItemsPatches = [[String : PlayerPlaylistItemPatch?]]()
+    private var defferedTrackId: TrackId?
+
 
     init(with application: Application) {
 
@@ -716,6 +719,8 @@ class Player: NSObject, Observable {
 
     func setCurrent(playlistItem: PlayerPlaylistItem?, completion: (() -> ())? = nil) {
 
+        self.defferedTrackId = nil
+
         guard let playlistItem = playlistItem else {
             let trackId = TrackId(id: 0, key: "")
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: false)
@@ -895,6 +900,7 @@ class Player: NSObject, Observable {
 extension Player: WebSocketServiceObserver {
 
     // MARK: - Apply State
+
     func apply(currentTrackId: TrackId) {
 
         guard self.currentTrackId != currentTrackId else { return }
@@ -905,9 +911,11 @@ extension Player: WebSocketServiceObserver {
         var currentPlayerItem: PlayerItem? = nil
         if let playerPlaylistItem = self.playlist.playListItem(for: currentTrackId) {
             currentPlayerItem = self.playerItem(for: playerPlaylistItem)
+            self.defferedTrackId = nil
+        } else {
+            self.defferedTrackId = currentTrackId
         }
 
-//        self.currentTrackState = nil
         self.currentTrackId = nil
         self.playerQueue.replace(playerItem: currentPlayerItem)
         self.replace(playerItems: self.playerQueue.playerItems)
@@ -945,6 +953,31 @@ extension Player: WebSocketServiceObserver {
         if self.state.playing == true { self.player.play() }
 
         self.addonsPlayTimer?.invalidate()
+    }
+
+    func applyDeferredPlaylistItemsPatches() {
+
+        var playlistChanged = false
+
+        while let playlistItemsPatches = self.deferredPlaylistItemsPatches.first {
+            let unloadedTracksIds = playlistItemsPatches.compactMap { $0.value?.trackId }.filter { return self.playlist.containsTrack(with: $0) == false }
+            guard unloadedTracksIds.isEmpty else { self.getTracks(tracksIds: unloadedTracksIds); break }
+
+            self.playlist.update(with: playlistItemsPatches)
+
+            self.deferredPlaylistItemsPatches.remove(at: 0)
+            playlistChanged = true
+        }
+
+        if playlistChanged {
+            if let defferedTrackId = self.defferedTrackId {
+                self.apply(currentTrackId: defferedTrackId)
+            }
+
+            self.observersContainer.invoke({ (observer) in
+                observer.playerDidChangePlaylist(player: self)
+            })
+        }
     }
 
     //MARK: - Set State
@@ -1010,6 +1043,11 @@ extension Player: WebSocketServiceObserver {
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
+    func getTracks(tracksIds: [Int], completion: ((Error?) -> ())? = nil) {
+        let webSocketCommand = WebSocketCommand.getTracks(tracksIds: tracksIds)
+        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+    }
+
     //MARK: - WebSocketServiceObserver
     func webSocketServiceDidDisconnect(_ service: WebSocketService) {
         self.state.initialized = false
@@ -1027,32 +1065,39 @@ extension Player: WebSocketServiceObserver {
         self.state.initialized = false
     }
 
-    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) {
-        if self.state.initialized {
+    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) {
+
+        if self.state.initialized && flush == false {
             self.playlist.add(traksToAdd: tracks)
+            self.applyDeferredPlaylistItemsPatches()
         } else {
+            self.defferedTrackId = nil
+            self.deferredPlaylistItemsPatches.removeAll()
+            self.playlist.reset(with: [:])
             self.playlist.reset(tracks: tracks)
         }
     }
 
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) {
+
         if self.state.initialized && flush == false {
-            self.playlist.update(with: playlistItemsPatches)
+            guard self.deferredPlaylistItemsPatches.isEmpty else {
+                self.deferredPlaylistItemsPatches.append(playlistItemsPatches)
+                return
+            }
 
-            guard let currentPlaylistItem = self.currentItem?.playlistItem else { return }
-            guard self.playlist.contains(playlistItem: currentPlaylistItem) == false else { return }
-
-            let nextPlaylistitem = self.findPlayablePlaylistItem(after: currentPlaylistItem) ?? self.playlist.firstPlaylistItem
-            self.setCurrent(playlistItem: nextPlaylistitem)
-
+            self.deferredPlaylistItemsPatches.append(playlistItemsPatches)
+            self.applyDeferredPlaylistItemsPatches()
 
         } else {
+            self.defferedTrackId = nil
+            self.deferredPlaylistItemsPatches.removeAll()
             self.playlist.reset(with: playlistItemsPatches)
-        }
 
-        self.observersContainer.invoke({ (observer) in
-            observer.playerDidChangePlaylist(player: self)
-        })
+            self.observersContainer.invoke({ (observer) in
+                observer.playerDidChangePlaylist(player: self)
+            })
+        }
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
@@ -1480,6 +1525,7 @@ extension Player {
         case .delete: self.performDelete(playlistItem: playlistItem, completion: completion)
         case .playNow:
             self.player.pause()
+            self.defferedTrackId = nil
 
             let currentPlayerItem = self.playerItem(for: playlistItem)
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: true)
@@ -1502,6 +1548,7 @@ extension Player {
 
             let wasPlaying = self.isPlaying
             self.player.pause()
+            self.defferedTrackId = nil
 
             let currentPlayerItem = self.playerItem(for: playlistItem)
             let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: wasPlaying)
@@ -1528,11 +1575,17 @@ extension Player {
     func add(tracks: [Track], at position: PlaylistPosition, completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
         guard self.state.initialized == true else { completion?(nil, AppError(.notInitialized)); return }
 
-        self.loadTracks(tracks: tracks) { [weak self] (error) in
-            guard error == nil else { completion?(nil, error); return }
-            self?.playlist.add(traksToAdd: tracks)
-            self?.performAdd(tracks: tracks, to: position, completion: completion)
+        let unloadedTracks = tracks.filter { return self.playlist.contains(track: $0) == false }
+        guard unloadedTracks.isEmpty else {
+            self.loadTracks(tracks: unloadedTracks) { [weak self] (error) in
+                guard error == nil else { completion?(nil, error); return }
+                self?.playlist.add(traksToAdd: unloadedTracks)
+                self?.performAdd(tracks: tracks, to: position, completion: completion)
+            }
+            return
         }
+
+        self.performAdd(tracks: tracks, to: position, completion: completion)
     }
 
     func performReplace(with tracks: [Track], completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
@@ -1576,10 +1629,16 @@ extension Player {
 
         guard self.state.initialized == true else { completion?(nil, AppError(.notInitialized)); return }
 
-        self.loadTracks(tracks: tracks) { [weak self] (error) in
-            guard error == nil else { completion?(nil, error); return }
-            self?.playlist.add(traksToAdd: tracks)
-            self?.performReplace(with: tracks, completion: completion)
+        let unloadedTracks = tracks.filter { return self.playlist.contains(track: $0) == false }
+        guard unloadedTracks.isEmpty else {
+            self.loadTracks(tracks: unloadedTracks) { [weak self] (error) in
+                guard error == nil else { completion?(nil, error); return }
+                self?.playlist.add(traksToAdd: unloadedTracks)
+                self?.performReplace(with: tracks, completion: completion)
+            }
+            return
         }
+
+        self.performReplace(with: tracks, completion: completion)
     }
 }

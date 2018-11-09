@@ -78,6 +78,12 @@ class PlayerPlaylist {
         return self.tracks.contains(track)
     }
 
+    func containsTrack(with trackId: Int) -> Bool {
+        return self.tracks.first(where: { (track) -> Bool in
+            return track.id == trackId
+        }) != nil
+    }
+
     // MARK: - PlayerPlaylistItem -
     var hasPlaylisItems: Bool { return self.playlistItems.isEmpty == false }
 

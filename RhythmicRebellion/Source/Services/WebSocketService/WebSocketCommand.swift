@@ -31,6 +31,7 @@ struct WebSocketCommand: Codable {
         case userSyncTrackLikeState = "user-syncLike"
         case playListLoadTracks = "playlist-loadTracks"
         case playListUpdate = "playlist-update"
+        case playListGetTracks = "playlist-getTracks"
         case currentTrackId = "currentTrack-setTrack"
         case currentTrackState = "currentTrack-setState"
         case currentTrackBlock = "currentTrack-setBlock"
@@ -50,6 +51,7 @@ struct WebSocketCommand: Codable {
         case userSyncTrackLikeState(TrackLikeState)
         case playListLoadTracks([Track])
         case playListUpdate([String : PlayerPlaylistItemPatch?])
+        case playListGetTracks([Int])
         case currentTrackId(TrackId?)
         case currentTrackState(TrackState)
         case currentTrackBlock(Bool)
@@ -108,6 +110,8 @@ struct WebSocketCommand: Codable {
                 self.data = .success(.playListLoadTracks(try container.decode([Track].self, forKey: .data)))
             case .playListUpdate:
                 self.data = .success(.playListUpdate(try container.decode([String : PlayerPlaylistItemPatch?].self, forKey: .data)))
+            case .playListGetTracks:
+                self.data = .success(.playListGetTracks([]))
             case .currentTrackId:
                 self.data = .success(.currentTrackId(try container.decode(TrackId.self, forKey: .data)))
             case .currentTrackState:
@@ -172,6 +176,8 @@ struct WebSocketCommand: Codable {
                 try container.encode(traks, forKey: .data)
             case .playListUpdate(let playerPlaylist):
                 try container.encode(playerPlaylist, forKey: .data)
+            case .playListGetTracks(let tracksIds):
+                try container.encode(tracksIds, forKey: .data)
             case .currentTrackId(let trackId):
                 try container.encode(trackId, forKey: .data)
             case .currentTrackState(let trackState):
@@ -215,6 +221,10 @@ extension WebSocketCommand {
 
     static func syncTrackLikeState(trackLikeState: TrackLikeState) -> WebSocketCommand {
         return WebSocketCommand(channel: "user", command: "syncLike", data: .success(.userSyncTrackLikeState(trackLikeState)))
+    }
+
+    static func getTracks(tracksIds: [Int]) -> WebSocketCommand {
+        return WebSocketCommand(channel: "playlist", command: "getTracks", data: .success(.playListGetTracks(tracksIds)))
     }
 
     static func setCurrentTrack(trackId: TrackId) -> WebSocketCommand {

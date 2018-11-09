@@ -21,7 +21,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase])
     func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState)
 
-    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track])
+    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool)
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
@@ -43,7 +43,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) { }
     func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) { }
 
-    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track]) { }
+    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) { }
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
@@ -200,7 +200,7 @@ class WebSocketService: WebSocketDelegate, Observable {
                 case .playListLoadTracks(let tracks):
 
                     self.observersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveTracks: tracks)
+                        observer.webSocketService(self, didReceiveTracks: tracks, flush: webSoketCommand.flush ?? false)
                     })
 
                 case .playListUpdate(let playerPlaylistUpdate):
@@ -212,6 +212,8 @@ class WebSocketService: WebSocketDelegate, Observable {
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceivePlaylistUpdate: playerPlaylistUpdate, flush: webSoketCommand.flush ?? false)
                     })
+
+                case .playListGetTracks( _): break
 
                 case .currentTrackId(let trackId):
                     self.observersContainer.invoke({ (observer) in
@@ -234,8 +236,7 @@ class WebSocketService: WebSocketDelegate, Observable {
                         observer.webSocketService(self, didReceiveCheckAddons: checkAddons)
                     })
 
-                case .playAddon(let addonState):
-                    print("addonState: \(addonState)")
+                case .playAddon( _): break
 
                 case .tracksTotalPlayTime(let tracksTotalPlayMSeconds):
                     self.observersContainer.invoke({ (observer) in
