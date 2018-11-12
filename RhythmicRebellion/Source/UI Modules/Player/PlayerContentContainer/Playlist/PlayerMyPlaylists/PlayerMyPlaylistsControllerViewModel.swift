@@ -80,6 +80,49 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
         self.router?.showContent(of: self.playlists[indexPath.item])
     }
 
+    // MARK: Action support
+
+    private func play(tracks: [Track]) {
+        self.player.add(tracks: tracks, at: .next, completion: { [weak self] (playlistItems, error) in
+            guard let playlistItem = playlistItems?.first else {
+                guard let error = error else { return }
+                self?.delegate?.show(error: error)
+                return
+            }
+
+            self?.player.performAction(.playNow, for: playlistItem, completion: { [weak self] (error) in
+                guard let error = error else { return }
+                self?.delegate?.show(error: error)
+            })
+        })
+    }
+
+    private func addToPlayerPlaylist(tracks: [Track], at position: Player.PlaylistPosition) {
+        self.player.add(tracks: tracks, at: position, completion: { [weak self] (playlistItems, error) in
+            guard let error = error else { return }
+            self?.delegate?.show(error: error)
+        })
+    }
+
+    private func replacePlayerPlaylist(with tracks: [Track]) {
+
+        self.player.replace(with: tracks, completion: { [weak self] (playlistItems, error) in
+            guard let error = error else { return }
+            self?.delegate?.show(error: error)
+        })
+
+    }
+
+    private func clear(playlist: Playlist) {
+        guard let fanPlaylist = playlist as? FanPlaylist else { return }
+
+        self.restApiService.fanClear(playlist: fanPlaylist, completion: { [weak self] (error) in
+            guard let error = error else { return }
+
+            self?.delegate?.show(error: error)
+        })
+    }
+
     // MARK: - Playlist Actions -
 
     func actionTypes(for playlist: FanPlaylist) -> [PlaylistActionsViewModels.ActionViewModel.ActionType] {
@@ -107,20 +150,13 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
         }
     }
 
-    private func play(tracks: [Track]) {
-        self.player.add(tracks: tracks, at: .next, completion: { [weak self] (playlistItems, error) in
-            guard error == nil, let playlistItem = playlistItems?.first else { return }
-            self?.player.performAction(.playNow, for: playlistItem, completion: nil)
-        })
-    }
-
     func performeAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, for tracks: [Track]) {
 
         switch actionType {
         case .playNow: self.play(tracks: tracks)
-        case .playNext: self.player.add(tracks: tracks, at: .next, completion: nil)
-        case .playLast: self.player.add(tracks: tracks, at: .last, completion: nil)
-        case .replaceCurrent: self.player.replace(with: tracks, completion: nil)
+        case .playNext: self.addToPlayerPlaylist(tracks: tracks, at: .next)
+        case .playLast: self.addToPlayerPlaylist(tracks: tracks, at: .last)
+        case .replaceCurrent: self.replacePlayerPlaylist(with: tracks)
         default: break
         }
     }
@@ -136,7 +172,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
                 }
             }
         case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
-        case .clear: break
+        case .clear: self.clear(playlist: playlist)
         case .delete:
             self.application.delete(playlist: playlist) { [weak self] (error) in
                 guard let error = error else { return }

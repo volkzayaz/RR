@@ -70,7 +70,6 @@ class Player: NSObject, Observable {
     }
 
     enum Actions {
-//        case add(PlaylistPosition)
         case playNow
         case setCurrent
         case delete
@@ -439,6 +438,13 @@ class Player: NSObject, Observable {
         }
 
         completion?(nil)
+    }
+
+    func error() -> Error? {
+        guard self.webSocketService.isReachable else { return AppError(.offline) }
+        guard self.state.initialized else { return AppError(.notInitialized) }
+
+        return nil
     }
 
     // MARK: - PlayerItem
@@ -1519,7 +1525,7 @@ extension Player {
     }
 
     func performAction(_ action: Player.Actions, for playlistItem: PlayerPlaylistItem, completion: ((Error?) -> Void)?) {
-        guard self.state.initialized == true else { completion?(AppError(.notInitialized)); return }
+        guard self.state.initialized == true else { completion?(self.error()); return }
 
         switch action {
         case .delete: self.performDelete(playlistItem: playlistItem, completion: completion)
@@ -1573,7 +1579,7 @@ extension Player {
     }
     
     func add(tracks: [Track], at position: PlaylistPosition, completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
-        guard self.state.initialized == true else { completion?(nil, AppError(.notInitialized)); return }
+        guard self.state.initialized == true else { completion?(nil, self.error()); return }
 
         let unloadedTracks = tracks.filter { return self.playlist.contains(track: $0) == false }
         guard unloadedTracks.isEmpty else {
@@ -1627,7 +1633,7 @@ extension Player {
 
     func replace(with tracks: [Track], completion: (([PlayerPlaylistItem]?, Error?) -> Void)?) {
 
-        guard self.state.initialized == true else { completion?(nil, AppError(.notInitialized)); return }
+        guard self.state.initialized == true else { completion?(nil, self.error()); return }
 
         let unloadedTracks = tracks.filter { return self.playlist.contains(track: $0) == false }
         guard unloadedTracks.isEmpty else {

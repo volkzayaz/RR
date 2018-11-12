@@ -93,6 +93,8 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         }
     }
 
+    // MARK: - Track Actions -
+
     func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor playlistItem: PlayerPlaylistItem) -> Bool {
         switch actionType {
         case .forceToPlay:
@@ -128,8 +130,17 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
                 default: break
                 }
             })
-        case .playNow: self.player?.performAction(.playNow, for: playlistItem, completion: nil)
-        case .delete: self.player?.performAction(.delete, for: playlistItem, completion: nil)
+        case .playNow:
+            self.player?.performAction(.playNow, for: playlistItem, completion: { [weak self] (error) in
+                guard let error = error else { return }
+                self?.delegate?.show(error: error)
+            })
+
+        case .delete:
+            self.player?.performAction(.delete, for: playlistItem, completion: { [weak self] (error) in
+                guard let error = error else { return }
+                self?.delegate?.show(error: error)
+            })
         case .toPlaylist: self.router?.showAddToPlaylist(for: [playlistItem.track])
         default: break
         }

@@ -9,30 +9,6 @@
 
 import UIKit
 
-class testView: UIView {
-
-    override var frame: CGRect {
-        set {
-            super.frame = newValue
-        }
-        get {
-            return super.frame
-        }
-    }
-}
-
-class testConstraint: NSLayoutConstraint {
-    override var constant: CGFloat {
-        set {
-            super.constant = constant
-        }
-
-        get {
-            return super.constant
-        }
-    }
-}
-
 final class AppViewController: UIViewController {
 
     @IBOutlet weak var contentContainerView: UIView!
