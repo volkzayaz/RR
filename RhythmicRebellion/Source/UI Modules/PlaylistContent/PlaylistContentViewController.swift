@@ -78,6 +78,7 @@ final class PlaylistContentViewController: UIViewController {
 
         coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
             self.tipView?.updateFrame()
+
         }) { (transitionCoordinatorContext) in
             self.tipView?.dismissTouched()
         }
@@ -88,6 +89,7 @@ final class PlaylistContentViewController: UIViewController {
 
         coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
             self.tipView?.updateFrame()
+
         }) { (transitionCoordinatorContext) in
             self.tipView?.dismissTouched()
         }
@@ -228,7 +230,7 @@ extension PlaylistContentViewController: PlaylistContentViewModelDelegate {
         self.tableHeaderView.setup(viewModel: self.viewModel.playlistHeaderViewModel) { [unowned self] (action) in
 
             switch action {
-            case .showActions: self.showPlaylistActions(sourceRect: self.tableHeaderView.actionButton.frame, sourceView: self.tableHeaderView.infoView)
+            case .showActions: self.showPlaylistActions(sourceRect: self.tableHeaderView.actionButton.bounds, sourceView: self.tableHeaderView.actionButton)
             case .clear: self.viewModel.clearPlaylist()
             }
         }

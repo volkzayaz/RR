@@ -101,6 +101,7 @@ class PlaylistTableHeaderView: UIView {
         } else if traitCollection.horizontalSizeClass == .regular {
             frame.size.height = max(self.infoView.frame.height + 57.0, 93.0)
         }
+
         self.frame = frame
     }
 
