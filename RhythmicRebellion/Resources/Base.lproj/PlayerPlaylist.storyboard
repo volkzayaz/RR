@@ -136,12 +136,32 @@
                         <viewLayoutGuide key="safeArea" id="eNi-kC-FRd"/>
                     </view>
                     <connections>
+                        <outlet property="emptyPlaylistView" destination="E3b-YQ-Wn9" id="fI4-qq-Nbc"/>
                         <outlet property="tableHeaderView" destination="y3W-SX-n73" id="4hd-sa-geM"/>
                         <outlet property="tableView" destination="nCw-tO-NCr" id="vY7-L2-kse"/>
                         <segue destination="ueP-ye-VOQ" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="Mea-Mx-KER"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0uq-Zw-YB3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="E3b-YQ-Wn9">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty Playlist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d5f-xQ-yRH">
+                            <rect key="frame" x="15" y="11.5" width="107" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d5f-xQ-yRH" secondAttribute="trailing" id="1cU-yl-Pvw"/>
+                        <constraint firstItem="d5f-xQ-yRH" firstAttribute="centerY" secondItem="E3b-YQ-Wn9" secondAttribute="centerY" id="6qf-V5-w6r"/>
+                        <constraint firstItem="d5f-xQ-yRH" firstAttribute="leading" secondItem="E3b-YQ-Wn9" secondAttribute="leading" constant="15" id="VD1-Vm-Lm5"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="Yha-qf-mYY"/>
+                </view>
                 <view contentMode="scaleToFill" id="y3W-SX-n73" customClass="PlayerNowPlayingTableHeaderView" customModule="RhythmicRebellion" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

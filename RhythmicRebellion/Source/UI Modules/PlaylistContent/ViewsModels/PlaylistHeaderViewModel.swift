@@ -17,7 +17,14 @@ struct PlaylistHeaderViewModel: PlaylistTableHeaderViewModel {
 
     var thumbnailURL: URL? { return playlist.thumbnailURL }
 
-    var canClear: Bool { return playlist.isFanPlaylist }
+    var canClear: Bool { return playlist.isFanPlaylist && isEmpty == false}
+
+    let isEmpty: Bool
 
     let playlist: Playlist
+
+    init(playlist: Playlist, isEmpty: Bool) {
+        self.playlist = playlist
+        self.isEmpty = isEmpty
+    }
 }

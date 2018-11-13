@@ -11,6 +11,7 @@ import UIKit
 
 protocol PlaylistContentViewModel: class {
 
+    var isPlaylistEmpty: Bool { get }
     var playlistHeaderViewModel: PlaylistHeaderViewModel { get }
 
     func load(with delegate: PlaylistContentViewModelDelegate)

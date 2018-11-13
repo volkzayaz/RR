@@ -70,9 +70,13 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
         self.viewModel.reload()
     }
 
-    func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
-        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else { return }
-        self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
+    func showActions(itemAt indexPath: IndexPath) {
+
+        viewModel.actions(forObjectAt: indexPath) { [weak self] (indexPath, actionsModel) in
+            guard let playlistItemCollectionViewCell = self?.collectionView.cellForItem(at: indexPath) as? PlaylistItemCollectionViewCell else { return }
+
+            self?.show(alertActionsviewModel: actionsModel, sourceRect: playlistItemCollectionViewCell.actionButton.bounds, sourceView: playlistItemCollectionViewCell.actionButton)
+        }
     }
 
     // MARK: - UICollectionViewDataSource -
@@ -80,7 +84,6 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.viewModel.numberOfItems(in: section)
     }
-
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let playlistItemCollectionViewCell = PlaylistItemCollectionViewCell.reusableCell(in: collectionView, at: indexPath)
@@ -90,7 +93,7 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
             guard let playlistItemCollectionViewCell = playlistItemCollectionViewCell, let indexPath = collectionView?.indexPath(for: playlistItemCollectionViewCell) else { return }
 
             switch action {
-            case .showActions(let sourceRect, let sourcreView): self.showActions(itemAt: indexPath, sourceRect: sourceRect, sourceView: sourcreView)
+            case .showActions: self.showActions(itemAt: indexPath)
             }
         }
 
@@ -126,7 +129,6 @@ extension HomeViewController {
 extension HomeViewController: HomeViewModelDelegate {
 
     func refreshUI() {
-
     }
 
     func reloadUI() {
@@ -134,4 +136,13 @@ extension HomeViewController: HomeViewModelDelegate {
         self.refreshControl.endRefreshing()
         self.refreshUI()
     }
+
+    func reloadItem(at indexPath: IndexPath, completion: (() -> Void)?) {
+        self.collectionView.performBatchUpdates({
+            self.collectionView.reloadItems(at: [indexPath])
+        }) { (success) in
+            completion?()
+        }
+    }
+
 }

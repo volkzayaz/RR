@@ -65,9 +65,13 @@ final class PlayerMyPlaylistsViewController: UIViewController, UICollectionViewD
         self.viewModel.reload()
     }
 
-    func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
-        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else { return }
-        self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
+    func showActions(itemAt indexPath: IndexPath) {
+
+        viewModel.actions(forObjectAt: indexPath) { [weak self] (indexPath, actionsModel) in
+            guard let playlistItemCollectionViewCell = self?.collectionView.cellForItem(at: indexPath) as? PlaylistItemCollectionViewCell else { return }
+
+            self?.show(alertActionsviewModel: actionsModel, sourceRect: playlistItemCollectionViewCell.actionButton.bounds, sourceView: playlistItemCollectionViewCell.actionButton)
+        }
     }
 
     // MARK: - UICollectionViewDataSource -
@@ -85,7 +89,7 @@ final class PlayerMyPlaylistsViewController: UIViewController, UICollectionViewD
             guard let playlistItemCollectionViewCell = playlistItemCollectionViewCell, let indexPath = collectionView?.indexPath(for: playlistItemCollectionViewCell) else { return }
 
             switch action {
-            case .showActions(let sourceRect, let sourcreView): self.showActions(itemAt: indexPath, sourceRect: sourceRect, sourceView: sourcreView)
+            case .showActions: self.showActions(itemAt: indexPath)
             }
         }
 
@@ -128,5 +132,13 @@ extension PlayerMyPlaylistsViewController: PlayerMyPlaylistsViewModelDelegate {
         self.collectionView.reloadData()
         self.refreshControl.endRefreshing()
         self.refreshUI()
+    }
+
+    func reloadItem(at indexPath: IndexPath, completion: (() -> Void)?) {
+        self.collectionView.performBatchUpdates({
+            self.collectionView.reloadItems(at: [indexPath])
+        }) { (success) in
+            completion?()
+        }
     }
 }

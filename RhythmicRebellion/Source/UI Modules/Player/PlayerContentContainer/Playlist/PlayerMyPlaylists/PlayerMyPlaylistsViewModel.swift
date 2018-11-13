@@ -18,11 +18,12 @@ protocol PlayerMyPlaylistsViewModel: class {
     func object(at indexPath: IndexPath) -> PlaylistItemCollectionViewCellViewModel?
     func selectObject(at indexPath: IndexPath)
 
-    func actions(forObjectAt indexPath: IndexPath) -> PlaylistActionsViewModels.ViewModel?
+    func actions(forObjectAt indexPath: IndexPath, completion: @escaping (IndexPath, PlaylistActionsViewModels.ViewModel) -> Void)
 }
 
 protocol PlayerMyPlaylistsViewModelDelegate: class, ErrorPresenting, AlertActionsViewModelPersenting, ConfirmationPresenting {
 
     func refreshUI()
     func reloadUI()
+    func reloadItem(at indexPath: IndexPath, completion: (() -> Void)?)
 }

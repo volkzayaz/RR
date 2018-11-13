@@ -17,6 +17,7 @@ protocol PlaylistItemCollectionViewCellViewModel {
     var description: String? { get }
 
     var thumbnailURL: URL? { get }
+    var showActivity: Bool { get }
 }
 
 class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
@@ -26,7 +27,7 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
     typealias ActionCallback = (Actions) -> Void
 
     enum Actions {
-        case showActions(CGRect, UIView)
+        case showActions
     }
 
 
@@ -76,6 +77,9 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
         self.titleLabel.text = viewModel.title
         self.descriptionLabel.text = viewModel.description
 
+        if viewModel.showActivity { self.activityIndicatorView.startAnimating() }
+
+        let showActivity = viewModel.showActivity
         if let thumbnailURL = viewModel.thumbnailURL {
             self.activityIndicatorView.startAnimating()
             self.imageView.af_setImage(withURL: thumbnailURL,
@@ -91,17 +95,18 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
                                         default: break
                                         }
 
-                                        self.activityIndicatorView.stopAnimating()
+                                        if showActivity == false { self.activityIndicatorView.stopAnimating() }
             }
         } else {
-            self.activityIndicatorView.stopAnimating()
+            if showActivity == false { self.activityIndicatorView.stopAnimating() }
         }
 
+        self.actionButton.isEnabled = viewModel.showActivity == false
         self.actionCallback = actionCallback
     }
 
     // MARK: - Actions -
     @IBAction func onActionButton(sender: Any?) {
-        self.actionCallback?(.showActions(self.actionButton.frame, self.gradientView))
+        self.actionCallback?(.showActions)
     }
 }

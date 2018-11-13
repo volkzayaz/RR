@@ -694,6 +694,7 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicatorView" destination="cn2-HQ-LXg" id="QCO-6y-AP3"/>
+                        <outlet property="emptyPlaylistView" destination="0zP-GP-Icx" id="eg6-Xd-OXk"/>
                         <outlet property="imageView" destination="IvS-kj-LK1" id="Jj1-qJ-bP2"/>
                         <outlet property="refreshControl" destination="8Ek-gw-P99" id="SXK-IA-QZK"/>
                         <outlet property="tableHeaderView" destination="upv-Gx-oyy" id="eTw-3y-DVK"/>
@@ -703,6 +704,25 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IZT-3q-7wg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="0zP-GP-Icx">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty Playlist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0AJ-Qv-cwi">
+                            <rect key="frame" x="15" y="11.666666666666664" width="107" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="0AJ-Qv-cwi" firstAttribute="leading" secondItem="0zP-GP-Icx" secondAttribute="leading" constant="15" id="3bV-Nv-SSN"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0AJ-Qv-cwi" secondAttribute="trailing" id="GLg-Cv-0aJ"/>
+                        <constraint firstItem="0AJ-Qv-cwi" firstAttribute="centerY" secondItem="0zP-GP-Icx" secondAttribute="centerY" id="hxA-YB-ycu"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="jkt-g7-BWk"/>
+                </view>
                 <view contentMode="scaleToFill" id="8Ek-gw-P99" customClass="UIRefreshControl">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1667,7 +1687,7 @@
         <image name="addPlaylist" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kAD-GO-v6x"/>
+        <segue reference="tg1-kY-VU3"/>
         <segue reference="swz-5X-Nq6"/>
     </inferredMetricsTieBreakers>
 </document>

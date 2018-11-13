@@ -11,6 +11,8 @@ import UIKit
 
 protocol PlayerNowPlayingViewModel: class {
 
+    var isPlaylistEmpty: Bool { get }
+
     func load(with delegate: PlayerNowPlayingViewModelDelegate)
     func reload()
 
@@ -32,6 +34,8 @@ protocol PlayerNowPlayingViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()
+
+    func reloadPlaylistUI()
 
     func reloadObjects(at indexPaths: [IndexPath])
 

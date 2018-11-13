@@ -65,7 +65,7 @@ enum PlaylistActionsViewModels {
             case .replaceCurrent: return NSLocalizedString("Replace current", comment: "Replace current playlist action title")
             case .toPlaylist: return NSLocalizedString("To Playlist", comment: "To Playlist playlist action title")
             case .clear: return NSLocalizedString("Clear", comment: "Clear playlist action title")
-            case .delete: return NSLocalizedString("Delete", comment: "Delete playlist action title")
+            case .delete: return NSLocalizedString("Delete Playlist", comment: "Delete playlist action title")
             case .cancel: return NSLocalizedString("Cancel", comment: "Cancel action title")
             }
         }

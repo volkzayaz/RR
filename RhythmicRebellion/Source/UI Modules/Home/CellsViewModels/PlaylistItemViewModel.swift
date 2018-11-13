@@ -18,4 +18,5 @@ struct PlaylistItemViewModel: PlaylistItemCollectionViewCellViewModel {
     var thumbnailURL: URL? { return playlist.thumbnailURL }
 
     let playlist: Playlist
+    let showActivity: Bool
 }

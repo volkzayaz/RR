@@ -13,7 +13,8 @@ import EasyTipView
 final class PlayerNowPlayingViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var tableHeaderView: PlayerNowPlayingTableHeaderView!
+    @IBOutlet var tableHeaderView: PlayerNowPlayingTableHeaderView!
+    @IBOutlet var emptyPlaylistView: UIView!
 
     // MARK: - Public properties -
 
@@ -181,6 +182,16 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
     }
+
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section == 0, self.viewModel.isPlaylistEmpty else { return 0.0 }
+        return 44.0
+    }
+
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section == 0, self.viewModel.isPlaylistEmpty else { return nil }
+        return self.emptyPlaylistView
+    }
 }
 
 // MARK: - Router -
@@ -209,6 +220,11 @@ extension PlayerNowPlayingViewController: PlayerNowPlayingViewModelDelegate {
     func reloadUI() {
         self.tableView.reloadData()
         self.refreshUI()
+    }
+
+    func reloadPlaylistUI() {
+        guard self.viewModel.isPlaylistEmpty == false else { self.tableView.tableHeaderView = nil; return }
+        self.tableView.tableHeaderView = self.tableHeaderView
     }
 
     func reloadObjects(at indexPaths: [IndexPath]) {

@@ -22,7 +22,9 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     private(set) var textImageGenerator: TextImageGenerator
     private(set) var trackPriceFormatter: MoneyFormatter
 
-    private var playlistItems: [PlayerPlaylistItem] = [PlayerPlaylistItem]()
+    private var playlistItems: [PlayerPlaylistItem]?
+
+    var isPlaylistEmpty: Bool { return self.playlistItems?.isEmpty ?? false }
 
     // MARK: - Lifecycle -
 
@@ -44,32 +46,31 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     func load(with delegate: PlayerNowPlayingViewModelDelegate) {
         self.delegate = delegate
 
-        self.loadTracks()
+        self.loadItems()
         self.application?.addObserver(self)
         self.player?.addObserver(self)
         self.audioFileLocalStorageService?.addObserver(self)
     }
 
-    func loadTracks() {
+    func loadItems() {
         self.playlistItems = self.player?.playlistItems ?? []
 
-//        print("self.playlistItems: \(self.playlistItems)")
-
         self.delegate?.reloadUI()
+        self.delegate?.reloadPlaylistUI()
     }
 
     func reload() {
-        self.loadTracks()
+        self.loadItems()
     }
 
     func numberOfItems(in section: Int) -> Int {
-        return self.playlistItems.count
+        return self.playlistItems?.count ?? 0
     }
 
     func object(at indexPath: IndexPath) -> TrackViewModel? {
-        guard indexPath.item < self.playlistItems.count else { return nil }
+        guard let playlistItems = self.playlistItems, indexPath.item < playlistItems.count else { return nil }
                 
-        let playlistItem = self.playlistItems[indexPath.item]
+        let playlistItem = playlistItems[indexPath.item]
 
         return TrackViewModel(track: playlistItem.track,
                               user: self.application?.user,
@@ -80,10 +81,10 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
     
     func selectObject(at indexPath: IndexPath) {
-        guard let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
+        guard let playlistItems = self.playlistItems, let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
 
         if !viewModel.isCurrentInPlayer {
-            self.player?.performAction(.playNow, for: self.playlistItems[indexPath.item], completion: nil)
+            self.player?.performAction(.playNow, for: playlistItems[indexPath.item], completion: nil)
         } else {
             if viewModel.isPlaying {
                 player?.pause()
@@ -170,8 +171,8 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel? {
-        guard indexPath.row < self.playlistItems.count else { return nil }
-        let playlistItem = self.playlistItems[indexPath.row]
+        guard let playlistItems = self.playlistItems, indexPath.row < playlistItems.count else { return nil }
+        let playlistItem = playlistItems[indexPath.row]
 
         var trackActionsTypes = TrackActionsViewModels.allActionsTypes
         if  let trackPrice = playlistItem.track.price,
@@ -196,19 +197,22 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 
     func downloadObject(at indexPath: IndexPath) {
-        guard indexPath.item < self.playlistItems.count, let trackAudioFile = self.playlistItems[indexPath.item].track.audioFile else { return }
+        guard let playlistItems = self.playlistItems, indexPath.item < playlistItems.count,
+            let trackAudioFile = playlistItems[indexPath.item].track.audioFile else { return }
 
         self.audioFileLocalStorageService?.download(trackAudioFile: trackAudioFile)
     }
 
     func cancelDownloadingObject(at indexPath: IndexPath) {
-        guard indexPath.item < self.playlistItems.count, let trackAudioFile = self.playlistItems[indexPath.item].track.audioFile else { return }
+        guard let playlistItems = self.playlistItems, indexPath.item < playlistItems.count,
+            let trackAudioFile = playlistItems[indexPath.item].track.audioFile else { return }
 
         self.audioFileLocalStorageService?.cancelDownloading(for: trackAudioFile)
     }
 
     func objectLoaclURL(at indexPath: IndexPath) -> URL? {
-        guard indexPath.item < self.playlistItems.count, let trackAudioFile = self.playlistItems[indexPath.item].track.audioFile,
+        guard let playlistItems = self.playlistItems, indexPath.item < playlistItems.count,
+            let trackAudioFile = playlistItems[indexPath.item].track.audioFile,
             let state = self.audioFileLocalStorageService?.state(for: trackAudioFile) else { return nil }
 
         switch state {
@@ -221,10 +225,11 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+        guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
 
-        for (index, playlistItem) in self.playlistItems.enumerated() {
+        for (index, playlistItem) in playlistItems.enumerated() {
             guard playlistItem.track.artist.id == artistFollowingState.artistId else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
@@ -235,13 +240,14 @@ extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
     }
 
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
+        guard let playlistItems = self.playlistItems else { return }
 
         var changedPurchasedTracksIds = Array(added)
         changedPurchasedTracksIds.append(contentsOf: removed)
 
         var indexPaths: [IndexPath] = []
 
-        for (index, playlistItem) in self.playlistItems.enumerated() {
+        for (index, playlistItem) in playlistItems.enumerated() {
             guard changedPurchasedTracksIds.contains(playlistItem.track.id) else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
@@ -272,11 +278,12 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
     }
 
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) {
+        guard let playlistItems = self.playlistItems else { return }
         guard let playerCurrentTrack = self.player?.currentItem?.playlistItem.track else { return }
 
         var indexPaths: [IndexPath] = []
 
-        for (index, playlistItem) in self.playlistItems.enumerated() {
+        for (index, playlistItem) in playlistItems.enumerated() {
             guard playlistItem.track.id == playerCurrentTrack.id else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
@@ -295,10 +302,11 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
 extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObserver {
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFile: TrackAudioFile) {
+        guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
 
-        for (index, playlistItem) in self.playlistItems.enumerated() {
+        for (index, playlistItem) in playlistItems.enumerated() {
             guard let audioFile = playlistItem.track.audioFile, audioFile.id == trackAudioFile.id else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
@@ -309,10 +317,11 @@ extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObser
     }
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFile: TrackAudioFile) {
+        guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
 
-        for (index, playlistItem) in self.playlistItems.enumerated() {
+        for (index, playlistItem) in playlistItems.enumerated() {
             guard let audioFile = playlistItem.track.audioFile, audioFile.id == trackAudioFile.id else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
@@ -323,9 +332,11 @@ extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObser
     }
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFile: TrackAudioFile) {
+        guard let playlistItems = self.playlistItems else { return }
+
         var indexPaths: [IndexPath] = []
 
-        for (index, playlistItem) in self.playlistItems.enumerated() {
+        for (index, playlistItem) in playlistItems.enumerated() {
             guard let audioFile = playlistItem.track.audioFile, audioFile.id == trackAudioFile.id else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }

@@ -18,6 +18,7 @@ final class PlaylistContentViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var refreshControl: UIRefreshControl!
     @IBOutlet weak var tableHeaderView: PlaylistTableHeaderView!
+    @IBOutlet var emptyPlaylistView: UIView!
 
     // MARK: - Public properties -
 
@@ -199,6 +200,15 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
         return 44.0
     }
 
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section == 0, self.viewModel.isPlaylistEmpty else { return 0.0 }
+        return 44.0
+    }
+
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section == 0, self.viewModel.isPlaylistEmpty else { return nil }
+        return self.emptyPlaylistView
+    }
 }
 
 // MARK: - Router -
