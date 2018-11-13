@@ -38,8 +38,21 @@ struct PlayerPlaylistItemPatch: Codable {
         self.trackId = try container.decodeIfPresent(Int.self, forKey: .trackId)
         self.key = try container.decodeIfPresent(String.self, forKey: .key)
 
-        self.nextKey = try container.decodeIfPresent(KeyType.self, forKey: .nextKey)
-        self.previousKey = try container.decodeIfPresent(KeyType.self, forKey: .previousKey)
+        if let nextKey = try container.decodeIfPresent(KeyType.self, forKey: .nextKey) {
+            self.nextKey = nextKey
+        } else if container.contains(.nextKey) {
+            self.nextKey = .null
+        } else {
+            self.nextKey = nil
+        }
+
+        if let previousKey = try container.decodeIfPresent(KeyType.self, forKey: .previousKey) {
+            self.previousKey = previousKey
+        } else if container.contains(.previousKey) {
+            self.previousKey = .null
+        } else {
+            self.previousKey = nil
+        }
     }
 
     func encode(to encoder: Encoder) throws {
