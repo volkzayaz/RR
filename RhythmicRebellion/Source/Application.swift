@@ -71,6 +71,8 @@ class Application: Observable {
 
     let audioFileLocalStorageService: AudioFileLocalStorageService
 
+    private var needsLoadUser: Bool = false
+
     var user: User? = nil
     var config: Config?
 
@@ -87,7 +89,7 @@ class Application: Observable {
 
         self.restApiServiceReachability?.whenReachable = { [unowned self] _ in
             if self.config == nil { self.loadConfig() }
-            if self.user == nil { self.fanUser() }
+            if self.user == nil || self.needsLoadUser { self.fanUser() }
 
             self.observersContainer.invoke({ (observer) in
                 observer.application(self, restApiServiceDidChangeReachableState: true)
@@ -141,6 +143,7 @@ class Application: Observable {
             }
             self.audioFileLocalStorageService.reset()
             self.notifyUserChanged()
+            self.needsLoadUser = false
             return
         }
 
@@ -165,6 +168,8 @@ class Application: Observable {
                 self.notifyUserTokenChanged()
             }
         }
+
+        self.needsLoadUser = false
     }
 
     func fanUser(completion: ((Result<User>) -> Void)? = nil) {
@@ -176,6 +181,9 @@ class Application: Observable {
                 completion?(.success(user))
 
             case .failure(let error):
+                if self?.restApiServiceReachability?.connection == Reachability.Connection.none {
+                    self?.needsLoadUser = true
+                }
                 completion?(.failure(error))
             }
         }
