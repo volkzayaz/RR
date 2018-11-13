@@ -1098,17 +1098,20 @@ extension Player: WebSocketServiceObserver {
         } else {
             self.defferedTrackId = nil
             self.deferredPlaylistItemsPatches.removeAll()
-            self.playlist.reset(with: playlistItemsPatches)
+            self.playlist.reset(with: [:])
 
             self.observersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
+
+            self.deferredPlaylistItemsPatches.append(playlistItemsPatches)
+            self.applyDeferredPlaylistItemsPatches()
         }
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
 
-        print("webSocketService didReceiveCurrentTrackId trackId: \(trackId)")
+//        print("webSocketService didReceiveCurrentTrackId trackId: \(trackId)")
 
         if self.state.initialized {
             guard let trackId = trackId else { return }
@@ -1128,7 +1131,7 @@ extension Player: WebSocketServiceObserver {
 //        print("webSocketService trackState: \(trackState)")
 
 //        print("time: \(Date().timeIntervalSince(self.isMasterStateSendDate))")
-        guard Date().timeIntervalSince(self.isMasterStateSendDate) > 1.0 else { print("BadTime"); return }
+        guard Date().timeIntervalSince(self.isMasterStateSendDate) > 1.0 else { /*print("BadTime");*/ return }
 
         self.apply(currentTrackState: trackState)
         if self.state.initialized == false {
