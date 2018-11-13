@@ -122,22 +122,16 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     deinit {
         self.player.removeObserver(self)
+        self.application.removeObserver(self)
     }
 
     func load(with delegate: PlayerViewModelDelegate) {
 
         self.loadPlayerItemPreviewOptionViewModel()
         self.delegate = delegate
-    }
 
-    func startObserve() {
         self.player.addObserver(self)
         self.application.addObserver(self)
-    }
-
-    func stopObserve() {
-        self.player.removeObserver(self)
-        self.application.removeObserver(self)
     }
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {
@@ -251,6 +245,7 @@ extension PlayerControllerViewModel: PlayerObserver {
     }
 
     func player(player: Player, didChangeStatus status: PlayerStatus) {
+        self.loadPlayerItemPreviewOptionViewModel()
         self.delegate?.refreshUI()
     }
 

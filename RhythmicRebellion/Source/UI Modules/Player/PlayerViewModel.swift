@@ -43,9 +43,6 @@ protocol PlayerViewModel: class {
 
     func load(with delegate: PlayerViewModelDelegate)
 
-    func startObserve()
-    func stopObserve()
-
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString
 
     func play()

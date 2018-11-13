@@ -1238,6 +1238,18 @@ extension Player: ApplicationObserver {
         self.disconnect(isPlaying: isPlaying, isPlayingAddons: isOtherBlocked)
     }
 
+    func application(_ application: Application, didChangeUserToken user: User) {
+        guard self.webSocketService.isConnected == true else {
+            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+            return
+        }
+
+        self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
+        if self.state.initialized == false {
+            self.webSocketService.reconnect()
+        }
+    }
+
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
         self.playlist.resetAddons()
     }

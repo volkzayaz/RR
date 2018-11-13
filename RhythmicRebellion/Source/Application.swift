@@ -20,6 +20,7 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool)
 
     func application(_ application: Application, didChange user: User)
+    func application(_ application: Application, didChangeUserToken user: User)
 
     func application(_ application: Application, didChangeUserProfile userProfile: UserProfile)
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings)
@@ -35,6 +36,7 @@ extension ApplicationObserver {
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) { }
     
     func application(_ application: Application, didChange user: User) { }
+    func application(_ application: Application, didChangeUserToken user: User) { }
 
     func application(_ application: Application, didChangeUserProfile userProfile: UserProfile) { }
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) { }
@@ -159,8 +161,8 @@ class Application: Observable {
                 self.notifyUserProfileChanged()
             }
 
-            if self.webSocketService.token?.token != user.wsToken {
-                self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
+            if prevUser.wsToken != user.wsToken {
+                self.notifyUserTokenChanged()
             }
         }
     }
@@ -445,6 +447,14 @@ extension Application {
 
         self.observersContainer.invoke({ (observer) in
             observer.application(self, didChange: user)
+        })
+    }
+
+    func notifyUserTokenChanged() {
+        guard let user = self.user else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChangeUserToken: user)
         })
     }
 
