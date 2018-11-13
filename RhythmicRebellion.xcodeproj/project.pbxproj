@@ -1230,6 +1230,7 @@
 				76F1FA2420DBA88100C9191F /* Frameworks */,
 				76F1FA2520DBA88100C9191F /* Resources */,
 				2616D3E71915AA44E4F4E126 /* [CP] Embed Pods Frameworks */,
+				76F0D960219B230400B0E86D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1335,6 +1336,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		76F0D960219B230400B0E86D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 017f0255f754651c69c03bf08a2d952dab60b3bf 5a8df3afae0ae525a591d0b6a93363b73590a651b88eca01014b80fd76def99c\n";
 		};
 		FEA8E141940AF8FBF6D73CC2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

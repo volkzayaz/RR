@@ -3,6 +3,8 @@ use_frameworks!
 
 target 'RhythmicRebellion' do
 
+pod 'Fabric'
+pod 'Crashlytics'
 pod 'ReachabilitySwift'
 pod 'Starscream', '3.0.5'
 pod 'Alamofire', '~> 4.7'
