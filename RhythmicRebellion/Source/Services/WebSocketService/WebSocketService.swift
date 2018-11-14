@@ -159,7 +159,7 @@ class WebSocketService: WebSocketDelegate, Observable {
 
         do {
 //            #if DEBUG
-//            print("playListUpdate: \(String(data: data, encoding: .utf8))")
+//            print("webSocket did recieve command : \(String(data: data, encoding: .utf8))")
 //            #endif
 
             let webSoketCommand = try JSONDecoder().decode(WebSocketCommand.self, from: data)

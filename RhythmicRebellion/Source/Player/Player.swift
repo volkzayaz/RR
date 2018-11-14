@@ -1123,6 +1123,7 @@ extension Player: WebSocketServiceObserver {
                 self.initializePlayer(); return
             }
             self.apply(currentTrackId: trackId)
+            self.initializePlayer()
         }
     }
 
