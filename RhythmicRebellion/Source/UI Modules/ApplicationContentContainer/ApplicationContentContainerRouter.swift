@@ -78,7 +78,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
             playerContentContainerViewController.transitioningDelegate = self.playerContentTransitioningDelegate
             playerContentContainerViewController.modalPresentationStyle = .overCurrentContext
 
-            let playerContentContainerRouter = DefaultPlayerContentContainerRouter(dependencies: self.dependencies)
+            let playerContentContainerRouter = DefaultPlayerContentContainerRouter(dependencies: self.dependencies, navigationDelegate: self)
             playerContentContainerRouter.start(controller: playerContentContainerViewController, navigationItem: playerNavigationItem)
 
             self.tabBarRouter?.playerContentContainerRouter = playerContentContainerRouter
@@ -143,5 +143,11 @@ extension DefaultApplicationContentContainerRouter: PlayerContentPresentingContr
         let destinationFrameOrigin = containerView.convert(destinationViewController.view.frame.origin, from: destinationViewControllerSuperview)
 
         return CGRect(origin: destinationFrameOrigin, size: containerView.frame.size)
+    }
+}
+
+extension DefaultApplicationContentContainerRouter: PlayerContentNavigationDelgate {
+    func navigateToPage(with url: URL) {
+        self.tabBarRouter?.selectPage(with: url)
     }
 }

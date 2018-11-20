@@ -31,6 +31,15 @@ final class PromoViewController: UIViewController {
         viewModel.load(with: self)
     }
 
+    @IBAction func navigateToGoogle() {
+        guard let url = URL(string: "http://www.google.com.ua") else { return }
+        self.viewModel.navigateToPage(with: url)
+    }
+
+    @IBAction func navigateToYoutube() {
+        guard let url = URL(string: "https://www.youtube.com") else { return }
+        self.viewModel.navigateToPage(with: url)
+    }
 }
 
 // MARK: - Router -

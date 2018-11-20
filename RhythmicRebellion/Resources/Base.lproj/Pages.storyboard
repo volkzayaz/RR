@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ma5-bx-0KI">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Pages-->
+        <scene sceneID="hoZ-Hd-fnd">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="ma5-bx-0KI" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="3" title="Pages" image="Pages" id="6Mz-VV-0Xw"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9g3-p0-B8A">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="RxQ-3c-dej" kind="relationship" relationship="rootViewController" id="eFe-7n-3jS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GMk-UR-nZj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-630" y="90"/>
+        </scene>
+        <!--Pages View Controller-->
+        <scene sceneID="Sk1-7c-SOC">
+            <objects>
+                <viewController id="RxQ-3c-dej" customClass="PagesViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mhX-tM-9x7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BlC-F2-aPm">
+                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
+                                <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ku5-Wc-BAE">
+                                    <size key="itemSize" width="177" height="250"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PageItemCollectionViewCellIdentifier" id="IiJ-oe-P0t" customClass="PageItemCollectionViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                        <rect key="frame" x="99" y="10" width="177" height="250"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="177" height="250"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EhM-Mz-GL0">
+                                                    <rect key="frame" x="0.0" y="0.0" width="177" height="250"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wWJ-NN-X9x">
+                                                            <rect key="frame" x="0.0" y="0.0" width="177" height="250"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="wWJ-NN-X9x" secondAttribute="bottom" id="2on-yY-mCW"/>
+                                                        <constraint firstAttribute="trailing" secondItem="wWJ-NN-X9x" secondAttribute="trailing" id="S3E-od-YQ1"/>
+                                                        <constraint firstItem="wWJ-NN-X9x" firstAttribute="leading" secondItem="EhM-Mz-GL0" secondAttribute="leading" id="f0U-KH-GJh"/>
+                                                        <constraint firstItem="wWJ-NN-X9x" firstAttribute="top" secondItem="EhM-Mz-GL0" secondAttribute="top" id="pd5-tH-tcH"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="EhM-Mz-GL0" secondAttribute="bottom" id="DKf-nY-1O4"/>
+                                            <constraint firstItem="EhM-Mz-GL0" firstAttribute="top" secondItem="IiJ-oe-P0t" secondAttribute="top" id="FPE-0g-qwY"/>
+                                            <constraint firstAttribute="trailing" secondItem="EhM-Mz-GL0" secondAttribute="trailing" id="eW7-Hg-kzw"/>
+                                            <constraint firstItem="EhM-Mz-GL0" firstAttribute="leading" secondItem="IiJ-oe-P0t" secondAttribute="leading" id="qjf-0a-9fd"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="containerView" destination="EhM-Mz-GL0" id="1MP-Hj-Etd"/>
+                                            <outlet property="imageView" destination="wWJ-NN-X9x" id="oUd-Bs-wgL"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="RxQ-3c-dej" id="E77-87-A8M"/>
+                                    <outlet property="delegate" destination="RxQ-3c-dej" id="OYX-aP-jaY"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="UXw-vJ-ltJ" firstAttribute="bottom" secondItem="BlC-F2-aPm" secondAttribute="bottom" id="Jz5-h1-Vqv"/>
+                            <constraint firstItem="BlC-F2-aPm" firstAttribute="leading" secondItem="UXw-vJ-ltJ" secondAttribute="leading" id="amH-yQ-WYx"/>
+                            <constraint firstItem="BlC-F2-aPm" firstAttribute="top" secondItem="UXw-vJ-ltJ" secondAttribute="top" id="nSb-du-HbT"/>
+                            <constraint firstItem="UXw-vJ-ltJ" firstAttribute="trailing" secondItem="BlC-F2-aPm" secondAttribute="trailing" id="omz-yl-nrz"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="UXw-vJ-ltJ"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="E4Y-cc-H3l"/>
+                    <connections>
+                        <outlet property="collectionView" destination="BlC-F2-aPm" id="rwe-ZW-0Lu"/>
+                        <segue destination="r8c-92-dVJ" kind="show" identifier="PageContentSegueIdentifier" animates="NO" id="BZV-qU-2Ae"/>
+                        <segue destination="r8c-92-dVJ" kind="show" identifier="AnimatedPageContentSegueIdentifier" id="HzJ-gZ-Wn7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NZh-NW-GYp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="292" y="89.505247376311857"/>
+        </scene>
+        <!--Page Content View Controller-->
+        <scene sceneID="2r1-oa-lhT">
+            <objects>
+                <viewController id="r8c-92-dVJ" customClass="PageContentViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fMO-Fy-rpI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="7tH-4l-MZo"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ooh-JL-rp1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1145" y="254"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Pages" width="20" height="20"/>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="BZV-qU-2Ae"/>
+    </inferredMetricsTieBreakers>
+</document>

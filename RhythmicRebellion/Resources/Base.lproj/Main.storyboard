@@ -40,7 +40,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5F7-I8-RRD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-143" y="679"/>
+            <point key="canvasLocation" x="12" y="691"/>
         </scene>
         <!--App View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -145,32 +145,14 @@
             <point key="canvasLocation" x="29" y="-31"/>
         </scene>
         <!--Pages-->
-        <scene sceneID="Sr7-jB-sab">
+        <scene sceneID="LzV-fB-sRK">
             <objects>
-                <viewController id="2fS-6u-uEG" customClass="PagesViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Fy0-ut-1VZ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="620"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PagesViewConroller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tLY-TP-eAa">
-                                <rect key="frame" x="57.666666666666657" y="289" width="299" height="42"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="tLY-TP-eAa" firstAttribute="centerX" secondItem="Fy0-ut-1VZ" secondAttribute="centerX" id="PZI-oy-jzx"/>
-                            <constraint firstItem="tLY-TP-eAa" firstAttribute="centerY" secondItem="Fy0-ut-1VZ" secondAttribute="centerY" id="eo4-W0-dSe"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="tJX-kg-nU8"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" tag="3" title="Pages" image="Pages" id="6MZ-k7-H02"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="raY-lC-T6C" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="Pages" id="v0v-rR-5t6" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="3" title="Pages" image="Pages" id="RnJ-Sk-n66"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VzY-Bm-CSN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="950" y="1676"/>
+            <point key="canvasLocation" x="348" y="1805"/>
         </scene>
         <!--Settings-->
         <scene sceneID="0VN-XO-u04">
@@ -985,17 +967,17 @@
                         <color key="barTintColor" red="0.058823529411764705" green="0.10196078431372549" blue="0.30196078431372547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
+                        <segue destination="sJe-mq-f8h" kind="presentation" identifier="PlayerContentControllerSegueIdentifier" customClass="PlayerContentStoryboardSegue" customModule="RhythmicRebellion" customModuleProvider="target" id="swz-5X-Nq6"/>
                         <segue destination="yzX-4P-EFu" kind="relationship" relationship="viewControllers" id="VgU-tL-Azc"/>
                         <segue destination="3l1-Uo-jsR" kind="relationship" relationship="viewControllers" id="cer-am-Bmt"/>
-                        <segue destination="2fS-6u-uEG" kind="relationship" relationship="viewControllers" id="lqy-Wb-loW"/>
+                        <segue destination="v0v-rR-5t6" kind="relationship" relationship="viewControllers" id="lFW-Ct-d7h"/>
                         <segue destination="dMN-EC-fFm" kind="relationship" relationship="viewControllers" id="5w3-vp-D9h"/>
                         <segue destination="PtX-54-04A" kind="relationship" relationship="viewControllers" id="Upt-Pn-Z3P"/>
-                        <segue destination="sJe-mq-f8h" kind="presentation" identifier="PlayerContentControllerSegueIdentifier" customClass="PlayerContentStoryboardSegue" customModule="RhythmicRebellion" customModuleProvider="target" id="swz-5X-Nq6"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JH6-xQ-y1O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-391" y="1607"/>
+            <point key="canvasLocation" x="-333" y="1478"/>
         </scene>
         <!--Video-->
         <scene sceneID="zsh-3h-aXs">
@@ -1131,11 +1113,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pBW-f6-Pyd">
+                                <rect key="frame" x="156" y="84" width="102" height="30"/>
+                                <state key="normal" title="google.com.ua"/>
+                                <connections>
+                                    <action selector="navigateToGoogle" destination="k5I-qk-V3W" eventType="touchUpInside" id="5Gf-uv-WpT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="br3-xk-HhR">
+                                <rect key="frame" x="162" y="124" width="90" height="30"/>
+                                <state key="normal" title="youtube.com"/>
+                                <connections>
+                                    <action selector="navigateToYoutube" destination="k5I-qk-V3W" eventType="touchUpInside" id="weY-wl-b9x"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="br3-xk-HhR" firstAttribute="centerX" secondItem="pBW-f6-Pyd" secondAttribute="centerX" id="3kL-WN-42n"/>
+                            <constraint firstItem="pBW-f6-Pyd" firstAttribute="top" secondItem="eMb-uP-5Pd" secondAttribute="top" constant="20" id="Bbo-Hn-pTn"/>
                             <constraint firstItem="sxu-gO-LwS" firstAttribute="centerX" secondItem="k3o-ux-bDP" secondAttribute="centerX" id="K5Y-qY-w9D"/>
+                            <constraint firstItem="pBW-f6-Pyd" firstAttribute="centerX" secondItem="k3o-ux-bDP" secondAttribute="centerX" id="RDE-Ji-3nl"/>
                             <constraint firstItem="sxu-gO-LwS" firstAttribute="centerY" secondItem="k3o-ux-bDP" secondAttribute="centerY" id="X08-8Z-aAu"/>
+                            <constraint firstItem="br3-xk-HhR" firstAttribute="top" secondItem="pBW-f6-Pyd" secondAttribute="bottom" constant="10" id="aaD-aJ-4UK"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="eMb-uP-5Pd"/>
                     </view>
@@ -1143,7 +1143,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BmJ-yW-Set" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="716" y="-827"/>
+            <point key="canvasLocation" x="752" y="-815"/>
         </scene>
         <!--Promo-->
         <scene sceneID="CIr-L1-Eyx">
@@ -1160,7 +1160,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C4l-BC-hnn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1405" y="-825"/>
+            <point key="canvasLocation" x="1648" y="-815"/>
         </scene>
         <!--Player View Controller-->
         <scene sceneID="MvO-9d-361">
@@ -1687,7 +1687,7 @@
         <image name="addPlaylist" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tg1-kY-VU3"/>
+        <segue reference="kAD-GO-v6x"/>
         <segue reference="swz-5X-Nq6"/>
     </inferredMetricsTieBreakers>
 </document>

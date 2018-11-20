@@ -9,6 +9,10 @@
 
 import UIKit
 
+protocol PlayerContentNavigationDelgate: PromoNavigationDelegate {
+}
+
+
 protocol PlayerContentContainerRouter: FlowRouter {
     func navigate(to playerNavigationItem: PlayerNavigationItem)
     func stop(_ animated: Bool)
@@ -38,6 +42,7 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
     private(set) weak var viewModel: PlayerContentContainerViewModel?
     private(set) weak var playerContentContainerViewController: PlayerContentContainerViewController?
     private(set) var playerNavigationItem: PlayerNavigationItem?
+    private(set) weak var navigationDelegate: PlayerContentNavigationDelgate?
 
     var sourceController: UIViewController? { return self.playerContentContainerViewController }
 
@@ -56,8 +61,9 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
         return PlayerNavigationItemType(rawValue: tabBarItem.tag)
     }
 
-    init(dependencies: RouterDependencies) {
+    init(dependencies: RouterDependencies, navigationDelegate: PlayerContentNavigationDelgate?) {
         self.dependencies = dependencies
+        self.navigationDelegate = navigationDelegate
     }
 
     func start(controller: PlayerContentContainerViewController, navigationItem: PlayerNavigationItem?) {
@@ -81,7 +87,7 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
                 playerPlaylistRootRouter.start(controller: playerPlaylistRootViewController)
             case .promo:
                 guard let promoViewController = navigationController.viewControllers.first as? PromoViewController else { continue }
-                let promoRouter = DefaultPromoRouter(dependencies: self.dependencies)
+                let promoRouter = DefaultPromoRouter(dependencies: self.dependencies, navigationDelegate: self.navigationDelegate)
                 promoRouter.start(controller: promoViewController)
             }
         }

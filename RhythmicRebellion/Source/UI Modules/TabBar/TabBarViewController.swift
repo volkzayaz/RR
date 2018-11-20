@@ -36,7 +36,7 @@ final class TabBarViewController: UITabBarController {
         super.viewDidLoad()
 
         viewModel.load(with: self)
-        self.view.clipsToBounds = true
+//        self.view.clipsToBounds = true
 
     }
 

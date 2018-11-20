@@ -30,6 +30,7 @@ protocol TabBarRouter: FlowRouter {
     func selectTab(for type: TabType)
 
     func selectAuthorizationTab(with authorizationType: AuthorizationType)
+    func selectPage(with url: URL)
 }
 
 final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatible {
@@ -109,10 +110,11 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
                 viewControllers.append(settingsNavigationController)
 
             case .pages:
-                guard let pagesViwController = viewController as? PagesViewController else { break }
+                guard let pagesNavigationController = viewController as? UINavigationController,
+                    let pagesViwController = pagesNavigationController.viewControllers.first as? PagesViewController else { break }
                 let pagesRouter = DefaultPagesRouter(dependencies: self.dependencies)
                 pagesRouter.start(controller: pagesViwController)
-                viewControllers.append(pagesViwController)
+                viewControllers.append(pagesNavigationController)
 
             case .profile:
                 guard let profileNavigationController = viewController as? UINavigationController,
@@ -169,6 +171,16 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
 
         authorizationRouter.change(authorizationType: authorizationType)
 
+        self.playerContentContainerRouter?.stop(true)
+    }
+
+    func selectPage(with url: URL) {
+        guard let pagesNavigationController = self.viewController(for: .pages, from: self.tabBarViewController?.viewControllers) as? UINavigationController,
+            let pagesViewController = pagesNavigationController.viewControllers.first as? PagesViewController else { return }
+
+        pagesViewController.viewModel.navigateToPage(with: url)
+
+        self.tabBarViewController?.selectedViewController = pagesNavigationController
         self.playerContentContainerRouter?.stop(true)
     }
 }

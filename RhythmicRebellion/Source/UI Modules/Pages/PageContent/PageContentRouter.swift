@@ -1,23 +1,18 @@
 //
-//  PromoRouter.swift
+//  PageContentRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/27/18.
+//  Created by Alexander Obolentsev on 11/15/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-protocol PromoNavigationDelegate: class {
-    func navigateToPage(with url: URL)
+protocol PageContentRouter: FlowRouter {
 }
 
-protocol PromoRouter: FlowRouter {
-    func navigateToPage(with url: URL)
-}
-
-final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
+final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -36,35 +31,31 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
-
-    private(set) weak var viewModel: PromoViewModel?
+    private(set) weak var viewModel: PageContentViewModel?
     private(set) weak var sourceController: UIViewController?
-    private(set) weak var navigationDelegate: PromoNavigationDelegate?
+
+    private(set) var dependencies: RouterDependencies
+    private(set) var pagesLocalStorage: PagesLocalStorageService
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
     }
 
-    func prepare(for destination: DefaultPromoRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: DefaultPageContentRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .placeholder: break
         }
     }
 
-    init(dependencies: RouterDependencies, navigationDelegate: PromoNavigationDelegate?) {
+    init(dependencies: RouterDependencies, pagesLocalStorage: PagesLocalStorageService) {
         self.dependencies = dependencies
-        self.navigationDelegate = navigationDelegate
+        self.pagesLocalStorage = pagesLocalStorage
     }
 
-    func start(controller: PromoViewController) {
+    func start(controller: PageContentViewController, page: Page) {
         sourceController = controller
-        let vm = PromoControllerViewModel(router: self)
+        let vm = PageContentControllerViewModel(router: self, page: page, pagesLocalStorage: self.pagesLocalStorage)
         controller.configure(viewModel: vm, router: self)
-    }
-
-    func navigateToPage(with url: URL) {
-        self.navigationDelegate?.navigateToPage(with: url)
     }
 }

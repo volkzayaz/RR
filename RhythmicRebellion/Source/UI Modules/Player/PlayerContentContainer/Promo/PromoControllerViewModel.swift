@@ -25,4 +25,8 @@ final class PromoControllerViewModel: PromoViewModel {
     func load(with delegate: PromoViewModelDelegate) {
         self.delegate = delegate
     }
+
+    func navigateToPage(with url: URL) {
+        self.router?.navigateToPage(with: url)
+    }
 }

@@ -12,7 +12,7 @@ import UIKit
 protocol PromoViewModel: class {
 
     func load(with delegate: PromoViewModelDelegate)
-
+    func navigateToPage(with url: URL)
 }
 
 protocol PromoViewModelDelegate: class {
