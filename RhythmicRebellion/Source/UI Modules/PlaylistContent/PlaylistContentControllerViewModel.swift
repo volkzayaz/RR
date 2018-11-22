@@ -433,7 +433,7 @@ extension PlaylistContentControllerViewModel: ApplicationObserver {
 
 extension PlaylistContentControllerViewModel: PlayerObserver {
     
-    func player(player: Player, didChangeStatus status: PlayerStatus) {
+    func player(player: Player, didChange status: PlayerStatus) {
         self.delegate?.reloadUI()
     }
     

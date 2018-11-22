@@ -244,7 +244,7 @@ extension PlayerControllerViewModel: PlayerObserver {
         self.delegate?.refreshUI()
     }
 
-    func player(player: Player, didChangeStatus status: PlayerStatus) {
+    func player(player: Player, didChange status: PlayerStatus) {
         self.loadPlayerItemPreviewOptionViewModel()
         self.delegate?.refreshUI()
     }

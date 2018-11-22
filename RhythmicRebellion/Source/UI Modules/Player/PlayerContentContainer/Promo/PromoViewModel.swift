@@ -11,11 +11,33 @@ import UIKit
 
 protocol PromoViewModel: class {
 
+    var artistName: String? { get }
+    var trackName: String? { get }
+
+    var infoText: String? { get }
+
+    var writerName: String? { get }
+
+    var isAddonsSkipped: Bool { get }
+
+    var canVisitArtistSite: Bool { get }
+    var canVisitWriterSite: Bool { get }
+
+    var canToggleSkipAddons: Bool { get }
+
     func load(with delegate: PromoViewModelDelegate)
-    func navigateToPage(with url: URL)
+
+    func thumbnailURL() -> URL?
+
+    func setSkipAddons(skip: Bool)
+
+    func visitArtistSite()
+    func visitWriterSite()
+
+    func navigateToAuthorization()
 }
 
-protocol PromoViewModelDelegate: class {
+protocol PromoViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
 

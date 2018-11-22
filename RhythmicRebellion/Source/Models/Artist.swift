@@ -17,6 +17,11 @@ public struct Artist: Codable {
     let urlString: String?
     let addons: [Addon]?
 
+    var url: URL? {
+        guard let urlString = self.urlString else { return nil }
+        return URL(string: urlString)
+    }
+
     enum CodingKeys: String, CodingKey {
         case id
         case name

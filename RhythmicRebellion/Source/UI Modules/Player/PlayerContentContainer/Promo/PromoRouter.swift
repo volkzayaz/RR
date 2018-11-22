@@ -11,10 +11,12 @@ import UIKit
 
 protocol PromoNavigationDelegate: class {
     func navigateToPage(with url: URL)
+    func navigateToAuthorization()
 }
 
 protocol PromoRouter: FlowRouter {
     func navigateToPage(with url: URL)
+    func navigateToAuthorization()
 }
 
 final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
@@ -60,11 +62,15 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
 
     func start(controller: PromoViewController) {
         sourceController = controller
-        let vm = PromoControllerViewModel(router: self)
+        let vm = PromoControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
     }
 
     func navigateToPage(with url: URL) {
         self.navigationDelegate?.navigateToPage(with: url)
+    }
+
+    func navigateToAuthorization() {
+        self.navigationDelegate?.navigateToAuthorization()
     }
 }

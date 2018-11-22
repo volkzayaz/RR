@@ -33,7 +33,7 @@ struct ImageLink: Codable {
             case .url(let urlString): return urlString
             case .base64(let base64String): return base64String
             }
-        }
+        }        
     }
 
     let path: PathType
@@ -106,3 +106,15 @@ extension Image: Hashable {
     public var hashValue: Int { return self.uuid.hashValue }
 }
 
+extension Image {
+
+    func firstImageLink(from orderedLinkTypes: [ImageLinkType]) -> ImageLink? {
+        for linkType in orderedLinkTypes {
+            guard let link = self.links[linkType.rawValue] else { continue }
+            return link
+        }
+
+        return nil
+    }
+
+}

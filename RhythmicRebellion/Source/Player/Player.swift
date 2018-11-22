@@ -32,7 +32,7 @@ protocol PlayerObserver: class {
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool)
 
-    func player(player: Player, didChangeStatus status: PlayerStatus)
+    func player(player: Player, didChange status: PlayerStatus)
 
     func player(player: Player, didChangePlayState isPlaying: Bool)
 
@@ -288,7 +288,7 @@ class Player: NSObject, Observable {
 
 
         self.observersContainer.invoke({ (observer) in
-            observer.player(player: self, didChangeStatus: .initialized)
+            observer.player(player: self, didChange: .initialized)
         })
     }
 

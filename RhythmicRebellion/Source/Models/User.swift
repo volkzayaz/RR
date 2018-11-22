@@ -26,6 +26,7 @@ public protocol User: Decodable {
     func hasPurchase(for track: Track) -> Bool
 
     func likeState(for track: Track) -> Track.LikeStates
+    func isAddonsSkipped(for artist: Artist) -> Bool
 }
 
 //func == (lhs: User, rhs: User) -> Bool {
@@ -57,6 +58,7 @@ struct GuestUser: User {
     func isFollower(for artist: Artist) -> Bool { return false }
     func hasPurchase(for track: Track) -> Bool { return false }
     func likeState(for track: Track) -> Track.LikeStates { return .none }
+    func isAddonsSkipped(for artist: Artist) -> Bool { return false }
 }
 
 struct UserProfile: Decodable {
@@ -77,6 +79,7 @@ struct UserProfile: Decodable {
     var followedArtistsIds: Set<String>
     var purchasedTracksIds: Set<Int>
     var tracksLikeStates: [Int : Track.LikeStates]
+    var skipAddonsArtistsIds: Set<String>
 
     var listeningSettings: ListeningSettings
 
@@ -98,6 +101,7 @@ struct UserProfile: Decodable {
         case followedArtistsIds = "artists_followed"
         case purchasedTracksIds = "purchased_tracks_ids"
         case tracksLikeStates = "likes"
+        case skipAddonsArtistsIds = "skip_add_ons_for_artist_ids"
     }
 
     init(from decoder: Decoder) throws {
@@ -149,6 +153,12 @@ struct UserProfile: Decodable {
         } else {
             self.tracksLikeStates = [:]
         }
+
+        if let skipAddonsArtistsIds = try container.decodeIfPresent(Set<String>.self, forKey: .skipAddonsArtistsIds) {
+            self.skipAddonsArtistsIds = skipAddonsArtistsIds
+        } else {
+            self.skipAddonsArtistsIds = Set<String>()
+        }
     }
 
     mutating func update(with trackForceToPlayState: TrackForceToPlayState) {
@@ -164,6 +174,14 @@ struct UserProfile: Decodable {
             followedArtistsIds.insert(artistFollowingState.artistId)
         } else {
             followedArtistsIds.remove(artistFollowingState.artistId)
+        }
+    }
+
+    mutating func update(with skipArtistAddonsState: SkipArtistAddonsState) {
+        if skipArtistAddonsState.isSkipped {
+            skipAddonsArtistsIds.insert(skipArtistAddonsState.artistId)
+        } else {
+            skipAddonsArtistsIds.remove(skipArtistAddonsState.artistId)
         }
     }
 
@@ -238,6 +256,11 @@ struct FanUser: User {
         guard let trackLikeState = self.profile.tracksLikeStates[track.id] else { return .none }
         return trackLikeState
     }
+
+    func isAddonsSkipped(for artist: Artist) -> Bool {
+        return self.profile.skipAddonsArtistsIds.contains(artist.id)
+    }
+
 }
 
 extension FanUser: Equatable {

@@ -486,6 +486,25 @@ class RestApiService {
         }
     }
 
+    func updateSkipArtistAddons(for artist: Artist, skip: Bool, completion: @escaping (Result<User>) -> Void) {
+        guard let skipAddonURL = self.makeURL(with: "fan/profile/skip-add-ons-for-artist/" + artist.id) else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+        let method: HTTPMethod = skip ? .post : .delete
+
+        Alamofire.request(skipAddonURL, method: method, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<FanProfileResponse>) in
+                switch dataResponse.result {
+                case .success(let fanProfileResponse): completion(.success(fanProfileResponse.user))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
     func fanUpdate(track: Track, likeState: Track.LikeStates, completion: @escaping (Result<TrackLikeState>) -> Void) {
         guard let trackLikeURL = self.makeURL(with: "fan/record-like/" + String(track.id)) else { return }
 

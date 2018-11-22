@@ -26,6 +26,7 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings)
     func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState)
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
+    func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState)
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int])
     func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState)
 
@@ -42,6 +43,7 @@ extension ApplicationObserver {
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) { }
     func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) { }
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
+    func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState) { }
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) { }
     func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState) { }
 
@@ -338,6 +340,29 @@ class Application: Observable {
         }
     }
 
+    func updateSkipAddons(for artist: Artist, skip: Bool, completion: @escaping (Error?) -> Void) {
+
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.restApiService.updateSkipArtistAddons(for: artist, skip: skip) { [weak self] (skipArtistAddonsResult) in
+            switch skipArtistAddonsResult {
+            case .success(let updatedUser):
+                self?.set(user: updatedUser)
+                guard let updatedFanUser = updatedUser as? FanUser, fanUser == updatedFanUser else { completion(nil); return }
+
+                let skipArtistAddonsState = SkipArtistAddonsState(artistId: artist.id, isSkipped: updatedFanUser.isAddonsSkipped(for: artist))
+                self?.webSocketService.sendCommand(command: WebSocketCommand.syncArtistAddonsState(skipArtistAddonsState: skipArtistAddonsState))
+
+                self?.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
+                completion(nil)
+
+            case .failure(let error):
+                completion(error)
+            }
+        }
+
+    }
+
     func update(track: Track, likeState: Track.LikeStates, completion: ((Error?) -> Void)? = nil) {
         guard let fanUser = self.user as? FanUser else { return }
 
@@ -498,6 +523,14 @@ extension Application {
         })
     }
 
+    func notifyUserProfileSkipAddonsArtistsIdsChanged(with skipArtistAddonsState: SkipArtistAddonsState) {
+        guard let fanUser = self.user as? FanUser else { return }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.application(self, didChangeUserProfile: Array(fanUser.profile.skipAddonsArtistsIds), with: skipArtistAddonsState)
+        })
+    }
+
     func notifyUserProfileChanged(purchasedTracksIds: Set<Int>, previousPurchasedTracksIds: Set<Int>) {
 
         guard purchasedTracksIds != previousPurchasedTracksIds else { return }
@@ -556,6 +589,16 @@ extension Application: WebSocketServiceObserver {
         self.user = fanUser
 
         self.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
+    }
+
+    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) {
+        guard let currentFanUser = self.user as? FanUser else { return }
+
+        var fanUser = currentFanUser
+        fanUser.profile.update(with: skipArtistAddonsState)
+        self.user = fanUser
+
+        self.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
     }
 
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {

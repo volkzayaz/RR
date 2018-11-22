@@ -19,6 +19,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
     func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState)
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase])
+    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState)
     func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState)
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool)
@@ -41,6 +42,7 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
     func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) { }
     func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) { }
+    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) { }
     func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) { }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) { }
@@ -190,6 +192,11 @@ class WebSocketService: WebSocketDelegate, Observable {
                 case .userSyncPurchases(let purchases):
                     self.observersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceivePurchases: purchases)
+                    })
+
+                case .userSyncSkipArtistAddons(let skipArtistAddonsState):
+                    self.observersContainer.invoke({ (observer) in
+                        observer.webSocketService(self, didReceiveSkipArtistAddonsState: skipArtistAddonsState)
                     })
 
                 case .userSyncTrackLikeState(let trackLikeState):

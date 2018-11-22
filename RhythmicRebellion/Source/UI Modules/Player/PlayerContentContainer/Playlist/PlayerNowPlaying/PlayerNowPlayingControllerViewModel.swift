@@ -265,7 +265,7 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
         self.reload()
     }
     
-    func player(player: Player, didChangeStatus status: PlayerStatus) {
+    func player(player: Player, didChange status: PlayerStatus) {
         self.delegate?.reloadUI()
     }
     
