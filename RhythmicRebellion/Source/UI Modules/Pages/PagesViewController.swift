@@ -106,11 +106,15 @@ extension PagesViewController: UICollectionViewDataSource, UICollectionViewDeleg
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let pageItemCollectionViewCell = PageItemCollectionViewCell.reusableCell(in: collectionView, at: indexPath)
-        let pageItemViewModel = self.viewModel.object(at: indexPath)!
+        let pageItemViewModel = self.viewModel.item(at: indexPath)!
 
         pageItemCollectionViewCell.setup(viewModel: pageItemViewModel) { [unowned self, weak pageItemCollectionViewCell, weak collectionView] action in
             guard let pageItemCollectionViewCell = pageItemCollectionViewCell,
                 let indexPath = collectionView?.indexPath(for: pageItemCollectionViewCell) else { return }
+
+            switch action {
+            case .delete: self.viewModel.deleteItem(at: indexPath)
+            }
 
         }
 
@@ -118,8 +122,17 @@ extension PagesViewController: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.viewModel.selectObject(at: indexPath)
+        self.viewModel.selectItem(at: indexPath)
     }
+
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+
+    }
+
 }
 
 // MARK: - Router -
@@ -149,10 +162,15 @@ extension PagesViewController: PagesViewModelDelegate {
         self.collectionView.reloadData()
     }
 
-    func reloadItem(at indexPath: IndexPath) {
-        self.collectionView.reloadItems(at: [indexPath])
-    }
+    func reloadItemsUI(deletedAt: [IndexPath], insertedAt: [IndexPath], updatedAt: [IndexPath]) {
+        self.collectionView.performBatchUpdates({
 
+            if deletedAt.isEmpty == false { self.collectionView.deleteItems(at: deletedAt) }
+            if insertedAt.isEmpty == false { self.collectionView.insertItems(at: insertedAt) }
+            if updatedAt.isEmpty == false { self.collectionView.reloadItems(at: updatedAt) }
+
+        }, completion: nil)
+    }
 }
 
 
@@ -174,35 +192,35 @@ extension PagesViewController: ZoomAnimatorSourceViewController {
 
     }
 
-    func referenceImageView(for animator: ZoomAnimator, for viewController: UIViewController) -> UIImageView? {
+    func sourceImageContainerView(for animator: ZoomAnimator, for viewController: UIViewController) -> (UIView & ZoomAnimatorSourceImageContainerView)? {
         self.collectionView.layoutIfNeeded()
 
         switch viewController {
         case let pageContentViewController as PageContentViewController:
             guard let pageIndexPath = self.viewModel.indexPath(for: pageContentViewController.viewModel.page),
                 let cell = self.collectionView.cellForItem(at: pageIndexPath) as? PageItemCollectionViewCell else { return nil }
-            return cell.imageView
+            return cell.containerView
         default: return nil
         }
     }
 
-    func frame(for viewController: UIViewController) -> CGRect? {
-        self.collectionView.layoutIfNeeded()
-
-        switch viewController {
-        case let pageContentViewController as PageContentViewController:
-            guard let pageIndexPath = self.viewModel.indexPath(for: pageContentViewController.viewModel.page),
-                let cell = self.collectionView.cellForItem(at: pageIndexPath) as? PageItemCollectionViewCell else { return nil }
-
-            let frame = self.collectionView.convert(cell.frame, to: self.view)
-
-            if frame.minY < self.collectionView.contentInset.top {
-                return CGRect(x: frame.minX, y: self.collectionView.contentInset.top, width: frame.width, height: frame.height - (self.collectionView.contentInset.top - frame.minY))
-            }
-
-            return frame
-
-        default: return nil
-        }
-    }
+//    func frame(for viewController: UIViewController) -> CGRect? {
+//        self.collectionView.layoutIfNeeded()
+//
+//        switch viewController {
+//        case let pageContentViewController as PageContentViewController:
+//            guard let pageIndexPath = self.viewModel.indexPath(for: pageContentViewController.viewModel.page),
+//                let cell = self.collectionView.cellForItem(at: pageIndexPath) as? PageItemCollectionViewCell else { return nil }
+//
+//            let frame = self.collectionView.convert(cell.frame, to: self.view)
+//
+//            if frame.minY < self.collectionView.contentInset.top {
+//                return CGRect(x: frame.minX, y: self.collectionView.contentInset.top, width: frame.width, height: frame.height - (self.collectionView.contentInset.top - frame.minY))
+//            }
+//
+//            return frame
+//
+//        default: return nil
+//        }
+//    }
 }

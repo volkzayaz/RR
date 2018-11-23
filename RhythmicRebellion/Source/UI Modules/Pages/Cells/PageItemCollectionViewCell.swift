@@ -14,6 +14,10 @@ protocol PageItemCollectionViewCellViewModel {
     var image: UIImage? { get }
 }
 
+class PageItemImageContainerView: UIView {
+
+    @IBOutlet weak var imageView: UIImageView!
+}
 
 class PageItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
@@ -25,8 +29,8 @@ class PageItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
         case delete
     }
 
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var containerView: PageItemImageContainerView!
+
 //    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var gradientView: UIView!
 
@@ -44,8 +48,19 @@ class PageItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
     func setup(viewModel: PageItemCollectionViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
         self.viewModelId = viewModel.id
-        self.imageView.image = viewModel.image
+        self.containerView.imageView.image = viewModel.image
 
         self.actionCallback = actionCallback
     }
+
+    // MARK: - Actions -
+
+    @IBAction func onDelete(sender: Any?) {
+        self.actionCallback?(.delete)
+    }
+}
+
+extension PageItemImageContainerView: ZoomAnimatorSourceImageContainerView {
+    var image: UIImage? { return imageView.image }
+    var imageContentMode: ContentMode { return imageView.contentMode }
 }

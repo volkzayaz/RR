@@ -15,8 +15,9 @@ protocol PagesViewModel: class {
     func load(with delegate: PagesViewModelDelegate)
 
     func numberOfItems(in section: Int) -> Int
-    func object(at indexPath: IndexPath) -> PageItemViewModel?
-    func selectObject(at indexPath: IndexPath)
+    func item(at indexPath: IndexPath) -> PageItemViewModel?
+    func selectItem(at indexPath: IndexPath)
+    func deleteItem(at indexPath: IndexPath)
 
     func indexPath(for page: Page) -> IndexPath?
 
@@ -27,5 +28,5 @@ protocol PagesViewModelDelegate: class {
 
     func refreshUI()
     func reloadUI()
-    func reloadItem(at indexPath: IndexPath)
+    func reloadItemsUI(deletedAt: [IndexPath], insertedAt: [IndexPath], updatedAt: [IndexPath])
 }

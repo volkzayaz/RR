@@ -11,8 +11,6 @@ import Foundation
 
 final class PagesControllerViewModel: PagesViewModel {
 
-    var selectedIndexPath: IndexPath?
-
     // MARK: - Private properties -
 
     private(set) weak var delegate: PagesViewModelDelegate?
@@ -20,7 +18,7 @@ final class PagesControllerViewModel: PagesViewModel {
 
     private(set) var pagesLocalStorage: PagesLocalStorageService
 
-    private var pages: [Page] { return self.pagesLocalStorage.pages }
+    private var pages: [Page]
 
     // MARK: - Lifecycle -
 
@@ -31,21 +29,24 @@ final class PagesControllerViewModel: PagesViewModel {
     init(router: PagesRouter, pagesLocalStorage: PagesLocalStorageService) {
         self.router = router
         self.pagesLocalStorage = pagesLocalStorage
+
+        self.pages = []
     }
 
     func load(with delegate: PagesViewModelDelegate) {
         self.delegate = delegate
 
-        self.pagesLocalStorage.addObserver(self)
+        self.pages = self.pagesLocalStorage.pages
 
         self.delegate?.reloadUI()
+        self.pagesLocalStorage.addObserver(self)
     }
 
     func numberOfItems(in section: Int) -> Int {
         return self.pages.count
     }
 
-    func object(at indexPath: IndexPath) -> PageItemViewModel? {
+    func item(at indexPath: IndexPath) -> PageItemViewModel? {
         guard indexPath.item < self.pages.count else { return nil }
 
         let page = self.pages[indexPath.item]
@@ -53,15 +54,22 @@ final class PagesControllerViewModel: PagesViewModel {
         return PageItemViewModel(page: page, image: self.pagesLocalStorage.snapshotImage(for: page))
     }
 
-    func selectObject(at indexPath: IndexPath) {
+    func selectItem(at indexPath: IndexPath) {
         guard indexPath.item < self.pages.count else { return }
 
         let page = self.pages[indexPath.item]
 
-        self.selectedIndexPath = indexPath
-
         self.router?.navigate(to: page, animated: true)
     }
+
+    func deleteItem(at indexPath: IndexPath) {
+        guard indexPath.item < self.pages.count else { return }
+
+        let page = self.pages[indexPath.item]
+
+        self.pagesLocalStorage.delete(page: page)
+    }
+
 
     func indexPath(for page: Page) -> IndexPath? {
         guard let pageIndex = self.pages.index(of: page) else { return nil }
@@ -73,15 +81,8 @@ final class PagesControllerViewModel: PagesViewModel {
         guard let page = self.pagesLocalStorage.page(for: url) else {
             let page = Page(url: url)
             self.pagesLocalStorage.add(page: page)
-            if let pageIndex = self.pages.index(of: page) {
-                self.selectedIndexPath = IndexPath(item: pageIndex, section: 0)
-            }
             self.router?.navigate(to: page, animated: false)
             return
-        }
-
-        if let pageIndex = self.pages.index(of: page) {
-            self.selectedIndexPath = IndexPath(item: pageIndex, section: 0)
         }
 
         self.router?.navigate(to: page, animated: false)
@@ -91,23 +92,32 @@ final class PagesControllerViewModel: PagesViewModel {
 extension PagesControllerViewModel : PagesLocalStorageServiceObserver {
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page) {
-        self.delegate?.reloadUI()
+        self.pages.append(page)
+
+        guard let pageIndex = self.pages.index(of: page) else { return }
+        self.delegate?.reloadItemsUI(deletedAt: [], insertedAt: [IndexPath(item: pageIndex, section: 0)], updatedAt: [])
     }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didUpdate page: Page) {
         guard let pageIndex = self.pages.index(of: page) else { return }
 
-        self.delegate?.reloadItem(at: IndexPath(item: pageIndex, section: 0))
+        self.pages[pageIndex] = page
+
+        self.delegate?.reloadItemsUI(deletedAt: [], insertedAt: [], updatedAt: [IndexPath(item: pageIndex, section: 0)])
     }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didDelete page: Page) {
-        self.delegate?.reloadUI()
+        guard let pageIndex = self.pages.index(of: page) else { return }
+
+        self.pages.remove(at: pageIndex)
+
+        self.delegate?.reloadItemsUI(deletedAt: [IndexPath(item: pageIndex, section: 0)], insertedAt: [], updatedAt: [])
     }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didSaveSnapshotImageFor page: Page) {
         guard let pageIndex = self.pages.index(of: page) else { return }
 
-        self.delegate?.reloadItem(at: IndexPath(item: pageIndex, section: 0))
+        self.delegate?.reloadItemsUI(deletedAt: [], insertedAt: [], updatedAt: [IndexPath(item: pageIndex, section: 0)])
     }
 
 }

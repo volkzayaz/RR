@@ -8,12 +8,16 @@
 
 import UIKit
 
+protocol ZoomAnimatorSourceImageContainerView: class {
+    var image: UIImage? { get }
+    var imageContentMode: UIViewContentMode { get }
+}
+
 protocol ZoomAnimatorSourceViewController: class {
     func transitionWillBegin(with animator: ZoomAnimator, for viewController: UIViewController)
     func transitionDidEnd(with animator: ZoomAnimator, for viewController: UIViewController)
 
-    func referenceImageView(for animator: ZoomAnimator, for viewController: UIViewController) -> UIImageView?
-    func frame(for viewController: UIViewController) -> CGRect?
+    func sourceImageContainerView(for animator: ZoomAnimator, for viewController: UIViewController) -> (UIView & ZoomAnimatorSourceImageContainerView)?
 }
 
 
@@ -45,19 +49,21 @@ class ZoomAnimator: NSObject {
         fromViewController.transitionWillBegin(with: self, for: toViewController)
         toViewController.transitionWillBegin(with: self)
 
-        guard let fromReferenceImageView = fromViewController.referenceImageView(for: self, for: toViewController),
-            let fromFrame = fromViewController.frame(for: toViewController) else { return }
+        guard let sourceImageContainerView = fromViewController.sourceImageContainerView(for: self, for: toViewController),
+            let sourceImageContainerViewSuperview = sourceImageContainerView.superview else { return }
 
         let toReferenceImageView = toViewController.referenceImageView(for: self)
-        toReferenceImageView?.image = fromReferenceImageView.image
-        toReferenceImageView?.contentMode = fromReferenceImageView.contentMode
+        toReferenceImageView?.image = sourceImageContainerView.image
+        toReferenceImageView?.contentMode = sourceImageContainerView.contentMode
 
         containerView.addSubview(toViewController.view)
 
+        let fromFrame = sourceImageContainerViewSuperview.convert(sourceImageContainerView.frame, to: containerView)
+
         if self.transitionImageView == nil {
             let transitionImageView = UIImageView(frame: fromFrame)
-            transitionImageView.image = fromReferenceImageView.image
-            transitionImageView.contentMode = fromReferenceImageView.contentMode
+            transitionImageView.image = sourceImageContainerView.image
+            transitionImageView.contentMode = sourceImageContainerView.contentMode
 //            transitionImageView.clipsToBounds = true
             self.transitionImageView = transitionImageView
             containerView.addSubview(transitionImageView)
@@ -65,12 +71,8 @@ class ZoomAnimator: NSObject {
 
         toViewController.view.alpha = 0.0
 
-        fromReferenceImageView.isHidden = true
+        sourceImageContainerView.isHidden = true
         toReferenceImageView?.isHidden = true
-
-        let referenceImage = fromReferenceImageView.image ?? UIImage()
-
-        let finalTransitionSize = calculateZoomInImageFrame(image: referenceImage, forView: toViewController.view)
 
         UIView.animate(withDuration: transitionDuration(using: transitionContext),
                        delay: 0,
@@ -78,7 +80,7 @@ class ZoomAnimator: NSObject {
                        initialSpringVelocity: 0,
                        options: [UIViewAnimationOptions.transitionCrossDissolve],
                        animations: {
-                        self.transitionImageView?.frame = finalTransitionSize
+                        self.transitionImageView?.frame = transitionContext.finalFrame(for: toViewController)
         },
                        completion: { completed in
 
@@ -86,7 +88,7 @@ class ZoomAnimator: NSObject {
 
                         self.transitionImageView?.removeFromSuperview()
 
-                        fromReferenceImageView.isHidden = false
+                        sourceImageContainerView.isHidden = false
                         toReferenceImageView?.isHidden = false
 
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
@@ -108,22 +110,24 @@ class ZoomAnimator: NSObject {
         toViewController.transitionWillBegin(with: self, for: fromViewController)
         fromViewController.transitionWillBegin(with: self)
 
-        guard let toReferenceImageView = toViewController.referenceImageView(for: self, for: fromViewController),
-            let toFrame = toViewController.frame(for: fromViewController) else { return }
+        guard let sourceImageContainerView = toViewController.sourceImageContainerView(for: self, for: fromViewController),
+            let sourceImageContainerViewSuperview = sourceImageContainerView.superview else { return }
 
         containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
 
         if self.transitionImageView == nil {
             let transitionImageView = UIImageView(frame: fromViewController.view.bounds)
-            transitionImageView.image = toReferenceImageView.image
-            transitionImageView.contentMode = toReferenceImageView.contentMode
+            transitionImageView.image = sourceImageContainerView.image
+            transitionImageView.contentMode = sourceImageContainerView.contentMode
 //            transitionImageView.clipsToBounds = true
             self.transitionImageView = transitionImageView
             containerView.addSubview(transitionImageView)
         }
 
         fromViewController.view.alpha = 0
-        toReferenceImageView.isHidden = true
+        sourceImageContainerView.isHidden = true
+
+        let toFrame = sourceImageContainerViewSuperview.convert(sourceImageContainerView.frame, to: containerView)
 
         UIView.animate(withDuration: transitionDuration(using: transitionContext),
                        delay: 0,
@@ -136,9 +140,10 @@ class ZoomAnimator: NSObject {
                        completion: { completed in
 
                         self.transitionImageView?.removeFromSuperview()
-                        toReferenceImageView.isHidden = false
+                        sourceImageContainerView.isHidden = false
 
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                        
                         fromViewController.transitionDidEnd(with: self)
                         toViewController.transitionDidEnd(with: self, for: toViewController)
         })
