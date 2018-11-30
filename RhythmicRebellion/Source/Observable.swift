@@ -16,6 +16,11 @@ struct ObserverReference<T>: Equatable {
     static func ==(lhs: ObserverReference, rhs: ObserverReference) -> Bool {
         return lhs.internalReference === rhs.internalReference
     }
+
+    static func ==(lhs: ObserverReference, rhs: AnyObject) -> Bool {
+        return lhs.internalReference === rhs
+    }
+
 }
 
 class ObserversContainer<T> {
@@ -30,8 +35,7 @@ class ObserversContainer<T> {
     }
 
     func remove(_ observer: T) {
-        let observerReference = ObserverReference<T>(observer)
-        if let index = self.observers.index(of: observerReference) {
+        if let index = self.observers.firstIndex(where: { $0 == observer as AnyObject }) {
             self.observers.remove(at: index)
         }
     }
