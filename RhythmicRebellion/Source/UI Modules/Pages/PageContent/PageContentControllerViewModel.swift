@@ -20,9 +20,9 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         case playLast
         case replace
         case setForceExplicit
-        case unknown
         case log
         case error
+        case unknown
     }
 
     // MARK: - Private properties -
@@ -39,7 +39,8 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
     var snapshotImage: UIImage? { return self.pagesLocalStorage.snapshotImage(for: self.page) }
     var isNeedUpdateSnapshotImage: Bool { return self.pagesLocalStorage.containsSnapshotImage(for: self.page) == false }
 
-    var requestedTimeTrackIds: [Int]
+    private(set) var requestedTimeTrackIds: [Int]
+    private(set) var handledCommandsNames: [String]
 
     // MARK: - Lifecycle -
 
@@ -56,6 +57,15 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         self.player = player
         self.pagesLocalStorage = pagesLocalStorage
         self.requestedTimeTrackIds = []
+        self.handledCommandsNames = [PageCommandType.getInitialData.rawValue,
+                                     PageCommandType.getSrtsPreviews.rawValue,
+                                     PageCommandType.playNow.rawValue,
+                                     PageCommandType.playLast.rawValue,
+                                     PageCommandType.playNext.rawValue,
+                                     PageCommandType.replace.rawValue,
+                                     PageCommandType.setForceExplicit.rawValue,
+                                     PageCommandType.log.rawValue,
+                                     PageCommandType.error.rawValue]
     }
 
     func load(with delegate: PageContentViewModelDelegate) {
@@ -86,17 +96,14 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
         #endif
 
+        let commandHandlers = self.handledCommandsNames.reduce([String : WKScriptMessageHandler]()) { (result, commandName) -> [String : WKScriptMessageHandler] in
+            var result = result
+            result[commandName] = self
+            return result
+        }
 
 
-        self.delegate?.configure(with: scripts, messageHandlers: [ "getInitialData" : self,
-                                                                   "getSrtsPreviews" : self,
-                                                                   "playNow" : self,
-                                                                   "playNext": self,
-                                                                   "playLast": self,
-                                                                   "replace" : self,
-                                                                   "setForceExplicit" : self,
-                                                                   "log" : self,
-                                                                   "error" : self])
+        self.delegate?.configure(with: scripts, commandHandlers: commandHandlers)
 
         self.delegate?.reloadUI()
 

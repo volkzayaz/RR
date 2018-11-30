@@ -14,6 +14,8 @@ protocol PageContentViewModel: class {
 
     var page: Page { get }
 
+    var handledCommandsNames: [String] { get }
+
     var url: URL? { get }
     var snapshotImage: UIImage? { get }
     var isNeedUpdateSnapshotImage: Bool { get }
@@ -26,7 +28,7 @@ protocol PageContentViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
 
-    func configure(with scripts: [WKUserScript], messageHandlers: [String : WKScriptMessageHandler])
+    func configure(with scripts: [WKUserScript], commandHandlers: [String : WKScriptMessageHandler])
 
     func reloadUI()
 

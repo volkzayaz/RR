@@ -10,12 +10,6 @@
 import UIKit
 import WebKit
 
-class TestWKWebView: WKWebView {
-    deinit {
-        print("TestWKWebView: deinit")
-    }
-}
-
 final class PageContentViewController: UIViewController {
 
     @IBOutlet weak var webView: WKWebView?
@@ -37,12 +31,16 @@ final class PageContentViewController: UIViewController {
 
     deinit {
         print("PageContentViewController: deinit")
+
+        for commandName in self.viewModel.handledCommandsNames {
+            self.webView?.configuration.userContentController.removeScriptMessageHandler(forName: commandName)
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let webView = TestWKWebView(frame: self.view.bounds)
+        let webView = WKWebView(frame: self.view.bounds)
         webView.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
         webView.navigationDelegate = self
         webView.uiDelegate = self
@@ -126,10 +124,10 @@ extension PageContentViewController: PageContentViewModelDelegate {
     func refreshUI() {
     }
 
-    func configure(with scripts: [WKUserScript], messageHandlers: [String : WKScriptMessageHandler]) {
+    func configure(with scripts: [WKUserScript], commandHandlers: [String : WKScriptMessageHandler]) {
 
         scripts.forEach { self.webView?.configuration.userContentController.addUserScript($0) }
-        messageHandlers.forEach { self.webView?.configuration.userContentController.add($0.value, name: $0.key) }
+        commandHandlers.forEach { self.webView?.configuration.userContentController.add($0.value, name: $0.key) }
     }
 
     func reloadUI() {
@@ -147,7 +145,7 @@ extension PageContentViewController: PageContentViewModelDelegate {
 
         self.snapshotImageView = snapshotImageView
 
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
+        let request = URLRequest(url: url, cachePolicy: .reloadRevalidatingCacheData)
         self.webView?.load(request)
         print("Start load URL: \(url)")
     }
