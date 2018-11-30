@@ -86,11 +86,9 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
 extension DefaultPagesRouter : UINavigationControllerDelegate {
 
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        print("willShow viewController: \(viewController)")
     }
 
     public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-
     }
 
     public func navigationController(_ navigationController: UINavigationController,

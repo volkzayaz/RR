@@ -8,6 +8,7 @@
 //
 
 import UIKit
+import WebKit
 
 protocol PageContentViewModel: class {
 
@@ -19,11 +20,18 @@ protocol PageContentViewModel: class {
 
     func load(with delegate: PageContentViewModelDelegate)
     func save(snapshotImage: UIImage)
-
 }
 
-protocol PageContentViewModelDelegate: class {
+protocol PageContentViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
+
+    func configure(with scripts: [WKUserScript], messageHandlers: [String : WKScriptMessageHandler])
+
     func reloadUI()
+
+    func evaluateJavaScript(javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)?)
+
+    
+
 }

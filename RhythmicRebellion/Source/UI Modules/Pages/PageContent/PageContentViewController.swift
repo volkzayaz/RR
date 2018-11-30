@@ -10,6 +10,12 @@
 import UIKit
 import WebKit
 
+class TestWKWebView: WKWebView {
+    deinit {
+        print("TestWKWebView: deinit")
+    }
+}
+
 final class PageContentViewController: UIViewController {
 
     @IBOutlet weak var webView: WKWebView?
@@ -29,12 +35,17 @@ final class PageContentViewController: UIViewController {
 
     // MARK: - Lifecycle -
 
+    deinit {
+        print("PageContentViewController: deinit")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let webView = WKWebView(frame: self.view.bounds)
+        let webView = TestWKWebView(frame: self.view.bounds)
         webView.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
         webView.navigationDelegate = self
+        webView.uiDelegate = self
         self.view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([webView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -43,6 +54,7 @@ final class PageContentViewController: UIViewController {
                                      webView.rightAnchor.constraint(equalTo: self.view.rightAnchor)])
 
         self.webView = webView
+
 
         viewModel.load(with: self)
     }
@@ -61,14 +73,33 @@ final class PageContentViewController: UIViewController {
 
 // MARK: - WKWebView
 
+extension PageContentViewController: WKUIDelegate {
+    public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+
+        print("Wants to create new WEBVIEW!!!!!!")
+
+        return nil
+    }
+}
+
 extension PageContentViewController: WKNavigationDelegate {
 
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+
+       print("didFinish: \(navigation)")
 
         self.snapshotImageView?.removeFromSuperview()
         if self.viewModel.isNeedUpdateSnapshotImage {
             self.perform(#selector(updateSnapshotImage), with: nil, afterDelay: 0.1)
         }
+    }
+
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("WebView error: \(error)")
+    }
+
+    public func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        print("didReceiveServerRedirectForProvisionalNavigation: \(navigation)")
     }
 }
 
@@ -93,8 +124,14 @@ extension PageContentViewController {
 extension PageContentViewController: PageContentViewModelDelegate {
 
     func refreshUI() {
-
     }
+
+    func configure(with scripts: [WKUserScript], messageHandlers: [String : WKScriptMessageHandler]) {
+
+        scripts.forEach { self.webView?.configuration.userContentController.addUserScript($0) }
+        messageHandlers.forEach { self.webView?.configuration.userContentController.add($0.value, name: $0.key) }
+    }
+
     func reloadUI() {
         guard let url = self.viewModel.url else { return }
 
@@ -110,9 +147,14 @@ extension PageContentViewController: PageContentViewModelDelegate {
 
         self.snapshotImageView = snapshotImageView
 
-        self.webView?.load(URLRequest(url: url))
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
+        self.webView?.load(request)
+        print("Start load URL: \(url)")
     }
 
+    func evaluateJavaScript(javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)?) {
+        self.webView?.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+    }
 }
 
 extension PageContentViewController: ZoomAnimatorDestinationViewController {
@@ -121,6 +163,7 @@ extension PageContentViewController: ZoomAnimatorDestinationViewController {
 
         if animator.isPresentation == false {
             self.webView?.stopLoading()
+
             if self.snapshotImageView == nil, let snapshotImage = self.webView?.makeSnapshotImage(afterScreenUpdates: false) {
                 self.viewModel.save(snapshotImage: snapshotImage)
             }
@@ -129,10 +172,14 @@ extension PageContentViewController: ZoomAnimatorDestinationViewController {
     }
 
     func transitionDidEnd(with animator: ZoomAnimator) {
-
+        if let snapshotImageView = self.snapshotImageView {
+            snapshotImageView.isHidden = true
+        }
     }
 
     func referenceImageView(for animator: ZoomAnimator) -> UIImageView? {
         return self.snapshotImageView
     }
+
+
 }

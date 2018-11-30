@@ -58,11 +58,13 @@ class Application: Observable {
 
     struct URI {
 
-        //http://mobile.fan.rebellionretailsite.com/
+//        static let origin = "http://dev-mobile.fan.rebellionretailsite.com"
+//        static let restApiService = "http://dev-mobile.api.rebellionretailsite.com"
+//        static let webSocketService = "ws://dev-mobile.rebellionretailsite.com:3000/"
 
-        static let origin = "http://dev-mobile.fan.rebellionretailsite.com"
-        static let restApiService = "http://dev-mobile.api.rebellionretailsite.com"
-        static let webSocketService = "ws://dev-mobile.rebellionretailsite.com:3000/"
+        static let origin = "http://rhythmic-rebellion.com"
+        static let restApiService =  "https://api.rhythmic-rebellion.com"
+        static let webSocketService = "wss://ws.rebellion-services.com/"
     }
 
     let restApiService: RestApiService
@@ -290,11 +292,11 @@ class Application: Observable {
 
     // MARK: Tracks
 
-    func allowPlayTrackWithExplicitMaterial(track: Track, completion: ((Result<[Int]>) -> Void)? = nil) {
+    func allowPlayTrackWithExplicitMaterial(trackId: Int, completion: ((Result<[Int]>) -> Void)? = nil) {
 
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.restApiService.fanAllowPlayTrackWithExplicitMaterial(track: track) { [weak self] (allowPlayTrackResult) in
+        self.restApiService.fanAllowPlayTrackWithExplicitMaterial(trackId: trackId) { [weak self] (allowPlayTrackResult) in
 
             switch allowPlayTrackResult {
             case .success(let trackForceToPlayState):
@@ -315,11 +317,11 @@ class Application: Observable {
         }
     }
 
-    func disallowPlayTrackWithExplicitMaterial(track: Track, completion: ((Result<[Int]>) -> Void)? = nil) {
+    func disallowPlayTrackWithExplicitMaterial(trackId: Int, completion: ((Result<[Int]>) -> Void)? = nil) {
 
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.restApiService.fanDisallowPlayTrackWithExplicitMaterial(track: track) { [weak self] (allowPlayTrackResult) in
+        self.restApiService.fanDisallowPlayTrackWithExplicitMaterial(trackId: trackId) { [weak self] (allowPlayTrackResult) in
 
             switch allowPlayTrackResult {
             case .success(let trackForceToPlayState):

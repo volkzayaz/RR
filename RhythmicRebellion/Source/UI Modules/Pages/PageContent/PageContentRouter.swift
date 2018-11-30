@@ -55,7 +55,7 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
 
     func start(controller: PageContentViewController, page: Page) {
         sourceController = controller
-        let vm = PageContentControllerViewModel(router: self, page: page, pagesLocalStorage: self.pagesLocalStorage)
+        let vm = PageContentControllerViewModel(router: self, page: page, application: self.dependencies.application, player: self.dependencies.player, pagesLocalStorage: self.pagesLocalStorage)
         controller.configure(viewModel: vm, router: self)
     }
 }

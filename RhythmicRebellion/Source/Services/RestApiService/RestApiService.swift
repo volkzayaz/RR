@@ -416,8 +416,8 @@ class RestApiService {
         }
     }
 
-    func fanAllowPlayTrackWithExplicitMaterial(track: Track, completion: @escaping (Result<(TrackForceToPlayState)>) -> Void) {
-        guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(track.id) + "/force-to-play") else { return }
+    func fanAllowPlayTrackWithExplicitMaterial(trackId: Int, completion: @escaping (Result<(TrackForceToPlayState)>) -> Void) {
+        guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(trackId) + "/force-to-play") else { return }
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",
@@ -433,8 +433,8 @@ class RestApiService {
         }
     }
 
-    func fanDisallowPlayTrackWithExplicitMaterial(track: Track, completion: @escaping (Result<TrackForceToPlayState>) -> Void) {
-        guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(track.id) + "/force-to-play") else { return }
+    func fanDisallowPlayTrackWithExplicitMaterial(trackId: Int, completion: @escaping (Result<TrackForceToPlayState>) -> Void) {
+        guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(trackId) + "/force-to-play") else { return }
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",

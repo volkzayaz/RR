@@ -14,7 +14,7 @@ public enum UserStubTrackAudioFileReason {
 }
 
 
-public protocol User: Decodable {
+public protocol User: Codable {
 
     var isGuest: Bool { get }
     var wsToken: String { get }
@@ -61,7 +61,7 @@ struct GuestUser: User {
     func isAddonsSkipped(for artist: Artist) -> Bool { return false }
 }
 
-struct UserProfile: Decodable {
+struct UserProfile: Codable {
 
     let id: Int
     let email: String
@@ -77,6 +77,7 @@ struct UserProfile: Decodable {
     var language: String?
     var forceToPlay: Set<Int>
     var followedArtistsIds: Set<String>
+    var purchasedAlbumsIds: Set<String>
     var purchasedTracksIds: Set<Int>
     var tracksLikeStates: [Int : Track.LikeStates]
     var skipAddonsArtistsIds: Set<String>
@@ -99,6 +100,7 @@ struct UserProfile: Decodable {
         case forceToPlay = "force_to_play"
         case listeningSettings = "listening_settings"
         case followedArtistsIds = "artists_followed"
+        case purchasedAlbumsIds = "purchased_albums_ids"
         case purchasedTracksIds = "purchased_tracks_ids"
         case tracksLikeStates = "likes"
         case skipAddonsArtistsIds = "skip_add_ons_for_artist_ids"
@@ -142,6 +144,12 @@ struct UserProfile: Decodable {
             self.followedArtistsIds = Set<String>()
         }
 
+        if let purchasedAlbumsIds = try container.decodeIfPresent(Set<String>.self, forKey: .purchasedAlbumsIds) {
+            self.purchasedAlbumsIds = purchasedAlbumsIds
+        } else {
+            self.purchasedAlbumsIds = Set<String>()
+        }
+
         if let purchasedTracksIds = try container.decodeIfPresent(Set<Int>.self, forKey: .purchasedTracksIds) {
             self.purchasedTracksIds = purchasedTracksIds
         } else {
@@ -159,6 +167,40 @@ struct UserProfile: Decodable {
         } else {
             self.skipAddonsArtistsIds = Set<String>()
         }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
+
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.email, forKey: .email)
+        try container.encode(self.nickname, forKey: .nickname)
+        try container.encode(self.firstName, forKey: .firstName)
+
+        if let gender = self.gender {
+            try container.encode(gender.rawValue, forKey: .gender)
+        }
+
+        try container.encodeAsString(self.birthDate, forKey: .birthDate, dateFormatter: dateTimeFormatter)
+        try container.encode(self.location, forKey: .location)
+
+        try container.encode(self.phone, forKey: .phone)
+
+        try container.encode(self.hobbies, forKey: .hobbies)
+        try container.encode(self.howHearId, forKey: .howHearId)
+
+        try container.encode(self.genres, forKey: .genres)
+        try container.encode(self.language, forKey: .language)
+
+        try container.encode(self.listeningSettings, forKey: .listeningSettings)
+
+        try container.encode(self.forceToPlay, forKey: .forceToPlay)
+        try container.encode(self.followedArtistsIds, forKey: .followedArtistsIds)
+        try container.encode(self.purchasedAlbumsIds, forKey: .purchasedAlbumsIds)
+        try container.encode(self.purchasedTracksIds, forKey: .purchasedTracksIds)
+        try container.encode(self.tracksLikeStates, forKey: .tracksLikeStates)
+        try container.encode(self.skipAddonsArtistsIds, forKey: .skipAddonsArtistsIds)
     }
 
     mutating func update(with trackForceToPlayState: TrackForceToPlayState) {
@@ -231,6 +273,15 @@ struct FanUser: User {
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.wsToken = try container.decode(String.self, forKey: .wsToken)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+
+        try self.profile.encode(to: encoder)
+
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.wsToken, forKey: .wsToken)
+
     }
 
     func isCensorshipTrack(_ track: Track) -> Bool {

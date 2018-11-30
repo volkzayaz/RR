@@ -47,6 +47,9 @@ class PageItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
     func setup(viewModel: PageItemCollectionViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
+        self.gradientView.setNeedsLayout()
+        self.gradientView.layoutIfNeeded()
+
         self.viewModelId = viewModel.id
         self.containerView.imageView.image = viewModel.image
 

@@ -42,6 +42,8 @@ protocol PlayerObserver: class {
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval)
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval)
 
+    func player(player: Player, didUpdateTracksTotalPlayMSeconds tracksTotalPlayMSeconds: [Int : UInt64])
+
     func playerDidChangePlaylist(player: Player)
 }
 
@@ -58,6 +60,8 @@ extension PlayerObserver {
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) { }
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval) { }
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) { }
+
+    func player(player: Player, didUpdateTracksTotalPlayMSeconds tracksTotalPlayMSeconds: [Int : UInt64]) { }
     
     func playerDidChangePlaylist(player: Player) {}
 }
@@ -466,7 +470,7 @@ class Player: NSObject, Observable {
         case .full:
             guard let previewLimitTimes = track.previewLimitTimes, previewLimitTimes > 0 else { return TimeInterval(45) }
             guard let trackDuration = track.audioFile?.duration else { return TimeInterval(0) }
-            guard let trackTotalPlayMSeconds = self.totalPlayMSeconds(for: track) else { return nil }
+            guard let trackTotalPlayMSeconds = self.totalPlayMSeconds(for: track.id) else { return nil }
 
             let trackMaxPlayMSeconds = UInt64(trackDuration * 1000 * previewLimitTimes)
             guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { return TimeInterval(45) }
@@ -490,8 +494,8 @@ class Player: NSObject, Observable {
         }
     }
 
-    func totalPlayMSeconds(for track: Track) -> UInt64? {
-        return self.playlist.totalPlayMSeconds(for: track)
+    func totalPlayMSeconds(for trackId: Int) -> UInt64? {
+        return self.playlist.totalPlayMSeconds(for: trackId)
     }
 
     func stubReason(for track: Track) -> TrackStubReason? {
@@ -508,7 +512,7 @@ class Player: NSObject, Observable {
         guard track.isFreeForPlaylist == false else { return false }
         guard track.previewType == .full, let previewLimitTimes = track.previewLimitTimes, previewLimitTimes > 0 else { return false }
 
-        return self.playlist.totalPlayMSeconds(for: track) == nil
+        return self.playlist.totalPlayMSeconds(for: track.id) == nil
     }
 
     // MARK: - Actions
@@ -993,7 +997,7 @@ extension Player: WebSocketServiceObserver {
             guard error == nil else { completion?(error); return }
 
             if shouldSendTrackingTimeRequest {
-                let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackId)
+                let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: [trackId.id])
                 self?.webSocketService.sendCommand(command: trackingTimeRequestCommand)
             }
 
@@ -1052,6 +1056,11 @@ extension Player: WebSocketServiceObserver {
     func getTracks(tracksIds: [Int], completion: ((Error?) -> ())? = nil) {
         let webSocketCommand = WebSocketCommand.getTracks(tracksIds: tracksIds)
         self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+    }
+
+    func trackingTimeRequest(for trackIds: [Int], completion: ((Error?) -> ())? = nil) {
+        let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackIds)
+        self.webSocketService.sendCommand(command: trackingTimeRequestCommand, completion: completion)
     }
 
     //MARK: - WebSocketServiceObserver
@@ -1168,6 +1177,10 @@ extension Player: WebSocketServiceObserver {
         } else {
             self.playlist.update(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
         }
+
+        self.observersContainer.invoke({ (observer) in
+            observer.player(player: self, didUpdateTracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
+        })
 
         guard let currentPlayerItem = self.currentItem,
             self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false,

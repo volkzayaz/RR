@@ -18,8 +18,12 @@ public struct Artist: Codable {
     let addons: [Addon]?
 
     var url: URL? {
-        guard let urlString = self.urlString else { return nil }
-        return URL(string: urlString)
+        guard let urlString = self.urlString, let urlComponents = URLComponents(string: urlString) else { return nil }
+
+        var updatedURLComponents = urlComponents
+        if updatedURLComponents.scheme == nil { updatedURLComponents.scheme = "https"}
+
+        return updatedURLComponents.url
     }
 
     enum CodingKeys: String, CodingKey {

@@ -296,14 +296,14 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
         switch actionType {
         case .forceToPlay:
-            self.application?.allowPlayTrackWithExplicitMaterial(track: track, completion: { (allowTrackResult) in
+            self.application?.allowPlayTrackWithExplicitMaterial(trackId: track.id, completion: { (allowTrackResult) in
                 switch allowTrackResult {
                 case .failure(let error): self.delegate?.show(error: error)
                 default: break
                 }
             })
         case .doNotPlay:
-            self.application?.disallowPlayTrackWithExplicitMaterial(track: track, completion: { (allowTrackResult) in
+            self.application?.disallowPlayTrackWithExplicitMaterial(trackId: track.id, completion: { (allowTrackResult) in
                 switch allowTrackResult {
                 case .failure(let error): self.delegate?.show(error: error)
                 default: break

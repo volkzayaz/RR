@@ -176,8 +176,6 @@ extension ZoomAnimator : UIViewControllerAnimatedTransitioning {
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
 
-        print("transitionContext.isAnimated: \(transitionContext.isAnimated)")
-
         if self.isPresentation {
             self.animateZoomInTransition(using: transitionContext)
         } else {

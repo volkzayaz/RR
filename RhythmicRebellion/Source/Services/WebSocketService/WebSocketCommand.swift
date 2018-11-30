@@ -265,8 +265,15 @@ extension WebSocketCommand {
         return WebSocketCommand(channel: "playlist", command: "update", data: .success(.playListUpdate(playlistItemsPatches)))
     }
 
-    static func trackingTimeRequest(for trackId: TrackId) -> WebSocketCommand {
-        return WebSocketCommand(channel: "previewOpt", command: "srts_previews", data: .success(.tracksTotalPlayTime([trackId.id: 0])))
+    static func trackingTimeRequest(for trackIds: [Int]) -> WebSocketCommand {
+
+        let trackIdsData = trackIds.reduce([Int:UInt64]()) { (result, trackId) -> [Int:UInt64] in
+            var result = result
+            result[trackId] = 0
+            return result
+        }
+
+        return WebSocketCommand(channel: "previewOpt", command: "srts_previews", data: .success(.tracksTotalPlayTime(trackIdsData)))
     }
 
     static func fanPlaylistsStates(for fanPlaylistState: FanPlaylistState) -> WebSocketCommand {

@@ -118,14 +118,14 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for playlistItem: PlayerPlaylistItem) {
         switch actionType {
         case .forceToPlay:
-            self.application?.allowPlayTrackWithExplicitMaterial(track: playlistItem.track, completion: { (allowTrackResult) in
+            self.application?.allowPlayTrackWithExplicitMaterial(trackId: playlistItem.track.id, completion: { (allowTrackResult) in
                 switch allowTrackResult {
                 case .failure(let error): self.delegate?.show(error: error)
                 default: break
                 }
             })
         case .doNotPlay:
-            self.application?.disallowPlayTrackWithExplicitMaterial(track: playlistItem.track, completion: { (allowTrackResult) in
+            self.application?.disallowPlayTrackWithExplicitMaterial(trackId: playlistItem.track.id, completion: { (allowTrackResult) in
                 switch allowTrackResult {
                 case .failure(let error): self.delegate?.show(error: error)
                 default: break
