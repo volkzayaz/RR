@@ -39,6 +39,6 @@ protocol PromoViewModel: class {
 
 protocol PromoViewModelDelegate: class, ErrorPresenting {
 
+    func refreshSkipAddonsUI()
     func refreshUI()
-
 }

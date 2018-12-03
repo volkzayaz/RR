@@ -125,13 +125,17 @@ extension PromoViewController: PromoViewModelDelegate {
         }
     }
 
+    func refreshSkipAddonsUI() {
+        self.silenceBIOandCommentarySwitch.setOn(self.viewModel.isAddonsSkipped, animated: true)
+        self.silenceBIOandCommentarySwitch.isEnabled = self.viewModel.canToggleSkipAddons
+        self.silenceBIOandCommentarySwitchTapGestureRecognizer.isEnabled = self.silenceBIOandCommentarySwitch.isEnabled == false
+    }
+
     func refreshUI() {
         self.reloadThumbnailImage()
 
         self.artistNameLabel.text = self.viewModel.artistName
         self.trackNameLabel.text = self.viewModel.trackName
-
-        self.silenceBIOandCommentarySwitch.isOn = self.viewModel.isAddonsSkipped
 
         self.infoTextView.text = self.viewModel.infoText
         self.writerNameLabel.text = self.viewModel.writerName
@@ -139,8 +143,7 @@ extension PromoViewController: PromoViewModelDelegate {
         self.artistSiteButton.isEnabled = self.viewModel.canVisitArtistSite
         self.writerSiteButton.isEnabled = self.viewModel.canVisitWriterSite
 
-        self.silenceBIOandCommentarySwitch.isEnabled = self.viewModel.canToggleSkipAddons
-        self.silenceBIOandCommentarySwitchTapGestureRecognizer.isEnabled = self.silenceBIOandCommentarySwitch.isEnabled == false
+        self.refreshSkipAddonsUI()
     }
 
 }

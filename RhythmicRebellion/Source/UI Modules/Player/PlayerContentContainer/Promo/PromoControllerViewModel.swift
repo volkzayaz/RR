@@ -86,6 +86,7 @@ final class PromoControllerViewModel: PromoViewModel {
         self.application.updateSkipAddons(for: artist, skip: skip) { [weak self] (error) in
             guard let error = error else { return }
 
+            self?.delegate?.refreshSkipAddonsUI()
             self?.delegate?.show(error: error)
         }
     }
