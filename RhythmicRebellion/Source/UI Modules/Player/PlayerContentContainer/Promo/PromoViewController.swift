@@ -107,6 +107,7 @@ extension PromoViewController: PromoViewModelDelegate {
             self.imageView.image = nil
             self.activityIndicatorView.startAnimating()
             self.imageView.af_setImage(withURL: thumbnailURL,
+                                       placeholderImage: UIImage(named: "TrackImagePlaceholder"),
                                        filter: AspectScaledToFillSizeFilter(size: self.imageView.bounds.size)) { [weak self] (thumbnailImageResponse) in
 
                                         switch thumbnailImageResponse.result {
