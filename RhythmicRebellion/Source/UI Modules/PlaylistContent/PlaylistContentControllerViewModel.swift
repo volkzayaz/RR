@@ -25,6 +25,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     private var playlist: Playlist
     private var playlistItems: [Track]?
 
+    private var lockedPlaylistItemsIds: Set<Int>
+
     var isPlaylistEmpty: Bool { return self.playlistItems?.isEmpty ?? false }
     var playlistHeaderViewModel: PlaylistHeaderViewModel { return PlaylistHeaderViewModel(playlist: self.playlist, isEmpty: self.isPlaylistEmpty) }
 
@@ -48,6 +50,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 7.0))
 
         self.trackPriceFormatter = MoneyFormatter()
+        self.lockedPlaylistItemsIds = Set<Int>()
     }
 
     func load(with delegate: PlaylistContentViewModelDelegate) {
@@ -99,7 +102,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
                               player: self.player,
                               audioFileLocalStorageService: self.audioFileLocalStorageService,
                               textImageGenerator: self.textImageGenerator,
-                              isCurrentInPlayer: player?.currentItem?.playlistItem.track.id == track.id)
+                              isCurrentInPlayer: player?.currentItem?.playlistItem.track.id == track.id,
+                              isLockedForActions: self.lockedPlaylistItemsIds.contains(track.id))
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -316,9 +320,20 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         case .delete:
             guard let fanPlaylist = self.playlist as? FanPlaylist else { return }
 
+            self.lockedPlaylistItemsIds.insert(track.id)
+            if let index = self.playlistItems?.index(of: track) {
+                self.delegate?.reloadObjects(at: [IndexPath(item: index, section: 0)])
+            }
+
             self.restApiService?.fanDelete(track, from: fanPlaylist, completion: { [weak self] (error) in
+
+                self?.lockedPlaylistItemsIds.remove(track.id)
+
                 if let error = error {
                     self?.delegate?.show(error: error)
+                    if let index = self?.playlistItems?.index(of: track) {
+                        self?.delegate?.reloadObjects(at: [IndexPath(item: index, section: 0)])
+                    }
                 } else {
                     if let index = self?.playlistItems?.index(of: track) {
                         self?.playlistItems?.remove(at: index)

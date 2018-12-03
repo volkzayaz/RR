@@ -38,12 +38,14 @@ struct TrackViewModel: TrackTableViewCellViewModel {
     let previewOptionViewModel: TrackPreviewOptionViewModel
 
     var downloadState: TrackDownloadState?
+
+    var isLockedForActions: Bool
 }
 
 
 extension TrackViewModel {
 
-    init(track: Track, user: User?, player: Player?, audioFileLocalStorageService: AudioFileLocalStorageService?, textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool) {
+    init(track: Track, user: User?, player: Player?, audioFileLocalStorageService: AudioFileLocalStorageService?, textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool, isLockedForActions: Bool) {
 
         self.track = track
         self.isCurrentInPlayer = isCurrentInPlayer
@@ -83,5 +85,7 @@ extension TrackViewModel {
                 }
             }
         }
+
+        self.isLockedForActions = isLockedForActions
     }
 }

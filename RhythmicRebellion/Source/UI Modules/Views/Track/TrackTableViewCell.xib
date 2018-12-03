@@ -51,21 +51,26 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DcK-Lp-NH0">
-                                <rect key="frame" x="15" y="11" width="22" height="22"/>
+                                <rect key="frame" x="14.5" y="11" width="22" height="22"/>
                                 <color key="tintColor" red="0.63529411764705879" green="0.65490196078431373" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="onActionButtonWithSender:" destination="IJd-ih-JrK" eventType="touchUpInside" id="f4r-Jw-sS6"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Jz7-MD-4u6">
+                                <rect key="frame" x="15.5" y="12" width="20" height="20"/>
+                                <color key="color" red="0.63529411764705879" green="0.65490196078431373" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="DcK-Lp-NH0" secondAttribute="trailing" constant="14" id="5BC-uz-enc"/>
+                            <constraint firstItem="Jz7-MD-4u6" firstAttribute="centerX" secondItem="uYt-43-1i4" secondAttribute="centerX" id="D1k-9d-HHI"/>
                             <constraint firstItem="DcK-Lp-NH0" firstAttribute="centerY" secondItem="uYt-43-1i4" secondAttribute="centerY" id="NUS-Cs-EeV"/>
                             <constraint firstAttribute="width" constant="51" id="QAn-bb-HTS"/>
+                            <constraint firstItem="DcK-Lp-NH0" firstAttribute="centerX" secondItem="uYt-43-1i4" secondAttribute="centerX" id="RLS-gn-jfO"/>
                             <constraint firstItem="kms-fH-bFS" firstAttribute="leading" secondItem="uYt-43-1i4" secondAttribute="leading" id="UxT-p5-6rR"/>
+                            <constraint firstItem="Jz7-MD-4u6" firstAttribute="centerY" secondItem="uYt-43-1i4" secondAttribute="centerY" id="g3B-MY-XY7"/>
                             <constraint firstAttribute="bottom" secondItem="kms-fH-bFS" secondAttribute="bottom" id="hBp-eB-OU2"/>
-                            <constraint firstItem="DcK-Lp-NH0" firstAttribute="centerY" secondItem="uYt-43-1i4" secondAttribute="centerY" id="mjJ-tC-RMV"/>
                             <constraint firstItem="kms-fH-bFS" firstAttribute="top" secondItem="uYt-43-1i4" secondAttribute="top" id="pvK-GD-zr2"/>
                         </constraints>
                     </view>
@@ -139,6 +144,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
+                <outlet property="actionActivityIndicatorView" destination="Jz7-MD-4u6" id="UFn-C3-h1a"/>
                 <outlet property="actionButton" destination="DcK-Lp-NH0" id="yhk-as-Nk7"/>
                 <outlet property="actionButtonConatinerViewTrailingConstraint" destination="bpA-0t-6Ky" id="cIu-QL-Uzl"/>
                 <outlet property="actionButtonContainerView" destination="uYt-43-1i4" id="6N1-rN-2de"/>

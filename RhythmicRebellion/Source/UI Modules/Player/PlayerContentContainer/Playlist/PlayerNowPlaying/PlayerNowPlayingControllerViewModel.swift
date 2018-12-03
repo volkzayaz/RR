@@ -77,7 +77,8 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
                               player: self.player,
                               audioFileLocalStorageService: self.audioFileLocalStorageService,
                               textImageGenerator: self.textImageGenerator,
-                              isCurrentInPlayer: self.player?.currentItem?.playlistItem == playlistItem)
+                              isCurrentInPlayer: self.player?.currentItem?.playlistItem == playlistItem,
+                              isLockedForActions: false)
     }
     
     func selectObject(at indexPath: IndexPath) {

@@ -37,6 +37,8 @@ protocol TrackTableViewCellViewModel {
 
     var downloadState: TrackDownloadState? { get }
     var downloadHintText: String? { get }
+
+    var isLockedForActions: Bool { get }
 }
 
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
@@ -61,6 +63,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     @IBOutlet weak var actionButtonContainerViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var actionButtonConatinerViewTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var actionButton: UIButton!
+    @IBOutlet weak var actionActivityIndicatorView: UIActivityIndicatorView!
 
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet var stackViewWidthConstraint: NSLayoutConstraint!
@@ -140,6 +143,9 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         self.stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         self.downloadButton.state = .startDownload
 
+        self.actionButton.isHidden = false
+        self.actionActivityIndicatorView.stopAnimating()
+
         if viewModel.isPlayable == false {
             self.actionButtonContainerView.isHidden = true
             self.actionButtonConatinerViewTrailingConstraint.constant = -self.actionButtonContainerViewWidthConstraint.constant
@@ -153,6 +159,10 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
             self.actionButtonConatinerViewTrailingConstraint.constant = 0
             self.actionButtonContainerView.isHidden = false
 
+            if viewModel.isLockedForActions {
+                self.actionButton.isHidden = true
+                self.actionActivityIndicatorView.startAnimating()
+            }
 
             if viewModel.isCensorship {
                 self.stackView.addArrangedSubview(self.censorshipMarkButton)
