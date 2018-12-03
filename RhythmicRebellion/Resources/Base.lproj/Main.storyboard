@@ -1165,6 +1165,9 @@
                                         <state key="normal" title="Artist Site" image="PageNavigationArrow">
                                             <color key="titleColor" red="1" green="0.24313725490196078" blue="0.65490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <state key="disabled">
+                                            <color key="titleColor" red="0.12941176470588234" green="0.15686274509803921" blue="0.28235294117647058" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="onArtistSiteWithSender:" destination="k5I-qk-V3W" eventType="touchUpInside" id="2h1-NP-hoy"/>
                                         </connections>
@@ -1291,6 +1294,9 @@
                                         <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>
                                         <state key="normal" title="Songwriter Site" image="PageNavigationArrow">
                                             <color key="titleColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <state key="disabled">
+                                            <color key="titleColor" red="0.12941176470588234" green="0.15686274509803921" blue="0.28235294117647058" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="onArtistSiteWithSender:" destination="k5I-qk-V3W" eventType="touchUpInside" id="Zul-gN-bxj"/>
