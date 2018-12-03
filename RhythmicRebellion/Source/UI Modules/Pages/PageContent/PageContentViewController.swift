@@ -42,6 +42,7 @@ final class PageContentViewController: UIViewController {
 
         let webView = WKWebView(frame: self.view.bounds)
         webView.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
+        webView.scrollView.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
         webView.navigationDelegate = self
         webView.uiDelegate = self
         self.view.addSubview(webView)
@@ -88,7 +89,7 @@ extension PageContentViewController: WKNavigationDelegate {
 
         self.snapshotImageView?.removeFromSuperview()
         if self.viewModel.isNeedUpdateSnapshotImage {
-            self.perform(#selector(updateSnapshotImage), with: nil, afterDelay: 0.1)
+            self.perform(#selector(updateSnapshotImage), with: nil, afterDelay: 3.0)
         }
     }
 
