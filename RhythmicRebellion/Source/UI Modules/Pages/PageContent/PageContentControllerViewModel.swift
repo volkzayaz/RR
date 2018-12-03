@@ -79,22 +79,22 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
         var scripts = [iOSWebViewScript, playerDisabledScript]
 
-        #if DEBUG
-            let consoleLogSource = """
-                console.log = function(str){
-                    window.webkit.messageHandlers.log.postMessage(str);}
-            """
-            let consoleLogScript = WKUserScript(source: consoleLogSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-            scripts.append(consoleLogScript)
-
-        let consolErrorSource = """
-                console.error = function(str){
-                    window.webkit.messageHandlers.error.postMessage(str);}
-            """
-        let consoleErrorScript = WKUserScript(source: consolErrorSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-        scripts.append(consoleErrorScript)
-
-        #endif
+//        #if DEBUG
+//            let consoleLogSource = """
+//                console.log = function(str){
+//                    window.webkit.messageHandlers.log.postMessage(str);}
+//            """
+//            let consoleLogScript = WKUserScript(source: consoleLogSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+//            scripts.append(consoleLogScript)
+//
+//        let consolErrorSource = """
+//                console.error = function(str){
+//                    window.webkit.messageHandlers.error.postMessage(str);}
+//            """
+//        let consoleErrorScript = WKUserScript(source: consolErrorSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+//        scripts.append(consoleErrorScript)
+//
+//        #endif
 
         let commandHandlers = self.handledCommandsNames.reduce([String : WKScriptMessageHandler]()) { (result, commandName) -> [String : WKScriptMessageHandler] in
             var result = result
@@ -112,6 +112,11 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         self.application.addObserver(self)
         self.player.addObserver(self)
 
+    }
+
+    func snapshotRect(for bounds: CGRect) -> CGRect {
+
+        return CGRect(origin: CGPoint(x: 0.0, y: 0.0), size: CGSize(width: bounds.width, height: bounds.width * self.pagesLocalStorage.pageSnapshotAspectRatio))
     }
 
     func save(snapshotImage: UIImage) {
@@ -135,7 +140,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
             let javaScriptString = "window.externalDataSource.updateUser('" + stringData + "')"
 
-            print("updateUserOnPage javaScriptString: \(javaScriptString)")
+//            print("updateUserOnPage javaScriptString: \(javaScriptString)")
 
             self.delegate?.evaluateJavaScript(javaScriptString: javaScriptString, completionHandler: nil)
         } catch {
@@ -153,7 +158,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
             let javaScriptString = "window.externalDataSource.updateCurrentTrackState('" + stringData + "')"
 
-            print("updateCurrentTrackStateOnPage javaScriptString: \(javaScriptString)")
+//            print("updateCurrentTrackStateOnPage javaScriptString: \(javaScriptString)")
 
             self.delegate?.evaluateJavaScript(javaScriptString: javaScriptString, completionHandler: nil)
 
@@ -170,7 +175,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
             let javaScriptString = "window.externalDataSource.updatePreviewOpt('" + stringData + "')"
 
-            print("updatePreviewOptOnPage javaScriptString: \(javaScriptString)")
+//            print("updatePreviewOptOnPage javaScriptString: \(javaScriptString)")
 
             self.delegate?.evaluateJavaScript(javaScriptString: javaScriptString, completionHandler: nil)
 
@@ -263,7 +268,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
 
         do {
 
-            print("didReceive message name: \(message.name)")
+//            print("didReceive message name: \(message.name)")
 
             let commandType = PageCommandType(rawValue: message.name) ?? .unknown
 
@@ -275,7 +280,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
                 self.updateCurrentTrackStateOnPage()
 
             case .getSrtsPreviews:
-                print("getSrtsPreviews")
+//                print("getSrtsPreviews")
                 guard let jsonString = message.body as? String, let trackIds = self.getTrackIds(from: jsonString) else { return }
                 self.requestedTimeTrackIds = trackIds
 
@@ -296,36 +301,36 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
                 }
 
             case .playNow:
-                print("playNow!!!!")
+//                print("playNow!!!!")
                 guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
 
-                print("playNow: \(tracks)")
+//                print("playNow: \(tracks)")
 
                 self.play(tracks: tracks)
 
             case .playNext:
-                print("playNext!!!!")
+//                print("playNext!!!!")
                 guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-                print("playNext: \(tracks)")
+//                print("playNext: \(tracks)")
                 self.addToPlayerPlaylist(tracks: tracks, at: .next)
 
             case .playLast:
-                print("playLast!!!!")
+//                print("playLast!!!!")
                 guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-                print("playLast: \(tracks)")
+//                print("playLast: \(tracks)")
                 self.addToPlayerPlaylist(tracks: tracks, at: .last)
 
             case .replace:
-                print("replace!!!!")
+//                print("replace!!!!")
                 guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-                print("replace: \(tracks)")
+//                print("replace: \(tracks)")
                 self.replacePlayerPlaylist(with: tracks)
 
             case .setForceExplicit:
-                print("setForceExplicit!!!!")
+//                print("setForceExplicit!!!!")
                 guard let jsonString = message.body as? String, let trackForceToPlayState = self.getTrackForceToPlayState(from: jsonString) else { return }
 
-                print("setForceExplicit: \(trackForceToPlayState)")
+//                print("setForceExplicit: \(trackForceToPlayState)")
 
                 if trackForceToPlayState.isForcedToPlay {
                     self.application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId)

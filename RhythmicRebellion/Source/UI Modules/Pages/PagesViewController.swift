@@ -25,33 +25,35 @@ final class PagesViewController: UIViewController {
         self.router    = router
     }
 
-    func setupCollectionViewLayout() {
-        guard let collectionViewFlowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+    func setupCollectionViewLayout(for size: CGSize) {
+        guard self.isViewLoaded, let collectionViewFlowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
 
         let offset = collectionViewFlowLayout.minimumInteritemSpacing + collectionViewFlowLayout.sectionInset.left + collectionViewFlowLayout.sectionInset.right
 
+        let viewRation = CGFloat(1.4125)
         let defaultItemWidth = CGFloat(177.0)
 
-        if self.view.frame.width < self.view.frame.height {
-            let viewRation = CGFloat(1.4125)
+        if size.width < size.height {
             var itemSize = CGSize(width: defaultItemWidth, height: (defaultItemWidth * viewRation).rounded())
             if offset + 2 * itemSize.width > self.view.frame.width {
-                itemSize.width = (self.view.frame.width - offset) / 2
+                itemSize.width = (size.width - offset) / 2
                 itemSize.height = (itemSize.width * viewRation).rounded()
             }
 
             collectionViewFlowLayout.itemSize = itemSize
 
         } else {
-            let viewRation = CGFloat(1.4125)
-            var itemSize = CGSize(width: (defaultItemWidth * viewRation).rounded(), height: defaultItemWidth)
+
+            var itemSize = CGSize(width: defaultItemWidth, height: (defaultItemWidth / viewRation).rounded())
             if offset + 2 * itemSize.width > self.view.frame.width {
-                itemSize.width = (self.view.frame.width - offset) / 2
+                itemSize.width = (size.width - offset) / 2
                 itemSize.height = (itemSize.width / viewRation).rounded()
             }
 
             collectionViewFlowLayout.itemSize = itemSize
         }
+
+        print("collectionViewFlowLayout.itemSize: \(collectionViewFlowLayout.itemSize)")
     }
 
     // MARK: - Lifecycle -
@@ -59,7 +61,7 @@ final class PagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.setupCollectionViewLayout()
+        self.setupCollectionViewLayout(for: self.view.bounds.size)
 
         viewModel.load(with: self)
     }
@@ -68,31 +70,34 @@ final class PagesViewController: UIViewController {
         super.viewDidLayoutSubviews()
     }
 
-//    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-//        super.viewWillTransition(to: size, with: coordinator)
-//
-//        self.setupCollectionViewLayout()
-//        self.collectionView.collectionViewLayout.invalidateLayout()
-//
-//        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
-//
-//        }) { (transitionCoordinatorContext) in
-//
-//        }
-//    }
-//
-//    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-//        super.willTransition(to: newCollection, with: coordinator)
-//
-//        self.setupCollectionViewLayout()
-//        self.collectionView.collectionViewLayout.invalidateLayout()
-//
-//        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
-//
-//        }) { (transitionCoordinatorContext) in
-//
-//        }
-//    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        guard self.isViewLoaded else { return }
+
+        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
+
+        }) { (transitionCoordinatorContext) in
+            self.setupCollectionViewLayout(for: size)
+            self.collectionView.collectionViewLayout.invalidateLayout()
+            print("finish Transition to size")
+        }
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+
+        guard self.isViewLoaded else { return }
+
+        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
+
+        }) { (transitionCoordinatorContext) in
+            self.setupCollectionViewLayout(for: self.view.bounds.size)
+            self.collectionView.collectionViewLayout.invalidateLayout()
+            
+            print("finish Transition to newCollection")
+        }
+    }
 
 }
 
@@ -177,6 +182,9 @@ extension PagesViewController: PagesViewModelDelegate {
 extension PagesViewController: ZoomAnimatorSourceViewController {
 
     func transitionWillBegin(with animator: ZoomAnimator, for viewController: UIViewController) {
+
+        self.view.layoutIfNeeded()
+
         switch viewController {
         case let pageContentViewController as PageContentViewController:
             guard let pageIndexPath = self.viewModel.indexPath(for: pageContentViewController.viewModel.page),
@@ -193,7 +201,7 @@ extension PagesViewController: ZoomAnimatorSourceViewController {
     }
 
     func sourceImageContainerView(for animator: ZoomAnimator, for viewController: UIViewController) -> (UIView & ZoomAnimatorSourceImageContainerView)? {
-        self.collectionView.layoutIfNeeded()
+//        self.collectionView.layoutIfNeeded()
 
         switch viewController {
         case let pageContentViewController as PageContentViewController:
@@ -203,24 +211,4 @@ extension PagesViewController: ZoomAnimatorSourceViewController {
         default: return nil
         }
     }
-
-//    func frame(for viewController: UIViewController) -> CGRect? {
-//        self.collectionView.layoutIfNeeded()
-//
-//        switch viewController {
-//        case let pageContentViewController as PageContentViewController:
-//            guard let pageIndexPath = self.viewModel.indexPath(for: pageContentViewController.viewModel.page),
-//                let cell = self.collectionView.cellForItem(at: pageIndexPath) as? PageItemCollectionViewCell else { return nil }
-//
-//            let frame = self.collectionView.convert(cell.frame, to: self.view)
-//
-//            if frame.minY < self.collectionView.contentInset.top {
-//                return CGRect(x: frame.minX, y: self.collectionView.contentInset.top, width: frame.width, height: frame.height - (self.collectionView.contentInset.top - frame.minY))
-//            }
-//
-//            return frame
-//
-//        default: return nil
-//        }
-//    }
 }

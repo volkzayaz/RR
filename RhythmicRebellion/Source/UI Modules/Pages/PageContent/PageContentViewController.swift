@@ -62,7 +62,7 @@ final class PageContentViewController: UIViewController {
     }
 
     @objc func updateSnapshotImage() {
-        guard let snapshotImage = self.webView?.makeSnapshotImage() else { return }
+        guard let webView = self.webView, let snapshotImage = webView.makeSnapshotImage(for: webView.bounds) else { return }
 
         self.viewModel.save(snapshotImage: snapshotImage)
     }
@@ -162,7 +162,8 @@ extension PageContentViewController: ZoomAnimatorDestinationViewController {
         if animator.isPresentation == false {
             self.webView?.stopLoading()
 
-            if self.snapshotImageView == nil, let snapshotImage = self.webView?.makeSnapshotImage(afterScreenUpdates: false) {
+            if self.snapshotImageView == nil, self.viewModel.isNeedUpdateSnapshotImage == true, let webView = self.webView,
+                let snapshotImage = webView.makeSnapshotImage(for: webView.bounds, afterScreenUpdates: false) {
                 self.viewModel.save(snapshotImage: snapshotImage)
             }
         }

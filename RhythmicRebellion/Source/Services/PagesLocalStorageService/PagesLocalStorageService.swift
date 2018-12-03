@@ -30,6 +30,8 @@ class PagesLocalStorageService: Observable {
     typealias ObserverType = PagesLocalStorageServiceObserver
     let observersContainer = ObserversContainer<ObserverType>()
 
+    var pageSnapshotAspectRatio: CGFloat = 1.4125
+
 
     private lazy var directoryURL: URL = {
         let applicationSupportDirectoryURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!

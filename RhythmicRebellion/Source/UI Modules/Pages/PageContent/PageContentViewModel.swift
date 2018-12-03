@@ -21,6 +21,8 @@ protocol PageContentViewModel: class {
     var isNeedUpdateSnapshotImage: Bool { get }
 
     func load(with delegate: PageContentViewModelDelegate)
+
+    func snapshotRect(for bounds: CGRect) -> CGRect
     func save(snapshotImage: UIImage)
 }
 

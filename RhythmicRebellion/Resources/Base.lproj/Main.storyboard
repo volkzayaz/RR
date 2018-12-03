@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F7O-Ui-Rs5">
-                                <rect key="frame" x="0.0" y="15" width="768" height="928"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="943"/>
                                 <connections>
                                     <segue destination="bQf-IV-4JF" kind="embed" identifier="TabBarControllerSegueIdentifier" id="f8N-Ry-JAp"/>
                                 </connections>
@@ -28,7 +28,9 @@
                         <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="F7O-Ui-Rs5" firstAttribute="leading" secondItem="E6u-q1-8HK" secondAttribute="leading" id="6pj-vx-BJs"/>
-                            <constraint firstItem="F7O-Ui-Rs5" firstAttribute="top" secondItem="E6u-q1-8HK" secondAttribute="top" constant="15" id="IQa-NS-gAE"/>
+                            <constraint firstItem="F7O-Ui-Rs5" firstAttribute="top" secondItem="E6u-q1-8HK" secondAttribute="top" constant="15" id="IQa-NS-gAE">
+                                <variation key="widthClass=regular" constant="0.0"/>
+                            </constraint>
                             <constraint firstAttribute="bottom" secondItem="F7O-Ui-Rs5" secondAttribute="bottom" id="Ymq-9Y-zhR"/>
                             <constraint firstAttribute="trailing" secondItem="F7O-Ui-Rs5" secondAttribute="trailing" id="zbh-3B-7WP"/>
                         </constraints>
@@ -218,11 +220,11 @@
             <objects>
                 <viewController id="GLL-Ah-dPr" customClass="ListeningSettingsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fyB-pM-gPB">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="858"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" sectionIndexMinimumDisplayRowCount="-1" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PaG-SO-c1c">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="808"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="823"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="MainSwitchableTableViewCellIdentifier" rowHeight="44" id="cOK-Ne-INg" customClass="SwitchableTableViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
@@ -444,11 +446,11 @@
             <objects>
                 <viewController id="EE0-GH-JrR" customClass="HomeViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m0q-K7-erT">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="858"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4G1-Bx-ATf">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="808"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="823"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gZk-kI-oO1">
                                     <size key="itemSize" width="177.5" height="160.5"/>
@@ -603,11 +605,11 @@
             <objects>
                 <viewController storyboardIdentifier="PlaylistContentViewController" id="QTJ-hD-c31" customClass="PlaylistContentViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jQD-NQ-HLl">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="858"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ctl-dI-oob">
-                                <rect key="frame" x="384" y="0.0" width="384" height="808"/>
+                                <rect key="frame" x="384" y="0.0" width="384" height="823"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="0.29585717429577463" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <connections>
@@ -1001,11 +1003,11 @@
             <objects>
                 <viewController id="LKx-fy-kqG" customClass="VideoViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ef2-se-iys">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="928"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="943"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VideoViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7IW-3P-vuK">
-                                <rect key="frame" x="231.5" y="443" width="305" height="42"/>
+                                <rect key="frame" x="231.5" y="450.5" width="305" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1029,11 +1031,11 @@
             <objects>
                 <viewController id="FgK-Uy-X1P" customClass="LyricsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Af3-zE-fxc">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="928"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="943"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LyricsViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dNe-C6-tYc">
-                                <rect key="frame" x="231" y="443" width="306" height="42"/>
+                                <rect key="frame" x="231" y="450.5" width="306" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1104,7 +1106,7 @@
             <objects>
                 <viewController id="k5I-qk-V3W" customClass="PromoViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k3o-ux-bDP">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="928"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="943"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W1F-NT-MBc">
@@ -1599,8 +1601,8 @@
                                                     <action selector="onFollowButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="eu8-LR-GYo"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCb-Dt-HFM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="70.5" y="0.0" width="32.5" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCb-Dt-HFM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="54" y="0.0" width="51" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Video" image="Video">
@@ -1613,8 +1615,8 @@
                                                     <action selector="onPlayerContentButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="Hx5-n3-mhs"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-U5-L93" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="119" y="0.0" width="33.5" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-U5-L93" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="105" y="0.0" width="48" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Lyrics" image="Lyrics">
@@ -1627,8 +1629,8 @@
                                                     <action selector="onPlayerContentButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="lSJ-al-veO"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utM-t0-WMm" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="169" y="0.0" width="40.5" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utM-t0-WMm" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="153" y="0.0" width="58" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Playlist" image="Playlist">
@@ -1641,8 +1643,8 @@
                                                     <action selector="onPlayerContentButtonWithSender:" destination="zss-td-B1y" eventType="touchUpInside" id="vjW-eb-oyg"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxQ-Wp-1dM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                <rect key="frame" x="225.5" y="0.0" width="37" height="35"/>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxQ-Wp-1dM" customClass="VerticalButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                                <rect key="frame" x="211" y="0.0" width="51.5" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="tintColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Promo" image="Promo">
@@ -1941,6 +1943,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="kAD-GO-v6x"/>
-        <segue reference="swz-5X-Nq6"/>
+        <segue reference="pA5-CW-r5f"/>
     </inferredMetricsTieBreakers>
 </document>
