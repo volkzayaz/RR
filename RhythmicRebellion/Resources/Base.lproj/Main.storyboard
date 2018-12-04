@@ -1269,14 +1269,14 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fpg-Id-bBK">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="0.5"/>
-                                        <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="0.30161065924657532" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="g6X-dQ-u6W"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5sm-PM-cZ3">
                                         <rect key="frame" x="0.0" y="59" width="768" height="0.5"/>
-                                        <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="0.2969017551369863" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="pE0-Sv-1No"/>
                                         </constraints>
