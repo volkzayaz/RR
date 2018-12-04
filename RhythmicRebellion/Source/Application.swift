@@ -388,10 +388,10 @@ class Application: Observable {
     }
 
     // MARK: Artists
-    func follow(artist: Artist, completion: ((Result<[String]>) -> Void)? = nil) {
+    func follow(artistId: String, completion: ((Result<[String]>) -> Void)? = nil) {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.restApiService.fanFollow(artist: artist) { [weak self] (followArtistResult) in
+        self.restApiService.fanFollow(artistId: artistId) { [weak self] (followArtistResult) in
 
             switch followArtistResult {
             case .success(let artistFollowingState):
@@ -412,10 +412,10 @@ class Application: Observable {
         }
     }
 
-    func unfollow(artist: Artist, completion: ((Result<[String]>) -> Void)? = nil) {
+    func unfollow(artistId: String, completion: ((Result<[String]>) -> Void)? = nil) {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.restApiService.fanUnfollow(artist: artist) { [weak self] (unfollowArtistResult) in
+        self.restApiService.fanUnfollow(artistId: artistId) { [weak self] (unfollowArtistResult) in
 
             switch unfollowArtistResult {
             case .success(let artistFollowingState):

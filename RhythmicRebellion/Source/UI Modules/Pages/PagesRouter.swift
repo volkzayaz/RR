@@ -38,6 +38,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
 
     private(set) var dependencies: RouterDependencies
     private(set) var pagesLocalStorage: PagesLocalStorageService
+    private(set) weak var authorizationNavigationDelgate: AuthorizationNavigationDelgate?
     
     private(set) weak var viewModel: PagesViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -50,20 +51,21 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         switch destination {
         case .showPageContent(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage)
+            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, authorizationNavigationDelgate: self.authorizationNavigationDelgate)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         case .showPageContentAnimated(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage)
+            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, authorizationNavigationDelgate: self.authorizationNavigationDelgate)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         }
     }
 
-    init(dependencies: RouterDependencies) {
+    init(dependencies: RouterDependencies, authorizationNavigationDelgate: AuthorizationNavigationDelgate?) {
         self.dependencies = dependencies
         self.pagesLocalStorage = PagesLocalStorageService()
+        self.authorizationNavigationDelgate = authorizationNavigationDelgate
 
         super.init()
     }

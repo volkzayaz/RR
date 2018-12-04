@@ -96,7 +96,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     var isArtistFollowed: Bool {
         guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return false }
 
-        return user.isFollower(for: currentPlayerItem.playlistItem.track.artist)
+        return user.isFollower(for: currentPlayerItem.playlistItem.track.artist.id)
     }
 
     // MARK: - Private properties -
@@ -219,10 +219,10 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
             }
         }
 
-        if fanUser.isFollower(for: currentPlayerItem.playlistItem.track.artist) {
-            self.application.unfollow(artist: currentPlayerItem.playlistItem.track.artist, completion: followingCompletion)
+        if fanUser.isFollower(for: currentPlayerItem.playlistItem.track.artist.id) {
+            self.application.unfollow(artistId: currentPlayerItem.playlistItem.track.artist.id, completion: followingCompletion)
         } else {
-            self.application.follow(artist: currentPlayerItem.playlistItem.track.artist, completion: followingCompletion)
+            self.application.follow(artistId: currentPlayerItem.playlistItem.track.artist.id, completion: followingCompletion)
         }
     }
 

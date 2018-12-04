@@ -9,6 +9,7 @@
 
 import UIKit
 import WebKit
+import Alamofire
 
 final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
@@ -20,6 +21,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         case playLast
         case replace
         case setForceExplicit
+        case toggleArtistFollowing
         case log
         case error
         case unknown
@@ -64,6 +66,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
                                      PageCommandType.playNext.rawValue,
                                      PageCommandType.replace.rawValue,
                                      PageCommandType.setForceExplicit.rawValue,
+                                     PageCommandType.toggleArtistFollowing.rawValue,
                                      PageCommandType.log.rawValue,
                                      PageCommandType.error.rawValue]
     }
@@ -336,6 +339,26 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
                     self.application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId)
                 } else {
                     self.application.disallowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId)
+                }
+
+            case .toggleArtistFollowing:
+
+                guard let artistId = message.body as? String else { return }
+                guard let fanUser = self.application.user as? FanUser else { self.router?.navigateToAuthorization(); return }
+                
+                let followingCompletion: (Result<[String]>) -> Void = { [weak self] (followingResult) in
+
+                    switch followingResult {
+                    case .failure(let error):
+                        self?.delegate?.show(error: error)
+                    default: break
+                    }
+                }
+
+                if fanUser.isFollower(for: artistId) {
+                    self.application.unfollow(artistId: artistId, completion: followingCompletion)
+                } else {
+                    self.application.follow(artistId: artistId, completion: followingCompletion)
                 }
 
             case .log: print("Log: \(message.body)")

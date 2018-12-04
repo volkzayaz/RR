@@ -22,7 +22,7 @@ public protocol User: Codable {
     func isCensorshipTrack(_ track: Track) -> Bool
     func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason?
 
-    func isFollower(for artist: Artist) -> Bool
+    func isFollower(for artistId: String) -> Bool
     func hasPurchase(for track: Track) -> Bool
 
     func likeState(for track: Track) -> Track.LikeStates
@@ -55,7 +55,7 @@ struct GuestUser: User {
         return .censorship
     }
 
-    func isFollower(for artist: Artist) -> Bool { return false }
+    func isFollower(for artistId: String) -> Bool { return false }
     func hasPurchase(for track: Track) -> Bool { return false }
     func likeState(for track: Track) -> Track.LikeStates { return .none }
     func isAddonsSkipped(for artist: Artist) -> Bool { return false }
@@ -295,8 +295,8 @@ struct FanUser: User {
         return .censorship
     }
 
-    func isFollower(for artist: Artist) -> Bool {
-        return self.profile.followedArtistsIds.contains(artist.id)
+    func isFollower(for artistId: String) -> Bool {
+        return self.profile.followedArtistsIds.contains(artistId)
     }
 
     func hasPurchase(for track: Track) -> Bool {

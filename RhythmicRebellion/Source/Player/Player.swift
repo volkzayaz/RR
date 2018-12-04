@@ -464,7 +464,7 @@ class Player: NSObject, Observable {
         guard track.isFreeForPlaylist == false else { return nil }
         guard let fanUser = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
         guard fanUser.hasPurchase(for: track) == false else { return nil }
-        guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist)) == false else { return nil }
+        guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { return nil }
 
         switch track.previewType {
         case .full:
@@ -1184,7 +1184,7 @@ extension Player: WebSocketServiceObserver {
 
         guard let currentPlayerItem = self.currentItem,
             self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false,
-            (currentPlayerItem.playlistItem.track.isFollowAllowFreeDownload && self.application.user?.isFollower(for: currentPlayerItem.playlistItem.track.artist) ?? false) == false,
+            (currentPlayerItem.playlistItem.track.isFollowAllowFreeDownload && self.application.user?.isFollower(for: currentPlayerItem.playlistItem.track.artist.id) ?? false) == false,
             currentPlayerItem.restrictedTime == nil,
             let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id] else { return }
 

@@ -10,6 +10,7 @@
 import UIKit
 
 protocol PageContentRouter: FlowRouter {
+    func navigateToAuthorization()
 }
 
 final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompatible {
@@ -36,6 +37,7 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
 
     private(set) var dependencies: RouterDependencies
     private(set) var pagesLocalStorage: PagesLocalStorageService
+    private(set) weak var authorizationNavigationDelgate: AuthorizationNavigationDelgate?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -48,14 +50,19 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
         }
     }
 
-    init(dependencies: RouterDependencies, pagesLocalStorage: PagesLocalStorageService) {
+    init(dependencies: RouterDependencies, pagesLocalStorage: PagesLocalStorageService, authorizationNavigationDelgate: AuthorizationNavigationDelgate?) {
         self.dependencies = dependencies
         self.pagesLocalStorage = pagesLocalStorage
+        self.authorizationNavigationDelgate = authorizationNavigationDelgate
     }
 
     func start(controller: PageContentViewController, page: Page) {
         sourceController = controller
         let vm = PageContentControllerViewModel(router: self, page: page, application: self.dependencies.application, player: self.dependencies.player, pagesLocalStorage: self.pagesLocalStorage)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func navigateToAuthorization() {
+        self.authorizationNavigationDelgate?.selectAuthorizationTab(with: .signIn)
     }
 }

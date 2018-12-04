@@ -62,7 +62,7 @@ extension TrackViewModel {
         if track.isFollowAllowFreeDownload || userHasPurchase {
 
             self.downloadState = .disable
-            if userHasPurchase || user?.isFollower(for: track.artist) ?? false {
+            if userHasPurchase || user?.isFollower(for: track.artist.id) ?? false {
                 self.downloadState = .ready
                 if let audioFile = track.audioFile, let state = audioFileLocalStorageService?.state(for: audioFile) {
                     switch state {

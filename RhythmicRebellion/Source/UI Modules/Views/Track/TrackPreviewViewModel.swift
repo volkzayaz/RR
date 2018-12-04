@@ -17,7 +17,7 @@ struct TrackPreviewOptionViewModel {
             guard track.isFreeForPlaylist == false else { return .freeForPlaylist }
             guard let fanUser = user as? FanUser else { return .authorizationNeeded }
             guard fanUser.hasPurchase(for: track) == false else { return .freeForPlaylist }
-            guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist)) == false else { return .freeForPlaylist }
+            guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { return .freeForPlaylist }
 
             switch track.previewType {
             case .full:

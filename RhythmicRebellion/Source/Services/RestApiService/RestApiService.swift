@@ -450,8 +450,8 @@ class RestApiService {
         }
     }
 
-    func fanFollow(artist: Artist, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
-        guard let followArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artist.id)) else { return }
+    func fanFollow(artistId: String, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
+        guard let followArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artistId)) else { return }
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",
@@ -462,15 +462,15 @@ class RestApiService {
             .restApiResponse { (dataResponse: DataResponse<FollowArtistResponse>) in
                 switch dataResponse.result {
                 case .success(let followArtistResponse):
-                    guard artist.id == followArtistResponse.state.artistId else { completion(.failure(AppError(.unexpectedResponse))); return }
+                    guard artistId == followArtistResponse.state.artistId else { completion(.failure(AppError(.unexpectedResponse))); return }
                     completion(.success(followArtistResponse.state))
                 case .failure(let error): completion(.failure(error))
                 }
         }
     }
 
-    func fanUnfollow(artist: Artist, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
-        guard let unfollowArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artist.id)) else { return }
+    func fanUnfollow(artistId: String, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
+        guard let unfollowArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artistId)) else { return }
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",
@@ -479,7 +479,7 @@ class RestApiService {
         Alamofire.request(unfollowArtistURL, method: .delete, headers: headers)
             .validate()
             .response { (response) in
-                guard let error = response.error else { completion(.success(ArtistFollowingState(artistId: artist.id, isFollowed: false)))
+                guard let error = response.error else { completion(.success(ArtistFollowingState(artistId: artistId, isFollowed: false)))
                                                         return }
 
                 completion(.failure(error))
