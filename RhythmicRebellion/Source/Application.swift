@@ -58,13 +58,13 @@ class Application: Observable {
 
     struct URI {
 
-        static let origin = "http://dev-mobile.fan.rebellionretailsite.com"
-        static let restApiService = "http://dev-mobile.api.rebellionretailsite.com"
-        static let webSocketService = "ws://dev-mobile.rebellionretailsite.com:3000/"
+//        static let origin = "http://dev-mobile.fan.rebellionretailsite.com"
+//        static let restApiService = "http://dev-mobile.api.rebellionretailsite.com"
+//        static let webSocketService = "ws://dev-mobile.rebellionretailsite.com:3000/"
 
-//        static let origin = "http://rhythmic-rebellion.com"
-//        static let restApiService =  "https://api.rhythmic-rebellion.com"
-//        static let webSocketService = "wss://ws.rebellion-services.com/"
+        static let origin = "http://rhythmic-rebellion.com"
+        static let restApiService =  "https://api.rhythmic-rebellion.com"
+        static let webSocketService = "wss://ws.rebellion-services.com/"
     }
 
     let restApiService: RestApiService
