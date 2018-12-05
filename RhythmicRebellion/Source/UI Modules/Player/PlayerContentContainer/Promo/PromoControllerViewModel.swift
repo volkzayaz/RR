@@ -23,8 +23,8 @@ final class PromoControllerViewModel: PromoViewModel {
         return self.application.user?.isAddonsSkipped(for: artist) ?? false
     }
 
-    var canVisitArtistSite: Bool { return self.playerItem?.playlistItem.track.artist.url != nil }
-    var canVisitWriterSite: Bool { return self.playerItem?.playlistItem.track.writer.url != nil }
+    var canVisitArtistSite: Bool { return self.playerItem?.playlistItem.track.artist.url != nil && self.playerItem?.playlistItem.track.artist.publishDate != nil }
+    var canVisitWriterSite: Bool { return self.playerItem?.playlistItem.track.writer.url != nil && self.playerItem?.playlistItem.track.writer.publishDate != nil }
 
     var canToggleSkipAddons: Bool { return self.application.user?.isGuest == false && self.playerItem != nil }
 

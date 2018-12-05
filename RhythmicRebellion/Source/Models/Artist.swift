@@ -16,6 +16,7 @@ public struct Artist: Codable {
     let likesCount: Int?
     let urlString: String?
     let addons: [Addon]?
+    let publishDate: Date?
 
     var url: URL? {
         guard let urlString = self.urlString, let urlComponents = URLComponents(string: urlString) else { return nil }
@@ -33,5 +34,41 @@ public struct Artist: Codable {
         case likesCount = "likes_count"
         case urlString = "url"
         case addons = "audio_add_ons"
+        case publishDate = "publish_date"
     }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
+
+        self.id = try container.decode(String.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
+
+        self.subDomain = try container.decodeIfPresent(String.self, forKey: .subDomain)
+        self.likesCount = try container.decodeIfPresent(Int.self, forKey: .likesCount)
+
+        self.urlString = try container.decodeIfPresent(String.self, forKey: .urlString)
+
+        self.addons = try container.decodeIfPresent([Addon].self, forKey: .addons)
+
+        self.publishDate = try container.decodeAsDate(String.self, forKey: .publishDate, dateFormatter: dateTimeFormatter)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
+
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.name, forKey: .name)
+
+        try container.encode(self.subDomain, forKey: .subDomain)
+        try container.encode(self.likesCount, forKey: .likesCount)
+
+        try container.encode(self.urlString, forKey: .urlString)
+
+        try container.encode(self.addons, forKey: .addons)
+
+        try container.encodeAsString(self.publishDate, forKey: .publishDate, dateFormatter: dateTimeFormatter)
+    }
+
 }

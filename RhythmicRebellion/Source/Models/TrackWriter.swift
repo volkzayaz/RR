@@ -13,6 +13,7 @@ struct TrackWriter: Codable {
     let id: String
     let name: String
     let urlString: String?
+    let publishDate: Date?
 
     var url: URL? {
         guard let urlString = self.urlString, let urlComponents = URLComponents(string: urlString) else { return nil }
@@ -27,5 +28,28 @@ struct TrackWriter: Codable {
         case id
         case name
         case urlString = "url"
+        case publishDate = "publish_date"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
+
+        self.id = try container.decode(String.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
+
+        self.urlString = try container.decodeIfPresent(String.self, forKey: .urlString)
+        self.publishDate = try container.decodeAsDate(String.self, forKey: .publishDate, dateFormatter: dateTimeFormatter)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
+
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.name, forKey: .name)
+
+        try container.encode(self.urlString, forKey: .urlString)
+        try container.encodeAsString(self.publishDate, forKey: .publishDate, dateFormatter: dateTimeFormatter)
     }
 }
