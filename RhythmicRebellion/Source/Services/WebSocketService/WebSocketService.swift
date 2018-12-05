@@ -62,13 +62,27 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     let observersContainer = ObserversContainer<WebSocketServiceObserver>()
 
+    enum State: Int {
+        case disconnected
+        case connecting
+        case connected
+
+        var isConnected: Bool {
+            switch self {
+            case .connected: return true
+            default: return false
+            }
+        }
+    }
+
     var webSocket: WebSocket?
     var token: Token?
+
 
     var webSocketURL: URL
 
     var isReachable: Bool = false
-    var isConnected: Bool { return self.webSocket?.isConnected ?? false }
+    private(set) var state: State
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
@@ -76,6 +90,7 @@ class WebSocketService: WebSocketDelegate, Observable {
         guard let webSocketURL = URL(string: webSocketURI) else { return nil }
         
         self.webSocketURL = webSocketURL
+        self.state = .disconnected
     }
 
     func makeWebSocket() -> WebSocket {
@@ -91,18 +106,24 @@ class WebSocketService: WebSocketDelegate, Observable {
     func connect(with token: Token) {
         self.token = token
 
-        print("connect with Token: \(self.token)")
+        print("connect with Token: \(String(describing: self.token))")
+
+        self.webSocket?.delegate = nil
 
         self.webSocket = self.makeWebSocket()
+        self.state = .connecting
         self.webSocket?.connect()
     }
 
     func reconnect() {
         guard let _ = self.token else { return }
 
-        print("reconnect with Token: \(self.token)")
+        print("reconnect with Token: \(String(describing: self.token))")
+
+        self.webSocket?.delegate = nil
 
         self.webSocket = self.makeWebSocket()
+        self.state = .connecting
         self.webSocket?.connect()
     }
 
@@ -117,11 +138,11 @@ class WebSocketService: WebSocketDelegate, Observable {
         do {
             let jsonData = try JSONEncoder().encode(command)
 
-            #if DEBUG
-            if command.commandType == .fanPlaylistsStates {
-                print("send fanPlaylistsStates: \(String(data: jsonData, encoding: .utf8))")
-            }
-            #endif
+//            #if DEBUG
+//            if command.commandType == .fanPlaylistsStates {
+//                print("send fanPlaylistsStates: \(String(data: jsonData, encoding: .utf8))")
+//            }
+//            #endif
 
 
             self.webSocket?.write(data: jsonData, completion: { completion?(nil) })
@@ -132,6 +153,8 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     // MARK: - WebSocketDelegate -
     public func websocketDidConnect(socket: WebSocketClient) {
+
+        self.state = .connected
 
         if let token = self.token {
             let initialCommand = WebSocketCommand.initialCommand(token: token)
@@ -145,6 +168,8 @@ class WebSocketService: WebSocketDelegate, Observable {
 
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocketDidDisconnect: \(String(describing: error))")
+
+        self.state = .disconnected
 
         self.observersContainer.invoke({ (observer) in
             observer.webSocketServiceDidDisconnect(self)

@@ -811,12 +811,14 @@ class Player: NSObject, Observable {
                 options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
             }
 
-            if self.webSocketService.isConnected == false {
+            if self.webSocketService.state.isConnected == false {
                 self.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                 if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
                     self.initializationAction = .playCurrent
                 }
-                self.webSocketService.reconnect()
+                if self.webSocketService.state == .disconnected {
+                    self.webSocketService.reconnect()
+                }
             } else {
                 if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
                     self.player.play()
@@ -1231,7 +1233,7 @@ extension Player: ApplicationObserver {
 
     func application(_ application: Application, didChange user: User) {
 
-        guard self.webSocketService.isConnected == true else {
+        guard self.webSocketService.state.isConnected == true else {
             self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
             return
         }
@@ -1256,7 +1258,7 @@ extension Player: ApplicationObserver {
     }
 
     func application(_ application: Application, didChangeUserToken user: User) {
-        guard self.webSocketService.isConnected == true else {
+        guard self.webSocketService.state.isConnected == true else {
             self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
             return
         }
