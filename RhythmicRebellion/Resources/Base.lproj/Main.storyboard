@@ -29,7 +29,7 @@
                         <constraints>
                             <constraint firstItem="F7O-Ui-Rs5" firstAttribute="leading" secondItem="E6u-q1-8HK" secondAttribute="leading" id="6pj-vx-BJs"/>
                             <constraint firstItem="F7O-Ui-Rs5" firstAttribute="top" secondItem="E6u-q1-8HK" secondAttribute="top" constant="15" id="IQa-NS-gAE">
-                                <variation key="widthClass=regular" constant="0.0"/>
+                                <variation key="widthClass=regular" constant="15"/>
                             </constraint>
                             <constraint firstAttribute="bottom" secondItem="F7O-Ui-Rs5" secondAttribute="bottom" id="Ymq-9Y-zhR"/>
                             <constraint firstAttribute="trailing" secondItem="F7O-Ui-Rs5" secondAttribute="trailing" id="zbh-3B-7WP"/>
