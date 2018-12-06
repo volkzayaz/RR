@@ -144,7 +144,9 @@ class PagesLocalStorageService: Observable {
 
     func snapshotImage(for page: Page) -> UIImage? {
         let snapshotImageURL = self.snapshotImageURL(for: page)
-        guard FileManager.default.fileExists(atPath: snapshotImageURL.path) else { return nil }
+        guard FileManager.default.fileExists(atPath: snapshotImageURL.path) else {
+            return UIImage(named: "PagePlaceholder")
+        }
 
         return UIImage(contentsOfFile: snapshotImageURL.path)
     }
