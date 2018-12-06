@@ -81,6 +81,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
             let playerContentContainerRouter = DefaultPlayerContentContainerRouter(dependencies: self.dependencies, navigationDelegate: self)
             playerContentContainerRouter.start(controller: playerContentContainerViewController, navigationItem: playerNavigationItem)
 
+            self.applicationContentContainerViewController?.playerContentContainerViewController = playerContentContainerViewController
             self.tabBarRouter?.playerContentContainerRouter = playerContentContainerRouter
         }
     }

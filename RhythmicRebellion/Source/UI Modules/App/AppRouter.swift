@@ -46,7 +46,9 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
     var dependencies: RouterDependencies
 
     private(set) weak var viewModel: AppViewModel?
-    private(set) weak var sourceController: UIViewController?
+    private(set) weak var appViewController: AppViewController?
+
+    var sourceController: UIViewController? { return appViewController }
 
     private(set) weak var contentContainerViewController: ApplicationContentContainerViewController?
     private(set) weak var contentContainerRouter: ApplicationContentContainerRouter?
@@ -67,8 +69,8 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
             guard let contentContainerViewController = segue.destination as? ApplicationContentContainerViewController else { fatalError("Incorrect controller for ContentContainerSegueIdentifier") }
             let contentContainerRouter = DefaultApplicationContentContainerRouter(dependencies: self.dependencies)
             contentContainerRouter.start(controller: contentContainerViewController)
+            self.appViewController?.contentContainerViewController = contentContainerViewController
             self.contentContainerRouter = contentContainerRouter
-            self.contentContainerViewController = contentContainerViewController
         }
     }
 
@@ -77,7 +79,7 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
     }
 
     func start(controller: AppViewController) {
-        sourceController = controller
+        appViewController = controller
         let vm = AppControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }

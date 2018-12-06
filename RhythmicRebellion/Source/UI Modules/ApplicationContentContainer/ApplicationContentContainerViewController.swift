@@ -14,6 +14,7 @@ final class ApplicationContentContainerViewController: UIViewController {
     // MARK: - Public properties -
 
     var tabBarViewController: TabBarViewController!
+    weak var playerContentContainerViewController: PlayerContentContainerViewController?
 
     private(set) var viewModel: ApplicationContentContainerViewModel!
     private(set) var router: FlowRouter!

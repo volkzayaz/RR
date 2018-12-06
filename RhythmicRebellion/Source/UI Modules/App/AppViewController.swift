@@ -17,6 +17,8 @@ final class AppViewController: UIViewController {
 
     @IBOutlet weak var playerDisclosureButton: UIButton!
 
+    weak var contentContainerViewController: ApplicationContentContainerViewController?
+
     // MARK: - Public properties -
 
     private(set) var viewModel: AppViewModel!
