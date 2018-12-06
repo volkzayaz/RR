@@ -9,26 +9,31 @@
 
 import UIKit
 
-public enum PlayerNavigationItemType: Int {
-    case video
-    case lyrics
-    case playlist
-    case promo
+protocol PlayerNavigationItemDelegate: class {
+    func refreshUI(for navigationItem: PlayerNavigationItem, isSelected: Bool)
 }
 
 public class PlayerNavigationItem {
 
-    var type: PlayerNavigationItemType
-
-    private weak var playerViewController: PlayerViewController?
-
-    fileprivate init(playerViewController: PlayerViewController, type: PlayerNavigationItemType) {
-        self.type = type
-        self.playerViewController = playerViewController
+    public enum NavigationType: Int {
+        case video
+        case lyrics
+        case playlist
+        case promo
     }
 
-    deinit {
-        self.playerViewController?.unselect(self)
+    var type: NavigationType
+
+    var isSelected: Bool {
+        didSet { self.delegate?.refreshUI(for: self, isSelected: self.isSelected) }
+    }
+
+    private weak var delegate: PlayerNavigationItemDelegate?
+
+    fileprivate init(type: NavigationType, delegate: PlayerNavigationItemDelegate) {
+        self.type = type
+        self.delegate = delegate
+        self.isSelected = false
     }
 }
 
@@ -39,7 +44,7 @@ protocol PlayerNavigationDelgate: class {
 
 protocol PlayerRouter: FlowRouter {
 
-    func navigate(to playerNavigationItemType: PlayerNavigationItemType)
+    func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType)
     func navigateToAuthorization()
 }
 
@@ -94,9 +99,9 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
 
 extension DefaultPlayerRouter {
 
-    func navigate(to playerNavigationItemType: PlayerNavigationItemType) {
+    func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) {
         guard let playerViewController = self.playerViewController else { return }
-        self.navigationDelegate?.navigate(to: PlayerNavigationItem(playerViewController: playerViewController, type: playerNavigationItemType))
+        self.navigationDelegate?.navigate(to: PlayerNavigationItem(type: playerNavigationItemType, delegate: playerViewController))
     }
 
     func navigateToAuthorization() {

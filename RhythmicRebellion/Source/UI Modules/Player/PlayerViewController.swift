@@ -106,22 +106,8 @@ final class PlayerViewController: UIViewController {
         }
     }
 
-    func tabBarItem(with playerNavigationItemType: PlayerNavigationItemType, on tabBar: UITabBar) -> UITabBarItem? {
+    func tabBarItem(with playerNavigationItemType: PlayerNavigationItem.NavigationType, on tabBar: UITabBar) -> UITabBarItem? {
         return tabBar.items?.filter({ $0.tag == playerNavigationItemType.rawValue }).first
-    }
-
-    func unselect(_ playerNavigationItem: PlayerNavigationItem) {
-
-        if compactTabBar.selectedItem?.tag == playerNavigationItem.type.rawValue {
-            self.compactTabBar.selectedItem = nil
-        }
-
-        switch playerNavigationItem.type {
-        case .video: self.videoButton.isSelected = false
-        case .lyrics: self.lyricsButton.isSelected = false
-        case .playlist: self.playlistButton.isSelected = false
-        case .promo: self.promoButton.isSelected = false
-        }
     }
 
     // MARK: - Actions -
@@ -156,6 +142,7 @@ final class PlayerViewController: UIViewController {
     @IBAction func onPlayerContentButton(sender: UIButton) {
 
         sender.isSelected = true
+
 
         switch sender {
         case self.videoButton: self.viewModel.navigate(to: .video)
@@ -295,7 +282,7 @@ extension PlayerViewController: PlayerViewModelDelegate {
         self.promoButton.isEnabled = self.viewModel.canNavigate(to: .promo)
 
         self.compactTabBar.items?.forEach({ (tabBarItem) in
-            guard let navigationItemType = PlayerNavigationItemType(rawValue: tabBarItem.tag) else { return }
+            guard let navigationItemType = PlayerNavigationItem.NavigationType(rawValue: tabBarItem.tag) else { return }
             tabBarItem.isEnabled = self.viewModel.canNavigate(to: navigationItemType)
         })
 
@@ -321,7 +308,29 @@ extension PlayerViewController: PlayerViewModelDelegate {
 extension PlayerViewController: UITabBarDelegate {
 
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        guard let navigationType = PlayerNavigationItemType.init(rawValue: item.tag) else { return }
+        guard let navigationType = PlayerNavigationItem.NavigationType.init(rawValue: item.tag) else { return }
+
         self.viewModel.navigate(to: navigationType)
+    }
+}
+
+extension PlayerViewController: PlayerNavigationItemDelegate {
+    func refreshUI(for navigationItem: PlayerNavigationItem, isSelected: Bool) {
+
+        if isSelected, let compactTabBarItem = self.tabBarItem(with: navigationItem.type, on: self.compactTabBar) {
+            self.compactTabBar.selectedItem = compactTabBarItem
+        } else {
+            self.compactTabBar.selectedItem = nil
+        }
+
+        switch navigationItem.type {
+        case .video:
+            self.videoButton.isSelected = isSelected
+
+        case .lyrics: self.lyricsButton.isSelected = isSelected
+        case .playlist: self.playlistButton.isSelected = isSelected
+        case .promo: self.promoButton.isSelected = isSelected
+        }
+
     }
 }

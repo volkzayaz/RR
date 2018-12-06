@@ -56,9 +56,9 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
         }
     }
 
-    func navigationItemType(for viewController: UIViewController) -> PlayerNavigationItemType? {
+    func navigationItemType(for viewController: UIViewController) -> PlayerNavigationItem.NavigationType? {
         guard let tabBarItem = viewController.tabBarItem else { return nil }
-        return PlayerNavigationItemType(rawValue: tabBarItem.tag)
+        return PlayerNavigationItem.NavigationType(rawValue: tabBarItem.tag)
     }
 
     init(dependencies: RouterDependencies, navigationDelegate: PlayerContentNavigationDelgate?) {
@@ -102,8 +102,9 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
     }
 
     func stop(_ animated: Bool) {
-        self.playerNavigationItem = nil
-        self.playerContentContainerViewController?.dismiss(animated: animated, completion: nil)
+        self.playerContentContainerViewController?.dismiss(animated: animated, completion: {
+            self.playerNavigationItem?.isSelected = false
+        })
     }
 }
 
@@ -111,7 +112,7 @@ extension DefaultPlayerContentContainerRouter {
 
     func viewController(for playerNavigationItem: PlayerNavigationItem) -> UIViewController? {
         return self.playerContentContainerViewController?.viewControllers?.filter ( {
-            guard let tabBarItem = $0.tabBarItem, let playerNavigationItemType = PlayerNavigationItemType(rawValue: tabBarItem.tag) else { return false }
+            guard let tabBarItem = $0.tabBarItem, let playerNavigationItemType = PlayerNavigationItem.NavigationType(rawValue: tabBarItem.tag) else { return false }
             return playerNavigationItemType == playerNavigationItem.type
         } ).first
     }
@@ -120,6 +121,9 @@ extension DefaultPlayerContentContainerRouter {
         guard playerNavigationItem.type != self.playerNavigationItem?.type else { self.stop(true); return }
         guard let viewController = self.viewController(for: playerNavigationItem) else { return }
         self.playerContentContainerViewController?.selectedViewController = viewController
+
+        self.playerNavigationItem?.isSelected = false
         self.playerNavigationItem = playerNavigationItem
+        self.playerNavigationItem?.isSelected = true
     }
 }

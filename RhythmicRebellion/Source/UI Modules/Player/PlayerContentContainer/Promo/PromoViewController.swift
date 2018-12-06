@@ -58,6 +58,8 @@ final class PromoViewController: UIViewController {
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
 
+        guard self.isViewLoaded else { return }
+
         coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
 
         }) { (transitionCoordinatorContext) in

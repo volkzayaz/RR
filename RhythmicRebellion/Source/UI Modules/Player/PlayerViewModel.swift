@@ -54,8 +54,8 @@ protocol PlayerViewModel: class {
     func setPlayerItemProgress(progress: Float)
     func toggleArtistFollowing()
 
-    func canNavigate(to playerNavigationItemType: PlayerNavigationItemType) -> Bool
-    func navigate(to playerNavigationItemType: PlayerNavigationItemType)
+    func canNavigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) -> Bool
+    func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType)
 }
 
 protocol PlayerViewModelDelegate: class, ErrorPresenting {

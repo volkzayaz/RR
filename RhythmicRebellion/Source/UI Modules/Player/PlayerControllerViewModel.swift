@@ -226,14 +226,14 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         }
     }
 
-    func canNavigate(to playerNavigationItemType: PlayerNavigationItemType) -> Bool {
+    func canNavigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) -> Bool {
         switch playerNavigationItemType {
         case .lyrics, .promo, .video: return self.player.currentItem != nil
         case .playlist: return true
         }
     }
 
-    func navigate(to playerNavigationItemType: PlayerNavigationItemType) {
+    func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) {
         self.router?.navigate(to: playerNavigationItemType)
     }
 }
