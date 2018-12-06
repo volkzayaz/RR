@@ -97,6 +97,10 @@ extension PageContentViewController: WKNavigationDelegate {
         print("WebView error: \(error)")
     }
 
+    public func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError error: Error) {
+        self.viewModel.webViewFailed(with: error)
+    }
+
     public func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         print("didReceiveServerRedirectForProvisionalNavigation: \(navigation)")
     }

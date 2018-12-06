@@ -126,6 +126,10 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         self.pagesLocalStorage.save(snapshotImage: snapshotImage, for: self.page)
     }
 
+    func webViewFailed(with error: Error) {
+        self.router?.pageFailed(with: error)
+    }
+
     func updateUserOnPage() {
         guard let user = self.application.user else { return }
 

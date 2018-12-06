@@ -9,8 +9,13 @@
 
 import UIKit
 
+protocol PageContentRouterDelegate: AuthorizationNavigationDelgate {
+    func pageFailed(with error: Error)
+}
+
 protocol PageContentRouter: FlowRouter {
     func navigateToAuthorization()
+    func pageFailed(with error: Error)
 }
 
 final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompatible {
@@ -37,7 +42,7 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
 
     private(set) var dependencies: RouterDependencies
     private(set) var pagesLocalStorage: PagesLocalStorageService
-    private(set) weak var authorizationNavigationDelgate: AuthorizationNavigationDelgate?
+    private(set) weak var delegate: PageContentRouterDelegate?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -50,10 +55,10 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
         }
     }
 
-    init(dependencies: RouterDependencies, pagesLocalStorage: PagesLocalStorageService, authorizationNavigationDelgate: AuthorizationNavigationDelgate?) {
+    init(dependencies: RouterDependencies, pagesLocalStorage: PagesLocalStorageService, delegate: PageContentRouterDelegate?) {
         self.dependencies = dependencies
         self.pagesLocalStorage = pagesLocalStorage
-        self.authorizationNavigationDelgate = authorizationNavigationDelgate
+        self.delegate = delegate
     }
 
     func start(controller: PageContentViewController, page: Page) {
@@ -62,7 +67,11 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
         controller.configure(viewModel: vm, router: self)
     }
 
+    func pageFailed(with error: Error) {
+        self.delegate?.pageFailed(with: error)
+    }
+
     func navigateToAuthorization() {
-        self.authorizationNavigationDelgate?.selectAuthorizationTab(with: .signIn)
+        self.delegate?.selectAuthorizationTab(with: .signIn)
     }
 }

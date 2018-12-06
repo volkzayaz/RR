@@ -87,6 +87,10 @@ final class PagesControllerViewModel: PagesViewModel {
 
         self.router?.navigate(to: page, animated: false)
     }
+
+    func show(error: Error) {
+        self.delegate?.show(error: error)
+    }
 }
 
 extension PagesControllerViewModel : PagesLocalStorageServiceObserver {

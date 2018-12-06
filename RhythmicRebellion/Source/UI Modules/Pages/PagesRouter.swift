@@ -9,7 +9,7 @@
 
 import UIKit
 
-protocol PagesRouter: FlowRouter {
+protocol PagesRouter: FlowRouter, PageContentRouterDelegate {
 
     func navigate(to page: Page, animated: Bool)
 }
@@ -41,7 +41,8 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     private(set) weak var authorizationNavigationDelgate: AuthorizationNavigationDelgate?
     
     private(set) weak var viewModel: PagesViewModel?
-    private(set) weak var sourceController: UIViewController?
+    private(set) weak var pagesViewController: PagesViewController?
+    var sourceController: UIViewController? { return self.pagesViewController }
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -51,12 +52,12 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         switch destination {
         case .showPageContent(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, authorizationNavigationDelgate: self.authorizationNavigationDelgate)
+            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, delegate: self)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         case .showPageContentAnimated(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, authorizationNavigationDelgate: self.authorizationNavigationDelgate)
+            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, delegate: self)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         }
@@ -71,7 +72,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     }
 
     func start(controller: PagesViewController) {
-        sourceController = controller
+        pagesViewController = controller
         controller.navigationController?.delegate = self
         let vm = PagesControllerViewModel(router: self, pagesLocalStorage: self.pagesLocalStorage)
         controller.configure(viewModel: vm, router: self)
@@ -82,6 +83,19 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         self.sourceController?.navigationController?.popToRootViewController(animated: false)
 
         self.perform(segue: animated ? .showPageContentAnimated(page: page) : .showPageContent(page: page))
+    }
+}
+
+extension DefaultPagesRouter: PageContentRouterDelegate {
+    func pageFailed(with error: Error) {
+        self.pagesViewController?.navigationController?.popViewController(animated: true)
+
+        self.pagesViewController?.viewModel.show(error: error)
+
+    }
+
+    func selectAuthorizationTab(with authorizationType: AuthorizationType) {
+        self.authorizationNavigationDelgate?.selectAuthorizationTab(with: authorizationType)
     }
 }
 

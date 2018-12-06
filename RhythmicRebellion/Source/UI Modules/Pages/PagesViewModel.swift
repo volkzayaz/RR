@@ -22,9 +22,11 @@ protocol PagesViewModel: class {
     func indexPath(for page: Page) -> IndexPath?
 
     func navigateToPage(with url: URL)
+
+    func show(error: Error)
 }
 
-protocol PagesViewModelDelegate: class {
+protocol PagesViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()

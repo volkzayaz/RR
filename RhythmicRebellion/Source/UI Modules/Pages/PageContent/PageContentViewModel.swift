@@ -24,6 +24,8 @@ protocol PageContentViewModel: class {
 
     func snapshotRect(for bounds: CGRect) -> CGRect
     func save(snapshotImage: UIImage)
+
+    func webViewFailed(with error: Error)
 }
 
 protocol PageContentViewModelDelegate: class, ErrorPresenting {
