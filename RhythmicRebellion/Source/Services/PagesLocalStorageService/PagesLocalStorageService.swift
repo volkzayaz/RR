@@ -83,6 +83,23 @@ class PagesLocalStorageService: Observable {
         }
     }
 
+    func reset() {
+        guard self.pages.isEmpty == false else { return }
+
+        do {
+            let contentsOfDirectory = try FileManager.default.contentsOfDirectory(at: self.imageCacheDirectiryURL, includingPropertiesForKeys: nil)
+
+            try contentsOfDirectory.forEach { (itemURL) in
+                try FileManager.default.removeItem(at: itemURL)
+            }
+        } catch {
+            print("Can't clear imageCacheDirectiryURL")
+        }
+
+        self.pages.removeAll()
+        self.save()
+    }
+
     func snapshotImageURL(for page: Page) -> URL {
 
         let md5 = page.urlString.MD5()

@@ -37,7 +37,6 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     }
 
     private(set) var dependencies: RouterDependencies
-    private(set) var pagesLocalStorage: PagesLocalStorageService
     private(set) weak var authorizationNavigationDelgate: AuthorizationNavigationDelgate?
     
     private(set) weak var viewModel: PagesViewModel?
@@ -52,12 +51,12 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         switch destination {
         case .showPageContent(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, delegate: self)
+            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, delegate: self)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         case .showPageContentAnimated(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, pagesLocalStorage: self.pagesLocalStorage, delegate: self)
+            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, delegate: self)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         }
@@ -65,7 +64,6 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
 
     init(dependencies: RouterDependencies, authorizationNavigationDelgate: AuthorizationNavigationDelgate?) {
         self.dependencies = dependencies
-        self.pagesLocalStorage = PagesLocalStorageService()
         self.authorizationNavigationDelgate = authorizationNavigationDelgate
 
         super.init()
@@ -74,7 +72,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     func start(controller: PagesViewController) {
         pagesViewController = controller
         controller.navigationController?.delegate = self
-        let vm = PagesControllerViewModel(router: self, pagesLocalStorage: self.pagesLocalStorage)
+        let vm = PagesControllerViewModel(router: self, pagesLocalStorage: self.dependencies.pagesLocalStorageService)
         controller.configure(viewModel: vm, router: self)
     }
 

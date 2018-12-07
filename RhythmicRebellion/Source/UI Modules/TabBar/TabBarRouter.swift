@@ -101,6 +101,9 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
             case .home:
                 guard let homeNavigationController = viewController as? UINavigationController,
                     let homeViewController = homeNavigationController.viewControllers.first as? HomeViewController else { break }
+
+                homeNavigationController.popToRootViewController(animated: false)
+
                 let homeRouter = DefaultHomeRouter(dependencies: self.dependencies)
                 homeRouter.start(controller: homeViewController)
                 viewControllers.append(homeNavigationController)
@@ -115,6 +118,9 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
             case .pages:
                 guard let pagesNavigationController = viewController as? UINavigationController,
                     let pagesViwController = pagesNavigationController.viewControllers.first as? PagesViewController else { break }
+
+                pagesNavigationController.popToRootViewController(animated: false)
+
                 let pagesRouter = DefaultPagesRouter(dependencies: self.dependencies, authorizationNavigationDelgate: self)
                 pagesRouter.start(controller: pagesViwController)
                 viewControllers.append(pagesNavigationController)

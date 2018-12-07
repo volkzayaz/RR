@@ -74,6 +74,7 @@ class Application: Observable {
     private let webSocketServiceReachability: Reachability?
 
     let audioFileLocalStorageService: AudioFileLocalStorageService
+    let pagesLocalStorageService : PagesLocalStorageService
 
     private var needsLoadUser: Bool = false
 
@@ -87,6 +88,7 @@ class Application: Observable {
         self.webSocketService = webSocketService
 
         self.audioFileLocalStorageService = AudioFileLocalStorageService()
+        self.pagesLocalStorageService = PagesLocalStorageService()
 
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
         self.webSocketServiceReachability = Reachability(hostname: webSocketService.webSocketURL.host!)
@@ -146,6 +148,7 @@ class Application: Observable {
                 Defaults.lastSignedUserEmail = fanUser.profile.email
             }
             self.audioFileLocalStorageService.reset()
+            self.pagesLocalStorageService.reset()
             self.notifyUserChanged()
             self.needsLoadUser = false
             return
@@ -159,6 +162,7 @@ class Application: Observable {
             }
 
             self.audioFileLocalStorageService.reset()
+            self.pagesLocalStorageService.reset()
             self.notifyUserChanged()
         } else {
             if let prevFanUser = prevUser as? FanUser,
