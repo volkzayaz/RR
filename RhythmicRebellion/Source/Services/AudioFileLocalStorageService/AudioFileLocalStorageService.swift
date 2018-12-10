@@ -10,15 +10,15 @@ import Foundation
 import Alamofire
 
 protocol AudioFileLocalStorageServiceObserver: class {
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFile: TrackAudioFile)
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFile: TrackAudioFile)
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFile: TrackAudioFile)
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
 }
 
 extension AudioFileLocalStorageServiceObserver {
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFile: TrackAudioFile) { }
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFile: TrackAudioFile) { }
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFile: TrackAudioFile) { }
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
 }
 
 
@@ -171,24 +171,26 @@ class AudioFileLocalStorageService: NSObject, Observable {
         self.syncQueue.sync {
             let downloadTask = self.downloadSession.downloadTask(with: downloadURL)
             self.tasks[downloadTask.taskIdentifier] = downloadTask
-            self.items[trackAudioFile.id] = TrackAudioFileLocalItem(trackAudioFile: trackAudioFile,
-                                                                    state: .downloading(downloadTask.taskIdentifier, Progress(totalUnitCount: 0)))
+
+            let progress = Progress(totalUnitCount: 0)
+            let trackAudioFileLocalItem = TrackAudioFileLocalItem(trackAudioFile: trackAudioFile,
+                                                                  state: .downloading(downloadTask.taskIdentifier, progress))
+            self.items[trackAudioFile.id] = trackAudioFileLocalItem
 
             self.save()
 
             downloadTask.resume()
-        }
 
-        DispatchQueue.main.async {
-            self.observersContainer.invoke { (observer) in
-                observer.audioFileLocalStorageService(self, didStartDownload: trackAudioFile)
+            DispatchQueue.main.async {
+                self.observersContainer.invoke { (observer) in
+                    observer.audioFileLocalStorageService(self, didStartDownload: trackAudioFileLocalItem)
+                }
             }
         }
     }
 
     func cancelDownloading(for trackAudioFile: TrackAudioFile) {
 
-        var shouldNotify = false
 
         self.syncQueue.sync {
             guard let item = self.items[trackAudioFile.id] else { return }
@@ -198,18 +200,8 @@ class AudioFileLocalStorageService: NSObject, Observable {
                 guard let task = self.tasks[taskId] else { return }
 
                 task.cancel()
-                self.items[trackAudioFile.id] = nil
-                shouldNotify = true
 
             default: break
-            }
-        }
-
-        if shouldNotify {
-            DispatchQueue.main.async {
-                self.observersContainer.invoke { (observer) in
-                    observer.audioFileLocalStorageService(self, didCancelDownload: trackAudioFile)
-                }
             }
         }
     }
@@ -278,7 +270,8 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
             }
         }
 
-        completionHandler(disposition, credential)    }
+        completionHandler(disposition, credential)
+    }
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         print("URLSessionDidFinishEventsForBackgroundURLSession: \(session)")
@@ -352,14 +345,21 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
             }).first?.value else { self.save(); return }
 
             self.items[item.trackAudioFile.id] = nil
+
+            DispatchQueue.main.async { [item] in
+//                if let nsError = error as NSError?, nsError.code == NSURLErrorCancelled {
+                    self.observersContainer.invoke { (observer) in
+                        observer.audioFileLocalStorageService(self, didCancelDownload: item)
+//                    }
+                }
+            }
+
             self.save()
         }
     }
 
     // MARK: NSURLSessionDownloadDelegate
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-
-        var trackAudioFile: TrackAudioFile?
 
         self.syncQueue.sync {
             guard let item = self.items.filter ({
@@ -375,23 +375,22 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
                 try FileManager.default.copyItem(at: location, to: itemSuggestedLocalURL)
 
                 item.state = .downloaded(itemSuggestedLocalURL)
+
+                DispatchQueue.main.async {
+                    self.observersContainer.invoke { (observer) in
+                        observer.audioFileLocalStorageService(self, didFinishDownload: item)
+                    }
+                }
+
             } catch {
                 self.items[item.trackAudioFile.id] = nil
                 print(print("AudioFileLocalStorageService copy item error: \(error)"))
             }
 
             save()
-
-            trackAudioFile = item.trackAudioFile
         }
 
-        if let downloadedTrackAudioFile = trackAudioFile {
-            DispatchQueue.main.async {
-                self.observersContainer.invoke { (observer) in
-                    observer.audioFileLocalStorageService(self, didFinishDownload: downloadedTrackAudioFile)
-                }
-            }
-        }
+
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
@@ -399,6 +398,8 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
 //        if #available(iOS 11.0, *) {
 //            print("didWriteData task.progress: \(downloadTask.progress)")
 //        }
+
+        guard downloadTask.state != .canceling else { print("didWriteData for Canceling TASK!!!!!!"); return }
 
         self.syncQueue.sync {
 
@@ -409,10 +410,13 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
                 }
                 }).first?.value else { return }
 
+
             switch item.state {
             case .downloading(_, let progress):
-                progress.totalUnitCount = totalBytesExpectedToWrite
-                progress.completedUnitCount = totalBytesWritten
+                DispatchQueue.main.async {
+                    progress.totalUnitCount = totalBytesExpectedToWrite
+                    progress.completedUnitCount = totalBytesWritten
+                }
             default: break
             }
         }

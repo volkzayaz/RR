@@ -8,6 +8,11 @@
 
 import UIKit
 
+final class TrackAudioFileDownloadingProgress {
+
+    var observer: NSKeyValueObservation?
+    var callback: ((CGFloat) -> Void)?
+}
 
 struct TrackViewModel: TrackTableViewCellViewModel {
 

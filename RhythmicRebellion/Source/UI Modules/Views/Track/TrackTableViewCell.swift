@@ -44,6 +44,7 @@ protocol TrackTableViewCellViewModel {
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
     typealias ActionCallback = (Actions) -> Void
+    typealias DownloadProgressCallback = (CGFloat) -> Void
 
     enum Actions {
         case showActions
@@ -78,8 +79,6 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     var downloadButtonHintText: String?
 
     var isDownloadAllowed: Bool = false
-    var progressObserver: NSKeyValueObservation?
-
 
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
@@ -87,6 +86,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     var viewModelId: String = ""
 
     var actionCallback: ActionCallback?
+    var downloadProgressCallback: DownloadProgressCallback?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -102,6 +102,21 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         self.downloadButton.stopDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
         self.downloadButton.downloadedButton.cleanDefaultAppearance()
         self.downloadButton.downloadedButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+
+        self.downloadProgressCallback = { [weak self] (fractionCompleted) in
+
+            guard let self = self else { return }
+
+            switch self.downloadButton.state {
+            case .pending:
+                self.downloadButton.state = .downloading
+                self.downloadButton.stopDownloadButton.progress = fractionCompleted
+            case .downloading:
+                self.downloadButton.stopDownloadButton.progress = fractionCompleted
+
+            default: break
+            }
+        }
     }
 
     func prepareToDisplay(viewModel: TrackTableViewCellViewModel) {
@@ -125,7 +140,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         
     func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
-        self.progressObserver = nil
+
         self.downloadButton.state = .startDownload
 
         self.viewModelId = viewModel.id
@@ -177,9 +192,10 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                     self.isDownloadAllowed = false
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Follow")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
-                    self.downloadButton.state = .startDownload
+//                    self.downloadButton.state = .startDownload
                 case .ready:
                     self.isDownloadAllowed = true
+//                    self.downloadButton.state = .startDownload
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
                 case .downloading(let progress):
@@ -188,15 +204,6 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
                     self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
                     self.downloadButton.state = progress.fractionCompleted == 0.0 ? .pending : .downloading
 
-                    self.progressObserver = progress.observe(\.fractionCompleted) { (pobject, _) in
-                        let value = pobject.fractionCompleted
-                        DispatchQueue.main.async {
-                            if self.downloadButton.state != .downloading {
-                                self.downloadButton.state = .downloading
-                            }
-                            self.downloadButton.stopDownloadButton.progress = CGFloat(value)
-                        }
-                    }
                 case .downloaded:
                     self.isDownloadAllowed = true
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -260,15 +267,11 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
 
         switch state {
         case .startDownload:
-            self.downloadButton.state = .pending
-            self.downloadButton.pendingView.startSpin()
             actionCallback?(.download)
         case .pending:
-            self.downloadButton.state = .startDownload
             actionCallback?(.cancelDownloading)
             break
         case .downloading:
-            self.downloadButton.state = .startDownload
             actionCallback?(.cancelDownloading)
         case .downloaded:
             actionCallback?(.openIn(downloadButton.frame, self.stackView))

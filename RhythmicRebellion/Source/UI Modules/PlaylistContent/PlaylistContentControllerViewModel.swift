@@ -25,6 +25,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     private var playlist: Playlist
     private var playlistItems: [Track]?
 
+    private var trackAudioFilesProgress: [Int : TrackAudioFileDownloadingProgress]
+
     private var lockedPlaylistItemsIds: Set<Int>
 
     var isPlaylistEmpty: Bool { return self.playlistItems?.isEmpty ?? false }
@@ -48,6 +50,8 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         
         self.playlist = playlist
         self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 7.0))
+
+        self.trackAudioFilesProgress = [ : ]
 
         self.trackPriceFormatter = MoneyFormatter()
         self.lockedPlaylistItemsIds = Set<Int>()
@@ -104,6 +108,15 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
                               textImageGenerator: self.textImageGenerator,
                               isCurrentInPlayer: player?.currentItem?.playlistItem.track.id == track.id,
                               isLockedForActions: self.lockedPlaylistItemsIds.contains(track.id))
+    }
+
+    func setupDowloadingProgresForObject(at indexPath: IndexPath, with callback: ((CGFloat) -> Void)?) {
+        guard let playlistItems = self.playlistItems, indexPath.item < playlistItems.count,
+            let trackAudioFile = playlistItems[indexPath.item].audioFile else { return }
+
+        if let trackAudioFileDownloadingProgress = self.trackAudioFilesProgress[trackAudioFile.id] {
+            trackAudioFileDownloadingProgress.callback = callback
+        }
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -483,13 +496,26 @@ extension PlaylistContentControllerViewModel: PlayerObserver {
 
 extension PlaylistContentControllerViewModel: AudioFileLocalStorageServiceObserver {
 
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFile: TrackAudioFile) {
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
+
+        switch trackAudioFileLocalItem.state {
+        case .downloading(_, let progress):
+            let trackAudioFileDownloadingProgress = TrackAudioFileDownloadingProgress()
+            trackAudioFileDownloadingProgress.observer = progress.observe(\.fractionCompleted) { [unowned trackAudioFileDownloadingProgress]  (pobject, _) in
+                trackAudioFileDownloadingProgress.callback?(CGFloat(pobject.fractionCompleted))
+            }
+
+            self.trackAudioFilesProgress[trackAudioFileLocalItem.trackAudioFile.id] = trackAudioFileDownloadingProgress
+
+        default: break
+        }
+
         guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
 
         for (index, track) in playlistItems.enumerated() {
-            guard let audioFile = track.audioFile, audioFile.id == trackAudioFile.id else { continue }
+            guard let audioFile = track.audioFile, audioFile.id == trackAudioFileLocalItem.trackAudioFile.id else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
 
@@ -498,13 +524,16 @@ extension PlaylistContentControllerViewModel: AudioFileLocalStorageServiceObserv
         }
     }
 
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFile: TrackAudioFile) {
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
+
+        self.trackAudioFilesProgress[trackAudioFileLocalItem.trackAudioFile.id] = nil
+
         guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
 
         for (index, track) in playlistItems.enumerated() {
-            guard let audioFile = track.audioFile, audioFile.id == trackAudioFile.id else { continue }
+            guard let audioFile = track.audioFile, audioFile.id == trackAudioFileLocalItem.trackAudioFile.id else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
 
@@ -513,13 +542,16 @@ extension PlaylistContentControllerViewModel: AudioFileLocalStorageServiceObserv
         }
     }
 
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFile: TrackAudioFile) {
+    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
+
+        self.trackAudioFilesProgress[trackAudioFileLocalItem.trackAudioFile.id] = nil
+
         guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
 
         for (index, track) in playlistItems.enumerated() {
-            guard let audioFile = track.audioFile, audioFile.id == trackAudioFile.id else { continue }
+            guard let audioFile = track.audioFile, audioFile.id == trackAudioFileLocalItem.trackAudioFile.id else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
 

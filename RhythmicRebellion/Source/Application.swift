@@ -146,9 +146,11 @@ class Application: Observable {
             self.user = user
             if let fanUser = user as? FanUser {
                 Defaults.lastSignedUserEmail = fanUser.profile.email
+            } else {
+                self.audioFileLocalStorageService.reset()
+                self.pagesLocalStorageService.reset()
             }
-            self.audioFileLocalStorageService.reset()
-            self.pagesLocalStorageService.reset()
+
             self.notifyUserChanged()
             self.needsLoadUser = false
             return

@@ -188,6 +188,8 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
             }
         }
 
+        self.viewModel.setupDowloadingProgresForObject(at: indexPath, with: trackItemTableViewCell.downloadProgressCallback)
+
         return trackItemTableViewCell
     }
     
