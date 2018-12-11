@@ -10,6 +10,8 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
+//import os.log
+
 private var playerKVOContext = 0
 
 public enum PlayerStatus : Int {
@@ -182,6 +184,7 @@ class Player: NSObject, Observable {
     private var deferredPlaylistItemsPatches = [[String : PlayerPlaylistItemPatch?]]()
     private var defferedTrackId: TrackId?
 
+//    let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Player")
 
     init(with application: Application) {
 
@@ -791,17 +794,27 @@ class Player: NSObject, Observable {
     @objc func audioSessionInterrupted(_ notification: Notification) {
         print("interruption received: \(notification)")
 
+//        os_log("audioSessionInterrupted", log: self.log)
+
+
         guard let userInfo = notification.userInfo,
             let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
             let type = AVAudioSessionInterruptionType(rawValue: typeValue) else { return }
 
         if type == .began {
+
+//            os_log("audioSessionInterrupted type: .egan", log: self.log)
             self.audioSessionIsInterrupted = true
             let pauseBackgroundtask = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
             self.state.playingBeforeAudioSessionInterruption = self.state.playing
-            self.pause { UIApplication.shared.endBackgroundTask(pauseBackgroundtask) }
+            self.pause {
+//                os_log("audioSessionInterrupted didPause", log: self.log)
+                UIApplication.shared.endBackgroundTask(pauseBackgroundtask)
+            }
 
         } else if type == .ended {
+
+//            os_log("audioSessionInterrupted type: .ended", log: self.log)
 
             self.player.pause()
             self.audioSessionIsInterrupted = false
@@ -812,15 +825,20 @@ class Player: NSObject, Observable {
             }
 
             if self.webSocketService.state.isConnected == false {
+
+//                os_log("audioSessionInterrupted websocket not connected", log: self.log)
+
                 self.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                 if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
                     self.initializationAction = .playCurrent
                 }
                 if self.webSocketService.state == .disconnected {
+//                    os_log("audioSessionInterrupted websocket reconnect", log: self.log)
                     self.webSocketService.reconnect()
                 }
             } else {
                 if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
+//                    os_log("audioSessionInterrupted just play ", log: self.log)
                     self.player.play()
                 }
             }
