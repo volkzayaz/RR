@@ -42,7 +42,10 @@ class PlayerPlaylist {
     private(set) var playlistItems = [String : PlayerPlaylistItem]()
     private(set) var reservedPlaylistItemsKeys = Set<String>()
     private(set) var tracksAddons = [Int : Set<Addon>]()
+    private(set) var addonsTypesWeight: [Addon.AddonType] = [.advertisement, .artistBIO, .songCommentary, .artistAnnouncements, .songIntroduction]
+
     private(set) var tracksTotalPlayMSeconds = [Int : UInt64]()
+
 
     // MARK: - Tracks -
     var orderedPlaylistItems: [PlayerPlaylistItem] {
@@ -231,7 +234,14 @@ class PlayerPlaylist {
     func addons(for track: Track, addonsIds: [Int]) -> [Addon]? {
         guard let allAddons = self.tracksAddons[track.id] else { return nil }
 
-        return allAddons.filter{ addonsIds.contains($0.id) } 
+        let filteredAddons = allAddons.filter{ addonsIds.contains($0.id) }
+
+        return filteredAddons.sorted(by: { (firstAddon, secondAddon) -> Bool in
+            guard let firstAddonTypeWeight = self.addonsTypesWeight.index(of: firstAddon.type) else { return false }
+            guard let secondAddonTypeWeight = self.addonsTypesWeight.index(of: secondAddon.type) else { return true }
+
+            return firstAddonTypeWeight <= secondAddonTypeWeight
+        })
 
 //        var addons = [Addon]()
 //        for addonId in addonsIds {

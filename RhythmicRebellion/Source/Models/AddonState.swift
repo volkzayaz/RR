@@ -14,7 +14,7 @@ struct AddonState: Codable {
     let typeValue: Int
     let trackId: Int
 
-    var type: AddonType { return AddonType(rawValue: typeValue) ?? .unknown}
+    var type: Addon.AddonType { return Addon.AddonType(rawValue: typeValue) ?? .unknown}
 
     enum CodingKeys: String, CodingKey {
         case id
