@@ -295,6 +295,8 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
         self.playerItemProgressView.restrictedValue = self.viewModel.playerItemRestrictedValue
 
+        self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
+
         self.playerItemCurrentTimeLabel.text = self.viewModel.playerItemCurrentTimeString
         if self.playerItemProgressView.isTracking == false {
             self.playerItemProgressView.setValue(self.viewModel.playerItemProgressValue, animated: true)

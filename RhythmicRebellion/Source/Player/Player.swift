@@ -108,7 +108,7 @@ class Player: NSObject, Observable {
     }
 
     var canSeek: Bool {
-        guard let currentQueueItem = self.playerQueue.currentItem else { return false }
+        guard self.state.initialized, let currentQueueItem = self.playerQueue.currentItem else { return false }
 
         switch currentQueueItem.content {
         case .addon(_), .stub(_): return false
@@ -162,7 +162,10 @@ class Player: NSObject, Observable {
     @objc private var player = AVQueuePlayer()
     var timeObserverToken: Any?
 
-    var isPlaying: Bool { return self.player.rate == 1.0 || self.currentTrackState?.isPlaying ?? false == true }
+    var isPlaying: Bool {
+        guard self.state.initialized else { return self.state.playing }
+
+        return self.state.playing || self.currentTrackState?.isPlaying ?? false == true }
 
     var playerCurrentItem: AVPlayerItem? { return self.player.currentItem }
     var playerCurrentItemDuration: TimeInterval? {
@@ -520,16 +523,19 @@ class Player: NSObject, Observable {
 
     // MARK: - Actions
     func play(completion: (() -> ())? = nil) {
+
+        self.state.playing = true
+
         guard self.state.initialized,
                 let currentPlayerItem = self.playerQueue.playerItem
                 else {
-                    self.state.playing = true
+                    self.currentTrackState = TrackState(hash: self.stateHash, progress: self.currentTrackState?.progress ?? 0.0, isPlaying: self.state.playing)
                     self.player.play()
                     completion?()
                     return
         }
 
-        self.state.playing = true
+
 
         let prepareQueueCompletion: ((Error?) -> ()) = { [weak self] (error) in
             guard error == nil else { self?.player.play(); completion?(); return }
@@ -596,7 +602,10 @@ class Player: NSObject, Observable {
         self.state.playing = false
         self.player.pause()
 
-        guard self.state.initialized, self.playerCurrentItem != nil else { completion?(); return }
+        guard self.state.initialized, let currentPlayerItem = self.playerQueue.playerItem else {
+            completion?()
+            return
+        }
 
         let playerCurrentItemCurrentTime = self.currentTrackState?.progress ?? 0.0
         let trackState = TrackState(hash: self.stateHash, progress: playerCurrentItemCurrentTime, isPlaying: false)
@@ -1029,6 +1038,8 @@ extension Player: WebSocketServiceObserver {
 
     func set(trackState: TrackState, completion: ((Error?) -> ())? = nil) {
 
+        guard self.state.initialized else { completion?(self.error()); return }
+
         let webSocketCommand = WebSocketCommand.setTrackState(trackState: trackState)
         self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
             guard error == nil else { completion?(error); return }
@@ -1090,6 +1101,10 @@ extension Player: WebSocketServiceObserver {
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.nextTrackCommand.isEnabled = self.canForward
         commandCenter.previousTrackCommand.isEnabled = self.canBackward
+
+        self.observersContainer.invoke({ (observer) in
+            observer.player(player: self, didChange: .failed)
+        })
 
         if self.audioSessionIsInterrupted == false && self.webSocketService.isReachable {
             self.webSocketService.reconnect()
