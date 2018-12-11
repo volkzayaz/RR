@@ -98,7 +98,10 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         guard let playlistItems = self.playlistItems, let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
 
         if !viewModel.isCurrentInPlayer {
-            self.player?.performAction(.playNow, for: playlistItems[indexPath.item], completion: nil)
+            self.player?.performAction(.playNow, for: playlistItems[indexPath.item], completion: { [weak self] (error) in
+                guard let error = error else { return }
+                self?.delegate?.show(error: error)
+            })
         } else {
             if viewModel.isPlaying {
                 player?.pause()
