@@ -12,23 +12,27 @@ import AVFoundation
 class PlayerQueueItem {
 
     enum Content {
-        case addon(Addon)
         case stub(AudioFile)
+        case addon(Addon)
         case track(Track)
     }
 
     let content: Content
+    let playerItem: AVPlayerItem
 
-    init(with addon: Addon) {
+    init(with addon: Addon, playerItem: AVPlayerItem) {
         self.content = .addon(addon)
+        self.playerItem = playerItem
     }
 
-    init(with track: Track) {
+    init(with track: Track, playerItem: AVPlayerItem) {
         self.content = .track(track)
+        self.playerItem = playerItem
     }
 
-    init(with audioFile: AudioFile) {
-        self.content = .stub(audioFile)
+    init(with stubAudioFile: AudioFile, playerItem: AVPlayerItem) {
+        self.content = .stub(stubAudioFile)
+        self.playerItem = playerItem
     }
 }
 
@@ -42,34 +46,33 @@ class PlayerQueue {
     }
 
     var containsOnlyTrack: Bool {
-        return self.addons?.isEmpty ?? true && self.playerItems.isEmpty == false
+        return self.addons?.isEmpty ?? true && self.items.isEmpty == false
     }
 
     var isEmpty: Bool {
-        return self.playerItems.isEmpty
+        return self.items.isEmpty
     }
 
     var currentItem: PlayerQueueItem? {
-        guard let playerItem = self.playerItems.first, let urlAsset = playerItem.asset as? AVURLAsset else { return nil }
-        return self.itemsInfo[urlAsset.url.absoluteString]
+        return self.items.first
     }
 
+    private var items = [PlayerQueueItem]()
 
-    private var itemsInfo = [String : PlayerQueueItem]()
-    private(set) var playerItems = [AVPlayerItem]()
+    var playerItems: [AVPlayerItem] {
+        return self.items.map { $0.playerItem }
+    }
 
     private func makeItems() {
 
-        self.itemsInfo.removeAll()
-        self.playerItems.removeAll()
+        self.items.removeAll()
 
         guard self.playerItem?.stubReason == nil else {
 
             self.addons = []
 
-            if let stubAudioFile = self.playerItem?.stubReason?.audioFile, let stubAudioFileURL = URL(string: stubAudioFile.urlString) {
-                itemsInfo[stubAudioFile.urlString] = PlayerQueueItem(with: stubAudioFile)
-                playerItems.append(AVPlayerItem(url: stubAudioFileURL))
+            if let stubAudioFile = self.playerItem?.stubReason?.audioFile, let playerItemURL = URL(string: stubAudioFile.urlString) {
+                self.items.append(PlayerQueueItem(with: stubAudioFile, playerItem: AVPlayerItem(url: playerItemURL)))
             }
 
             return
@@ -77,13 +80,11 @@ class PlayerQueue {
 
         for addon in self.addons ?? [] {
             guard let playerItemURL = URL(string: addon.audioFile.urlString) else { continue }
-            itemsInfo[addon.audioFile.urlString] = PlayerQueueItem(with: addon)
-            playerItems.append(AVPlayerItem(url: playerItemURL))
+            self.items.append(PlayerQueueItem(with: addon, playerItem: AVPlayerItem(url: playerItemURL)))
         }
 
         if let track = self.playerItem?.playlistItem.track, let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
-            itemsInfo[audioFile.urlString] = PlayerQueueItem(with: track)
-            playerItems.append(AVPlayerItem(url: playerItemURL))
+            items.append(PlayerQueueItem(with: track, playerItem: AVPlayerItem(url: playerItemURL)))
         }
     }
 
@@ -109,12 +110,10 @@ class PlayerQueue {
     }
 
     func dequeueFirst() {
-        guard self.playerItems.isEmpty == false else { return }
-        let playerItem = self.playerItems.removeFirst()
-        guard let urlAsset = playerItem.asset as? AVURLAsset else { return }
-        guard let queueItem = self.itemsInfo.removeValue(forKey: urlAsset.url.absoluteString) else { return }
+        guard self.items.isEmpty == false else { return }
+        let playerQueueItem = self.items.removeFirst()
 
-        switch queueItem.content {
+        switch playerQueueItem.content {
         case .addon(let addon):
             if let addonIndex = self.addons?.index(of: addon) {
                 self.addons?.remove(at: addonIndex)
