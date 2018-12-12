@@ -338,7 +338,7 @@ class Player: NSObject, Observable {
         var trackStubReason: TrackStubReason?
         repeat {
             guard let nextPlaylistItem = self.playlist.nextPlaylistItem(for: currentPlaylistItem, cycled: true),
-                nextPlaylistItem != playlistItem else { return nil }
+                nextPlaylistItem != playlistItem else { return playlistItem }
             currentPlaylistItem = nextPlaylistItem
             trackStubReason = self.stubReason(for: nextPlaylistItem.track)
         } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile == nil)
@@ -352,7 +352,7 @@ class Player: NSObject, Observable {
         var trackStubReason: TrackStubReason?
         repeat {
             guard let previousPlaylistItem = self.playlist.previousPlaylistItem(for: currentPlaylistItem, cycled: true),
-                previousPlaylistItem != playlistItem else { return nil }
+                previousPlaylistItem != playlistItem else { return playlistItem }
             currentPlaylistItem = previousPlaylistItem
             trackStubReason = self.stubReason(for: previousPlaylistItem.track)
         } while currentPlaylistItem.track.isPlayable == false && (trackStubReason == nil || trackStubReason?.audioFile == nil)
