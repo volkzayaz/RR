@@ -812,13 +812,15 @@ class Player: NSObject, Observable {
 
         if type == .began {
 
-//            os_log("audioSessionInterrupted type: .egan", log: self.log)
+//            os_log("audioSessionInterrupted type: .began", log: self.log)
             self.audioSessionIsInterrupted = true
-            let pauseBackgroundtask = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
             self.state.playingBeforeAudioSessionInterruption = self.state.playing
-            self.pause {
-//                os_log("audioSessionInterrupted didPause", log: self.log)
-                UIApplication.shared.endBackgroundTask(pauseBackgroundtask)
+            if self.state.playing {
+                let pauseBackgroundtask = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                self.pause {
+    //                os_log("audioSessionInterrupted didPause", log: self.log)
+                    UIApplication.shared.endBackgroundTask(pauseBackgroundtask)
+                }
             }
 
         } else if type == .ended {
@@ -848,7 +850,7 @@ class Player: NSObject, Observable {
             } else {
                 if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
 //                    os_log("audioSessionInterrupted just play ", log: self.log)
-                    self.player.play()
+                    self.play()
                 }
             }
 
@@ -946,6 +948,7 @@ extension Player: WebSocketServiceObserver {
 
         self.state.playing = false
         self.player.pause()
+        self.currentTrackState = nil
 
         var currentPlayerItem: PlayerItem? = nil
         if let playerPlaylistItem = self.playlist.playListItem(for: currentTrackId) {
@@ -966,15 +969,15 @@ extension Player: WebSocketServiceObserver {
 
     func apply(currentTrackState: TrackState) {
 
-        self.currentTrackState = currentTrackState
 
-        if currentTrackState.progress > 1.0 {
-            self.playerQueue.replace(addons: [])
-        }
-
-        if self.stateHash != currentTrackState.hash {
+        if self.stateHash != currentTrackState.hash || self.currentTrackState == nil {
             self.state.playing = false
             self.player.pause()
+            self.currentTrackState = currentTrackState
+
+            if currentTrackState.progress > 1.0 {
+                self.playerQueue.replace(addons: [])
+            }
         }
     }
 
@@ -1040,9 +1043,10 @@ extension Player: WebSocketServiceObserver {
 
         guard self.state.initialized else { completion?(self.error()); return }
 
+
         let webSocketCommand = WebSocketCommand.setTrackState(trackState: trackState)
         self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
-            guard error == nil else { completion?(error); return }
+            guard error == nil else { print("Set trackstate erorr: \(error)"); completion?(error); return }
 
             if let strongSelf = self, strongSelf.isMaster == false {
                 strongSelf.isMasterStateSendDate = Date()

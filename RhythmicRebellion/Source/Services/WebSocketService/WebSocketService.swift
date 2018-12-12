@@ -128,6 +128,9 @@ class WebSocketService: WebSocketDelegate, Observable {
     }
 
     func disconnect() {
+
+        print("WebSocket disconnect!!!!")
+
         self.webSocket?.disconnect()
     }
 
@@ -170,6 +173,9 @@ class WebSocketService: WebSocketDelegate, Observable {
         print("websocketDidDisconnect: \(String(describing: error))")
 
         self.state = .disconnected
+
+        self.webSocket?.delegate = nil
+        self.webSocket = nil
 
         self.observersContainer.invoke({ (observer) in
             observer.webSocketServiceDidDisconnect(self)

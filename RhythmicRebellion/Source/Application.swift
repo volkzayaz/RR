@@ -110,7 +110,7 @@ class Application: Observable {
 
         self.webSocketServiceReachability?.whenReachable = { [unowned self] _ in
             self.webSocketService.isReachable = true
-            guard let user = self.user else { return }
+            guard let user = self.user, self.webSocketService.state == .disconnected else { return }
             self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
         }
 
