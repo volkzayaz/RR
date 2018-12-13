@@ -1334,6 +1334,11 @@ extension Player: ApplicationObserver {
         })
     }
 
+    func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState) {
+
+        self.playlist.resetAddons(for: skipArtistAddonsState.artistId)
+    }
+
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
         let changedIdsSet = Set(added).union(removed)
         guard let currentItem = self.currentItem, changedIdsSet.contains(currentItem.playlistItem.track.id) else { return }

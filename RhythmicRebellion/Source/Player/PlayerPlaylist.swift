@@ -137,6 +137,7 @@ class PlayerPlaylist {
 
         self.reservedPlaylistItemsKeys.removeAll()
         self.playlistItems.removeAll()
+        self.resetAddons()
 
         var newPlayListItems = [String : PlayerPlaylistItem]()
         for (key, value) in playlistItemsPaths {
@@ -159,12 +160,21 @@ class PlayerPlaylist {
 
     func update(with playlistItemsPaths: [String : PlayerPlaylistItemPatch?]) {
 
-        guard playlistItemsPaths.count > 0 else { self.playlistItems.removeAll(); return }
+        guard playlistItemsPaths.count > 0 else {
+            self.playlistItems.removeAll()
+            self.resetAddons()
+            return
+        }
 
         playlistItemsPaths.forEach { (key, playListItemPath) in
-            guard let playListItemPatch = playListItemPath else { self.playlistItems.removeValue(forKey: key)
-                                                                  self.reservedPlaylistItemsKeys.remove(key)
-                                                                  return }
+            guard let playListItemPatch = playListItemPath else {
+                if let playlistItem = self.playlistItems.removeValue(forKey: key) {
+                    self.resetAddons(for: [playlistItem.track.id])
+                }
+                self.reservedPlaylistItemsKeys.remove(key)
+                return
+            }
+
             guard let playlistItem = self.playlistItems[key] else {
 
                 guard let trackId = playListItemPatch.trackId,
@@ -212,6 +222,19 @@ class PlayerPlaylist {
     func resetAddons() {
         self.tracksAddons.removeAll()
     }
+
+    func resetAddons(for artistId: String) {
+
+        let artistTrackIds =  self.tracks.filter { $0.artist.id == artistId }.map { $0.id }
+        if artistTrackIds.isEmpty == false {
+            self.resetAddons(for: artistTrackIds)
+        }
+    }
+
+    func resetAddons(for trackIds: [Int]) {
+        trackIds.forEach { self.tracksAddons[$0] = nil }
+    }
+
 
     func add(tracksAddons: [Int : [Addon]]) {
 
