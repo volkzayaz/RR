@@ -20,8 +20,6 @@ protocol PlaylistContentViewModel: class {
     func numberOfItems(in section: Int) -> Int
     func object(at indexPath: IndexPath) -> TrackViewModel?
 
-    func setupDowloadingProgresForObject(at indexPath: IndexPath, with callback: ((CGFloat) -> Void)?)
-
     func selectObject(at indexPath: IndexPath)
 
     func playlistActions() -> PlaylistActionsViewModels.ViewModel?

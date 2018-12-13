@@ -27,12 +27,6 @@ class AudioFileLocalStorageService: NSObject, Observable {
     typealias ObserverType = AudioFileLocalStorageServiceObserver
     let observersContainer = ObserversContainer<ObserverType>()
 
-
-    enum AudioFileState {
-        case downloaded(String)
-        case loading(Progress)
-    }
-
     let syncQueue: DispatchQueue
 
     var items: [Int: TrackAudioFileLocalItem]
@@ -152,9 +146,9 @@ class AudioFileLocalStorageService: NSObject, Observable {
         }
     }
 
-    func state(for trackAudioFile: TrackAudioFile) -> TrackAudioFileLocalItemState? {
+    func state(for trackAudioFile: TrackAudioFile) -> TrackAudioFileLocalItem.State? {
 
-        var state: TrackAudioFileLocalItemState? = nil
+        var state: TrackAudioFileLocalItem.State? = nil
 
         self.syncQueue.sync {
             guard let item = self.items[trackAudioFile.id] else { return }
@@ -172,9 +166,8 @@ class AudioFileLocalStorageService: NSObject, Observable {
             let downloadTask = self.downloadSession.downloadTask(with: downloadURL)
             self.tasks[downloadTask.taskIdentifier] = downloadTask
 
-            let progress = Progress(totalUnitCount: 0)
             let trackAudioFileLocalItem = TrackAudioFileLocalItem(trackAudioFile: trackAudioFile,
-                                                                  state: .downloading(downloadTask.taskIdentifier, progress))
+                                                                  state: .downloading(TrackAudioFileDownloadingInfo(with: downloadTask.taskIdentifier)))
             self.items[trackAudioFile.id] = trackAudioFileLocalItem
 
             self.save()
@@ -196,8 +189,8 @@ class AudioFileLocalStorageService: NSObject, Observable {
             guard let item = self.items[trackAudioFile.id] else { return }
 
             switch item.state {
-            case .downloading(let taskId, _):
-                guard let task = self.tasks[taskId] else { return }
+            case .downloading(let downloadingInfo):
+                guard let task = self.tasks[downloadingInfo.taskIdentifier] else { return }
 
                 task.cancel()
 
@@ -339,7 +332,7 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
 
             guard error != nil, let item = self.items.filter ({
                 switch $0.value.state {
-                case .downloading(let taskIdentifier, _): return taskIdentifier == task.taskIdentifier
+                case .downloading(let downloadingInfo): return downloadingInfo.taskIdentifier == task.taskIdentifier
                 default: return false
                 }
             }).first?.value else { self.save(); return }
@@ -364,7 +357,7 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
         self.syncQueue.sync {
             guard let item = self.items.filter ({
                 switch $0.value.state {
-                case .downloading(let taskIdentifier, _): return taskIdentifier == downloadTask.taskIdentifier
+                case .downloading(let downloadingInfo): return downloadingInfo.taskIdentifier == downloadTask.taskIdentifier
                 default: return false
                 }
             }).first?.value else { return }
@@ -405,18 +398,16 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
 
             guard let item = self.items.filter ({
                 switch $0.value.state {
-                case .downloading(let taskIdentifier, _): return taskIdentifier == downloadTask.taskIdentifier
+                case .downloading(let downloadingInfo): return downloadingInfo.taskIdentifier == downloadTask.taskIdentifier
                 default: return false
                 }
                 }).first?.value else { return }
 
 
             switch item.state {
-            case .downloading(_, let progress):
-                DispatchQueue.main.async {
-                    progress.totalUnitCount = totalBytesExpectedToWrite
-                    progress.completedUnitCount = totalBytesWritten
-                }
+            case .downloading(let downloadingInfo):
+                downloadingInfo.updateProgress(with: totalBytesExpectedToWrite, completedUnitCount: totalBytesWritten)
+
             default: break
             }
         }
@@ -432,16 +423,14 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
 
             guard let item = self.items.filter ({
                 switch $0.value.state {
-                case .downloading(let taskIdentifier, _): return taskIdentifier == downloadTask.taskIdentifier
+                case .downloading(let downloadingInfo): return downloadingInfo.taskIdentifier == downloadTask.taskIdentifier
                 default: return false
                 }
             }).first?.value else { return }
 
             switch item.state {
-            case .downloading(_, let progress):
-
-                progress.totalUnitCount = expectedTotalBytes
-                progress.completedUnitCount = fileOffset
+            case .downloading(let downloadingInfo):
+                downloadingInfo.updateProgress(with: expectedTotalBytes, completedUnitCount: fileOffset)
             default: break
             }
         }

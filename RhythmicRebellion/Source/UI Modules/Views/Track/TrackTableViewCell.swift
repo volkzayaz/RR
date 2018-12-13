@@ -13,7 +13,7 @@ import DownloadButton
 enum TrackDownloadState {
     case disable
     case ready
-    case downloading(Progress)
+    case downloading(TrackAudioFileDownloadingInfo)
     case downloaded
 }
 
@@ -44,7 +44,6 @@ protocol TrackTableViewCellViewModel {
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
     typealias ActionCallback = (Actions) -> Void
-    typealias DownloadProgressCallback = (CGFloat) -> Void
 
     enum Actions {
         case showActions
@@ -86,7 +85,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     var viewModelId: String = ""
 
     var actionCallback: ActionCallback?
-    var downloadProgressCallback: DownloadProgressCallback?
+    weak var downloadingInfo: TrackAudioFileDownloadingInfo?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -102,21 +101,6 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         self.downloadButton.stopDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
         self.downloadButton.downloadedButton.cleanDefaultAppearance()
         self.downloadButton.downloadedButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
-
-        self.downloadProgressCallback = { [weak self] (fractionCompleted) in
-
-            guard let self = self else { return }
-
-            switch self.downloadButton.state {
-            case .pending:
-                self.downloadButton.state = .downloading
-                self.downloadButton.stopDownloadButton.progress = fractionCompleted
-            case .downloading:
-                self.downloadButton.stopDownloadButton.progress = fractionCompleted
-
-            default: break
-            }
-        }
     }
 
     func prepareToDisplay(viewModel: TrackTableViewCellViewModel) {
@@ -131,16 +115,22 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         if self.downloadButton.state == .pending {
             self.downloadButton.pendingView.startSpin()
         }
+
+        self.downloadingInfo?.addObserver(self)
+
     }
 
     func prepareToEndDisplay() {
-         equalizer.pause()
+        self.equalizer.pause()
+        self.downloadingInfo?.removeObserver(self)
     }
 
         
     func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
-
+        self.downloadingInfo?.removeObserver(self)
+        self.downloadingInfo = nil
+        
         self.downloadButton.state = .startDownload
 
         self.viewModelId = viewModel.id
@@ -198,11 +188,12 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 //                    self.downloadButton.state = .startDownload
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
-                case .downloading(let progress):
+                case .downloading(let downloadingInfo):
                     self.isDownloadAllowed = true
                     self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
-                    self.downloadButton.state = progress.fractionCompleted == 0.0 ? .pending : .downloading
+                    self.downloadButton.state = downloadingInfo.progress.fractionCompleted == 0.0 ? .pending : .downloading
+                    self.downloadingInfo = downloadingInfo
 
                 case .downloaded:
                     self.isDownloadAllowed = true
@@ -278,4 +269,21 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
         }
     }
 
+}
+
+extension TrackTableViewCell: TrackAudioFileDownloadingInfoObserver {
+
+    func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) {
+
+        switch self.downloadButton.state {
+        case .pending:
+            self.downloadButton.state = .downloading
+            self.downloadButton.stopDownloadButton.progress = CGFloat(progress.fractionCompleted)
+        case .downloading:
+            self.downloadButton.stopDownloadButton.progress = CGFloat(progress.fractionCompleted)
+
+        default: break
+        }
+
+    }
 }

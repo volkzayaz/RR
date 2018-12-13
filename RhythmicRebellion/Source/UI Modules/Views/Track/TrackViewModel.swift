@@ -72,7 +72,7 @@ extension TrackViewModel {
                 if let audioFile = track.audioFile, let state = audioFileLocalStorageService?.state(for: audioFile) {
                     switch state {
                     case .downloaded( _ ): self.downloadState = .downloaded
-                    case .downloading(_, let progress): self.downloadState = .downloading(progress)
+                    case .downloading(let downloadingInfo): self.downloadState = .downloading(downloadingInfo)
                     case .unknown: break
                     }
                 }

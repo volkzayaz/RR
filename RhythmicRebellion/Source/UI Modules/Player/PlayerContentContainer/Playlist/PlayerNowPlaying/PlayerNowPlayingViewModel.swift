@@ -21,8 +21,6 @@ protocol PlayerNowPlayingViewModel: class {
     func numberOfItems(in section: Int) -> Int
     func object(at indexPath: IndexPath) -> TrackViewModel?
 
-    func setupDowloadingProgresForObject(at indexPath: IndexPath, with callback: ((CGFloat) -> Void)?)
-
     func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
     
     func selectObject(at indexPath: IndexPath)

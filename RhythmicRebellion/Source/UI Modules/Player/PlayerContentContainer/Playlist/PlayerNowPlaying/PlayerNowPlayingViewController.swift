@@ -171,8 +171,6 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
             }
         }
 
-        self.viewModel.setupDowloadingProgresForObject(at: indexPath, with: trackItemTableViewCell.downloadProgressCallback)
-
         return trackItemTableViewCell
     }
     

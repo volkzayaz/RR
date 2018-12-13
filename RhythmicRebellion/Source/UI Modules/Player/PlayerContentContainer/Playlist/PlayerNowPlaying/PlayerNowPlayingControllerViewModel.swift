@@ -24,8 +24,6 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
     private var playlistItems: [PlayerPlaylistItem]?
 
-    private var trackAudioFilesProgress: [Int : TrackAudioFileDownloadingProgress]
-
     var isPlaylistEmpty: Bool { return self.playlistItems?.isEmpty ?? false }
 
     // MARK: - Lifecycle -
@@ -43,8 +41,6 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.audioFileLocalStorageService = audioFileLocalStorageService
         self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
         self.trackPriceFormatter = MoneyFormatter()
-
-        self.trackAudioFilesProgress = [ : ]
     }
 
     func load(with delegate: PlayerNowPlayingViewModelDelegate) {
@@ -85,15 +81,6 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
                               isLockedForActions: false)
     }
 
-    func setupDowloadingProgresForObject(at indexPath: IndexPath, with callback: ((CGFloat) -> Void)?) {
-        guard let playlistItems = self.playlistItems, indexPath.item < playlistItems.count,
-        let trackAudioFile = playlistItems[indexPath.item].track.audioFile else { return }
-
-        if let trackAudioFileDownloadingProgress = self.trackAudioFilesProgress[trackAudioFile.id] {
-            trackAudioFileDownloadingProgress.callback = callback
-        }
-    }
-    
     func selectObject(at indexPath: IndexPath) {
         guard let playlistItems = self.playlistItems, let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
 
@@ -320,18 +307,6 @@ extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObser
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
 
-        switch trackAudioFileLocalItem.state {
-        case .downloading(_, let progress):
-            let trackAudioFileDownloadingProgress = TrackAudioFileDownloadingProgress()
-            trackAudioFileDownloadingProgress.observer = progress.observe(\.fractionCompleted) { [unowned trackAudioFileDownloadingProgress]  (pobject, _) in
-                trackAudioFileDownloadingProgress.callback?(CGFloat(pobject.fractionCompleted))
-            }
-
-            self.trackAudioFilesProgress[trackAudioFileLocalItem.trackAudioFile.id] = trackAudioFileDownloadingProgress
-
-        default: break
-        }
-
         guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
@@ -348,8 +323,6 @@ extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObser
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
 
-        self.trackAudioFilesProgress[trackAudioFileLocalItem.trackAudioFile.id] = nil
-
         guard let playlistItems = self.playlistItems else { return }
 
         var indexPaths: [IndexPath] = []
@@ -365,8 +338,6 @@ extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObser
     }
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
-
-        self.trackAudioFilesProgress[trackAudioFileLocalItem.trackAudioFile.id] = nil
 
         guard let playlistItems = self.playlistItems else { return }
 
