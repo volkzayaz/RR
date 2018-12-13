@@ -1130,6 +1130,12 @@ extension Player: WebSocketServiceObserver {
             self.playlist.reset(with: [:])
             self.playlist.reset(tracks: tracks)
         }
+
+        let trackIdsForTimeRequest = tracks.filter { self.shouldSendTrackingTimeRequest(for: $0) }.map { $0.id }
+        if trackIdsForTimeRequest.isEmpty == false {
+            let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackIdsForTimeRequest)
+            self.webSocketService.sendCommand(command: trackingTimeRequestCommand)
+        }
     }
 
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) {
