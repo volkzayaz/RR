@@ -43,6 +43,7 @@ final class PageContentViewController: UIViewController {
         let webView = WKWebView(frame: self.view.bounds)
         webView.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
         webView.scrollView.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1)
+        webView.isOpaque = false
         webView.navigationDelegate = self
         webView.uiDelegate = self
         self.view.addSubview(webView)
@@ -53,7 +54,6 @@ final class PageContentViewController: UIViewController {
                                      webView.rightAnchor.constraint(equalTo: self.view.rightAnchor)])
 
         self.webView = webView
-
 
         viewModel.load(with: self)
     }
@@ -139,7 +139,7 @@ extension PageContentViewController: PageContentViewModelDelegate {
         guard let url = self.viewModel.url else { return }
 
         let snapshotImageView = UIImageView(frame: self.view.bounds)
-        snapshotImageView.contentMode = .scaleAspectFit
+        snapshotImageView.contentMode = .scaleAspectFill
         snapshotImageView.image = self.viewModel.snapshotImage
         self.view.addSubview(snapshotImageView)
         snapshotImageView.translatesAutoresizingMaskIntoConstraints = false

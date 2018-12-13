@@ -12,7 +12,7 @@ extension UIView {
 
     func makeSnapshotImage(for rect: CGRect, afterScreenUpdates: Bool = true) -> UIImage? {
 
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0)
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 1)
         self.drawHierarchy(in: self.bounds, afterScreenUpdates: afterScreenUpdates)
         let image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext()
