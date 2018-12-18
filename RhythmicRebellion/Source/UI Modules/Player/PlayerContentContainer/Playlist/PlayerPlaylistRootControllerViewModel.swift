@@ -26,7 +26,7 @@ final class PlayerPlaylistRootControllerViewModel: PlayerPlaylistRootViewModel {
 
     func load(with delegate: PlayerPlaylistRootViewModelDelegate) {
         self.delegate = delegate
-        application.addObserver(self)
+        application.addWatcher(self)
     }
     
     var showOnlyNowPlaying: Bool {

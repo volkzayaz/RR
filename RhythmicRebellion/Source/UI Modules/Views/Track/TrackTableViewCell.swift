@@ -116,19 +116,19 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
             self.downloadButton.pendingView.startSpin()
         }
 
-        self.downloadingInfo?.addObserver(self)
+        self.downloadingInfo?.addWatcher(self)
 
     }
 
     func prepareToEndDisplay() {
         self.equalizer.pause()
-        self.downloadingInfo?.removeObserver(self)
+        self.downloadingInfo?.removeWatcher(self)
     }
 
         
     func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
 
-        self.downloadingInfo?.removeObserver(self)
+        self.downloadingInfo?.removeWatcher(self)
         self.downloadingInfo = nil
         
         self.downloadButton.state = .startDownload

@@ -48,7 +48,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         guard let fanUser = self.application?.user as? FanUser else { return }
 
-        self.application?.addObserver(self)
+        self.application?.addWatcher(self)
 
         self.listeningSettings = fanUser.profile.listeningSettings
         self.listeningSettingsSections = self.makeListeningSettingsSections()

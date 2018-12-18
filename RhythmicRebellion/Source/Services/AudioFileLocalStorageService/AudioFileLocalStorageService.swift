@@ -22,10 +22,10 @@ extension AudioFileLocalStorageServiceObserver {
 }
 
 
-class AudioFileLocalStorageService: NSObject, Observable {
+class AudioFileLocalStorageService: NSObject, Watchable {
 
-    typealias ObserverType = AudioFileLocalStorageServiceObserver
-    let observersContainer = ObserversContainer<ObserverType>()
+    typealias WatchType = AudioFileLocalStorageServiceObserver
+    let watchersContainer = WatchersContainer<WatchType>()
 
     let syncQueue: DispatchQueue
 
@@ -175,7 +175,7 @@ class AudioFileLocalStorageService: NSObject, Observable {
             downloadTask.resume()
 
             DispatchQueue.main.async {
-                self.observersContainer.invoke { (observer) in
+                self.watchersContainer.invoke { (observer) in
                     observer.audioFileLocalStorageService(self, didStartDownload: trackAudioFileLocalItem)
                 }
             }
@@ -341,7 +341,7 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
 
             DispatchQueue.main.async { [item] in
 //                if let nsError = error as NSError?, nsError.code == NSURLErrorCancelled {
-                    self.observersContainer.invoke { (observer) in
+                    self.watchersContainer.invoke { (observer) in
                         observer.audioFileLocalStorageService(self, didCancelDownload: item)
 //                    }
                 }
@@ -370,7 +370,7 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
                 item.state = .downloaded(itemSuggestedLocalURL)
 
                 DispatchQueue.main.async {
-                    self.observersContainer.invoke { (observer) in
+                    self.watchersContainer.invoke { (observer) in
                         observer.audioFileLocalStorageService(self, didFinishDownload: item)
                     }
                 }

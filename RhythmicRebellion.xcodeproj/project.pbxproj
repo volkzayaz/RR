@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		737BB2C921C9347B0062A3A5 /* NotNilObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2BC21C9347B0062A3A5 /* NotNilObservable.swift */; };
+		737BB2CA21C9347B0062A3A5 /* ViewIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */; };
+		737BB2CD21C9347B0062A3A5 /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */; };
+		737BB2CE21C9347B0062A3A5 /* PresentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2C421C9347B0062A3A5 /* PresentMessage.swift */; };
+		737BB2D021C9347B0062A3A5 /* AnimationStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2C621C9347B0062A3A5 /* AnimationStatus.swift */; };
+		737BB2D121C9347B0062A3A5 /* MVVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2C721C9347B0062A3A5 /* MVVM.swift */; };
+		737BB2D221C9347B0062A3A5 /* CatchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2C821C9347B0062A3A5 /* CatchError.swift */; };
+		737BB2D421C934BA0062A3A5 /* UIView+ProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2D321C934BA0062A3A5 /* UIView+ProgressIndicator.swift */; };
+		737BB2D821C935720062A3A5 /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2D721C935720062A3A5 /* SpinnerView.swift */; };
+		737BB2DA21C936A30062A3A5 /* ViewController+ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2D921C936A30062A3A5 /* ViewController+ErrorMessage.swift */; };
+		737BB2DC21C937250062A3A5 /* GenericError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2DB21C937250062A3A5 /* GenericError.swift */; };
 		7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */; };
 		7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD420FF471300D90D73 /* SignUpRouter.swift */; };
 		7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD520FF471300D90D73 /* SignUpViewController.swift */; };
@@ -98,7 +109,7 @@
 		7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961A20E4DC7800BF1F79 /* Artist.swift */; };
 		7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961C20E4E11C00BF1F79 /* TrackId.swift */; };
 		7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961E20E4E45000BF1F79 /* TrackState.swift */; };
-		7650962120E5029200BF1F79 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962020E5029200BF1F79 /* Observable.swift */; };
+		7650962120E5029200BF1F79 /* Watchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962020E5029200BF1F79 /* Watchable.swift */; };
 		7650962320E5238100BF1F79 /* PlayerPlaylistItemPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962220E5238100BF1F79 /* PlayerPlaylistItemPatch.swift */; };
 		7650962520E662D100BF1F79 /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650962420E662D100BF1F79 /* RestApiService.swift */; };
 		76525E682146722700C556D6 /* RestorePasswordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */; };
@@ -257,6 +268,17 @@
 
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		737BB2BC21C9347B0062A3A5 /* NotNilObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotNilObservable.swift; sourceTree = "<group>"; };
+		737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewIndicator.swift; sourceTree = "<group>"; };
+		737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
+		737BB2C421C9347B0062A3A5 /* PresentMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentMessage.swift; sourceTree = "<group>"; };
+		737BB2C621C9347B0062A3A5 /* AnimationStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationStatus.swift; sourceTree = "<group>"; };
+		737BB2C721C9347B0062A3A5 /* MVVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVVM.swift; sourceTree = "<group>"; };
+		737BB2C821C9347B0062A3A5 /* CatchError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatchError.swift; sourceTree = "<group>"; };
+		737BB2D321C934BA0062A3A5 /* UIView+ProgressIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+ProgressIndicator.swift"; sourceTree = "<group>"; };
+		737BB2D721C935720062A3A5 /* SpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
+		737BB2D921C936A30062A3A5 /* ViewController+ErrorMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+ErrorMessage.swift"; sourceTree = "<group>"; };
+		737BB2DB21C937250062A3A5 /* GenericError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericError.swift; sourceTree = "<group>"; };
 		7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpControllerViewModel.swift; sourceTree = "<group>"; };
 		7606BDD420FF471300D90D73 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
 		7606BDD520FF471300D90D73 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -348,7 +370,7 @@
 		7650961A20E4DC7800BF1F79 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		7650961C20E4E11C00BF1F79 /* TrackId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackId.swift; sourceTree = "<group>"; };
 		7650961E20E4E45000BF1F79 /* TrackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackState.swift; sourceTree = "<group>"; };
-		7650962020E5029200BF1F79 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		7650962020E5029200BF1F79 /* Watchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watchable.swift; sourceTree = "<group>"; };
 		7650962220E5238100BF1F79 /* PlayerPlaylistItemPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPlaylistItemPatch.swift; sourceTree = "<group>"; };
 		7650962420E662D100BF1F79 /* RestApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
 		76525E642146722700C556D6 /* RestorePasswordControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorePasswordControllerViewModel.swift; sourceTree = "<group>"; };
@@ -527,6 +549,55 @@
 				80BC96C5C2DF2EDD9FF2BB72 /* Pods-RhythmicRebellion.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		737BB2BB21C9347B0062A3A5 /* RxExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				737BB2BC21C9347B0062A3A5 /* NotNilObservable.swift */,
+				737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */,
+				737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */,
+				737BB2C221C9347B0062A3A5 /* MVVM */,
+			);
+			path = RxExtensions;
+			sourceTree = "<group>";
+		};
+		737BB2C221C9347B0062A3A5 /* MVVM */ = {
+			isa = PBXGroup;
+			children = (
+				737BB2C321C9347B0062A3A5 /* Traits */,
+				737BB2C721C9347B0062A3A5 /* MVVM.swift */,
+				737BB2C821C9347B0062A3A5 /* CatchError.swift */,
+			);
+			path = MVVM;
+			sourceTree = "<group>";
+		};
+		737BB2C321C9347B0062A3A5 /* Traits */ = {
+			isa = PBXGroup;
+			children = (
+				737BB2D621C935570062A3A5 /* Error */,
+				737BB2D521C935470062A3A5 /* Progress */,
+			);
+			path = Traits;
+			sourceTree = "<group>";
+		};
+		737BB2D521C935470062A3A5 /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				737BB2D721C935720062A3A5 /* SpinnerView.swift */,
+				737BB2C621C9347B0062A3A5 /* AnimationStatus.swift */,
+				737BB2D321C934BA0062A3A5 /* UIView+ProgressIndicator.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
+		737BB2D621C935570062A3A5 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				737BB2D921C936A30062A3A5 /* ViewController+ErrorMessage.swift */,
+				737BB2C421C9347B0062A3A5 /* PresentMessage.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 		7606BDD220FF46CB00D90D73 /* SignUp */ = {
@@ -775,6 +846,7 @@
 		7650960C20E2322B00BF1F79 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				737BB2BB21C9347B0062A3A5 /* RxExtensions */,
 				7655477020EBA5A2004AC0BD /* String+Extension.swift */,
 				761B6CB120EA75DE0019A71D /* TimeInterval+Extension.swift */,
 				768EC2C720F4EBD000629F1B /* Dictionary+Extension.swift */,
@@ -1160,6 +1232,7 @@
 				76EDBD1A20F796FF0021297F /* WebSocketServiceError.swift */,
 				7665332C20FE26A600FEC702 /* RestApiServiceError.swift */,
 				766B02FD21009505005AB2B6 /* PlayerError.swift */,
+				737BB2DB21C937250062A3A5 /* GenericError.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -1229,7 +1302,7 @@
 				763C905D20FDF5BA007C1F86 /* Application.swift */,
 				76F1FA4620DBA8DE00C9191F /* AppDelegate.swift */,
 				76F1FA4F20DBA96200C9191F /* RhythmicRebellion.swift */,
-				7650962020E5029200BF1F79 /* Observable.swift */,
+				7650962020E5029200BF1F79 /* Watchable.swift */,
 				76CE92AD2191CA3500956882 /* Defaults.swift */,
 			);
 			path = Source;
@@ -1420,6 +1493,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
 			);
@@ -1439,6 +1513,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
 			);
@@ -1514,7 +1589,7 @@
 				767BA578211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift in Sources */,
 				7665335020FF1DE300FEC702 /* ProfileViewController.swift in Sources */,
 				76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */,
-				7650962120E5029200BF1F79 /* Observable.swift in Sources */,
+				7650962120E5029200BF1F79 /* Watchable.swift in Sources */,
 				763931F72118831600A65257 /* PlayerMyPlaylistsViewModel.swift in Sources */,
 				7634783721527364001F85F6 /* ConfirmationAlertViewModel.swift in Sources */,
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
@@ -1548,6 +1623,7 @@
 				762A240E2164C71D007FA1C1 /* ArtistFollowingState.swift in Sources */,
 				76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */,
 				76C8DDFD211063E800773BB1 /* Playlist.swift in Sources */,
+				737BB2CD21C9347B0062A3A5 /* NSObject+Rx.swift in Sources */,
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
 				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,
 				76315814219D97F800E1D7F5 /* PageContentControllerViewModel.swift in Sources */,
@@ -1580,6 +1656,7 @@
 				76E6CB822179D9BB00283CA1 /* Purchase.swift in Sources */,
 				769F4EB5210B669F000DD23B /* LyricsControllerViewModel.swift in Sources */,
 				7621959821A2CBB900808D18 /* ZoomAnimator.swift in Sources */,
+				737BB2D421C934BA0062A3A5 /* UIView+ProgressIndicator.swift in Sources */,
 				764D684121491F3500F52730 /* GenresContainerView.swift in Sources */,
 				7631581F219EC9B600E1D7F5 /* PageItemViewModel.swift in Sources */,
 				760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */,
@@ -1590,6 +1667,8 @@
 				7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */,
 				761873BC2167ACCD00F3997F /* Price.swift in Sources */,
 				76F1FA5D20DBA9FF00C9191F /* AppControllerViewModel.swift in Sources */,
+				737BB2DC21C937250062A3A5 /* GenericError.swift in Sources */,
+				737BB2D821C935720062A3A5 /* SpinnerView.swift in Sources */,
 				769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */,
 				7665E81F2105DB22007D8B98 /* ListeningSettings.swift in Sources */,
 				762271A8213D8D510018689E /* Location.swift in Sources */,
@@ -1610,7 +1689,9 @@
 				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
 				769F4E97210B5BA1000DD23B /* PlayerContentContainerControllerViewModel.swift in Sources */,
 				76EDBD1920F78FCD0021297F /* AppError.swift in Sources */,
+				737BB2CA21C9347B0062A3A5 /* ViewIndicator.swift in Sources */,
 				769F4E99210B5BA1000DD23B /* PlayerContentContainerViewController.swift in Sources */,
+				737BB2D021C9347B0062A3A5 /* AnimationStatus.swift in Sources */,
 				76D39CED2111F7FA00D47DFA /* PlaylistContentViewController.swift in Sources */,
 				7665E81C2105BC84007D8B98 /* ListeningSettingsViewController.swift in Sources */,
 				7650962520E662D100BF1F79 /* RestApiService.swift in Sources */,
@@ -1657,8 +1738,10 @@
 				7639320A2119C8A000A65257 /* PlayerNowPlayingTableHeaderView.swift in Sources */,
 				76336A86215CBE8100AE9001 /* RoundedView.swift in Sources */,
 				7665335A20FF414300FEC702 /* SignInViewModel.swift in Sources */,
+				737BB2CE21C9347B0062A3A5 /* PresentMessage.swift in Sources */,
 				7665332D20FE26A600FEC702 /* RestApiServiceError.swift in Sources */,
 				767289C720ED1A13008A86B6 /* PlayerPlaylist.swift in Sources */,
+				737BB2D121C9347B0062A3A5 /* MVVM.swift in Sources */,
 				765F2592213EC6B700F5C3D8 /* Region.swift in Sources */,
 				76D39CEB2111F7FA00D47DFA /* PlaylistContentControllerViewModel.swift in Sources */,
 				76E6CB8A217E0EC200283CA1 /* ChangePasswordViewController.swift in Sources */,
@@ -1682,6 +1765,7 @@
 				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
 				76A45B4C213944180080885D /* SelectableListItemTableViewCell.swift in Sources */,
 				76A45B40213926380080885D /* SelectableListControllerViewModel.swift in Sources */,
+				737BB2DA21C936A30062A3A5 /* ViewController+ErrorMessage.swift in Sources */,
 				76C821AC21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift in Sources */,
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,
 				764D6843214920C300F52730 /* Genre.swift in Sources */,
@@ -1693,6 +1777,8 @@
 				763931EC2118748200A65257 /* PlayerNowPlayingViewController.swift in Sources */,
 				763931F42118831600A65257 /* PlayerMyPlaylistsControllerViewModel.swift in Sources */,
 				764E7EDD2188C99300952182 /* PlaylistActions.swift in Sources */,
+				737BB2C921C9347B0062A3A5 /* NotNilObservable.swift in Sources */,
+				737BB2D221C9347B0062A3A5 /* CatchError.swift in Sources */,
 				769F4E8D210A16CF000DD23B /* PlayerContentStoryboardSegue.swift in Sources */,
 				76CE92AE2191CA3500956882 /* Defaults.swift in Sources */,
 				76CE92BD2192E17B00956882 /* ApplicationContentContainerRouter.swift in Sources */,

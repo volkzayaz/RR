@@ -33,9 +33,9 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.application?.removeObserver(self)
-        self.player?.removeObserver(self)
-        self.audioFileLocalStorageService?.removeObserver(self)
+        self.application?.removeWatcher(self)
+        self.player?.removeWatcher(self)
+        self.audioFileLocalStorageService?.removeWatcher(self)
     }
 
     init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, audioFileLocalStorageService: AudioFileLocalStorageService, playlist: Playlist) {
@@ -61,9 +61,9 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.delegate?.reloadUI()
         self.delegate?.reloadPlaylistUI()
 
-        self.application?.addObserver(self)
-        self.player?.addObserver(self)
-        self.audioFileLocalStorageService?.addObserver(self)
+        self.application?.addWatcher(self)
+        self.player?.addWatcher(self)
+        self.audioFileLocalStorageService?.addWatcher(self)
     }
 
     func loadItems() {

@@ -68,7 +68,7 @@ extension PlayerObserver {
     func playerDidChangePlaylist(player: Player) {}
 }
 
-class Player: NSObject, Observable {
+class Player: NSObject, Watchable {
 
     enum PlaylistPosition {
         case next
@@ -81,9 +81,9 @@ class Player: NSObject, Observable {
         case delete
     }
 
-    typealias ObserverType = PlayerObserver
+    typealias WatchType = PlayerObserver
 
-    let observersContainer = ObserversContainer<PlayerObserver>()
+    let watchersContainer = WatchersContainer<PlayerObserver>()
 
     var canForward: Bool {
         guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems }
@@ -195,8 +195,8 @@ class Player: NSObject, Observable {
 
         super.init()
 
-        self.application.addObserver(self)
-        self.webSocketService.addObserver(self)
+        self.application.addWatcher(self)
+        self.webSocketService.addWatcher(self)
 
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 
@@ -238,7 +238,7 @@ class Player: NSObject, Observable {
         removeObserver(self, forKeyPath: #keyPath(Player.player.currentItem.duration), context: &playerKVOContext)
 
         NotificationCenter.default.removeObserver(self)
-        self.webSocketService.removeObserver(self)
+        self.webSocketService.removeWatcher(self)
     }
 
     func loadConfig() {
@@ -297,7 +297,7 @@ class Player: NSObject, Observable {
         commandCenter.previousTrackCommand.isEnabled = self.canBackward
 
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChange: .initialized)
         })
     }
@@ -324,7 +324,7 @@ class Player: NSObject, Observable {
         commandCenter.nextTrackCommand.isEnabled = self.canForward
 
         if self.playerQueue.containsOnlyTrack && self.playerQueue.playerItem?.stubReason == nil{
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerItemCurrentTime: timeElapsed)
             })
         }
@@ -612,7 +612,7 @@ class Player: NSObject, Observable {
         self.set(trackState: trackState) { [weak self] (error) in
             guard let strongSelf = self else { completion?(); return }
 
-            strongSelf.observersContainer.invoke({ (observer) in
+            strongSelf.watchersContainer.invoke({ (observer) in
                 observer.player(player: strongSelf, didChangePlayState: trackState.isPlaying)
             })
 
@@ -632,7 +632,7 @@ class Player: NSObject, Observable {
             self.playerQueue.reset()
             self.replace(playerItems: self.playerQueue.playerItems)
 
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerItem: nil)
             })
 
@@ -642,7 +642,7 @@ class Player: NSObject, Observable {
 
                 self.playlist.update(with: playlistItemsPatches)
 
-                self.observersContainer.invoke({ (observer) in
+                self.watchersContainer.invoke({ (observer) in
                     observer.playerDidChangePlaylist(player: self)
                 })
             })
@@ -688,7 +688,7 @@ class Player: NSObject, Observable {
                 strongSelf.currentTrackState = trackState
                 strongSelf.updateMPRemoteInfo()
 
-                strongSelf.observersContainer.invoke({ (observer) in
+                strongSelf.watchersContainer.invoke({ (observer) in
                     observer.player(player: strongSelf, didChangePlayerItemCurrentTime: trackState.progress)
                 })
 
@@ -753,7 +753,7 @@ class Player: NSObject, Observable {
                 self.playerQueue.reset()
                 self.replace(playerItems: self.playerQueue.playerItems)
 
-                self.observersContainer.invoke({ (observer) in
+                self.watchersContainer.invoke({ (observer) in
                     observer.player(player: self, didChangePlayerItem: nil)
                 })
             }
@@ -771,7 +771,7 @@ class Player: NSObject, Observable {
             self.playerQueue.replace(playerItem: currentPlayerItem)
             self.replace(playerItems: self.playerQueue.playerItems)
 
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerItem: self.currentItem)
             })
 
@@ -890,13 +890,13 @@ class Player: NSObject, Observable {
 
         if keyPath == #keyPath(Player.player.rate) {
 
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayState: self.player.rate == 1.0)
             })
 
         } else if keyPath == #keyPath(Player.player.currentItem) {
             guard let currrentQueueItem = self.currentQueueItem else { return }
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerQueueItem: currrentQueueItem)
             })
         } else if keyPath == #keyPath(Player.player.currentItem.status) {
@@ -919,7 +919,7 @@ class Player: NSObject, Observable {
             }
         } else if keyPath == #keyPath(Player.player.currentItem.duration) {
             guard let currrentQueueItem = self.currentQueueItem else { return }
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.player(player: self, didChangePlayerQueueItem: currrentQueueItem)
             })
         }
@@ -962,7 +962,7 @@ extension Player: WebSocketServiceObserver {
         self.playerQueue.replace(playerItem: currentPlayerItem)
         self.replace(playerItems: self.playerQueue.playerItems)
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItem: self.currentItem)
         })
     }
@@ -1016,7 +1016,7 @@ extension Player: WebSocketServiceObserver {
                 self.apply(currentTrackId: defferedTrackId)
             }
 
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
         }
@@ -1106,7 +1106,7 @@ extension Player: WebSocketServiceObserver {
         commandCenter.nextTrackCommand.isEnabled = self.canForward
         commandCenter.previousTrackCommand.isEnabled = self.canBackward
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChange: .failed)
         })
 
@@ -1154,7 +1154,7 @@ extension Player: WebSocketServiceObserver {
             self.deferredPlaylistItemsPatches.removeAll()
             self.playlist.reset(with: [:])
 
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
 
@@ -1202,7 +1202,7 @@ extension Player: WebSocketServiceObserver {
             self.playerQueue.replace(addons: [])
         }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangeBlockedState: isBlocked)
         })
     }
@@ -1223,7 +1223,7 @@ extension Player: WebSocketServiceObserver {
             self.playlist.update(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
         }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didUpdateTracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
         })
 
@@ -1233,7 +1233,7 @@ extension Player: WebSocketServiceObserver {
             currentPlayerItem.restrictedTime == nil,
             let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id] else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItemTotalPlayTime: TimeInterval(currentTrackTotalPlayMSeconds / 1000))
         })
 
@@ -1329,7 +1329,7 @@ extension Player: ApplicationObserver {
 
         self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItem: self.currentItem)
         })
     }
@@ -1345,7 +1345,7 @@ extension Player: ApplicationObserver {
 
         self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItem: self.currentItem)
         })
     }
@@ -1554,7 +1554,7 @@ extension Player {
             guard let `self` = self else { completion?(nil , nil); return }
 
             self.playlist.update(with: playlistItemsPatches)
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
             completion?(self.playlist.playlistItems(for: tracksKeys), nil)
@@ -1590,7 +1590,7 @@ extension Player {
         self.updatePlaylist(playlistItemsPatches: playlistItemsPatches) { [weak self] (error) in
             guard let `self` = self, error == nil else { completion?(error); return }
             self.playlist.update(with: playlistItemsPatches)
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
 
@@ -1622,7 +1622,7 @@ extension Player {
                 self.playerQueue.replace(playerItem: currentPlayerItem)
                 self.replace(playerItems: self.playerQueue.playerItems)
 
-                self.observersContainer.invoke({ (observer) in
+                self.watchersContainer.invoke({ (observer) in
                     observer.player(player: self, didChangePlayerItem: self.currentItem)
                 })
 
@@ -1645,7 +1645,7 @@ extension Player {
                 self.playerQueue.replace(playerItem: currentPlayerItem)
                 self.replace(playerItems: self.playerQueue.playerItems)
 
-                self.observersContainer.invoke({ (observer) in
+                self.watchersContainer.invoke({ (observer) in
                     observer.player(player: self, didChangePlayerItem: self.currentItem)
                 })
 
@@ -1696,7 +1696,7 @@ extension Player {
             guard let `self` = self else { completion?(nil , nil); return }
 
             self.playlist.reset(with: playlistItemsPatches)
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.playerDidChangePlaylist(player: self)
             })
 

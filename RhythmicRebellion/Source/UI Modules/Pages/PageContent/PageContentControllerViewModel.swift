@@ -48,8 +48,8 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
     deinit {
         print("PageContentControllerViewModel deinit")
-        self.player.removeObserver(self)
-        self.application.removeObserver(self)
+        self.player.removeWatcher(self)
+        self.application.removeWatcher(self)
     }
 
     init(router: PageContentRouter, page: Page, application: Application, player: Player, pagesLocalStorage: PagesLocalStorageService) {
@@ -112,8 +112,8 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
 //        self.delegate?.evaluateJavaScript(javaScriptString: playerDisabledScriptSource, completionHandler: nil)
 
-        self.application.addObserver(self)
-        self.player.addObserver(self)
+        self.application.addWatcher(self)
+        self.player.addWatcher(self)
 
     }
 

@@ -121,8 +121,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 
     deinit {
-        self.player.removeObserver(self)
-        self.application.removeObserver(self)
+        self.player.removeWatcher(self)
+        self.application.removeWatcher(self)
     }
 
     func load(with delegate: PlayerViewModelDelegate) {
@@ -130,8 +130,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.loadPlayerItemPreviewOptionViewModel()
         self.delegate = delegate
 
-        self.player.addObserver(self)
-        self.application.addObserver(self)
+        self.player.addWatcher(self)
+        self.application.addWatcher(self)
     }
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {

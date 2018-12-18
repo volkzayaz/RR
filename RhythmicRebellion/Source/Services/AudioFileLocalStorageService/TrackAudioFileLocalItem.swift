@@ -16,10 +16,10 @@ extension TrackAudioFileDownloadingInfoObserver {
     func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) { }
 }
 
-class TrackAudioFileDownloadingInfo: Observable {
+class TrackAudioFileDownloadingInfo: Watchable {
 
-    typealias ObserverType = TrackAudioFileDownloadingInfoObserver
-    let observersContainer = ObserversContainer<ObserverType>()
+    typealias WatchType = TrackAudioFileDownloadingInfoObserver
+    let watchersContainer = WatchersContainer<WatchType>()
 
     let taskIdentifier: Int
     let progress: Progress
@@ -34,7 +34,7 @@ class TrackAudioFileDownloadingInfo: Observable {
         self.progress.completedUnitCount = completedUnitCount
 
         DispatchQueue.main.async {
-            self.observersContainer.invoke { (observer) in
+            self.watchersContainer.invoke { (observer) in
                 observer.trackAudioFileDownloadingInfoObserver(self, didUpdate: self.progress)
             }
         }

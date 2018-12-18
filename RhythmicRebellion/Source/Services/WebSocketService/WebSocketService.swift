@@ -56,11 +56,11 @@ extension WebSocketServiceObserver {
     func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) { }
 }
 
-class WebSocketService: WebSocketDelegate, Observable {
+class WebSocketService: WebSocketDelegate, Watchable {
 
-    typealias ObserverType = WebSocketServiceObserver
+    typealias WatchType = WebSocketServiceObserver
 
-    let observersContainer = ObserversContainer<WebSocketServiceObserver>()
+    let watchersContainer = WatchersContainer<WebSocketServiceObserver>()
 
     enum State: Int {
         case disconnected
@@ -164,7 +164,7 @@ class WebSocketService: WebSocketDelegate, Observable {
             self.sendCommand(command: initialCommand)
         }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.webSocketServiceDidConnect(self)
         })
     }
@@ -177,7 +177,7 @@ class WebSocketService: WebSocketDelegate, Observable {
         self.webSocket?.delegate = nil
         self.webSocket = nil
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.webSocketServiceDidDisconnect(self)
         })
     }
@@ -206,38 +206,38 @@ class WebSocketService: WebSocketDelegate, Observable {
 
                 case .userSyncListeningSettings(let listeningSettings):
 
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveListeningSettings: listeningSettings)
                     })
 
                 case .userSyncForceToPlay(let trackForceToPlayState):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTrackForceToPlayState: trackForceToPlayState)
                     })
 
                 case .userSyncFollowing(let artistFollowingState):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveArtistFollowingState: artistFollowingState)
                     })
 
                 case .userSyncPurchases(let purchases):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceivePurchases: purchases)
                     })
 
                 case .userSyncSkipArtistAddons(let skipArtistAddonsState):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveSkipArtistAddonsState: skipArtistAddonsState)
                     })
 
                 case .userSyncTrackLikeState(let trackLikeState):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTrackLikeState: trackLikeState)
                     })
 
                 case .playListLoadTracks(let tracks):
 
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTracks: tracks, flush: webSoketCommand.flush ?? false)
                     })
 
@@ -247,42 +247,42 @@ class WebSocketService: WebSocketDelegate, Observable {
 //                    print("recieve playListUpdate: \(String(data: data, encoding: .utf8))")
 //                #endif
 
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceivePlaylistUpdate: playerPlaylistUpdate, flush: webSoketCommand.flush ?? false)
                     })
 
                 case .playListGetTracks( _): break
 
                 case .currentTrackId(let trackId):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveCurrentTrackId: trackId)
                     })
 
                 case .currentTrackState(let trackState):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
                     })
 
                 case .currentTrackBlock(let isBlocked):
 
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveCurrentTrackBlock: isBlocked)
                     })
 
                 case .checkAddons(let checkAddons):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveCheckAddons: checkAddons)
                     })
 
                 case .playAddon( _): break
 
                 case .tracksTotalPlayTime(let tracksTotalPlayMSeconds):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveTracksTotalPlayTime: tracksTotalPlayMSeconds, flush: webSoketCommand.flush ?? false)
                     })
 
                 case .fanPlaylistsStates(let fanPlaylistState):
-                    self.observersContainer.invoke({ (observer) in
+                    self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didRecieveFanPlaylistState: fanPlaylistState)
                     })
                 }
