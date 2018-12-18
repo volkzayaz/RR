@@ -136,6 +136,7 @@
 		7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */; };
 		7665E8292107224F007D8B98 /* CellsViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7665E8282107224F007D8B98 /* CellsViewModels.swift */; };
 		766B02FE21009505005AB2B6 /* PlayerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766B02FD21009505005AB2B6 /* PlayerError.swift */; };
+		7671D24621C3B5FE00187F77 /* Lyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7671D24521C3B5FB00187F77 /* Lyrics.swift */; };
 		767289C620ED1A13008A86B6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C420ED1A13008A86B6 /* Player.swift */; };
 		767289C720ED1A13008A86B6 /* PlayerPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767289C520ED1A13008A86B6 /* PlayerPlaylist.swift */; };
 		76769A85218079A900DCB146 /* ChangeEmailControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76769A81218079A900DCB146 /* ChangeEmailControllerViewModel.swift */; };
@@ -387,6 +388,7 @@
 		7665E82521070A95007D8B98 /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		7665E8282107224F007D8B98 /* CellsViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsViewModels.swift; sourceTree = "<group>"; };
 		766B02FD21009505005AB2B6 /* PlayerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerError.swift; sourceTree = "<group>"; };
+		7671D24521C3B5FB00187F77 /* Lyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lyrics.swift; sourceTree = "<group>"; };
 		767289C420ED1A13008A86B6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		767289C520ED1A13008A86B6 /* PlayerPlaylist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerPlaylist.swift; sourceTree = "<group>"; };
 		76769A81218079A900DCB146 /* ChangeEmailControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailControllerViewModel.swift; sourceTree = "<group>"; };
@@ -833,6 +835,7 @@
 				76FA64C0218B2ECB00A132E9 /* FanPlaylistState.swift */,
 				76CE92A7218C7B9900956882 /* TrackLikeState.swift */,
 				7621959A21A6B17B00808D18 /* SkipArtistAddonsState.swift */,
+				7671D24521C3B5FB00187F77 /* Lyrics.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1575,6 +1578,7 @@
 				763931F62118831600A65257 /* PlayerMyPlaylistsViewController.swift in Sources */,
 				762DD7852141237B0046A984 /* HowHear.swift in Sources */,
 				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
+				7671D24621C3B5FE00187F77 /* Lyrics.swift in Sources */,
 				7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */,
 				7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */,
 				761873BC2167ACCD00F3997F /* Price.swift in Sources */,

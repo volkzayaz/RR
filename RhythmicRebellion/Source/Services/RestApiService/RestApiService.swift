@@ -554,6 +554,24 @@ class RestApiService {
         }
     }
 
+    func lyrics(for trackId: Int, completion: @escaping (Result<Lyrics>) -> Void) {
+        guard let lyricsURL = self.makeURL(with: "player/record/" + String(trackId) + "/lyrics-karaoke") else { return }
+
+        let headers: HTTPHeaders = ["Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Origin" : self.originURI]
+
+        Alamofire.request(lyricsURL, method: .get, headers: headers)
+            .validate()
+            .restApiResponse { (dataResponse: DataResponse<LyricsResponse>) in
+
+                switch dataResponse.result {
+                case .success(let lyricsResponse): completion(.success(lyricsResponse.lyrics))
+                case .failure(let error): completion(.failure(error))
+                }
+        }
+    }
+
     func artists(with artistIds: [String], completion: @escaping (Result<[Artist]>) -> Void ) {
         guard let artistTracksURL = self.makeURL(with: "player/artist") else { return }
 

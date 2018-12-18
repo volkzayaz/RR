@@ -11,6 +11,9 @@ import UIKit
 
 final class LyricsViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var karaokeModeButton: UIButton!
+
     // MARK: - Public properties -
 
     private(set) var viewModel: LyricsViewModel!
@@ -29,6 +32,17 @@ final class LyricsViewController: UIViewController {
         super.viewDidLoad()
 
         viewModel.load(with: self)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    // MARK: - Actions -
+    @IBAction func switchToKaraokeMode(sender: Any) {
+        self.viewModel.switchToKaraokeMode()
     }
 
 }
@@ -53,7 +67,8 @@ extension LyricsViewController {
 extension LyricsViewController: LyricsViewModelDelegate {
 
     func refreshUI() {
-
+        self.textView.text = self.viewModel.lyricsText
+        self.karaokeModeButton.isEnabled = self.viewModel.canSwitchToKaraokeMode
     }
 
 }
