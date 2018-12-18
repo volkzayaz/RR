@@ -72,11 +72,11 @@ final class SelectableListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.keyboardDidShow(notification: notification)
         }
 
-        self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.keyboardWillHide(notification: notification)
         }
     }
@@ -120,7 +120,7 @@ final class SelectableListViewController: UIViewController {
 
             let placeholder = NSLocalizedString("Search", comment: "Search plaholder")
             let attributedPlaceholder = NSAttributedString(string: textFieldInsideSearchBar.placeholder ?? placeholder,
-                                                           attributes: [NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)])
+                                                           attributes: [NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)])
             textFieldInsideSearchBar.attributedPlaceholder = attributedPlaceholder
 
             if let imageView = textFieldInsideSearchBar.leftView as? UIImageView {
@@ -152,7 +152,7 @@ final class SelectableListViewController: UIViewController {
 
     // MARK: - Notifications -
     func keyboardDidShow(notification: Notification) {
-        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
 
         let bottomInset = self.view.bounds.maxY - keyboardFrame.minY

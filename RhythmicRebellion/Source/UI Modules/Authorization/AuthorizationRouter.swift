@@ -112,7 +112,7 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
         let vm = AuthorizationControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
 
-        for childViewController in self.authorizationViewController?.childViewControllers ?? [] {
+        for childViewController in self.authorizationViewController?.children ?? [] {
             self.prepare(viewController: childViewController)
         }
 
@@ -128,7 +128,7 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
     func viewController(for authorizaionType: AuthorizationType) -> ChildViewController? {
         guard let authorizationViewController = self.authorizationViewController else { return nil }
 
-        guard let childViewControllers = authorizationViewController.childViewControllers as? [ChildViewController], let viewControllerForAuthorizationType = childViewControllers.first(where: { (viewController) -> Bool in
+        guard let childViewControllers = authorizationViewController.children as? [ChildViewController], let viewControllerForAuthorizationType = childViewControllers.first(where: { (viewController) -> Bool in
             switch authorizaionType {
             case .signIn:
                 guard let _ = viewController as? SignInViewController else { return false }
@@ -155,7 +155,7 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
         self.prepare(viewController: viewControllerForAuthorizationType)
 
         if viewControllerForAuthorizationType.parent != authorizationViewController {
-            authorizationViewController.addChildViewController(viewControllerForAuthorizationType)
+            authorizationViewController.addChild(viewControllerForAuthorizationType)
         }
 
         viewControllerForAuthorizationType.view.translatesAutoresizingMaskIntoConstraints = false

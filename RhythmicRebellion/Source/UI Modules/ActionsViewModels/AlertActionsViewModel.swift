@@ -18,7 +18,7 @@ protocol AlertActionItemViewModel {
 
     var title: String { get }
 
-    var actionStyle: UIAlertActionStyle { get }
+    var actionStyle: UIAlertAction.Style { get }
 }
 
 
@@ -31,7 +31,7 @@ struct AlertActionsViewModel<T: AlertActionItemViewModel> {
 extension UIAlertController {
 
     class func make<T>(from viewModel: AlertActionsViewModel<T>,
-                       style: UIAlertControllerStyle = .actionSheet,
+                       style: UIAlertController.Style = .actionSheet,
                        onAction: @escaping (T) -> Void = { _ in}) -> UIAlertController {
 
         let alertController = UIAlertController(title: viewModel.title, message: viewModel.message, preferredStyle: style)
@@ -53,8 +53,8 @@ extension UIAlertController {
 protocol AlertActionsViewModelPersenting {
 
     func show<T>(alertActionsviewModel: AlertActionsViewModel<T>)
-    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle)
-    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle, completion: (() -> Void)?)
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style)
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style, completion: (() -> Void)?)
 
     func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView)
     func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView, completion: (() -> Void)?)
@@ -66,11 +66,11 @@ extension AlertActionsViewModelPersenting where Self: UIViewController {
         show(alertActionsviewModel: alertActionsviewModel, style: .actionSheet)
     }
 
-    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle) {
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style) {
         show(alertActionsviewModel: alertActionsviewModel, style: style, completion: nil)
     }
 
-    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertControllerStyle, completion: (() -> Void)? = nil) {
+    func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style, completion: (() -> Void)? = nil) {
 
         let alertActionsController = UIAlertController.make(from: alertActionsviewModel, style: style)
 

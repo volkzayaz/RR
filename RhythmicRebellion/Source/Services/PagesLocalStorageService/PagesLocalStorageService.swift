@@ -169,7 +169,7 @@ class PagesLocalStorageService: Observable {
     }
 
     func save(snapshotImage: UIImage, for page: Page) {
-        guard let imageData = UIImagePNGRepresentation(snapshotImage) else { return }
+        guard let imageData = snapshotImage.pngData() else { return }
 
         let snapshotImageURL = self.snapshotImageURL(for: page)
         let fileManager = FileManager.default

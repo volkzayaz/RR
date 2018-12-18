@@ -200,12 +200,12 @@ class Player: NSObject, Observable {
 
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterrupted(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionInterrupted(_:)), name: AVAudioSession.interruptionNotification, object: AVAudioSession.sharedInstance())
 
-        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionRouteChange(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionRouteChange(_:)), name: AVAudioSession.routeChangeNotification, object: AVAudioSession.sharedInstance())
 
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category(rawValue: convertFromAVAudioSessionCategory(AVAudioSession.Category.playback)), mode: AVAudioSession.Mode.default)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch let error as NSError {
             print("an error occurred when audio session category.\n \(error)")
@@ -216,7 +216,7 @@ class Player: NSObject, Observable {
         addObserver(self, forKeyPath: #keyPath(Player.player.currentItem.status), options: [.new, .initial], context: &playerKVOContext)
         addObserver(self, forKeyPath: #keyPath(Player.player.currentItem.duration), options: [.new, .initial], context: &playerKVOContext)
 
-        let interval = CMTimeMake(1, 1)
+        let interval = CMTimeMake(value: 1, timescale: 1)
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
             let timeElapsed = TimeInterval(CMTimeGetSeconds(time))
             self.updateCurrentTrackState(with: timeElapsed)
@@ -808,7 +808,7 @@ class Player: NSObject, Observable {
 
         guard let userInfo = notification.userInfo,
             let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
-            let type = AVAudioSessionInterruptionType(rawValue: typeValue) else { return }
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
 
         if type == .began {
 
@@ -829,10 +829,10 @@ class Player: NSObject, Observable {
 
             self.player.pause()
             self.audioSessionIsInterrupted = false
-            var options: AVAudioSessionInterruptionOptions = []
+            var options: AVAudioSession.InterruptionOptions = []
 
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
-                options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
+                options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
             }
 
             if self.webSocketService.state.isConnected == false {
@@ -873,7 +873,7 @@ class Player: NSObject, Observable {
     @objc func audioSessionRouteChange(_ notification: Notification) {
 
         if let notificationUserInfo = notification.userInfo {
-            if let audioSessionRouteChangeReason = AVAudioSessionRouteChangeReason(rawValue: notificationUserInfo[AVAudioSessionRouteChangeReasonKey] as? UInt ?? 0) {
+            if let audioSessionRouteChangeReason = AVAudioSession.RouteChangeReason(rawValue: notificationUserInfo[AVAudioSessionRouteChangeReasonKey] as? UInt ?? 0) {
 
                 switch audioSessionRouteChangeReason {
                 case .oldDeviceUnavailable:
@@ -1726,4 +1726,9 @@ extension Player {
 
         self.performReplace(with: tracks, completion: completion)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }

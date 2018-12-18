@@ -20,9 +20,9 @@ extension ScrollableContentViewController where Self: UIViewController {
 
     func startObserveKeyboard() {
 
-        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
 
-            guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+            guard let keyboardFrameValue: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
             let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
 
@@ -34,7 +34,7 @@ extension ScrollableContentViewController where Self: UIViewController {
             }
         }
 
-        self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
 
             self.scrollView.contentInset = .zero
             self.scrollView.scrollIndicatorInsets = .zero

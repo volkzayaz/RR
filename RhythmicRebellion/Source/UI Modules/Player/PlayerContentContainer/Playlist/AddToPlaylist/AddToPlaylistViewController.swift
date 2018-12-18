@@ -34,8 +34,8 @@ final class AddToPlaylistViewController: UIViewController, UITableViewDataSource
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.tableFooterView = UIView()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(AddToPlaylistViewController.keyboardDidShow(notification:)), name: Notification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(AddToPlaylistViewController.keyboardWillHide(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddToPlaylistViewController.keyboardDidShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddToPlaylistViewController.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         viewModel.load(with: self)
     }
@@ -64,7 +64,7 @@ final class AddToPlaylistViewController: UIViewController, UITableViewDataSource
     
     // MARK: - Notifications
     @objc func keyboardDidShow(notification: Notification) {
-        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
         
         let bottomInset = self.view.bounds.maxY - keyboardFrame.minY

@@ -30,8 +30,8 @@ final class PlayerContentContainerViewController: UITabBarController {
         viewModel.load(with: self)
     }
 
-    override func willMove(toParentViewController parent: UIViewController?) {
-        super.willMove(toParentViewController: parent)
+    override func willMove(toParent parent: UIViewController?) {
+        super.willMove(toParent: parent)
 
         print("willMove toParentViewController: \(parent)")
     }

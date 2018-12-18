@@ -22,7 +22,7 @@ extension CellIdentifiable where Self: UICollectionViewCell {
 
 extension CellIdentifiable where Self: UICollectionReusableView {
 
-    static func makeView(in collectionView: UICollectionView, at indexPath: IndexPath, ofKind kind: String = UICollectionElementKindSectionHeader) -> Self {
+    static func makeView(in collectionView: UICollectionView, at indexPath: IndexPath, ofKind kind: String = UICollectionView.elementKindSectionHeader) -> Self {
         return collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                withReuseIdentifier: identifier,
                                                                for: indexPath) as! Self
