@@ -23,7 +23,7 @@ class TextImageGenerator {
         var cachedImage = self.cachedImages[text]
 
         if cachedImage == nil {
-            let attributes = [NSAttributedStringKey.font: self.font] as [NSAttributedStringKey : Any]
+            let attributes = [NSAttributedString.Key.font: self.font] as [NSAttributedString.Key : Any]
 
             let stringSize = text.size(withAttributes: attributes)
 

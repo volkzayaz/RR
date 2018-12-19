@@ -10,7 +10,7 @@ import UIKit
 
 protocol ZoomAnimatorSourceImageContainerView: class {
     var image: UIImage? { get }
-    var imageContentMode: UIViewContentMode { get }
+    var imageContentMode: UIView.ContentMode { get }
 }
 
 protocol ZoomAnimatorSourceViewController: class {
@@ -80,7 +80,7 @@ class ZoomAnimator: NSObject {
                        delay: 0,
                        usingSpringWithDamping: 0.8,
                        initialSpringVelocity: 0,
-                       options: [UIViewAnimationOptions.transitionCrossDissolve],
+                       options: [UIView.AnimationOptions.transitionCrossDissolve],
                        animations: {
                         self.transitionImageView?.frame = transitionContext.finalFrame(for: toViewController)
         },
@@ -139,7 +139,7 @@ class ZoomAnimator: NSObject {
                        delay: 0,
                        usingSpringWithDamping: 0.8,
                        initialSpringVelocity: 0,
-                       options: [UIViewAnimationOptions.transitionCrossDissolve],
+                       options: [UIView.AnimationOptions.transitionCrossDissolve],
                        animations: {
                         self.transitionImageView?.frame = toFrame
         },

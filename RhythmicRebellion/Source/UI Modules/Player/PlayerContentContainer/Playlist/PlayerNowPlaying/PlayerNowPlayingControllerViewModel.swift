@@ -29,9 +29,9 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.application?.removeObserver(self)
-        self.player?.removeObserver(self)
-        self.audioFileLocalStorageService?.removeObserver(self)
+        self.application?.removeWatcher(self)
+        self.player?.removeWatcher(self)
+        self.audioFileLocalStorageService?.removeWatcher(self)
     }
 
     init(router: PlayerNowPlayingRouter, application: Application, player: Player, audioFileLocalStorageService: AudioFileLocalStorageService) {
@@ -47,9 +47,9 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.delegate = delegate
 
         self.loadItems()
-        self.application?.addObserver(self)
-        self.player?.addObserver(self)
-        self.audioFileLocalStorageService?.addObserver(self)
+        self.application?.addWatcher(self)
+        self.player?.addWatcher(self)
+        self.audioFileLocalStorageService?.addWatcher(self)
     }
 
     func loadItems() {

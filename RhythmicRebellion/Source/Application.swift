@@ -50,11 +50,11 @@ extension ApplicationObserver {
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) { }
 }
 
-class Application: Observable {
+class Application: Watchable {
 
-    typealias ObserverType = ApplicationObserver
+    typealias WatchType = ApplicationObserver
 
-    let observersContainer = ObserversContainer<ApplicationObserver>()
+    let watchersContainer = WatchersContainer<ApplicationObserver>()
 
     struct URI {
 
@@ -97,13 +97,13 @@ class Application: Observable {
             if self.config == nil { self.loadConfig() }
             if self.user == nil || self.needsLoadUser { self.fanUser() }
 
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.application(self, restApiServiceDidChangeReachableState: true)
             })
         }
 
         self.restApiServiceReachability?.whenUnreachable = { [unowned self] _ in
-            self.observersContainer.invoke({ (observer) in
+            self.watchersContainer.invoke({ (observer) in
                 observer.application(self, restApiServiceDidChangeReachableState: false)
             })
         }
@@ -119,7 +119,7 @@ class Application: Observable {
             self.webSocketService.disconnect()
         }
 
-        self.webSocketService.addObserver(self)
+        self.webSocketService.addWatcher(self)
     }
 
     func start() {
@@ -486,7 +486,7 @@ extension Application {
 
         guard let user = self.user else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChange: user)
         })
     }
@@ -494,7 +494,7 @@ extension Application {
     func notifyUserTokenChanged() {
         guard let user = self.user else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserToken: user)
         })
     }
@@ -502,7 +502,7 @@ extension Application {
     func notifyUserProfileChanged() {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: fanUser.profile)
         })
     }
@@ -510,7 +510,7 @@ extension Application {
     func notifyUserProfileListeningSettingsChanged() {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: fanUser.profile.listeningSettings)
         })
     }
@@ -518,7 +518,7 @@ extension Application {
     func notifyUserProfileForceToPlayChanged(with trackForceToPlayState: TrackForceToPlayState) {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: Array(fanUser.profile.forceToPlay), with: trackForceToPlayState)
         })
     }
@@ -526,7 +526,7 @@ extension Application {
     func notifyUserProfileFollowedArtistsIdsChanged(with artistFollowingState: ArtistFollowingState) {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: Array(fanUser.profile.followedArtistsIds), with: artistFollowingState)
         })
     }
@@ -534,7 +534,7 @@ extension Application {
     func notifyUserProfileSkipAddonsArtistsIdsChanged(with skipArtistAddonsState: SkipArtistAddonsState) {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: Array(fanUser.profile.skipAddonsArtistsIds), with: skipArtistAddonsState)
         })
     }
@@ -546,13 +546,13 @@ extension Application {
         let addedPurchasedTracksIds = Array(purchasedTracksIds.subtracting(previousPurchasedTracksIds))
         let removedPurchasedTracksIds = Array(previousPurchasedTracksIds.subtracting(purchasedTracksIds))
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: Array(purchasedTracksIds), added: addedPurchasedTracksIds, removed: removedPurchasedTracksIds)
         })
     }
 
     func notifyFanPlaylistChanged(with fanPlaylistState: FanPlaylistState) {
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeFanPlaylist: fanPlaylistState)
         })
     }
@@ -560,7 +560,7 @@ extension Application {
     func notifyUserProfileTraksLikeStetesChanged(with trackLikeState: TrackLikeState) {
         guard let fanUser = self.user as? FanUser else { return }
 
-        self.observersContainer.invoke({ (observer) in
+        self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: fanUser.profile.tracksLikeStates, with: trackLikeState)
         })
     }

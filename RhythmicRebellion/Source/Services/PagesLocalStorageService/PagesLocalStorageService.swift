@@ -25,10 +25,10 @@ extension PagesLocalStorageServiceObserver {
 }
 
 
-class PagesLocalStorageService: Observable {
+class PagesLocalStorageService: Watchable {
 
-    typealias ObserverType = PagesLocalStorageServiceObserver
-    let observersContainer = ObserversContainer<ObserverType>()
+    typealias WatchType = PagesLocalStorageServiceObserver
+    let watchersContainer = WatchersContainer<WatchType>()
 
     var pageSnapshotAspectRatio: CGFloat = 1.4125
 
@@ -121,7 +121,7 @@ class PagesLocalStorageService: Observable {
         self.pages.append(page)
         self.save()
 
-        self.observersContainer.invoke { (observer) in
+        self.watchersContainer.invoke { (observer) in
             observer.pagesLocalStorageService(self, didAdd: page)
         }
     }
@@ -132,7 +132,7 @@ class PagesLocalStorageService: Observable {
         self.pages[pageIndex] = page
         self.save()
 
-        self.observersContainer.invoke { (observer) in
+        self.watchersContainer.invoke { (observer) in
             observer.pagesLocalStorageService(self, didUpdate: page)
         }
     }
@@ -150,7 +150,7 @@ class PagesLocalStorageService: Observable {
         self.pages.remove(at: pageIndex)
         self.save()
 
-        self.observersContainer.invoke { (observer) in
+        self.watchersContainer.invoke { (observer) in
             observer.pagesLocalStorageService(self, didDelete: page)
         }
     }
@@ -169,7 +169,7 @@ class PagesLocalStorageService: Observable {
     }
 
     func save(snapshotImage: UIImage, for page: Page) {
-        guard let imageData = UIImagePNGRepresentation(snapshotImage) else { return }
+        guard let imageData = snapshotImage.pngData() else { return }
 
         let snapshotImageURL = self.snapshotImageURL(for: page)
         let fileManager = FileManager.default
@@ -185,7 +185,7 @@ class PagesLocalStorageService: Observable {
 
             try imageData.write(to: snapshotImageURL)
 
-            self.observersContainer.invoke { (observer) in
+            self.watchersContainer.invoke { (observer) in
                 observer.pagesLocalStorageService(self, didSaveSnapshotImageFor: page)
             }
         } catch {

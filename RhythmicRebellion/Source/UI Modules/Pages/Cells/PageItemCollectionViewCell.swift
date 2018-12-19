@@ -65,5 +65,5 @@ class PageItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
 extension PageItemImageContainerView: ZoomAnimatorSourceImageContainerView {
     var image: UIImage? { return imageView.image }
-    var imageContentMode: ContentMode { return imageView.contentMode }
+    var imageContentMode: UIView.ContentMode { return imageView.contentMode }
 }

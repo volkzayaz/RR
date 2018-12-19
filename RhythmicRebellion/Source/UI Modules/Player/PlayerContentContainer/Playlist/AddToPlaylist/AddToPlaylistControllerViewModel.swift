@@ -26,7 +26,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.application.removeObserver(self)
+        self.application.removeWatcher(self)
     }
 
     init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, excludedPlaylists: [FanPlaylist]) {
@@ -44,7 +44,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
         self.loadPlaylists()
         self.delegate?.reloadUI()
 
-        self.application.addObserver(self)
+        self.application.addWatcher(self)
     }
     
     func loadPlaylists() {

@@ -26,7 +26,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.application.removeObserver(self)
+        self.application.removeWatcher(self)
     }
 
     init(router: PlayerMyPlaylistsRouter, application: Application, player: Player, restApiService: RestApiService) {
@@ -44,7 +44,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
             self.delegate?.reloadUI()
         }
 
-        self.application.addObserver(self)
+        self.application.addWatcher(self)
     }
 
     func reload() {

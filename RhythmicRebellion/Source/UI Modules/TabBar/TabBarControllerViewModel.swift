@@ -34,7 +34,7 @@ final class TabBarControllerViewModel: TabBarViewModel {
     }
 
     deinit {
-        self.application?.removeObserver(self)
+        self.application?.removeWatcher(self)
     }
 
     func tabTypes(for userType: UserType) -> [TabType] {
@@ -51,7 +51,7 @@ final class TabBarControllerViewModel: TabBarViewModel {
         self.router?.updateTabs(for: self.tabTypes(for: self.userType))
 
 
-        self.application?.addObserver(self)
+        self.application?.addWatcher(self)
     }
 }
 

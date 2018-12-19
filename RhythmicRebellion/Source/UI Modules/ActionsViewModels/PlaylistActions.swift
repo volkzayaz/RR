@@ -70,7 +70,7 @@ enum PlaylistActionsViewModels {
             }
         }
 
-        var actionStyle: UIAlertActionStyle {
+        var actionStyle: UIAlertAction.Style {
             switch type {
             case .delete: return .destructive
             case .cancel: return .cancel

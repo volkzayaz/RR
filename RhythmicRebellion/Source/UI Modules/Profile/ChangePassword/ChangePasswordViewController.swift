@@ -96,15 +96,15 @@ final class ChangePasswordViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.applicationWillEnterForegroundObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.applicationWillEnterForegroundObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.applicationWillEnterForeground(notification: notification)
         }
 
-        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.keyboardWillShowObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.keyboardDidShow(notification: notification)
         }
 
-        self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.keyboardWillHide(notification: notification)
         }
     }
@@ -143,7 +143,7 @@ final class ChangePasswordViewController: UIViewController {
 
     func keyboardDidShow(notification: Notification) {
 
-        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else { return }
+        guard let keyboardFrameValue: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = self.view.convert(keyboardFrameValue.cgRectValue, from: nil)
 
         let bottomInset = self.scrollView.frame.maxY - keyboardFrame.minY
@@ -184,7 +184,7 @@ extension ChangePasswordViewController: UITextFieldDelegate {
     @IBAction func textFieldEditingChange(textField: UITextField) {
 
         let textFieldFrame = self.contentView.convert(textField.frame, to: self.scrollView)
-        let scrollViewBounds = UIEdgeInsetsInsetRect(self.scrollView.bounds, self.scrollView.contentInset)
+        let scrollViewBounds = self.scrollView.bounds.inset(by: self.scrollView.contentInset)
 
         if scrollViewBounds.contains(textFieldFrame) == false {
             scrollView.scrollRectToVisible(textFieldFrame, animated: true)

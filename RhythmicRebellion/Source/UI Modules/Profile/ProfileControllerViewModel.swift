@@ -46,14 +46,14 @@ final class ProfileControllerViewModel: ProfileViewModel {
     }
 
     deinit {
-        self.application?.removeObserver(self)
+        self.application?.removeWatcher(self)
     }
 
     func load(with delegate: ProfileViewModelDelegate) {
         guard let fanUser = self.application?.user as? FanUser else { return }
 
         self.delegate = delegate
-        self.application?.addObserver(self)
+        self.application?.addWatcher(self)
 
         self.fanUser = fanUser
         self.profileItems = [.profileSettings, .changeEmail, .changePassword]

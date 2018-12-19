@@ -23,41 +23,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UITabBar.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).unselectedItemTintColor = #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96)
         UITabBar.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3647058824, blue: 0.7137254902, alpha: 0.96)
-        UITabBarItem.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
-                                                                                                                 NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
+        UITabBarItem.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
+                                                                                                                 NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any],
                                                                                                                 for: .normal)
 
-        UITabBarItem.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
-                                                                                                                 NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
+        UITabBarItem.appearance(whenContainedInInstancesOf: [PlayerViewController.self]).setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
+                                                                                                                 NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any],
                                                                                                                 for: .selected)
 
         UITabBar.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).unselectedItemTintColor = #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96)
         UITabBar.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).tintColor = #colorLiteral(red: 1, green: 0.3647058824, blue: 0.7137254902, alpha: 0.96)
-        UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
-                                                                                                                 NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
+        UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
+                                                                                                                 NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any],
                                                                                                                 for: .normal)
 
-        UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
-                                                                                                                 NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any],
+        UITabBarItem.appearance(whenContainedInInstancesOf: [TabBarViewController.self]).setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
+                                                                                                                 NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any],
                                                                                                                 for: .selected)
         UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
-            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
-                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
+            .setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1),
+                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any], for: .normal)
         UISegmentedControl.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
-            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
-                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
+            .setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any], for: .selected)
 
         UISegmentedControl.appearance(whenContainedInInstancesOf: [SignUpContentView.self])
-            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1),
-                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .normal)
+            .setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1),
+                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any], for: .normal)
         UISegmentedControl.appearance(whenContainedInInstancesOf: [SignUpContentView.self])
-            .setTitleTextAttributes([NSAttributedStringKey.foregroundColor : #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1),
-                                     NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedStringKey : Any], for: .selected)
+            .setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1),
+                                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any], for: .selected)
 
     }
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         Fabric.with([Crashlytics.self])
 

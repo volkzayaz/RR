@@ -18,7 +18,7 @@ class CreatePlaylistTableViewCell: UITableViewCell, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        NotificationCenter.default.addObserver(forName: Notification.Name.UITextFieldTextDidEndEditing, object: playlistNametextField, queue: OperationQueue.main) {[weak self] (notification) in
+        NotificationCenter.default.addObserver(forName: UITextField.textDidEndEditingNotification, object: playlistNametextField, queue: OperationQueue.main) {[weak self] (notification) in
             self?.nameEditingFinishedCallback?(self?.playlistNametextField.text)
         }
         

@@ -23,7 +23,7 @@ final class PagesControllerViewModel: PagesViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.pagesLocalStorage.removeObserver(self)
+        self.pagesLocalStorage.removeWatcher(self)
     }
 
     init(router: PagesRouter, pagesLocalStorage: PagesLocalStorageService) {
@@ -39,7 +39,7 @@ final class PagesControllerViewModel: PagesViewModel {
         self.pages = self.pagesLocalStorage.pages
 
         self.delegate?.reloadUI()
-        self.pagesLocalStorage.addObserver(self)
+        self.pagesLocalStorage.addWatcher(self)
     }
 
     func numberOfItems(in section: Int) -> Int {

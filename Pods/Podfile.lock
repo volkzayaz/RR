@@ -5,6 +5,7 @@ PODS:
   - CloudTagView (3.0.0)
   - Crashlytics (3.10.9):
     - Fabric (~> 1.7.13)
+  - Differentiator (3.1.0)
   - DownloadButton (0.1.0)
   - EasyTipView (2.0.0)
   - Fabric (1.7.13)
@@ -12,6 +13,16 @@ PODS:
   - MBProgressHUD (1.1.0)
   - NSStringMask (1.2.2)
   - ReachabilitySwift (4.3.0)
+  - RxAtomic (4.4.0)
+  - RxCocoa (4.4.0):
+    - RxSwift (~> 4.0)
+  - RxDataSources (3.1.0):
+    - Differentiator (~> 3.0)
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxSwift (4.4.0):
+    - RxAtomic (~> 4.4)
+  - SnapKit (4.2.0)
   - Starscream (3.0.5)
   - SwiftValidator (4.0.0)
 
@@ -27,6 +38,9 @@ DEPENDENCIES:
   - MBProgressHUD (~> 1.1.0)
   - NSStringMask
   - ReachabilitySwift
+  - RxCocoa (~> 4.4)
+  - RxDataSources (~> 3.1.0)
+  - SnapKit (~> 4.2.0)
   - Starscream (= 3.0.5)
   - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, branch `master`)
 
@@ -36,6 +50,7 @@ SPEC REPOS:
     - AlamofireImage
     - CloudTagView
     - Crashlytics
+    - Differentiator
     - DownloadButton
     - EasyTipView
     - Fabric
@@ -43,6 +58,11 @@ SPEC REPOS:
     - MBProgressHUD
     - NSStringMask
     - ReachabilitySwift
+    - RxAtomic
+    - RxCocoa
+    - RxDataSources
+    - RxSwift
+    - SnapKit
     - Starscream
 
 EXTERNAL SOURCES:
@@ -60,6 +80,7 @@ SPEC CHECKSUMS:
   AlamofireImage: 78d67ccbb763d87ba44b21583d2153500a195630
   CloudTagView: c4eebbb9cf88d8de849e4ae0c3323e95ccc236b2
   Crashlytics: 55e24fc23989680285a21cb1146578d9d18e432c
+  Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
   EasyTipView: f24313ded34b20c6e63811e218016ee3baaa7ee5
   Fabric: 25d0963b691fc97be566392243ff0ecef5a68338
@@ -67,9 +88,14 @@ SPEC CHECKSUMS:
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   NSStringMask: c0969955b28c4286418197696469665d9dcba313
   ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
+  RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
+  RxCocoa: df63ebf7b9a70d6b4eeea407ed5dd4efc8979749
+  RxDataSources: a843bad90c29817f5923ec8163f4af2de084ceb3
+  RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
 
-PODFILE CHECKSUM: 6523d7861f76cc49153867da3dc6bfa144aafe7e
+PODFILE CHECKSUM: b32c2e0c6fc82346dd961a2075a9463652c946da
 
 COCOAPODS: 1.5.3

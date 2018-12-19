@@ -42,8 +42,8 @@ final class PromoControllerViewModel: PromoViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.player.removeObserver(self)
-        self.application.removeObserver(self)
+        self.player.removeWatcher(self)
+        self.application.removeWatcher(self)
     }
 
     init(router: PromoRouter, application: Application, player: Player) {
@@ -57,8 +57,8 @@ final class PromoControllerViewModel: PromoViewModel {
 
         self.delegate?.refreshUI()
 
-        self.application.addObserver(self)
-        self.player.addObserver(self)
+        self.application.addWatcher(self)
+        self.player.addWatcher(self)
     }
 
     func thumbnailURL() -> URL? {

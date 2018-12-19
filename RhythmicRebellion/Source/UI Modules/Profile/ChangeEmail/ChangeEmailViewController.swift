@@ -82,7 +82,7 @@ final class ChangeEmailViewController: UIViewController, ScrollableContentViewCo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.applicationWillEnterForegroundObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
+        self.applicationWillEnterForegroundObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
 
             self.viewModel.restart()
         }
@@ -134,7 +134,7 @@ extension ChangeEmailViewController: UITextFieldDelegate {
     @IBAction func textFieldEditingChange(textField: UITextField) {
 
         let textFieldFrame = self.contentView.convert(textField.frame, to: self.scrollView)
-        let scrollViewBounds = UIEdgeInsetsInsetRect(self.scrollView.bounds, self.scrollView.contentInset)
+        let scrollViewBounds = self.scrollView.bounds.inset(by: self.scrollView.contentInset)
 
         if scrollViewBounds.contains(textFieldFrame) == false {
             scrollView.scrollRectToVisible(textFieldFrame, animated: true)
