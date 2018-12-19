@@ -208,7 +208,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="904"/>
                                 <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="h2I-d2-BJ2" customClass="BaseFlowLayout" customModule="RhythmicRebellion" customModuleProvider="target">
-                                    <size key="itemSize" width="177.5" height="160.5"/>
+                                    <size key="itemSize" width="177" height="160"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
@@ -238,9 +238,6 @@
                                                                 <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s8Y-fj-fWf">
                                                                     <rect key="frame" x="145" y="32.5" width="22" height="22"/>
                                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <connections>
-                                                                        <action selector="onActionButtonWithSender:" destination="6Sv-yQ-oxJ" eventType="touchUpInside" id="kYo-J9-uo1"/>
-                                                                    </connections>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dUD-D3-xMK">
                                                                     <rect key="frame" x="10" y="35.5" width="33" height="16"/>
@@ -293,14 +290,8 @@
                                         </constraints>
                                         <size key="customSize" width="177" height="160"/>
                                         <connections>
-                                            <outlet property="actionButton" destination="s8Y-fj-fWf" id="N2D-rh-X7A"/>
                                             <outlet property="artistImageView" destination="29I-jh-RpC" id="mTc-dY-bmJ"/>
-                                            <outlet property="containerView" destination="uuD-gI-trT" id="aF7-L1-G0E"/>
-                                            <outlet property="gradientView" destination="Hhu-fl-fQw" id="fid-nG-nPl"/>
-                                            <outlet property="imageView" destination="29I-jh-RpC" id="UOY-n2-huT"/>
                                             <outlet property="nameLabel" destination="dUD-D3-xMK" id="EPb-hZ-lRK"/>
-                                            <outlet property="shadowContainerView" destination="Coi-mD-eFp" id="ib4-WM-Fms"/>
-                                            <outlet property="titleLabel" destination="dUD-D3-xMK" id="WYu-LO-NKP"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

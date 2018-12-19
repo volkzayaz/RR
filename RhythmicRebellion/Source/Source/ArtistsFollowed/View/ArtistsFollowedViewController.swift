@@ -10,6 +10,7 @@ import UIKit
 
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 class ArtistsFollowedViewController: UIViewController, MVVM_View {
     
@@ -18,19 +19,25 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var baseLayout: BaseFlowLayout!
     
+    lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<String, Artist>>(configureCell: { [unowned self] (_, collectionView, ip, x) in
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.artistCell,
+                                                      for: ip)!
+        
+        cell.nameLabel.text = x.name
+        
+        return cell
+    })
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        baseLayout.configureFor(bounds: collectionView.bounds)
+        baseLayout.configureFor(bounds: view.bounds)
         
-        /**
-         *  Set up any bindings here
-         *  viewModel.labelText
-         *     .drive(label.rx.text)
-         *     .addDisposableTo(rx_disposeBag)
-         */
+        viewModel.dataSource
+            .drive(collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: rx.disposeBag)
         
     }
     

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxDataSources
 
 public struct Artist: Codable {
 
@@ -71,4 +72,17 @@ public struct Artist: Codable {
         try container.encodeAsString(self.publishDate, forKey: .publishDate, dateFormatter: dateTimeFormatter)
     }
 
+    
+}
+
+extension Artist: IdentifiableType, Equatable {
+    
+    public var identity : String { return id }
+    
+    public static func ==(lhs: Artist, rhs: Artist) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.urlString == rhs.urlString
+    }
+    
 }
