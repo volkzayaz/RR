@@ -238,7 +238,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 }
 
-extension PlayerControllerViewModel: PlayerObserver {
+extension PlayerControllerViewModel: PlayerWatcher {
 
     func playerDidChangePlaylist(player: Player) {
         self.delegate?.refreshUI()
@@ -276,7 +276,7 @@ extension PlayerControllerViewModel: PlayerObserver {
     }
 }
 
-extension PlayerControllerViewModel: ApplicationObserver {
+extension PlayerControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let artist = self.player.currentItem?.playlistItem.track.artist, artist.id == artistFollowingState.artistId else { return }

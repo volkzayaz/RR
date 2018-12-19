@@ -31,7 +31,7 @@ public enum PlayerInitializationAction : Int {
     case playBackward
 }
 
-protocol PlayerObserver: class {
+protocol PlayerWatcher: class {
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool)
 
@@ -53,7 +53,7 @@ protocol PlayerObserver: class {
     func playerDidChangePlaylist(player: Player)
 }
 
-extension PlayerObserver {
+extension PlayerWatcher {
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool) { }
 
@@ -93,9 +93,9 @@ class Player: NSObject, Watchable {
         case delete
     }
 
-    typealias WatchType = PlayerObserver
+    typealias WatchType = PlayerWatcher
 
-    let watchersContainer = WatchersContainer<PlayerObserver>()
+    let watchersContainer = WatchersContainer<PlayerWatcher>()
 
     var canForward: Bool {
         guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems }
@@ -415,12 +415,12 @@ class Player: NSObject, Watchable {
             switch lyricsResult {
             case .success(let lyrics):
                 playerCurrentItem.lyrics = lyrics
-                self.observersContainer.invoke({ (observer) in
+                self.watchersContainer.invoke({ (observer) in
                     observer.player(player: self, didLoadPlayerItemLyrics: lyrics)
                 })
 
             case .failure(let error):
-                self.observersContainer.invoke({ (observer) in
+                self.watchersContainer.invoke({ (observer) in
                     observer.player(player: self, didFailedLoadPlayerItemLyrics: error)
                 })
             }
@@ -981,7 +981,7 @@ class Player: NSObject, Watchable {
     }
 }
 
-extension Player: WebSocketServiceObserver {
+extension Player: WebSocketServiceWatcher {
 
     // MARK: - Apply State
 
@@ -1289,7 +1289,7 @@ extension Player: WebSocketServiceObserver {
     }
 }
 
-extension Player: ApplicationObserver {
+extension Player: ApplicationWatcher {
 
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) {
         guard isReachable == true, self.config == nil else { return }

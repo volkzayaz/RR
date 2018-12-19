@@ -93,7 +93,7 @@ final class PagesControllerViewModel: PagesViewModel {
     }
 }
 
-extension PagesControllerViewModel : PagesLocalStorageServiceObserver {
+extension PagesControllerViewModel : PagesLocalStorageServiceWatcher {
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page) {
         self.pages.append(page)

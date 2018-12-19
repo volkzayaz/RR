@@ -34,7 +34,7 @@ final class PlayerPlaylistRootControllerViewModel: PlayerPlaylistRootViewModel {
     }
 }
 
-extension PlayerPlaylistRootControllerViewModel : ApplicationObserver {
+extension PlayerPlaylistRootControllerViewModel : ApplicationWatcher {
     func application(_ application: Application, didChange user: User) {
         self.delegate?.refreshUI()
     }

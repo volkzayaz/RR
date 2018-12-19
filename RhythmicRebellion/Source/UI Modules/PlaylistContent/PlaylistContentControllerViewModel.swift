@@ -399,7 +399,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     }
 }
 
-extension PlaylistContentControllerViewModel: ApplicationObserver {
+extension PlaylistContentControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
         guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.id == fanPlaylistState.id else { return }
@@ -446,7 +446,7 @@ extension PlaylistContentControllerViewModel: ApplicationObserver {
     }
 }
 
-extension PlaylistContentControllerViewModel: PlayerObserver {
+extension PlaylistContentControllerViewModel: PlayerWatcher {
     
     func player(player: Player, didChange status: PlayerStatus) {
         self.delegate?.reloadUI()
@@ -481,7 +481,7 @@ extension PlaylistContentControllerViewModel: PlayerObserver {
     }
 }
 
-extension PlaylistContentControllerViewModel: AudioFileLocalStorageServiceObserver {
+extension PlaylistContentControllerViewModel: AudioFileLocalStorageServiceWatcher {
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
 

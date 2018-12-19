@@ -10,7 +10,7 @@ import Foundation
 import Starscream
 import os.log
 
-protocol WebSocketServiceObserver: class {
+protocol WebSocketServiceWatcher: class {
 
     func webSocketServiceDidConnect(_ service: WebSocketService)
     func webSocketServiceDidDisconnect(_ service: WebSocketService)
@@ -33,7 +33,7 @@ protocol WebSocketServiceObserver: class {
     func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState)
 }
 
-extension WebSocketServiceObserver {
+extension WebSocketServiceWatcher {
 
     func webSocketServiceDidConnect(_ service: WebSocketService) { }
     func webSocketServiceDidDisconnect(_ service: WebSocketService) { }
@@ -58,9 +58,9 @@ extension WebSocketServiceObserver {
 
 class WebSocketService: WebSocketDelegate, Watchable {
 
-    typealias WatchType = WebSocketServiceObserver
+    typealias WatchType = WebSocketServiceWatcher
 
-    let watchersContainer = WatchersContainer<WebSocketServiceObserver>()
+    let watchersContainer = WatchersContainer<WebSocketServiceWatcher>()
 
     enum State: Int {
         case disconnected

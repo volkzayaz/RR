@@ -26,7 +26,7 @@ final class LyricsControllerViewModel: LyricsViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.player.removeObserver(self)
+        self.player.removeWatcher(self)
 
         if self.player.karaokeMode == .lyrics {
             self.player.switchTo(karaokeMode: .none)
@@ -47,7 +47,7 @@ final class LyricsControllerViewModel: LyricsViewModel {
             self.player.switchTo(karaokeMode: .lyrics)
         }
 
-        self.player.addObserver(self)
+        self.player.addWatcher(self)
     }
 
     func switchToKaraokeMode() {
@@ -55,7 +55,7 @@ final class LyricsControllerViewModel: LyricsViewModel {
     }
 }
 
-extension LyricsControllerViewModel: PlayerObserver {
+extension LyricsControllerViewModel: PlayerWatcher {
 
     func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
         self.delegate?.refreshUI()

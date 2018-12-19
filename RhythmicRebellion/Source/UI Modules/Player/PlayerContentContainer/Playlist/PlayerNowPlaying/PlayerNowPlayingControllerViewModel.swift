@@ -226,7 +226,7 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 }
 
-extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
+extension PlayerNowPlayingControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let playlistItems = self.playlistItems else { return }
@@ -263,7 +263,7 @@ extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
 
 }
 
-extension PlayerNowPlayingControllerViewModel: PlayerObserver {
+extension PlayerNowPlayingControllerViewModel: PlayerWatcher {
     
     func playerDidChangePlaylist(player: Player) {
         self.reload()
@@ -303,7 +303,7 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
     }
 }
 
-extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObserver {
+extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceWatcher {
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
 

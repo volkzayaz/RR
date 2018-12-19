@@ -271,7 +271,7 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
 
 }
 
-extension TrackTableViewCell: TrackAudioFileDownloadingInfoObserver {
+extension TrackTableViewCell: TrackAudioFileDownloadingInfoWatcher {
 
     func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) {
 
