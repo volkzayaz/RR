@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		737622C621CA4ED8005B603E /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622C321CA4ED8005B603E /* ArtistsFollowedRouter.swift */; };
+		737622C721CA4ED8005B603E /* ArtistsFollowedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622C421CA4ED8005B603E /* ArtistsFollowedViewController.swift */; };
+		737622C821CA4ED8005B603E /* ArtistsFollowedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622C521CA4ED8005B603E /* ArtistsFollowedViewModel.swift */; };
+		737622CB21CA4EED005B603E /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622CA21CA4EED005B603E /* ArtistsFollowedCollectionCell.swift */; };
+		737622CF21CA5039005B603E /* BaseFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622CE21CA5039005B603E /* BaseFlowLayout.swift */; };
+		737622D221CA5462005B603E /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622D121CA5462005B603E /* R.generated.swift */; };
 		737BB2C921C9347B0062A3A5 /* NotNilObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2BC21C9347B0062A3A5 /* NotNilObservable.swift */; };
 		737BB2CA21C9347B0062A3A5 /* ViewIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */; };
 		737BB2CD21C9347B0062A3A5 /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */; };
@@ -73,10 +79,6 @@
 		763931F52118831600A65257 /* PlayerMyPlaylistsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931F12118831600A65257 /* PlayerMyPlaylistsRouter.swift */; };
 		763931F62118831600A65257 /* PlayerMyPlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931F22118831600A65257 /* PlayerMyPlaylistsViewController.swift */; };
 		763931F72118831600A65257 /* PlayerMyPlaylistsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931F32118831600A65257 /* PlayerMyPlaylistsViewModel.swift */; };
-		763931FD21198C3600A65257 /* PlayerFollowingControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931F921198C3600A65257 /* PlayerFollowingControllerViewModel.swift */; };
-		763931FE21198C3600A65257 /* PlayerFollowingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931FA21198C3600A65257 /* PlayerFollowingRouter.swift */; };
-		763931FF21198C3600A65257 /* PlayerFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931FB21198C3600A65257 /* PlayerFollowingViewController.swift */; };
-		7639320021198C3600A65257 /* PlayerFollowingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763931FC21198C3600A65257 /* PlayerFollowingViewModel.swift */; };
 		763932062119AE3300A65257 /* TrackTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763932052119AE3300A65257 /* TrackTableViewCell.xib */; };
 		7639320A2119C8A000A65257 /* PlayerNowPlayingTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763932092119C8A000A65257 /* PlayerNowPlayingTableHeaderView.swift */; };
 		763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C904820FCBABD007C1F86 /* TabBarControllerViewModel.swift */; };
@@ -268,6 +270,12 @@
 
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		737622C321CA4ED8005B603E /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
+		737622C421CA4ED8005B603E /* ArtistsFollowedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedViewController.swift; sourceTree = "<group>"; };
+		737622C521CA4ED8005B603E /* ArtistsFollowedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedViewModel.swift; sourceTree = "<group>"; };
+		737622CA21CA4EED005B603E /* ArtistsFollowedCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCollectionCell.swift; sourceTree = "<group>"; };
+		737622CE21CA5039005B603E /* BaseFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFlowLayout.swift; sourceTree = "<group>"; };
+		737622D121CA5462005B603E /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		737BB2BC21C9347B0062A3A5 /* NotNilObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotNilObservable.swift; sourceTree = "<group>"; };
 		737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewIndicator.swift; sourceTree = "<group>"; };
 		737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
@@ -334,10 +342,6 @@
 		763931F12118831600A65257 /* PlayerMyPlaylistsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerMyPlaylistsRouter.swift; sourceTree = "<group>"; };
 		763931F22118831600A65257 /* PlayerMyPlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerMyPlaylistsViewController.swift; sourceTree = "<group>"; };
 		763931F32118831600A65257 /* PlayerMyPlaylistsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerMyPlaylistsViewModel.swift; sourceTree = "<group>"; };
-		763931F921198C3600A65257 /* PlayerFollowingControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFollowingControllerViewModel.swift; sourceTree = "<group>"; };
-		763931FA21198C3600A65257 /* PlayerFollowingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFollowingRouter.swift; sourceTree = "<group>"; };
-		763931FB21198C3600A65257 /* PlayerFollowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFollowingViewController.swift; sourceTree = "<group>"; };
-		763931FC21198C3600A65257 /* PlayerFollowingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFollowingViewModel.swift; sourceTree = "<group>"; };
 		763932052119AE3300A65257 /* TrackTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackTableViewCell.xib; sourceTree = "<group>"; };
 		763932092119C8A000A65257 /* PlayerNowPlayingTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingTableHeaderView.swift; sourceTree = "<group>"; };
 		763C904820FCBABD007C1F86 /* TabBarControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControllerViewModel.swift; sourceTree = "<group>"; };
@@ -551,6 +555,50 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		737622C121CA4EBA005B603E /* Bricks */ = {
+			isa = PBXGroup;
+			children = (
+				737622C221CA4EC6005B603E /* ArtistsFollowed */,
+			);
+			name = Bricks;
+			path = Source;
+			sourceTree = "<group>";
+		};
+		737622C221CA4EC6005B603E /* ArtistsFollowed */ = {
+			isa = PBXGroup;
+			children = (
+				737622C921CA4EDC005B603E /* View */,
+				737622C321CA4ED8005B603E /* ArtistsFollowedRouter.swift */,
+				737622C521CA4ED8005B603E /* ArtistsFollowedViewModel.swift */,
+			);
+			path = ArtistsFollowed;
+			sourceTree = "<group>";
+		};
+		737622C921CA4EDC005B603E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				737622C421CA4ED8005B603E /* ArtistsFollowedViewController.swift */,
+				737622CA21CA4EED005B603E /* ArtistsFollowedCollectionCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		737622CD21CA502B005B603E /* BaseFlowLayout */ = {
+			isa = PBXGroup;
+			children = (
+				737622CE21CA5039005B603E /* BaseFlowLayout.swift */,
+			);
+			path = BaseFlowLayout;
+			sourceTree = "<group>";
+		};
+		737622D021CA5462005B603E /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				737622D121CA5462005B603E /* R.generated.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		737BB2BB21C9347B0062A3A5 /* RxExtensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,6 +724,7 @@
 		763170F2215BBED80053C719 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				737622D021CA5462005B603E /* UI */,
 				763170F0215BA3390053C719 /* TextImageGenerator.swift */,
 				768486E7216B4C51000D0F79 /* MoneyFormatter.swift */,
 			);
@@ -723,17 +772,6 @@
 				763931F22118831600A65257 /* PlayerMyPlaylistsViewController.swift */,
 			);
 			path = PlayerMyPlaylists;
-			sourceTree = "<group>";
-		};
-		763931F821198C1A00A65257 /* PlayerPlaylistFollowing */ = {
-			isa = PBXGroup;
-			children = (
-				763931FA21198C3600A65257 /* PlayerFollowingRouter.swift */,
-				763931FC21198C3600A65257 /* PlayerFollowingViewModel.swift */,
-				763931F921198C3600A65257 /* PlayerFollowingControllerViewModel.swift */,
-				763931FB21198C3600A65257 /* PlayerFollowingViewController.swift */,
-			);
-			path = PlayerPlaylistFollowing;
 			sourceTree = "<group>";
 		};
 		763932012119ADB700A65257 /* Views */ = {
@@ -1052,7 +1090,6 @@
 				AB1423672124481F00C926F5 /* AddToPlaylist */,
 				763931E52118745300A65257 /* PlayerNowPlaying */,
 				763931EF211882F500A65257 /* PlayerMyPlaylists */,
-				763931F821198C1A00A65257 /* PlayerPlaylistFollowing */,
 				769F4E85210A143B000DD23B /* PlayerPlaylistRootRouter.swift */,
 				769F4E86210A143B000DD23B /* PlayerPlaylistRootViewModel.swift */,
 				769F4E83210A143B000DD23B /* PlayerPlaylistRootControllerViewModel.swift */,
@@ -1291,6 +1328,7 @@
 		76F1FA4320DBA8DE00C9191F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				737622C121CA4EBA005B603E /* Bricks */,
 				76EDBD1720F78F0A0021297F /* Errors */,
 				7650961320E3A0FC00BF1F79 /* Models */,
 				7650960F20E2593F00BF1F79 /* Services */,
@@ -1323,6 +1361,7 @@
 		76F1FA6A20DBD94200C9191F /* UI Components */ = {
 			isa = PBXGroup;
 			children = (
+				737622CD21CA502B005B603E /* BaseFlowLayout */,
 				ABD79E85212C9E77004139F6 /* EqualizerView.swift */,
 				76336A85215CBE8100AE9001 /* RoundedView.swift */,
 				76C9F6502147DFFD00054B44 /* RoundedImageVIew.swift */,
@@ -1397,6 +1436,7 @@
 			buildConfigurationList = 76F1FA3920DBA88100C9191F /* Build configuration list for PBXNativeTarget "RhythmicRebellion" */;
 			buildPhases = (
 				FEA8E141940AF8FBF6D73CC2 /* [CP] Check Pods Manifest.lock */,
+				737622CC21CA4F8A005B603E /* R.swift */,
 				76F1FA2320DBA88100C9191F /* Sources */,
 				76F1FA2420DBA88100C9191F /* Frameworks */,
 				76F1FA2520DBA88100C9191F /* Resources */,
@@ -1485,9 +1525,11 @@
 				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/DownloadButton/DownloadButton.framework",
 				"${BUILT_PRODUCTS_DIR}/EasyTipView/EasyTipView.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MaterialTextField/MaterialTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/NSStringMask/NSStringMask.framework",
+				"${BUILT_PRODUCTS_DIR}/R.swift.Library/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
@@ -1505,9 +1547,11 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DownloadButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyTipView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSStringMask.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
@@ -1521,6 +1565,26 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		737622CC21CA4F8A005B603E /* R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			name = R.swift;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift\"\n";
 		};
 		76F0D960219B230400B0E86D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1573,6 +1637,7 @@
 				763170F1215BA3390053C719 /* TextImageGenerator.swift in Sources */,
 				764B854F2138043E00071F30 /* Country.swift in Sources */,
 				76315816219D97F800E1D7F5 /* PageContentViewController.swift in Sources */,
+				737622CF21CA5039005B603E /* BaseFlowLayout.swift in Sources */,
 				763C905E20FDF5BA007C1F86 /* Application.swift in Sources */,
 				7650962320E5238100BF1F79 /* PlayerPlaylistItemPatch.swift in Sources */,
 				764D683E2148E86200F52730 /* ProfileSettingsViewController.swift in Sources */,
@@ -1595,7 +1660,6 @@
 				76F1FA5F20DBA9FF00C9191F /* AppViewController.swift in Sources */,
 				762271A3213D33E60018689E /* TextFields.swift in Sources */,
 				76C9F6512147DFFD00054B44 /* RoundedImageVIew.swift in Sources */,
-				7639320021198C3600A65257 /* PlayerFollowingViewModel.swift in Sources */,
 				76A45B43213926380080885D /* SelectableListViewModel.swift in Sources */,
 				764D6849214967DD00F52730 /* GenresSelectableListControllerViewModel.swift in Sources */,
 				76F61E1E21AEA58800F758EF /* PageTrackState.swift in Sources */,
@@ -1609,6 +1673,7 @@
 				76315821219EF92C00E1D7F5 /* View+Extension.swift in Sources */,
 				767289C620ED1A13008A86B6 /* Player.swift in Sources */,
 				769F4EAF210B6631000DD23B /* VideoViewController.swift in Sources */,
+				737622CB21CA4EED005B603E /* ArtistsFollowedCollectionCell.swift in Sources */,
 				764D683D2148E86200F52730 /* ProfileSettingsRouter.swift in Sources */,
 				76310DCD20F6252200140D03 /* AddonState.swift in Sources */,
 				76CE92BE2192E17B00956882 /* ApplicationContentContainerViewController.swift in Sources */,
@@ -1625,6 +1690,7 @@
 				76C8DDFD211063E800773BB1 /* Playlist.swift in Sources */,
 				737BB2CD21C9347B0062A3A5 /* NSObject+Rx.swift in Sources */,
 				7665334E20FF1DE300FEC702 /* ProfileControllerViewModel.swift in Sources */,
+				737622C721CA4ED8005B603E /* ArtistsFollowedViewController.swift in Sources */,
 				7665E81A2105BC84007D8B98 /* ListeningSettingsControllerViewModel.swift in Sources */,
 				76315814219D97F800E1D7F5 /* PageContentControllerViewModel.swift in Sources */,
 				767BA57F2111AEEC00C390D8 /* CellIdentifiable.swift in Sources */,
@@ -1661,8 +1727,10 @@
 				7631581F219EC9B600E1D7F5 /* PageItemViewModel.swift in Sources */,
 				760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */,
 				763931F62118831600A65257 /* PlayerMyPlaylistsViewController.swift in Sources */,
+				737622D221CA5462005B603E /* R.generated.swift in Sources */,
 				762DD7852141237B0046A984 /* HowHear.swift in Sources */,
 				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
+				737622C821CA4ED8005B603E /* ArtistsFollowedViewModel.swift in Sources */,
 				7665E82621070A95007D8B98 /* DatePickerTableViewCell.swift in Sources */,
 				7665E8242106265F007D8B98 /* SwitchableTableViewCell.swift in Sources */,
 				761873BC2167ACCD00F3997F /* Price.swift in Sources */,
@@ -1696,7 +1764,6 @@
 				7665E81C2105BC84007D8B98 /* ListeningSettingsViewController.swift in Sources */,
 				7650962520E662D100BF1F79 /* RestApiService.swift in Sources */,
 				76315815219D97F800E1D7F5 /* PageContentRouter.swift in Sources */,
-				763931FF21198C3600A65257 /* PlayerFollowingViewController.swift in Sources */,
 				7665334520FF1CFA00FEC702 /* PagesControllerViewModel.swift in Sources */,
 				767BA57A21119B6500C390D8 /* GradientView.swift in Sources */,
 				76EDBD1520F73DCC0021297F /* PlayerQueue.swift in Sources */,
@@ -1715,7 +1782,6 @@
 				76A45B41213926380080885D /* SelectableListRouter.swift in Sources */,
 				7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */,
 				7665335820FF414300FEC702 /* SignInRouter.swift in Sources */,
-				763931FD21198C3600A65257 /* PlayerFollowingControllerViewModel.swift in Sources */,
 				763C904F20FCBABD007C1F86 /* TabBarViewModel.swift in Sources */,
 				767BA57D2111A15400C390D8 /* PlaylistItemViewModel.swift in Sources */,
 				769F4E88210A143C000DD23B /* PlayerPlaylistRootViewController.swift in Sources */,
@@ -1727,7 +1793,6 @@
 				76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */,
 				769F4EBD210B6706000DD23B /* PromoControllerViewModel.swift in Sources */,
 				AB14236C2124487F00C926F5 /* AddToPlaylistViewModel.swift in Sources */,
-				763931FE21198C3600A65257 /* PlayerFollowingRouter.swift in Sources */,
 				7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */,
 				769F4EBF210B6706000DD23B /* PromoViewController.swift in Sources */,
 				769F4E8A210A143C000DD23B /* PlayerPlaylistRootViewModel.swift in Sources */,
@@ -1762,6 +1827,7 @@
 				7680942B21B00742002FB589 /* PageTrackForceToPlayState.swift in Sources */,
 				763931DC21144CF600A65257 /* TrackActions.swift in Sources */,
 				769F4EB0210B6631000DD23B /* VideoViewModel.swift in Sources */,
+				737622C621CA4ED8005B603E /* ArtistsFollowedRouter.swift in Sources */,
 				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
 				76A45B4C213944180080885D /* SelectableListItemTableViewCell.swift in Sources */,
 				76A45B40213926380080885D /* SelectableListControllerViewModel.swift in Sources */,

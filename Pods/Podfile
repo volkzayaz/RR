@@ -23,9 +23,11 @@ target 'RhythmicRebellion' do
     #infrastructure
     pod 'RxDataSources', '~> 3.1.0'
     pod 'RxCocoa', '~> 4.4'
+    pod 'R.swift', '5.0.0'
     
     #ui
     pod 'SnapKit', '~> 4.2.0'
+    pod 'Kingfisher', '~> 4.8'
     
 end
 
