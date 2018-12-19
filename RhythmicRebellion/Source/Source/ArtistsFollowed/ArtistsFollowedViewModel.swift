@@ -36,6 +36,13 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
     init(router: ArtistsFollowedRouter) {
         self.router = router
         
+        ArtistsFollowingRouter.list.rx.response(type: [Artist].self)
+            .subscribe(onSuccess: { (x) in
+                print(x)
+            }, onError: { e in
+                print(e)
+            })
+        
         /**
          
          Proceed with initialization here
