@@ -14,6 +14,10 @@ import RxDataSources
 
 extension ArtistsFollowedViewModel {
     
+    /////-------
+    /////Bindings
+    /////-------
+    
     var dataSource: Driver<[AnimatableSectionModel<String, Artist>]> {
         return data.asDriver().map { x in
             return [AnimatableSectionModel(model: "", items: x)]
@@ -24,17 +28,16 @@ extension ArtistsFollowedViewModel {
 
 struct ArtistsFollowedViewModel : MVVM_ViewModel {
     
-    /** Reference dependent viewModels, managers, stores, tracking variables...
-     
-     fileprivate let privateDependency = Dependency()
-     
-     fileprivate let privateTextVar = BehaviourRelay<String?>(nil)
-     
+    /** dependent viewModels, managers, stores, tracking variables...
      */
     
     fileprivate let searchQuery = BehaviorRelay(value: "")
-    
     fileprivate let data = BehaviorRelay<[Artist]>(value: [])
+    
+    ///upon unfollowing directly from dataSource
+    ///we will not wait until socket signals us
+    ///we will directly remove corresponding artist from the datasource
+    fileprivate let quickUnfollowBuffer = BehaviorSubject<ArtistFollowingState?>(value: nil)
     
     init(router: ArtistsFollowedRouter) {
         self.router = router
@@ -50,23 +53,43 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
                 return q.lengthOfBytes(using: String.Encoding.utf8) == 0
             }
         
+        let listUpdated = DataLayer.get.webSocketService.followingState
+        
+        let artistUnfollowed = listUpdated.filter { !$0.isFollowed }
+        let artistFollowed   = listUpdated.filter {  $0.isFollowed }
+        
         let dataRequest = ArtistsFollowingRequest.list.rx
             .response(type: [Artist].self)
             .trackView(viewIndicator: indicator)
             .asObservable()
         
-        Observable.combineLatest(dataRequest, queryChanges) { ($0, $1) }
-            .silentCatch(handler: router.owner)
+        artistFollowed.map { _ in }
+            .startWith( () )
+            .flatMapLatest { [unowned buffer = quickUnfollowBuffer] _ -> Observable<([Artist], [String], String)> in
+                
+                let filterOutArtists = Observable.of( buffer.asObservable().skip(1).notNil(),
+                                                      artistUnfollowed)
+                    .merge()
+                    .scan([], accumulator: { $0 + [$1.artistId] })
+                    .startWith([])
+                
+                return Observable.combineLatest(dataRequest,
+                                                filterOutArtists, queryChanges) { ($0, $1, $2) }
+            }
             .map { arg -> [Artist] in
                 
-                let (artists, query) = arg
+                let (artists, kicked, query) = arg
+                
+                let list = artists.filter { !kicked.contains($0.id) }
+                
                 let q = query.lowercased()
                 
-                guard !q.isEmpty else { return artists }
+                guard !q.isEmpty else { return list }
                 
-                return artists.filter { $0.name.lowercased().contains(q) }
+                return list.filter { $0.name.lowercased().contains(q) }
                 
             }
+            .silentCatch(handler: router.owner)
             .bind(to: data)
             .disposed(by: bag)
             
@@ -87,11 +110,24 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
 
 extension ArtistsFollowedViewModel {
     
+    ////------
+    ////Actions
+    ////------
+    
     func queryChanges(_ q: String) {
         searchQuery.accept(q)
     }
  
     func unfollow(artist: Artist) {
+        
+        quickUnfollowBuffer.onNext( ArtistFollowingState(artistId: artist.id,
+                                                         isFollowed: false) )
+        ///TODO: migrate to reactive error handling
+        DataLayer.get.application.unfollow(artistId: artist.id) { (res) in
+            if case .failure(let e) = res {
+                self.router.messagePresentable.presentError(error: e)
+            }
+        }
         
     }
     

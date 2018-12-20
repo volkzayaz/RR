@@ -189,7 +189,7 @@ class Player: NSObject, Watchable {
 
 //    let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Player")
 
-    init(with application: Application) {
+    public init(with application: Application) {
 
         self.application = application
 

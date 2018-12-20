@@ -10,6 +10,10 @@ import Foundation
 
 enum ArtistsFollowingRequest: BaseNetworkRouter {
     case list
+    
+    case follow(artist: Artist)
+    case unfollow(artist: Artist)
+    
 }
 
 extension ArtistsFollowingRequest {
@@ -22,6 +26,14 @@ extension ArtistsFollowingRequest {
             return anonymousRequest(method: .get,
                                     path: "fan/artist-follow")
         
+        case .follow(let artist):
+            return anonymousRequest(method: .post,
+                                    path: "fan/artist-follow/\(artist.id)")
+            
+        case .unfollow(let artist):
+            return anonymousRequest(method: .delete,
+                                    path: "fan/artist-follow/\(artist.id)")
+            
         }
         
     }
