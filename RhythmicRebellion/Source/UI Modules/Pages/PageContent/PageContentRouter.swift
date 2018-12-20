@@ -9,7 +9,7 @@
 
 import UIKit
 
-protocol PageContentRouterDelegate: AuthorizationNavigationDelgate {
+protocol PageContentRouterDelegate: ForcedAuthorizationRouter {
     func pageFailed(with error: Error)
 }
 
@@ -70,6 +70,6 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
     }
 
     func navigateToAuthorization() {
-        self.delegate?.selectAuthorizationTab(with: .signIn)
+        self.delegate?.routeToAuthorization(with: .signIn)
     }
 }

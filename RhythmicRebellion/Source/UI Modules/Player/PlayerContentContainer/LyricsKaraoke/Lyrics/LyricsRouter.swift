@@ -9,7 +9,10 @@
 
 import UIKit
 
-protocol LyricsRouter: FlowRouter {
+protocol LyricsRouterDelegate: ForcedAuthorizationRouter {
+}
+
+protocol LyricsRouter: FlowRouter, ForcedAuthorizationRouter {
 }
 
 final class DefaultLyricsRouter:  LyricsRouter, FlowRouterSegueCompatible {
@@ -32,6 +35,7 @@ final class DefaultLyricsRouter:  LyricsRouter, FlowRouterSegueCompatible {
     }
 
     private(set) var dependencies: RouterDependencies
+    private(set) weak var delegate: LyricsRouterDelegate?
 
     private(set) weak var viewModel: LyricsViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -46,13 +50,18 @@ final class DefaultLyricsRouter:  LyricsRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies) {
+    init(dependencies: RouterDependencies, delegate: LyricsRouterDelegate? = nil) {
         self.dependencies = dependencies
+        self.delegate = delegate
     }
 
     func start(controller: LyricsViewController) {
         sourceController = controller
-        let vm = LyricsControllerViewModel(router: self, player: self.dependencies.player)
+        let vm = LyricsControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
+    }
+
+    func routeToAuthorization(with authorizationType: AuthorizationType) {
+        self.delegate?.routeToAuthorization(with: .signIn)
     }
 }

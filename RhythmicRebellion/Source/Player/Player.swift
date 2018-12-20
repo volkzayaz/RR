@@ -41,6 +41,8 @@ protocol PlayerWatcher: class {
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?)
 
+    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode)
+
     func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics)
     func player(player: Player, didFailedLoadPlayerItemLyrics error: Error)
 
@@ -63,6 +65,8 @@ extension PlayerWatcher {
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) { }
 
+    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) { }
+
     func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) { }
     func player(player: Player, didFailedLoadPlayerItemLyrics error: Error) { }
 
@@ -80,6 +84,7 @@ class Player: NSObject, Watchable {
     enum KaraokeMode {
         case none
         case lyrics
+        case karaoke
     }
 
     enum PlaylistPosition {
@@ -406,7 +411,7 @@ class Player: NSObject, Watchable {
 
     func loadLirycs() {
 
-        guard let playerCurrentItemForLyrics = self.currentItem else { return }
+        guard let playerCurrentItemForLyrics = self.currentItem, playerCurrentItemForLyrics.playlistItem.track.isInstrumental == false else { return }
 
         self.application.restApiService.lyrics(for: playerCurrentItemForLyrics.playlistItem.track.id) { [weak self] (lyricsResult) in
 
@@ -1794,6 +1799,10 @@ extension Player {
 
         if karaokeMode != .none, self.currentItem?.lyrics == nil {
             self.loadLirycs()
+        }
+
+        self.watchersContainer.invoke { (watcher) in
+            watcher.player(player: self, didChangeKaraokeMode: self.karaokeMode)
         }
     }
 }

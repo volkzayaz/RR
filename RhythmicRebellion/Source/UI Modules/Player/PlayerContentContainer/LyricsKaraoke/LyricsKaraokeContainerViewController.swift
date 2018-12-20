@@ -1,27 +1,30 @@
 //
-//  LyricsViewController.swift
+//  LyricsKaraokeContainerViewController.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/27/18.
+//  Created by Alexander Obolentsev on 12/19/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-final class LyricsViewController: UIViewController {
+final class LyricsKaraokeContainerViewController: UIViewController, ContainerViewController {
 
-    @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var karaokeModeButton: UIButton!
+    @IBOutlet weak var containerView: UIView!
+
+    // MARK: ContainerViewController
+
+    weak var currentViewController: UIViewController?
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: LyricsViewModel!
+    private(set) var viewModel: LyricsKaraokeContainerViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: LyricsViewModel, router: FlowRouter) {
+    func configure(viewModel: LyricsKaraokeContainerViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -34,21 +37,10 @@ final class LyricsViewController: UIViewController {
         viewModel.load(with: self)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-
-    // MARK: - Actions -
-    @IBAction func switchToKaraokeMode(sender: Any) {
-        self.viewModel.switchToKaraokeMode()
-    }
-
 }
 
 // MARK: - Router -
-extension LyricsViewController {
+extension LyricsKaraokeContainerViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -64,11 +56,11 @@ extension LyricsViewController {
 
 }
 
-extension LyricsViewController: LyricsViewModelDelegate {
+extension LyricsKaraokeContainerViewController: LyricsKaraokeContainerViewModelDelegate {
 
     func refreshUI() {
-        self.textView.text = self.viewModel.lyricsText
-        self.karaokeModeButton.isEnabled = self.viewModel.canSwitchToKaraokeMode
+
     }
 
 }
+

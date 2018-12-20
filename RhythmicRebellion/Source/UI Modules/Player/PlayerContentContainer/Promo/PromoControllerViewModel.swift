@@ -107,8 +107,8 @@ final class PromoControllerViewModel: PromoViewModel {
         self.navigateToPage(with: writerURL)
     }
 
-    func navigateToAuthorization() {
-        self.router?.navigateToAuthorization()
+    func routeToAuthorization() {
+        self.router?.routeToAuthorization(with: .signIn)
     }
 }
 
