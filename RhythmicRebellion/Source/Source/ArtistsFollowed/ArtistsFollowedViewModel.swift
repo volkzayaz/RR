@@ -50,7 +50,7 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
                 return q.lengthOfBytes(using: String.Encoding.utf8) == 0
             }
         
-        let dataRequest = ArtistsFollowingRouter.list.rx
+        let dataRequest = ArtistsFollowingRequest.list.rx
             .response(type: [Artist].self)
             .trackView(viewIndicator: indicator)
             .asObservable()

@@ -24,7 +24,7 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.artistCell,
                                                       for: ip)!
         
-        cell.nameLabel.text = x.name
+        cell.artist = x
         
         return cell
     })

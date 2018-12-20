@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum ArtistsFollowingRouter: BaseNetworkRouter {
+enum ArtistsFollowingRequest: BaseNetworkRouter {
     case list
 }
 
-extension ArtistsFollowingRouter {
+extension ArtistsFollowingRequest {
     
     func asURLRequest() throws -> URLRequest {
         

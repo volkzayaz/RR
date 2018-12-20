@@ -16,6 +16,7 @@
 		737622D721CA7B42005B603E /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622D621CA7B42005B603E /* BaseRouter.swift */; };
 		737622DA21CA7D09005B603E /* FollowingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622D921CA7D09005B603E /* FollowingRouter.swift */; };
 		737622DE21CA8051005B603E /* RxResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622DC21CA7D91005B603E /* RxResponse.swift */; };
+		737622EA21CB9C31005B603E /* ImageRetreiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622E921CB9C31005B603E /* ImageRetreiver.swift */; };
 		737BB2C921C9347B0062A3A5 /* NotNilObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2BC21C9347B0062A3A5 /* NotNilObservable.swift */; };
 		737BB2CA21C9347B0062A3A5 /* ViewIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */; };
 		737BB2CD21C9347B0062A3A5 /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */; };
@@ -282,6 +283,7 @@
 		737622D621CA7B42005B603E /* BaseRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
 		737622D921CA7D09005B603E /* FollowingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingRouter.swift; sourceTree = "<group>"; };
 		737622DC21CA7D91005B603E /* RxResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxResponse.swift; sourceTree = "<group>"; };
+		737622E921CB9C31005B603E /* ImageRetreiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRetreiver.swift; sourceTree = "<group>"; };
 		737BB2BC21C9347B0062A3A5 /* NotNilObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotNilObservable.swift; sourceTree = "<group>"; };
 		737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewIndicator.swift; sourceTree = "<group>"; };
 		737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 		737622D021CA5462005B603E /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				737622E921CB9C31005B603E /* ImageRetreiver.swift */,
 				737622D121CA5462005B603E /* R.generated.swift */,
 			);
 			path = UI;
@@ -609,18 +612,18 @@
 			isa = PBXGroup;
 			children = (
 				737622DB21CA7D73005B603E /* Response */,
-				737622D521CA7B00005B603E /* Routers */,
+				737622D521CA7B00005B603E /* Request */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		737622D521CA7B00005B603E /* Routers */ = {
+		737622D521CA7B00005B603E /* Request */ = {
 			isa = PBXGroup;
 			children = (
 				737622D821CA7CFC005B603E /* Following */,
 				737622D621CA7B42005B603E /* BaseRouter.swift */,
 			);
-			path = Routers;
+			path = Request;
 			sourceTree = "<group>";
 		};
 		737622D821CA7CFC005B603E /* Following */ = {
@@ -1747,6 +1750,7 @@
 				769F4EAD210B6631000DD23B /* VideoControllerViewModel.swift in Sources */,
 				764B854D2137E5C600071F30 /* DatePickerInputView.swift in Sources */,
 				7665333620FE470C00FEC702 /* HomeViewModel.swift in Sources */,
+				737622EA21CB9C31005B603E /* ImageRetreiver.swift in Sources */,
 				7606BDDA20FF471300D90D73 /* SignUpViewModel.swift in Sources */,
 				76F1FA6620DBAEEC00C9191F /* PlayerControllerViewModel.swift in Sources */,
 				763931EA2118748200A65257 /* PlayerNowPlayingControllerViewModel.swift in Sources */,

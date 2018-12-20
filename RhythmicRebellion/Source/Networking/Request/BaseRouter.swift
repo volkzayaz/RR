@@ -13,13 +13,13 @@ protocol BaseNetworkRouter : URLRequestConvertible, ReactiveCompatible {
     
     func personilisedRequest(method: Alamofire.HTTPMethod,
                            path: String,
-                           params: Parameters,
+                           params: Parameters?,
                            encoding: ParameterEncoding,
                            headers: HTTPHeaders?) -> URLRequest
      
     func anonymousRequest(method: Alamofire.HTTPMethod,
                           path: String,
-                          params: Parameters,
+                          params: Parameters?,
                           encoding: ParameterEncoding,
                           headers: HTTPHeaders?) -> URLRequest
     
@@ -31,7 +31,7 @@ extension BaseNetworkRouter {
     
     func personilisedRequest(method: Alamofire.HTTPMethod,
                              path: String,
-                             params: Parameters = [:],
+                             params: Parameters? = nil,
                              encoding: ParameterEncoding = JSONEncoding.default,
                              headers: HTTPHeaders? = nil) -> URLRequest {
         
@@ -50,7 +50,7 @@ extension BaseNetworkRouter {
     
     func anonymousRequest(method: Alamofire.HTTPMethod,
                           path: String,
-                          params: Parameters = [:],
+                          params: Parameters? = nil,
                           encoding: ParameterEncoding = JSONEncoding.default,
                           headers: HTTPHeaders? = nil)
         -> URLRequest {
