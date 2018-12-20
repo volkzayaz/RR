@@ -25,6 +25,9 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
                                                       for: ip)!
         
         cell.artist = x
+        cell.unfollow = { [weak self] in
+            self?.viewModel.unfollow(artist: x)
+        }
         
         return cell
     })
@@ -39,24 +42,26 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
             .drive(collectionView.rx.items(dataSource: dataSource))
             .disposed(by: rx.disposeBag)
         
+        collectionView.rx.modelSelected(Artist.self)
+            .subscribe(onNext: { [weak self] artist in
+                self?.viewModel.select(artist: artist)
+            })
+            .disposed(by: rx.disposeBag)
+        
     }
     
 }
 
-extension ArtistsFollowedViewController {
+extension ArtistsFollowedViewController : UISearchBarDelegate {
     
-    /**
-     *  Describe any IBActions here
-     *
-     
-     @IBAction func performAction(_ sender: Any) {
-     
-     }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.queryChanges(searchText)
+    }
     
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     
-     }
- 
-    */
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.text = ""
+        self.searchBar(searchBar, textDidChange: "")
+    }
     
 }

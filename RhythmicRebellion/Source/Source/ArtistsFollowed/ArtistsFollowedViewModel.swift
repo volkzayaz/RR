@@ -90,5 +90,13 @@ extension ArtistsFollowedViewModel {
     func queryChanges(_ q: String) {
         searchQuery.accept(q)
     }
+ 
+    func unfollow(artist: Artist) {
+        
+    }
+    
+    func select(artist: Artist) {
+        
+    }
     
 }

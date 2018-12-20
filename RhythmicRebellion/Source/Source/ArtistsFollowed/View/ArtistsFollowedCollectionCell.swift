@@ -26,12 +26,18 @@ class ArtistsFollowedCollectionCell: UICollectionViewCell {
             
             nameLabel.text = a.name
             
-            ImageRetreiver.imageForURLWithoutProgress(url: a.urlString ?? "")
-                .drive(artistImageView.rx.image(transitionType: CATransitionType.fade.rawValue))
-                .disposed(by: disposeBag)
+//            ImageRetreiver.imageForURLWithoutProgress(url: a.urlString ?? "")
+//                .drive(artistImageView.rx.image(transitionType: CATransitionType.fade.rawValue))
+//                .disposed(by: disposeBag)
             
         }
         
+    }
+    
+    var unfollow: ( () -> () )? = nil
+    
+    @IBAction func unfollowAction(_ sender: Any) {
+        unfollow?()
     }
     
     override func prepareForReuse() {
