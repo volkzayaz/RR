@@ -104,4 +104,12 @@ extension LyricsControllerViewModel: ApplicationWatcher {
         self.delegate?.refreshUI()
 
     }
+
+    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
+
+        guard let playerItem = self.player.currentItem, playerItem.playlistItem.track.isCensorship else { return }
+
+        self.updateInfoText(for: playerItem.playlistItem.track)
+        self.delegate?.refreshUI()
+    }
 }
