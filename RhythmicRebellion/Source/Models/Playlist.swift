@@ -98,8 +98,6 @@ extension DefinedPlaylist: Hashable {
     public var hashValue: Int { return self.id }
 }
 
-
-
 struct FanPlaylist: Playlist, Codable {
     let id: Int
     let name: String

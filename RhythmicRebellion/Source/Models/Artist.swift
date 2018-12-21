@@ -19,6 +19,8 @@ public struct Artist: Codable {
     let addons: [Addon]?
     let publishDate: Date?
 
+    let profileImage: Image?
+    
     var url: URL? {
         guard let urlString = self.urlString, let urlComponents = URLComponents(string: urlString) else { return nil }
 
@@ -36,6 +38,7 @@ public struct Artist: Codable {
         case urlString = "url"
         case addons = "audio_add_ons"
         case publishDate = "publish_date"
+        case profileImage
     }
 
     public init(from decoder: Decoder) throws {
@@ -53,6 +56,8 @@ public struct Artist: Codable {
         self.addons = try container.decodeIfPresent([Addon].self, forKey: .addons)
 
         self.publishDate = try container.decodeAsDate(String.self, forKey: .publishDate, dateFormatter: dateTimeFormatter)
+        
+        profileImage = try container.decodeIfPresent(Image.self, forKey: .profileImage)
     }
 
     public func encode(to encoder: Encoder) throws {

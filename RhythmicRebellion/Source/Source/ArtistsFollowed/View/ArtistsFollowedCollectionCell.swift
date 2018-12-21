@@ -26,9 +26,18 @@ class ArtistsFollowedCollectionCell: UICollectionViewCell {
             
             nameLabel.text = a.name
             
-//            ImageRetreiver.imageForURLWithoutProgress(url: a.urlString ?? "")
-//                .drive(artistImageView.rx.image(transitionType: CATransitionType.fade.rawValue))
-//                .disposed(by: disposeBag)
+            ImageRetreiver.imageForURLWithoutProgress(url: a.urlString ?? "")
+                .map { [weak v = artistImageView] x -> UIImage? in
+                    if let x = x {
+                        v?.contentMode = .scaleAspectFill
+                        return x
+                    }
+                    
+                    v?.contentMode = .center
+                    return R.image.playlistPlaceholder()
+                }
+                .drive(artistImageView.rx.image(transitionType: CATransitionType.fade.rawValue))
+                .disposed(by: disposeBag)
             
         }
         

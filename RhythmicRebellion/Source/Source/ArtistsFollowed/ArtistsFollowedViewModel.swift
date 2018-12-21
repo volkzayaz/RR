@@ -134,6 +134,24 @@ extension ArtistsFollowedViewModel {
     
     func select(artist: Artist) {
         
+        ArtistRequest.albums(artist: artist).rx.response(type: ArtistResponse<Album>.self)
+            .map { $0.data }
+            .subscribe(onSuccess: { (x) in
+                print(x)
+            }, onError: { er in
+                print(er)
+                let a = 1
+            })
+        
+        ArtistRequest.playlists(artist: artist).rx.response(type: ArtistResponse<FanPlaylist>.self)
+            .map { $0.data }
+            .subscribe(onSuccess: { (x) in
+                print(x)
+            }, onError: { er in
+                print(er)
+                let a = 1
+            })
+        
     }
     
 }

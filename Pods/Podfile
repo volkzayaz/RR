@@ -27,7 +27,6 @@ target 'RhythmicRebellion' do
     
     #ui
     pod 'SnapKit', '~> 4.2.0'
-    pod 'Kingfisher', '~> 4.8'
     
 end
 
