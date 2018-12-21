@@ -38,7 +38,12 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         self.audioFileLocalStorageService?.removeWatcher(self)
     }
 
-    init(router: PlaylistContentRouter, application: Application, player: Player, restApiService: RestApiService, audioFileLocalStorageService: AudioFileLocalStorageService, playlist: Playlist) {
+    init(router: PlaylistContentRouter,
+         application: Application,
+         player: Player,
+         restApiService: RestApiService,
+         audioFileLocalStorageService: AudioFileLocalStorageService,
+         playlist: Playlist) {
         self.router = router
         self.application = application
         self.player = player

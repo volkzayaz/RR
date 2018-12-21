@@ -53,7 +53,7 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
                 return q.lengthOfBytes(using: String.Encoding.utf8) == 0
             }
         
-        let listUpdated = DataLayer.get.webSocketService.followingState
+        let listUpdated = DataLayer.get.application.followingState
         
         let artistUnfollowed = listUpdated.filter { !$0.isFollowed }
         let artistFollowed   = listUpdated.filter {  $0.isFollowed }
@@ -63,6 +63,7 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
             .trackView(viewIndicator: indicator)
             .asObservable()
         
+        ///TODO: listen to changes in UserProfile
         artistFollowed.map { _ in }
             .startWith( () )
             .flatMapLatest { [unowned buffer = quickUnfollowBuffer] _ -> Observable<([Artist], [String], String)> in

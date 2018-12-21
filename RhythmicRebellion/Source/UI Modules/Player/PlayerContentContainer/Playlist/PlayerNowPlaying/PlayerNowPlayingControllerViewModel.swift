@@ -34,7 +34,10 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.audioFileLocalStorageService?.removeWatcher(self)
     }
 
-    init(router: PlayerNowPlayingRouter, application: Application, player: Player, audioFileLocalStorageService: AudioFileLocalStorageService) {
+    init(router: PlayerNowPlayingRouter,
+         application: Application,
+         player: Player,
+         audioFileLocalStorageService: AudioFileLocalStorageService) {
         self.router = router
         self.application = application
         self.player = player

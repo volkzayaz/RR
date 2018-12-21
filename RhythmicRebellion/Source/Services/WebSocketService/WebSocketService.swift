@@ -9,7 +9,6 @@
 import Foundation
 import Starscream
 import os.log
-import RxSwift
 
 protocol WebSocketServiceObserver: class {
 
@@ -63,14 +62,6 @@ class WebSocketService: WebSocketDelegate, Watchable {
 
     let watchersContainer = WatchersContainer<WebSocketServiceObserver>()
 
-    ////TODO: move watcherContainer to strongly typed Observable Commands
-    ////WebSocketCommand<T>
-    
-    fileprivate let followingStateSubject = BehaviorSubject<ArtistFollowingState?>(value: nil)
-    var followingState: Observable<ArtistFollowingState> {
-        return followingStateSubject.asObservable().skip(1).notNil()
-    }
-    
     enum State: Int {
         case disconnected
         case connecting
@@ -229,8 +220,6 @@ class WebSocketService: WebSocketDelegate, Watchable {
                         observer.webSocketService(self, didReceiveArtistFollowingState: artistFollowingState)
                     })
                     
-                    followingStateSubject.on( .next(artistFollowingState) )
-
                 case .userSyncPurchases(let purchases):
                     self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceivePurchases: purchases)
