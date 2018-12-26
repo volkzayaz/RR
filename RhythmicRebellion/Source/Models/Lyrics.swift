@@ -13,12 +13,6 @@ struct KaraokeIntervals: Codable {
     let start: Double
     let end: Double
     let content: String
-
-    enum CodingKeys: String, CodingKey {
-        case start
-        case end
-        case content
-    }
 }
 
 struct Karaoke: Codable {
@@ -28,7 +22,6 @@ struct Karaoke: Codable {
     let createdAt: Date?
     let updatedAt: Date?
     let isPublic: Bool
-//    let metadata:
     let intervals: [KaraokeIntervals]
 
     enum CodingKeys: String, CodingKey {
@@ -37,7 +30,6 @@ struct Karaoke: Codable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
         case isPublic = "is_public"
-//        case metadata
         case intervals
     }
 

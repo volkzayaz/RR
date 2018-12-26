@@ -16,12 +16,12 @@ final class LyricsViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: LyricsViewModel!
+    private(set) var viewModel: LyricsViewModelProtocol!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: LyricsViewModel, router: FlowRouter) {
+    func configure(viewModel: LyricsViewModelProtocol, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }

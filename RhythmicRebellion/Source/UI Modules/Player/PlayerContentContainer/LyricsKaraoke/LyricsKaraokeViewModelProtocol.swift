@@ -9,13 +9,13 @@
 
 import UIKit
 
-protocol LyricsKaraokeContainerViewModel: class {
+protocol LyricsKaraokeViewModelProtocol: class {
 
-    func load(with delegate: LyricsKaraokeContainerViewModelDelegate)
+    func load(with delegate: LyricsKaraokeViewModelDelegate)
 
 }
 
-protocol LyricsKaraokeContainerViewModelDelegate: class {
+protocol LyricsKaraokeViewModelDelegate: class {
 
     func refreshUI()
 

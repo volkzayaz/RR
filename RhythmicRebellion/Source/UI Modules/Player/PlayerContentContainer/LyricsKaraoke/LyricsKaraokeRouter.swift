@@ -9,16 +9,16 @@
 
 import UIKit
 
-protocol LyricsKaraokeContainerRouterDelegate: ForcedAuthorizationRouter {
+protocol LyricsKaraokeRouterDelegate: ForcedAuthorizationRouter {
 
 }
 
-protocol LyricsKaraokeContainerRouter: FlowRouter {
+protocol LyricsKaraokeRouter: FlowRouter {
     func routeToLyrics()
     func routeToKaraoke()
 }
 
-final class DefaultLyricsKaraokeContainerRouter:  LyricsKaraokeContainerRouter, FlowRouterSegueCompatible {
+final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCompatible {
 
 
     typealias DestinationsList = SegueList
@@ -42,10 +42,10 @@ final class DefaultLyricsKaraokeContainerRouter:  LyricsKaraokeContainerRouter, 
     }
 
     private(set) var dependencies: RouterDependencies
-    private(set) weak var delegate: LyricsKaraokeContainerRouterDelegate?
+    private(set) weak var delegate: LyricsKaraokeRouterDelegate?
 
-    private(set) weak var viewModel: LyricsKaraokeContainerViewModel?
-    private(set) weak var viewController: LyricsKaraokeContainerViewController?
+    private(set) weak var viewModel: LyricsKaraokeViewModel?
+    private(set) weak var viewController: LyricsKaraokeViewController?
 
     var sourceController: UIViewController? { return viewController }
 
@@ -53,7 +53,7 @@ final class DefaultLyricsKaraokeContainerRouter:  LyricsKaraokeContainerRouter, 
         return true
     }
 
-    func prepare(for destination: DefaultLyricsKaraokeContainerRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: DefaultLyricsKaraokeRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .showLyrics:
@@ -68,14 +68,14 @@ final class DefaultLyricsKaraokeContainerRouter:  LyricsKaraokeContainerRouter, 
         }
     }
 
-    init(dependencies: RouterDependencies, delegate: LyricsKaraokeContainerRouterDelegate?) {
+    init(dependencies: RouterDependencies, delegate: LyricsKaraokeRouterDelegate?) {
         self.dependencies = dependencies
         self.delegate = delegate
     }
 
-    func start(controller: LyricsKaraokeContainerViewController) {
+    func start(controller: LyricsKaraokeViewController) {
         viewController = controller
-        let vm = LyricsKaraokeContainerControllerViewModel(router: self, player: self.dependencies.player)
+        let vm = LyricsKaraokeViewModel(router: self, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
     }
 
@@ -94,7 +94,7 @@ final class DefaultLyricsKaraokeContainerRouter:  LyricsKaraokeContainerRouter, 
     }
 }
 
-extension DefaultLyricsKaraokeContainerRouter: LyricsRouterDelegate {
+extension DefaultLyricsKaraokeRouter: LyricsRouterDelegate {
     func routeToAuthorization(with authorizationType: AuthorizationType) {
         self.delegate?.routeToAuthorization(with: authorizationType)
     }

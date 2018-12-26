@@ -9,12 +9,12 @@
 
 import Foundation
 
-final class LyricsKaraokeContainerControllerViewModel: LyricsKaraokeContainerViewModel {
+final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
 
     // MARK: - Private properties -
 
-    private(set) weak var delegate: LyricsKaraokeContainerViewModelDelegate?
-    private(set) weak var router: LyricsKaraokeContainerRouter?
+    private(set) weak var delegate: LyricsKaraokeViewModelDelegate?
+    private(set) weak var router: LyricsKaraokeRouter?
 
     private(set) var player: Player
 
@@ -28,12 +28,12 @@ final class LyricsKaraokeContainerControllerViewModel: LyricsKaraokeContainerVie
         }
     }
 
-    init(router: LyricsKaraokeContainerRouter, player: Player) {
+    init(router: LyricsKaraokeRouter, player: Player) {
         self.router = router
         self.player = player
     }
 
-    func load(with delegate: LyricsKaraokeContainerViewModelDelegate) {
+    func load(with delegate: LyricsKaraokeViewModelDelegate) {
         self.delegate = delegate
 
         self.player.addWatcher(self)
@@ -48,7 +48,7 @@ final class LyricsKaraokeContainerControllerViewModel: LyricsKaraokeContainerVie
     }
 }
 
-extension LyricsKaraokeContainerControllerViewModel: PlayerWatcher {
+extension LyricsKaraokeViewModel: PlayerWatcher {
 
     func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) {
 
