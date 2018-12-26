@@ -11,11 +11,17 @@ import UIKit
 
 protocol LyricsViewModel: class {
 
+    var infoText: String { get }
+    var lyricsText: String? { get }
+    var canSwitchToKaraokeMode: Bool { get }
+
     func load(with delegate: LyricsViewModelDelegate)
+
+    func switchToKaraoke()
 
 }
 
-protocol LyricsViewModelDelegate: class {
+protocol LyricsViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
 

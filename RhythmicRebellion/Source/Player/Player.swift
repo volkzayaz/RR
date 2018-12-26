@@ -21,6 +21,7 @@ public enum PlayerStatus : Int {
     case failed
 }
 
+
 public enum PlayerInitializationAction : Int {
 
     case none
@@ -30,7 +31,7 @@ public enum PlayerInitializationAction : Int {
     case playBackward
 }
 
-protocol PlayerObserver: class {
+protocol PlayerWatcher: class {
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool)
 
@@ -39,6 +40,11 @@ protocol PlayerObserver: class {
     func player(player: Player, didChangePlayState isPlaying: Bool)
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?)
+
+    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode)
+
+    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics)
+    func player(player: Player, didFailedLoadPlayerItemLyrics error: Error)
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem)
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval)
@@ -49,7 +55,7 @@ protocol PlayerObserver: class {
     func playerDidChangePlaylist(player: Player)
 }
 
-extension PlayerObserver {
+extension PlayerWatcher {
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool) { }
 
@@ -58,6 +64,11 @@ extension PlayerObserver {
     func player(player: Player, didChangePlayState isPlaying: Bool) { }
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) { }
+
+    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) { }
+
+    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) { }
+    func player(player: Player, didFailedLoadPlayerItemLyrics error: Error) { }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) { }
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval) { }
@@ -70,6 +81,12 @@ extension PlayerObserver {
 
 class Player: NSObject, Watchable {
 
+    enum KaraokeMode {
+        case none
+        case lyrics
+        case karaoke
+    }
+
     enum PlaylistPosition {
         case next
         case last
@@ -81,9 +98,9 @@ class Player: NSObject, Watchable {
         case delete
     }
 
-    typealias WatchType = PlayerObserver
+    typealias WatchType = PlayerWatcher
 
-    let watchersContainer = WatchersContainer<PlayerObserver>()
+    let watchersContainer = WatchersContainer<PlayerWatcher>()
 
     var canForward: Bool {
         guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems }
@@ -189,6 +206,9 @@ class Player: NSObject, Watchable {
 
 //    let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Player")
 
+    private(set) var karaokeMode: KaraokeMode = .none
+    private var needsLoadPlayerItemLyrics: Bool { return self.karaokeMode != .none && self.currentItem?.lyrics == nil }
+
     init(with application: Application) {
 
         self.application = application
@@ -284,6 +304,8 @@ class Player: NSObject, Watchable {
 
             self.playerQueue.replace(playerItem: currentPlayerItem, addons: self.currentTrackState != nil ? [] : nil)
             self.replace(playerItems: self.playerQueue.playerItems)
+
+            if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
         }
 
         self.updateMPRemoteInfo()
@@ -385,8 +407,32 @@ class Player: NSObject, Watchable {
             }
 
         }
-
     }
+
+    func loadLirycs() {
+
+        guard let playerCurrentItemForLyrics = self.currentItem, playerCurrentItemForLyrics.playlistItem.track.isInstrumental == false else { return }
+
+        self.application.restApiService.lyrics(for: playerCurrentItemForLyrics.playlistItem.track.id) { [weak self] (lyricsResult) in
+
+            guard let self = self, let playerCurrentItem = self.currentItem, playerCurrentItem.playlistItem.track.id == playerCurrentItemForLyrics.playlistItem.track.id  else { return }
+
+            switch lyricsResult {
+            case .success(let lyrics):
+                playerCurrentItem.lyrics = lyrics
+                self.watchersContainer.invoke({ (observer) in
+                    observer.player(player: self, didLoadPlayerItemLyrics: lyrics)
+                })
+
+            case .failure(let error):
+                self.watchersContainer.invoke({ (observer) in
+                    observer.player(player: self, didFailedLoadPlayerItemLyrics: error)
+                })
+            }
+
+        }
+    }
+
 
     func prepareAddons(for track: Track, completion: ((Error?) -> ())?) {
 
@@ -775,6 +821,8 @@ class Player: NSObject, Watchable {
                 observer.player(player: self, didChangePlayerItem: self.currentItem)
             })
 
+            if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
+
             if self.isPlaying {
                 self.state.playing = self.isPlaying
                 self.preparePlayerQueueToPlay(completion: { [weak self] (error) in
@@ -938,7 +986,7 @@ class Player: NSObject, Watchable {
     }
 }
 
-extension Player: WebSocketServiceObserver {
+extension Player: WebSocketServiceWatcher {
 
     // MARK: - Apply State
 
@@ -965,6 +1013,8 @@ extension Player: WebSocketServiceObserver {
         self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItem: self.currentItem)
         })
+
+        if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
     }
 
     func apply(currentTrackState: TrackState) {
@@ -1244,7 +1294,7 @@ extension Player: WebSocketServiceObserver {
     }
 }
 
-extension Player: ApplicationObserver {
+extension Player: ApplicationWatcher {
 
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) {
         guard isReachable == true, self.config == nil else { return }
@@ -1626,6 +1676,8 @@ extension Player {
                     observer.player(player: self, didChangePlayerItem: self.currentItem)
                 })
 
+                if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
+
                 self.play()
                 completion?(nil)
             })
@@ -1648,6 +1700,8 @@ extension Player {
                 self.watchersContainer.invoke({ (observer) in
                     observer.player(player: self, didChangePlayerItem: self.currentItem)
                 })
+
+                if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
 
                 if wasPlaying {
                     self.play()
@@ -1731,4 +1785,24 @@ extension Player {
 // Helper function inserted by Swift 4.2 migrator.
 fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
 	return input.rawValue
+}
+
+// MARK: - Karaoke -
+
+extension Player {
+
+    func switchTo(karaokeMode: KaraokeMode) {
+
+        guard self.karaokeMode != karaokeMode else { return }
+
+        self.karaokeMode = karaokeMode
+
+        if karaokeMode != .none, self.currentItem?.lyrics == nil {
+            self.loadLirycs()
+        }
+
+        self.watchersContainer.invoke { (watcher) in
+            watcher.player(player: self, didChangeKaraokeMode: self.karaokeMode)
+        }
+    }
 }

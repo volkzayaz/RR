@@ -22,11 +22,11 @@ enum TabType: Int {
     //        case mixer
 }
 
-protocol AuthorizationNavigationDelgate: class {
-    func selectAuthorizationTab(with authorizationType: AuthorizationType)
+protocol ForcedAuthorizationRouter: class {
+    func routeToAuthorization(with authorizationType: AuthorizationType)
 }
 
-protocol TabBarRouter: FlowRouter, AuthorizationNavigationDelgate {
+protocol TabBarRouter: FlowRouter, ForcedAuthorizationRouter {
 
     var playerContentContainerRouter: PlayerContentContainerRouter? { get set }
 
@@ -179,9 +179,9 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
     }
 }
 
-extension DefaultTabBarRouter: AuthorizationNavigationDelgate {
+extension DefaultTabBarRouter: ForcedAuthorizationRouter {
 
-    func selectAuthorizationTab(with authorizationType: AuthorizationType) {
+    func routeToAuthorization(with authorizationType: AuthorizationType) {
 
         guard let authorizationNavigationController = self.viewController(for: .authorization, from: self.tabBarViewController?.viewControllers) as? UINavigationController,
             let authorizationViwController = authorizationNavigationController.viewControllers.first as? AuthorizationViewController

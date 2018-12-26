@@ -37,15 +37,13 @@ public class PlayerNavigationItem {
     }
 }
 
-protocol PlayerNavigationDelgate: class {
+protocol PlayerNavigationDelgate: ForcedAuthorizationRouter {
     func navigate(to playerNavigationItem: PlayerNavigationItem)
-    func navigateToAuthorization()
 }
 
-protocol PlayerRouter: FlowRouter {
+protocol PlayerRouter: FlowRouter, ForcedAuthorizationRouter {
 
     func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType)
-    func navigateToAuthorization()
 }
 
 final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
@@ -104,8 +102,8 @@ extension DefaultPlayerRouter {
         self.navigationDelegate?.navigate(to: PlayerNavigationItem(type: playerNavigationItemType, delegate: playerViewController))
     }
 
-    func navigateToAuthorization() {
-        self.navigationDelegate?.navigateToAuthorization()
+    func routeToAuthorization(with authorizationType: AuthorizationType) {
+        self.navigationDelegate?.routeToAuthorization(with: authorizationType)
     }
 }
 

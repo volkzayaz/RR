@@ -343,6 +343,15 @@ struct TrackLikeStateResponse: RestApiResponse {
 
 }
 
+struct LyricsResponse: RestApiResponse {
+
+    let lyrics: Lyrics
+
+    enum CodingKeys: String, CodingKey {
+        case lyrics = "data"
+    }
+}
+
 // MARK: - Config -
 
 struct PlayerConfigResponse: RestApiResponse {

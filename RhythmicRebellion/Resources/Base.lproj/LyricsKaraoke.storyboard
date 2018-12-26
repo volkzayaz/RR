@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zPB-jR-wl7">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Lyrics-->
+        <scene sceneID="zQt-mm-d2a">
+            <objects>
+                <viewController id="zPB-jR-wl7" customClass="LyricsKaraokeContainerViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pbI-DY-rh6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1dn-MG-Q5p">
+                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="vf4-fC-lpW" firstAttribute="trailing" secondItem="1dn-MG-Q5p" secondAttribute="trailing" id="Ixn-k7-7dW"/>
+                            <constraint firstItem="vf4-fC-lpW" firstAttribute="bottom" secondItem="1dn-MG-Q5p" secondAttribute="bottom" id="Kfk-rV-UHj"/>
+                            <constraint firstItem="1dn-MG-Q5p" firstAttribute="top" secondItem="vf4-fC-lpW" secondAttribute="top" id="LgC-4s-9rc"/>
+                            <constraint firstItem="1dn-MG-Q5p" firstAttribute="leading" secondItem="vf4-fC-lpW" secondAttribute="leading" id="QZM-ab-QqF"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="vf4-fC-lpW"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" tag="1" title="Lyrics" image="Lyrics" id="5aN-gH-TcC"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="containerView" destination="1dn-MG-Q5p" id="ful-hP-wjs"/>
+                        <segue destination="h3m-kq-PN9" kind="custom" identifier="LyricsSegueIdentifier" customClass="ContainerTransitionSegue" customModule="RhythmicRebellion" customModuleProvider="target" animates="NO" id="pBU-pW-rM5"/>
+                        <segue destination="dUj-Bk-fEf" kind="custom" identifier="KaraokeSegueIdentifier" customClass="ContainerTransitionSegue" customModule="RhythmicRebellion" customModuleProvider="target" animates="NO" id="fVx-FD-zOW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rc8-ar-LtG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1009" y="-1495"/>
+        </scene>
+        <!--Lyrics View Controller-->
+        <scene sceneID="NH3-So-i41">
+            <objects>
+                <viewController id="h3m-kq-PN9" customClass="LyricsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nPr-yS-APj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i7h-wT-HHx" customClass="RoundedButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                                <rect key="frame" x="92.5" y="611" width="190" height="46"/>
+                                <color key="backgroundColor" red="1" green="0.34901960780000002" blue="0.71764705880000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="46" id="Zl2-zT-30O"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="contentEdgeInsets" minX="35" minY="0.0" maxX="20" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="-35" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Karaoke mode" image="KaraokeMicrophoneButton">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isRounded" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onKaraokeModeWithSender:" destination="h3m-kq-PN9" eventType="touchUpInside" id="1Km-RR-nhG"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="AJ1-Qk-YSu">
+                                <rect key="frame" x="15" y="35" width="345" height="561"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Nqv-AP-aiW" firstAttribute="bottom" secondItem="i7h-wT-HHx" secondAttribute="bottom" constant="10" id="0HF-BV-JcH"/>
+                            <constraint firstItem="i7h-wT-HHx" firstAttribute="centerX" secondItem="nPr-yS-APj" secondAttribute="centerX" id="XDL-cs-L2I"/>
+                            <constraint firstItem="Nqv-AP-aiW" firstAttribute="trailing" secondItem="AJ1-Qk-YSu" secondAttribute="trailing" constant="15" id="mBm-dd-Zeo"/>
+                            <constraint firstItem="i7h-wT-HHx" firstAttribute="top" secondItem="AJ1-Qk-YSu" secondAttribute="bottom" constant="15" id="moK-YN-sAW"/>
+                            <constraint firstItem="AJ1-Qk-YSu" firstAttribute="leading" secondItem="Nqv-AP-aiW" secondAttribute="leading" constant="15" id="pMh-0e-tHr"/>
+                            <constraint firstItem="AJ1-Qk-YSu" firstAttribute="top" secondItem="Nqv-AP-aiW" secondAttribute="top" constant="15" id="s03-q3-37U"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Nqv-AP-aiW"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="jhi-pt-lk0"/>
+                    <connections>
+                        <outlet property="karaokeModeButton" destination="i7h-wT-HHx" id="QdD-Xx-4Li"/>
+                        <outlet property="textView" destination="AJ1-Qk-YSu" id="BLN-ew-Cj5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CYE-zj-4d5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-47" y="-1713"/>
+        </scene>
+        <!--Karaoke View Controller-->
+        <scene sceneID="t78-o1-e3O">
+            <objects>
+                <viewController id="dUj-Bk-fEf" customClass="KaraokeViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="iap-jA-Lv2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXf-6U-xu6">
+                                <rect key="frame" x="162.5" y="315.5" width="50" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Close">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="onClose" destination="dUj-Bk-fEf" eventType="touchUpInside" id="ZH0-n6-2Ww"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="aXf-6U-xu6" firstAttribute="centerX" secondItem="iap-jA-Lv2" secondAttribute="centerX" id="byE-AJ-zKC"/>
+                            <constraint firstItem="aXf-6U-xu6" firstAttribute="centerY" secondItem="iap-jA-Lv2" secondAttribute="centerY" id="rzh-wh-vEg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="fkh-Ha-qh5"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e30-IG-joa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-47" y="-1039"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="KaraokeMicrophoneButton" width="18" height="27"/>
+        <image name="Lyrics" width="14" height="14"/>
+    </resources>
+</document>

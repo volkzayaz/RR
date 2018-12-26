@@ -103,6 +103,10 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
 }
 
 extension DefaultApplicationContentContainerRouter: PlayerNavigationDelgate {
+    func routeToAuthorization(with authorizationType: AuthorizationType) {
+        self.tabBarRouter?.routeToAuthorization(with: authorizationType)
+    }
+
 
     func navigate(to playerNavigationItem: PlayerNavigationItem) {
 
@@ -114,11 +118,6 @@ extension DefaultApplicationContentContainerRouter: PlayerNavigationDelgate {
 
         playerContentContainerRouter.navigate(to: playerNavigationItem)
     }
-
-    func navigateToAuthorization() {
-        self.tabBarRouter?.selectAuthorizationTab(with: .signIn)
-    }
-
 }
 
 extension DefaultApplicationContentContainerRouter: PlayerContentPresentingController {
@@ -148,6 +147,8 @@ extension DefaultApplicationContentContainerRouter: PlayerContentPresentingContr
 }
 
 extension DefaultApplicationContentContainerRouter: PlayerContentNavigationDelgate {
+
+
     func navigateToPage(with url: URL) {
         self.tabBarRouter?.selectPage(with: url)
     }

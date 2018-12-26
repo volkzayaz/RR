@@ -134,6 +134,10 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.application.addWatcher(self)
     }
 
+    func routeToAuthorization() {
+        self.router?.routeToAuthorization(with: .signIn)
+    }
+
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {
         guard let currentTrack = self.player.currentItem?.playlistItem.track else { return NSAttributedString() }
 
@@ -180,7 +184,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func toggleLike() {
         guard let track = self.player.currentItem?.playlistItem.track else { return }
-        guard (self.application.user as? FanUser) != nil else { self.router?.navigateToAuthorization(); return }
+        guard (self.application.user as? FanUser) != nil else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked) { [weak self] (error) in
             guard let error = error else { return }
@@ -190,7 +194,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func toggleDislike() {
         guard let track = self.player.currentItem?.playlistItem.track else { return }
-        guard (self.application.user as? FanUser) != nil else { self.router?.navigateToAuthorization(); return }
+        guard (self.application.user as? FanUser) != nil else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .disliked) { [weak self] (error) in
             guard let error = error else { return }
@@ -208,7 +212,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     func toggleArtistFollowing() {
 
         guard let currentPlayerItem = self.player.currentItem else { return }
-        guard let fanUser = self.application.user as? FanUser else { self.router?.navigateToAuthorization(); return }
+        guard let fanUser = self.application.user as? FanUser else { self.routeToAuthorization(); return }
 
         let followingCompletion: (Result<[String]>) -> Void = { [weak self] (followingResult) in
 
@@ -238,7 +242,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 }
 
-extension PlayerControllerViewModel: PlayerObserver {
+extension PlayerControllerViewModel: PlayerWatcher {
 
     func playerDidChangePlaylist(player: Player) {
         self.delegate?.refreshUI()
@@ -276,7 +280,7 @@ extension PlayerControllerViewModel: PlayerObserver {
     }
 }
 
-extension PlayerControllerViewModel: ApplicationObserver {
+extension PlayerControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let artist = self.player.currentItem?.playlistItem.track.artist, artist.id == artistFollowingState.artistId else { return }

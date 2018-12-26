@@ -9,13 +9,13 @@
 import Foundation
 import Alamofire
 
-protocol AudioFileLocalStorageServiceObserver: class {
+protocol AudioFileLocalStorageServiceWatcher: class {
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
 }
 
-extension AudioFileLocalStorageServiceObserver {
+extension AudioFileLocalStorageServiceWatcher {
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
@@ -24,7 +24,7 @@ extension AudioFileLocalStorageServiceObserver {
 
 class AudioFileLocalStorageService: NSObject, Watchable {
 
-    typealias WatchType = AudioFileLocalStorageServiceObserver
+    typealias WatchType = AudioFileLocalStorageServiceWatcher
     let watchersContainer = WatchersContainer<WatchType>()
 
     let syncQueue: DispatchQueue

@@ -9,14 +9,12 @@
 
 import UIKit
 
-protocol PromoNavigationDelegate: class {
+protocol PromoRouterDelegate: ForcedAuthorizationRouter {
     func navigateToPage(with url: URL)
-    func navigateToAuthorization()
 }
 
-protocol PromoRouter: FlowRouter {
+protocol PromoRouter: FlowRouter, ForcedAuthorizationRouter {
     func navigateToPage(with url: URL)
-    func navigateToAuthorization()
 }
 
 final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
@@ -42,7 +40,7 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
 
     private(set) weak var viewModel: PromoViewModel?
     private(set) weak var sourceController: UIViewController?
-    private(set) weak var navigationDelegate: PromoNavigationDelegate?
+    private(set) weak var delegate: PromoRouterDelegate?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
@@ -55,9 +53,9 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies, navigationDelegate: PromoNavigationDelegate?) {
+    init(dependencies: RouterDependencies, delegate: PromoRouterDelegate?) {
         self.dependencies = dependencies
-        self.navigationDelegate = navigationDelegate
+        self.delegate = delegate
     }
 
     func start(controller: PromoViewController) {
@@ -67,10 +65,10 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
     }
 
     func navigateToPage(with url: URL) {
-        self.navigationDelegate?.navigateToPage(with: url)
+        self.delegate?.navigateToPage(with: url)
     }
 
-    func navigateToAuthorization() {
-        self.navigationDelegate?.navigateToAuthorization()
+    func routeToAuthorization(with authorizationType: AuthorizationType) {
+        self.delegate?.routeToAuthorization(with: authorizationType)
     }
 }

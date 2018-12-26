@@ -37,7 +37,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     }
 
     private(set) var dependencies: RouterDependencies
-    private(set) weak var authorizationNavigationDelgate: AuthorizationNavigationDelgate?
+    private(set) weak var authorizationNavigationDelgate: ForcedAuthorizationRouter?
     
     private(set) weak var viewModel: PagesViewModel?
     private(set) weak var pagesViewController: PagesViewController?
@@ -62,7 +62,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         }
     }
 
-    init(dependencies: RouterDependencies, authorizationNavigationDelgate: AuthorizationNavigationDelgate?) {
+    init(dependencies: RouterDependencies, authorizationNavigationDelgate: ForcedAuthorizationRouter?) {
         self.dependencies = dependencies
         self.authorizationNavigationDelgate = authorizationNavigationDelgate
 
@@ -85,15 +85,15 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
 }
 
 extension DefaultPagesRouter: PageContentRouterDelegate {
+    func routeToAuthorization(with authorizationType: AuthorizationType) {
+        self.authorizationNavigationDelgate?.routeToAuthorization(with: authorizationType)
+    }
+
     func pageFailed(with error: Error) {
         self.pagesViewController?.navigationController?.popViewController(animated: true)
 
         self.pagesViewController?.viewModel.show(error: error)
 
-    }
-
-    func selectAuthorizationTab(with authorizationType: AuthorizationType) {
-        self.authorizationNavigationDelgate?.selectAuthorizationTab(with: authorizationType)
     }
 }
 

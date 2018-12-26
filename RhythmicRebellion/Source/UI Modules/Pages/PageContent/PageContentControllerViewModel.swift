@@ -379,7 +379,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
 }
 
 
-extension PageContentControllerViewModel: PlayerObserver {
+extension PageContentControllerViewModel: PlayerWatcher {
 
     func player(player: Player, didUpdateTracksTotalPlayMSeconds tracksTotalPlayMSeconds: [Int : UInt64]) {
         self.updatePreviewOptOnPage(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
@@ -394,7 +394,7 @@ extension PageContentControllerViewModel: PlayerObserver {
     }
 }
 
-extension PageContentControllerViewModel: ApplicationObserver {
+extension PageContentControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChange user: User) {
         self.updateUserOnPage()

@@ -107,19 +107,19 @@ final class PromoControllerViewModel: PromoViewModel {
         self.navigateToPage(with: writerURL)
     }
 
-    func navigateToAuthorization() {
-        self.router?.navigateToAuthorization()
+    func routeToAuthorization() {
+        self.router?.routeToAuthorization(with: .signIn)
     }
 }
 
-extension PromoControllerViewModel: PlayerObserver {
+extension PromoControllerViewModel: PlayerWatcher {
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
         self.delegate?.refreshUI()
     }
 }
 
-extension PromoControllerViewModel: ApplicationObserver {
+extension PromoControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState) {
         guard skipArtistAddonsState.artistId == self.playerItem?.playlistItem.track.artist.id else { return }

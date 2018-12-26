@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PagesLocalStorageServiceObserver: class {
+protocol PagesLocalStorageServiceWatcher: class {
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page)
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didUpdate page: Page)
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didDelete page: Page)
@@ -16,7 +16,7 @@ protocol PagesLocalStorageServiceObserver: class {
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didSaveSnapshotImageFor page: Page)
 }
 
-extension PagesLocalStorageServiceObserver {
+extension PagesLocalStorageServiceWatcher {
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page) { }
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didUpdate page: Page) { }
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didDelete page: Page) { }
@@ -27,7 +27,7 @@ extension PagesLocalStorageServiceObserver {
 
 class PagesLocalStorageService: Watchable {
 
-    typealias WatchType = PagesLocalStorageServiceObserver
+    typealias WatchType = PagesLocalStorageServiceWatcher
     let watchersContainer = WatchersContainer<WatchType>()
 
     var pageSnapshotAspectRatio: CGFloat = 1.4125

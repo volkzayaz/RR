@@ -91,8 +91,8 @@ extension DefaultAppRouter: PlayerNavigationDelgate {
         self.contentContainerRouter?.navigate(to: playerNavigationItem)
     }
 
-    func navigateToAuthorization() {
-        self.contentContainerRouter?.navigateToAuthorization()
+    func routeToAuthorization(with authorizationType: AuthorizationType) {
+        self.contentContainerRouter?.routeToAuthorization(with: authorizationType)
     }
 }
 

@@ -55,7 +55,7 @@ final class TabBarControllerViewModel: TabBarViewModel {
     }
 }
 
-extension TabBarControllerViewModel: ApplicationObserver {
+extension TabBarControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChange user: User) {
 

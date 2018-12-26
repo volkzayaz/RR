@@ -29,6 +29,6 @@ open class RoundedButton: UIButton {
 
     override open func layoutSubviews() {
         super.layoutSubviews()
-        self.layer.cornerRadius = isRounded ? self.bounds.midX : 0
+        self.layer.cornerRadius = isRounded ? min(self.bounds.midX, self.bounds.midY) : 0
     }
 }
