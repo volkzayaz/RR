@@ -63,7 +63,6 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
             .trackView(viewIndicator: indicator)
             .asObservable()
         
-        ///TODO: listen to changes in UserProfile
         artistFollowed.map { _ in }
             .startWith( () )
             .flatMapLatest { [unowned buffer = quickUnfollowBuffer] _ -> Observable<([Artist], [String], String)> in

@@ -7,10 +7,21 @@
 //
 
 import RxSwift
+import Alamofire
 
 enum Box<T> {
     case value(val: T)
     case error(er: Error)
+    
+    static func transformed<T>( boxed: @escaping (Box<[T]>) -> Void ) -> (Result<[T]>) -> Void {
+        return { res in
+            switch res {
+            case .success(let x): boxed( .value(val: x) )
+            case .failure(let e): boxed( .error(er:  e) )
+            }
+        }
+    }
+
 }
 
 extension ObservableConvertibleType {
