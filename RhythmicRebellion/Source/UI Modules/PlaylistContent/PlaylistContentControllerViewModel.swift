@@ -282,7 +282,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
     
     // MARK: - Track Actions -
 
-    func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor track: Track) -> Bool {
+    func isAction(with actionType: ActionViewModel.ActionType, availableFor track: Track) -> Bool {
         switch actionType {
         case .forceToPlay:
             guard let fanUser = self.application?.user as? FanUser else { return false }
@@ -301,7 +301,7 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         }
     }
 
-    func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for track: Track) {
+    func performeAction(with actionType: ActionViewModel.ActionType, for track: Track) {
 
         switch actionType {
         case .forceToPlay:
@@ -353,11 +353,11 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
         }
     }
 
-    func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel? {
+    func actions(forObjectAt indexPath: IndexPath) -> AlertActionsViewModel<ActionViewModel>? {
         guard let playlistItems = self.playlistItems, indexPath.row < playlistItems.count else { return nil }
         let track = playlistItems[indexPath.row]
 
-        var trackActionsTypes = TrackActionsViewModels.allActionsTypes
+        var trackActionsTypes = ActionViewModel.allTypes
         if  let trackPrice = track.price,
             let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
             trackActionsTypes.append(.addToCart(trackPriceString))
@@ -369,11 +369,11 @@ final class PlaylistContentControllerViewModel: PlaylistContentViewModel {
 
         guard filteredTrackActionsTypes.count > 0 else { return nil }
 
-        let trackActions = TrackActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredTrackActionsTypes) { [weak self, track] (actionType) in
+        let trackActions = Factory().makeActionsViewModels(actionTypes: filteredTrackActionsTypes) { [weak self, track] (actionType) in
             self?.performeAction(with: actionType, for: track)
         }
 
-        return TrackActionsViewModels.ViewModel(title: nil,
+        return AlertActionsViewModel<ActionViewModel>(title: nil,
                                                 message: nil,
                                                 actions: trackActions)
     }

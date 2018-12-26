@@ -20,12 +20,12 @@ final class PlayerNowPlayingViewController: UIViewController {
 
     private(set) weak var tipView: TipView?
 
-    private(set) var viewModel: PlayerNowPlayingViewModel!
+    private(set) var viewModel: NowPlayingViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: PlayerNowPlayingViewModel, router: FlowRouter) {
+    func configure(viewModel: NowPlayingViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -87,7 +87,7 @@ final class PlayerNowPlayingViewController: UIViewController {
 
     // MARK: - Actions -
     @IBAction func onRefresh(sender: UIRefreshControl) {
-        self.viewModel.reload()
+        self.viewModel.loadItems()
     }
 
     func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {

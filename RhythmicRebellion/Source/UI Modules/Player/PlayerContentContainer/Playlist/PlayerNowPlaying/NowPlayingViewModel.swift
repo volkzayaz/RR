@@ -9,7 +9,15 @@
 
 import UIKit
 
-final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
+protocol PlayerNowPlayingViewModelDelegate: class, ErrorPresenting {
+    
+    func reloadUI()
+    func reloadPlaylistUI()
+    
+    func reloadObjects(at indexPath: [IndexPath])
+}
+
+final class NowPlayingViewModel {
 
     // MARK: - Private properties -
 
@@ -46,6 +54,12 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.trackPriceFormatter = MoneyFormatter()
     }
 
+}
+
+
+
+extension NowPlayingViewModel {
+    
     func load(with delegate: PlayerNowPlayingViewModelDelegate) {
         self.delegate = delegate
 
@@ -62,9 +76,20 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         self.delegate?.reloadPlaylistUI()
     }
 
-    func reload() {
-        self.loadItems()
-    }
+}
+
+
+
+/////////////////
+/////////////////
+/////---------DataSource
+/////////////////
+/////////////////
+
+
+
+
+extension NowPlayingViewModel {
 
     func numberOfItems(in section: Int) -> Int {
         return self.playlistItems?.count ?? 0
@@ -76,41 +101,57 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         let playlistItem = playlistItems[indexPath.item]
 
         return TrackViewModel(track: playlistItem.track,
-                              user: self.application?.user,
-                              player: self.player,
-                              audioFileLocalStorageService: self.audioFileLocalStorageService,
-                              textImageGenerator: self.textImageGenerator,
-                              isCurrentInPlayer: self.player?.currentItem?.playlistItem == playlistItem,
+                              user: application?.user,
+                              player: player,
+                              audioFileLocalStorageService: audioFileLocalStorageService,
+                              textImageGenerator: textImageGenerator,
+                              isCurrentInPlayer: player?.currentItem?.playlistItem == playlistItem,
                               isLockedForActions: false)
     }
 
     func selectObject(at indexPath: IndexPath) {
-        guard let playlistItems = self.playlistItems, let viewModel = object(at: indexPath), viewModel.isPlayable else { return }
-
-        if !viewModel.isCurrentInPlayer {
-            self.player?.performAction(.playNow, for: playlistItems[indexPath.item], completion: { [weak self] (error) in
-                guard let error = error else { return }
-                self?.delegate?.show(error: error)
-            })
-        } else {
-            if viewModel.isPlaying {
-                player?.pause()
-            } else {
-                player?.play()
-            }
+        guard let playlistItems = self.playlistItems,
+              let viewModel = object(at: indexPath),
+              viewModel.isPlayable else {
+                return
         }
+        
+        if !viewModel.isCurrentInPlayer {
+            self.player?.performAction(.playNow,
+                                       for: playlistItems[indexPath.item],
+                                       completion: { [weak self] (error) in
+                                        guard let error = error else { return }
+                                        self?.delegate?.show(error: error)
+                                       })
+            return
+        }
+        
+        if viewModel.isPlaying {
+            player?.pause()
+        } else {
+            player?.play()
+        }
+        
     }
 
+}
+
+extension NowPlayingViewModel {
     // MARK: - Track Actions -
 
-    func isAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, availableFor playlistItem: PlayerPlaylistItem) -> Bool {
+    func isAction(with actionType: ActionViewModel.ActionType,
+                  availableFor playlistItem: PlayerPlaylistItem) -> Bool {
         switch actionType {
         case .forceToPlay:
             guard let fanUser = self.application?.user as? FanUser else { return false }
-            return fanUser.isCensorshipTrack(playlistItem.track) && !fanUser.profile.forceToPlay.contains(playlistItem.track.id)
+            return fanUser.isCensorshipTrack(playlistItem.track) &&
+                  !fanUser.profile.forceToPlay.contains(playlistItem.track.id)
+            
         case .doNotPlay:
             guard let fanUser = self.application?.user as? FanUser else { return false }
-            return fanUser.isCensorshipTrack(playlistItem.track) && fanUser.profile.forceToPlay.contains(playlistItem.track.id)
+            return fanUser.isCensorshipTrack(playlistItem.track) &&
+                   fanUser.profile.forceToPlay.contains(playlistItem.track.id)
+            
         case .playNow: return playlistItem.track.isPlayable
         case .toPlaylist: return self.application?.user?.isGuest == false
         case .replaceCurrent, .playNext, .playLast: return false
@@ -122,7 +163,8 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         }
     }
 
-    func performeAction(with actionType: TrackActionsViewModels.ActionViewModel.ActionType, for playlistItem: PlayerPlaylistItem) {
+    func performeAction(with actionType: ActionViewModel.ActionType,
+                        for playlistItem: PlayerPlaylistItem) {
         switch actionType {
         case .forceToPlay:
             self.application?.allowPlayTrackWithExplicitMaterial(trackId: playlistItem.track.id, completion: { (allowTrackResult) in
@@ -177,11 +219,11 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
         }
     }
 
-    func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel? {
+    func actions(forObjectAt indexPath: IndexPath) -> AlertActionsViewModel<ActionViewModel>? {
         guard let playlistItems = self.playlistItems, indexPath.row < playlistItems.count else { return nil }
         let playlistItem = playlistItems[indexPath.row]
 
-        var trackActionsTypes = TrackActionsViewModels.allActionsTypes
+        var trackActionsTypes = ActionViewModel.allTypes
         if  let trackPrice = playlistItem.track.price,
             let trackPriceString = self.trackPriceFormatter.string(from: trackPrice) {
             trackActionsTypes.append(.addToCart(trackPriceString))
@@ -193,15 +235,30 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
 
         guard filteredTrackActionsTypes.count > 0 else { return nil }
 
-        let trackActions = TrackActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredTrackActionsTypes) { [weak self, playlistItem] (actionType) in
+        let trackActions = Factory().makeActionsViewModels(actionTypes: filteredTrackActionsTypes) { [weak self, playlistItem] (actionType) in
             self?.performeAction(with: actionType, for: playlistItem)
         }
 
-        return TrackActionsViewModels.ViewModel(title: nil,
+        return AlertActionsViewModel<ActionViewModel>(title: nil,
                                                 message: nil,
                                                 actions: trackActions)
 
     }
+    
+}
+
+
+
+/////////////////
+/////////////////
+/////---------Downloading audio
+/////////////////
+/////////////////
+
+
+
+
+extension NowPlayingViewModel {
 
     func downloadObject(at indexPath: IndexPath) {
         guard let playlistItems = self.playlistItems, indexPath.item < playlistItems.count,
@@ -229,7 +286,19 @@ final class PlayerNowPlayingControllerViewModel: PlayerNowPlayingViewModel {
     }
 }
 
-extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
+
+
+/////////////////
+/////////////////
+/////---------User profile changed
+/////////////////
+/////////////////
+
+
+
+
+
+extension NowPlayingViewModel: ApplicationObserver {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let playlistItems = self.playlistItems else { return }
@@ -266,10 +335,22 @@ extension PlayerNowPlayingControllerViewModel: ApplicationObserver {
 
 }
 
-extension PlayerNowPlayingControllerViewModel: PlayerObserver {
+
+
+/////////////////
+/////////////////
+/////---------Global player state
+/////////////////
+/////////////////
+
+
+
+
+
+extension NowPlayingViewModel: PlayerObserver {
     
     func playerDidChangePlaylist(player: Player) {
-        self.reload()
+        self.loadItems()
     }
     
     func player(player: Player, didChange status: PlayerStatus) {
@@ -306,7 +387,19 @@ extension PlayerNowPlayingControllerViewModel: PlayerObserver {
     }
 }
 
-extension PlayerNowPlayingControllerViewModel: AudioFileLocalStorageServiceObserver {
+
+
+/////////////////
+/////////////////
+/////---------Audio downloading and sharing
+/////////////////
+/////////////////
+
+
+
+
+
+extension NowPlayingViewModel: AudioFileLocalStorageServiceObserver {
 
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
 

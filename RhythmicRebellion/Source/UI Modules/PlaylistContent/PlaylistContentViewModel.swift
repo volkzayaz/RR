@@ -25,7 +25,7 @@ protocol PlaylistContentViewModel: class {
     func playlistActions() -> PlaylistActionsViewModels.ViewModel?
     func clearPlaylist()
 
-    func actions(forObjectAt indexPath: IndexPath) -> TrackActionsViewModels.ViewModel?
+    func actions(forObjectAt indexPath: IndexPath) -> AlertActionsViewModel<ActionViewModel>?
 
     func downloadObject(at indexPath: IndexPath)
     func cancelDownloadingObject(at indexPath: IndexPath)
