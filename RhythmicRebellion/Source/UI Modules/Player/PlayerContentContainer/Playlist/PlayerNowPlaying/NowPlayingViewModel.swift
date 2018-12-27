@@ -9,6 +9,20 @@
 
 import UIKit
 
+struct NowPlayingProvider : TrackProvider {
+    
+    let player: Player
+    
+    var playlistItems: [PlayerPlaylistItem] {
+        return player.playlistItems
+    }
+    
+    func provide(completion: (Box<[Track]>) -> Void) {
+        return completion( .value( val: playlistItems.map { $0.track } ) )
+    }
+    
+}
+
 final class NowPlayingViewModel {
 
     // MARK: - Private properties -
@@ -16,15 +30,12 @@ final class NowPlayingViewModel {
     private(set) weak var router: PlayerNowPlayingRouter!
     private(set) weak var application: Application!
     private(set) weak var player: Player!
-    private(set) weak var audioFileStorage: AudioFileLocalStorageService!
     
-    private var playlistItems: [PlayerPlaylistItem] = []
-
-    lazy var tracksViewModel = TrackListViewModel(application: application,
-                                                  player: player,
-                                                  audioFileLocalStorageService: audioFileStorage,
-                                                  provider: self)
-
+    let tracksViewModel: TrackListViewModel
+    private var playlistItems: [PlayerPlaylistItem] {
+        return (tracksViewModel.trackProivder as! NowPlayingProvider).playlistItems
+    }
+    
     private var errorPresenter: ErrorPresenting {
         return tracksViewModel.delegate!
     }
@@ -36,132 +47,83 @@ final class NowPlayingViewModel {
         self.router = router
         self.application = application
         self.player = player
-        self.audioFileStorage = audioFileLocalStorageService
-    }
-
-}
-
-extension NowPlayingViewModel: TrackProvider {
-    
-    func provide(completion: (Box<[Track]>) -> Void) {
         
-        let items = player?.playlistItems ?? []
-        playlistItems = items
-        
-        return completion( .value( val: items.map { $0.track } ) )
-    }
-    
-    func actions(for track: Track, indexPath: IndexPath) -> [ActionViewModel] {
-        
-        let maybeUser = application?.user as? FanUser
-        let item = playlistItems[indexPath.row]
-        
-        let ftp = ActionViewModel(.forceToPlay) { [weak self] in
-            self?.tracksViewModel.forceToPlay(track: track)
-        }
-        
-        let dnp = ActionViewModel(.doNotPlay) { [weak self] in
-            self?.tracksViewModel.doNotPlay(track: track)
-        }
-    
-        let pn = ActionViewModel(.playNow) { [weak self] in
+        let actions: TrackListViewModel.ActionsProvider = { list, track, indexPath in
             
-            self?.player?.performAction(.playNow,
-                                       for: item,
-                                       completion: { [weak self] (error) in
-                                        guard let error = error else { return }
-                                        self?.errorPresenter.show(error: error)
-                })
+            var result: [ActionViewModel] = []
             
-        }
-
-        let delete = ActionViewModel(.delete) { [weak self] in
+            let maybeUser = application.user as? FanUser
+            let playlistItem = (list.trackProivder as! NowPlayingProvider).playlistItems[indexPath.row]
             
-            self?.player?.performAction(.delete,
-                                        for: item,
-                                        completion: { [weak self] (error) in
-                                        guard let error = error else { return }
-                                        self?.errorPresenter.show(error: error)
-            })
+            //////1
+            
+            if maybeUser?.isGuest == false {
+                
+                let toPlaylist = ActionViewModel(.toPlaylist) {
+                    router.showAddToPlaylist(for: [track])
+                }
+                
+                result.append(toPlaylist)
+            }
+            
+            //////2
+            
+            if track.isPlayable {
+                
+                let playNow = ActionViewModel(.playNow) {
+                    list.play(playlistItem: playlistItem)
+                }
+                
+                result.append(playNow)
+                
+            }
+            
+            /////3
+            
+            let delete = ActionViewModel(.delete) {
+                list.delete(playlistItem: playlistItem)
+            }
+            
+            result.append(delete)
+            
+            return result
             
         }
         
-        let toPlaylist = ActionViewModel(.toPlaylist) { [weak self] in
-            self?.router?.showAddToPlaylist(for: [track])
-        }
-        
-        var result: [ActionViewModel] = []
-        
-        if let user = maybeUser,
-           user.isCensorshipTrack(track) &&
-          !user.profile.forceToPlay.contains(track.id) {
-            result.append(ftp)
-        }
-            
-        if let user = maybeUser,
-           user.isCensorshipTrack(track) &&
-           user.profile.forceToPlay.contains(track.id) {
-            result.append(dnp)
-        }
-        
-        if track.isPlayable {
-            result.append(pn)
-        }
-        
-        if application?.user?.isGuest == false {
-            result.append(toPlaylist)
-        }
-        
-        result.append(delete)
-        
-        if let user = maybeUser,
-            user.hasPurchase(for: track) {
-            ///No proper action is available so far
-            //result.append(add)
-        }
-        
-        return result
-    }
-    
-    var selected: (Track, IndexPath) -> Void {
-        
-        return { [weak self] (track, indexPath) in
+        let select: TrackListViewModel.SelectedProvider = { list, track, indexPath in
             
             guard track.isPlayable else {
                 return
             }
             
-            guard let playlistItem = self?.playlistItems[indexPath.row] else {
-                fatalError("Select action perfromed for not existing playlist item. Expected track \(track)")
-            }
+            let playlistItem = (list.trackProivder as! NowPlayingProvider).playlistItems[indexPath.row]
             
             precondition(playlistItem.track == track, "Race condition appeared. Action performed with unsynced dataSource. Expected track \(track), received track \(playlistItem.track)")
             
             
             ///This piece of logic is still a mystery for me.
             ///Specifically, why is it different from same conditon present in PlaylistViewModel
-            let condition = !(self?.player?.currentItem?.playlistItem.track == track)
+            let condition = !(player.currentItem?.playlistItem.track == track)
             
             if condition {
-                
-                self?.player?.performAction(.playNow,
-                                            for: playlistItem,
-                                            completion: { [weak self] (error) in
-                                                guard let error = error else { return }
-                                                self?.errorPresenter.show(error: error)
-                })
+                list.play(playlistItem: playlistItem)
                 return
             }
             
-            self?.player?.flipPlayState()
+            player.flipPlayState()
             
         }
         
+        tracksViewModel = TrackListViewModel(application: application,
+                                             player: player,
+                                             audioFileLocalStorageService: audioFileLocalStorageService,
+                                             dataProvider: NowPlayingProvider(player: player),
+                                             actionsProvider: actions,
+                                             selectedProvider: select)
+        
     }
-    
-    
-}
 
+}
 
 extension NowPlayingViewModel {
     

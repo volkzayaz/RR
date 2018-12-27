@@ -9,7 +9,6 @@
 
 import Foundation
 
-///TODO: reconsider naming
 protocol PlaylistProvider: TrackProvider {
     var playlist: Playlist { get }
 }
@@ -48,7 +47,7 @@ struct FanPlaylistProvider: DeletablePlaylistProvider {
     
 }
 
-struct DefinedPlaylistProvider: TrackProvider {
+struct DefinedPlaylistProvider: PlaylistProvider {
     
     let playlist: Playlist
     
@@ -73,6 +72,9 @@ final class PlaylistViewModel {
     }
     
     let tracksViewModel: TrackListViewModel
+    var playlist: Playlist {
+        return (tracksViewModel.trackProivder as! PlaylistProvider).playlist
+    }
     
     private(set) weak var router: PlaylistContentRouter!
     private(set) weak var application: Application!
@@ -100,10 +102,9 @@ final class PlaylistViewModel {
         self.player = player
         self.restApiService = restApiService
         
-        playlistHeaderViewModel = PlaylistHeaderViewModel(playlist: provider.playlist,
-                                                          isEmpty: tracksViewModel.isPlaylistEmpty)
-        
-        let actions: TrackActionsProvider = { (list, track, indexPath) -> [ActionViewModel] in
+        let actions = { (list: TrackListViewModel,
+                         track: Track,
+                         indexPath: IndexPath) -> [ActionViewModel] in
             
             var result: [ActionViewModel] = []
             
@@ -124,16 +125,16 @@ final class PlaylistViewModel {
             
             if track.isPlayable {
             
-                let playNow = ActionViewModel(.playNow) { [weak self] in
-                    self?.play(tracks: [track])
+                let playNow = ActionViewModel(.playNow) {
+                    list.play(tracks: [track])
                 }
                 
-                let playNext = ActionViewModel(.playNext) { [weak self] in
-                    self?.addToPlayerPlaylist(tracks: [track], at: .next)
+                let playNext = ActionViewModel(.playNext) {
+                    list.addToPlayerPlaylist(tracks: [track], at: .next)
                 }
                 
-                let playLast = ActionViewModel(.playLast) { [weak self] in
-                    self?.addToPlayerPlaylist(tracks: [track], at: .last)
+                let playLast = ActionViewModel(.playLast) {
+                    list.addToPlayerPlaylist(tracks: [track], at: .last)
                 }
             
                 result.append(playNow)
@@ -169,14 +170,36 @@ final class PlaylistViewModel {
             
         }
         
+        let select = { (list: TrackListViewModel,
+                        track: Track,
+                        indexPath: IndexPath) in
+            
+            guard track.isPlayable else {
+                return
+            }
+            
+            ///This piece of logic is still a mystery for me.
+            ///Specifically, why is it different from same conditon present in NowPlayingViewModel
+            let condition = !(player.currentItem?.playlistItem.track.id == track.id)
+            
+            if condition {
+                list.play(tracks: [track])
+                return
+            }
+            
+            player.flipPlayState()
+            
+        }
         
         tracksViewModel = TrackListViewModel(application: application,
                                              player: player,
                                              audioFileLocalStorageService: audioFileLocalStorageService,
                                              dataProvider: provider,
                                              actionsProvider: actions,
-                                             selectedProvider: { _, _, _ in })
+                                             selectedProvider: select)
         
+        playlistHeaderViewModel = PlaylistHeaderViewModel(playlist: provider.playlist,
+                                                          isEmpty: tracksViewModel.isPlaylistEmpty)
     }
 
     func load(with delegate: TrackListBindings) {
@@ -188,70 +211,8 @@ final class PlaylistViewModel {
 }
 
 extension PlaylistViewModel {
-    
-    var selected: (Track, IndexPath) -> Void {
-        
-        return { [weak self] (track, _) in
-            
-            guard track.isPlayable else {
-                return
-            }
-            
-            ///This piece of logic is still a mystery for me.
-            ///Specifically, why is it different from same conditon present in NowPlayingViewModel
-            let condition = !(self?.player?.currentItem?.playlistItem.track.id == track.id)
-            
-            if condition {
-                self?.play(tracks: [track])
-                return
-            }
-            
-            self?.player?.flipPlayState()
-            
-        }
-        
-    }
-    
-}
-
-extension PlaylistViewModel {
 
     // MARK: Action support
-
-    private func play(tracks: [Track]) {
-        
-        self.player?.add(tracks: tracks, at: .next, completion: { [weak self] (playlistItems, error) in
-            guard let playlistItem = playlistItems?.first else {
-                guard let error = error else { return }
-                self?.errorPresenter.show(error: error)
-                return
-            }
-
-            self?.player?.performAction(.playNow, for: playlistItem, completion: { [weak self] (error) in
-                guard let error = error else { return }
-                self?.errorPresenter.show(error: error)
-            })
-        })
-    }
-
-    private func addToPlayerPlaylist(tracks: [Track], at position: Player.PlaylistPosition) {
-        guard tracks.isEmpty == false else { return }
-
-        self.player?.add(tracks: tracks, at: position, completion: { [weak self] (playlistItems, error) in
-            guard let error = error else { return }
-            self?.errorPresenter.show(error: error)
-        })
-    }
-
-    private func replacePlayerPlaylist(with tracks: [Track]) {
-        guard tracks.isEmpty == false else { return }
-
-        self.player?.replace(with: tracks, completion: { [weak self] (playlistItems, error) in
-            guard let error = error else { return }
-            self?.errorPresenter.show(error: error)
-        })
-
-    }
 
     private func clear(playlist: Playlist) {
         
@@ -307,10 +268,10 @@ extension PlaylistViewModel {
     func performeAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, for playlist: Playlist) {
 
         switch actionType {
-        case .playNow: self.play(tracks: tracksViewModel.tracks)
-        case .playNext: self.addToPlayerPlaylist(tracks: tracksViewModel.tracks, at: .next)
-        case .playLast: self.addToPlayerPlaylist(tracks: tracksViewModel.tracks, at: .last)
-        case .replaceCurrent: self.replacePlayerPlaylist(with: tracksViewModel.tracks)
+        case .playNow: tracksViewModel.play(tracks: tracksViewModel.tracks)
+        case .playNext: tracksViewModel.addToPlayerPlaylist(tracks: tracksViewModel.tracks, at: .next)
+        case .playLast: tracksViewModel.addToPlayerPlaylist(tracks: tracksViewModel.tracks, at: .last)
+        case .replaceCurrent: tracksViewModel.replacePlayerPlaylist(with: tracksViewModel.tracks)
         case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .clear: self.clear(playlist: playlist)
 

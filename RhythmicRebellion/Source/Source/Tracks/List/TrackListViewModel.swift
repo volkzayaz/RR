@@ -9,19 +9,6 @@
 import Foundation
 import UIKit
 
-struct Factory {
-    
-    func makeActionsViewModels(actionTypes: [ActionViewModel.ActionType],
-                               actionCallback: @escaping (ActionViewModel.ActionType) -> Void) -> [ActionViewModel] {
-        let actionsViewModels = actionTypes.map { actionType in
-            ActionViewModel(actionType, actionCallback: { actionCallback(actionType) })
-        }
-        
-        return actionsViewModels + [ActionViewModel(.cancel, actionCallback: { } )]
-    }
-}
-
-
 struct ActionViewModel: AlertActionItemViewModel {
     
     let type: ActionType
@@ -112,14 +99,15 @@ protocol TrackProvider {
     
 }
 
-////provide list of actions available for given track
-typealias TrackActionsProvider = (TrackListViewModel, Track, IndexPath) -> [ActionViewModel]
-
-///handle track selection
-typealias TrackSelectedProvider = (TrackListViewModel, Track, IndexPath) -> Void
-
 class TrackListViewModel {
- 
+
+    ////provide list of actions available for given track
+    typealias ActionsProvider = (TrackListViewModel, Track, IndexPath) -> [ActionViewModel]
+    
+    ///handle track selection
+    typealias SelectedProvider = (TrackListViewModel, Track, IndexPath) -> Void
+
+    
     private(set) weak var delegate: TrackListBindings?
     private weak var application: Application?
     private weak var player: Player?
@@ -128,9 +116,9 @@ class TrackListViewModel {
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     private let trackPriceFormatter = MoneyFormatter()
     
-    private let trackProivder: TrackProvider
-    private let selectedProvider: TrackSelectedProvider
-    private let actionsProvider: TrackActionsProvider
+    let trackProivder: TrackProvider
+    private let selectedProvider: SelectedProvider
+    private let actionsProvider: ActionsProvider
     
     private(set) var tracks: [Track] = [] {
         didSet {
@@ -155,8 +143,8 @@ class TrackListViewModel {
          player: Player,
          audioFileLocalStorageService: AudioFileLocalStorageService,
          dataProvider: TrackProvider,
-         actionsProvider: @escaping TrackActionsProvider = { _, _, _ in [] },
-         selectedProvider: @escaping TrackSelectedProvider = { _, _, _ in }) {
+         actionsProvider: @escaping ActionsProvider = { _, _, _ in [] },
+         selectedProvider: @escaping SelectedProvider = { _, _, _ in }) {
     
         self.application = application
         self.player = player
@@ -313,9 +301,59 @@ extension TrackListViewModel {
         })
     }
     
+    func play(playlistItem: PlayerPlaylistItem) {
+        
+        self.player?.performAction(.playNow, for: playlistItem, completion: { [weak self] (error) in
+            guard let error = error else { return }
+            self?.delegate?.show(error: error)
+        })
+        
+    }
+    
+    func delete(playlistItem: PlayerPlaylistItem) {
+        player?.performAction(.delete,
+                              for: playlistItem,
+                              completion: { [weak self] (error) in
+                                guard let error = error else { return }
+                                self?.delegate?.show(error: error)
+        })
+    }
+    
+    
+    
+    func play(tracks: [Track]) {
+        
+        self.player?.add(tracks: tracks, at: .next, completion: { [weak self] (playlistItems, error) in
+            guard let playlistItem = playlistItems?.first else {
+                guard let error = error else { return }
+                self?.delegate?.show(error: error)
+                return
+            }
+            
+            self?.play(playlistItem: playlistItem)
+        })
+    }
+    
+    func addToPlayerPlaylist(tracks: [Track], at position: Player.PlaylistPosition) {
+        guard tracks.isEmpty == false else { return }
+        
+        self.player?.add(tracks: tracks, at: position, completion: { [weak self] (playlistItems, error) in
+            guard let error = error else { return }
+            self?.delegate?.show(error: error)
+        })
+    }
+    
+    func replacePlayerPlaylist(with tracks: [Track]) {
+        guard tracks.isEmpty == false else { return }
+        
+        self.player?.replace(with: tracks, completion: { [weak self] (playlistItems, error) in
+            guard let error = error else { return }
+            self?.delegate?.show(error: error)
+        })
+        
+    }
+    
 }
-
-
 
 
 /////////////////

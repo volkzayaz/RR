@@ -69,12 +69,22 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     func start(controller: PlaylistContentViewController, playlist: Playlist) {
         sourceController = controller
 
+        ////TODO: decouple the code further
+        let provider: PlaylistProvider
+        
+        if let x = playlist as? FanPlaylist {
+            provider = FanPlaylistProvider(fanPlaylist: x)
+        }
+        else {
+            provider = DefinedPlaylistProvider(playlist: playlist)
+        }
+        
         let vm = PlaylistViewModel(router: self,
-                                                    application: self.dependencies.application,
-                                                    player: self.dependencies.player,
-                                                    restApiService: self.dependencies.restApiService,
-                                                    audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService,
-                                                    playlist: playlist)
+                                   application: self.dependencies.application,
+                                   player: self.dependencies.player,
+                                   restApiService: self.dependencies.restApiService,
+                                   audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService,
+                                   provider: provider)
 
         controller.configure(viewModel: vm, router: self)
     }
