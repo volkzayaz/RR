@@ -9,7 +9,7 @@
 
 import UIKit
 
-final class LyricsKaraokeContainerViewController: UIViewController, ContainerViewController {
+final class LyricsKaraokeViewController: UIViewController, ContainerViewController {
 
     @IBOutlet weak var containerView: UIView!
 
@@ -19,12 +19,12 @@ final class LyricsKaraokeContainerViewController: UIViewController, ContainerVie
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: LyricsKaraokeContainerViewModel!
+    private(set) var viewModel: LyricsKaraokeViewModelProtocol!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: LyricsKaraokeContainerViewModel, router: FlowRouter) {
+    func configure(viewModel: LyricsKaraokeViewModelProtocol, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -40,7 +40,7 @@ final class LyricsKaraokeContainerViewController: UIViewController, ContainerVie
 }
 
 // MARK: - Router -
-extension LyricsKaraokeContainerViewController {
+extension LyricsKaraokeViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -56,7 +56,7 @@ extension LyricsKaraokeContainerViewController {
 
 }
 
-extension LyricsKaraokeContainerViewController: LyricsKaraokeContainerViewModelDelegate {
+extension LyricsKaraokeViewController: LyricsKaraokeViewModelDelegate {
 
     func refreshUI() {
 

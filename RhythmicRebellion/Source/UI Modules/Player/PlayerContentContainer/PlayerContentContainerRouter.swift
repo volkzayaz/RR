@@ -9,7 +9,7 @@
 
 import UIKit
 
-protocol PlayerContentNavigationDelgate: PromoRouterDelegate, LyricsKaraokeContainerRouterDelegate {
+protocol PlayerContentNavigationDelgate: PromoRouterDelegate, LyricsKaraokeRouterDelegate {
 }
 
 
@@ -78,9 +78,9 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
                 let videoRouter = DefaultVideoRouter(dependencies: self.dependencies)
                 videoRouter.start(controller: videoViewController)
             case .lyrics:
-                guard let lyricsKaraokeContinerViewController = childViewController as? LyricsKaraokeContainerViewController else { continue }
-                let lyricsKaraokeContainerRouter = DefaultLyricsKaraokeContainerRouter(dependencies: self.dependencies, delegate: self.navigationDelegate)
-                lyricsKaraokeContainerRouter.start(controller: lyricsKaraokeContinerViewController)
+                guard let lyricsKaraokeViewController = childViewController as? LyricsKaraokeViewController else { continue }
+                let lyricsKaraokeRouter = DefaultLyricsKaraokeRouter(dependencies: self.dependencies, delegate: self.navigationDelegate)
+                lyricsKaraokeRouter.start(controller: lyricsKaraokeViewController)
             case .playlist:
                 guard let navigationController = childViewController as? UINavigationController,
                     let playerPlaylistRootViewController = navigationController.viewControllers.first as? PlayerPlaylistRootViewController else { continue }
