@@ -9,6 +9,59 @@
 
 import Foundation
 
+///TODO: reconsider naming
+protocol PlaylistProvider: TrackProvider {
+    var playlist: Playlist { get }
+}
+
+protocol DeletablePlaylistProvider: PlaylistProvider {
+    func delete(track: Track, completion: @escaping (Box<Void>) -> Void)
+}
+
+struct FanPlaylistProvider: DeletablePlaylistProvider {
+    
+    let fanPlaylist: FanPlaylist
+    var playlist: Playlist {
+        return fanPlaylist
+    }
+    
+    func provide(completion: @escaping (Box<[Track]>) -> Void) {
+        
+        return DataLayer.get.application.restApiService
+            .fanTracks(for: playlist.id,
+                       completion: Box<[Track]>.transformed(boxed: completion))
+        
+    }
+    
+    func delete(track: Track, completion: @escaping (Box<Void>) -> Void) {
+        
+        return DataLayer.get.application.restApiService
+            .fanDelete(track,
+                       from: fanPlaylist,
+                       completion: { er in
+                        
+                        if let error = er { completion( .error(er:  error)) }
+                        else              { completion( .value(val: ()   )) }
+                            
+            })
+    }
+    
+}
+
+struct DefinedPlaylistProvider: TrackProvider {
+    
+    let playlist: Playlist
+    
+    func provide(completion: @escaping (Box<[Track]>) -> Void) {
+        
+        return DataLayer.get.application.restApiService
+            .tracks(for: playlist.id,
+                    completion: Box<[Track]>.transformed(boxed: completion))
+        
+    }
+    
+}
+
 final class PlaylistViewModel {
     
     private var errorPresenter: ErrorPresenting {
@@ -19,25 +72,16 @@ final class PlaylistViewModel {
         return tracksViewModel.delegate!
     }
     
-    lazy var tracksViewModel = TrackListViewModel(application: application,
-                                                  player: player,
-                                                  audioFileLocalStorageService: audioFileLocalStorageService,
-                                                  provider: self)
+    let tracksViewModel: TrackListViewModel
     
     private(set) weak var router: PlaylistContentRouter!
     private(set) weak var application: Application!
     private(set) weak var player: Player!
-    private(set) weak var audioFileLocalStorageService: AudioFileLocalStorageService!
     
     private(set) weak var restApiService: RestApiService!
     
-    private var playlist: Playlist
-
-    var playlistHeaderViewModel: PlaylistHeaderViewModel {
-        return PlaylistHeaderViewModel(playlist: playlist,
-                                       isEmpty: tracksViewModel.isPlaylistEmpty)
-    }
-
+    let playlistHeaderViewModel: PlaylistHeaderViewModel
+    
     // MARK: - Lifecycle -
 
     deinit {
@@ -49,15 +93,89 @@ final class PlaylistViewModel {
          player: Player,
          restApiService: RestApiService,
          audioFileLocalStorageService: AudioFileLocalStorageService,
-         playlist: Playlist) {
+         provider: PlaylistProvider) {
         
         self.router = router
         self.application = application
         self.player = player
         self.restApiService = restApiService
-        self.audioFileLocalStorageService = audioFileLocalStorageService
         
-        self.playlist = playlist
+        playlistHeaderViewModel = PlaylistHeaderViewModel(playlist: provider.playlist,
+                                                          isEmpty: tracksViewModel.isPlaylistEmpty)
+        
+        let actions: TrackActionsProvider = { (list, track, indexPath) -> [ActionViewModel] in
+            
+            var result: [ActionViewModel] = []
+            
+            let maybeUser = application.user as? FanUser
+            
+            //////1
+            
+            if maybeUser?.isGuest == false {
+                
+                let toPlaylist = ActionViewModel(.toPlaylist) {
+                    router.showAddToPlaylist(for: [track])
+                }
+                
+                result.append(toPlaylist)
+            }
+            
+            //////2
+            
+            if track.isPlayable {
+            
+                let playNow = ActionViewModel(.playNow) { [weak self] in
+                    self?.play(tracks: [track])
+                }
+                
+                let playNext = ActionViewModel(.playNext) { [weak self] in
+                    self?.addToPlayerPlaylist(tracks: [track], at: .next)
+                }
+                
+                let playLast = ActionViewModel(.playLast) { [weak self] in
+                    self?.addToPlayerPlaylist(tracks: [track], at: .last)
+                }
+            
+                result.append(playNow)
+                result.append(playNext)
+                result.append(playLast)
+            }
+            
+            /////3
+            
+            if let p = provider as? DeletablePlaylistProvider {
+                
+                let delete = ActionViewModel(.delete) {
+                    
+                    p.delete(track: track) { x in
+                        switch x {
+                        case .error(let error):
+                            list.delegate?.show(error: error)
+                            list.delegate?.reloadObjects(at: [indexPath])
+                            
+                        case .value(_):
+                            list.loadItems()
+                            
+                        }
+                    }
+                    
+                }
+             
+                result.append(delete)
+                
+            }
+            
+            return result
+            
+        }
+        
+        
+        tracksViewModel = TrackListViewModel(application: application,
+                                             player: player,
+                                             audioFileLocalStorageService: audioFileLocalStorageService,
+                                             dataProvider: provider,
+                                             actionsProvider: actions,
+                                             selectedProvider: { _, _, _ in })
         
     }
 
@@ -69,102 +187,7 @@ final class PlaylistViewModel {
 
 }
 
-extension PlaylistViewModel: TrackProvider {
-    
-    func provide(completion: @escaping (Box<[Track]>) -> Void) {
-        
-        if playlist.isFanPlaylist {
-            restApiService.fanTracks(for: playlist.id,
-                                     completion: Box<[Track]>.transformed(boxed: completion))
-        } else {
-            restApiService.tracks(for: playlist.id,
-                                  completion: Box<[Track]>.transformed(boxed: completion))
-        }
-        
-    }
-    
-    func actions(for track: Track, indexPath: IndexPath) -> [ActionViewModel] {
-    
-        let maybeUser = application?.user as? FanUser
-        
-        let ftp = ActionViewModel(.forceToPlay) { [weak self] in
-            self?.tracksViewModel.forceToPlay(track: track)
-        }
-        
-        let dnp = ActionViewModel(.doNotPlay) { [weak self] in
-            self?.tracksViewModel.doNotPlay(track: track)
-        }
-        
-        let toPlaylist = ActionViewModel(.toPlaylist) { [weak self] in
-            self?.router?.showAddToPlaylist(for: [track])
-        }
-        
-        let delete = ActionViewModel(.delete) { [weak self] in
-
-            self?.restApiService?.fanDelete(track,
-                                            from: self?.playlist as! FanPlaylist,
-                                            completion: { [weak self] er in
-                
-                if let error = er {
-                    self?.errorPresenter.show(error: error)
-                    self?.tracksViewModel.delegate?.reloadObjects(at: [indexPath])
-                } else {
-                    self?.tracksViewModel.loadItems()
-                }
-                
-            })
-            
-        }
-        
-        let playNow = ActionViewModel(.playNow) { [weak self] in
-            self?.play(tracks: [track])
-        }
-        
-        let playNext = ActionViewModel(.playNext) { [weak self] in
-            self?.addToPlayerPlaylist(tracks: [track], at: .next)
-        }
-        
-        let playLast = ActionViewModel(.playLast) { [weak self] in
-            self?.addToPlayerPlaylist(tracks: [track], at: .last)
-        }
-        
-        //////
-        var result: [ActionViewModel] = []
-        
-        if let user = maybeUser,
-            user.isCensorshipTrack(track) &&
-                !user.profile.forceToPlay.contains(track.id) {
-            result.append(ftp)
-        }
-        
-        if let user = maybeUser,
-            user.isCensorshipTrack(track) &&
-                user.profile.forceToPlay.contains(track.id) {
-            result.append(dnp)
-        }
-        
-        if track.isPlayable {
-            result.append(playNow)
-            result.append(playNext)
-            result.append(playLast)
-        }
-        
-        if application?.user?.isGuest == false {
-            result.append(toPlaylist)
-        }
-        
-        result.append(delete)
-        
-        if let user = maybeUser,
-            user.hasPurchase(for: track) {
-            ///No proper action is available so far
-            //result.append(add)
-        }
-        
-        return result
-        
-        
-    }
+extension PlaylistViewModel {
     
     var selected: (Track, IndexPath) -> Void {
         

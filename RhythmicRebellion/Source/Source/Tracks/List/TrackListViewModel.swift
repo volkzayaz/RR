@@ -105,18 +105,18 @@ protocol TrackListBindings: class, ErrorPresenting, AlertActionsViewModelPersent
     func reloadObjects(at indexPath: [IndexPath])
 }
 
-protocol TrackProvider: class {
+protocol TrackProvider {
     
     ////provide list of tracks to play back
     func provide( completion: @escaping (Box<[Track]>) -> Void )
     
-    ////provide list of actions available for given track
-    func actions(for track: Track, indexPath: IndexPath) -> [ActionViewModel]
-    
-    ///handle track selection
-    var selected: (Track, IndexPath) -> Void { get }
-    
 }
+
+////provide list of actions available for given track
+typealias TrackActionsProvider = (TrackListViewModel, Track, IndexPath) -> [ActionViewModel]
+
+///handle track selection
+typealias TrackSelectedProvider = (TrackListViewModel, Track, IndexPath) -> Void
 
 class TrackListViewModel {
  
@@ -128,7 +128,10 @@ class TrackListViewModel {
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     private let trackPriceFormatter = MoneyFormatter()
     
-    private weak var trackProivder: TrackProvider!
+    private let trackProivder: TrackProvider
+    private let selectedProvider: TrackSelectedProvider
+    private let actionsProvider: TrackActionsProvider
+    
     private(set) var tracks: [Track] = [] {
         didSet {
             delegate?.reloadUI()
@@ -151,11 +154,17 @@ class TrackListViewModel {
     init(application: Application,
          player: Player,
          audioFileLocalStorageService: AudioFileLocalStorageService,
-         provider: TrackProvider) {
+         dataProvider: TrackProvider,
+         actionsProvider: @escaping TrackActionsProvider = { _, _, _ in [] },
+         selectedProvider: @escaping TrackSelectedProvider = { _, _, _ in }) {
+    
         self.application = application
         self.player = player
         self.audioFileLocalStorageService = audioFileLocalStorageService
-        trackProivder = provider
+        
+        self.trackProivder = dataProvider
+        self.selectedProvider = selectedProvider
+        self.actionsProvider = actionsProvider
     }
     
 }
@@ -223,7 +232,7 @@ extension TrackListViewModel {
             return
         }
         
-        trackProivder.selected( tracks[indexPath.row], indexPath )
+        selectedProvider(self, tracks[indexPath.row], indexPath)
         
     }
     
@@ -236,11 +245,41 @@ extension TrackListViewModel {
         let track = tracks[indexPath.row]
         
         let cancel = [ActionViewModel(.cancel, actionCallback: {} )]
-        let actions = trackProivder.actions(for: track, indexPath: indexPath)
+        let actions = actionsProvider(self, track, indexPath)
+        
+        let ftp = ActionViewModel(.forceToPlay) { [weak self] in
+            self?.forceToPlay(track: track)
+        }
+        
+        let dnp = ActionViewModel(.doNotPlay) { [weak self] in
+            self?.doNotPlay(track: track)
+        }
+        
+        let maybeUser = application?.user as? FanUser
+        
+        var result: [ActionViewModel] = []
+        
+        if let user = maybeUser,
+            user.isCensorshipTrack(track) &&
+                !user.profile.forceToPlay.contains(track.id) {
+            result.append(ftp)
+        }
+        
+        if let user = maybeUser,
+            user.isCensorshipTrack(track) &&
+                user.profile.forceToPlay.contains(track.id) {
+            result.append(dnp)
+        }
+        
+        if let user = maybeUser,
+            user.hasPurchase(for: track) {
+            ///No proper action is available so far
+            //result.append(add)
+        }
         
         return AlertActionsViewModel<ActionViewModel>(title: nil,
                                                       message: nil,
-                                                      actions: actions + cancel)
+                                                      actions: result + actions + cancel)
         
     }
     
@@ -253,10 +292,6 @@ extension TrackListViewModel {
 /////////////////
 
 extension TrackListViewModel {
-    
-    func play(tracks: [Track]) {
-        
-    }
     
     func forceToPlay(track: Track) {
         
