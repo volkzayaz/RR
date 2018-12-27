@@ -20,8 +20,7 @@ final class NowPlayingViewModel {
     
     private var playlistItems: [PlayerPlaylistItem] = []
 
-    lazy var tracksViewModel = TrackListViewModel(router: router,
-                                                  application: application,
+    lazy var tracksViewModel = TrackListViewModel(application: application,
                                                   player: player,
                                                   audioFileLocalStorageService: audioFileStorage,
                                                   provider: self)
@@ -54,32 +53,15 @@ extension NowPlayingViewModel: TrackProvider {
     
     func actions(for track: Track, indexPath: IndexPath) -> [ActionViewModel] {
         
-        guard let user = application?.user as? FanUser else {
-            return []
-        }
-        
+        let maybeUser = application?.user as? FanUser
         let item = playlistItems[indexPath.row]
         
         let ftp = ActionViewModel(.forceToPlay) { [weak self] in
-            
-            self?.application?
-                .allowPlayTrackWithExplicitMaterial(trackId: track.id,
-                                                    completion: { res in
-                                                        if case .failure(let error) = res {
-                                                            self?.errorPresenter.show(error: error)
-                                                        }
-                                                    })
+            self?.tracksViewModel.forceToPlay(track: track)
         }
         
         let dnp = ActionViewModel(.doNotPlay) { [weak self] in
-            
-            self?.application?
-                .disallowPlayTrackWithExplicitMaterial(trackId: track.id,
-                                                       completion: { res in
-                                                        if case .failure(let error) = res {
-                                                            self?.errorPresenter.show(error: error)
-                                                        }
-                })
+            self?.tracksViewModel.doNotPlay(track: track)
         }
     
         let pn = ActionViewModel(.playNow) { [weak self] in
@@ -110,12 +92,14 @@ extension NowPlayingViewModel: TrackProvider {
         
         var result: [ActionViewModel] = []
         
-        if user.isCensorshipTrack(track) &&
+        if let user = maybeUser,
+           user.isCensorshipTrack(track) &&
           !user.profile.forceToPlay.contains(track.id) {
             result.append(ftp)
         }
             
-        if user.isCensorshipTrack(track) &&
+        if let user = maybeUser,
+           user.isCensorshipTrack(track) &&
            user.profile.forceToPlay.contains(track.id) {
             result.append(dnp)
         }
@@ -130,7 +114,8 @@ extension NowPlayingViewModel: TrackProvider {
         
         result.append(delete)
         
-        if user.hasPurchase(for: track) {
+        if let user = maybeUser,
+            user.hasPurchase(for: track) {
             ///No proper action is available so far
             //result.append(add)
         }
@@ -154,7 +139,7 @@ extension NowPlayingViewModel: TrackProvider {
             
             
             ///This piece of logic is still a mystery for me.
-            ///Specifically, why is it different from same conditon present in PlaylistContentControllerViewModel
+            ///Specifically, why is it different from same conditon present in PlaylistViewModel
             let condition = !(self?.player?.currentItem?.playlistItem.track == track)
             
             if condition {

@@ -9,7 +9,95 @@
 import Foundation
 import UIKit
 
-protocol TrackListBindings: class, ErrorPresenting {
+struct Factory {
+    
+    func makeActionsViewModels(actionTypes: [ActionViewModel.ActionType],
+                               actionCallback: @escaping (ActionViewModel.ActionType) -> Void) -> [ActionViewModel] {
+        let actionsViewModels = actionTypes.map { actionType in
+            ActionViewModel(actionType, actionCallback: { actionCallback(actionType) })
+        }
+        
+        return actionsViewModels + [ActionViewModel(.cancel, actionCallback: { } )]
+    }
+}
+
+
+struct ActionViewModel: AlertActionItemViewModel {
+    
+    let type: ActionType
+    let actionCallback: () -> Void
+    
+    init(_ type: ActionType, actionCallback: @escaping () -> Void) {
+        self.type = type
+        self.actionCallback = actionCallback
+    }
+    
+    var title: String {
+        return type.description
+    }
+    
+    var actionStyle: UIAlertAction.Style {
+        return type.actionStyle
+    }
+    
+    static var allTypes: [ActionViewModel.ActionType] {
+        return [
+            .forceToPlay,
+            .doNotPlay,
+            .playNow,
+            .playNext,
+            .playLast,
+            .replaceCurrent,
+            .toPlaylist,
+            .delete
+        ]
+    }
+}
+
+extension ActionViewModel {
+    
+    enum ActionType: CustomStringConvertible {
+        case forceToPlay
+        case doNotPlay
+        case playNow
+        case playNext
+        case playLast
+        case replaceCurrent
+        case toPlaylist
+        case delete
+        case cancel
+        case addToCart(String)
+        
+        var actionStyle: UIAlertAction.Style {
+            switch self {
+            case .delete: return .destructive
+            case .cancel: return .cancel
+            default: return .default
+            }
+        }
+        
+        var description: String {
+            switch self {
+            case .forceToPlay: return NSLocalizedString("Force To Play", comment: "Force To Play track action title")
+            case .doNotPlay: return NSLocalizedString("Do Not Play", comment: "Do Not Play track action title")
+            case .playNow:  return NSLocalizedString("Play Now", comment: "Play Now track action title")
+            case .playNext: return NSLocalizedString("Play Next", comment: "Play Next track action title")
+            case .playLast: return NSLocalizedString("Play Last", comment: "playLast track action title")
+            case .replaceCurrent: return NSLocalizedString("Replace current", comment: "Replace current track action title")
+            case .toPlaylist: return NSLocalizedString("To Playlist", comment: "To Playlist track action title")
+            case .addToCart(let priceStringValue):
+                let titleFormat = NSLocalizedString("Add To Cart %@", comment: "Add To Cart track action title format")
+                return String(format: titleFormat, priceStringValue)
+            case .delete: return NSLocalizedString("Delete", comment: "Delete track action title")
+            case .cancel: return NSLocalizedString("Cancel", comment: "Cancel action title")
+            }
+        }
+    }
+    
+}
+
+
+protocol TrackListBindings: class, ErrorPresenting, AlertActionsViewModelPersenting, ConfirmationPresenting {
     
     func reloadUI()
     func reloadPlaylistUI()
@@ -17,13 +105,13 @@ protocol TrackListBindings: class, ErrorPresenting {
     func reloadObjects(at indexPath: [IndexPath])
 }
 
-protocol TrackProvider {
+protocol TrackProvider: class {
     
     ////provide list of tracks to play back
-    func provide( competion: (Box<[Track]>) -> Void )
+    func provide( completion: @escaping (Box<[Track]>) -> Void )
     
     ////provide list of actions available for given track
-    func actions(for track: Track) -> [ActionViewModel]
+    func actions(for track: Track, indexPath: IndexPath) -> [ActionViewModel]
     
     ///handle track selection
     var selected: (Track, IndexPath) -> Void { get }
@@ -32,8 +120,7 @@ protocol TrackProvider {
 
 class TrackListViewModel {
  
-    private weak var delegate: PlayerNowPlayingViewModelDelegate?
-    private weak var router: PlayerNowPlayingRouter?
+    private(set) weak var delegate: TrackListBindings?
     private weak var application: Application?
     private weak var player: Player?
     private weak var audioFileLocalStorageService: AudioFileLocalStorageService?
@@ -41,8 +128,8 @@ class TrackListViewModel {
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     private let trackPriceFormatter = MoneyFormatter()
     
-    private let trackProivder: TrackProvider
-    private var tracks: [Track] = [] {
+    private weak var trackProivder: TrackProvider!
+    private(set) var tracks: [Track] = [] {
         didSet {
             delegate?.reloadUI()
             delegate?.reloadPlaylistUI()
@@ -61,12 +148,10 @@ class TrackListViewModel {
         self.audioFileLocalStorageService?.removeWatcher(self)
     }
     
-    init(router: PlayerNowPlayingRouter,
-         application: Application,
+    init(application: Application,
          player: Player,
          audioFileLocalStorageService: AudioFileLocalStorageService,
          provider: TrackProvider) {
-        self.router = router
         self.application = application
         self.player = player
         self.audioFileLocalStorageService = audioFileLocalStorageService
@@ -75,11 +160,9 @@ class TrackListViewModel {
     
 }
 
-
-
 extension TrackListViewModel {
     
-    func load(with delegate: PlayerNowPlayingViewModelDelegate) {
+    func load(with delegate: TrackListBindings) {
         self.delegate = delegate
         
         self.loadItems()
@@ -130,7 +213,7 @@ extension TrackListViewModel {
                               audioFileLocalStorageService: audioFileLocalStorageService,
                               textImageGenerator: textImageGenerator,
                               isCurrentInPlayer: player?.currentItem?.playlistItem.track == track,
-                              isLockedForActions: false)
+                              isLockedForActions: false) //self.lockedPlaylistItemsIds.contains(track.id)
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -152,13 +235,51 @@ extension TrackListViewModel {
         
         let track = tracks[indexPath.row]
         
+        let cancel = [ActionViewModel(.cancel, actionCallback: {} )]
+        let actions = trackProivder.actions(for: track, indexPath: indexPath)
+        
         return AlertActionsViewModel<ActionViewModel>(title: nil,
                                                       message: nil,
-                                                      actions: trackProivder.actions(for: track))
+                                                      actions: actions + cancel)
         
     }
     
 }
+
+/////////////////
+/////////////////
+/////---------Actions with list
+/////////////////
+/////////////////
+
+extension TrackListViewModel {
+    
+    func play(tracks: [Track]) {
+        
+    }
+    
+    func forceToPlay(track: Track) {
+        
+        application?.allowPlayTrackWithExplicitMaterial(trackId: track.id,
+                                                completion: { [weak self] res in
+                                                    if case .failure(let error) = res {
+                                                        self?.delegate?.show(error: error)
+                                                    }
+            })
+    }
+
+    func doNotPlay(track: Track) {
+        
+        application?.disallowPlayTrackWithExplicitMaterial(trackId: track.id,
+                                                        completion: { [weak self] res in
+                                                            if case .failure(let error) = res {
+                                                                self?.delegate?.show(error: error)
+                                                            }
+        })
+    }
+    
+}
+
 
 
 
@@ -242,6 +363,10 @@ extension TrackListViewModel: ApplicationObserver {
         if indexPaths.isEmpty == false {
             self.delegate?.reloadObjects(at: indexPaths)
         }
+    }
+    
+    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
+        self.delegate?.reloadUI()
     }
     
 }

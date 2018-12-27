@@ -24,12 +24,12 @@ final class PlaylistContentViewController: UIViewController {
 
     private(set) weak var tipView: TipView?
 
-    private(set) var viewModel: PlaylistContentViewModel!
+    private(set) var viewModel: PlaylistViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: PlaylistContentViewModel, router: FlowRouter) {
+    func configure(viewModel: PlaylistViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -112,7 +112,7 @@ final class PlaylistContentViewController: UIViewController {
     // MARK: - Actions -
 
     @IBAction func onRefresh(sender: UIRefreshControl) {
-        self.viewModel.reload()
+        self.viewModel.tracksViewModel.loadItems()
     }
 
     func showPlaylistActions(sourceRect: CGRect, sourceView: UIView) {
@@ -122,14 +122,14 @@ final class PlaylistContentViewController: UIViewController {
     }
 
     func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
-        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else { return }
+        let actionsModel = viewModel.tracksViewModel.actions(forObjectAt: indexPath)
 
         self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
     }
 
     func showOpenIn(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
 
-        guard let downloadedURL = self.viewModel.objectLoaclURL(at: indexPath) else { return }
+        guard let downloadedURL = self.viewModel.tracksViewModel.objectLoaclURL(at: indexPath) else { return }
 
         let activityViewController = UIActivityViewController(activityItems: [downloadedURL], applicationActivities: nil)
 
@@ -155,11 +155,11 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
 
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.numberOfItems(in: section)
+        return self.viewModel.tracksViewModel.numberOfItems(in: section)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
+        let trackItemTableViewCellViewModel = self.viewModel.tracksViewModel.object(at: indexPath)
         (cell as! TrackTableViewCell).prepareToDisplay(viewModel: trackItemTableViewCellViewModel)
     }
 
@@ -169,7 +169,7 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let trackItemTableViewCell = TrackTableViewCell.reusableCell(in: tableView, at: indexPath)
-        let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
+        let trackItemTableViewCellViewModel = self.viewModel.tracksViewModel.object(at: indexPath)
 
         trackItemTableViewCell.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
             guard let trackItemTableViewCell = trackItemTableViewCell, let indexPath = tableView?.indexPath(for: trackItemTableViewCell) else { return }
@@ -179,8 +179,8 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
                 self.showActions(itemAt: indexPath,
                                  sourceRect: trackItemTableViewCell.actionButton.frame,
                                  sourceView: trackItemTableViewCell.actionButtonContainerView)
-            case .download: self.viewModel.downloadObject(at: indexPath)
-            case .cancelDownloading: self.viewModel.cancelDownloadingObject(at: indexPath)
+            case .download: self.viewModel.tracksViewModel.downloadObject(at: indexPath)
+            case .cancelDownloading: self.viewModel.tracksViewModel.cancelDownloadingObject(at: indexPath)
             case .openIn(let sourceRect, let sourceView): self.showOpenIn(itemAt: indexPath,
                                           sourceRect: sourceRect,
                                           sourceView: sourceView)
@@ -193,7 +193,7 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        viewModel.selectObject(at: indexPath)
+        viewModel.tracksViewModel.selectObject(at: indexPath)
     }
 
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -201,12 +201,12 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == 0, self.viewModel.isPlaylistEmpty else { return 0.0 }
+        guard section == 0, self.viewModel.tracksViewModel.isPlaylistEmpty else { return 0.0 }
         return 44.0
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == 0, self.viewModel.isPlaylistEmpty else { return nil }
+        guard section == 0, self.viewModel.tracksViewModel.isPlaylistEmpty else { return nil }
         return self.emptyPlaylistView
     }
 }
@@ -228,11 +228,7 @@ extension PlaylistContentViewController {
 
 }
 
-extension PlaylistContentViewController: PlaylistContentViewModelDelegate {
-
-    func refreshUI() {
-
-    }
+extension PlaylistContentViewController: TrackListBindings {
 
     func reloadPlaylistUI() {
         let playlistHeaderViewModel = self.viewModel.playlistHeaderViewModel
@@ -273,7 +269,6 @@ extension PlaylistContentViewController: PlaylistContentViewModelDelegate {
     func reloadUI() {
         self.tableView.reloadData()
         self.refreshControl.endRefreshing()
-        self.refreshUI()
     }
 
     func reloadObjects(at indexPaths: [IndexPath]) {
