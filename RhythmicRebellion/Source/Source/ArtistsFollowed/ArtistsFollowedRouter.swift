@@ -19,18 +19,12 @@ struct ArtistsFollowedRouter : MVVM_Router {
         self._owner = owner
     }
     
-    /**
-     
-     func showNextModule(with data: String) {
-     
-        let nextViewController = owner.storyboard.instantiate()
-        let nextRouter = NextRouter(owner: nextViewController)
-        let nextViewModel = NextViewModel(router: nextRuter, data: data)
+    func presentArtist(artist: Artist) {
         
-        nextViewController.viewModel = nextViewModel
-        owner.present(nextViewController)
-     }
-     
-     */
+        let vc = R.storyboard.artist.instantiateInitialViewController()!
+        vc.viewModel = ArtistViewModel(router: ArtistRouter(owner: vc), artist: artist)
+        owner.navigationController?.pushViewController(vc, animated: true)
+        
+    }
     
 }

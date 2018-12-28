@@ -73,19 +73,22 @@ struct ImageLink: Codable {
 
 struct Image: Codable {
 
-    let uuid: String
+    let uuid: String?
     let links: [ImageLinkType.RawValue: ImageLink]
-
+    let id: Int
+    
     enum CodingKeys: String, CodingKey {
         case uuid
         case links
+        case id
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.uuid = try container.decode(String.self, forKey: .uuid)
+        self.uuid = try container.decodeIfPresent(String.self, forKey: .uuid)
         self.links = try container.decode([ImageLinkType.RawValue: ImageLink].self, forKey: .links)
+        self.id = try container.decode(Int.self, forKey: .id)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -93,6 +96,7 @@ struct Image: Codable {
 
         try container.encode(self.uuid, forKey: .uuid)
         try container.encode(self.links, forKey: .links)
+        try container.encode(self.id, forKey: .id)
     }
 }
 
@@ -117,4 +121,19 @@ extension Image {
         return nil
     }
 
+    var simpleURL: String? {
+        
+        let orderedImageLinksTypes: [ImageLinkType] = [.thumb, .small, .medium, .xsmall, .original, .big, .large, .xlarge, .preload]
+        
+        guard let link = firstImageLink(from: orderedImageLinksTypes) else { return nil }
+        
+        switch link.path {
+        case .url(let urlString):
+            return urlString
+            
+        default: return nil
+        }
+        
+    }
+    
 }

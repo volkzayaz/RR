@@ -527,3 +527,59 @@ extension TrackListViewModel: AudioFileLocalStorageServiceObserver {
         }
     }
 }
+
+import RxSwift
+
+extension TrackListViewModel {
+    
+    class Observer: TrackListBindings {
+        
+        typealias Handler = NSObjectProtocol & ErrorPresenting & AlertActionsViewModelPersenting & ConfirmationPresenting
+        
+        var tracks: Observable<[Track]> {
+            return subject.asObservable()
+        }
+        
+        let trackList: TrackListViewModel
+        weak var handler: Handler?
+        init(list: TrackListViewModel, handler: Handler) {
+            trackList = list
+            self.handler = handler
+            
+            list.load(with: self)
+        }
+        
+        fileprivate let subject = BehaviorSubject<[Track]>(value: [])
+        
+        func reloadUI() {
+            subject.onNext( trackList.tracks )
+        }
+        
+        func reloadPlaylistUI() {
+            subject.onNext( trackList.tracks )
+        }
+        
+        func reloadObjects(at indexPath: [IndexPath]) {
+            subject.onNext( trackList.tracks )
+        }
+    
+        
+        
+        func show(error: Error) { handler?.show(error: error) }
+        func show(error: Error, completion: (() -> Void)?) { handler?.show(error: error, completion: completion) }
+        
+        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>) { handler?.show(alertActionsviewModel: alertActionsviewModel) }
+        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style) { handler?.show(alertActionsviewModel: alertActionsviewModel, style: style) }
+        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style, completion: (() -> Void)?) { handler?.show(alertActionsviewModel: alertActionsviewModel, style: style, completion: completion) }
+        
+        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView) { handler?.show(alertActionsviewModel: alertActionsviewModel, sourceRect: sourceRect, sourceView: sourceView) }
+        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView, completion: (() -> Void)?) { handler?.show(alertActionsviewModel: alertActionsviewModel, sourceRect: sourceRect, sourceView: sourceView, completion: completion) }
+        
+        func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>) { handler?.showConfirmation(confirmationViewModel: confirmationViewModel) }
+        func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>, completion: (() -> Void)?) { handler?.showConfirmation(confirmationViewModel: confirmationViewModel, completion: completion) }
+        
+    }
+    
+    
+    
+}

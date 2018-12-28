@@ -9,17 +9,25 @@
 import Foundation
 
 struct Album : Decodable {
-    
+
+    let id: Int
+    let ownerId: String
     let name: String
     let image: Image
     
 }
 
-extension Album {
+extension Album: Equatable {
     
     enum CodingKeys: String, CodingKey {
+        case id
         case name
+        case ownerId = "owner_id"
         case image = "front_image"
+    }
+    
+    static func ==(lhs: Album, rhs: Album) -> Bool {
+        return lhs.ownerId + "\(lhs.id)" == rhs.ownerId + "\(rhs.id)"
     }
     
 }

@@ -36,6 +36,8 @@ final class PlayerMyPlaylistsViewController: UIViewController, UICollectionViewD
         self.collectionView.addSubview(self.refreshControl)
         self.setupCollectionViewLayout()
 
+        collectionView.register(R.nib.playlistCollectionCell)
+        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         viewModel.load(with: self)

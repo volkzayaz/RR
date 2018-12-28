@@ -160,7 +160,7 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let trackItemTableViewCellViewModel = self.viewModel.tracksViewModel.object(at: indexPath)
-        (cell as! TrackTableViewCell).trackView.prepareToDisplay(viewModel: trackItemTableViewCellViewModel)
+        (cell as! TrackTableViewCell).trackView.prepareToDisplay()
     }
 
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {

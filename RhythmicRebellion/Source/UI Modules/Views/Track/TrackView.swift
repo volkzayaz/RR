@@ -41,30 +41,6 @@ protocol TrackTableViewCellViewModel {
     var isLockedForActions: Bool { get }
 }
 
-class TrackTableViewCell: UITableViewCell, CellIdentifiable {
-    static let identifier = R.reuseIdentifier.trackTableViewCellIdentifier.identifier
- 
-    var trackView: TrackView!
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        trackView = R.nib.trackView.instantiate(withOwner: self).first as? TrackView
-        
-        contentView.addSubview(trackView)
-    }
-    
-    override func updateConstraints() {
-     
-        trackView.snp.remakeConstraints { (make) in
-            make.edges.equalTo(self.contentView)
-        }
-        
-        super.updateConstraints()
-    }
-    
-}
-
 class TrackView: UIView {
 
     typealias ActionCallback = (Actions) -> Void
@@ -104,7 +80,7 @@ class TrackView: UIView {
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
     
-    var viewModelId: String = ""
+    var viewModel: TrackTableViewCellViewModel!
 
     var actionCallback: ActionCallback?
     weak var downloadingInfo: TrackAudioFileDownloadingInfo?
@@ -125,7 +101,7 @@ class TrackView: UIView {
         self.downloadButton.downloadedButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
     }
 
-    func prepareToDisplay(viewModel: TrackTableViewCellViewModel) {
+    func prepareToDisplay() {
         if (!equalizer.isHidden) {
             if (viewModel.isPlaying) {
                 equalizer.startAnimating()
@@ -155,7 +131,7 @@ class TrackView: UIView {
         
         self.downloadButton.state = .startDownload
 
-        self.viewModelId = viewModel.id
+        self.viewModel = viewModel
         if viewModel.isCurrentInPlayer && viewModel.isPlayable {
             equalizer.isHidden = false
             equalizerWidthConstraint.constant = 18
