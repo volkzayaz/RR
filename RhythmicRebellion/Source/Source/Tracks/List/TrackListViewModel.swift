@@ -27,18 +27,6 @@ struct ActionViewModel: AlertActionItemViewModel {
         return type.actionStyle
     }
     
-    static var allTypes: [ActionViewModel.ActionType] {
-        return [
-            .forceToPlay,
-            .doNotPlay,
-            .playNow,
-            .playNext,
-            .playLast,
-            .replaceCurrent,
-            .toPlaylist,
-            .delete
-        ]
-    }
 }
 
 extension ActionViewModel {
@@ -107,7 +95,6 @@ class TrackListViewModel {
     ///handle track selection
     typealias SelectedProvider = (TrackListViewModel, Track, IndexPath) -> Void
 
-    
     private(set) weak var delegate: TrackListBindings?
     private weak var application: Application?
     private weak var player: Player?

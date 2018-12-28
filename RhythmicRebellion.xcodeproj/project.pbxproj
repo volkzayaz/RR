@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		736598CF21D62FDE0092E499 /* TrackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 736598CE21D62FDE0092E499 /* TrackView.xib */; };
 		737622C621CA4ED8005B603E /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622C321CA4ED8005B603E /* ArtistsFollowedRouter.swift */; };
 		737622C721CA4ED8005B603E /* ArtistsFollowedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622C421CA4ED8005B603E /* ArtistsFollowedViewController.swift */; };
 		737622C821CA4ED8005B603E /* ArtistsFollowedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737622C521CA4ED8005B603E /* ArtistsFollowedViewModel.swift */; };
@@ -276,6 +277,7 @@
 
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		736598CE21D62FDE0092E499 /* TrackView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackView.xib; sourceTree = "<group>"; };
 		737622C321CA4ED8005B603E /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
 		737622C421CA4ED8005B603E /* ArtistsFollowedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedViewController.swift; sourceTree = "<group>"; };
 		737622C521CA4ED8005B603E /* ArtistsFollowedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedViewModel.swift; sourceTree = "<group>"; };
@@ -869,6 +871,7 @@
 				76D39CF52112FDB400D47DFA /* TrackViewModel.swift */,
 				76D39CF02112EF3A00D47DFA /* TrackTableViewCell.swift */,
 				76E6CB7F21787AAC00283CA1 /* TrackPreviewViewModel.swift */,
+				736598CE21D62FDE0092E499 /* TrackView.xib */,
 			);
 			path = Track;
 			sourceTree = "<group>";
@@ -1581,6 +1584,7 @@
 			files = (
 				76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */,
 				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
+				736598CF21D62FDE0092E499 /* TrackView.xib in Resources */,
 				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
 				763932062119AE3300A65257 /* TrackTableViewCell.xib in Resources */,
 				763157FB219D794500E1D7F5 /* Pages.storyboard in Resources */,

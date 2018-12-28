@@ -8,7 +8,7 @@
 
 import UIKit
 import DownloadButton
-
+import SnapKit
 
 enum TrackDownloadState {
     case disable
@@ -42,6 +42,30 @@ protocol TrackTableViewCellViewModel {
 }
 
 class TrackTableViewCell: UITableViewCell, CellIdentifiable {
+    static let identifier = R.reuseIdentifier.trackTableViewCellIdentifier.identifier
+ 
+    var trackView: TrackView!
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        trackView = R.nib.trackView.instantiate(withOwner: self).first as? TrackView
+        
+        contentView.addSubview(trackView)
+    }
+    
+    override func updateConstraints() {
+     
+        trackView.snp.remakeConstraints { (make) in
+            make.edges.equalTo(self.contentView)
+        }
+        
+        super.updateConstraints()
+    }
+    
+}
+
+class TrackView: UIView {
 
     typealias ActionCallback = (Actions) -> Void
 
@@ -52,8 +76,6 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         case openIn(CGRect, UIView)
         case showHint(UIView, String)
     }
-
-    static let identifier = "TrackTableViewCellIdentifier"
 
     @IBOutlet weak var equalizer: EqualizerView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -233,12 +255,12 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         actionCallback?(.showActions)
     }
 
-    @IBAction func onCensorshipMarkButton(sender: UIButton) {
+    @IBAction func onCensorshipMarkButton(_ sender: UIButton) {
         guard let censorshipMarkButtonHintText = self.censorshipMarkButtonHintText, censorshipMarkButtonHintText.isEmpty == false else { return }
         actionCallback?(.showHint(sender, censorshipMarkButtonHintText))
     }
 
-    @IBAction func onPreviewOptionsButton(sender: UIButton) {
+    @IBAction func onPreviewOptionButton(_ sender: UIButton) {
         guard let previewOptionsButtonHintText = self.previewOptionsButtonHintText, previewOptionsButtonHintText.isEmpty == false else { return }
 
         actionCallback?(.showHint(sender, previewOptionsButtonHintText))
@@ -246,7 +268,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 }
 
 
-extension TrackTableViewCell: PKDownloadButtonDelegate {
+extension TrackView: PKDownloadButtonDelegate {
 
     func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
 
@@ -271,7 +293,7 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
 
 }
 
-extension TrackTableViewCell: TrackAudioFileDownloadingInfoObserver {
+extension TrackView: TrackAudioFileDownloadingInfoObserver {
 
     func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) {
 

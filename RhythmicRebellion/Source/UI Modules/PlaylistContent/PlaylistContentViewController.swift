@@ -57,8 +57,8 @@ final class PlaylistContentViewController: UIViewController {
         self.imageView.layer.cornerRadius = 6
         self.imageView.layer.masksToBounds = true
 
-        self.tableView.register(UINib(nibName: "TrackTableViewCell", bundle: nil), forCellReuseIdentifier: TrackTableViewCell.identifier)
-
+        tableView.register(R.nib.trackTableViewCell)
+        
         viewModel.load(with: self)
     }
 
@@ -160,25 +160,25 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let trackItemTableViewCellViewModel = self.viewModel.tracksViewModel.object(at: indexPath)
-        (cell as! TrackTableViewCell).prepareToDisplay(viewModel: trackItemTableViewCellViewModel)
+        (cell as! TrackTableViewCell).trackView.prepareToDisplay(viewModel: trackItemTableViewCellViewModel)
     }
 
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        (cell as! TrackTableViewCell).prepareToEndDisplay()
+        (cell as! TrackTableViewCell).trackView.prepareToEndDisplay()
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let trackItemTableViewCell = TrackTableViewCell.reusableCell(in: tableView, at: indexPath)
         let trackItemTableViewCellViewModel = self.viewModel.tracksViewModel.object(at: indexPath)
 
-        trackItemTableViewCell.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
+        trackItemTableViewCell.trackView.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
             guard let trackItemTableViewCell = trackItemTableViewCell, let indexPath = tableView?.indexPath(for: trackItemTableViewCell) else { return }
 
             switch action {
             case .showActions:
                 self.showActions(itemAt: indexPath,
-                                 sourceRect: trackItemTableViewCell.actionButton.frame,
-                                 sourceView: trackItemTableViewCell.actionButtonContainerView)
+                                 sourceRect: trackItemTableViewCell.trackView.actionButton.frame,
+                                 sourceView: trackItemTableViewCell.trackView.actionButtonContainerView)
             case .download: self.viewModel.tracksViewModel.downloadObject(at: indexPath)
             case .cancelDownloading: self.viewModel.tracksViewModel.cancelDownloadingObject(at: indexPath)
             case .openIn(let sourceRect, let sourceView): self.showOpenIn(itemAt: indexPath,
