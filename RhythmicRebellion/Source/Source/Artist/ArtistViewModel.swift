@@ -26,6 +26,14 @@ extension ArtistViewModel {
         return artist.name
     }
     
+    var artistCoverURL: String? {
+        return artist.profileImage?.simpleURL
+    }
+    
+    func title(for section: Int) -> String {
+        return data.value[section].0.uppercased()
+    }
+    
 }
 
 struct ArtistViewModel : MVVM_ViewModel {

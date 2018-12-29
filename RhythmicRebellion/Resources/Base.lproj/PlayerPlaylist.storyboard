@@ -234,7 +234,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Opb-LN-5AW">
                                 <rect key="frame" x="0.0" y="56" width="768" height="848"/>
-                                <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="h2I-d2-BJ2" customClass="BaseFlowLayout" customModule="RhythmicRebellion" customModuleProvider="target">
                                     <size key="itemSize" width="177" height="160"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -332,15 +332,25 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="m1Z-KP-P6e">
+                            <searchBar contentMode="redraw" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1Z-KP-P6e">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="56"/>
+                                <color key="tintColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="searchField.textColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="searchField.backgroundColor">
+                                        <color key="value" red="0.15304270386695862" green="0.1260358989238739" blue="0.25044286251068115" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="delegate" destination="qcg-kW-faD" id="eBt-kN-XNF"/>
                                 </connections>
                             </searchBar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.040000000000000001" green="0.070000000000000007" blue="0.23000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Opb-LN-5AW" firstAttribute="leading" secondItem="K90-g9-GkI" secondAttribute="leading" id="0pN-ji-LWQ"/>
                             <constraint firstItem="Opb-LN-5AW" firstAttribute="bottom" secondItem="K90-g9-GkI" secondAttribute="bottom" id="12N-M0-gWU"/>
@@ -355,6 +365,7 @@
                     <connections>
                         <outlet property="baseLayout" destination="h2I-d2-BJ2" id="hhH-El-tfi"/>
                         <outlet property="collectionView" destination="Opb-LN-5AW" id="Yk8-dJ-DIh"/>
+                        <outlet property="searchBar" destination="m1Z-KP-P6e" id="wlB-fl-OB5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jn9-Uh-X1X" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -16,9 +16,6 @@ class ArtistViewController: UIViewController, MVVM_View {
     
     var viewModel: ArtistViewModel!
     
-    @IBOutlet weak var coverImageView: UIImageView!
-    @IBOutlet weak var artistNameLabel: UILabel!
-    
     @IBOutlet weak var flowLayout: BaseFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -63,14 +60,41 @@ class ArtistViewController: UIViewController, MVVM_View {
             
         }
         
+    }, configureSupplementaryView: { [weak self] (_, cv, kind, ip) -> UICollectionReusableView in
+        
+        guard ip.section == 0 else {
+            
+            let view = cv.dequeueReusableSupplementaryView(ofKind: kind,
+                                                           withReuseIdentifier: R.reuseIdentifier.artistSectionHeader, for: ip)!
+            
+            view.label.text = self?.viewModel.title(for: ip.section)
+            
+            return view
+        }
+        
+        let view = cv.dequeueReusableSupplementaryView(ofKind: kind,
+                                                       withReuseIdentifier: R.reuseIdentifier.artistCoverHeader, for: ip)!
+        
+        view.coverURL = self?.viewModel.artistCoverURL
+        view.artistNameLabel.text = self?.viewModel.artistName
+        view.sectionNameLabel.text = self?.viewModel.title(for: 0)
+        
+        return view
+        
     })
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = R.string.localizable.following()
+        
         flowLayout.configureFor(bounds: view.bounds)
         
         collectionView.register(R.nib.playlistCollectionCell)
+        collectionView.register(R.nib.artistSectionHeader,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        collectionView.register(R.nib.artistCoverHeader,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         
         viewModel.dataSource
             .drive(collectionView.rx.items(dataSource: dataSource))
@@ -103,13 +127,46 @@ extension ArtistViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+
         guard indexPath.section == 2 else {
             return flowLayout.itemSize
         }
-        
+
         return CGSize(width: collectionView.bounds.size.width,
                       height: 44)
+
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        guard section == 2 else {
+            return 10
+        }
+        
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        guard section == 2 else {
+            return flowLayout.sectionInset
+        }
+        
+        return .zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return .zero
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        guard section == 0 else {
+            return CGSize(width: collectionView.bounds.size.width, height: 39)
+        }
+        
+        return CGSize(width: collectionView.bounds.size.width, height: 270)
         
     }
     

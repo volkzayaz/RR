@@ -41,6 +41,9 @@
 		737BB2D821C935720062A3A5 /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2D721C935720062A3A5 /* SpinnerView.swift */; };
 		737BB2DA21C936A30062A3A5 /* ViewController+ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2D921C936A30062A3A5 /* ViewController+ErrorMessage.swift */; };
 		737BB2DC21C937250062A3A5 /* GenericError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737BB2DB21C937250062A3A5 /* GenericError.swift */; };
+		738E60F221D792A800E698B7 /* ArtistCellHedaers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738E60F121D792A800E698B7 /* ArtistCellHedaers.swift */; };
+		738E60F421D7968F00E698B7 /* ArtistSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 738E60F321D7968F00E698B7 /* ArtistSectionHeader.xib */; };
+		738E60F621D7A4E800E698B7 /* ArtistCoverHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 738E60F521D7A4E800E698B7 /* ArtistCoverHeader.xib */; };
 		7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */; };
 		7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD420FF471300D90D73 /* SignUpRouter.swift */; };
 		7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD520FF471300D90D73 /* SignUpViewController.swift */; };
@@ -318,6 +321,9 @@
 		737BB2D721C935720062A3A5 /* SpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
 		737BB2D921C936A30062A3A5 /* ViewController+ErrorMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+ErrorMessage.swift"; sourceTree = "<group>"; };
 		737BB2DB21C937250062A3A5 /* GenericError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericError.swift; sourceTree = "<group>"; };
+		738E60F121D792A800E698B7 /* ArtistCellHedaers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistCellHedaers.swift; sourceTree = "<group>"; };
+		738E60F321D7968F00E698B7 /* ArtistSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArtistSectionHeader.xib; sourceTree = "<group>"; };
+		738E60F521D7A4E800E698B7 /* ArtistCoverHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArtistCoverHeader.xib; sourceTree = "<group>"; };
 		7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpControllerViewModel.swift; sourceTree = "<group>"; };
 		7606BDD420FF471300D90D73 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
 		7606BDD520FF471300D90D73 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -606,6 +612,9 @@
 			isa = PBXGroup;
 			children = (
 				736598DD21D6605D0092E499 /* AlbumCollectionCell.swift */,
+				738E60F121D792A800E698B7 /* ArtistCellHedaers.swift */,
+				738E60F321D7968F00E698B7 /* ArtistSectionHeader.xib */,
+				738E60F521D7A4E800E698B7 /* ArtistCoverHeader.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1647,9 +1656,11 @@
 				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
 				736598CF21D62FDE0092E499 /* TrackView.xib in Resources */,
 				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
+				738E60F621D7A4E800E698B7 /* ArtistCoverHeader.xib in Resources */,
 				763932062119AE3300A65257 /* TrackTableViewCell.xib in Resources */,
 				736598E221D6615E0092E499 /* PlaylistCollectionCell.xib in Resources */,
 				763157FB219D794500E1D7F5 /* Pages.storyboard in Resources */,
+				738E60F421D7968F00E698B7 /* ArtistSectionHeader.xib in Resources */,
 				76C821AF2142675F00A6F5AE /* Authorization.storyboard in Resources */,
 				763157FE219D798700E1D7F5 /* Profile.storyboard in Resources */,
 				736598E621D66E6C0092E499 /* Localizable.strings in Resources */,
@@ -1814,6 +1825,7 @@
 				7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */,
 				76A45B48213939060080885D /* ContriesSelectableListControllerViewModel.swift in Sources */,
 				763C904D20FCBABD007C1F86 /* TabBarRouter.swift in Sources */,
+				738E60F221D792A800E698B7 /* ArtistCellHedaers.swift in Sources */,
 				762DD77B213FED700046A984 /* City.swift in Sources */,
 				76769A85218079A900DCB146 /* ChangeEmailControllerViewModel.swift in Sources */,
 				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,

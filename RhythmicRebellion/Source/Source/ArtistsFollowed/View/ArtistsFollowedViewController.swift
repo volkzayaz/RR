@@ -19,6 +19,11 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var baseLayout: BaseFlowLayout!
     
+    @IBOutlet weak var searchBar: UISearchBar! {
+        didSet {
+            searchBar.backgroundImage = UIImage()
+        }
+    }
     lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<String, Artist>>(configureCell: { [unowned self] (_, collectionView, ip, x) in
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.artistCell,
@@ -37,6 +42,9 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
         super.viewDidLoad()
         
         baseLayout.configureFor(bounds: view.bounds)
+        view.backgroundColor = UIColor(red: 0.04,
+                                       green: 0.07,
+                                       blue: 0.23, alpha: 1)
         
         viewModel.dataSource
             .drive(collectionView.rx.items(dataSource: dataSource))
@@ -47,6 +55,8 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
                 self?.viewModel.select(artist: artist)
             })
             .disposed(by: rx.disposeBag)
+        
+        
         
     }
     

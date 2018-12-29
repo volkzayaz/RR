@@ -75,7 +75,7 @@ struct Image: Codable {
 
     let uuid: String?
     let links: [ImageLinkType.RawValue: ImageLink]
-    let id: Int
+    let id: Int?
     
     enum CodingKeys: String, CodingKey {
         case uuid
@@ -88,7 +88,7 @@ struct Image: Codable {
 
         self.uuid = try container.decodeIfPresent(String.self, forKey: .uuid)
         self.links = try container.decode([ImageLinkType.RawValue: ImageLink].self, forKey: .links)
-        self.id = try container.decode(Int.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Int.self, forKey: .id)
     }
 
     public func encode(to encoder: Encoder) throws {
