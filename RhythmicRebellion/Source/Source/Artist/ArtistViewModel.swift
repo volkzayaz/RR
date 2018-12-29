@@ -56,15 +56,15 @@ struct ArtistViewModel : MVVM_ViewModel {
             .trackView(viewIndicator: indicator)
         
         let playlists = ArtistRequest.playlists(artist: artist)
-            .rx.response(type: ArtistResponse<AlbumPlaylist>.self)
+            .rx.response(type: ArtistResponse<ArtistPlaylist>.self)
             .map { response in
                 return ( R.string.localizable.playlist(), response.data.map { Data.playlist(playlist: $0) } )
             }
             .trackView(viewIndicator: indicator)
 
-        let records = trackObserver.tracks
+        let records = trackObserver.trackViewModels
             .map { x in
-                return ( R.string.localizable.songs(), x.map { Data.track(track: $0) } )
+                return ( R.string.localizable.songs(), x.map { Data.track(trackViewModel: $0) } )
             }
         
         Observable.combineLatest([
@@ -76,12 +76,6 @@ struct ArtistViewModel : MVVM_ViewModel {
             .silentCatch(handler: router.owner)
             .bind(to: data)
             .disposed(by: bag)
-        
-        /**
-         
-         Proceed with initialization here
-         
-         */
         
         /////progress indicator
         
@@ -100,15 +94,45 @@ struct ArtistViewModel : MVVM_ViewModel {
 
 extension ArtistViewModel {
     
-    /** Reference any actions ViewModel can handle
-     ** Actions should always be void funcs
-     ** any result should be reflected via corresponding drivers
-     
-     func buttonPressed(labelValue: String) {
-     
-     }
-     
-     */
+    func selected(item: Data) {
+        
+        switch item {
+        case .album(let album):
+            router.show(album: album)
+            
+        case .track(let trackViewModel):
+            tracksViewModel.play(tracks: [trackViewModel.track])
+            
+        case .playlist(let playlist):
+            router.show(playlist: playlist)
+            
+        }
+        
+    }
+    
+    func optionsSelected(for indexPath: IndexPath,
+                         sourceRect: CGRect, sourceView: UIView) {
+        
+        router.present(actions: tracksViewModel.actions(forObjectAt: indexPath),
+                       sourceRect: sourceRect, sourceView: sourceView)
+        
+    }
+    
+    func openIn(for indexPath: IndexPath,
+                sourceRect: CGRect, sourceView: UIView) {
+        
+        guard let url = tracksViewModel.objectLoaclURL(at: indexPath) else {
+            return
+        }
+        
+        router.openIn(for: url,
+                      sourceRect: sourceRect, sourceView: sourceView)
+    }
+    
+    func showTip(tip: String, view: UIView, superView: UIView) {
+        router.showTip(text: tip, view: view, superView: superView)
+    }
+    
 }
 
 extension ArtistViewModel {
@@ -133,8 +157,8 @@ extension ArtistViewModel {
     
     enum Data: IdentifiableType, Equatable {
         case album(album: Album)
-        case playlist(playlist: AlbumPlaylist)
-        case track(track: Track)
+        case playlist(playlist: ArtistPlaylist)
+        case track(trackViewModel: TrackViewModel)
         
         var identity: String {
             switch self {

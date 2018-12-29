@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol PlaylistProvider: TrackProvider {
     var playlist: Playlist { get }
@@ -58,6 +59,60 @@ struct DefinedPlaylistProvider: PlaylistProvider {
                     completion: Box<[Track]>.transformed(boxed: completion))
         
     }
+    
+}
+
+struct AlbumPlaylistProvider: PlaylistProvider, Playlist {
+    
+    let album: Album
+    
+    func provide(completion: @escaping (Box<[Track]>) -> Void) {
+        
+        return ArtistRequest.albumRecords(album: album)
+            .rx.response(type: ArtistResponse<Track>.self)
+            .map { $0.data }
+            .subscribe(onSuccess: { completion( .value(val: $0) )},
+                       onError:   { completion( .error(er:  $0) )})
+            .disposed(by: bag)
+        
+    }
+    
+    fileprivate let bag = DisposeBag()
+    
+    ///surrogate getter
+    var playlist: Playlist {
+        return self
+    }
+    
+    var id: Int { return album.id }
+    var name: String { return album.name }
+    var isDefault: Bool { return false }
+    var thumbnailURL: URL? { return nil }
+    var description: String? { return nil }
+    var title: String? { return nil }
+    var isFanPlaylist: Bool { return false }
+    
+}
+
+struct ArtistPlaylistProvider: PlaylistProvider {
+    
+    let artistPlaylist: ArtistPlaylist
+    
+    func provide(completion: @escaping (Box<[Track]>) -> Void) {
+        
+        return ArtistRequest.playlistRecords(playlist: artistPlaylist)
+            .rx.response(type: ArtistResponse<Track>.self)
+            .map { $0.data }
+            .subscribe(onSuccess: { completion( .value(val: $0) )},
+                       onError:   { completion( .error(er:  $0) )})
+            .disposed(by: bag)
+        
+    }
+    
+    var playlist: Playlist {
+        return artistPlaylist
+    }
+    fileprivate let bag = DisposeBag()
     
 }
 

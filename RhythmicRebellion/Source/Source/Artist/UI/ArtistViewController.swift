@@ -54,11 +54,10 @@ class ArtistViewController: UIViewController, MVVM_View {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.trackCell,
                                                           for: ip)!
             
-            let vm = self.viewModel.tracksViewModel.object(at: ip)
+            cell.trackView.setup(viewModel: x) { _ in }
             
-            cell.trackView.setup(viewModel: vm) { action in
-                print(action)
-            }
+            cell.trackView.backwardCompatibilityViewModel = self.viewModel
+            cell.trackView.indexPath = ip
             
             return cell
             
@@ -87,6 +86,12 @@ class ArtistViewController: UIViewController, MVVM_View {
             .map { $0.cell as? TrackCollectionViewCell }
             .notNil()
             .subscribe(onNext: { $0.trackView.prepareToEndDisplay() })
+            .disposed(by: rx.disposeBag)
+        
+        collectionView.rx.modelSelected(ArtistViewModel.Data.self)
+            .subscribe(onNext: { [weak self] x in
+                self?.viewModel.selected(item: x)
+            })
             .disposed(by: rx.disposeBag)
         
     }

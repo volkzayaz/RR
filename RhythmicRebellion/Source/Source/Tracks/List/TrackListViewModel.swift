@@ -191,6 +191,11 @@ extension TrackListViewModel {
         
         let track = tracks[indexPath.row]
         
+        return trackViewModel(for: track)
+    }
+    
+    func trackViewModel(for track: Track) -> TrackViewModel {
+        
         return TrackViewModel(track: track,
                               user: application?.user,
                               player: player,
@@ -198,6 +203,7 @@ extension TrackListViewModel {
                               textImageGenerator: textImageGenerator,
                               isCurrentInPlayer: player?.currentItem?.playlistItem.track == track,
                               isLockedForActions: false) //self.lockedPlaylistItemsIds.contains(track.id)
+        
     }
     
     func selectObject(at indexPath: IndexPath) {
@@ -536,7 +542,7 @@ extension TrackListViewModel {
         
         typealias Handler = NSObjectProtocol & ErrorPresenting & AlertActionsViewModelPersenting & ConfirmationPresenting
         
-        var tracks: Observable<[Track]> {
+        var trackViewModels: Observable<[TrackViewModel]> {
             return subject.asObservable()
         }
         
@@ -549,18 +555,18 @@ extension TrackListViewModel {
             list.load(with: self)
         }
         
-        fileprivate let subject = BehaviorSubject<[Track]>(value: [])
+        fileprivate let subject = BehaviorSubject<[TrackViewModel]>(value: [])
         
         func reloadUI() {
-            subject.onNext( trackList.tracks )
+            subject.onNext( trackList.tracks.map { self.trackList.trackViewModel(for: $0) } )
         }
         
         func reloadPlaylistUI() {
-            subject.onNext( trackList.tracks )
+            subject.onNext( trackList.tracks.map { self.trackList.trackViewModel(for: $0) } )
         }
         
         func reloadObjects(at indexPath: [IndexPath]) {
-            subject.onNext( trackList.tracks )
+            subject.onNext( trackList.tracks.map { self.trackList.trackViewModel(for: $0) } )
         }
     
         

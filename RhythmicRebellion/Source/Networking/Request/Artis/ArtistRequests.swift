@@ -14,8 +14,8 @@ enum ArtistRequest: BaseNetworkRouter {
     case playlists(artist: Artist)
     
     case records(artist: Artist)
-    case playlistRecords(playlist: Playlist)
-    //case albumRecords(album: Album)
+    case playlistRecords(playlist: ArtistPlaylist)
+    case albumRecords(album: Album)
     
     
 }
@@ -41,6 +41,10 @@ extension ArtistRequest {
             return anonymousRequest(method: .get,
                                     path: "fan/artist/records-of-artist-playlist/\(playlist.id)")
         
+        case .albumRecords(let album):
+            return anonymousRequest(method: .get,
+                                    path: "fan/artist/records-of-album/\(album.id)")
+            
         }
         
     }

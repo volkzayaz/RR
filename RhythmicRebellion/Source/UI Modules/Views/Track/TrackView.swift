@@ -39,6 +39,8 @@ protocol TrackTableViewCellViewModel {
     var downloadHintText: String? { get }
 
     var isLockedForActions: Bool { get }
+    
+    var track: Track { get }
 }
 
 class TrackView: UIView {
@@ -82,6 +84,9 @@ class TrackView: UIView {
     
     var viewModel: TrackTableViewCellViewModel!
 
+    var backwardCompatibilityViewModel: ArtistViewModel?
+    var indexPath: IndexPath?
+    
     var actionCallback: ActionCallback?
     weak var downloadingInfo: TrackAudioFileDownloadingInfo?
 
@@ -229,17 +234,31 @@ class TrackView: UIView {
 
     @IBAction func onActionButton(sender: UIButton) {
         actionCallback?(.showActions)
+        
+        if let x = indexPath {
+            backwardCompatibilityViewModel?.optionsSelected(for: x,
+                                                            sourceRect: sender.frame,
+                                                            sourceView: actionButtonContainerView)
+        }
+        
+        
     }
 
     @IBAction func onCensorshipMarkButton(_ sender: UIButton) {
         guard let censorshipMarkButtonHintText = self.censorshipMarkButtonHintText, censorshipMarkButtonHintText.isEmpty == false else { return }
         actionCallback?(.showHint(sender, censorshipMarkButtonHintText))
+        
+        backwardCompatibilityViewModel?.showTip(tip: censorshipMarkButtonHintText,
+                                                view: sender, superView: self)
     }
 
     @IBAction func onPreviewOptionButton(_ sender: UIButton) {
         guard let previewOptionsButtonHintText = self.previewOptionsButtonHintText, previewOptionsButtonHintText.isEmpty == false else { return }
 
         actionCallback?(.showHint(sender, previewOptionsButtonHintText))
+        
+        backwardCompatibilityViewModel?.showTip(tip: previewOptionsButtonHintText,
+                                                view: sender, superView: self)
     }
 }
 
@@ -251,17 +270,35 @@ extension TrackView: PKDownloadButtonDelegate {
         guard self.isDownloadAllowed == true else {
             guard let downloadButtonHintText = self.downloadButtonHintText, downloadButtonHintText.isEmpty == false else { return }
             actionCallback?(.showHint(downloadButton, downloadButtonHintText))
+            
+            backwardCompatibilityViewModel?.showTip(tip: downloadButtonHintText,
+                                                    view: downloadButton, superView: self)
+            
             return
         }
 
         switch state {
         case .startDownload:
             actionCallback?(.download)
+
+            if let x = indexPath {
+                backwardCompatibilityViewModel?.tracksViewModel.downloadObject(at: x)
+            }
+            
         case .pending:
             actionCallback?(.cancelDownloading)
+            
+            if let x = indexPath {
+                backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
+            }
+            
             break
         case .downloading:
             actionCallback?(.cancelDownloading)
+            if let x = indexPath {
+                backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
+            }
+            
         case .downloaded:
             actionCallback?(.openIn(downloadButton.frame, self.stackView))
         }

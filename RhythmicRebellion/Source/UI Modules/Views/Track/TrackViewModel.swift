@@ -14,7 +14,7 @@ final class TrackAudioFileDownloadingProgress {
     var callback: ((CGFloat) -> Void)?
 }
 
-struct TrackViewModel: TrackTableViewCellViewModel {
+struct TrackViewModel: TrackTableViewCellViewModel, Equatable {
 
     var id: String { return String(track.id) }
 
@@ -45,6 +45,13 @@ struct TrackViewModel: TrackTableViewCellViewModel {
     var downloadState: TrackDownloadState?
 
     var isLockedForActions: Bool
+    
+    static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
+        return lhs.track == rhs.track &&
+            lhs.isCurrentInPlayer == rhs.isCurrentInPlayer &&
+            lhs.isPlaying == rhs.isPlaying &&
+            lhs.isCensorship == rhs.isCensorship
+    }
 }
 
 

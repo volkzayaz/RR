@@ -144,7 +144,7 @@ extension FanPlaylist: Hashable {
 }
 
 
-struct AlbumPlaylist: Playlist, Codable, Equatable {
+struct ArtistPlaylist: Playlist, Codable, Equatable {
     
     let id: Int
     let name: String
