@@ -9,7 +9,7 @@
 
 import UIKit
 
-protocol PlayerContentNavigationDelgate: PromoNavigationDelegate {
+protocol PlayerContentNavigationDelgate: PromoRouterDelegate, LyricsKaraokeRouterDelegate {
 }
 
 
@@ -70,24 +70,26 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
 
         for childViewController in controller.viewControllers ?? [] {
             guard let childViewControllerNavigationItemType = navigationItemType(for: childViewController) else { continue }
-            guard let navigationController = childViewController as? UINavigationController else { continue }
 
             switch childViewControllerNavigationItemType {
             case .video:
-                guard let videoViewController = navigationController.viewControllers.first as? VideoViewController else { continue }
+                guard let navigationController = childViewController as? UINavigationController,
+                    let videoViewController = navigationController.viewControllers.first as? VideoViewController else { continue }
                 let videoRouter = DefaultVideoRouter(dependencies: self.dependencies)
                 videoRouter.start(controller: videoViewController)
             case .lyrics:
-                guard let lyricsViewController = navigationController.viewControllers.first as? LyricsViewController else { continue }
-                let lyricsRouter = DefaultLyricsRouter(dependencies: self.dependencies)
-                lyricsRouter.start(controller: lyricsViewController)
+                guard let lyricsKaraokeViewController = childViewController as? LyricsKaraokeViewController else { continue }
+                let lyricsKaraokeRouter = DefaultLyricsKaraokeRouter(dependencies: self.dependencies, delegate: self.navigationDelegate)
+                lyricsKaraokeRouter.start(controller: lyricsKaraokeViewController)
             case .playlist:
-                guard let playerPlaylistRootViewController = navigationController.viewControllers.first as? PlayerPlaylistRootViewController else { continue }
+                guard let navigationController = childViewController as? UINavigationController,
+                    let playerPlaylistRootViewController = navigationController.viewControllers.first as? PlayerPlaylistRootViewController else { continue }
                 let playerPlaylistRootRouter = DefaultPlayerPlaylistRootRouter(dependencies: self.dependencies)
                 playerPlaylistRootRouter.start(controller: playerPlaylistRootViewController)
             case .promo:
-                guard let promoViewController = navigationController.viewControllers.first as? PromoViewController else { continue }
-                let promoRouter = DefaultPromoRouter(dependencies: self.dependencies, navigationDelegate: self.navigationDelegate)
+                guard let navigationController = childViewController as? UINavigationController,
+                    let promoViewController = navigationController.viewControllers.first as? PromoViewController else { continue }
+                let promoRouter = DefaultPromoRouter(dependencies: self.dependencies, delegate: self.navigationDelegate)
                 promoRouter.start(controller: promoViewController)
             }
         }

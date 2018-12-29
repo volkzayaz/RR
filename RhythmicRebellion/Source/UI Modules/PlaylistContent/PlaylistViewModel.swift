@@ -393,7 +393,7 @@ extension PlaylistViewModel {
 }
 
 
-extension PlaylistViewModel: ApplicationObserver {
+extension PlaylistViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
         guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.id == fanPlaylistState.id else { return }

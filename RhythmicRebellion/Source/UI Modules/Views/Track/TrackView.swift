@@ -306,7 +306,7 @@ extension TrackView: PKDownloadButtonDelegate {
 
 }
 
-extension TrackView: TrackAudioFileDownloadingInfoObserver {
+extension TrackView: TrackAudioFileDownloadingInfoWatcher {
 
     func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) {
 

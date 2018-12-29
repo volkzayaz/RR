@@ -34,7 +34,7 @@ protocol PromoViewModel: class {
     func visitArtistSite()
     func visitWriterSite()
 
-    func navigateToAuthorization()
+    func routeToAuthorization()
 }
 
 protocol PromoViewModelDelegate: class, ErrorPresenting {

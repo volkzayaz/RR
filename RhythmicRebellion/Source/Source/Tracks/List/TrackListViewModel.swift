@@ -398,7 +398,7 @@ extension TrackListViewModel {
 
 
 
-extension TrackListViewModel: ApplicationObserver {
+extension TrackListViewModel: ApplicationWatcher {
     
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         
@@ -443,7 +443,7 @@ extension TrackListViewModel: ApplicationObserver {
 /////////////////
 /////////////////
 
-extension TrackListViewModel: PlayerObserver {
+extension TrackListViewModel: PlayerWatcher {
     
     func playerDidChangePlaylist(player: Player) {
         self.loadItems()
@@ -489,7 +489,7 @@ extension TrackListViewModel: PlayerObserver {
 /////////////////
 /////////////////
 
-extension TrackListViewModel: AudioFileLocalStorageServiceObserver {
+extension TrackListViewModel: AudioFileLocalStorageServiceWatcher {
     
     func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
         

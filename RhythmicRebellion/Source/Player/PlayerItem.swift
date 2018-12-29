@@ -27,6 +27,7 @@ class PlayerItem {
     let playlistItem: PlayerPlaylistItem
     let stubReason: TrackStubReason?
     let restrictedTime: TimeInterval?
+    var lyrics: Lyrics?
 
     var trackId: TrackId {
         return TrackId(id: self.playlistItem.track.id, key: self.playlistItem.key, skipStat: stubReason == nil ? nil : true)
@@ -52,6 +53,7 @@ class PlayerItem {
         self.playlistItem = playlistItem
         self.stubReason = stubReason
         self.restrictedTime = restrictedTime
+        self.lyrics = nil
     }
 
 }

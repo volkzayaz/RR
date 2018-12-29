@@ -1,24 +1,30 @@
 //
-//  LyricsViewController.swift
+//  LyricsKaraokeContainerViewController.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/27/18.
+//  Created by Alexander Obolentsev on 12/19/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
 
 import UIKit
 
-final class LyricsViewController: UIViewController {
+final class LyricsKaraokeViewController: UIViewController, ContainerViewController {
+
+    @IBOutlet weak var containerView: UIView!
+
+    // MARK: ContainerViewController
+
+    weak var currentViewController: UIViewController?
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: LyricsViewModel!
+    private(set) var viewModel: LyricsKaraokeViewModelProtocol!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: LyricsViewModel, router: FlowRouter) {
+    func configure(viewModel: LyricsKaraokeViewModelProtocol, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -34,7 +40,7 @@ final class LyricsViewController: UIViewController {
 }
 
 // MARK: - Router -
-extension LyricsViewController {
+extension LyricsKaraokeViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -50,10 +56,11 @@ extension LyricsViewController {
 
 }
 
-extension LyricsViewController: LyricsViewModelDelegate {
+extension LyricsKaraokeViewController: LyricsKaraokeViewModelDelegate {
 
     func refreshUI() {
 
     }
 
 }
+

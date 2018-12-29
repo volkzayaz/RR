@@ -8,17 +8,17 @@
 
 import Foundation
 
-protocol TrackAudioFileDownloadingInfoObserver: class {
+protocol TrackAudioFileDownloadingInfoWatcher: class {
     func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress)
 }
 
-extension TrackAudioFileDownloadingInfoObserver {
+extension TrackAudioFileDownloadingInfoWatcher {
     func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) { }
 }
 
 class TrackAudioFileDownloadingInfo: Watchable {
 
-    typealias WatchType = TrackAudioFileDownloadingInfoObserver
+    typealias WatchType = TrackAudioFileDownloadingInfoWatcher
     let watchersContainer = WatchersContainer<WatchType>()
 
     let taskIdentifier: Int

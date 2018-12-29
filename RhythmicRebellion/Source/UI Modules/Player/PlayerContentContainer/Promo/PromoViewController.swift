@@ -78,7 +78,7 @@ final class PromoViewController: UIViewController {
     }
 
     @IBAction func handleSilenceBIOandCommentarySwitchTapGestureRecognizer(_ gestureRecognizer: UITapGestureRecognizer) {
-        self.viewModel.navigateToAuthorization()
+        self.viewModel.routeToAuthorization()
     }
 
     @IBAction func onToggleSilenceBIOandCommentary(sender: UISwitch) {

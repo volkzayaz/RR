@@ -16,7 +16,7 @@ protocol UserCredentials {
     var password: String { get }
 }
 
-protocol ApplicationObserver: class {
+protocol ApplicationWatcher: class {
 
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool)
 
@@ -34,7 +34,7 @@ protocol ApplicationObserver: class {
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState)
 }
 
-extension ApplicationObserver {
+extension ApplicationWatcher {
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) { }
     
     func application(_ application: Application, didChange user: User) { }
@@ -53,9 +53,9 @@ extension ApplicationObserver {
 
 class Application: Watchable {
 
-    typealias WatchType = ApplicationObserver
+    typealias WatchType = ApplicationWatcher
 
-    let watchersContainer = WatchersContainer<ApplicationObserver>()
+    let watchersContainer = WatchersContainer<ApplicationWatcher>()
 
     ////TODO: move watcherContainer to strongly typed Observable Commands
     ////WebSocketCommand<T>
@@ -577,7 +577,7 @@ extension Application {
     }
 }
 
-extension Application: WebSocketServiceObserver {
+extension Application: WebSocketServiceWatcher {
 
     func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) {
         guard let currentFanUser = self.user as? FanUser else { return }

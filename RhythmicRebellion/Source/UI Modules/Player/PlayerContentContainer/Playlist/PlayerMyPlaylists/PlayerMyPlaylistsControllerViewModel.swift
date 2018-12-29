@@ -247,7 +247,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     }
 }
 
-extension PlayerMyPlaylistsControllerViewModel: ApplicationObserver {
+extension PlayerMyPlaylistsControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
 

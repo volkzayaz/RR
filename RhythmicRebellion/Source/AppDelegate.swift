@@ -66,8 +66,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appViewController = self.window?.rootViewController as! AppViewController
 
         if let application = Application() {
+            let player = Player(with: application)
+
             let routerDependencies = RouterDependencies(application: application,
-                                                        player: Player(with: application))
+                                                        player: player)
 
             let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
             defaultAppRouter.start(controller: appViewController)

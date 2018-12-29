@@ -113,7 +113,7 @@ final class ProfileControllerViewModel: ProfileViewModel {
     }
 }
 
-extension ProfileControllerViewModel: ApplicationObserver {
+extension ProfileControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile profile: UserProfile) {
 

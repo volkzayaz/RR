@@ -357,7 +357,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     }
 }
 
-extension ListeningSettingsControllerViewModel: ApplicationObserver {
+extension ListeningSettingsControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
 

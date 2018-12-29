@@ -112,7 +112,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     }
 }
 
-extension AddToPlaylistControllerViewModel: ApplicationObserver {
+extension AddToPlaylistControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
         guard let playlist = self.playlists.filter( { return $0.id == fanPlaylistState.id } ).first,
