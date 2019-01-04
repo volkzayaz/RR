@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="artist cover header" id="QaX-Ps-5Zk" customClass="ArtistCoverHeader" customModule="RhythmicRebellion" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="325"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6cH-nB-XXP">
+                    <rect key="frame" x="111" y="33" width="153" height="153"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="6cH-nB-XXP" secondAttribute="height" id="DLo-tZ-Zfq"/>
+                        <constraint firstAttribute="width" constant="153" id="U3p-X5-ong"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vfu-Za-RBz">
+                    <rect key="frame" x="38" y="202" width="299" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T1X-0w-qgs">
+                    <rect key="frame" x="15" y="294" width="352" height="16"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="01W-XR-WUG">
+                    <rect key="frame" x="0.0" y="323" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="81B-UP-5KI"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="vfu-Za-RBz" firstAttribute="leading" secondItem="QaX-Ps-5Zk" secondAttribute="leadingMargin" constant="22" id="9It-eh-7ZQ"/>
+                <constraint firstItem="T1X-0w-qgs" firstAttribute="bottom" secondItem="3KN-4S-kEe" secondAttribute="bottom" constant="-15" id="FqB-UP-zeZ"/>
+                <constraint firstItem="T1X-0w-qgs" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vfu-Za-RBz" secondAttribute="bottom" constant="8" id="I3d-oI-Ueo"/>
+                <constraint firstItem="vfu-Za-RBz" firstAttribute="top" secondItem="6cH-nB-XXP" secondAttribute="bottom" constant="16" id="MlS-iT-Xlr"/>
+                <constraint firstAttribute="trailingMargin" secondItem="vfu-Za-RBz" secondAttribute="trailing" constant="22" id="RHp-r9-3pI"/>
+                <constraint firstItem="3KN-4S-kEe" firstAttribute="bottom" secondItem="01W-XR-WUG" secondAttribute="bottom" constant="1" id="Ugl-se-FsT"/>
+                <constraint firstItem="T1X-0w-qgs" firstAttribute="trailing" secondItem="3KN-4S-kEe" secondAttribute="trailing" constant="-8" id="ZP1-6g-d3h"/>
+                <constraint firstItem="6cH-nB-XXP" firstAttribute="centerX" secondItem="QaX-Ps-5Zk" secondAttribute="centerX" id="cTi-AZ-j5v"/>
+                <constraint firstItem="T1X-0w-qgs" firstAttribute="leading" secondItem="3KN-4S-kEe" secondAttribute="leading" constant="15" id="dR3-yW-9gA"/>
+                <constraint firstItem="6cH-nB-XXP" firstAttribute="top" secondItem="QaX-Ps-5Zk" secondAttribute="top" constant="33" id="l2L-8Z-dxI"/>
+                <constraint firstAttribute="trailing" secondItem="01W-XR-WUG" secondAttribute="trailing" id="q4V-Vu-F1Y"/>
+                <constraint firstItem="01W-XR-WUG" firstAttribute="leading" secondItem="QaX-Ps-5Zk" secondAttribute="leading" id="wDm-4b-ggl"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="3KN-4S-kEe"/>
+            <connections>
+                <outlet property="artistNameLabel" destination="vfu-Za-RBz" id="MAv-CX-ves"/>
+                <outlet property="coverImageView" destination="6cH-nB-XXP" id="vCC-n5-zrE"/>
+                <outlet property="sectionNameLabel" destination="T1X-0w-qgs" id="FeQ-sT-am0"/>
+            </connections>
+            <point key="canvasLocation" x="34.399999999999999" y="52.623688155922046"/>
+        </collectionReusableView>
+    </objects>
+</document>

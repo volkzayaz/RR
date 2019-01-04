@@ -20,12 +20,12 @@ final class PlayerNowPlayingViewController: UIViewController {
 
     private(set) weak var tipView: TipView?
 
-    private(set) var viewModel: PlayerNowPlayingViewModel!
+    private(set) var viewModel: NowPlayingViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: PlayerNowPlayingViewModel, router: FlowRouter) {
+    func configure(viewModel: NowPlayingViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -50,7 +50,8 @@ final class PlayerNowPlayingViewController: UIViewController {
             self.onTableViewHeaderAction(action)
         }
 
-        self.tableView.register(UINib(nibName: "TrackTableViewCell", bundle: nil), forCellReuseIdentifier: TrackTableViewCell.identifier)
+        tableView.register(R.nib.trackTableViewCell)
+        
         self.tableView.tableHeaderView = self.tableHeaderView
         self.tableView.tableFooterView = UIView()
 
@@ -87,15 +88,13 @@ final class PlayerNowPlayingViewController: UIViewController {
 
     // MARK: - Actions -
     @IBAction func onRefresh(sender: UIRefreshControl) {
-        self.viewModel.reload()
+        self.viewModel.tracksViewModel.loadItems()
     }
 
     func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
 
-        guard let actionsModel = viewModel.actions(forObjectAt: indexPath) else {
-            return
-        }
-
+        let actionsModel = viewModel.tracksViewModel.actions(forObjectAt: indexPath)
+        
         let actionSheet = UIAlertController.make(from: actionsModel)
 
         actionSheet.popoverPresentationController?.sourceView = sourceView
@@ -106,7 +105,7 @@ final class PlayerNowPlayingViewController: UIViewController {
 
     func showOpenIn(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
 
-        guard let downloadedURL = self.viewModel.objectLoaclURL(at: indexPath) else { return }
+        guard let downloadedURL = self.viewModel.tracksViewModel.objectLoaclURL(at: indexPath) else { return }
 
         let activityViewController = UIActivityViewController(activityItems: [downloadedURL], applicationActivities: nil)
 
@@ -138,32 +137,31 @@ final class PlayerNowPlayingViewController: UIViewController {
 extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.numberOfItems(in: section)
+        return self.viewModel.tracksViewModel.numberOfItems(in: section)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
-        (cell as! TrackTableViewCell).prepareToDisplay(viewModel: trackItemTableViewCellViewModel)
+        (cell as! TrackTableViewCell).trackView.prepareToDisplay()
     }
 
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        (cell as! TrackTableViewCell).prepareToEndDisplay()
+        (cell as! TrackTableViewCell).trackView.prepareToEndDisplay()
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let trackItemTableViewCell = TrackTableViewCell.reusableCell(in: tableView, at: indexPath)
-        let trackItemTableViewCellViewModel = self.viewModel.object(at: indexPath)!
+        let trackItemTableViewCellViewModel = self.viewModel.tracksViewModel.object(at: indexPath)
 
-        trackItemTableViewCell.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
+        trackItemTableViewCell.trackView.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
             guard let trackItemTableViewCell = trackItemTableViewCell, let indexPath = tableView?.indexPath(for: trackItemTableViewCell) else { return }
 
             switch action {
             case .showActions:
                 self.showActions(itemAt: indexPath,
-                                 sourceRect: trackItemTableViewCell.actionButton.frame,
-                                 sourceView: trackItemTableViewCell.actionButtonContainerView)
-            case .download: self.viewModel.downloadObject(at: indexPath)
-            case .cancelDownloading: self.viewModel.cancelDownloadingObject(at: indexPath)
+                                 sourceRect: trackItemTableViewCell.trackView.actionButton.frame,
+                                 sourceView: trackItemTableViewCell.trackView.actionButtonContainerView)
+            case .download: self.viewModel.tracksViewModel.downloadObject(at: indexPath)
+            case .cancelDownloading: self.viewModel.tracksViewModel.cancelDownloadingObject(at: indexPath)
             case .openIn(let sourceRect, let sourceView): self.showOpenIn(itemAt: indexPath,
                                           sourceRect: sourceRect,
                                           sourceView: sourceView)
@@ -176,7 +174,7 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        viewModel.selectObject(at: indexPath)
+        viewModel.tracksViewModel.selectObject(at: indexPath)
     }
 
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -184,12 +182,12 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == 0, self.viewModel.isPlaylistEmpty else { return 0.0 }
+        guard section == 0, self.viewModel.tracksViewModel.isPlaylistEmpty else { return 0.0 }
         return 44.0
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == 0, self.viewModel.isPlaylistEmpty else { return nil }
+        guard section == 0, self.viewModel.tracksViewModel.isPlaylistEmpty else { return nil }
         return self.emptyPlaylistView
     }
 }
@@ -211,19 +209,14 @@ extension PlayerNowPlayingViewController {
 
 }
 
-extension PlayerNowPlayingViewController: PlayerNowPlayingViewModelDelegate {
-
-    func refreshUI() {
-
-    }
+extension PlayerNowPlayingViewController: TrackListBindings {
 
     func reloadUI() {
         self.tableView.reloadData()
-        self.refreshUI()
     }
 
     func reloadPlaylistUI() {
-        guard self.viewModel.isPlaylistEmpty == false else { self.tableView.tableHeaderView = nil; return }
+        guard self.viewModel.tracksViewModel.isPlaylistEmpty == false else { self.tableView.tableHeaderView = nil; return }
         self.tableView.tableHeaderView = self.tableHeaderView
     }
 

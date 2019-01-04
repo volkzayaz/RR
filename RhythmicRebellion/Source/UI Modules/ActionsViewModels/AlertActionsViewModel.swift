@@ -60,7 +60,7 @@ protocol AlertActionsViewModelPersenting {
     func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView, completion: (() -> Void)?)
 }
 
-extension AlertActionsViewModelPersenting where Self: UIViewController {
+extension UIViewController: AlertActionsViewModelPersenting {
 
     func show<T>(alertActionsviewModel: AlertActionsViewModel<T>) {
         show(alertActionsviewModel: alertActionsviewModel, style: .actionSheet)

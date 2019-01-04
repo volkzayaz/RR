@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxDataSources
 
 public struct Artist: Codable {
 
@@ -18,6 +19,8 @@ public struct Artist: Codable {
     let addons: [Addon]?
     let publishDate: Date?
 
+    let profileImage: Image?
+    
     var url: URL? {
         guard let urlString = self.urlString, let urlComponents = URLComponents(string: urlString) else { return nil }
 
@@ -35,6 +38,7 @@ public struct Artist: Codable {
         case urlString = "url"
         case addons = "audio_add_ons"
         case publishDate = "publish_date"
+        case profileImage
     }
 
     public init(from decoder: Decoder) throws {
@@ -52,6 +56,8 @@ public struct Artist: Codable {
         self.addons = try container.decodeIfPresent([Addon].self, forKey: .addons)
 
         self.publishDate = try container.decodeAsDate(String.self, forKey: .publishDate, dateFormatter: dateTimeFormatter)
+        
+        profileImage = try container.decodeIfPresent(Image.self, forKey: .profileImage)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -71,4 +77,17 @@ public struct Artist: Codable {
         try container.encodeAsString(self.publishDate, forKey: .publishDate, dateFormatter: dateTimeFormatter)
     }
 
+    
+}
+
+extension Artist: IdentifiableType, Equatable {
+    
+    public var identity : String { return id }
+    
+    public static func ==(lhs: Artist, rhs: Artist) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.urlString == rhs.urlString
+    }
+    
 }

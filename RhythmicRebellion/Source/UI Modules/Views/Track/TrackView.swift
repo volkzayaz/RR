@@ -8,7 +8,7 @@
 
 import UIKit
 import DownloadButton
-
+import SnapKit
 
 enum TrackDownloadState {
     case disable
@@ -39,9 +39,11 @@ protocol TrackTableViewCellViewModel {
     var downloadHintText: String? { get }
 
     var isLockedForActions: Bool { get }
+    
+    var track: Track { get }
 }
 
-class TrackTableViewCell: UITableViewCell, CellIdentifiable {
+class TrackView: UIView {
 
     typealias ActionCallback = (Actions) -> Void
 
@@ -52,8 +54,6 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         case openIn(CGRect, UIView)
         case showHint(UIView, String)
     }
-
-    static let identifier = "TrackTableViewCellIdentifier"
 
     @IBOutlet weak var equalizer: EqualizerView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -82,8 +82,11 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
     
-    var viewModelId: String = ""
+    var viewModel: TrackTableViewCellViewModel!
 
+    var backwardCompatibilityViewModel: ArtistViewModel?
+    var indexPath: IndexPath?
+    
     var actionCallback: ActionCallback?
     weak var downloadingInfo: TrackAudioFileDownloadingInfo?
 
@@ -103,7 +106,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         self.downloadButton.downloadedButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
     }
 
-    func prepareToDisplay(viewModel: TrackTableViewCellViewModel) {
+    func prepareToDisplay() {
         if (!equalizer.isHidden) {
             if (viewModel.isPlaying) {
                 equalizer.startAnimating()
@@ -133,7 +136,7 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
         
         self.downloadButton.state = .startDownload
 
-        self.viewModelId = viewModel.id
+        self.viewModel = viewModel
         if viewModel.isCurrentInPlayer && viewModel.isPlayable {
             equalizer.isHidden = false
             equalizerWidthConstraint.constant = 18
@@ -231,39 +234,71 @@ class TrackTableViewCell: UITableViewCell, CellIdentifiable {
 
     @IBAction func onActionButton(sender: UIButton) {
         actionCallback?(.showActions)
+        
+        if let x = indexPath {
+            backwardCompatibilityViewModel?.optionsSelected(for: x,
+                                                            sourceRect: sender.frame,
+                                                            sourceView: actionButtonContainerView)
+        }
+        
+        
     }
 
-    @IBAction func onCensorshipMarkButton(sender: UIButton) {
+    @IBAction func onCensorshipMarkButton(_ sender: UIButton) {
         guard let censorshipMarkButtonHintText = self.censorshipMarkButtonHintText, censorshipMarkButtonHintText.isEmpty == false else { return }
         actionCallback?(.showHint(sender, censorshipMarkButtonHintText))
+        
+        backwardCompatibilityViewModel?.showTip(tip: censorshipMarkButtonHintText,
+                                                view: sender, superView: self)
     }
 
-    @IBAction func onPreviewOptionsButton(sender: UIButton) {
+    @IBAction func onPreviewOptionButton(_ sender: UIButton) {
         guard let previewOptionsButtonHintText = self.previewOptionsButtonHintText, previewOptionsButtonHintText.isEmpty == false else { return }
 
         actionCallback?(.showHint(sender, previewOptionsButtonHintText))
+        
+        backwardCompatibilityViewModel?.showTip(tip: previewOptionsButtonHintText,
+                                                view: sender, superView: self)
     }
 }
 
 
-extension TrackTableViewCell: PKDownloadButtonDelegate {
+extension TrackView: PKDownloadButtonDelegate {
 
     func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
 
         guard self.isDownloadAllowed == true else {
             guard let downloadButtonHintText = self.downloadButtonHintText, downloadButtonHintText.isEmpty == false else { return }
             actionCallback?(.showHint(downloadButton, downloadButtonHintText))
+            
+            backwardCompatibilityViewModel?.showTip(tip: downloadButtonHintText,
+                                                    view: downloadButton, superView: self)
+            
             return
         }
 
         switch state {
         case .startDownload:
             actionCallback?(.download)
+
+            if let x = indexPath {
+                backwardCompatibilityViewModel?.tracksViewModel.downloadObject(at: x)
+            }
+            
         case .pending:
             actionCallback?(.cancelDownloading)
+            
+            if let x = indexPath {
+                backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
+            }
+            
             break
         case .downloading:
             actionCallback?(.cancelDownloading)
+            if let x = indexPath {
+                backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
+            }
+            
         case .downloaded:
             actionCallback?(.openIn(downloadButton.frame, self.stackView))
         }
@@ -271,7 +306,7 @@ extension TrackTableViewCell: PKDownloadButtonDelegate {
 
 }
 
-extension TrackTableViewCell: TrackAudioFileDownloadingInfoWatcher {
+extension TrackView: TrackAudioFileDownloadingInfoWatcher {
 
     func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) {
 

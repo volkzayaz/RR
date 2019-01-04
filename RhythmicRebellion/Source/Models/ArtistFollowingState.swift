@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ArtistFollowingState: Codable {
+struct ArtistFollowingState: Codable, Hashable {
     let artistId: String
     let isFollowed: Bool
 
@@ -16,4 +16,7 @@ struct ArtistFollowingState: Codable {
         case artistId = "id"
         case isFollowed = "state"
     }
+    
+    public var hashValue: Int { return artistId.hashValue }
+    
 }

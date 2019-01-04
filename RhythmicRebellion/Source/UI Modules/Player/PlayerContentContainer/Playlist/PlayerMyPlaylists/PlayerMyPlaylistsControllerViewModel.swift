@@ -197,7 +197,8 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
         }
     }
 
-    func actions(forObjectAt indexPath: IndexPath, completion: @escaping (IndexPath, PlaylistActionsViewModels.ViewModel) -> Void) {
+    func actions(forObjectAt indexPath: IndexPath,
+                 completion: @escaping (IndexPath, PlaylistActionsViewModels.ViewModel) -> Void) {
         guard indexPath.row < playlists.count else { return }
         let playlist = playlists[indexPath.row]
 
