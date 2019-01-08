@@ -1819,29 +1819,9 @@ fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Categ
 
 extension Player {
 
-    func switchTo(karaokeMode: KaraokeMode) {
+    func updatePlayerQueu(prefferedAudioFileType: AudioFileType) {
+        guard self.playerQueue.prefferedAudioFileType != prefferedAudioFileType else { return }
 
-        guard self.karaokeMode != karaokeMode else { return }
-
-        self.karaokeMode = karaokeMode
-
-        if karaokeMode != .none, self.currentItem?.lyrics == nil {
-            self.loadLirycs()
-        }
-
-        self.playerQueue.prefferedAudioFileType = self.audioFileType
-        self.replace(playerItems: playerQueue.playerItems)
-
-        self.watchersContainer.invoke { (watcher) in
-            watcher.player(player: self, didChangeKaraokeMode: self.karaokeMode)
-        }
-    }
-
-    func change(karaokeAudioFileType: AudioFileType) {
-        guard self.playerQueue.containsOnlyTrack == true else { return }
-        guard self.karaokeAudioFileType != karaokeAudioFileType else { return }
-
-        self.karaokeAudioFileType = karaokeAudioFileType
         self.playerQueue.prefferedAudioFileType = self.audioFileType
         self.replace(playerItems: playerQueue.playerItems)
 
@@ -1852,5 +1832,31 @@ extension Player {
         self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
         })
+    }
+
+    func switchTo(karaokeMode: KaraokeMode) {
+
+        guard self.playerQueue.containsOnlyTrack == true else { return }
+        guard self.karaokeMode != karaokeMode else { return }
+
+        self.karaokeMode = karaokeMode
+
+        if karaokeMode != .none, self.currentItem?.lyrics == nil {
+            self.loadLirycs()
+        }
+
+        self.watchersContainer.invoke { (watcher) in
+            watcher.player(player: self, didChangeKaraokeMode: self.karaokeMode)
+        }
+
+        self.updatePlayerQueu(prefferedAudioFileType: self.audioFileType)
+    }
+
+    func change(karaokeAudioFileType: AudioFileType) {
+        guard self.playerQueue.containsOnlyTrack == true else { return }
+        guard self.karaokeAudioFileType != karaokeAudioFileType else { return }
+
+        self.karaokeAudioFileType = karaokeAudioFileType
+        self.updatePlayerQueu(prefferedAudioFileType: self.audioFileType)
     }
 }

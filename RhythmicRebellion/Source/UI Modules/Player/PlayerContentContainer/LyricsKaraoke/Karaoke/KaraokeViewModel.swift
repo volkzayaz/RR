@@ -18,7 +18,7 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 
     private(set) var player: Player
 
-    private var karaoke: Karaoke? { return self.player.currentItem?.lyrics?.karaoke }
+    private var karaoke: Karaoke?
 
     private(set) var viewMode: KaraokeViewMode
     private(set) var currentItemIndexPath: IndexPath?
@@ -66,6 +66,7 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
     func load(with delegate: KaraokeViewModelDelegate) {
         self.delegate = delegate
 
+        self.karaoke = self.player.currentItem?.lyrics?.karaoke
         self.currentItemIndexPath = self.findCurrentItemIndexPath()
 
         self.delegate?.reloadUI()
@@ -129,12 +130,14 @@ extension KaraokeViewModel: PlayerWatcher {
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
 
-        self.currentItemIndexPath = nil
+        self.karaoke = self.player.currentItem?.lyrics?.karaoke
+        self.currentItemIndexPath = self.findCurrentItemIndexPath()
         self.delegate?.reloadUI()
     }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
-        self.currentItemIndexPath = nil
+
+        self.currentItemIndexPath = self.findCurrentItemIndexPath()
         self.delegate?.refreshUI()
     }
 
@@ -149,6 +152,7 @@ extension KaraokeViewModel: PlayerWatcher {
 
     func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
 
+        self.karaoke = self.player.currentItem?.lyrics?.karaoke
         self.currentItemIndexPath = self.findCurrentItemIndexPath()
         self.delegate?.refreshUI()
     }

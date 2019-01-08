@@ -116,10 +116,7 @@ final class KaraokeViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-
-        if let flowlayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowlayout.invalidateLayout()
-        }
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
 
 
@@ -207,7 +204,7 @@ extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDel
         case let collectionViewFlowLayout as KaraokeOnePhraseCollectionViewFlowLayout:
             let width = self.collectionView.frame.width - (collectionViewFlowLayout.sectionInset.left + collectionViewFlowLayout.sectionInset.right)
             let height = self.viewModel.itemViewHeight(at: indexPath, with: width) + 2
-            itemSize = CGSize(width: width, height: max(height, round(self.collectionView.frame.width / 3)))
+            itemSize = CGSize(width: width, height: max(height, round(self.collectionView.frame.height / 3)))
 
         case let collectionViewFlowLayout as KaraokeScrollCollectionViewFlowLayout:
             let width = self.collectionView.frame.width - (collectionViewFlowLayout.sectionInset.left + collectionViewFlowLayout.sectionInset.right)

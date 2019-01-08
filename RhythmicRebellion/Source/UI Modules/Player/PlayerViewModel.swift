@@ -41,7 +41,12 @@ protocol PlayerViewModel: class {
     var canFollowArtist: Bool { get }
     var isArtistFollowed: Bool { get }
 
+    var isKaraokeEnabled: Bool { get }
+    var karaokeModelId: Int? { get }
+
     func load(with delegate: PlayerViewModelDelegate)
+
+    func karaokeIntervalsViewModel() -> DefaultKaraokeIntervalsProgressViewModel?
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString
 
@@ -62,4 +67,5 @@ protocol PlayerViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func refreshProgressUI()
+    func refreshKaraokeUI()
 }
