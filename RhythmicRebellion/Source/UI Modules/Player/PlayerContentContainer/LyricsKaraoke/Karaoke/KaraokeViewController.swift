@@ -27,14 +27,14 @@ final class KaraokeViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: KaraokeViewModel!
+    private(set) var viewModel: KaraokeViewModelProtocol!
     private(set) var router: FlowRouter!
 
     private weak var hideControlsTimer: Timer?
 
     // MARK: - Configuration -
 
-    func configure(viewModel: KaraokeViewModel, router: FlowRouter) {
+    func configure(viewModel: KaraokeViewModelProtocol, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
