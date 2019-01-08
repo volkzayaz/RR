@@ -9,6 +9,7 @@
 import Foundation
 import Reachability
 import Alamofire
+import RxSwift
 
 protocol UserCredentials {
     var email: String { get }
@@ -56,6 +57,14 @@ class Application: Watchable {
 
     let watchersContainer = WatchersContainer<ApplicationWatcher>()
 
+    ////TODO: move watcherContainer to strongly typed Observable Commands
+    ////WebSocketCommand<T>
+    
+    fileprivate let followingStateSubject = BehaviorSubject<ArtistFollowingState?>(value: nil)
+    var followingState: Observable<ArtistFollowingState> {
+        return followingStateSubject.asObservable().skip(1).notNil()
+    }
+    
     struct URI {
 
         static let origin = "http://dev-mobile.fan.rebellionretailsite.com"
@@ -529,6 +538,8 @@ extension Application {
         self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: Array(fanUser.profile.followedArtistsIds), with: artistFollowingState)
         })
+        
+        followingStateSubject.on( .next(artistFollowingState) )
     }
 
     func notifyUserProfileSkipAddonsArtistsIdsChanged(with skipArtistAddonsState: SkipArtistAddonsState) {

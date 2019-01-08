@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UISegmentedControl.appearance(whenContainedInInstancesOf: [SignUpContentView.self])
             .setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1),
                                      NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any], for: .selected)
-
+        
     }
 
 

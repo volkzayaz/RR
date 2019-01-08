@@ -20,6 +20,12 @@ protocol Playlist {
     var isFanPlaylist: Bool {get}
 }
 
+extension Playlist where Self: Equatable {
+    static func ==(rhs: Playlist, lhs: Playlist) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
 struct DefinedPlaylist: Playlist, Codable {
     let id: Int
     let name: String
@@ -89,16 +95,11 @@ struct DefinedPlaylist: Playlist, Codable {
 }
 
 extension DefinedPlaylist: Equatable {
-    static func == (lhs: DefinedPlaylist, rhs: DefinedPlaylist) -> Bool {
-        return lhs.id == rhs.id
-    }
 }
 
 extension DefinedPlaylist: Hashable {
     public var hashValue: Int { return self.id }
 }
-
-
 
 struct FanPlaylist: Playlist, Codable {
     let id: Int
@@ -136,9 +137,6 @@ struct FanPlaylist: Playlist, Codable {
 }
 
 extension FanPlaylist: Equatable {
-    static func == (lhs: FanPlaylist, rhs: FanPlaylist) -> Bool {
-        return lhs.id == rhs.id
-    }
 }
 
 extension FanPlaylist: Hashable {
@@ -146,3 +144,36 @@ extension FanPlaylist: Hashable {
 }
 
 
+struct ArtistPlaylist: Playlist, Codable, Equatable {
+    
+    let id: Int
+    let name: String
+    let coverImage: Image
+    
+    
+    var isDefault: Bool {
+        return false
+    }
+    
+    var isFanPlaylist: Bool {
+        return false
+    }
+    
+    var thumbnailURL: URL? {
+        guard let str = coverImage.simpleURL,
+              let url = URL(string: str) else {
+            return nil
+        }
+        
+        return url
+    }
+    
+    var description: String? {
+        return nil
+    }
+    
+    var title: String? {
+        return nil
+    }
+    
+}

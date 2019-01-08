@@ -40,10 +40,7 @@ extension CanPresentMessage {
     }
     
     func presentError(error: Error) {
-        
-        fatalError("Implement error handling")
-        presentErrorMessage(error: "Unexpected error occured")
-        
+        presentErrorMessage(error: error.localizedDescription)
     }
 }
 

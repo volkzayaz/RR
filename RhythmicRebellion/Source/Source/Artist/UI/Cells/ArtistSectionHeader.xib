@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="artist section header" id="sQ0-JI-UNK" customClass="ArtistSectionHeader" customModule="RhythmicRebellion" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AT0-rK-hLa">
+                    <rect key="frame" x="15" y="17" width="344" height="16"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aFk-zr-PEy">
+                    <rect key="frame" x="0.0" y="49" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="243-7q-dXv"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.066666666666666666" green="0.043137254901960784" blue="0.15686274509803921" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="AT0-rK-hLa" firstAttribute="leading" secondItem="AlW-jG-aF6" secondAttribute="leading" constant="15" id="GjE-p2-Jgz"/>
+                <constraint firstItem="aFk-zr-PEy" firstAttribute="leading" secondItem="AlW-jG-aF6" secondAttribute="leading" id="dIf-FX-Z1t"/>
+                <constraint firstItem="aFk-zr-PEy" firstAttribute="trailing" secondItem="AlW-jG-aF6" secondAttribute="trailing" id="hel-E7-gs0"/>
+                <constraint firstItem="AT0-rK-hLa" firstAttribute="centerY" secondItem="AlW-jG-aF6" secondAttribute="centerY" id="l3s-rH-2en"/>
+                <constraint firstItem="aFk-zr-PEy" firstAttribute="bottom" secondItem="AlW-jG-aF6" secondAttribute="bottom" id="uv8-9V-SBC"/>
+                <constraint firstItem="AlW-jG-aF6" firstAttribute="trailing" secondItem="AT0-rK-hLa" secondAttribute="trailing" constant="16" id="xW5-sR-cea"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="AlW-jG-aF6"/>
+            <connections>
+                <outlet property="label" destination="AT0-rK-hLa" id="4Xa-y7-D9p"/>
+            </connections>
+            <point key="canvasLocation" x="53.600000000000001" y="52.173913043478265"/>
+        </collectionReusableView>
+    </objects>
+</document>

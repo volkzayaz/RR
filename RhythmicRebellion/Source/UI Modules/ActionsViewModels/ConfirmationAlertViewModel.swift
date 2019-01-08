@@ -116,7 +116,7 @@ protocol ConfirmationPresenting {
     func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>, completion: (() -> Void)?)
 }
 
-extension AlertActionsViewModelPersenting where Self: UIViewController {
+extension UIViewController: ConfirmationPresenting {
 
     func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>) {
         self.showConfirmation(confirmationViewModel: confirmationViewModel, completion: nil)

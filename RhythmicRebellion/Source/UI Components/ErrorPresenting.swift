@@ -13,7 +13,7 @@ protocol ErrorPresenting {
     func show(error: Error, completion: (() -> Void)?)
 }
 
-extension ErrorPresenting where Self: UIViewController {
+extension UIViewController: ErrorPresenting {
 
     func show(error: Error) {
         self.show(error: error, completion: nil)

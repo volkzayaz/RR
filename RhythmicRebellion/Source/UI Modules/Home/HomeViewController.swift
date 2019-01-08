@@ -41,6 +41,8 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
         self.collectionView.addSubview(self.refreshControl)
         self.setupCollectionViewLayout()
 
+        collectionView.register(R.nib.playlistCollectionCell)
+        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         viewModel.load(with: self)
@@ -53,15 +55,10 @@ final class HomeViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
     func setupCollectionViewLayout() {
-        guard let collectionViewFlowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-
-        let offset = collectionViewFlowLayout.minimumInteritemSpacing + collectionViewFlowLayout.sectionInset.left + collectionViewFlowLayout.sectionInset.right
-        let viewWidth = min(self.view.bounds.width, self.view.bounds.height)
-        let lineWidth = offset + 2 * collectionViewFlowLayout.itemSize.width
-        if lineWidth > viewWidth {
-            let itemWidth = (viewWidth - offset) / 2
-            collectionViewFlowLayout.itemSize = CGSize(width: floor(itemWidth), height: (itemWidth / 1.10625).rounded())
-        }
+        
+        (collectionView.collectionViewLayout as? BaseFlowLayout)?
+            .configureFor(bounds: view.bounds)
+        
     }
 
     // MARK: - Actions

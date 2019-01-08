@@ -34,7 +34,7 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
 
     private(set) var dependencies: RouterDependencies
 
-    private(set) weak var viewModel: PlayerNowPlayingViewModel?
+    private(set) weak var viewModel: NowPlayingViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -58,7 +58,7 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
 
     func start(controller: PlayerNowPlayingViewController) {
         sourceController = controller
-        let vm = PlayerNowPlayingControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player, audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService)
+        let vm = NowPlayingViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player, audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService)
         controller.configure(viewModel: vm, router: self)
     }
     

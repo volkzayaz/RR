@@ -86,7 +86,7 @@ class WebSocketService: WebSocketDelegate, Watchable {
 
     let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
 
-    init?(webSocketURI: String) {
+    public init?(webSocketURI: String) {
         guard let webSocketURL = URL(string: webSocketURI) else { return nil }
         
         self.webSocketURL = webSocketURL
@@ -219,7 +219,7 @@ class WebSocketService: WebSocketDelegate, Watchable {
                     self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceiveArtistFollowingState: artistFollowingState)
                     })
-
+                    
                 case .userSyncPurchases(let purchases):
                     self.watchersContainer.invoke({ (observer) in
                         observer.webSocketService(self, didReceivePurchases: purchases)

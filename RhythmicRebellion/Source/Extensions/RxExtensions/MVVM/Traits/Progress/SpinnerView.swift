@@ -12,9 +12,7 @@ class SpinnerView : UIImageView {
     
     convenience init() {
         
-        let image = UIImage(named: "InfinityMark") //R.image.spinner()!
-        
-        self.init(image: image)
+        self.init(image: R.image.addPlaylist())
         
         let animationDuration: CFTimeInterval = 0.8;
         let linearCurve = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)

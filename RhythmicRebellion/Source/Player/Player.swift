@@ -590,6 +590,10 @@ class Player: NSObject, Watchable {
         return self.playlist.totalPlayMSeconds(for: track.id) == nil
     }
 
+    func flipPlayState() {
+        isPlaying ? pause() : play()
+    }
+    
     // MARK: - Actions
     func play(completion: (() -> ())? = nil) {
 

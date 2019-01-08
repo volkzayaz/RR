@@ -56,7 +56,7 @@ final class LyricsViewModel: LyricsViewModelProtocol {
         self.infoText = ""
 
         if  self.application.user?.isCensorshipTrack(track) ?? track.isCensorship {
-            self.infoText.append("\n" + NSLocalizedString("Contains explisit material", comment: "Contains explisit material hint text") + "\n")
+            self.infoText.append("\n" + NSLocalizedString("Contains explicit material", comment: "Contains explicit material hint text") + "\n")
         }
 
         if track.isInstrumental {
