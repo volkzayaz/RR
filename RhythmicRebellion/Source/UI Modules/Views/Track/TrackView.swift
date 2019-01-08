@@ -54,8 +54,6 @@ class TrackView: UIView {
     var previewOptionsButtonHintText: String?
     var downloadButtonHintText: String?
 
-    var isDownloadAllowed: Bool = false
-
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
     
@@ -112,8 +110,6 @@ class TrackView: UIView {
 
         self.downloadingInfo = nil
         
-        self.downloadButton.state = .startDownload
-
         self.viewModel = viewModel
         if viewModel.isCurrentInPlayer && viewModel.isPlayable {
             equalizer.isHidden = false
@@ -127,8 +123,7 @@ class TrackView: UIView {
 
 
         self.stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        self.downloadButton.state = .startDownload
-
+        
         self.actionButton.isHidden = false
         self.actionActivityIndicatorView.stopAnimating()
 
@@ -154,41 +149,21 @@ class TrackView: UIView {
                 self.stackView.addArrangedSubview(self.censorshipMarkButton)
             }
 
-            if let downloadState = viewModel.downloadState {
+            self.stackView.addArrangedSubview(self.downloadButton)
 
-                self.stackView.addArrangedSubview(self.downloadButton)
+            self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+            self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
+            self.downloadButton.downloadedButton.setImage(UIImage(named: "OpenIn")?.withRenderingMode(.alwaysTemplate), for: .normal)
+            
+            if viewModel.downloadDisabled {
 
-                switch downloadState {
-                case .disable:
-                    self.isDownloadAllowed = false
-                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Follow")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
-//                    self.downloadButton.state = .startDownload
-                case .ready:
-                    self.isDownloadAllowed = true
-//                    self.downloadButton.state = .startDownload
-                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
-                case .downloading(let downloadingInfo):
-                    self.isDownloadAllowed = true
-                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
-                    self.downloadButton.state = downloadingInfo.progress.fractionCompleted == 0.0 ? .pending : .downloading
-                    self.downloadingInfo = downloadingInfo
+                downloadButton.startDownloadButton.setImage(UIImage(named: "Follow")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
 
-                case .downloaded:
-                    self.isDownloadAllowed = true
-                    self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
-                    self.downloadButton.downloadedButton.setImage(UIImage(named: "OpenIn")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.downloadButton.state = .downloaded
-                }
-
-            } else {
-                self.isDownloadAllowed = false
             }
-
-            self.previewOptionsButton.setImage(viewModel.previewOptionImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        
+            self.previewOptionsButton
+                .setImage(viewModel.previewOptionImage?.withRenderingMode(.alwaysTemplate), for: .normal)
             self.stackView.addArrangedSubview(self.previewOptionsButton)
         }
 
@@ -209,15 +184,15 @@ class TrackView: UIView {
         
         viewModel.downloadPercent
             .drive(onNext: { [weak d = downloadButton] (x) in
-                
-                d?.state = .downloading
-                
                 d?.stopDownloadButton.progress = x
-                
             })
             .disposed(by: rx.disposeBag)
 
-        //downloadButton.state = .downloading
+        viewModel.downloadState
+            .drive(onNext: { [weak d = downloadButton] (x) in
+                d?.state = x
+            })
+            .disposed(by: rx.disposeBag)
         
     }
 
@@ -231,7 +206,6 @@ class TrackView: UIView {
                                                             sourceRect: sender.frame,
                                                             sourceView: actionButtonContainerView)
         }
-        
         
     }
 
@@ -258,7 +232,7 @@ extension TrackView: PKDownloadButtonDelegate {
 
     func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
 
-        guard self.isDownloadAllowed == true else {
+        guard !viewModel.downloadDisabled else {
             guard let downloadButtonHintText = self.downloadButtonHintText, downloadButtonHintText.isEmpty == false else { return }
             actionCallback?(.showHint(downloadButton, downloadButtonHintText))
             
@@ -271,20 +245,11 @@ extension TrackView: PKDownloadButtonDelegate {
         switch state {
         case .startDownload:
             actionCallback?(.download)
-
             viewModel.download()
-            
-//            if let x = indexPath {
-//                //backwardCompatibilityViewModel?.tracksViewModel.downloadObject(at: x)
-//            }
             
         case .pending, .downloading:
             actionCallback?(.cancelDownloading)
-            
             viewModel.cancelDownload()
-//            if let x = indexPath {
-//                //backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
-//            }
             
         case .downloaded:
             actionCallback?(.openIn(downloadButton.frame, self.stackView))

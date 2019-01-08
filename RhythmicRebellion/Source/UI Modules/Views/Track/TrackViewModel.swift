@@ -11,6 +11,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+import DownloadButton
+
 final class TrackAudioFileDownloadingProgress {
 
     var observer: NSKeyValueObservation?
@@ -56,20 +58,6 @@ extension TrackViewModel {
         return user?.isCensorshipTrack(track) ?? track.isCensorship
     }
     
-    var downloadState: TrackDownloadState? {
-        
-        let userHasPurchase = user?.hasPurchase(for: track) ?? false
-        if track.isFollowAllowFreeDownload || userHasPurchase {
-            return .disable
-        }
-        
-        if userHasPurchase || user?.isFollower(for: track.artist.id) ?? false {
-            return .ready
-        }
-        
-        return nil
-        
-    }
     
     var downloadPercent: Driver<CGFloat> {
         return dataState.asDriver().map { x -> CGFloat? in
@@ -81,6 +69,30 @@ extension TrackViewModel {
             return CGFloat(p)
         }
         .notNil()
+    }
+    
+    var downloadDisabled: Bool {
+        let userHasPurchase = user?.hasPurchase(for: track) ?? false
+        return track.isFollowAllowFreeDownload || userHasPurchase
+    }
+    
+    var downloadState: Driver<PKDownloadButtonState> {
+        
+        let pending = token.asDriver(onErrorJustReturn: nil)
+            .map { $0 == nil ? .startDownload : PKDownloadButtonState.pending }
+        
+        let progress = dataState.asDriver().notNil().map { x -> PKDownloadButtonState in
+            
+            switch x {
+            case .data(_):     return .downloaded
+            case .progress(_): return .downloading
+            }
+            
+        }
+        
+        return Driver.merge([pending, progress])
+            .distinctUntilChanged()
+        
     }
     
 }
@@ -118,21 +130,17 @@ struct TrackViewModel {
 
         self.isLockedForActions = isLockedForActions
         
-        let producer = downloadTrigger.asObservable().notNil().map {
-            return DownloadManager.default.download(x: track.audioFile!.urlString)
-        }
-        .share()
-        
-        producer.map { $0.1 }
-            .subscribe(onNext: { [weak t = token] (newToken) in
+        downloadTrigger.asObservable().notNil().map {
+                return DownloadManager.default.download(x: track.audioFile!.urlString)
+            }
+            .flatMapLatest { [weak t = token] input -> Observable<ChunkedData<URL>> in
+                
+                let newToken = input.1
                 t?.unsafeValue?.cancel()
                 t?.onNext(newToken)
-            })
-            .disposed(by: bag)
-        
-        producer.map { $0.0 }
-            .switchLatest()
-            .silentCatch()
+                
+                return input.0.silentCatch()
+            }
             .bind(to: dataState)
             .disposed(by: bag)
         
@@ -140,7 +148,6 @@ struct TrackViewModel {
     
     fileprivate let bag = DisposeBag()
 }
-    
 
 extension TrackViewModel: Equatable {
     
@@ -150,6 +157,7 @@ extension TrackViewModel: Equatable {
     
     func cancelDownload() {
         token.unsafeValue?.cancel()
+        token.onNext(nil)
     }
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
