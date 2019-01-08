@@ -19,6 +19,9 @@ protocol KaraokeViewModel: class {
     var viewMode: KaraokeViewMode { get }
     var currentItemIndexPath: IndexPath? { get }
 
+    var isVocalAudioFile: Bool { get }
+    var canChangeAudioFileType: Bool { get }
+
     func load(with delegate: KaraokeViewModelDelegate)
 
     func thumbnailURL() -> URL?
@@ -28,7 +31,7 @@ protocol KaraokeViewModel: class {
     func itemViewHeight(at indexPath: IndexPath, with width: CGFloat) -> CGFloat
 
     func change(viewMode: KaraokeViewMode)
-
+    func changeAudioFileType()
 
     func switchToLyrics()
 

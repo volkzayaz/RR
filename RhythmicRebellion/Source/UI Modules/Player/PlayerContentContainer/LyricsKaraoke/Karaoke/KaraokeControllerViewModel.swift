@@ -23,6 +23,9 @@ final class KaraokeControllerViewModel: KaraokeViewModel {
     private(set) var viewMode: KaraokeViewMode
     private(set) var currentItemIndexPath: IndexPath?
 
+    var isVocalAudioFile: Bool { return self.player.karaokeAudioFileType == .vocal }
+    var canChangeAudioFileType: Bool { return self.player.canChangeKaraokeAudioFileType }
+
     // MARK: - Lifecycle -
 
     deinit {
@@ -45,18 +48,25 @@ final class KaraokeControllerViewModel: KaraokeViewModel {
         }
     }
 
+    func findCurrentItemIndexPath() -> IndexPath? {
+
+        guard let karaokeIntervals = self.karaoke?.intervals, let currentItemTime = self.player.currentItemTime else { return nil }
+        guard let intervalIndex = karaokeIntervals.firstIndex(where: { (interval) -> Bool in
+            return TimeInterval(interval.start) <= currentItemTime + 0.3 && TimeInterval(interval.end) > currentItemTime }) else {
+
+            guard let previousIntervalIndex = karaokeIntervals.firstIndex(where: { (interval) -> Bool in
+                return TimeInterval(interval.start) > currentItemTime}) else { return nil }
+
+                return IndexPath(item: max(0, previousIntervalIndex - 1), section: 0)
+        }
+
+        return IndexPath(item: intervalIndex, section: 0)
+    }
+
     func load(with delegate: KaraokeViewModelDelegate) {
         self.delegate = delegate
 
-        if let karaokeIntervals = self.karaoke?.intervals, let currentItemTime = self.player.currentItemTime {
-            if let intervalIndex = karaokeIntervals.firstIndex(where: { (interval) -> Bool in
-                return TimeInterval(interval.start) <= currentItemTime && TimeInterval(interval.end) > currentItemTime
-            }) {
-                self.currentItemIndexPath = IndexPath(item: intervalIndex, section: 0)
-            }
-        } else {
-            self.currentItemIndexPath = nil
-        }
+        self.currentItemIndexPath = self.findCurrentItemIndexPath()
 
         self.delegate?.reloadUI()
 
@@ -100,6 +110,16 @@ final class KaraokeControllerViewModel: KaraokeViewModel {
         self.delegate?.refreshUI()
     }
 
+    func changeAudioFileType() {
+
+        switch self.player.karaokeAudioFileType {
+        case .vocal: self.player.change(karaokeAudioFileType: .clean)
+        case .clean: self.player.change(karaokeAudioFileType: .vocal)
+        }
+
+        self.delegate?.refreshUI()
+    }
+
     func switchToLyrics() {
         self.player.switchTo(karaokeMode: .lyrics)
     }
@@ -113,29 +133,23 @@ extension KaraokeControllerViewModel: PlayerWatcher {
         self.delegate?.reloadUI()
     }
 
+    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+        self.currentItemIndexPath = nil
+        self.delegate?.refreshUI()
+    }
+
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval) {
+        guard let currentItemIndexPath = self.findCurrentItemIndexPath(), self.currentItemIndexPath != currentItemIndexPath else { return }
 
-        if let karaokeIntervals = self.karaoke?.intervals, let currentItemTime = self.player.currentItemTime {
-            guard let intervalIndex = karaokeIntervals.firstIndex(where: { (interval) -> Bool in
-                return TimeInterval(interval.start) <= currentItemTime && TimeInterval(interval.end) > currentItemTime
-            }) else { return }
-
-            self.currentItemIndexPath = IndexPath(item: intervalIndex, section: 0)
-        }
-
+        self.currentItemIndexPath = currentItemIndexPath
 
         self.delegate?.refreshUI()
     }
 
+
     func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
-        if let karaokeIntervals = self.karaoke?.intervals, let currentItemTime = self.player.currentItemTime {
-            guard let intervalIndex = karaokeIntervals.firstIndex(where: { (interval) -> Bool in
-                return TimeInterval(interval.start) <= currentItemTime && TimeInterval(interval.end) > currentItemTime
-            }) else { return }
 
-            self.currentItemIndexPath = IndexPath(item: intervalIndex, section: 0)
-        }
-
+        self.currentItemIndexPath = self.findCurrentItemIndexPath()
         self.delegate?.refreshUI()
     }
 }

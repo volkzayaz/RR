@@ -95,8 +95,6 @@ final class KaraokeViewController: UIViewController {
         if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
             self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
         }
-
-
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -178,7 +176,7 @@ final class KaraokeViewController: UIViewController {
     }
 
     @IBAction func onVocalTrack() {
-        self.footerView.vocaltrackButton.isSelected = !self.footerView.vocaltrackButton.isSelected
+        self.viewModel.changeAudioFileType()
     }
 }
 
@@ -222,24 +220,6 @@ extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDel
 
         return itemSize
     }
-}
-
-extension KaraokeViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.numberOfItems(in: section)
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let karaokeIntervalTableViewCell = KaraokeIntervalTableViewCell.reusableCell(in: tableView, at: indexPath)
-        let karaokeIntervalCellViewModel = self.viewModel.item(at: indexPath)!
-
-        karaokeIntervalTableViewCell.setup(viewModel: karaokeIntervalCellViewModel)
-
-        return karaokeIntervalTableViewCell
-    }
-
 }
 
 // MARK: - Router -
@@ -327,8 +307,13 @@ extension KaraokeViewController: KaraokeViewModelDelegate {
 
         self.refreshViewModeUI()
 
+        self.footerView.vocaltrackButton.isSelected = self.viewModel.isVocalAudioFile
+        self.footerView.vocaltrackButton.isEnabled = self.viewModel.canChangeAudioFileType
+
         if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
             self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: true)
+        } else {
+            self.collectionView.setContentOffset(CGPoint(x: 0.0, y: -self.collectionView.contentInset.top), animated: true)
         }
     }
 }

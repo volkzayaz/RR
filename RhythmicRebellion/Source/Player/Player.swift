@@ -21,6 +21,10 @@ public enum PlayerStatus : Int {
     case failed
 }
 
+enum AudioFileType: UInt {
+    case vocal
+    case clean
+}
 
 public enum PlayerInitializationAction : Int {
 
@@ -194,7 +198,7 @@ class Player: NSObject, Watchable {
     private var webSocketService: WebSocketService { return self.application.webSocketService }
 
     private let playlist: PlayerPlaylist = PlayerPlaylist()
-    private var playerQueue: PlayerQueue = PlayerQueue()
+    private var playerQueue: PlayerQueue = PlayerQueue(prefferedAudioFileType: AudioFileType.vocal)
 
     public var currentTrackId: TrackId?
     private var currentTrackState: TrackState?
@@ -207,6 +211,24 @@ class Player: NSObject, Watchable {
 //    let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Player")
 
     private(set) var karaokeMode: KaraokeMode = .none
+    private(set) var karaokeAudioFileType: AudioFileType = .vocal
+
+    var canChangeKaraokeAudioFileType: Bool {
+        guard let currentQueueItem = self.playerQueue.currentItem else { return false }
+
+        switch currentQueueItem.content {
+        case .addon(_), .stub(_): return false
+        case .track(_): return self.state.waitingAddons == false
+        }
+    }
+
+    private var audioFileType: AudioFileType {
+        switch karaokeMode {
+        case .karaoke: return self.karaokeAudioFileType
+        default: return .vocal
+        }
+    }
+
     private var needsLoadPlayerItemLyrics: Bool { return self.karaokeMode != .none && self.currentItem?.lyrics == nil }
 
     init(with application: Application) {
@@ -236,9 +258,10 @@ class Player: NSObject, Watchable {
         addObserver(self, forKeyPath: #keyPath(Player.player.currentItem.status), options: [.new, .initial], context: &playerKVOContext)
         addObserver(self, forKeyPath: #keyPath(Player.player.currentItem.duration), options: [.new, .initial], context: &playerKVOContext)
 
-        let interval = CMTimeMake(value: 1, timescale: 1)
+        let interval = CMTimeMakeWithSeconds(0.25, preferredTimescale: 4)
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
             let timeElapsed = TimeInterval(CMTimeGetSeconds(time))
+
             self.updateCurrentTrackState(with: timeElapsed)
         }
 
@@ -781,6 +804,11 @@ class Player: NSObject, Watchable {
             self.player.currentItem?.seek(to: time, completionHandler: { [weak self] (success) in
                 self?.state.playing = isPlaying
                 if isPlaying { self?.player.play() }
+
+                guard let self = self else { return }
+                self.watchersContainer.invoke({ (observer) in
+                    observer.player(player: self, didChangePlayerItemCurrentTime: trackState.progress)
+                })
             })
         }
     }
@@ -1801,8 +1829,28 @@ extension Player {
             self.loadLirycs()
         }
 
+        self.playerQueue.prefferedAudioFileType = self.audioFileType
+        self.replace(playerItems: playerQueue.playerItems)
+
         self.watchersContainer.invoke { (watcher) in
             watcher.player(player: self, didChangeKaraokeMode: self.karaokeMode)
         }
+    }
+
+    func change(karaokeAudioFileType: AudioFileType) {
+        guard self.playerQueue.containsOnlyTrack == true else { return }
+        guard self.karaokeAudioFileType != karaokeAudioFileType else { return }
+
+        self.karaokeAudioFileType = karaokeAudioFileType
+        self.playerQueue.prefferedAudioFileType = self.audioFileType
+        self.replace(playerItems: playerQueue.playerItems)
+
+        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
+        self.set(trackState: trackState)
+
+        guard let currentQueueItem = self.currentQueueItem else { return }
+        self.watchersContainer.invoke({ (observer) in
+            observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
+        })
     }
 }
