@@ -13,12 +13,6 @@ import RxCocoa
 
 import DownloadButton
 
-final class TrackAudioFileDownloadingProgress {
-
-    var observer: NSKeyValueObservation?
-    var callback: ((CGFloat) -> Void)?
-}
-
 extension TrackViewModel {
  
     var id: String { return String(track.id) }

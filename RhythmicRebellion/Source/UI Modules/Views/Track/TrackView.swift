@@ -13,13 +13,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-enum TrackDownloadState {
-    case disable
-    case ready
-    case downloading(TrackAudioFileDownloadingInfo)
-    case downloaded
-}
-
 class TrackView: UIView {
 
     typealias ActionCallback = (Actions) -> Void
