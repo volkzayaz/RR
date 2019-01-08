@@ -10,37 +10,14 @@ import UIKit
 import DownloadButton
 import SnapKit
 
+import RxSwift
+import RxCocoa
+
 enum TrackDownloadState {
     case disable
     case ready
     case downloading(TrackAudioFileDownloadingInfo)
     case downloaded
-}
-
-protocol TrackTableViewCellViewModel {
-
-    var id: String { get }
-
-    var title: String { get }
-    var description: String { get }
-
-    var isPlayable: Bool { get }
-
-    var isCurrentInPlayer: Bool { get }
-    var isPlaying: Bool { get }
-
-    var isCensorship: Bool { get }
-    var censorshipHintText: String? { get }
-
-    var previewOptionImage: UIImage? { get }
-    var previewOptionHintText: String? { get }
-
-    var downloadState: TrackDownloadState? { get }
-    var downloadHintText: String? { get }
-
-    var isLockedForActions: Bool { get }
-    
-    var track: Track { get }
 }
 
 class TrackView: UIView {
@@ -82,7 +59,7 @@ class TrackView: UIView {
     @IBOutlet weak var equalizerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
     
-    var viewModel: TrackTableViewCellViewModel!
+    var viewModel: TrackViewModel!
 
     var backwardCompatibilityViewModel: ArtistViewModel?
     var indexPath: IndexPath?
@@ -90,10 +67,11 @@ class TrackView: UIView {
     var actionCallback: ActionCallback?
     weak var downloadingInfo: TrackAudioFileDownloadingInfo?
 
+    var disposeBag = DisposeBag()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        self.censorshipMarkButton.setImage(self.censorshipMarkButton.image(for: .normal)?.withRenderingMode(.alwaysTemplate), for: .normal)
+    self.censorshipMarkButton.setImage(self.censorshipMarkButton.image(for: .normal)?.withRenderingMode(.alwaysTemplate), for: .normal)
 
         self.previewOptionsButton.layer.borderWidth = 0.65
         self.previewOptionsButton.layer.borderColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
@@ -104,6 +82,7 @@ class TrackView: UIView {
         self.downloadButton.stopDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
         self.downloadButton.downloadedButton.cleanDefaultAppearance()
         self.downloadButton.downloadedButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+        
     }
 
     func prepareToDisplay() {
@@ -119,19 +98,18 @@ class TrackView: UIView {
             self.downloadButton.pendingView.startSpin()
         }
 
-        self.downloadingInfo?.addWatcher(self)
 
     }
 
     func prepareToEndDisplay() {
         self.equalizer.pause()
-        self.downloadingInfo?.removeWatcher(self)
+
+        disposeBag = DisposeBag()
     }
 
         
-    func setup(viewModel: TrackTableViewCellViewModel, actionCallback:  @escaping ActionCallback) {
+    func setup(viewModel: TrackViewModel, actionCallback:  @escaping ActionCallback) {
 
-        self.downloadingInfo?.removeWatcher(self)
         self.downloadingInfo = nil
         
         self.downloadButton.state = .startDownload
@@ -228,6 +206,19 @@ class TrackView: UIView {
         self.downloadButtonHintText = viewModel.downloadHintText
 
         self.actionCallback = actionCallback
+        
+        viewModel.downloadPercent
+            .drive(onNext: { [weak d = downloadButton] (x) in
+                
+                d?.state = .downloading
+                
+                d?.stopDownloadButton.progress = x
+                
+            })
+            .disposed(by: rx.disposeBag)
+
+        //downloadButton.state = .downloading
+        
     }
 
     // MARK: - Actions -
@@ -281,44 +272,23 @@ extension TrackView: PKDownloadButtonDelegate {
         case .startDownload:
             actionCallback?(.download)
 
-            if let x = indexPath {
-                backwardCompatibilityViewModel?.tracksViewModel.downloadObject(at: x)
-            }
+            viewModel.download()
             
-        case .pending:
+//            if let x = indexPath {
+//                //backwardCompatibilityViewModel?.tracksViewModel.downloadObject(at: x)
+//            }
+            
+        case .pending, .downloading:
             actionCallback?(.cancelDownloading)
             
-            if let x = indexPath {
-                backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
-            }
-            
-            break
-        case .downloading:
-            actionCallback?(.cancelDownloading)
-            if let x = indexPath {
-                backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
-            }
+            viewModel.cancelDownload()
+//            if let x = indexPath {
+//                //backwardCompatibilityViewModel?.tracksViewModel.cancelDownloadingObject(at: x)
+//            }
             
         case .downloaded:
             actionCallback?(.openIn(downloadButton.frame, self.stackView))
         }
     }
 
-}
-
-extension TrackView: TrackAudioFileDownloadingInfoWatcher {
-
-    func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) {
-
-        switch self.downloadButton.state {
-        case .pending:
-            self.downloadButton.state = .downloading
-            self.downloadButton.stopDownloadButton.progress = CGFloat(progress.fractionCompleted)
-        case .downloading:
-            self.downloadButton.stopDownloadButton.progress = CGFloat(progress.fractionCompleted)
-
-        default: break
-        }
-
-    }
 }

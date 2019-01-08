@@ -123,7 +123,7 @@ extension ArtistsFollowedViewModel {
         quickUnfollowBuffer.onNext( ArtistFollowingState(artistId: artist.id,
                                                          isFollowed: false) )
         ///TODO: migrate to reactive error handling
-        DataLayer.get.application.unfollow(artistId: artist.id) { [weak m = router.messagePresentable] (res) in
+        DataLayer.get.application.unfollow(artistId: artist.id) { [weak m = router.owner] (res) in
             if case .failure(let e) = res {
                 m?.presentError(error: e)
             }

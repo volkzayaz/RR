@@ -8,43 +8,149 @@
 
 import UIKit
 
+import RxSwift
+import RxCocoa
+
 final class TrackAudioFileDownloadingProgress {
 
     var observer: NSKeyValueObservation?
     var callback: ((CGFloat) -> Void)?
 }
 
-struct TrackViewModel: TrackTableViewCellViewModel, Equatable {
-
+extension TrackViewModel {
+ 
     var id: String { return String(track.id) }
-
+    
     var title: String { return track.name }
     var description: String { return track.artist.name }
-
+    
     var isPlayable: Bool { return track.isPlayable }
-
+    
     var previewOptionImage: UIImage? { return previewOptionViewModel.image }
     var previewOptionHintText: String? { return previewOptionViewModel.hintText }
-
+    
     var censorshipHintText: String? {
         guard self.isCensorship == true else { return nil }
         return NSLocalizedString("Contains explisit material", comment: "Contains explisit material hint text")
     }
+    
+    var downloadHintText: String? {
+        
+        let userHasPurchase = user?.hasPurchase(for: track) ?? false
+        
+        guard track.isFollowAllowFreeDownload || userHasPurchase else {
+            return nil
+        }
+        
+        if user?.isGuest ?? true { return R.string.localizable.freeDownloadForFans() }
+        
+        return R.string.localizable.freeDownloadForFollowers()
+        
+    }
+    
+    var isPlaying: Bool {
+        return isCurrentInPlayer && player.isPlaying
+    }
 
-    var downloadHintText: String?
+    var isCensorship: Bool {
+        return user?.isCensorshipTrack(track) ?? track.isCensorship
+    }
+    
+    var downloadState: TrackDownloadState? {
+        
+        let userHasPurchase = user?.hasPurchase(for: track) ?? false
+        if track.isFollowAllowFreeDownload || userHasPurchase {
+            return .disable
+        }
+        
+        if userHasPurchase || user?.isFollower(for: track.artist.id) ?? false {
+            return .ready
+        }
+        
+        return nil
+        
+    }
+    
+    var downloadPercent: Driver<CGFloat> {
+        return dataState.asDriver().map { x -> CGFloat? in
+            guard let state = x,
+                  case .progress(let p) = state else {
+                    return nil
+            }
+            
+            return CGFloat(p)
+        }
+        .notNil()
+    }
+    
+}
 
-    let track: Track
-
-    var isCurrentInPlayer: Bool
-    var isPlaying: Bool
-
-    var isCensorship: Bool
+struct TrackViewModel {
     
     let previewOptionViewModel: TrackPreviewOptionViewModel
 
-    var downloadState: TrackDownloadState?
-
     var isLockedForActions: Bool
+
+    let track: Track
+    let user: User?
+    
+    let isCurrentInPlayer: Bool
+    let player: Player
+    
+    fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
+    
+    fileprivate let token: BehaviorSubject<DownloadToken?> = BehaviorSubject(value: nil)
+    fileprivate let dataState: BehaviorRelay<ChunkedData<URL>?> = BehaviorRelay(value: nil)
+    
+    init(track: Track, user: User?,
+         player: Player, audioFileLocalStorageService: AudioFileLocalStorageService?,
+         textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool, isLockedForActions: Bool) {
+
+        self.track = track
+        self.isCurrentInPlayer = isCurrentInPlayer
+        self.user = user
+        self.player = player
+        
+        self.previewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
+                                                                                          user: user,
+                                                                                          player: player,
+                                                                                          textImageGenerator: textImageGenerator)
+
+        self.isLockedForActions = isLockedForActions
+        
+        let producer = downloadTrigger.asObservable().notNil().map {
+            return DownloadManager.default.download(x: track.audioFile!.urlString)
+        }
+        .share()
+        
+        producer.map { $0.1 }
+            .subscribe(onNext: { [weak t = token] (newToken) in
+                t?.unsafeValue?.cancel()
+                t?.onNext(newToken)
+            })
+            .disposed(by: bag)
+        
+        producer.map { $0.0 }
+            .switchLatest()
+            .silentCatch()
+            .bind(to: dataState)
+            .disposed(by: bag)
+        
+    }
+    
+    fileprivate let bag = DisposeBag()
+}
+    
+
+extension TrackViewModel: Equatable {
+    
+    func download() {
+        downloadTrigger.onNext( () )
+    }
+    
+    func cancelDownload() {
+        token.unsafeValue?.cancel()
+    }
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
         return lhs.track == rhs.track &&
@@ -52,52 +158,5 @@ struct TrackViewModel: TrackTableViewCellViewModel, Equatable {
             lhs.isPlaying == rhs.isPlaying &&
             lhs.isCensorship == rhs.isCensorship
     }
-}
-
-
-extension TrackViewModel {
-
-    init(track: Track, user: User?, player: Player?, audioFileLocalStorageService: AudioFileLocalStorageService?, textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool, isLockedForActions: Bool) {
-
-        self.track = track
-        self.isCurrentInPlayer = isCurrentInPlayer
-        self.isPlaying = isCurrentInPlayer && (player?.isPlaying ?? false)
-
-        self.isCensorship = user?.isCensorshipTrack(track) ?? track.isCensorship
-
-        self.previewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
-                                                                                          user: user,
-                                                                                          player: player,
-                                                                                          textImageGenerator: textImageGenerator)
-
-        let userHasPurchase = user?.hasPurchase(for: track) ?? false
-        if track.isFollowAllowFreeDownload || userHasPurchase {
-
-            self.downloadState = .disable
-            if userHasPurchase || user?.isFollower(for: track.artist.id) ?? false {
-                self.downloadState = .ready
-                if let audioFile = track.audioFile, let state = audioFileLocalStorageService?.state(for: audioFile) {
-                    switch state {
-                    case .downloaded( _ ): self.downloadState = .downloaded
-                    case .downloading(let downloadingInfo): self.downloadState = .downloading(downloadingInfo)
-                    case .unknown: break
-                    }
-                }
-            }
-
-            if let downloadState = self.downloadState {
-                switch downloadState {
-                case .disable:
-                    if user?.isGuest ?? true {
-                        self.downloadHintText = NSLocalizedString("Free download for fans", comment: "Free download for fans hint text")
-                    } else {
-                        self.downloadHintText = NSLocalizedString("Free download for followers", comment: "Free download for followers hint text")
-                    }
-                default: break
-                }
-            }
-        }
-
-        self.isLockedForActions = isLockedForActions
-    }
+    
 }

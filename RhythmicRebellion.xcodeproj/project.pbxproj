@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73116DF221E4B0CA00F2A19A /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF121E4B0CA00F2A19A /* DownloadManager.swift */; };
 		736598CF21D62FDE0092E499 /* TrackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 736598CE21D62FDE0092E499 /* TrackView.xib */; };
 		736598D621D65A220092E499 /* ArtistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736598D321D65A220092E499 /* ArtistRouter.swift */; };
 		736598D721D65A220092E499 /* ArtistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736598D421D65A220092E499 /* ArtistViewController.swift */; };
@@ -298,6 +299,7 @@
 
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		73116DF121E4B0CA00F2A19A /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		736598CE21D62FDE0092E499 /* TrackView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackView.xib; sourceTree = "<group>"; };
 		736598D321D65A220092E499 /* ArtistRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistRouter.swift; sourceTree = "<group>"; };
 		736598D421D65A220092E499 /* ArtistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistViewController.swift; sourceTree = "<group>"; };
@@ -611,6 +613,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		73116DF021E4B0B800F2A19A /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				73116DF121E4B0CA00F2A19A /* DownloadManager.swift */,
+			);
+			path = Download;
+			sourceTree = "<group>";
+		};
 		736598D021D65A080092E499 /* Artist */ = {
 			isa = PBXGroup;
 			children = (
@@ -707,6 +717,7 @@
 		737622D421CA7AF6005B603E /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				73116DF021E4B0B800F2A19A /* Download */,
 				737622DB21CA7D73005B603E /* Response */,
 				737622D521CA7B00005B603E /* Request */,
 			);
@@ -1914,6 +1925,7 @@
 				767BA57F2111AEEC00C390D8 /* CellIdentifiable.swift in Sources */,
 				76E6CB89217E0EC200283CA1 /* ChangePasswordRouter.swift in Sources */,
 				762DD783214122FE0046A984 /* Hobby.swift in Sources */,
+				73116DF221E4B0CA00F2A19A /* DownloadManager.swift in Sources */,
 				7641B2ED21CA88C2005535E6 /* KaraokeRouter.swift in Sources */,
 				7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */,
 				7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */,
@@ -1988,7 +2000,6 @@
 				7650962520E662D100BF1F79 /* RestApiService.swift in Sources */,
 				736598DE21D6605D0092E499 /* AlbumCollectionCell.swift in Sources */,
 				76315815219D97F800E1D7F5 /* PageContentRouter.swift in Sources */,
-				763931FF21198C3600A65257 /* PlayerFollowingViewController.swift in Sources */,
 				7641B2DD21CA4DE6005535E6 /* LyricsKaraokeViewModel.swift in Sources */,
 				7665334520FF1CFA00FEC702 /* PagesControllerViewModel.swift in Sources */,
 				767BA57A21119B6500C390D8 /* GradientView.swift in Sources */,

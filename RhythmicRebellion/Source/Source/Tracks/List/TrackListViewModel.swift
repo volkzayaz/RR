@@ -97,7 +97,7 @@ class TrackListViewModel {
 
     private(set) weak var delegate: TrackListBindings?
     private weak var application: Application?
-    private weak var player: Player?
+    private weak var player: Player!
     private weak var audioFileLocalStorageService: AudioFileLocalStorageService?
     
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))

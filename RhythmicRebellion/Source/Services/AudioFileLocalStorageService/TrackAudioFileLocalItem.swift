@@ -8,18 +8,7 @@
 
 import Foundation
 
-protocol TrackAudioFileDownloadingInfoWatcher: class {
-    func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress)
-}
-
-extension TrackAudioFileDownloadingInfoWatcher {
-    func trackAudioFileDownloadingInfoObserver(_ trackAudioFileDownloadingInfo: TrackAudioFileDownloadingInfo, didUpdate progress: Progress) { }
-}
-
-class TrackAudioFileDownloadingInfo: Watchable {
-
-    typealias WatchType = TrackAudioFileDownloadingInfoWatcher
-    let watchersContainer = WatchersContainer<WatchType>()
+class TrackAudioFileDownloadingInfo {
 
     let taskIdentifier: Int
     let progress: Progress
@@ -33,11 +22,6 @@ class TrackAudioFileDownloadingInfo: Watchable {
         self.progress.totalUnitCount = totalUnitCount
         self.progress.completedUnitCount = completedUnitCount
 
-        DispatchQueue.main.async {
-            self.watchersContainer.invoke { (observer) in
-                observer.trackAudioFileDownloadingInfoObserver(self, didUpdate: self.progress)
-            }
-        }
     }
 }
 
