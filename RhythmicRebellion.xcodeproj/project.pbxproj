@@ -114,10 +114,14 @@
 		7641B2E021CA4DE6005535E6 /* LyricsKaraokeViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2DC21CA4DE6005535E6 /* LyricsKaraokeViewModelProtocol.swift */; };
 		7641B2E321CA4E5C005535E6 /* LyricsKaraoke.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7641B2E121CA4E5C005535E6 /* LyricsKaraoke.storyboard */; };
 		7641B2E621CA5609005535E6 /* ContainerTransitionSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2E521CA5609005535E6 /* ContainerTransitionSegue.swift */; };
-		7641B2EC21CA88C2005535E6 /* KaraokeControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2E821CA88C2005535E6 /* KaraokeControllerViewModel.swift */; };
+		7641B2EC21CA88C2005535E6 /* KaraokeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2E821CA88C2005535E6 /* KaraokeViewModel.swift */; };
 		7641B2ED21CA88C2005535E6 /* KaraokeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2E921CA88C2005535E6 /* KaraokeRouter.swift */; };
 		7641B2EE21CA88C2005535E6 /* KaraokeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2EA21CA88C2005535E6 /* KaraokeViewController.swift */; };
-		7641B2EF21CA88C2005535E6 /* KaraokeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2EB21CA88C2005535E6 /* KaraokeViewModel.swift */; };
+		7641B2EF21CA88C2005535E6 /* KaraokeViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2EB21CA88C2005535E6 /* KaraokeViewModelProtocol.swift */; };
+		7641B2F221CCE74B005535E6 /* KaraokeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2F121CCE74B005535E6 /* KaraokeHeaderView.swift */; };
+		7641B2F421CCE75D005535E6 /* KaraokeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2F321CCE75D005535E6 /* KaraokeFooterView.swift */; };
+		7641B2F721CD3EDC005535E6 /* KaraokeIntervalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2F621CD3EDC005535E6 /* KaraokeIntervalCell.swift */; };
+		7641B2F921CD4772005535E6 /* DefaultKaraokeIntervalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7641B2F821CD4772005535E6 /* DefaultKaraokeIntervalViewModel.swift */; };
 		764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764B854A2137C80100071F30 /* ValidatebleField+Extension.swift */; };
 		764B854D2137E5C600071F30 /* DatePickerInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764B854C2137E5C600071F30 /* DatePickerInputView.swift */; };
 		764B854F2138043E00071F30 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764B854E2138043E00071F30 /* Country.swift */; };
@@ -218,6 +222,7 @@
 		769F4EBE210B6706000DD23B /* PromoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBA210B6706000DD23B /* PromoRouter.swift */; };
 		769F4EBF210B6706000DD23B /* PromoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBB210B6706000DD23B /* PromoViewController.swift */; };
 		769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769F4EBC210B6706000DD23B /* PromoViewModel.swift */; };
+		76A093D621D4CE9800B363FA /* KaraokeCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A093D521D4CE9800B363FA /* KaraokeCollectionViewFlowLayout.swift */; };
 		76A45B40213926380080885D /* SelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B3C213926380080885D /* SelectableListControllerViewModel.swift */; };
 		76A45B41213926380080885D /* SelectableListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B3D213926380080885D /* SelectableListRouter.swift */; };
 		76A45B42213926380080885D /* SelectableListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A45B3E213926380080885D /* SelectableListViewController.swift */; };
@@ -278,11 +283,12 @@
 		76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6320DBAEEC00C9191F /* PlayerRouter.swift */; };
 		76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6420DBAEEC00C9191F /* PlayerViewController.swift */; };
 		76F1FA6920DBAEEC00C9191F /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6520DBAEEC00C9191F /* PlayerViewModel.swift */; };
-		76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */; };
+		76F1FA6C20DBD96C00C9191F /* DesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6B20DBD96C00C9191F /* DesignableButton.swift */; };
 		76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */; };
 		76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */; };
 		76F61E1E21AEA58800F758EF /* PageTrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F61E1D21AEA58800F758EF /* PageTrackState.swift */; };
 		76FA64C1218B2ECB00A132E9 /* FanPlaylistState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA64C0218B2ECB00A132E9 /* FanPlaylistState.swift */; };
+		76FF911221DF501500D4FE94 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FF911121DF501400D4FE94 /* RoundedButton.swift */; };
 		AB1423662124345700C926F5 /* UIImageView+Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1423652124345700C926F5 /* UIImageView+Placeholder.swift */; };
 		AB14236C2124487F00C926F5 /* AddToPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1423682124487E00C926F5 /* AddToPlaylistViewModel.swift */; };
 		AB14236D2124487F00C926F5 /* AddToPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1423692124487E00C926F5 /* AddToPlaylistViewController.swift */; };
@@ -405,10 +411,14 @@
 		7641B2DC21CA4DE6005535E6 /* LyricsKaraokeViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsKaraokeViewModelProtocol.swift; sourceTree = "<group>"; };
 		7641B2E221CA4E5C005535E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LyricsKaraoke.storyboard; sourceTree = "<group>"; };
 		7641B2E521CA5609005535E6 /* ContainerTransitionSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTransitionSegue.swift; sourceTree = "<group>"; };
-		7641B2E821CA88C2005535E6 /* KaraokeControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeControllerViewModel.swift; sourceTree = "<group>"; };
+		7641B2E821CA88C2005535E6 /* KaraokeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeViewModel.swift; sourceTree = "<group>"; };
 		7641B2E921CA88C2005535E6 /* KaraokeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeRouter.swift; sourceTree = "<group>"; };
 		7641B2EA21CA88C2005535E6 /* KaraokeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeViewController.swift; sourceTree = "<group>"; };
-		7641B2EB21CA88C2005535E6 /* KaraokeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeViewModel.swift; sourceTree = "<group>"; };
+		7641B2EB21CA88C2005535E6 /* KaraokeViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeViewModelProtocol.swift; sourceTree = "<group>"; };
+		7641B2F121CCE74B005535E6 /* KaraokeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeHeaderView.swift; sourceTree = "<group>"; };
+		7641B2F321CCE75D005535E6 /* KaraokeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeFooterView.swift; sourceTree = "<group>"; };
+		7641B2F621CD3EDC005535E6 /* KaraokeIntervalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeIntervalCell.swift; sourceTree = "<group>"; };
+		7641B2F821CD4772005535E6 /* DefaultKaraokeIntervalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultKaraokeIntervalViewModel.swift; sourceTree = "<group>"; };
 		764B854A2137C80100071F30 /* ValidatebleField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ValidatebleField+Extension.swift"; sourceTree = "<group>"; };
 		764B854C2137E5C600071F30 /* DatePickerInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerInputView.swift; sourceTree = "<group>"; };
 		764B854E2138043E00071F30 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
@@ -509,6 +519,7 @@
 		769F4EBA210B6706000DD23B /* PromoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoRouter.swift; sourceTree = "<group>"; };
 		769F4EBB210B6706000DD23B /* PromoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoViewController.swift; sourceTree = "<group>"; };
 		769F4EBC210B6706000DD23B /* PromoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoViewModel.swift; sourceTree = "<group>"; };
+		76A093D521D4CE9800B363FA /* KaraokeCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaraokeCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		76A45B3C213926380080885D /* SelectableListControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListControllerViewModel.swift; sourceTree = "<group>"; };
 		76A45B3D213926380080885D /* SelectableListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListRouter.swift; sourceTree = "<group>"; };
 		76A45B3E213926380080885D /* SelectableListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableListViewController.swift; sourceTree = "<group>"; };
@@ -571,11 +582,12 @@
 		76F1FA6320DBAEEC00C9191F /* PlayerRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRouter.swift; sourceTree = "<group>"; };
 		76F1FA6420DBAEEC00C9191F /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		76F1FA6520DBAEEC00C9191F /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
-		76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
+		76F1FA6B20DBD96C00C9191F /* DesignableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableButton.swift; sourceTree = "<group>"; };
 		76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedLabel.swift; sourceTree = "<group>"; };
 		76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarRegular.swift; sourceTree = "<group>"; };
 		76F61E1D21AEA58800F758EF /* PageTrackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTrackState.swift; sourceTree = "<group>"; };
 		76FA64C0218B2ECB00A132E9 /* FanPlaylistState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanPlaylistState.swift; sourceTree = "<group>"; };
+		76FF911121DF501400D4FE94 /* RoundedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		80BC96C5C2DF2EDD9FF2BB72 /* Pods-RhythmicRebellion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.release.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.release.xcconfig"; sourceTree = "<group>"; };
 		AB1423652124345700C926F5 /* UIImageView+Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Placeholder.swift"; sourceTree = "<group>"; };
 		AB1423682124487E00C926F5 /* AddToPlaylistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddToPlaylistViewModel.swift; sourceTree = "<group>"; };
@@ -1069,12 +1081,33 @@
 		7641B2E721CA889E005535E6 /* Karaoke */ = {
 			isa = PBXGroup;
 			children = (
+				76A093D421D4CE8700B363FA /* Layouts */,
+				7641B2F021CCE72F005535E6 /* Views */,
+				7641B2F521CD3E1E005535E6 /* ViewModels */,
 				7641B2E921CA88C2005535E6 /* KaraokeRouter.swift */,
-				7641B2EB21CA88C2005535E6 /* KaraokeViewModel.swift */,
-				7641B2E821CA88C2005535E6 /* KaraokeControllerViewModel.swift */,
+				7641B2EB21CA88C2005535E6 /* KaraokeViewModelProtocol.swift */,
+				7641B2E821CA88C2005535E6 /* KaraokeViewModel.swift */,
 				7641B2EA21CA88C2005535E6 /* KaraokeViewController.swift */,
 			);
 			path = Karaoke;
+			sourceTree = "<group>";
+		};
+		7641B2F021CCE72F005535E6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7641B2F621CD3EDC005535E6 /* KaraokeIntervalCell.swift */,
+				7641B2F121CCE74B005535E6 /* KaraokeHeaderView.swift */,
+				7641B2F321CCE75D005535E6 /* KaraokeFooterView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7641B2F521CD3E1E005535E6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7641B2F821CD4772005535E6 /* DefaultKaraokeIntervalViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		764D68372148E7E000F52730 /* ProfileSettings */ = {
@@ -1366,6 +1399,14 @@
 			path = Promo;
 			sourceTree = "<group>";
 		};
+		76A093D421D4CE8700B363FA /* Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				76A093D521D4CE9800B363FA /* KaraokeCollectionViewFlowLayout.swift */,
+			);
+			path = Layouts;
+			sourceTree = "<group>";
+		};
 		76A45B3B213925D50080885D /* SelectableList */ = {
 			isa = PBXGroup;
 			children = (
@@ -1573,11 +1614,12 @@
 		76F1FA6A20DBD94200C9191F /* UI Components */ = {
 			isa = PBXGroup;
 			children = (
+				76FF911121DF501400D4FE94 /* RoundedButton.swift */,
 				737622CD21CA502B005B603E /* BaseFlowLayout */,
 				ABD79E85212C9E77004139F6 /* EqualizerView.swift */,
 				76336A85215CBE8100AE9001 /* RoundedView.swift */,
 				76C9F6502147DFFD00054B44 /* RoundedImageVIew.swift */,
-				76F1FA6B20DBD96C00C9191F /* RoundedButton.swift */,
+				76F1FA6B20DBD96C00C9191F /* DesignableButton.swift */,
 				76F1FA6D20DD161A00C9191F /* RoundedLabel.swift */,
 				76F1FA6F20E0E53200C9191F /* TabBarRegular.swift */,
 				767BA57921119B6500C390D8 /* GradientView.swift */,
@@ -1888,6 +1930,7 @@
 				76769A85218079A900DCB146 /* ChangeEmailControllerViewModel.swift in Sources */,
 				76DB5ABD20E684A60008D2FE /* User.swift in Sources */,
 				76315821219EF92C00E1D7F5 /* View+Extension.swift in Sources */,
+				76A093D621D4CE9800B363FA /* KaraokeCollectionViewFlowLayout.swift in Sources */,
 				767289C620ED1A13008A86B6 /* Player.swift in Sources */,
 				769F4EAF210B6631000DD23B /* VideoViewController.swift in Sources */,
 				737622CB21CA4EED005B603E /* ArtistsFollowedCollectionCell.swift in Sources */,
@@ -1964,7 +2007,8 @@
 				762271A8213D8D510018689E /* Location.swift in Sources */,
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				769F4E87210A143C000DD23B /* PlayerPlaylistRootControllerViewModel.swift in Sources */,
-				7641B2EC21CA88C2005535E6 /* KaraokeControllerViewModel.swift in Sources */,
+				7641B2F721CD3EDC005535E6 /* KaraokeIntervalCell.swift in Sources */,
+				7641B2EC21CA88C2005535E6 /* KaraokeViewModel.swift in Sources */,
 				7665334620FF1CFA00FEC702 /* PagesRouter.swift in Sources */,
 				763931EB2118748200A65257 /* PlayerNowPlayingRouter.swift in Sources */,
 				76F1FA6020DBA9FF00C9191F /* AppViewModel.swift in Sources */,
@@ -1977,7 +2021,7 @@
 				762DD779213FE14F0046A984 /* RegionsSelectableListControllerViewModel.swift in Sources */,
 				AB1423772125A58200C926F5 /* ProgressPresenting.swift in Sources */,
 				7665334720FF1CFA00FEC702 /* PagesViewController.swift in Sources */,
-				76F1FA6C20DBD96C00C9191F /* RoundedButton.swift in Sources */,
+				76F1FA6C20DBD96C00C9191F /* DesignableButton.swift in Sources */,
 				769F4E97210B5BA1000DD23B /* PlayerContentContainerControllerViewModel.swift in Sources */,
 				76EDBD1920F78FCD0021297F /* AppError.swift in Sources */,
 				737BB2CA21C9347B0062A3A5 /* ViewIndicator.swift in Sources */,
@@ -2066,9 +2110,10 @@
 				76A45B4C213944180080885D /* SelectableListItemTableViewCell.swift in Sources */,
 				76A45B40213926380080885D /* SelectableListControllerViewModel.swift in Sources */,
 				737BB2DA21C936A30062A3A5 /* ViewController+ErrorMessage.swift in Sources */,
+				7641B2F221CCE74B005535E6 /* KaraokeHeaderView.swift in Sources */,
 				76C821AC21425F7500A6F5AE /* HowHearSelectableListControllerViewModel.swift in Sources */,
 				7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */,
-				7641B2EF21CA88C2005535E6 /* KaraokeViewModel.swift in Sources */,
+				7641B2EF21CA88C2005535E6 /* KaraokeViewModelProtocol.swift in Sources */,
 				764D6843214920C300F52730 /* Genre.swift in Sources */,
 				764D684D214A36AA00F52730 /* LanguagesSelectableListControllerViewModel.swift in Sources */,
 				76D39CF12112EF3A00D47DFA /* TrackView.swift in Sources */,
@@ -2077,6 +2122,7 @@
 				76D39CFA211353A200D47DFA /* PlaylistHeaderViewModel.swift in Sources */,
 				763931EC2118748200A65257 /* PlayerNowPlayingViewController.swift in Sources */,
 				763931F42118831600A65257 /* PlayerMyPlaylistsControllerViewModel.swift in Sources */,
+				7641B2F921CD4772005535E6 /* DefaultKaraokeIntervalViewModel.swift in Sources */,
 				764E7EDD2188C99300952182 /* PlaylistActions.swift in Sources */,
 				737BB2C921C9347B0062A3A5 /* NotNilObservable.swift in Sources */,
 				737BB2D221C9347B0062A3A5 /* CatchError.swift in Sources */,
@@ -2109,10 +2155,12 @@
 				763C904C20FCBABD007C1F86 /* TabBarControllerViewModel.swift in Sources */,
 				763C905720FDDE96007C1F86 /* AuthorizationControllerViewModel.swift in Sources */,
 				76C821B521440E9E00A6F5AE /* HobbiesContainerView.swift in Sources */,
+				76FF911221DF501500D4FE94 /* RoundedButton.swift in Sources */,
 				7686D4DB21660D2A0001B061 /* VerticalButton.swift in Sources */,
 				76525E692146722700C556D6 /* RestorePasswordRouter.swift in Sources */,
 				76C8DE03211090AA00773BB1 /* TrackWriter.swift in Sources */,
 				7630FA3F2183015100F795EA /* OptionalValue.swift in Sources */,
+				7641B2F421CCE75D005535E6 /* KaraokeFooterView.swift in Sources */,
 				763478412153DECD001F85F6 /* AddNewSelectableListItemViewModel.swift in Sources */,
 				764B854B2137C80100071F30 /* ValidatebleField+Extension.swift in Sources */,
 				7634783F2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift in Sources */,

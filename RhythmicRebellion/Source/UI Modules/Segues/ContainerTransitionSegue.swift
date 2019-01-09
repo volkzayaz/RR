@@ -43,10 +43,12 @@ class ContainerTransitionSegue: UIStoryboardSegue {
 
         destinationViewController.view.frame = containerViewController.containerView.bounds
 
+        currentViewController.willMove(toParent: nil)
+
         containerViewController.transition(from: currentViewController,
                                            to: destinationViewController,
                                            duration: 0.0,
-                                           options: [],
+                                           options: [.layoutSubviews],
                                            animations: {
                                              destinationViewController.view.frame = containerViewController.containerView.bounds
                                             }) { [currentViewController, destinationViewController, containerViewController] (success) in
@@ -58,8 +60,9 @@ class ContainerTransitionSegue: UIStoryboardSegue {
                                                                              self.destination.view.bottomAnchor.constraint(equalTo: containerViewController.containerView.bottomAnchor),
                                                                              self.destination.view.rightAnchor.constraint(equalTo: containerViewController.containerView.rightAnchor)])
 
-                                                currentViewController.willMove(toParent: nil)
                                                 currentViewController.removeFromParent()
+
+                                                destinationViewController.didMove(toParent: containerViewController)
 
                                                 containerViewController.currentViewController = destinationViewController
                                             }

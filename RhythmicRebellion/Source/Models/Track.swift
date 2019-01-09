@@ -159,6 +159,23 @@ public struct Track: Codable {
             try container.encode(priceValue, forKey: .price)
         }
     }
+
+    func thumbnailURL(with orderedImageLinksTypes: [ImageLinkType]) -> URL? {
+
+        for trackImage in self.images {
+            guard let imageLink = trackImage.firstImageLink(from: orderedImageLinksTypes) else { continue }
+
+            switch imageLink.path {
+            case .url(let urlString):
+                guard let imageLinkURL = URL(string: urlString) else { continue }
+                return imageLinkURL
+            default: continue
+            }
+        }
+
+        return nil
+    }
+
 }
 
 extension Track: Equatable {

@@ -36,6 +36,12 @@ class GradientView: UIView {
         gradientLayer.colors    = [startColor.cgColor, endColor.cgColor]
     }
 
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let view = super.hitTest(point, with: event), view != self else { return nil }
+
+        return view
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         updateLocations()
