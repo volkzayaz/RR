@@ -9,23 +9,7 @@
 import Foundation
 import Alamofire
 
-protocol AudioFileLocalStorageServiceWatcher: class {
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem)
-}
-
-extension AudioFileLocalStorageServiceWatcher {
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) { }
-}
-
-
-class AudioFileLocalStorageService: NSObject, Watchable {
-
-    typealias WatchType = AudioFileLocalStorageServiceWatcher
-    let watchersContainer = WatchersContainer<WatchType>()
+class AudioFileLocalStorageService: NSObject {
 
     let syncQueue: DispatchQueue
 
@@ -175,9 +159,9 @@ class AudioFileLocalStorageService: NSObject, Watchable {
             downloadTask.resume()
 
             DispatchQueue.main.async {
-                self.watchersContainer.invoke { (observer) in
-                    observer.audioFileLocalStorageService(self, didStartDownload: trackAudioFileLocalItem)
-                }
+//                self.watchersContainer.invoke { (observer) in
+//                    observer.audioFileLocalStorageService(self, didStartDownload: trackAudioFileLocalItem)
+//                }
             }
         }
     }
@@ -341,10 +325,10 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
 
             DispatchQueue.main.async { [item] in
 //                if let nsError = error as NSError?, nsError.code == NSURLErrorCancelled {
-                    self.watchersContainer.invoke { (observer) in
-                        observer.audioFileLocalStorageService(self, didCancelDownload: item)
+//                    self.watchersContainer.invoke { (observer) in
+//                        observer.audioFileLocalStorageService(self, didCancelDownload: item)
 //                    }
-                }
+//                }
             }
 
             self.save()
@@ -370,9 +354,9 @@ extension AudioFileLocalStorageService: URLSessionDownloadDelegate {
                 item.state = .downloaded(itemSuggestedLocalURL)
 
                 DispatchQueue.main.async {
-                    self.watchersContainer.invoke { (observer) in
-                        observer.audioFileLocalStorageService(self, didFinishDownload: item)
-                    }
+//                    self.watchersContainer.invoke { (observer) in
+//                        observer.audioFileLocalStorageService(self, didFinishDownload: item)
+//                    }
                 }
 
             } catch {

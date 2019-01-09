@@ -30,7 +30,6 @@ struct ArtistRouter : MVVM_Router {
                                    application: DataLayer.get.application,
                                    player: DataLayer.get.player,
                                    restApiService: DataLayer.get.restApiService,
-                                   audioFileLocalStorageService: DataLayer.get.audioFileLocalStorageService,
                                    provider: AlbumPlaylistProvider(album: album))
         vc.configure(viewModel: vm, router: router)
 
@@ -48,7 +47,6 @@ struct ArtistRouter : MVVM_Router {
                                    application: DataLayer.get.application,
                                    player: DataLayer.get.player,
                                    restApiService: DataLayer.get.restApiService,
-                                   audioFileLocalStorageService: DataLayer.get.audioFileLocalStorageService,
                                    provider: ArtistPlaylistProvider(artistPlaylist: playlist))
         vc.configure(viewModel: vm, router: router)
         
@@ -63,17 +61,6 @@ struct ArtistRouter : MVVM_Router {
         
     }
     
-    func openIn(for url: URL, sourceRect: CGRect, sourceView: UIView) {
-        
-        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        
-        activityViewController.popoverPresentationController?.sourceView = sourceView
-        activityViewController.popoverPresentationController?.sourceRect = sourceRect
-        
-        owner.present(activityViewController, animated: true, completion: nil)
-        
-    }
-    
     func showTip(text: String, view: UIView, superView: UIView) {
         
         let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
@@ -81,26 +68,9 @@ struct ArtistRouter : MVVM_Router {
         
     }
     
-    
-    //                case .openIn(let sourceRect, let sourceView): self.showOpenIn(itemAt: indexPath,
-    //                                                                              sourceRect: sourceRect,
-    //                                                                              sourceView: sourceView)
-    //                case .showHint(let sourceView, let hintText): self.showHint(sourceView: sourceView, text: hintText)
-
-    
-    /**
-     
-     func showNextModule(with data: String) {
-     
-        let nextViewController = owner.storyboard.instantiate()
-        let nextRouter = NextRouter(owner: nextViewController)
-        let nextViewModel = NextViewModel(router: nextRuter, data: data)
-        
-        nextViewController.viewModel = nextViewModel
-        owner.present(nextViewController)
-     }
-     
-     */
+    func trackListRouter() -> TrackListRouter {
+        return TrackListRouter(owner: owner)
+    }
     
 }
 

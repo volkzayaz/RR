@@ -98,12 +98,12 @@ class TrackListViewModel {
     private(set) weak var delegate: TrackListBindings?
     private weak var application: Application?
     private weak var player: Player!
-    private weak var audioFileLocalStorageService: AudioFileLocalStorageService?
     
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     private let trackPriceFormatter = MoneyFormatter()
     
     let trackProivder: TrackProvider
+    private let router: TrackListRouter
     private let selectedProvider: SelectedProvider
     private let actionsProvider: ActionsProvider
     
@@ -123,21 +123,20 @@ class TrackListViewModel {
     deinit {
         self.application?.removeWatcher(self)
         self.player?.removeWatcher(self)
-        self.audioFileLocalStorageService?.removeWatcher(self)
     }
     
     init(application: Application,
          player: Player,
-         audioFileLocalStorageService: AudioFileLocalStorageService,
          dataProvider: TrackProvider,
+         router: TrackListRouter,
          actionsProvider: @escaping ActionsProvider = { _, _, _ in [] },
          selectedProvider: @escaping SelectedProvider = { _, _, _ in }) {
     
         self.application = application
         self.player = player
-        self.audioFileLocalStorageService = audioFileLocalStorageService
         
         self.trackProivder = dataProvider
+        self.router = router
         self.selectedProvider = selectedProvider
         self.actionsProvider = actionsProvider
     }
@@ -152,7 +151,6 @@ extension TrackListViewModel {
         self.loadItems()
         self.application?.addWatcher(self)
         self.player?.addWatcher(self)
-        self.audioFileLocalStorageService?.addWatcher(self)
     }
     
     func loadItems() {
@@ -196,10 +194,10 @@ extension TrackListViewModel {
     
     func trackViewModel(for track: Track) -> TrackViewModel {
         
-        return TrackViewModel(track: track,
+        return TrackViewModel(router: router.trackRouter(for: track),
+                              track: track,
                               user: application?.user,
                               player: player,
-                              audioFileLocalStorageService: audioFileLocalStorageService,
                               textImageGenerator: textImageGenerator,
                               isCurrentInPlayer: player?.currentItem?.playlistItem.track == track,
                               isLockedForActions: false) //self.lockedPlaylistItemsIds.contains(track.id)
@@ -351,51 +349,9 @@ extension TrackListViewModel {
 
 /////////////////
 /////////////////
-/////---------Downloading audio
-/////////////////
-/////////////////
-
-
-
-
-extension TrackListViewModel {
-    
-    func downloadObject(at indexPath: IndexPath) {
-        guard indexPath.item < tracks.count,
-              let trackAudioFile = tracks[indexPath.item].audioFile else { return }
-        
-        self.audioFileLocalStorageService?.download(trackAudioFile: trackAudioFile)
-    }
-    
-    func cancelDownloadingObject(at indexPath: IndexPath) {
-        guard indexPath.item < tracks.count,
-            let trackAudioFile = tracks[indexPath.item].audioFile else { return }
-        
-        self.audioFileLocalStorageService?.cancelDownloading(for: trackAudioFile)
-    }
-    
-    func objectLoaclURL(at indexPath: IndexPath) -> URL? {
-        guard indexPath.item < tracks.count,
-            let trackAudioFile = tracks[indexPath.item].audioFile,
-            let state = self.audioFileLocalStorageService?.state(for: trackAudioFile) else { return nil }
-        
-        switch state {
-        case .downloaded(let localURL): return localURL
-        default: return nil
-        }
-    }
-}
-
-
-
-/////////////////
-/////////////////
 /////---------User profile changed
 /////////////////
 /////////////////
-
-
-
 
 
 extension TrackListViewModel: ApplicationWatcher {
@@ -480,57 +436,6 @@ extension TrackListViewModel: PlayerWatcher {
     
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {
         self.delegate?.reloadUI()
-    }
-}
-
-/////////////////
-/////////////////
-/////---------Audio downloading state change
-/////////////////
-/////////////////
-
-extension TrackListViewModel: AudioFileLocalStorageServiceWatcher {
-    
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didStartDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
-        
-        var indexPaths: [IndexPath] = []
-        
-        for (index, track) in tracks.enumerated() {
-            guard let audioFile = track.audioFile, audioFile.id == trackAudioFileLocalItem.trackAudioFile.id else { continue }
-            indexPaths.append(IndexPath(row: index, section: 0))
-        }
-        
-        if indexPaths.isEmpty == false {
-            self.delegate?.reloadObjects(at: indexPaths)
-        }
-    }
-    
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didFinishDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
-        
-        var indexPaths: [IndexPath] = []
-        
-        for (index, track) in tracks.enumerated() {
-            guard let audioFile = track.audioFile, audioFile.id == trackAudioFileLocalItem.trackAudioFile.id else { continue }
-            indexPaths.append(IndexPath(row: index, section: 0))
-        }
-        
-        if indexPaths.isEmpty == false {
-            self.delegate?.reloadObjects(at: indexPaths)
-        }
-    }
-    
-    func audioFileLocalStorageService(_ audioFileLocalStorageService: AudioFileLocalStorageService, didCancelDownload trackAudioFileLocalItem: TrackAudioFileLocalItem) {
-        
-        var indexPaths: [IndexPath] = []
-        
-        for (index, track) in tracks.enumerated() {
-            guard let audioFile = track.audioFile, audioFile.id == trackAudioFileLocalItem.trackAudioFile.id else { continue }
-            indexPaths.append(IndexPath(row: index, section: 0))
-        }
-        
-        if indexPaths.isEmpty == false {
-            self.delegate?.reloadObjects(at: indexPaths)
-        }
     }
 }
 

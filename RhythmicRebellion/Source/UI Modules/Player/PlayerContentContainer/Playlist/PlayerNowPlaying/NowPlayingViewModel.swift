@@ -116,8 +116,8 @@ final class NowPlayingViewModel {
         
         tracksViewModel = TrackListViewModel(application: application,
                                              player: player,
-                                             audioFileLocalStorageService: audioFileLocalStorageService,
                                              dataProvider: NowPlayingProvider(player: player),
+                                             router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)
         

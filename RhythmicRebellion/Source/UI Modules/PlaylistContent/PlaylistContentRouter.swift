@@ -10,6 +10,9 @@
 import UIKit
 
 protocol PlaylistContentRouter: FlowRouter {
+    
+    var owner: UIViewController { get }
+    
     func showAddToPlaylist(for tracks: [Track])
     func showAddToPlaylist(for playlist: Playlist)
 
@@ -17,7 +20,11 @@ protocol PlaylistContentRouter: FlowRouter {
 }
 
 final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegueCompatible {
-
+    
+    var owner: UIViewController {
+        return sourceController!
+    }
+    
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
 
@@ -46,7 +53,6 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
     }
-
 
     func prepare(for destination: DefaultPlaylistContentRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
@@ -83,7 +89,6 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
                                    application: self.dependencies.application,
                                    player: self.dependencies.player,
                                    restApiService: self.dependencies.restApiService,
-                                   audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService,
                                    provider: provider)
 
         controller.configure(viewModel: vm, router: self)

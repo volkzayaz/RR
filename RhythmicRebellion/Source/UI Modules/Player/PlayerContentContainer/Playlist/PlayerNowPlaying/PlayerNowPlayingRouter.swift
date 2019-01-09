@@ -10,10 +10,16 @@
 import UIKit
 
 protocol PlayerNowPlayingRouter: FlowRouter {
+    var owner: UIViewController { get }
     func showAddToPlaylist(for tracks: [Track])
 }
 
 final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSegueCompatible {
+    
+    var owner: UIViewController {
+        return sourceController!
+    }
+    
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions

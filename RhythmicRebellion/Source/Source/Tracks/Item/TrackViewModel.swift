@@ -1,12 +1,12 @@
 //
-//  TrackItemViewModel.swift
+//  TrackViewModel.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 8/2/18.
-//  Copyright © 2018 Patron Empowerment, LLC. All rights reserved.
+//  Created by Vlad Soroka on 1/9/19.
+//  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 import RxSwift
 import RxCocoa
@@ -14,7 +14,7 @@ import RxCocoa
 import DownloadButton
 
 extension TrackViewModel {
- 
+    
     var id: String { return String(track.id) }
     
     var title: String { return track.name }
@@ -47,7 +47,7 @@ extension TrackViewModel {
     var isPlaying: Bool {
         return isCurrentInPlayer && player.isPlaying
     }
-
+    
     var isCensorship: Bool {
         return user?.isCensorshipTrack(track) ?? track.isCensorship
     }
@@ -56,18 +56,18 @@ extension TrackViewModel {
     var downloadPercent: Driver<CGFloat> {
         return dataState.asDriver().map { x -> CGFloat? in
             guard let state = x,
-                  case .progress(let p) = state else {
+                case .progress(let p) = state else {
                     return nil
             }
             
             return CGFloat(p)
-        }
-        .notNil()
+            }
+            .notNil()
     }
     
     var downloadDisabled: Bool {
         let userHasPurchase = user?.hasPurchase(for: track) ?? false
-        return track.isFollowAllowFreeDownload || userHasPurchase
+        return !(track.isFollowAllowFreeDownload || userHasPurchase)
     }
     
     var downloadState: Driver<PKDownloadButtonState> {
@@ -91,12 +91,12 @@ extension TrackViewModel {
     
 }
 
-struct TrackViewModel {
+struct TrackViewModel : MVVM_ViewModel {
     
     let previewOptionViewModel: TrackPreviewOptionViewModel
-
+    
     var isLockedForActions: Bool
-
+    
     let track: Track
     let user: User?
     
@@ -108,10 +108,11 @@ struct TrackViewModel {
     fileprivate let token: BehaviorSubject<DownloadToken?> = BehaviorSubject(value: nil)
     fileprivate let dataState: BehaviorRelay<ChunkedData<URL>?> = BehaviorRelay(value: nil)
     
-    init(track: Track, user: User?,
-         player: Player, audioFileLocalStorageService: AudioFileLocalStorageService?,
+    init(router: TrackRouter, track: Track, user: User?,
+         player: Player,
          textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool, isLockedForActions: Bool) {
-
+        
+        self.router = router
         self.track = track
         self.isCurrentInPlayer = isCurrentInPlayer
         self.user = user
@@ -121,11 +122,11 @@ struct TrackViewModel {
                                                                                           user: user,
                                                                                           player: player,
                                                                                           textImageGenerator: textImageGenerator)
-
+        
         self.isLockedForActions = isLockedForActions
         
         downloadTrigger.asObservable().notNil().map {
-                return DownloadManager.default.download(x: track.audioFile!.urlString)
+            return DownloadManager.default.download(x: track.audioFile!.urlString)
             }
             .flatMapLatest { [weak t = token] input -> Observable<ChunkedData<URL>> in
                 
@@ -138,9 +139,18 @@ struct TrackViewModel {
             .bind(to: dataState)
             .disposed(by: bag)
         
+        indicator.asDriver()
+            .drive(onNext: { [weak h = router.owner] (loading) in
+                h?.changedAnimationStatusTo(status: loading)
+            })
+            .disposed(by: bag)
+        
     }
     
+    let router: TrackRouter
+    fileprivate let indicator: ViewIndicator = ViewIndicator()
     fileprivate let bag = DisposeBag()
+    
 }
 
 extension TrackViewModel: Equatable {
@@ -152,6 +162,17 @@ extension TrackViewModel: Equatable {
     func cancelDownload() {
         token.unsafeValue?.cancel()
         token.onNext(nil)
+    }
+    
+    func openIn(sourceRect: CGRect, sourceView: UIView) {
+        
+        guard let data = dataState.value,
+              case .data(let url) = data else {
+               return fatalErrorInDebug("Trying to `open in` track \(track.audioFile?.urlString) that hasn't been downloaded yet")
+        }
+        
+        router.showOpenIn(url: url, sourceRect: sourceRect, sourceView: sourceView)
+        
     }
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {

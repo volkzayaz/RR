@@ -19,9 +19,6 @@ class TrackView: UIView {
 
     enum Actions {
         case showActions
-        case download
-        case cancelDownloading
-        case openIn(CGRect, UIView)
         case showHint(UIView, String)
     }
 
@@ -237,15 +234,13 @@ extension TrackView: PKDownloadButtonDelegate {
 
         switch state {
         case .startDownload:
-            actionCallback?(.download)
             viewModel.download()
             
         case .pending, .downloading:
-            actionCallback?(.cancelDownloading)
             viewModel.cancelDownload()
             
         case .downloaded:
-            actionCallback?(.openIn(downloadButton.frame, self.stackView))
+            viewModel.openIn(sourceRect: downloadButton.frame, sourceView: stackView)
         }
     }
 

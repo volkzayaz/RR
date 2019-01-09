@@ -127,18 +127,6 @@ final class PlaylistContentViewController: UIViewController {
         self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
     }
 
-    func showOpenIn(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {
-
-        guard let downloadedURL = self.viewModel.tracksViewModel.objectLoaclURL(at: indexPath) else { return }
-
-        let activityViewController = UIActivityViewController(activityItems: [downloadedURL], applicationActivities: nil)
-
-        activityViewController.popoverPresentationController?.sourceView = sourceView
-        activityViewController.popoverPresentationController?.sourceRect = sourceRect
-
-        self.present(activityViewController, animated: true, completion: nil)
-    }
-
     func showHint(sourceView: UIView, text: String) {
 
         let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
@@ -179,11 +167,7 @@ extension PlaylistContentViewController: UITableViewDataSource, UITableViewDeleg
                 self.showActions(itemAt: indexPath,
                                  sourceRect: trackItemTableViewCell.trackView.actionButton.frame,
                                  sourceView: trackItemTableViewCell.trackView.actionButtonContainerView)
-            case .download: self.viewModel.tracksViewModel.downloadObject(at: indexPath)
-            case .cancelDownloading: self.viewModel.tracksViewModel.cancelDownloadingObject(at: indexPath)
-            case .openIn(let sourceRect, let sourceView): self.showOpenIn(itemAt: indexPath,
-                                          sourceRect: sourceRect,
-                                          sourceView: sourceView)
+            
             case .showHint(let sourceView, let hintText): self.showHint(sourceView: sourceView, text: hintText)
             }
         }

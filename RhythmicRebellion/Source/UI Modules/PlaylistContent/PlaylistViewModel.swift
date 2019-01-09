@@ -149,7 +149,6 @@ final class PlaylistViewModel {
          application: Application,
          player: Player,
          restApiService: RestApiService,
-         audioFileLocalStorageService: AudioFileLocalStorageService,
          provider: PlaylistProvider) {
         
         self.router = router
@@ -248,8 +247,8 @@ final class PlaylistViewModel {
         
         tracksViewModel = TrackListViewModel(application: application,
                                              player: player,
-                                             audioFileLocalStorageService: audioFileLocalStorageService,
                                              dataProvider: provider,
+                                             router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)
         
