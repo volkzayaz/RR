@@ -178,7 +178,7 @@ final class KaraokeViewController: UIViewController {
 }
 
 
-extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, KaraokeCollectionViewFlowLayoutViewModel {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.viewModel.numberOfItems(in: section)
@@ -197,25 +197,15 @@ extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDel
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let itemSize: CGSize
-
-        switch collectionViewLayout {
-
-        case let collectionViewFlowLayout as KaraokeOnePhraseCollectionViewFlowLayout:
-            let width = self.collectionView.frame.width - (collectionViewFlowLayout.sectionInset.left + collectionViewFlowLayout.sectionInset.right)
-            let height = self.viewModel.itemViewHeight(at: indexPath, with: width) + 2
-            itemSize = CGSize(width: width, height: max(height, round(self.collectionView.frame.height / 3)))
-
-        case let collectionViewFlowLayout as KaraokeScrollCollectionViewFlowLayout:
-            let width = self.collectionView.frame.width - (collectionViewFlowLayout.sectionInset.left + collectionViewFlowLayout.sectionInset.right)
-            let height = self.viewModel.itemViewHeight(at: indexPath, with: width) + 2
-            itemSize = CGSize(width: width, height: height)
-
-        default:
-            itemSize = CGSize.zero
+        guard let karaokeCollectionViewFlowLayout = collectionViewLayout as? KaraokeCollectionViewFlowLayout else {
+            fatalError("Incorrect KaraokeCollectionViewLayout")
         }
 
-        return itemSize
+        return karaokeCollectionViewFlowLayout.itemSize(at: indexPath, with: self)
+    }
+
+    func itemSize(at indexPath: IndexPath, for width: CGFloat) -> CGSize {
+        return self.viewModel.itemSize(at: indexPath, for: width)
     }
 }
 

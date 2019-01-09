@@ -92,15 +92,16 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
         return DefaultKaraokeIntervalViewModel(font: font, karaokeInterval: karaokeInterval)
     }
 
-    func itemViewHeight(at indexPath: IndexPath, with width: CGFloat) -> CGFloat {
-        guard let karaoke = self.karaoke, karaoke.intervals.count > indexPath.item else { return 0.0 }
+    func itemSize(at indexPath: IndexPath, for width: CGFloat) -> CGSize {
+        guard let karaoke = self.karaoke, karaoke.intervals.count > indexPath.item else { return CGSize.zero }
 
         let karaokeInterval = karaoke.intervals[indexPath.item]
 
         let font = self.contentFont()
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
         let boundingBox = karaokeInterval.content.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font], context: nil)
-        return round(boundingBox.height)
+
+        return CGSize(width: width, height: round(boundingBox.height))
     }
 
     func change(viewMode: KaraokeViewMode) {

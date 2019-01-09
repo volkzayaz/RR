@@ -9,6 +9,10 @@
 import UIKit
 
 
+protocol KaraokeCollectionViewFlowLayoutViewModel {
+    func itemSize(at indexPath: IndexPath, for width: CGFloat) -> CGSize
+}
+
 class KaraokeCollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 
     var boundsCenterOffset = CGPoint(x: 0.0, y: 0.0)
@@ -142,15 +146,24 @@ class KaraokeCollectionViewFlowLayout: UICollectionViewFlowLayout {
         karaokeLayoutAttributes.boundsCenterOffset = boundsCenterOffset
         karaokeLayoutAttributes.activeDistance = karaokeLayoutAttributes.frame.height + self.minimumLineSpacing
     }
+
+    open func itemSize(at indexPath: IndexPath, with viewModel: KaraokeCollectionViewFlowLayoutViewModel) -> CGSize {
+
+        guard let collectionView = self.collectionView else { return CGSize.zero }
+
+        let width = collectionView.frame.width - (self.sectionInset.left + self.sectionInset.right)
+        var itemSize = viewModel.itemSize(at: indexPath, for: width)
+
+        itemSize.height += 2
+
+        return itemSize
+    }
 }
 
 class KaraokeScrollCollectionViewFlowLayout: KaraokeCollectionViewFlowLayout {
 }
 
 class KaraokeOnePhraseCollectionViewFlowLayout: KaraokeCollectionViewFlowLayout {
-
-    
-
 
     open override func update(karaokeLayoutAttributes: KaraokeCollectionViewLayoutAttributes, in collectionView: UICollectionView) {
 
@@ -168,4 +181,12 @@ class KaraokeOnePhraseCollectionViewFlowLayout: KaraokeCollectionViewFlowLayout 
 
     }
 
+    open override func itemSize(at indexPath: IndexPath, with viewModel: KaraokeCollectionViewFlowLayoutViewModel) -> CGSize {
+
+        guard let collectionView = self.collectionView else { return CGSize.zero }
+
+        let itemSize = super.itemSize(at: indexPath, with: viewModel)
+
+        return CGSize(width: itemSize.width, height: max(itemSize.height, collectionView.frame.height / 3))
+    }
 }

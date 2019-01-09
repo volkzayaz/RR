@@ -28,7 +28,7 @@ protocol KaraokeViewModelProtocol: class {
 
     func numberOfItems(in section: Int) -> Int
     func item(at indexPath: IndexPath) -> DefaultKaraokeIntervalViewModel?
-    func itemViewHeight(at indexPath: IndexPath, with width: CGFloat) -> CGFloat
+    func itemSize(at indexPath: IndexPath, for width: CGFloat) -> CGSize
 
     func change(viewMode: KaraokeViewMode)
     func changeAudioFileType()
