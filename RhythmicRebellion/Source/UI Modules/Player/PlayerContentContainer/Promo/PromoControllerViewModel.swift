@@ -62,22 +62,8 @@ final class PromoControllerViewModel: PromoViewModel {
     }
 
     func thumbnailURL() -> URL? {
-        guard let trackImages = self.playerItem?.playlistItem.track.images else { return nil }
-
-        let orderedImageLinksTypes: [ImageLinkType] = [.thumb, .small, .medium, .xsmall, .original, .big, .large, .xlarge, .preload]
-
-        for trackImage in trackImages {
-            guard let imageLink = trackImage.firstImageLink(from: orderedImageLinksTypes) else { continue }
-
-            switch imageLink.path {
-            case .url(let urlString):
-                guard let imageLinkURL = URL(string: urlString) else { continue }
-                return imageLinkURL
-            default: continue
-            }
-        }
-
-        return nil
+        guard let track = self.playerItem?.playlistItem.track else { return nil }
+        return track.thumbnailURL(with: [.thumb, .small, .medium, .xsmall, .original, .big, .large, .xlarge, .preload])
     }
 
     func setSkipAddons(skip: Bool) {

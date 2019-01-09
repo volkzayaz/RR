@@ -53,7 +53,7 @@ final class DefaultKaraokeRouter:  KaraokeRouter, FlowRouterSegueCompatible {
 
     func start(controller: KaraokeViewController) {
         sourceController = controller
-        let vm = KaraokeControllerViewModel(router: self, player: self.dependencies.player)
+        let vm = KaraokeViewModel(router: self, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
     }
 }

@@ -86,7 +86,11 @@ final class PlayerViewController: UIViewController {
         self.playerContentButtons = [self.videoButton, self.lyricsButton, self.playlistButton, self.promoButton]
 
         self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+        self.playerItemProgressView.setThumbImage(UIImage(named: "ProgressIndicator")?.withRenderingMode(.alwaysTemplate), for: [.normal, .highlighted])
+
+        self.playerItemProgressView.setThumbImage(UIImage(named: "KaraokeProgressIndicator"), for: .selected)
+        self.playerItemProgressView.setThumbImage(UIImage(named: "KaraokeProgressIndicator"), for: [.selected, .highlighted])
+
 
         self.playerItemProgressViewTapGestureRecognizer.delegate = self
 
@@ -288,12 +292,15 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
         self.playerItemPreviewOptionButton.setImage(self.viewModel.playerItemPreviewOptionViewModel?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
 
+        self.playerItemProgressView.isSelected = self.viewModel.isKaraokeEnabled
+
         self.refreshProgressUI()
+        self.refreshKaraokeUI()
     }
 
     func refreshProgressUI() {
 
-        self.playerItemProgressView.restrictedValue = self.viewModel.playerItemRestrictedValue
+        self.playerItemProgressView.restrictedValue = self.viewModel.playerItemRestrictedValue        
 
         self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
 
@@ -301,7 +308,17 @@ extension PlayerViewController: PlayerViewModelDelegate {
         if self.playerItemProgressView.isTracking == false {
             self.playerItemProgressView.setValue(self.viewModel.playerItemProgressValue, animated: true)
         }
+
         self.updatePlayPauseState()
+    }
+
+    func refreshKaraokeUI() {
+
+        guard self.viewModel.isKaraokeEnabled else { self.playerItemProgressView.update(with: nil); return }
+        guard self.playerItemProgressView.karaokeIntervalsViewModelId != self.viewModel.karaokeModelId else { return }
+
+        let karaokeIntervalsViewModel = self.viewModel.karaokeIntervalsViewModel()
+        self.playerItemProgressView.update(with: karaokeIntervalsViewModel)
     }
 }
 
