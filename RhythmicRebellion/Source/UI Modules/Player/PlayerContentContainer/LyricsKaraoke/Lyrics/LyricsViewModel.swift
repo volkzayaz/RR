@@ -62,6 +62,10 @@ final class LyricsViewModel: LyricsViewModelProtocol {
         if  self.application.user?.isCensorshipTrack(track) ?? track.isCensorship {
             self.infoText.append("\n" + NSLocalizedString("Contains explicit material", comment: "Contains explicit material hint text") + "\n")
         }
+
+        if track.previewType == .noPreview {
+            self.infoText.append("\n" + NSLocalizedString("No preview", comment: "No preview text") + "\n")
+        }
     }
 
     func switchToKaraoke() {
