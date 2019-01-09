@@ -178,7 +178,7 @@ final class KaraokeViewController: UIViewController {
 }
 
 
-extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, KaraokeCollectionViewFlowLayoutViewModel {
+extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.viewModel.numberOfItems(in: section)
@@ -201,11 +201,7 @@ extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDel
             fatalError("Incorrect KaraokeCollectionViewLayout")
         }
 
-        return karaokeCollectionViewFlowLayout.itemSize(at: indexPath, with: self)
-    }
-
-    func itemSize(at indexPath: IndexPath, for width: CGFloat) -> CGSize {
-        return self.viewModel.itemSize(at: indexPath, for: width)
+        return karaokeCollectionViewFlowLayout.itemSize(at: indexPath, with: self.viewModel)
     }
 }
 
