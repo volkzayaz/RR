@@ -55,6 +55,10 @@ final class LyricsViewModel: LyricsViewModelProtocol {
 
         self.infoText = ""
 
+        if track.isInstrumental {
+            self.infoText.append("\n" + NSLocalizedString("This is an instrumental song", comment: "This is an instrumental song") + "\n")
+        }
+
         var isCensorshipTrack = track.isCensorship
         if isCensorshipTrack == true, let user = self.application.user {
             isCensorshipTrack = user.stubTrackAudioFileReason(for: track) == .censorship
@@ -64,8 +68,8 @@ final class LyricsViewModel: LyricsViewModelProtocol {
             self.infoText.append("\n" + NSLocalizedString("Contains explicit material", comment: "Contains explicit material hint text") + "\n")
         }
 
-        if track.isInstrumental {
-            self.infoText.append("\n" + NSLocalizedString("This is an instrumental song", comment: "This is an instrumental song") + "\n")
+        if track.previewType == .noPreview {
+            self.infoText.append("\n" + NSLocalizedString("No preview", comment: "No preview text") + "\n")
         }
     }
 
