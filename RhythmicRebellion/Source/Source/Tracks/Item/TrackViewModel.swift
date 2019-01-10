@@ -108,6 +108,8 @@ struct TrackViewModel : MVVM_ViewModel {
     fileprivate let token: BehaviorSubject<DownloadToken?> = BehaviorSubject(value: nil)
     fileprivate let dataState: BehaviorRelay<ChunkedData<URL>?> = BehaviorRelay(value: nil)
     
+    fileprivate let downloadManager = MulticastDownloadManager.default
+    
     init(router: TrackRouter, track: Track, user: User?,
          player: Player,
          textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool, isLockedForActions: Bool) {
@@ -125,17 +127,15 @@ struct TrackViewModel : MVVM_ViewModel {
         
         self.isLockedForActions = isLockedForActions
         
-        downloadTrigger.asObservable().notNil().map {
-            return DownloadManager.default.download(x: track.audioFile!.urlString)
+        let m = downloadManager
+        Observable.never().startWith(0)
+            .flatMap { _ in
+                m.downloadStatus(for: track.audioFile!.urlString)
+                    .silentCatch()
             }
-            .flatMapLatest { [weak t = token] input -> Observable<ChunkedData<URL>> in
-                
-                let newToken = input.1
-                t?.unsafeValue?.cancel()
-                t?.onNext(newToken)
-                
-                return input.0.silentCatch()
-            }
+            .do(onCompleted: {
+                print("Hi")
+            })
             .bind(to: dataState)
             .disposed(by: bag)
         
@@ -156,12 +156,11 @@ struct TrackViewModel : MVVM_ViewModel {
 extension TrackViewModel: Equatable {
     
     func download() {
-        downloadTrigger.onNext( () )
+        downloadManager.start(for: track.audioFile!.urlString)
     }
     
     func cancelDownload() {
-        token.unsafeValue?.cancel()
-        token.onNext(nil)
+        downloadManager.cancel(for: track.audioFile!.urlString)
     }
     
     func openIn(sourceRect: CGRect, sourceView: UIView) {

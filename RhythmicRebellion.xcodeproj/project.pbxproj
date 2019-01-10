@@ -48,6 +48,7 @@
 		738E60F421D7968F00E698B7 /* ArtistSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 738E60F321D7968F00E698B7 /* ArtistSectionHeader.xib */; };
 		738E60F621D7A4E800E698B7 /* ArtistCoverHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 738E60F521D7A4E800E698B7 /* ArtistCoverHeader.xib */; };
 		73E0A9E021E62A4500679C01 /* TrackListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */; };
+		73E0A9E221E62EA900679C01 /* Alamofire+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */; };
 		7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */; };
 		7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD420FF471300D90D73 /* SignUpRouter.swift */; };
 		7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD520FF471300D90D73 /* SignUpViewController.swift */; };
@@ -342,6 +343,7 @@
 		738E60F321D7968F00E698B7 /* ArtistSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArtistSectionHeader.xib; sourceTree = "<group>"; };
 		738E60F521D7A4E800E698B7 /* ArtistCoverHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArtistCoverHeader.xib; sourceTree = "<group>"; };
 		73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListRouter.swift; sourceTree = "<group>"; };
+		73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Rx.swift"; sourceTree = "<group>"; };
 		7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpControllerViewModel.swift; sourceTree = "<group>"; };
 		7606BDD420FF471300D90D73 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
 		7606BDD520FF471300D90D73 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -815,6 +817,7 @@
 				737BB2BD21C9347B0062A3A5 /* ViewIndicator.swift */,
 				737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */,
 				737BB2C221C9347B0062A3A5 /* MVVM */,
+				73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */,
 			);
 			path = RxExtensions;
 			sourceTree = "<group>";
@@ -1897,6 +1900,7 @@
 				76310DCB20F5F30800140D03 /* Alamofire+Extension.swift in Sources */,
 				76769A87218079A900DCB146 /* ChangeEmailViewController.swift in Sources */,
 				763931E121144E9300A65257 /* AlertActionsViewModel.swift in Sources */,
+				73E0A9E221E62EA900679C01 /* Alamofire+Rx.swift in Sources */,
 				76CE92AC2191805900956882 /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */,
 				764D683F2148E86200F52730 /* ProfileSettingsViewModel.swift in Sources */,
 				763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */,

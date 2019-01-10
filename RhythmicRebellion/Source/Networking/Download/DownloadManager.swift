@@ -37,7 +37,8 @@ struct DownloadManager {
         let config = URLSessionConfiguration.default
         config.httpMaximumConnectionsPerHost = 3
     
-        return SessionManager(configuration: config)
+        let x = SessionManager(configuration: config)
+        return x
     }()
     
     func download(x: URLConvertible) -> (Observable<ChunkedData<URL>>, DownloadToken) {
@@ -49,35 +50,82 @@ struct DownloadManager {
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
         
-        let task = sessionManager.download(x, to: destination)
+        let x = sessionManager.download(x, to: destination)
         
-        let o: Observable<ChunkedData<URL>> = Observable.create { (subscriber) -> Disposable in
-            
-                task.downloadProgress(closure: { (progress) in
-                    subscriber.onNext(.progress(x: progress.fractionCompleted))
-                })
-                .response { response in
-                    
-                    if let e = response.error {
-                        subscriber.onError(e)
-                        return
-                    }
-                    
-                    guard let path = response.destinationURL else {
-                        fatalError("Download task has neither error nor result. \(response)")
-                    }
-                    
-                    subscriber.onNext(.data(x: path))
-                    subscriber.onCompleted()
-                }
-            
-            return Disposables.create {
-                task.cancel()
-            }
-        
-        }
-    
-        return (o, task)
+        return (x.rx.download, x)
     }
     
+}
+
+
+class MulticastDownloadManager {
+    
+    static let `default` = MulticastDownloadManager(manager: DownloadManager.default)
+    
+    private let manager: DownloadManager
+    private let bag = DisposeBag()
+    
+    init(manager: DownloadManager) {
+        self.manager = manager
+    }
+    
+    fileprivate let pipe: BehaviorSubject<(String, ChunkedData<URL>)?> = BehaviorSubject(value: nil)
+    
+    ///TODO: wrap accesses into barier queue
+    var tasks: [String: DownloadToken] = [:]
+    
+    
+    func downloadStatus(for url: String) -> Observable<ChunkedData<URL>> {
+        return pipe.asObservable().notNil()
+            .filter { url == $0.0 }
+            .map { $0.1 }
+    }
+    
+    func start(for url: String) {
+        
+        ///quit if download is already in progress
+        guard tasks[url] == nil else { return }
+        
+        let res = manager.download(x: url)
+        
+        tasks[url] = res.1
+        
+        ///binding download task to global pipe to share with all subscribers
+        res.0.map { (url, $0) }
+            .silentCatch()
+            .do(onCompleted: { [unowned self] in
+                self.tasks.removeValue(forKey: url)
+            })
+            .bind(to: pipe)
+            .disposed(by: bag)
+        
+    }
+    
+    func pause(for url: String) {
+        
+        guard let task = tasks[url] else {
+            return fatalErrorInDebug("Trying to pause download of \(url). But MulticastDownloadManager does not contain download task for this url.")
+        }
+        
+        task.pause()
+    }
+    
+    func resume(for url: String) {
+        
+        guard let task = tasks[url] else {
+            return fatalErrorInDebug("Trying to resume download of \(url). But MulticastDownloadManager does not contain download task for this url.")
+        }
+        
+        task.resume()
+    }
+    
+    func cancel(for url: String) {
+        
+        guard let task = tasks[url] else {
+            return fatalErrorInDebug("Trying to cancel download of \(url). But MulticastDownloadManager does not contain download task for this url.")
+        }
+        
+        task.cancel()
+        
+    }
 }
