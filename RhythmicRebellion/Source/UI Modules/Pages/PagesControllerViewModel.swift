@@ -118,6 +118,11 @@ extension PagesControllerViewModel : PagesLocalStorageServiceWatcher {
         self.delegate?.reloadItemsUI(deletedAt: [IndexPath(item: pageIndex, section: 0)], insertedAt: [], updatedAt: [])
     }
 
+    func pagesLocalStorageServiceDidReset(_ pagesLocalStorageService: PagesLocalStorageService) {
+        self.router?.navigateToPagesList(animated: false)
+        self.delegate?.reloadUI()
+    }
+
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didSaveSnapshotImageFor page: Page) {
         guard let pageIndex = self.pages.index(of: page) else { return }
 

@@ -12,6 +12,7 @@ import UIKit
 protocol PagesRouter: FlowRouter, PageContentRouterDelegate {
 
     func navigate(to page: Page, animated: Bool)
+    func navigateToPagesList(animated: Bool)
 }
 
 final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible {
@@ -81,6 +82,10 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         self.sourceController?.navigationController?.popToRootViewController(animated: false)
 
         self.perform(segue: animated ? .showPageContentAnimated(page: page) : .showPageContent(page: page))
+    }
+
+    func navigateToPagesList(animated: Bool) {
+        self.sourceController?.navigationController?.popToRootViewController(animated: animated)
     }
 }
 
