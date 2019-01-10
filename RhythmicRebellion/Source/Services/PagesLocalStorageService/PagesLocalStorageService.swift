@@ -12,6 +12,7 @@ protocol PagesLocalStorageServiceWatcher: class {
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page)
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didUpdate page: Page)
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didDelete page: Page)
+    func pagesLocalStorageServiceDidReset(_ pagesLocalStorageService: PagesLocalStorageService)
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didSaveSnapshotImageFor page: Page)
 }
@@ -20,6 +21,7 @@ extension PagesLocalStorageServiceWatcher {
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page) { }
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didUpdate page: Page) { }
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didDelete page: Page) { }
+    func pagesLocalStorageServiceDidReset(_ pagesLocalStorageService: PagesLocalStorageService) { }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didSaveSnapshotImageFor page: Page) { }
 }
@@ -98,6 +100,10 @@ class PagesLocalStorageService: Watchable {
 
         self.pages.removeAll()
         self.save()
+
+        self.watchersContainer.invoke { (observer) in
+            observer.pagesLocalStorageServiceDidReset(self)
+        }
     }
 
     func snapshotImageURL(for page: Page) -> URL {
