@@ -53,7 +53,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i7h-wT-HHx" customClass="RoundedButton" customModule="RhythmicRebellion" customModuleProvider="target">
-                                <rect key="frame" x="92.5" y="611" width="190" height="46"/>
+                                <rect key="frame" x="92.5" y="601" width="190" height="46"/>
                                 <color key="backgroundColor" red="1" green="0.34901960780000002" blue="0.71764705880000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="46" id="Zl2-zT-30O"/>
@@ -74,8 +74,8 @@
                                     <action selector="onKaraokeModeWithSender:" destination="h3m-kq-PN9" eventType="touchUpInside" id="1Km-RR-nhG"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="AJ1-Qk-YSu">
-                                <rect key="frame" x="15" y="35" width="345" height="561"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="AJ1-Qk-YSu">
+                                <rect key="frame" x="15" y="35" width="345" height="551"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -84,7 +84,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Nqv-AP-aiW" firstAttribute="bottom" secondItem="i7h-wT-HHx" secondAttribute="bottom" constant="10" id="0HF-BV-JcH"/>
+                            <constraint firstItem="Nqv-AP-aiW" firstAttribute="bottom" secondItem="i7h-wT-HHx" secondAttribute="bottom" constant="20" id="0HF-BV-JcH"/>
                             <constraint firstItem="i7h-wT-HHx" firstAttribute="centerX" secondItem="nPr-yS-APj" secondAttribute="centerX" id="XDL-cs-L2I"/>
                             <constraint firstItem="Nqv-AP-aiW" firstAttribute="trailing" secondItem="AJ1-Qk-YSu" secondAttribute="trailing" constant="15" id="mBm-dd-Zeo"/>
                             <constraint firstItem="i7h-wT-HHx" firstAttribute="top" secondItem="AJ1-Qk-YSu" secondAttribute="bottom" constant="15" id="moK-YN-sAW"/>
