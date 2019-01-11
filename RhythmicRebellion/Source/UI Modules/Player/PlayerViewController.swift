@@ -292,8 +292,6 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
         self.playerItemPreviewOptionButton.setImage(self.viewModel.playerItemPreviewOptionViewModel?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
 
-        self.playerItemProgressView.isSelected = self.viewModel.isKaraokeEnabled
-
         self.refreshProgressUI()
         self.refreshKaraokeUI()
     }
@@ -313,6 +311,8 @@ extension PlayerViewController: PlayerViewModelDelegate {
     }
 
     func refreshKaraokeUI() {
+
+        self.playerItemProgressView.isSelected = self.viewModel.isKaraokeEnabled && self.viewModel.karaokeModelId != nil
 
         guard self.viewModel.isKaraokeEnabled else { self.playerItemProgressView.update(with: nil); return }
         guard self.playerItemProgressView.karaokeIntervalsViewModelId != self.viewModel.karaokeModelId else { return }
