@@ -48,7 +48,7 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     private(set) var dependencies: RouterDependencies
 
     private(set) weak var viewModel: PlaylistViewModel?
-    private(set) weak var sourceController: UIViewController?
+    weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true

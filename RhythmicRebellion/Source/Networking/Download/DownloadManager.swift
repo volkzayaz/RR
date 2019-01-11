@@ -11,6 +11,18 @@ import Foundation
 import Alamofire
 import RxSwift
 
+//struct ProgressData {
+//
+//    let fractionCompleted: Double
+//    let speed: Int64
+//
+//    static var empty: ProgressData {
+//        return ProgressData(fractionCompleted: 0,
+//                            speed: 0)
+//    }
+//
+//}
+
 enum ChunkedData<T> {
     case progress(x: Double)
     case data(x: T)
@@ -52,7 +64,34 @@ struct DownloadManager {
         
         let x = sessionManager.download(x, to: destination)
         
-        return (x.rx.download, x)
+        let d = x.rx.download
+        
+        return (d, x)
+//
+//        let progress = d.map { (chunked) -> Progress? in
+//                switch chunked {
+//                case .data(_): return nil
+//                case .progress(let x): return x
+//                }
+//            }
+//            .notNil()
+//            .buffer(timeSpan: 1, count: 100, scheduler: SerialDispatchQueueScheduler(qos: .default))
+//            .map { samples in
+//                return ProgressData(fractionCompleted: samples.last?.fractionCompleted ?? 0,
+//                                    speed: samples.last?.totalUnitCount ?? 0 - (samples.first?.totalUnitCount ?? 0))
+//            }
+//            .map { ChunkedData<URL, ProgressData>.progress(x: $0) }
+//
+//        let data = d.map { (chunked) -> URL? in
+//            switch chunked {
+//            case .data(let x): return x
+//            case .progress(_): return nil
+//            }
+//        }
+//        .notNil()
+//        .map { ChunkedData<URL, ProgressData>.data(x: $0) }
+//
+//        return (Observable.merge([progress, data]), x)
     }
     
 }

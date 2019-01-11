@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7301E0DD21E8C8B700F9B5D5 /* NWise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301E0DC21E8C8B700F9B5D5 /* NWise.swift */; };
 		73116DF221E4B0CA00F2A19A /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF121E4B0CA00F2A19A /* DownloadManager.swift */; };
 		73116DF921E621D800F2A19A /* TrackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF621E621D800F2A19A /* TrackRouter.swift */; };
 		73116DFB21E621D800F2A19A /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF821E621D800F2A19A /* TrackViewModel.swift */; };
@@ -49,6 +50,7 @@
 		738E60F621D7A4E800E698B7 /* ArtistCoverHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 738E60F521D7A4E800E698B7 /* ArtistCoverHeader.xib */; };
 		73E0A9E021E62A4500679C01 /* TrackListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */; };
 		73E0A9E221E62EA900679C01 /* Alamofire+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */; };
+		73F7A0A121E78B7900B92433 /* AlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F7A0A021E78B7900B92433 /* AlbumRequest.swift */; };
 		7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */; };
 		7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD420FF471300D90D73 /* SignUpRouter.swift */; };
 		7606BDD920FF471300D90D73 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD520FF471300D90D73 /* SignUpViewController.swift */; };
@@ -302,6 +304,7 @@
 
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7301E0DC21E8C8B700F9B5D5 /* NWise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NWise.swift; sourceTree = "<group>"; };
 		73116DF121E4B0CA00F2A19A /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		73116DF621E621D800F2A19A /* TrackRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRouter.swift; sourceTree = "<group>"; };
 		73116DF821E621D800F2A19A /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
@@ -344,6 +347,7 @@
 		738E60F521D7A4E800E698B7 /* ArtistCoverHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArtistCoverHeader.xib; sourceTree = "<group>"; };
 		73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListRouter.swift; sourceTree = "<group>"; };
 		73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Rx.swift"; sourceTree = "<group>"; };
+		73F7A0A021E78B7900B92433 /* AlbumRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumRequest.swift; sourceTree = "<group>"; };
 		7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpControllerViewModel.swift; sourceTree = "<group>"; };
 		7606BDD420FF471300D90D73 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
 		7606BDD520FF471300D90D73 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -752,7 +756,8 @@
 		737622D521CA7B00005B603E /* Request */ = {
 			isa = PBXGroup;
 			children = (
-				737622ED21CD164C005B603E /* Artis */,
+				73F7A09F21E78B6E00B92433 /* Album */,
+				737622ED21CD164C005B603E /* Artist */,
 				737622D821CA7CFC005B603E /* Following */,
 				737622D621CA7B42005B603E /* BaseRouter.swift */,
 			);
@@ -776,12 +781,12 @@
 			path = Response;
 			sourceTree = "<group>";
 		};
-		737622ED21CD164C005B603E /* Artis */ = {
+		737622ED21CD164C005B603E /* Artist */ = {
 			isa = PBXGroup;
 			children = (
 				737622EE21CD165E005B603E /* ArtistRequests.swift */,
 			);
-			path = Artis;
+			path = Artist;
 			sourceTree = "<group>";
 		};
 		737622F221CD1AFA005B603E /* Artist */ = {
@@ -818,6 +823,7 @@
 				737BB2C121C9347B0062A3A5 /* NSObject+Rx.swift */,
 				737BB2C221C9347B0062A3A5 /* MVVM */,
 				73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */,
+				7301E0DC21E8C8B700F9B5D5 /* NWise.swift */,
 			);
 			path = RxExtensions;
 			sourceTree = "<group>";
@@ -858,6 +864,14 @@
 				737BB2C421C9347B0062A3A5 /* PresentMessage.swift */,
 			);
 			path = Error;
+			sourceTree = "<group>";
+		};
+		73F7A09F21E78B6E00B92433 /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				73F7A0A021E78B7900B92433 /* AlbumRequest.swift */,
+			);
+			path = Album;
 			sourceTree = "<group>";
 		};
 		7606BDD220FF46CB00D90D73 /* SignUp */ = {
@@ -1986,6 +2000,7 @@
 				760D793B210871FB00FD8D46 /* RestApiRequestPayloads.swift in Sources */,
 				763931F62118831600A65257 /* PlayerMyPlaylistsViewController.swift in Sources */,
 				737622D221CA5462005B603E /* R.generated.swift in Sources */,
+				7301E0DD21E8C8B700F9B5D5 /* NWise.swift in Sources */,
 				762DD7852141237B0046A984 /* HowHear.swift in Sources */,
 				7665335920FF414300FEC702 /* SignInViewController.swift in Sources */,
 				737622C821CA4ED8005B603E /* ArtistsFollowedViewModel.swift in Sources */,
@@ -2050,6 +2065,7 @@
 				769F4E88210A143C000DD23B /* PlayerPlaylistRootViewController.swift in Sources */,
 				76315824219EFFEC00E1D7F5 /* PagesLocalStorageService.swift in Sources */,
 				76F1FA7020E0E53200C9191F /* TabBarRegular.swift in Sources */,
+				73F7A0A121E78B7900B92433 /* AlbumRequest.swift in Sources */,
 				76D39CF42112F63B00D47DFA /* ErrorPresenting.swift in Sources */,
 				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
 				7665334820FF1CFA00FEC702 /* PagesViewModel.swift in Sources */,

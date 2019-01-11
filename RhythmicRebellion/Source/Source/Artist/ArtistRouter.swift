@@ -25,6 +25,7 @@ struct ArtistRouter : MVVM_Router {
         let vc = R.storyboard.main.playlistContentViewController()!
         
         let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
+        router.sourceController = vc
         
         let vm = PlaylistViewModel(router: router,
                                    application: DataLayer.get.application,
