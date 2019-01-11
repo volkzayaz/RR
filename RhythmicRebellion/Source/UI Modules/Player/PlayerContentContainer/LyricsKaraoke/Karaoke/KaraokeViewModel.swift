@@ -155,6 +155,6 @@ extension KaraokeViewModel: PlayerWatcher {
 
         self.karaoke = self.player.currentItem?.lyrics?.karaoke
         self.currentItemIndexPath = self.findCurrentItemIndexPath()
-        self.delegate?.refreshUI()
+        self.delegate?.reloadUI()
     }
 }
