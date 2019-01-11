@@ -75,7 +75,7 @@ final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCom
 
     func start(controller: LyricsKaraokeViewController) {
         viewController = controller
-        let vm = LyricsKaraokeViewModel(router: self, player: self.dependencies.player)
+        let vm = LyricsKaraokeViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
     }
 
