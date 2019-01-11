@@ -16,6 +16,7 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
     private(set) weak var delegate: LyricsKaraokeViewModelDelegate?
     private(set) weak var router: LyricsKaraokeRouter?
 
+    private(set) var application: Application
     private(set) var player: Player
 
     // MARK: - Lifecycle -
@@ -28,8 +29,9 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
         }
     }
 
-    init(router: LyricsKaraokeRouter, player: Player) {
+    init(router: LyricsKaraokeRouter, application: Application, player: Player) {
         self.router = router
+        self.application = application
         self.player = player
     }
 
@@ -49,6 +51,21 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
 }
 
 extension LyricsKaraokeViewModel: PlayerWatcher {
+
+    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
+        guard let playerItemTrack = playerItem?.playlistItem.track else { self.router?.routeToLyrics(); return }
+
+        var isCensorshipTrack = playerItemTrack.isCensorship
+        if isCensorshipTrack == true, let user = self.application.user {
+            isCensorshipTrack = user.stubTrackAudioFileReason(for: playerItemTrack) == .censorship
+        }
+
+        if isCensorshipTrack == true ||
+            playerItemTrack.isInstrumental == true ||
+            playerItemTrack.previewType == .noPreview {
+            self.router?.routeToLyrics()
+        }
+    }
 
     func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) {
 
