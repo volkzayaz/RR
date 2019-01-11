@@ -90,7 +90,11 @@ final class KaraokeViewController: UIViewController {
         contentInset.top = self.view.bounds.height / 2
         contentInset.bottom = self.view.bounds.height / 2
         self.collectionView.contentInset = contentInset
-        self.collectionView.collectionViewLayout.invalidateLayout()
+
+        UIView.performWithoutAnimation {
+            self.collectionView.collectionViewLayout.invalidateLayout()
+            self.collectionView.reloadData()
+        }
 
         if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
             self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
