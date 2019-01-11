@@ -190,8 +190,6 @@ extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDel
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        print("cellForItemAt indexPath: \(indexPath)")
-
         let karaokeIntervalCollectionViewCell = KaraokeIntervalCollectionViewCell.reusableCell(in: collectionView, at: indexPath)
         let karaokeIntervalCellViewModel = self.viewModel.item(at: indexPath)!
 
