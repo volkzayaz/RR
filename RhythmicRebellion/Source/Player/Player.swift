@@ -1053,13 +1053,30 @@ extension Player: WebSocketServiceWatcher {
 
 
         if self.stateHash != currentTrackState.hash || self.currentTrackState == nil {
+
+            let isPlaying = self.currentTrackState?.isPlaying ?? self.state.playing == true
+
             self.state.playing = false
-            self.player.pause()
+            if self.player.timeControlStatus != .paused {
+                self.player.pause()
+            }
+
             self.currentTrackState = currentTrackState
 
             if currentTrackState.progress > 1.0 {
                 self.playerQueue.replace(addons: [])
             }
+
+            if isPlaying != currentTrackState.isPlaying {
+                self.watchersContainer.invoke({ (observer) in
+                    observer.player(player: self, didChangePlayState: currentTrackState.isPlaying)
+                })
+            }
+
+            self.watchersContainer.invoke({ (observer) in
+                observer.player(player: self, didChangePlayerItemCurrentTime: currentTrackState.progress)
+            })
+
         }
     }
 
