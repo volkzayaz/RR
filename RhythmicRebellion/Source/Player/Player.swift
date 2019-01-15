@@ -48,11 +48,6 @@ protocol PlayerWatcher: class {
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?)
 
-    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode)
-
-    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics)
-    func player(player: Player, didFailedLoadPlayerItemLyrics error: Error)
-
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem)
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval)
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval)
@@ -71,11 +66,6 @@ extension PlayerWatcher {
     func player(player: Player, didChangePlayState isPlaying: Bool) { }
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) { }
-
-    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) { }
-
-    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) { }
-    func player(player: Player, didFailedLoadPlayerItemLyrics error: Error) { }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) { }
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval) { }
@@ -217,26 +207,6 @@ class Player: NSObject, Watchable {
 
 //    let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Player")
 
-    private(set) var karaokeMode: KaraokeMode = .none
-    private(set) var karaokeAudioFileType: AudioFileType = .vocal
-
-    var canChangeKaraokeAudioFileType: Bool {
-        guard let currentQueueItem = self.playerQueue.currentItem else { return false }
-
-        switch currentQueueItem.content {
-        case .addon(_), .stub(_): return false
-        case .track(_): return self.state.waitingAddons == false
-        }
-    }
-
-    private var audioFileType: AudioFileType {
-        switch karaokeMode {
-        case .karaoke: return self.karaokeAudioFileType
-        default: return .vocal
-        }
-    }
-
-    private var needsLoadPlayerItemLyrics: Bool { return self.karaokeMode != .none && self.currentItem?.lyrics == nil }
 
     init(with application: Application) {
 
@@ -334,8 +304,6 @@ class Player: NSObject, Watchable {
 
             self.playerQueue.replace(playerItem: currentPlayerItem, addons: self.currentTrackState != nil ? [] : nil)
             self.replace(playerItems: self.playerQueue.playerItems)
-
-            if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
         }
 
         self.updateMPRemoteInfo()
@@ -438,31 +406,6 @@ class Player: NSObject, Watchable {
 
         }
     }
-
-    func loadLirycs() {
-
-        guard let playerCurrentItemForLyrics = self.currentItem, playerCurrentItemForLyrics.playlistItem.track.isInstrumental == false else { return }
-
-        self.application.restApiService.lyrics(for: playerCurrentItemForLyrics.playlistItem.track.id) { [weak self] (lyricsResult) in
-
-            guard let self = self, let playerCurrentItem = self.currentItem, playerCurrentItem.playlistItem.track.id == playerCurrentItemForLyrics.playlistItem.track.id  else { return }
-
-            switch lyricsResult {
-            case .success(let lyrics):
-                playerCurrentItem.lyrics = lyrics
-                self.watchersContainer.invoke({ (observer) in
-                    observer.player(player: self, didLoadPlayerItemLyrics: lyrics)
-                })
-
-            case .failure(let error):
-                self.watchersContainer.invoke({ (observer) in
-                    observer.player(player: self, didFailedLoadPlayerItemLyrics: error)
-                })
-            }
-
-        }
-    }
-
 
     func prepareAddons(for track: Track, completion: ((Error?) -> ())?) {
 
@@ -860,8 +803,6 @@ class Player: NSObject, Watchable {
                 observer.player(player: self, didChangePlayerItem: self.currentItem)
             })
 
-            if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
-
             if self.isPlaying {
                 self.state.playing = self.isPlaying
                 self.preparePlayerQueueToPlay(completion: { [weak self] (error) in
@@ -1052,8 +993,6 @@ extension Player: WebSocketServiceWatcher {
         self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItem: self.currentItem)
         })
-
-        if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
     }
 
     func apply(currentTrackState: TrackState) {
@@ -1732,8 +1671,6 @@ extension Player {
                     observer.player(player: self, didChangePlayerItem: self.currentItem)
                 })
 
-                if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
-
                 self.play()
                 completion?(nil)
             })
@@ -1756,8 +1693,6 @@ extension Player {
                 self.watchersContainer.invoke({ (observer) in
                     observer.player(player: self, didChangePlayerItem: self.currentItem)
                 })
-
-                if self.needsLoadPlayerItemLyrics { self.loadLirycs() }
 
                 if wasPlaying {
                     self.play()
@@ -1847,44 +1782,26 @@ fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Categ
 
 extension Player {
 
-    func updatePlayerQueu(prefferedAudioFileType: AudioFileType) {
-        guard self.playerQueue.prefferedAudioFileType != prefferedAudioFileType else { return }
-
-        self.playerQueue.prefferedAudioFileType = self.audioFileType
-        self.replace(playerItems: playerQueue.playerItems)
-
-        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-        self.set(trackState: trackState)
-
-        guard let currentQueueItem = self.currentQueueItem else { return }
-        self.watchersContainer.invoke({ (observer) in
-            observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
-        })
-    }
-
-    func switchTo(karaokeMode: KaraokeMode) {
-
-        guard self.playerQueue.containsOnlyTrack == true else { return }
-        guard self.karaokeMode != karaokeMode else { return }
-
-        self.karaokeMode = karaokeMode
-
-        if karaokeMode != .none, self.currentItem?.lyrics == nil {
-            self.loadLirycs()
-        }
-
-        self.watchersContainer.invoke { (watcher) in
-            watcher.player(player: self, didChangeKaraokeMode: self.karaokeMode)
-        }
-
-        self.updatePlayerQueu(prefferedAudioFileType: self.audioFileType)
-    }
-
-    func change(karaokeAudioFileType: AudioFileType) {
-        guard self.playerQueue.containsOnlyTrack == true else { return }
-        guard self.karaokeAudioFileType != karaokeAudioFileType else { return }
-
-        self.karaokeAudioFileType = karaokeAudioFileType
-        self.updatePlayerQueu(prefferedAudioFileType: self.audioFileType)
-    }
+//    func updatePlayerQueu(prefferedAudioFileType: AudioFileType) {
+//        guard self.playerQueue.prefferedAudioFileType != prefferedAudioFileType else { return }
+//
+//        self.playerQueue.prefferedAudioFileType = self.audioFileType
+//        self.replace(playerItems: playerQueue.playerItems)
+//
+//        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
+//        self.set(trackState: trackState)
+//
+//        guard let currentQueueItem = self.currentQueueItem else { return }
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
+//        })
+//    }
+//
+//    func change(karaokeAudioFileType: AudioFileType) {
+//        guard self.playerQueue.containsOnlyTrack == true else { return }
+//        guard self.karaokeAudioFileType != karaokeAudioFileType else { return }
+//
+//        self.karaokeAudioFileType = karaokeAudioFileType
+//        self.updatePlayerQueu(prefferedAudioFileType: self.audioFileType)
+//    }
 }

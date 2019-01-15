@@ -26,8 +26,8 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
     private(set) var viewMode: KaraokeViewMode
     private(set) var currentItemIndexPath: IndexPath?
 
-    var isVocalAudioFile: Bool { return self.player.karaokeAudioFileType == .vocal }
-    var canChangeAudioFileType: Bool { return self.player.canChangeKaraokeAudioFileType }
+    var isVocalAudioFile: Bool { return false/*self.player.karaokeAudioFileType == .vocal*/ }
+    var canChangeAudioFileType: Bool { return false/*self.player.canChangeKaraokeAudioFileType*/ }
 
     let disposeBag = DisposeBag()
 
@@ -131,12 +131,12 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 
     func changeAudioFileType() {
 
-        switch self.player.karaokeAudioFileType {
-        case .vocal: self.player.change(karaokeAudioFileType: .clean)
-        case .clean: self.player.change(karaokeAudioFileType: .vocal)
-        }
-
-        self.delegate?.refreshUI()
+//        switch self.player.karaokeAudioFileType {
+//        case .vocal: self.player.change(karaokeAudioFileType: .clean)
+//        case .clean: self.player.change(karaokeAudioFileType: .vocal)
+//        }
+//
+//        self.delegate?.refreshUI()
     }
 
     func switchToLyrics() {

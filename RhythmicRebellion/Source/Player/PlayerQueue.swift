@@ -22,6 +22,13 @@ class PlayerQueueItem {
     let content: Content
     let playerItem: AVPlayerItem
 
+    var isTrack: Bool {
+        switch content {
+        case .track(_): return true
+        default: return false
+        }
+    }
+
     init(with addon: Addon, playerItem: AVPlayerItem) {
         self.content = .addon(addon)
         self.playerItem = playerItem
@@ -36,6 +43,8 @@ class PlayerQueueItem {
         self.content = .stub(stubAudioFile)
         self.playerItem = playerItem
     }
+
+
 }
 
 class PlayerQueue {

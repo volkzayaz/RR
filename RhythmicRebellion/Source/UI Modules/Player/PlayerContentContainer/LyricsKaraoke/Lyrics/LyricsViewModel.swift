@@ -26,17 +26,18 @@ final class LyricsViewModel: LyricsViewModelProtocol {
     var lyricsText: String? { return self.lyrics?.lyrics }
     private(set) var infoText: String = ""
 
-    var canSwitchToKaraokeMode: Bool { return self.lyrics?.karaoke != nil }
+    var canSwitchToKaraokeMode: Bool { return self.lyrics?.karaoke != nil
+                                        && self.player.state.blocked == false
+                                        && self.player.state.waitingAddons == false
+                                        && self.player.currentQueueItem?.isTrack == true
+    }
 
     let disposeBag = DisposeBag()
 
     // MARK: - Lifecycle -
-
     deinit {
         self.player.removeWatcher(self)
-        self.application.removeWatcher(self)
     }
-
     init(router: LyricsRouter, application: Application, player: Player, lyricsKaraokeService: LyricsKaraokeService) {
         self.router = router
         self.application = application
@@ -64,12 +65,6 @@ final class LyricsViewModel: LyricsViewModelProtocol {
         })
         .disposed(by: disposeBag)
 
-//        if let playerItem = self.player.currentItem {
-//            self.updateInfoText(for: playerItem.playlistItem.track)
-//        }
-//
-//        self.delegate?.refreshUI()
-        self.application.addWatcher(self)
         self.player.addWatcher(self)
     }
 
@@ -99,49 +94,15 @@ final class LyricsViewModel: LyricsViewModelProtocol {
         guard self.application.user as? FanUser != nil else { self.router?.routeToAuthorization(with: .signIn); return }
 
         self.lyricsKaraokeService.mode.accept(.karaoke)
-//        self.player.switchTo(karaokeMode: .karaoke)
     }
 }
 
 extension LyricsViewModel: PlayerWatcher {
+    func player(player: Player, didChangeBlockedState isBlocked: Bool) {
+        self.delegate?.refreshUI()
+    }
 
-//    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
-//        self.delegate?.refreshUI()
-//    }
-//
-//    func player(player: Player, didFailedLoadPlayerItemLyrics error: Error) {
-//        self.delegate?.show(error: error)
-//    }
-//
-//    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
-//
-//        guard let playerItem = playerItem else {
-//            self.infoText = ""
-//            self.delegate?.refreshUI()
-//            return
-//        }
-//
-//        self.updateInfoText(for: playerItem.playlistItem.track)
-//        self.delegate?.refreshUI()
-//    }
-}
-
-extension LyricsViewModel: ApplicationWatcher {
-
-//    func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) {
-//
-//        guard let playerItem = self.player.currentItem, playerItem.playlistItem.track.id == trackForceToPlayState.trackId else { return }
-//
-//        self.updateInfoText(for: playerItem.playlistItem.track)
-//        self.delegate?.refreshUI()
-//
-//    }
-//
-//    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
-//
-//        guard let playerItem = self.player.currentItem, playerItem.playlistItem.track.isCensorship else { return }
-//
-//        self.updateInfoText(for: playerItem.playlistItem.track)
-//        self.delegate?.refreshUI()
-//    }
+    func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
+        self.delegate?.refreshUI()
+    }
 }

@@ -18,8 +18,6 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
     private(set) weak var delegate: LyricsKaraokeViewModelDelegate?
     private(set) weak var router: LyricsKaraokeRouter?
 
-    private(set) var application: Application
-    private(set) var player: Player
     private(set) var lyricsKaraokeService: LyricsKaraokeService
 
     let disposeBag = DisposeBag()
@@ -27,28 +25,18 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
     // MARK: - Lifecycle -
 
     deinit {
-        self.player.removeWatcher(self)
-
-        if self.player.karaokeMode == .lyrics {
-            self.player.switchTo(karaokeMode: .none)
-        }
-
         if self.lyricsKaraokeService.mode.value == .lyrics {
             self.lyricsKaraokeService.mode.accept(.none)
         }
     }
 
-    init(router: LyricsKaraokeRouter, application: Application, player: Player, lyricsKaraokeService: LyricsKaraokeService) {
+    init(router: LyricsKaraokeRouter, lyricsKaraokeService: LyricsKaraokeService) {
         self.router = router
-        self.application = application
-        self.player = player
         self.lyricsKaraokeService = lyricsKaraokeService
     }
 
     func load(with delegate: LyricsKaraokeViewModelDelegate) {
         self.delegate = delegate
-
-        self.player.addWatcher(self)
 
         self.lyricsKaraokeService.lyricsState
             .subscribe(onNext: { [weak self] (lyricsState) in
@@ -100,53 +88,5 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
         if self.lyricsKaraokeService.mode.value == .none {
             self.lyricsKaraokeService.mode.accept(.lyrics)
         }
-
-//        switch self.player.karaokeMode {
-//        case .none:
-//            self.player.switchTo(karaokeMode: .lyrics)
-//            self.lyricsKaraokeService.mode.accept(.lyrics)
-//
-//        case .lyrics: self.router?.routeToLyrics()
-//        case .karaoke:
-//            guard self.player.currentItem?.lyrics?.karaoke != nil else { self.router?.routeToLyrics(); return }
-//            self.router?.routeToKaraoke()
-//        }
     }
-}
-
-extension LyricsKaraokeViewModel: PlayerWatcher {
-
-//    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
-//        guard let playerItemTrack = playerItem?.playlistItem.track else { self.router?.routeToLyrics(); return }
-//
-//        var isCensorshipTrack = playerItemTrack.isCensorship
-//        if isCensorshipTrack == true, let user = self.application.user {
-//            isCensorshipTrack = user.stubTrackAudioFileReason(for: playerItemTrack) == .censorship
-//        }
-//
-//        if isCensorshipTrack == true ||
-//            playerItemTrack.isInstrumental == true ||
-//            playerItemTrack.previewType == .noPreview {
-//            self.router?.routeToLyrics()
-//        }
-//    }
-//
-//    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) {
-//
-//        switch karaokeMode {
-//        case .none: break
-//        case .lyrics: self.router?.routeToLyrics()
-//        case .karaoke: self.router?.routeToKaraoke()
-//        }
-//    }
-//
-//    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
-//        guard lyrics.karaoke != nil else { self.router?.routeToLyrics(); return }
-//
-//        switch player.karaokeMode {
-//        case .none, .lyrics: self.router?.routeToLyrics()
-//        case .karaoke: self.router?.routeToKaraoke()
-//        }
-//    }
-
 }
