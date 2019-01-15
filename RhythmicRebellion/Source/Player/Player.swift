@@ -10,6 +10,9 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
+import RxSwift
+import RxCocoa
+
 //import os.log
 
 private var playerKVOContext = 0
@@ -139,6 +142,10 @@ class Player: NSObject, Watchable {
 
     var currentItem: PlayerItem? {
         return self.playerQueue.playerItem
+    }
+
+    var currentItemObservable: BehaviorRelay<PlayerItem?> {
+        return self.playerQueue.playerItemObservable
     }
 
     var currentQueueItem: PlayerQueueItem? {
@@ -1426,7 +1433,7 @@ extension Player: ApplicationWatcher {
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let currentItem = self.currentItem, currentItem.playlistItem.track.artist.id == artistFollowingState.artistId else { return }
 
-        self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
+        self.playerQueue.playerItemObservable.accept(self.playerItem(for: currentItem.playlistItem))
 
         self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItem: self.currentItem)
@@ -1442,7 +1449,7 @@ extension Player: ApplicationWatcher {
         let changedIdsSet = Set(added).union(removed)
         guard let currentItem = self.currentItem, changedIdsSet.contains(currentItem.playlistItem.track.id) else { return }
 
-        self.playerQueue.playerItem = self.playerItem(for: currentItem.playlistItem)
+        self.playerQueue.playerItemObservable.accept(self.playerItem(for: currentItem.playlistItem))
 
         self.watchersContainer.invoke({ (observer) in
             observer.player(player: self, didChangePlayerItem: self.currentItem)

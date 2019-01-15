@@ -22,7 +22,7 @@ enum TrackStubReason {
     }
 }
 
-class PlayerItem {
+public class PlayerItem {
 
     let playlistItem: PlayerPlaylistItem
     let stubReason: TrackStubReason?

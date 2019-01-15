@@ -15,6 +15,14 @@ struct KaraokeInterval: Codable {
     let content: String
 }
 
+extension KaraokeInterval: Equatable {
+    public static func == (lhs: KaraokeInterval, rhs: KaraokeInterval) -> Bool {
+        return lhs.start == rhs.start
+                && lhs.end == rhs.end
+                && lhs.content == rhs.content
+    }
+}
+
 struct Karaoke: Codable {
 
     let id: Int
@@ -58,6 +66,19 @@ struct Karaoke: Codable {
     }
 }
 
+extension Karaoke: Equatable {
+    public static func == (lhs: Karaoke, rhs: Karaoke) -> Bool {
+        return lhs.id == rhs.id
+            && lhs.trackId == rhs.trackId
+            && lhs.createdAt == rhs.createdAt
+            && lhs.updatedAt == rhs.updatedAt
+            && lhs.isPublic == rhs.isPublic
+            && lhs.intervals == rhs.intervals
+    }
+}
+
+
+
 public struct Lyrics: Codable {
 
     let id: Int
@@ -68,5 +89,14 @@ public struct Lyrics: Codable {
         case id
         case lyrics
         case karaoke = "transcript"
+    }
+}
+
+
+extension Lyrics: Equatable {
+    public static func == (lhs: Lyrics, rhs: Lyrics) -> Bool {
+        return lhs.id == rhs.id
+            && lhs.lyrics == rhs.lyrics
+            && lhs.karaoke == rhs.karaoke
     }
 }

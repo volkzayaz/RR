@@ -67,9 +67,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if let application = Application() {
             let player = Player(with: application)
+            let lyricsKaraokeService = LyricsKaraokeService(with: application, player: player)
 
             let routerDependencies = RouterDependencies(application: application,
-                                                        player: player)
+                                                        player: player,
+                                                        lyricsKaraokeService: lyricsKaraokeService)
 
             let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
             defaultAppRouter.start(controller: appViewController)

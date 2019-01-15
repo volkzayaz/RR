@@ -165,6 +165,7 @@ struct RouterDependencies {
     
     let application: Application
     let player: Player
+    let lyricsKaraokeService: LyricsKaraokeService
 
 }
 

@@ -8,6 +8,8 @@
 
 import Foundation
 import AVFoundation
+import RxSwift
+import RxCocoa
 
 class PlayerQueueItem {
 
@@ -38,7 +40,9 @@ class PlayerQueueItem {
 
 class PlayerQueue {
 
-    var playerItem: PlayerItem?
+    var playerItem: PlayerItem? { return self.playerItemObservable.value }
+
+    let playerItemObservable: BehaviorRelay<PlayerItem?> = BehaviorRelay(value: nil)
     var addons: [Addon]?
 
     var prefferedAudioFileType: AudioFileType {
@@ -103,7 +107,7 @@ class PlayerQueue {
     }
 
     func reset() {
-        self.playerItem = nil
+        self.playerItemObservable.accept(nil)
         self.addons = nil
 
         self.makeItems()
@@ -111,7 +115,7 @@ class PlayerQueue {
 
     func replace(playerItem: PlayerItem?, addons: [Addon]? = nil) {
 
-        self.playerItem = playerItem
+        self.playerItemObservable.accept(playerItem)
         self.addons = addons
 
         self.makeItems()
