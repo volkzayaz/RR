@@ -11,28 +11,42 @@ import Foundation
 import Alamofire
 import RxSwift
 
+enum DownloadStatus<T> {
+    case initialise
+    case progress(Double)
+    case data(T)
+    case error(Error)
+}
+
 extension Reactive where Base == DownloadRequest {
     
-    var download: Observable<ChunkedData<URL>> {
+    func download(shouldUseRxErrors: Bool = false) -> Observable<DownloadStatus<URL>> {
         
         return Observable.create { (subscriber) -> Disposable in
             
-                self.base.downloadProgress(closure: { (progress) in
-                    subscriber.onNext(.progress(x: progress.fractionCompleted))
-                })
-                .response { response in
+            subscriber.onNext(.initialise)
+            
+            self.base.downloadProgress(closure: { (progress) in
+                subscriber.onNext( .progress(progress.fractionCompleted) )
+            })
+            .response { response in
+                if let e = response.error {
                     
-                    if let e = response.error {
-                        subscriber.onError(e)
-                        return
+                    if shouldUseRxErrors { subscriber.onError(e) }
+                    else {
+                        subscriber.onNext( .error(e) )
+                        subscriber.onCompleted()
                     }
                     
-                    guard let path = response.destinationURL else {
-                        fatalError("Download task has neither error nor result. \(response)")
-                    }
-                    
-                    subscriber.onNext(.data(x: path))
-                    subscriber.onCompleted()
+                    return
+                }
+                
+                guard let path = response.destinationURL else {
+                    fatalError("Download task has neither error nor result. \(response)")
+                }
+                
+                subscriber.onNext( .data( path ) )
+                subscriber.onCompleted()
             }
             
             return Disposables.create {

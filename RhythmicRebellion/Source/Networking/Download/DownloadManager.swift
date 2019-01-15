@@ -11,23 +11,6 @@ import Foundation
 import Alamofire
 import RxSwift
 
-//struct ProgressData {
-//
-//    let fractionCompleted: Double
-//    let speed: Int64
-//
-//    static var empty: ProgressData {
-//        return ProgressData(fractionCompleted: 0,
-//                            speed: 0)
-//    }
-//
-//}
-
-enum ChunkedData<T> {
-    case progress(x: Double)
-    case data(x: T)
-}
-
 protocol DownloadToken {
     func pause()
     func resume()
@@ -53,52 +36,31 @@ struct DownloadManager {
         return x
     }()
     
-    func download(x: URLConvertible) -> (Observable<ChunkedData<URL>>, DownloadToken) {
+    func download(x: URLConvertible) -> (Observable<DownloadStatus<URL>>, DownloadToken) {
+        
+        let fileURL = self.fileURL(for: x)
         
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileURL = documentsURL.appendingPathComponent(try! x.asURL().absoluteString)
-            
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
         
         let x = sessionManager.download(x, to: destination)
-        
-        let d = x.rx.download
-        
+        let d = x.rx.download()
+
         return (d, x)
-//
-//        let progress = d.map { (chunked) -> Progress? in
-//                switch chunked {
-//                case .data(_): return nil
-//                case .progress(let x): return x
-//                }
-//            }
-//            .notNil()
-//            .buffer(timeSpan: 1, count: 100, scheduler: SerialDispatchQueueScheduler(qos: .default))
-//            .map { samples in
-//                return ProgressData(fractionCompleted: samples.last?.fractionCompleted ?? 0,
-//                                    speed: samples.last?.totalUnitCount ?? 0 - (samples.first?.totalUnitCount ?? 0))
-//            }
-//            .map { ChunkedData<URL, ProgressData>.progress(x: $0) }
-//
-//        let data = d.map { (chunked) -> URL? in
-//            switch chunked {
-//            case .data(let x): return x
-//            case .progress(_): return nil
-//            }
-//        }
-//        .notNil()
-//        .map { ChunkedData<URL, ProgressData>.data(x: $0) }
-//
-//        return (Observable.merge([progress, data]), x)
+
+    }
+    
+    func fileURL(for urlConvertible: URLConvertible) -> URL {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsURL.appendingPathComponent(try! urlConvertible.asURL().lastPathComponent)
     }
     
 }
 
 
 class MulticastDownloadManager {
-    
+
     static let `default` = MulticastDownloadManager(manager: DownloadManager.default)
     
     private let manager: DownloadManager
@@ -108,14 +70,19 @@ class MulticastDownloadManager {
         self.manager = manager
     }
     
-    fileprivate let pipe: BehaviorSubject<(String, ChunkedData<URL>)?> = BehaviorSubject(value: nil)
+    fileprivate let pipe: BehaviorSubject<(String, DownloadStatus<URL>)?> = BehaviorSubject(value: nil)
     
     ///TODO: wrap accesses into barier queue
     var tasks: [String: DownloadToken] = [:]
     
-    
-    func downloadStatus(for url: String) -> Observable<ChunkedData<URL>> {
-        return pipe.asObservable().notNil()
+    func downloadStatus(for url: String) -> Observable<DownloadStatus<URL>> {
+        
+        let maybeURL = manager.fileURL(for: url)
+        let fileExist = FileManager.default.fileExists(atPath: maybeURL.path)
+        
+        return pipe.asObservable()
+            .startWith( fileExist ? (url, .data(maybeURL)) : nil )
+            .notNil()
             .filter { url == $0.0 }
             .map { $0.1 }
     }
@@ -131,10 +98,12 @@ class MulticastDownloadManager {
         
         ///binding download task to global pipe to share with all subscribers
         res.0.map { (url, $0) }
-            .silentCatch()
             .do(onCompleted: { [unowned self] in
                 self.tasks.removeValue(forKey: url)
             })
+            .flatMapLatest {
+                return Observable.just($0).concat(Observable.never())
+            }
             .bind(to: pipe)
             .disposed(by: bag)
         

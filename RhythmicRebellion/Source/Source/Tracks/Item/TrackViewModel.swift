@@ -72,19 +72,18 @@ extension TrackViewModel {
     
     var downloadState: Driver<PKDownloadButtonState> {
         
-        let pending = token.asDriver(onErrorJustReturn: nil)
-            .map { $0 == nil ? .startDownload : PKDownloadButtonState.pending }
-        
         let progress = dataState.asDriver().notNil().map { x -> PKDownloadButtonState in
             
             switch x {
             case .data(_):     return .downloaded
             case .progress(_): return .downloading
+            case .error(_):    return .startDownload
+            case .initialise:  return .pending
             }
             
         }
         
-        return Driver.merge([pending, progress])
+        return progress.startWith(.startDownload)
             .distinctUntilChanged()
         
     }
@@ -105,8 +104,7 @@ struct TrackViewModel : MVVM_ViewModel {
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
-    fileprivate let token: BehaviorSubject<DownloadToken?> = BehaviorSubject(value: nil)
-    fileprivate let dataState: BehaviorRelay<ChunkedData<URL>?> = BehaviorRelay(value: nil)
+    fileprivate let dataState: BehaviorRelay<DownloadStatus<URL>?> = BehaviorRelay(value: nil)
     
     fileprivate let downloadManager = MulticastDownloadManager.default
     
@@ -128,14 +126,7 @@ struct TrackViewModel : MVVM_ViewModel {
         self.isLockedForActions = isLockedForActions
         
         let m = downloadManager
-        Observable.never().startWith(0)
-            .flatMap { _ in
-                m.downloadStatus(for: track.audioFile!.urlString)
-                    .silentCatch()
-            }
-            .do(onCompleted: {
-                print("Hi")
-            })
+        m.downloadStatus(for: track.audioFile!.urlString)
             .bind(to: dataState)
             .disposed(by: bag)
         
