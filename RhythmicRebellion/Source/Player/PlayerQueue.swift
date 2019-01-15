@@ -41,6 +41,12 @@ class PlayerQueue {
     var playerItem: PlayerItem?
     var addons: [Addon]?
 
+    var prefferedAudioFileType: AudioFileType {
+        didSet {
+            self.makeItems()
+        }
+    }
+
     var isReadyToPlay: Bool {
         return self.addons != nil
     }
@@ -63,6 +69,10 @@ class PlayerQueue {
         return self.items.map { $0.playerItem }
     }
 
+    init(prefferedAudioFileType: AudioFileType) {
+        self.prefferedAudioFileType = prefferedAudioFileType
+    }
+
     private func makeItems() {
 
         self.items.removeAll()
@@ -83,8 +93,12 @@ class PlayerQueue {
             self.items.append(PlayerQueueItem(with: addon, playerItem: AVPlayerItem(url: playerItemURL)))
         }
 
-        if let track = self.playerItem?.playlistItem.track, let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
-            items.append(PlayerQueueItem(with: track, playerItem: AVPlayerItem(url: playerItemURL)))
+        if let track = self.playerItem?.playlistItem.track {
+            if self.prefferedAudioFileType == .clean, let cleanAudioFile = track.cleanAudioFile, let playerItemURL = URL(string: cleanAudioFile.urlString) {
+                items.append(PlayerQueueItem(with: track, playerItem: AVPlayerItem(url: playerItemURL)))
+            } else if let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
+                items.append(PlayerQueueItem(with: track, playerItem: AVPlayerItem(url: playerItemURL)))
+            }
         }
     }
 

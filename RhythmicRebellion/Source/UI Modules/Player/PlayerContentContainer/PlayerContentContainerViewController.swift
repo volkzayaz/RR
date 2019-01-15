@@ -29,20 +29,6 @@ final class PlayerContentContainerViewController: UITabBarController {
 
         viewModel.load(with: self)
     }
-
-    override func willMove(toParent parent: UIViewController?) {
-        super.willMove(toParent: parent)
-
-        print("willMove toParentViewController: \(parent)")
-    }
-
-    override func targetViewController(forAction action: Selector, sender: Any?) -> UIViewController? {
-
-        print("targetViewController action: \(action) sender: \(sender)")
-
-        return super.targetViewController(forAction: action, sender: sender)
-    }
-
 }
 
 // MARK: - Router -

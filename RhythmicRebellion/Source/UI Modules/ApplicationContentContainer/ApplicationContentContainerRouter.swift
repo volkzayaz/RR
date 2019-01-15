@@ -129,6 +129,8 @@ extension DefaultApplicationContentContainerRouter: PlayerContentPresentingContr
 
         var destinationViewControllerFrame = containerViewSuperview.convert(destinationViewController.view.frame, from: destinationViewControllerSuperview)
 
+        destinationViewControllerFrame.size.height += destinationViewControllerFrame.origin.y
+
         if destinationViewController.tabBar.isHidden == false {
             destinationViewControllerFrame.size.height -= destinationViewController.tabBar.frame.height
         }
@@ -141,8 +143,9 @@ extension DefaultApplicationContentContainerRouter: PlayerContentPresentingContr
             let destinationViewControllerSuperview = destinationViewController.view.superview else { return containerView.frame }
 
         let destinationFrameOrigin = containerView.convert(destinationViewController.view.frame.origin, from: destinationViewControllerSuperview)
+        let size = CGSize(width: containerView.frame.width, height: containerView.frame.height - destinationFrameOrigin.y)
 
-        return CGRect(origin: destinationFrameOrigin, size: containerView.frame.size)
+        return CGRect(origin: destinationFrameOrigin, size: size)
     }
 }
 

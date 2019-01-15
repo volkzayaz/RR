@@ -56,10 +56,7 @@ public struct Track: Codable {
     let audioFile: TrackAudioFile?
     let cleanAudioFile: TrackAudioFile?
     let artist: Artist
-    let fansLiked: Int
-    let fansDisliked: Int
 //    let current_fan_listen: Any?
-    let isReleasedForFans: Bool
     let writer: TrackWriter
     let backingTrack: TrackAudioFile?
     let price: Money?
@@ -86,9 +83,6 @@ public struct Track: Codable {
         case audioFile = "mp3_file"
         case cleanAudioFile = "clean_mp3_file"
         case artist
-        case fansLiked = "fans_liked"
-        case fansDisliked = "fans_disliked"
-        case isReleasedForFans = "is_released_for_fans"
         case writer = "songwriter"
         case backingTrack = "backing_track"
         case price
@@ -121,10 +115,6 @@ public struct Track: Codable {
         self.audioFile = try? container.decode(TrackAudioFile.self, forKey: .audioFile)
         self.cleanAudioFile = try? container.decode(TrackAudioFile.self, forKey: .cleanAudioFile)
         self.artist = try container.decode(Artist.self, forKey: .artist)
-
-        self.fansLiked = try container.decode(Int.self, forKey: .fansLiked)
-        self.fansDisliked = try container.decode(Int.self, forKey: .fansDisliked)
-        self.isReleasedForFans = try container.decode(Bool.self, forKey: .isReleasedForFans)
 
         self.writer = try container.decode(TrackWriter.self, forKey: .writer)
         self.backingTrack = try? container.decode(TrackAudioFile.self, forKey: .backingTrack)
@@ -162,10 +152,6 @@ public struct Track: Codable {
         try container.encode(self.cleanAudioFile, forKey: .cleanAudioFile)
         try container.encode(self.artist, forKey: .artist)
 
-        try container.encode(self.fansLiked, forKey: .fansLiked)
-        try container.encode(self.fansDisliked, forKey: .fansDisliked)
-        try container.encode(self.isReleasedForFans, forKey: .isReleasedForFans)
-
         try container.encode(self.writer, forKey: .writer)
         try container.encode(self.backingTrack, forKey: .backingTrack)
 
@@ -173,6 +159,23 @@ public struct Track: Codable {
             try container.encode(priceValue, forKey: .price)
         }
     }
+
+    func thumbnailURL(with orderedImageLinksTypes: [ImageLinkType]) -> URL? {
+
+        for trackImage in self.images {
+            guard let imageLink = trackImage.firstImageLink(from: orderedImageLinksTypes) else { continue }
+
+            switch imageLink.path {
+            case .url(let urlString):
+                guard let imageLinkURL = URL(string: urlString) else { continue }
+                return imageLinkURL
+            default: continue
+            }
+        }
+
+        return nil
+    }
+
 }
 
 extension Track: Equatable {

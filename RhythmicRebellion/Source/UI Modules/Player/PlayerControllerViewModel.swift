@@ -12,6 +12,19 @@ import CoreMedia
 import UIKit
 import Alamofire
 
+struct DefaultKaraokeIntervalProgressViewModel: KaraokeIntervalProgressViewModel {
+    var startValue: Float
+    var endValue: Float
+    var color: UIColor
+}
+
+struct DefaultKaraokeIntervalsProgressViewModel: KaraokeIntervalsProgressViewModel {
+
+    let id: Int
+    let intervals: [KaraokeIntervalProgressViewModel]
+
+}
+
 final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     // MARK: - Public properties -
@@ -99,6 +112,10 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         return user.isFollower(for: currentPlayerItem.playlistItem.track.artist.id)
     }
 
+    var isKaraokeEnabled: Bool { return self.player.karaokeMode == .karaoke }
+    var karaokeModelId: Int? { return self.player.currentItem?.lyrics?.karaoke?.id }
+
+
     // MARK: - Private properties -
 
     private(set) weak var delegate: PlayerViewModelDelegate?
@@ -129,6 +146,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         self.loadPlayerItemPreviewOptionViewModel()
         self.delegate = delegate
+
+        self.delegate?.refreshUI()
 
         self.player.addWatcher(self)
         self.application.addWatcher(self)
@@ -162,6 +181,23 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
                                                                                                     player: self.player,
                                                                                                     textImageGenerator: self.textImageGenerator)
 
+    }
+
+    func karaokeIntervalsViewModel() -> DefaultKaraokeIntervalsProgressViewModel? {
+
+        guard self.player.karaokeMode == .karaoke else { return nil }
+        guard let playerCurrentItem = self.player.currentItem, let karaoke = playerCurrentItem.lyrics?.karaoke,
+            let playerItemDuration = self.player.currentItemDuration else { return nil }
+
+        let karaokeIntervalViewModels: [DefaultKaraokeIntervalProgressViewModel] = karaoke.intervals.compactMap {
+            guard $0.content.isEmpty == false else { return nil }
+
+            return DefaultKaraokeIntervalProgressViewModel(startValue: Float($0.start / Double(playerItemDuration)),
+                                                           endValue: Float($0.end / Double(playerItemDuration)),
+                                                           color: #colorLiteral(red: 0.9725490196, green: 0.9058823529, blue: 0.1098039216, alpha: 1))
+        }
+
+        return DefaultKaraokeIntervalsProgressViewModel(id: karaoke.id, intervals: karaokeIntervalViewModels)
     }
 
     // MARK: - Actions -
@@ -276,6 +312,14 @@ extension PlayerControllerViewModel: PlayerWatcher {
     }
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {
+        self.delegate?.refreshUI()
+    }
+
+    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
+        self.delegate?.refreshKaraokeUI()
+    }
+
+    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) {
         self.delegate?.refreshUI()
     }
 }

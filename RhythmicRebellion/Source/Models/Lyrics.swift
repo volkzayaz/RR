@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct KaraokeIntervals: Codable {
+struct KaraokeInterval: Codable {
 
     let start: Double
     let end: Double
@@ -22,7 +22,7 @@ struct Karaoke: Codable {
     let createdAt: Date?
     let updatedAt: Date?
     let isPublic: Bool
-    let intervals: [KaraokeIntervals]
+    let intervals: [KaraokeInterval]
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -42,7 +42,7 @@ struct Karaoke: Codable {
         self.createdAt = try container.decodeAsDate(String.self, forKey: .createdAt, dateFormatter: dateTimeFormatter)
         self.updatedAt = try container.decodeAsDate(String.self, forKey: .updatedAt, dateFormatter: dateTimeFormatter)
         self.isPublic = try container.decode(Bool.self, forKey: .isPublic)
-        self.intervals = try container.decode([KaraokeIntervals].self, forKey: .intervals)
+        self.intervals = try container.decode([KaraokeInterval].self, forKey: .intervals)
     }
 
     public func encode(to encoder: Encoder) throws {
