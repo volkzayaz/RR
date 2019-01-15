@@ -172,13 +172,13 @@ class TrackView: UIView {
 
         self.actionCallback = actionCallback
         
-        viewModel.downloadPercent
+        viewModel.downloadViewModel.downloadPercent
             .drive(onNext: { [weak d = downloadButton] (x) in
                 d?.stopDownloadButton.progress = x
             })
             .disposed(by: rx.disposeBag)
 
-        viewModel.downloadState
+        viewModel.downloadViewModel.state
             .drive(onNext: { [weak d = downloadButton] (x) in
                 d?.state = x
             })
@@ -234,10 +234,10 @@ extension TrackView: PKDownloadButtonDelegate {
 
         switch state {
         case .startDownload:
-            viewModel.download()
+            viewModel.downloadViewModel.download()
             
         case .pending, .downloading:
-            viewModel.cancelDownload()
+            viewModel.downloadViewModel.cancelDownload()
             
         case .downloaded:
             viewModel.openIn(sourceRect: downloadButton.frame, sourceView: stackView)

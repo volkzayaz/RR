@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7301E0DD21E8C8B700F9B5D5 /* NWise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301E0DC21E8C8B700F9B5D5 /* NWise.swift */; };
+		7301E0E221EE1E5900F9B5D5 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301E0E121EE1E5900F9B5D5 /* DownloadViewModel.swift */; };
+		7301E0E521EE271900F9B5D5 /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301E0E421EE271900F9B5D5 /* DataResponse.swift */; };
 		73116DF221E4B0CA00F2A19A /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF121E4B0CA00F2A19A /* DownloadManager.swift */; };
 		73116DF921E621D800F2A19A /* TrackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF621E621D800F2A19A /* TrackRouter.swift */; };
 		73116DFB21E621D800F2A19A /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF821E621D800F2A19A /* TrackViewModel.swift */; };
@@ -305,6 +307,8 @@
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7301E0DC21E8C8B700F9B5D5 /* NWise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NWise.swift; sourceTree = "<group>"; };
+		7301E0E121EE1E5900F9B5D5 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
+		7301E0E421EE271900F9B5D5 /* DataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataResponse.swift; sourceTree = "<group>"; };
 		73116DF121E4B0CA00F2A19A /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		73116DF621E621D800F2A19A /* TrackRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRouter.swift; sourceTree = "<group>"; };
 		73116DF821E621D800F2A19A /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
@@ -623,6 +627,22 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		7301E0E021EE1E4200F9B5D5 /* CompositeViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7301E0E121EE1E5900F9B5D5 /* DownloadViewModel.swift */,
+			);
+			path = CompositeViewModels;
+			sourceTree = "<group>";
+		};
+		7301E0E321EE26FA00F9B5D5 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				7301E0E421EE271900F9B5D5 /* DataResponse.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		73116DF021E4B0B800F2A19A /* Download */ = {
 			isa = PBXGroup;
 			children = (
@@ -775,6 +795,7 @@
 		737622DB21CA7D73005B603E /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				7301E0E321EE26FA00F9B5D5 /* Data */,
 				737622F221CD1AFA005B603E /* Artist */,
 				737622DC21CA7D91005B603E /* RxResponse.swift */,
 			);
@@ -1589,6 +1610,7 @@
 		76F1FA4320DBA8DE00C9191F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7301E0E021EE1E4200F9B5D5 /* CompositeViewModels */,
 				737622D421CA7AF6005B603E /* Networking */,
 				737622C121CA4EBA005B603E /* Bricks */,
 				76EDBD1720F78F0A0021297F /* Errors */,
@@ -2014,6 +2036,7 @@
 				769F4EC0210B6706000DD23B /* PromoViewModel.swift in Sources */,
 				7665E81F2105DB22007D8B98 /* ListeningSettings.swift in Sources */,
 				762271A8213D8D510018689E /* Location.swift in Sources */,
+				7301E0E221EE1E5900F9B5D5 /* DownloadViewModel.swift in Sources */,
 				76F1FA6720DBAEEC00C9191F /* PlayerRouter.swift in Sources */,
 				769F4E87210A143C000DD23B /* PlayerPlaylistRootControllerViewModel.swift in Sources */,
 				7641B2EC21CA88C2005535E6 /* KaraokeControllerViewModel.swift in Sources */,
@@ -2097,6 +2120,7 @@
 				76E6CB8A217E0EC200283CA1 /* ChangePasswordViewController.swift in Sources */,
 				7665E81B2105BC84007D8B98 /* ListeningSettingsRouter.swift in Sources */,
 				737622DE21CA8051005B603E /* RxResponse.swift in Sources */,
+				7301E0E521EE271900F9B5D5 /* DataResponse.swift in Sources */,
 				7665335120FF1DE300FEC702 /* ProfileViewModel.swift in Sources */,
 				76336A88215CD5E400AE9001 /* ProgressView.swift in Sources */,
 				7665334F20FF1DE300FEC702 /* ProfileRouter.swift in Sources */,

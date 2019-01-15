@@ -17,6 +17,9 @@ protocol PlaylistContentRouter: FlowRouter {
     func showAddToPlaylist(for playlist: Playlist)
 
     func dismiss()
+    
+    func showOpenIn(url: URL, sourceRect: CGRect, sourceView: UIView)
+    
 }
 
 final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegueCompatible {
@@ -105,6 +108,18 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     func dismiss() {
         self.sourceController?.navigationController?.popViewController(animated: true)
     }
+    
+    func showOpenIn(url: URL, sourceRect: CGRect, sourceView: UIView) {
+        
+        let activityViewController = UIActivityViewController(activityItems: [url],
+                                                              applicationActivities: nil)
+        
+        activityViewController.popoverPresentationController?.sourceView = sourceView
+        activityViewController.popoverPresentationController?.sourceRect = sourceRect
+        
+        owner.present(activityViewController, animated: true, completion: nil)
+    }
+    
 }
 
 extension DefaultPlaylistContentRouter {

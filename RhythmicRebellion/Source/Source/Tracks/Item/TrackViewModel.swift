@@ -52,40 +52,9 @@ extension TrackViewModel {
         return user?.isCensorshipTrack(track) ?? track.isCensorship
     }
     
-    
-    var downloadPercent: Driver<CGFloat> {
-        return dataState.asDriver().map { x -> CGFloat? in
-            guard let state = x,
-                case .progress(let p) = state else {
-                    return nil
-            }
-            
-            return CGFloat(p)
-            }
-            .notNil()
-    }
-    
     var downloadDisabled: Bool {
         let userHasPurchase = user?.hasPurchase(for: track) ?? false
         return !(track.isFollowAllowFreeDownload || userHasPurchase)
-    }
-    
-    var downloadState: Driver<PKDownloadButtonState> {
-        
-        let progress = dataState.asDriver().notNil().map { x -> PKDownloadButtonState in
-            
-            switch x {
-            case .data(_):     return .downloaded
-            case .progress(_): return .downloading
-            case .error(_):    return .startDownload
-            case .initialise:  return .pending
-            }
-            
-        }
-        
-        return progress.startWith(.startDownload)
-            .distinctUntilChanged()
-        
     }
     
 }
@@ -104,9 +73,7 @@ struct TrackViewModel : MVVM_ViewModel {
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
-    fileprivate let dataState: BehaviorRelay<DownloadStatus<URL>?> = BehaviorRelay(value: nil)
-    
-    fileprivate let downloadManager = MulticastDownloadManager.default
+    let downloadViewModel: DownloadViewModel
     
     init(router: TrackRouter, track: Track, user: User?,
          player: Player,
@@ -125,10 +92,7 @@ struct TrackViewModel : MVVM_ViewModel {
         
         self.isLockedForActions = isLockedForActions
         
-        let m = downloadManager
-        m.downloadStatus(for: track.audioFile!.urlString)
-            .bind(to: dataState)
-            .disposed(by: bag)
+        downloadViewModel = DownloadViewModel(remoteURL: track.audioFile!.urlString)
         
         indicator.asDriver()
             .drive(onNext: { [weak h = router.owner] (loading) in
@@ -146,19 +110,11 @@ struct TrackViewModel : MVVM_ViewModel {
 
 extension TrackViewModel: Equatable {
     
-    func download() {
-        downloadManager.start(for: track.audioFile!.urlString)
-    }
-    
-    func cancelDownload() {
-        downloadManager.cancel(for: track.audioFile!.urlString)
-    }
-    
     func openIn(sourceRect: CGRect, sourceView: UIView) {
         
-        guard let data = dataState.value,
+        guard let data = downloadViewModel.dataState.value,
               case .data(let url) = data else {
-               return fatalErrorInDebug("Trying to `open in` track \(track.audioFile?.urlString) that hasn't been downloaded yet")
+               return fatalErrorInDebug("Trying to `open in` track \(track.audioFile!.urlString) that hasn't been downloaded yet")
         }
         
         router.showOpenIn(url: url, sourceRect: sourceRect, sourceView: sourceView)

@@ -8,6 +8,7 @@
 
 import UIKit
 import AlamofireImage
+import DownloadButton
 
 protocol PlaylistTableHeaderViewModel {
 
@@ -38,6 +39,8 @@ class PlaylistTableHeaderView: UIView {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
+    @IBOutlet var downloadButton: PKDownloadButton!
+    
     @IBOutlet weak var clearPlaylistButtonTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var clearPlaylistButtonHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var clearPlaylistButtonBottomConstraint: NSLayoutConstraint!
@@ -87,6 +90,16 @@ class PlaylistTableHeaderView: UIView {
         }
 
         self.actionCallback = actionCallback
+        
+        self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
+        self.downloadButton.downloadedButton.setImage(UIImage(named: "OpenIn")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        
+        self.downloadButton.startDownloadButton.cleanDefaultAppearance()
+        self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+        self.downloadButton.stopDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
+        self.downloadButton.downloadedButton.cleanDefaultAppearance()
+        self.downloadButton.downloadedButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
     }
 
     func updateFrame(in view: UIView, for traitCollection: UITraitCollection) {

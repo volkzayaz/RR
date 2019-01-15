@@ -10,6 +10,7 @@
 import UIKit
 import AlamofireImage
 import EasyTipView
+import DownloadButton
 
 final class PlaylistContentViewController: UIViewController {
 
@@ -60,6 +61,25 @@ final class PlaylistContentViewController: UIViewController {
         tableView.register(R.nib.trackTableViewCell)
         
         viewModel.load(with: self)
+        
+        viewModel.downloadButtonHidden
+            .drive(tableHeaderView.downloadButton.rx.isHidden)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.downloadViewModelDriver
+            .flatMapLatest { $0.downloadPercent }
+            .drive(onNext: { [weak d = tableHeaderView.downloadButton] (x) in
+                d?.stopDownloadButton.progress = x
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.downloadViewModelDriver
+            .flatMapLatest { $0.state }
+            .drive(onNext: { [weak d = tableHeaderView.downloadButton] (x) in
+                d?.state = x
+            })
+            .disposed(by: rx.disposeBag)
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -259,4 +279,21 @@ extension PlaylistContentViewController: TrackListBindings {
         self.tableView.reloadRows(at: indexPaths, with: .none)
     }
 
+}
+
+extension PlaylistContentViewController: PKDownloadButtonDelegate {
+
+    func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
+        switch state {
+        case .startDownload:
+            viewModel.downloadViewModel.value?.download()
+            
+        case .pending, .downloading:
+            viewModel.downloadViewModel.value?.cancelDownload()
+            
+        case .downloaded:
+            viewModel.openIn(sourceRect: downloadButton.frame, sourceView: tableHeaderView)
+        }
+    }
+    
 }
