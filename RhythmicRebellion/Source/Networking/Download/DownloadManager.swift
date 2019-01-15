@@ -56,6 +56,12 @@ struct DownloadManager {
         return documentsURL.appendingPathComponent(try! urlConvertible.asURL().lastPathComponent)
     }
     
+    ///clears download directory
+    func clearArtifacts() {
+        ////TODO: drop documents directory with downloaded songs and albums
+        ////
+    }
+    
 }
 
 

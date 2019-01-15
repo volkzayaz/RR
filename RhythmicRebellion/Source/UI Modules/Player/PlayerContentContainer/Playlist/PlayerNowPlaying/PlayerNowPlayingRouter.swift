@@ -64,7 +64,9 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
 
     func start(controller: PlayerNowPlayingViewController) {
         sourceController = controller
-        let vm = NowPlayingViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player, audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService)
+        let vm = NowPlayingViewModel(router: self,
+                                     application: self.dependencies.application,
+                                     player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
     }
     

@@ -42,8 +42,7 @@ final class NowPlayingViewModel {
     
     init(router: PlayerNowPlayingRouter,
          application: Application,
-         player: Player,
-         audioFileLocalStorageService: AudioFileLocalStorageService) {
+         player: Player) {
         self.router = router
         self.application = application
         self.player = player

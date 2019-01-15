@@ -82,7 +82,6 @@ class Application: Watchable {
     private let restApiServiceReachability: Reachability?
     private let webSocketServiceReachability: Reachability?
 
-    let audioFileLocalStorageService: AudioFileLocalStorageService
     let pagesLocalStorageService : PagesLocalStorageService
 
     private var needsLoadUser: Bool = false
@@ -96,7 +95,6 @@ class Application: Watchable {
         self.restApiService = restApiService
         self.webSocketService = webSocketService
 
-        self.audioFileLocalStorageService = AudioFileLocalStorageService()
         self.pagesLocalStorageService = PagesLocalStorageService()
 
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
@@ -156,7 +154,7 @@ class Application: Watchable {
             if let fanUser = user as? FanUser {
                 Defaults.lastSignedUserEmail = fanUser.profile.email
             } else {
-                self.audioFileLocalStorageService.reset()
+                DownloadManager.default.clearArtifacts()
                 self.pagesLocalStorageService.reset()
             }
 
@@ -172,7 +170,7 @@ class Application: Watchable {
                 Defaults.lastSignedUserEmail = fanUser.profile.email
             }
 
-            self.audioFileLocalStorageService.reset()
+            DownloadManager.default.clearArtifacts()
             self.pagesLocalStorageService.reset()
             self.notifyUserChanged()
         } else {

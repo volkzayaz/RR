@@ -90,8 +90,6 @@
 		763170F1215BA3390053C719 /* TextImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763170F0215BA3390053C719 /* TextImageGenerator.swift */; };
 		76336A86215CBE8100AE9001 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76336A85215CBE8100AE9001 /* RoundedView.swift */; };
 		76336A88215CD5E400AE9001 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76336A87215CD5E400AE9001 /* ProgressView.swift */; };
-		7633F31B216CD4DB009A1834 /* AudioFileLocalStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7633F31A216CD4DB009A1834 /* AudioFileLocalStorageService.swift */; };
-		7633F31D216CD6A6009A1834 /* TrackAudioFileLocalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7633F31C216CD6A6009A1834 /* TrackAudioFileLocalItem.swift */; };
 		7634783721527364001F85F6 /* ConfirmationAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */; };
 		7634783D2153867E001F85F6 /* MaskedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783C2153867E001F85F6 /* MaskedTextField.swift */; };
 		7634783F2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634783E2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift */; };
@@ -389,8 +387,6 @@
 		763170F0215BA3390053C719 /* TextImageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextImageGenerator.swift; sourceTree = "<group>"; };
 		76336A85215CBE8100AE9001 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
 		76336A87215CD5E400AE9001 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
-		7633F31A216CD4DB009A1834 /* AudioFileLocalStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileLocalStorageService.swift; sourceTree = "<group>"; };
-		7633F31C216CD6A6009A1834 /* TrackAudioFileLocalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackAudioFileLocalItem.swift; sourceTree = "<group>"; };
 		7634783621527364001F85F6 /* ConfirmationAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationAlertViewModel.swift; sourceTree = "<group>"; };
 		7634783C2153867E001F85F6 /* MaskedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskedTextField.swift; sourceTree = "<group>"; };
 		7634783E2153DCCD001F85F6 /* AddNewSelectableListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewSelectableListItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -978,15 +974,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		7633F319216CD451009A1834 /* AudioFileLocalStorageService */ = {
-			isa = PBXGroup;
-			children = (
-				7633F31A216CD4DB009A1834 /* AudioFileLocalStorageService.swift */,
-				7633F31C216CD6A6009A1834 /* TrackAudioFileLocalItem.swift */,
-			);
-			path = AudioFileLocalStorageService;
-			sourceTree = "<group>";
-		};
 		763931DA21144A5300A65257 /* ActionsViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -1177,7 +1164,6 @@
 			isa = PBXGroup;
 			children = (
 				76315822219EFF3D00E1D7F5 /* PagesLocalStorageService */,
-				7633F319216CD451009A1834 /* AudioFileLocalStorageService */,
 				768EC2C420F4DA2600629F1B /* RestApiService */,
 				761B6CB920EB56000019A71D /* WebSocketService */,
 			);
@@ -2007,7 +1993,6 @@
 				76CE92A8218C7B9A00956882 /* TrackLikeState.swift in Sources */,
 				76D39CF82113183200D47DFA /* PlaylistTableHeaderView.swift in Sources */,
 				764D683C2148E86200F52730 /* ProfileSettingsControllerViewModel.swift in Sources */,
-				7633F31D216CD6A6009A1834 /* TrackAudioFileLocalItem.swift in Sources */,
 				ABD79E86212C9E77004139F6 /* EqualizerView.swift in Sources */,
 				76CE92BC2192E17B00956882 /* ApplicationContentContainerControllerViewModel.swift in Sources */,
 				AB14236D2124487F00C926F5 /* AddToPlaylistViewController.swift in Sources */,
@@ -2070,7 +2055,6 @@
 				769F4E9A210B5BA1000DD23B /* PlayerContentContainerViewModel.swift in Sources */,
 				AB14237221246AC700C926F5 /* AddToPlaylistTableViewCell.swift in Sources */,
 				7665333420FE470C00FEC702 /* HomeRouter.swift in Sources */,
-				7633F31B216CD4DB009A1834 /* AudioFileLocalStorageService.swift in Sources */,
 				737622FA21CE3E50005B603E /* TrackListViewModel.swift in Sources */,
 				76FA64C1218B2ECB00A132E9 /* FanPlaylistState.swift in Sources */,
 				7665335720FF414300FEC702 /* SignInControllerViewModel.swift in Sources */,

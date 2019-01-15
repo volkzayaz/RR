@@ -53,8 +53,7 @@ class TrackView: UIView {
     var indexPath: IndexPath?
     
     var actionCallback: ActionCallback?
-    weak var downloadingInfo: TrackAudioFileDownloadingInfo?
-
+    
     var disposeBag = DisposeBag()
     
     override func awakeFromNib() {
@@ -98,8 +97,6 @@ class TrackView: UIView {
         
     func setup(viewModel: TrackViewModel, actionCallback:  @escaping ActionCallback) {
 
-        self.downloadingInfo = nil
-        
         self.viewModel = viewModel
         if viewModel.isCurrentInPlayer && viewModel.isPlayable {
             equalizer.isHidden = false
