@@ -10,10 +10,16 @@
 import UIKit
 
 protocol PlayerNowPlayingRouter: FlowRouter {
+    var owner: UIViewController { get }
     func showAddToPlaylist(for tracks: [Track])
 }
 
 final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSegueCompatible {
+    
+    var owner: UIViewController {
+        return sourceController!
+    }
+    
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -58,7 +64,9 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
 
     func start(controller: PlayerNowPlayingViewController) {
         sourceController = controller
-        let vm = NowPlayingViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player, audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService)
+        let vm = NowPlayingViewModel(router: self,
+                                     application: self.dependencies.application,
+                                     player: self.dependencies.player)
         controller.configure(viewModel: vm, router: self)
     }
     

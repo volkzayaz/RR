@@ -67,9 +67,9 @@ class Application: Watchable {
     
     struct URI {
 
-        static let origin = "http://dev-mobile.fan.rebellionretailsite.com"
-        static let restApiService = "http://dev-mobile.api.rebellionretailsite.com"
-        static let webSocketService = "ws://dev-mobile.rebellionretailsite.com:3000/"
+        static let origin = "http://dev.fan.rebellionretailsite.com"
+        static let restApiService = "http://dev.api.rebellionretailsite.com"
+        static let webSocketService = "ws://dev.rebellionretailsite.com:3000/"
 
 //        static let origin = "http://rhythmic-rebellion.com"
 //        static let restApiService =  "https://api.rhythmic-rebellion.com"
@@ -82,7 +82,6 @@ class Application: Watchable {
     private let restApiServiceReachability: Reachability?
     private let webSocketServiceReachability: Reachability?
 
-    let audioFileLocalStorageService: AudioFileLocalStorageService
     let pagesLocalStorageService : PagesLocalStorageService
 
     private var needsLoadUser: Bool = false
@@ -96,7 +95,6 @@ class Application: Watchable {
         self.restApiService = restApiService
         self.webSocketService = webSocketService
 
-        self.audioFileLocalStorageService = AudioFileLocalStorageService()
         self.pagesLocalStorageService = PagesLocalStorageService()
 
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
@@ -156,7 +154,7 @@ class Application: Watchable {
             if let fanUser = user as? FanUser {
                 Defaults.lastSignedUserEmail = fanUser.profile.email
             } else {
-                self.audioFileLocalStorageService.reset()
+                DownloadManager.default.clearArtifacts()
                 self.pagesLocalStorageService.reset()
             }
 
@@ -172,7 +170,7 @@ class Application: Watchable {
                 Defaults.lastSignedUserEmail = fanUser.profile.email
             }
 
-            self.audioFileLocalStorageService.reset()
+            DownloadManager.default.clearArtifacts()
             self.pagesLocalStorageService.reset()
             self.notifyUserChanged()
         } else {

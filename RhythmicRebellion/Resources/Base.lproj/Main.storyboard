@@ -496,7 +496,7 @@
             </objects>
             <point key="canvasLocation" x="1712" y="410"/>
         </scene>
-        <!--Playlist Content View Controller-->
+        <!--Delegate-->
         <scene sceneID="wY8-ic-DLR">
             <objects>
                 <viewController storyboardIdentifier="PlaylistContentViewController" id="QTJ-hD-c31" customClass="PlaylistContentViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
@@ -688,15 +688,27 @@
                                 <constraint firstItem="itf-f4-Hdm" firstAttribute="top" secondItem="SJy-ur-hTr" secondAttribute="bottom" constant="15" id="EOH-Q2-h9h"/>
                                 <constraint firstItem="SJy-ur-hTr" firstAttribute="leading" secondItem="zfW-hP-KPC" secondAttribute="leading" id="Tyg-JX-18Z"/>
                                 <constraint firstAttribute="bottom" secondItem="itf-f4-Hdm" secondAttribute="bottom" id="YB1-Mb-An3"/>
+                                <constraint firstItem="L5R-rG-uQf" firstAttribute="leading" secondItem="SJy-ur-hTr" secondAttribute="trailing" constant="15" id="cIi-43-aIa"/>
                                 <constraint firstAttribute="trailing" secondItem="itf-f4-Hdm" secondAttribute="trailing" constant="15" id="faF-Er-6Ko"/>
-                                <constraint firstItem="L5R-rG-uQf" firstAttribute="leading" secondItem="SJy-ur-hTr" secondAttribute="trailing" constant="15" id="gi6-r9-NK4"/>
                                 <constraint firstAttribute="trailing" secondItem="L5R-rG-uQf" secondAttribute="trailing" constant="15" id="raT-BD-Mqt"/>
                                 <constraint firstItem="SJy-ur-hTr" firstAttribute="top" secondItem="zfW-hP-KPC" secondAttribute="top" id="xrf-NB-3rz"/>
                             </constraints>
                         </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PZk-HB-NGG" customClass="PKDownloadButton">
+                            <rect key="frame" x="237" y="259" width="22" height="22"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="PZk-HB-NGG" secondAttribute="height" multiplier="1:1" id="K7J-iR-OU5"/>
+                                <constraint firstAttribute="width" constant="22" id="Pjn-yQ-TtV"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="delegate" destination="QTJ-hD-c31" id="8wr-HA-ubx"/>
+                            </connections>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="PZk-HB-NGG" firstAttribute="centerY" secondItem="L5R-rG-uQf" secondAttribute="centerY" id="9Ll-OG-p8Z"/>
                         <constraint firstItem="dNr-95-tqM" firstAttribute="width" secondItem="upv-Gx-oyy" secondAttribute="width" multiplier="0.6" id="CHc-xw-p3h"/>
                         <constraint firstItem="zfW-hP-KPC" firstAttribute="leading" secondItem="upv-Gx-oyy" secondAttribute="leading" id="GGY-Mz-kXV"/>
                         <constraint firstItem="j5P-nR-Sfr" firstAttribute="top" secondItem="zfW-hP-KPC" secondAttribute="bottom" constant="14" id="HSB-8c-OFY"/>
@@ -707,6 +719,7 @@
                         <constraint firstItem="udV-La-GaU" firstAttribute="centerY" secondItem="upv-Gx-oyy" secondAttribute="centerY" multiplier="0.85" id="elE-bC-Erf"/>
                         <constraint firstItem="j5P-nR-Sfr" firstAttribute="bottom" secondItem="lmZ-Pv-1LC" secondAttribute="bottom" id="h3Y-Qb-o5v"/>
                         <constraint firstItem="j5P-nR-Sfr" firstAttribute="leading" secondItem="lmZ-Pv-1LC" secondAttribute="leading" id="rd2-WV-7Hf"/>
+                        <constraint firstItem="L5R-rG-uQf" firstAttribute="leading" secondItem="PZk-HB-NGG" secondAttribute="trailing" constant="45" id="x55-Rg-5G4"/>
                         <constraint firstItem="dNr-95-tqM" firstAttribute="centerY" secondItem="upv-Gx-oyy" secondAttribute="centerY" multiplier="0.85" id="zJc-eU-6O5"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="lmZ-Pv-1LC"/>
@@ -727,6 +740,7 @@
                         <outlet property="clearPlaylistButtonHeightConstraint" destination="1LY-JS-Y71" id="VXi-lm-lXE"/>
                         <outlet property="clearPlaylistButtonTopConstraint" destination="EOH-Q2-h9h" id="s6F-xX-0qi"/>
                         <outlet property="descriptionLabel" destination="YiP-MZ-xQR" id="PVO-fy-Kuh"/>
+                        <outlet property="downloadButton" destination="PZk-HB-NGG" id="adf-oD-y6F"/>
                         <outlet property="imageView" destination="dNr-95-tqM" id="grO-Qn-5cz"/>
                         <outlet property="infoView" destination="zfW-hP-KPC" id="6We-9q-Sxq"/>
                         <outlet property="titleLabel" destination="fKw-Ed-0lZ" id="8Gl-yl-a84"/>
@@ -1810,7 +1824,7 @@
         <image name="addPlaylist" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kAD-GO-v6x"/>
+        <segue reference="tg1-kY-VU3"/>
         <segue reference="pA5-CW-r5f"/>
     </inferredMetricsTieBreakers>
 </document>

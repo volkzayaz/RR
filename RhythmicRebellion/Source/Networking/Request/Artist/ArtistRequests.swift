@@ -17,7 +17,6 @@ enum ArtistRequest: BaseNetworkRouter {
     case playlistRecords(playlist: ArtistPlaylist)
     case albumRecords(album: Album)
     
-    
 }
 
 extension ArtistRequest {

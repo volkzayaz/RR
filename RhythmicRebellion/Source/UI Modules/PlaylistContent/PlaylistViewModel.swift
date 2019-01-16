@@ -9,6 +9,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 protocol PlaylistProvider: TrackProvider {
     var playlist: Playlist { get }
@@ -16,6 +17,10 @@ protocol PlaylistProvider: TrackProvider {
 
 protocol DeletablePlaylistProvider: PlaylistProvider {
     func delete(track: Track, completion: @escaping (Box<Void>) -> Void)
+}
+
+protocol DownloadablePlaylistProvider: PlaylistProvider {
+    var downloadURL: Maybe<String> { get }
 }
 
 struct FanPlaylistProvider: DeletablePlaylistProvider {
@@ -62,7 +67,7 @@ struct DefinedPlaylistProvider: PlaylistProvider {
     
 }
 
-struct AlbumPlaylistProvider: PlaylistProvider, Playlist {
+struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistProvider {
     
     let album: Album
     
@@ -91,6 +96,15 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist {
     var description: String? { return nil }
     var title: String? { return nil }
     var isFanPlaylist: Bool { return false }
+ 
+    var downloadURL: Maybe<String> {
+        
+        return AlbumRequest.downloadLink(album: album)
+            .rx.response(type: DataReponse<String>.self)
+            .map { $0.data }
+            
+            
+    }
     
 }
 
@@ -113,6 +127,18 @@ struct ArtistPlaylistProvider: PlaylistProvider {
         return artistPlaylist
     }
     fileprivate let bag = DisposeBag()
+    
+}
+
+extension PlaylistViewModel {
+    
+    var downloadButtonHidden: Driver<Bool> {
+        return downloadViewModel.asDriver().map { $0 == nil }
+    }
+    
+    var downloadViewModelDriver: Driver<DownloadViewModel> {
+        return downloadViewModel.asDriver().notNil()
+    }
     
 }
 
@@ -139,6 +165,9 @@ final class PlaylistViewModel {
     
     let playlistHeaderViewModel: PlaylistHeaderViewModel
     
+    let downloadViewModel = BehaviorRelay<DownloadViewModel?>(value: nil)
+    fileprivate let bag = DisposeBag()
+    
     // MARK: - Lifecycle -
 
     deinit {
@@ -149,13 +178,20 @@ final class PlaylistViewModel {
          application: Application,
          player: Player,
          restApiService: RestApiService,
-         audioFileLocalStorageService: AudioFileLocalStorageService,
          provider: PlaylistProvider) {
         
         self.router = router
         self.application = application
         self.player = player
         self.restApiService = restApiService
+        
+        if let p = provider as? DownloadablePlaylistProvider {
+            p.downloadURL
+                .silentCatch()
+                .map { DownloadViewModel(remoteURL: $0) }
+                .bind(to: downloadViewModel)
+                .disposed(by: bag)
+        }
         
         let actions = { (list: TrackListViewModel,
                          track: Track,
@@ -248,8 +284,8 @@ final class PlaylistViewModel {
         
         tracksViewModel = TrackListViewModel(application: application,
                                              player: player,
-                                             audioFileLocalStorageService: audioFileLocalStorageService,
                                              dataProvider: provider,
+                                             router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)
         
@@ -262,7 +298,18 @@ final class PlaylistViewModel {
         
         application.addWatcher(self)
     }
-
+    
+    func openIn(sourceRect: CGRect, sourceView: UIView) {
+        
+        guard let data = downloadViewModel.value?.dataState.value,
+            case .data(let url) = data else {
+                return fatalErrorInDebug("Trying to `open in` album \(playlist.name) that hasn't been downloaded yet")
+        }
+        
+        router.showOpenIn(url: url, sourceRect: sourceRect, sourceView: sourceView)
+        
+    }
+    
 }
 
 extension PlaylistViewModel {
