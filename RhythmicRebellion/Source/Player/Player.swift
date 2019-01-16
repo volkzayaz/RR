@@ -24,8 +24,9 @@ public enum PlayerStatus : Int {
     case failed
 }
 
-enum AudioFileType: UInt {
-    case vocal
+public enum AudioFileType: UInt {
+    case original
+    case backing
     case clean
 }
 
@@ -195,7 +196,7 @@ class Player: NSObject, Watchable {
     private var webSocketService: WebSocketService { return self.application.webSocketService }
 
     private let playlist: PlayerPlaylist = PlayerPlaylist()
-    private var playerQueue: PlayerQueue = PlayerQueue(prefferedAudioFileType: AudioFileType.vocal)
+    private var playerQueue: PlayerQueue = PlayerQueue(preferredAudioFileType: AudioFileType.original)
 
     public var currentTrackId: TrackId?
     private var currentTrackState: TrackState?
@@ -207,6 +208,7 @@ class Player: NSObject, Watchable {
 
 //    let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Player")
 
+    var preferredAudioFileType: AudioFileType { return self.playerQueue.preferredAudioFileType}
 
     init(with application: Application) {
 
@@ -1782,26 +1784,24 @@ fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Categ
 
 extension Player {
 
-//    func updatePlayerQueu(prefferedAudioFileType: AudioFileType) {
-//        guard self.playerQueue.prefferedAudioFileType != prefferedAudioFileType else { return }
-//
-//        self.playerQueue.prefferedAudioFileType = self.audioFileType
-//        self.replace(playerItems: playerQueue.playerItems)
-//
-//        let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
-//        self.set(trackState: trackState)
-//
-//        guard let currentQueueItem = self.currentQueueItem else { return }
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
-//        })
-//    }
-//
-//    func change(karaokeAudioFileType: AudioFileType) {
-//        guard self.playerQueue.containsOnlyTrack == true else { return }
-//        guard self.karaokeAudioFileType != karaokeAudioFileType else { return }
-//
-//        self.karaokeAudioFileType = karaokeAudioFileType
-//        self.updatePlayerQueu(prefferedAudioFileType: self.audioFileType)
-//    }
+    func setPreferredAudioFileType(preferredAudioFileType: AudioFileType) {
+        guard self.playerQueue.preferredAudioFileType != preferredAudioFileType else { return }
+
+        if let trackAudioFileType = self.playerQueue.trackAudioFileType, trackAudioFileType != preferredAudioFileType {
+
+            self.playerQueue.replace(preferredAudioFileType: preferredAudioFileType)
+            self.replace(playerItems: playerQueue.playerItems)
+
+            let trackState = TrackState(hash: self.stateHash, progress: 0.0, isPlaying: isPlaying)
+            self.set(trackState: trackState)
+
+            if let currentQueueItem = self.currentQueueItem {
+                self.watchersContainer.invoke({ (observer) in
+                    observer.player(player: self, didChangePlayerQueueItem: currentQueueItem)
+                })
+            }
+        } else {
+            self.playerQueue.preferredAudioFileType = preferredAudioFileType
+        }
+    }
 }

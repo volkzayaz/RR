@@ -23,8 +23,9 @@ class LyricsKaraokeService {
     private(set) var player: Player
 
     let mode: BehaviorRelay<Mode> = BehaviorRelay(value: .none)
-
     let lyricsState: BehaviorRelay<LyricsState> = BehaviorRelay(value: .unknown)
+
+    var karaokeAudioFileType: BehaviorRelay<AudioFileType> =  BehaviorRelay(value: .original)
 
     private(set) var tracksIdsLyrics = [Int : Lyrics]()
 
@@ -39,6 +40,10 @@ class LyricsKaraokeService {
 
         let modeChanges = self.mode.asObservable()
 
+        let prefferedAudioFileTypeChanges = self.karaokeAudioFileType.asObservable()
+
+        let lyricsStateChanges = self.lyricsState.asObservable()
+
         let _ = Observable.combineLatest(modeChanges, plyerCurrentItemChanges)
             .flatMap { [unowned self] (arg) -> Observable<LyricsState> in
                 let (mode, playerItem) = arg
@@ -50,6 +55,25 @@ class LyricsKaraokeService {
                 self.lyricsState.accept(.error(error))
             })
             .disposed(by: disposeBag)
+
+
+        let _ = Observable.combineLatest(modeChanges, prefferedAudioFileTypeChanges, lyricsStateChanges)
+            .subscribe(onNext: { [unowned self] (arg) in
+                let (mode, audioFileType, lyricsState) = arg
+
+                switch mode {
+                case .none, .lyrics: self.player.setPreferredAudioFileType(preferredAudioFileType: .original)
+                case .karaoke:
+                    switch lyricsState {
+                    case .lyrics(let lyrics):
+                        guard lyrics.karaoke != nil else { self.player.setPreferredAudioFileType(preferredAudioFileType: .original); return }
+                        self.player.setPreferredAudioFileType(preferredAudioFileType: audioFileType)
+                    default: self.player.setPreferredAudioFileType(preferredAudioFileType: .original)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+
 
         self.application.addWatcher(self)
     }

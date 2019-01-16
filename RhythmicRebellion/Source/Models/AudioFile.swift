@@ -30,7 +30,7 @@ struct TrackAudioFile: AudioFile, Codable {
     }
 }
 
-struct PlayerConfigAudioFile: AudioFile, Decodable {
+struct DefaultAudioFile: AudioFile, Codable {
 
     let duration: Int
     let urlString: String

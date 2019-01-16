@@ -11,9 +11,9 @@ import Foundation
 
 struct PlayerConfig: Decodable {
 
-    let explicitMaterialAudioFile: PlayerConfigAudioFile
-    let noAudioFile: PlayerConfigAudioFile
-    let noPreviewAudioFile: PlayerConfigAudioFile
+    let explicitMaterialAudioFile: DefaultAudioFile
+    let noAudioFile: DefaultAudioFile
+    let noPreviewAudioFile: DefaultAudioFile
 
     enum CodingKeys: String, CodingKey {
         case explicitMaterialAudioFile = "explicit_material"

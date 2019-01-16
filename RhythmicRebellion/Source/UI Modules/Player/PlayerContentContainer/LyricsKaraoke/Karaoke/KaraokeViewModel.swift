@@ -26,8 +26,11 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
     private(set) var viewMode: KaraokeViewMode
     private(set) var currentItemIndexPath: IndexPath?
 
-    var isVocalAudioFile: Bool { return false/*self.player.karaokeAudioFileType == .vocal*/ }
-    var canChangeAudioFileType: Bool { return false/*self.player.canChangeKaraokeAudioFileType*/ }
+    var isVocalAudioFile: Bool { return self.lyricsKaraokeService.karaokeAudioFileType.value == .original }
+    var canChangeAudioFileType: Bool { return self.karaoke != nil
+                                            && self.player.state.blocked == false
+                                            && self.player.state.waitingAddons == false
+                                            && self.player.currentQueueItem?.isTrack == true }
 
     let disposeBag = DisposeBag()
 
@@ -87,6 +90,13 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
         .disposed(by: disposeBag)
 
 
+        self.lyricsKaraokeService.karaokeAudioFileType
+            .subscribe(onNext: { [unowned self] (audioFileType) in
+                self.delegate?.refreshUI()
+            })
+            .disposed(by: disposeBag)
+
+
         self.delegate?.reloadUI()
         self.player.addWatcher(self)
     }
@@ -131,12 +141,11 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 
     func changeAudioFileType() {
 
-//        switch self.player.karaokeAudioFileType {
-//        case .vocal: self.player.change(karaokeAudioFileType: .clean)
-//        case .clean: self.player.change(karaokeAudioFileType: .vocal)
-//        }
-//
-//        self.delegate?.refreshUI()
+        switch self.lyricsKaraokeService.karaokeAudioFileType.value {
+        case .original: self.lyricsKaraokeService.karaokeAudioFileType.accept(.backing)
+        case .clean: self.lyricsKaraokeService.karaokeAudioFileType.accept(.original)
+        default: self.lyricsKaraokeService.karaokeAudioFileType.accept(.original)
+        }
     }
 
     func switchToLyrics() {
@@ -145,6 +154,10 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 }
 
 extension KaraokeViewModel: PlayerWatcher {
+
+    func player(player: Player, didChangeBlockedState isBlocked: Bool) {
+        self.delegate?.refreshUI()
+    }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
 
