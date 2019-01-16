@@ -91,8 +91,13 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     
     var id: Int { return album.id }
     var name: String { return album.name }
+    var thumbnailURL: URL? {
+        guard let x = album.image.simpleURL else { return nil }
+            
+        return URL(string: x)
+    }
+
     var isDefault: Bool { return false }
-    var thumbnailURL: URL? { return nil }
     var description: String? { return nil }
     var title: String? { return nil }
     var isFanPlaylist: Bool { return false }
