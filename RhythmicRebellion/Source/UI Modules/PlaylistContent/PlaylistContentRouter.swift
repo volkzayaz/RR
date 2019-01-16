@@ -10,14 +10,24 @@
 import UIKit
 
 protocol PlaylistContentRouter: FlowRouter {
+    
+    var owner: UIViewController { get }
+    
     func showAddToPlaylist(for tracks: [Track])
     func showAddToPlaylist(for playlist: Playlist)
 
     func dismiss()
+    
+    func showOpenIn(url: URL, sourceRect: CGRect, sourceView: UIView)
+    
 }
 
 final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegueCompatible {
-
+    
+    var owner: UIViewController {
+        return sourceController!
+    }
+    
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
 
@@ -41,12 +51,11 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     private(set) var dependencies: RouterDependencies
 
     private(set) weak var viewModel: PlaylistViewModel?
-    private(set) weak var sourceController: UIViewController?
+    weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
     }
-
 
     func prepare(for destination: DefaultPlaylistContentRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
@@ -83,7 +92,6 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
                                    application: self.dependencies.application,
                                    player: self.dependencies.player,
                                    restApiService: self.dependencies.restApiService,
-                                   audioFileLocalStorageService: self.dependencies.audioFileLocalStorageService,
                                    provider: provider)
 
         controller.configure(viewModel: vm, router: self)
@@ -100,6 +108,18 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     func dismiss() {
         self.sourceController?.navigationController?.popViewController(animated: true)
     }
+    
+    func showOpenIn(url: URL, sourceRect: CGRect, sourceView: UIView) {
+        
+        let activityViewController = UIActivityViewController(activityItems: [url],
+                                                              applicationActivities: nil)
+        
+        activityViewController.popoverPresentationController?.sourceView = sourceView
+        activityViewController.popoverPresentationController?.sourceRect = sourceRect
+        
+        owner.present(activityViewController, animated: true, completion: nil)
+    }
+    
 }
 
 extension DefaultPlaylistContentRouter {

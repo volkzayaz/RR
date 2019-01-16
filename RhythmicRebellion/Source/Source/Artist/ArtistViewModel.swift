@@ -50,8 +50,8 @@ struct ArtistViewModel : MVVM_ViewModel {
 
         tracksViewModel = TrackListViewModel(application: DataLayer.get.application,
                                              player: DataLayer.get.player,
-                                             audioFileLocalStorageService: DataLayer.get.audioFileLocalStorageService,
-                                             dataProvider: TracksProvider(artist: artist))
+                                             dataProvider: TracksProvider(artist: artist),
+                                             router: router.trackListRouter())
         
         trackObserver = TrackListViewModel.Observer(list: tracksViewModel,
                                                     handler: router.owner)
@@ -124,17 +124,6 @@ extension ArtistViewModel {
         router.present(actions: tracksViewModel.actions(forObjectAt: indexPath),
                        sourceRect: sourceRect, sourceView: sourceView)
         
-    }
-    
-    func openIn(for indexPath: IndexPath,
-                sourceRect: CGRect, sourceView: UIView) {
-        
-        guard let url = tracksViewModel.objectLoaclURL(at: indexPath) else {
-            return
-        }
-        
-        router.openIn(for: url,
-                      sourceRect: sourceRect, sourceView: sourceView)
     }
     
     func showTip(tip: String, view: UIView, superView: UIView) {

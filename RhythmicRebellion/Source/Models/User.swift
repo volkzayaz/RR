@@ -77,7 +77,7 @@ struct UserProfile: Codable {
     var language: String?
     var forceToPlay: Set<Int>
     var followedArtistsIds: Set<String>
-    var purchasedAlbumsIds: Set<String>
+    var purchasedAlbumsIds: Set<Int>
     var purchasedTracksIds: Set<Int>
     var tracksLikeStates: [Int : Track.LikeStates]
     var skipAddonsArtistsIds: Set<String>
@@ -144,10 +144,10 @@ struct UserProfile: Codable {
             self.followedArtistsIds = Set<String>()
         }
 
-        if let purchasedAlbumsIds = try container.decodeIfPresent(Set<String>.self, forKey: .purchasedAlbumsIds) {
+        if let purchasedAlbumsIds = try container.decodeIfPresent(Set<Int>.self, forKey: .purchasedAlbumsIds) {
             self.purchasedAlbumsIds = purchasedAlbumsIds
         } else {
-            self.purchasedAlbumsIds = Set<String>()
+            self.purchasedAlbumsIds = Set<Int>()
         }
 
         if let purchasedTracksIds = try container.decodeIfPresent(Set<Int>.self, forKey: .purchasedTracksIds) {

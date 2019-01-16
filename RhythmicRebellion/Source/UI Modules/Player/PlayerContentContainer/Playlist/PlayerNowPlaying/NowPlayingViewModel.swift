@@ -42,8 +42,7 @@ final class NowPlayingViewModel {
     
     init(router: PlayerNowPlayingRouter,
          application: Application,
-         player: Player,
-         audioFileLocalStorageService: AudioFileLocalStorageService) {
+         player: Player) {
         self.router = router
         self.application = application
         self.player = player
@@ -116,8 +115,8 @@ final class NowPlayingViewModel {
         
         tracksViewModel = TrackListViewModel(application: application,
                                              player: player,
-                                             audioFileLocalStorageService: audioFileLocalStorageService,
                                              dataProvider: NowPlayingProvider(player: player),
+                                             router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)
         
