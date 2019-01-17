@@ -9,11 +9,6 @@
 
 import UIKit
 
-enum KaraokeViewMode: Int {
-    case scroll
-    case onePhrase
-}
-
 protocol KaraokeViewModelProtocol: class, KaraokeCollectionViewFlowLayoutViewModel {
 
     var viewMode: KaraokeViewMode { get }
