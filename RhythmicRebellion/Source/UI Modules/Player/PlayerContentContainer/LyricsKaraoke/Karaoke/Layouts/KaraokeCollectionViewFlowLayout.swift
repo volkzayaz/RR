@@ -56,6 +56,7 @@ class KaraokeCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
 
     private func initialize() {
+        self.sectionInset = UIEdgeInsets.init(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
         dynamicAnimator = UIDynamicAnimator(collectionViewLayout: self)
     }
 
@@ -170,8 +171,8 @@ class KaraokeOnePhraseCollectionViewFlowLayout: KaraokeCollectionViewFlowLayout 
         super.update(karaokeLayoutAttributes: karaokeLayoutAttributes, in: collectionView)
 
 
-        if abs(karaokeLayoutAttributes.boundsCenterOffset.y) <= karaokeLayoutAttributes.frame.height + 10.0 {
-            let scale = 1.0 - (0.4 * abs(karaokeLayoutAttributes.boundsCenterOffset.y) / (karaokeLayoutAttributes.frame.height + 10.0))
+        if abs(karaokeLayoutAttributes.boundsCenterOffset.y) <= karaokeLayoutAttributes.frame.height + self.minimumLineSpacing {
+            let scale = 1.0 - (0.4 * abs(karaokeLayoutAttributes.boundsCenterOffset.y) / (karaokeLayoutAttributes.frame.height + self.minimumLineSpacing))
 
             karaokeLayoutAttributes.transform = CGAffineTransform(scaleX: scale, y: scale)
 
