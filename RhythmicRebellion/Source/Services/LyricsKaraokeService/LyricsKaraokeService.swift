@@ -11,6 +11,11 @@ import RxSwift
 import RxCocoa
 
 
+enum KaraokeViewMode: Int {
+    case scroll
+    case onePhrase
+}
+
 class LyricsKaraokeService {
 
     enum Mode {
@@ -22,6 +27,8 @@ class LyricsKaraokeService {
     private(set) var application: Application
     private(set) var player: Player
 
+    var karaokeViewMode: KaraokeViewMode = .onePhrase
+    
     let mode: BehaviorRelay<Mode> = BehaviorRelay(value: .none)
     let lyricsState: BehaviorRelay<LyricsState> = BehaviorRelay(value: .unknown)
 
