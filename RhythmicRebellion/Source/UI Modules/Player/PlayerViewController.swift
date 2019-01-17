@@ -312,10 +312,10 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
     func refreshKaraokeUI() {
 
-        self.playerItemProgressView.isSelected = self.viewModel.isKaraokeEnabled && self.viewModel.karaokeModelId != nil
+        self.playerItemProgressView.isSelected = self.viewModel.karaokeModelId != nil && self.viewModel.isKaraokeEnabled
 
-        guard self.viewModel.isKaraokeEnabled else { self.playerItemProgressView.update(with: nil); return }
-        guard self.playerItemProgressView.karaokeIntervalsViewModelId != self.viewModel.karaokeModelId else { return }
+        guard let karaokeModelId = self.viewModel.karaokeModelId, self.viewModel.isKaraokeEnabled else { self.playerItemProgressView.update(with: nil); return }
+        guard self.playerItemProgressView.karaokeIntervalsViewModelId != karaokeModelId else { return }
 
         let karaokeIntervalsViewModel = self.viewModel.karaokeIntervalsViewModel()
         self.playerItemProgressView.update(with: karaokeIntervalsViewModel)

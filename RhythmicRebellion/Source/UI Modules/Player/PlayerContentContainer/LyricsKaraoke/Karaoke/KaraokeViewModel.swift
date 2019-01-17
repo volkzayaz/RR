@@ -8,6 +8,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class KaraokeViewModel: KaraokeViewModelProtocol {
 
@@ -16,15 +18,21 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
     private(set) weak var delegate: KaraokeViewModelDelegate?
     private(set) weak var router: KaraokeRouter?
 
-    private(set) var player: Player
+    private var player: Player
+    private var lyricsKaraokeService: LyricsKaraokeService
 
     private var karaoke: Karaoke?
 
     private(set) var viewMode: KaraokeViewMode
     private(set) var currentItemIndexPath: IndexPath?
 
-    var isVocalAudioFile: Bool { return self.player.karaokeAudioFileType == .vocal }
-    var canChangeAudioFileType: Bool { return self.player.canChangeKaraokeAudioFileType }
+    var isVocalAudioFile: Bool { return self.lyricsKaraokeService.karaokeAudioFileType.value == .original }
+    var canChangeAudioFileType: Bool { return self.karaoke != nil
+                                            && self.player.state.blocked == false
+                                            && self.player.state.waitingAddons == false
+                                            && self.player.currentQueueItem?.isTrack == true }
+
+    let disposeBag = DisposeBag()
 
     // MARK: - Lifecycle -
 
@@ -32,9 +40,10 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
         self.player.removeWatcher(self)
     }
 
-    init(router: KaraokeRouter, player: Player) {
+    init(router: KaraokeRouter, player: Player, lyricsKaraokeService: LyricsKaraokeService) {
         self.router = router
         self.player = player
+        self.lyricsKaraokeService = lyricsKaraokeService
 
         self.viewMode = .onePhrase
     }
@@ -66,11 +75,29 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
     func load(with delegate: KaraokeViewModelDelegate) {
         self.delegate = delegate
 
-        self.karaoke = self.player.currentItem?.lyrics?.karaoke
-        self.currentItemIndexPath = self.findCurrentItemIndexPath()
+
+        self.lyricsKaraokeService.lyricsState.subscribe(onNext: { [unowned self] (lyricsState) in
+            switch lyricsState {
+            case .lyrics(let lyrics):
+                self.karaoke = lyrics.karaoke
+            default:
+                self.karaoke = nil
+            }
+
+            self.currentItemIndexPath = self.findCurrentItemIndexPath()
+            self.delegate?.reloadUI()
+        })
+        .disposed(by: disposeBag)
+
+
+        self.lyricsKaraokeService.karaokeAudioFileType
+            .subscribe(onNext: { [unowned self] (audioFileType) in
+                self.delegate?.refreshUI()
+            })
+            .disposed(by: disposeBag)
+
 
         self.delegate?.reloadUI()
-
         self.player.addWatcher(self)
     }
 
@@ -114,26 +141,22 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 
     func changeAudioFileType() {
 
-        switch self.player.karaokeAudioFileType {
-        case .vocal: self.player.change(karaokeAudioFileType: .clean)
-        case .clean: self.player.change(karaokeAudioFileType: .vocal)
+        switch self.lyricsKaraokeService.karaokeAudioFileType.value {
+        case .original: self.lyricsKaraokeService.karaokeAudioFileType.accept(.backing)
+        case .clean: self.lyricsKaraokeService.karaokeAudioFileType.accept(.original)
+        default: self.lyricsKaraokeService.karaokeAudioFileType.accept(.original)
         }
-
-        self.delegate?.refreshUI()
     }
 
     func switchToLyrics() {
-        self.player.switchTo(karaokeMode: .lyrics)
+        self.lyricsKaraokeService.mode.accept(.lyrics)
     }
 }
 
 extension KaraokeViewModel: PlayerWatcher {
 
-    func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
-
-        self.karaoke = self.player.currentItem?.lyrics?.karaoke
-        self.currentItemIndexPath = self.findCurrentItemIndexPath()
-        self.delegate?.reloadUI()
+    func player(player: Player, didChangeBlockedState isBlocked: Bool) {
+        self.delegate?.refreshUI()
     }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
@@ -148,13 +171,5 @@ extension KaraokeViewModel: PlayerWatcher {
         self.currentItemIndexPath = currentItemIndexPath
 
         self.delegate?.refreshUI()
-    }
-
-
-    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
-
-        self.karaoke = self.player.currentItem?.lyrics?.karaoke
-        self.currentItemIndexPath = self.findCurrentItemIndexPath()
-        self.delegate?.reloadUI()
     }
 }

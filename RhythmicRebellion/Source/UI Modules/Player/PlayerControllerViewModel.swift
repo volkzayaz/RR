@@ -11,6 +11,8 @@ import Foundation
 import CoreMedia
 import UIKit
 import Alamofire
+import RxSwift
+import RxCocoa
 
 struct DefaultKaraokeIntervalProgressViewModel: KaraokeIntervalProgressViewModel {
     var startValue: Float
@@ -112,8 +114,9 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         return user.isFollower(for: currentPlayerItem.playlistItem.track.artist.id)
     }
 
-    var isKaraokeEnabled: Bool { return self.player.karaokeMode == .karaoke }
-    var karaokeModelId: Int? { return self.player.currentItem?.lyrics?.karaoke?.id }
+    var isKaraokeEnabled: Bool { return self.lyricsKaraokeService.mode.value == .karaoke }
+    var karaoke: Karaoke?
+    var karaokeModelId: Int? { return self.karaoke?.id }
 
 
     // MARK: - Private properties -
@@ -122,15 +125,19 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     private(set) weak var router: PlayerRouter?
     private(set) var application: Application
     private(set) var player: Player
+    private(set) var lyricsKaraokeService: LyricsKaraokeService
 
     private(set) var textImageGenerator: TextImageGenerator
 
+    let disposeBag = DisposeBag()
+
     // MARK: - Lifecycle -
 
-    init(router: PlayerRouter, application: Application, player: Player) {
+    init(router: PlayerRouter, application: Application, player: Player, lyricsKaraokeService: LyricsKaraokeService) {
         self.router = router
         self.application = application
         self.player = player
+        self.lyricsKaraokeService = lyricsKaraokeService
 
         self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
 
@@ -146,6 +153,20 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         self.loadPlayerItemPreviewOptionViewModel()
         self.delegate = delegate
+
+        self.lyricsKaraokeService.lyricsState.subscribe(onNext: { [unowned self] (lyricsState) in
+
+            switch lyricsState {
+            case .lyrics(let lyrics):
+                self.karaoke = lyrics.karaoke
+            default:
+                self.karaoke = nil
+            }
+
+            self.delegate?.refreshKaraokeUI()
+            })
+            .disposed(by: disposeBag)
+
 
         self.delegate?.refreshUI()
 
@@ -185,9 +206,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     func karaokeIntervalsViewModel() -> DefaultKaraokeIntervalsProgressViewModel? {
 
-        guard self.player.karaokeMode == .karaoke else { return nil }
-        guard let playerCurrentItem = self.player.currentItem, let karaoke = playerCurrentItem.lyrics?.karaoke,
-            let playerItemDuration = self.player.currentItemDuration else { return nil }
+        guard self.lyricsKaraokeService.mode.value == .karaoke else { return nil }
+        guard let karaoke = self.karaoke, let playerItemDuration = self.player.currentItemDuration else { return nil }
 
         let karaokeIntervalViewModels: [DefaultKaraokeIntervalProgressViewModel] = karaoke.intervals.compactMap {
             guard $0.content.isEmpty == false else { return nil }
@@ -295,6 +315,11 @@ extension PlayerControllerViewModel: PlayerWatcher {
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
         self.loadPlayerItemPreviewOptionViewModel()
+
+        if self.karaoke?.trackId != playerItem?.playlistItem.track.id {
+            self.karaoke = nil
+        }
+
         self.delegate?.refreshUI()
     }
 
@@ -312,14 +337,6 @@ extension PlayerControllerViewModel: PlayerWatcher {
     }
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {
-        self.delegate?.refreshUI()
-    }
-
-    func player(player: Player, didLoadPlayerItemLyrics lyrics: Lyrics) {
-        self.delegate?.refreshKaraokeUI()
-    }
-
-    func player(player: Player, didChangeKaraokeMode karaokeMode: Player.KaraokeMode) {
         self.delegate?.refreshUI()
     }
 }

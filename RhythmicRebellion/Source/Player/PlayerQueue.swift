@@ -8,6 +8,8 @@
 
 import Foundation
 import AVFoundation
+import RxSwift
+import RxCocoa
 
 class PlayerQueueItem {
 
@@ -19,6 +21,13 @@ class PlayerQueueItem {
 
     let content: Content
     let playerItem: AVPlayerItem
+
+    var isTrack: Bool {
+        switch content {
+        case .track(_): return true
+        default: return false
+        }
+    }
 
     init(with addon: Addon, playerItem: AVPlayerItem) {
         self.content = .addon(addon)
@@ -34,18 +43,21 @@ class PlayerQueueItem {
         self.content = .stub(stubAudioFile)
         self.playerItem = playerItem
     }
+
+
 }
 
 class PlayerQueue {
 
-    var playerItem: PlayerItem?
+    var playerItem: PlayerItem? { return self.playerItemObservable.value }
+
+
+    let playerItemObservable: BehaviorRelay<PlayerItem?> = BehaviorRelay(value: nil)
     var addons: [Addon]?
 
-    var prefferedAudioFileType: AudioFileType {
-        didSet {
-            self.makeItems()
-        }
-    }
+    var preferredAudioFileType: AudioFileType
+
+    private(set) var trackAudioFileType: AudioFileType?
 
     var isReadyToPlay: Bool {
         return self.addons != nil
@@ -69,8 +81,9 @@ class PlayerQueue {
         return self.items.map { $0.playerItem }
     }
 
-    init(prefferedAudioFileType: AudioFileType) {
-        self.prefferedAudioFileType = prefferedAudioFileType
+    init(preferredAudioFileType: AudioFileType) {
+        self.preferredAudioFileType = preferredAudioFileType
+        self.trackAudioFileType = preferredAudioFileType
     }
 
     private func makeItems() {
@@ -94,25 +107,29 @@ class PlayerQueue {
         }
 
         if let track = self.playerItem?.playlistItem.track {
-            if self.prefferedAudioFileType == .clean, let cleanAudioFile = track.cleanAudioFile, let playerItemURL = URL(string: cleanAudioFile.urlString) {
+            if self.preferredAudioFileType == .backing, let backingAudioFile = track.backingAudioFile, let playerItemURL = URL(string: backingAudioFile.urlString) {
+                self.trackAudioFileType = .backing
                 items.append(PlayerQueueItem(with: track, playerItem: AVPlayerItem(url: playerItemURL)))
             } else if let audioFile = track.audioFile, let playerItemURL = URL(string: audioFile.urlString) {
+                self.trackAudioFileType = .original
                 items.append(PlayerQueueItem(with: track, playerItem: AVPlayerItem(url: playerItemURL)))
             }
         }
     }
 
     func reset() {
-        self.playerItem = nil
+        self.playerItemObservable.accept(nil)
         self.addons = nil
+        self.trackAudioFileType = nil
 
         self.makeItems()
     }
 
     func replace(playerItem: PlayerItem?, addons: [Addon]? = nil) {
 
-        self.playerItem = playerItem
+        self.playerItemObservable.accept(playerItem)
         self.addons = addons
+        self.trackAudioFileType = nil
 
         self.makeItems()
     }
@@ -120,6 +137,11 @@ class PlayerQueue {
     func replace(addons: [Addon]) {
 
         self.addons = addons
+        self.makeItems()
+    }
+
+    func replace(preferredAudioFileType: AudioFileType) {
+        self.preferredAudioFileType = preferredAudioFileType
         self.makeItems()
     }
 
@@ -136,4 +158,5 @@ class PlayerQueue {
         default: break
         }
     }
+
 }

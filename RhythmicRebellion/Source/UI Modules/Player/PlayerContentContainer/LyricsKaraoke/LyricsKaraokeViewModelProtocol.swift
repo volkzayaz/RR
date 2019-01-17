@@ -15,7 +15,7 @@ protocol LyricsKaraokeViewModelProtocol: class {
 
 }
 
-protocol LyricsKaraokeViewModelDelegate: class {
+protocol LyricsKaraokeViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
 

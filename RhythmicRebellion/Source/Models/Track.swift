@@ -54,11 +54,11 @@ public struct Track: Codable {
     let featuring: String?
     let images: [Image]
     let audioFile: TrackAudioFile?
-    let cleanAudioFile: TrackAudioFile?
+    let cleanAudioFile: DefaultAudioFile?
     let artist: Artist
 //    let current_fan_listen: Any?
     let writer: TrackWriter
-    let backingTrack: TrackAudioFile?
+    let backingAudioFile: DefaultAudioFile?
     let price: Money?
 
     var previewType: TrackPreviewType { return TrackPreviewType(rawValue: self.previewTypeValue ?? 0) ?? .unknown }
@@ -84,7 +84,7 @@ public struct Track: Codable {
         case cleanAudioFile = "clean_mp3_file"
         case artist
         case writer = "songwriter"
-        case backingTrack = "backing_track"
+        case backingAudioFile = "backing_track"
         case price
     }
 
@@ -113,11 +113,11 @@ public struct Track: Codable {
 
         self.images = try container.decode([Image].self, forKey: .images)
         self.audioFile = try? container.decode(TrackAudioFile.self, forKey: .audioFile)
-        self.cleanAudioFile = try? container.decode(TrackAudioFile.self, forKey: .cleanAudioFile)
+        self.cleanAudioFile = try? container.decode(DefaultAudioFile.self, forKey: .cleanAudioFile)
         self.artist = try container.decode(Artist.self, forKey: .artist)
 
         self.writer = try container.decode(TrackWriter.self, forKey: .writer)
-        self.backingTrack = try? container.decode(TrackAudioFile.self, forKey: .backingTrack)
+        self.backingAudioFile = try? container.decode(DefaultAudioFile.self, forKey: .backingAudioFile)
 
         if let priceValue = try container.decodeIfPresent(Decimal.self, forKey: .price) {
             self.price = Money(value: priceValue, currency: .USD)
@@ -153,7 +153,7 @@ public struct Track: Codable {
         try container.encode(self.artist, forKey: .artist)
 
         try container.encode(self.writer, forKey: .writer)
-        try container.encode(self.backingTrack, forKey: .backingTrack)
+        try container.encode(self.backingAudioFile, forKey: .backingAudioFile)
 
         if let priceValue = self.price?.amount {
             try container.encode(priceValue, forKey: .price)
