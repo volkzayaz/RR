@@ -32,6 +32,11 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
                                             && self.player.state.waitingAddons == false
                                             && self.player.currentQueueItem?.isTrack == true }
 
+    var isIdleTimerDisabled: Bool {
+        get { return self.lyricsKaraokeService.isIdleTimerDisabled.value }
+        set { self.lyricsKaraokeService.isIdleTimerDisabled.accept(newValue) }
+    }
+
     let disposeBag = DisposeBag()
 
     // MARK: - Lifecycle -

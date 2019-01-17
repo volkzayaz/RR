@@ -22,6 +22,8 @@ protocol KaraokeViewModelProtocol: class, KaraokeCollectionViewFlowLayoutViewMod
     var isVocalAudioFile: Bool { get }
     var canChangeAudioFileType: Bool { get }
 
+    var isIdleTimerDisabled: Bool { get set }
+
     func load(with delegate: KaraokeViewModelDelegate)
 
     func thumbnailURL() -> URL?
