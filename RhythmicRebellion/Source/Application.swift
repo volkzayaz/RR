@@ -79,7 +79,7 @@ class Application: Watchable {
     let restApiService: RestApiService
     let webSocketService: WebSocketService
 
-    private let restApiServiceReachability: Reachability?
+    let restApiServiceReachability: Reachability?
     private let webSocketServiceReachability: Reachability?
 
     let pagesLocalStorageService : PagesLocalStorageService

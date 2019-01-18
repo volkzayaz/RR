@@ -10,6 +10,8 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Reachability
+import RxReachability
 
 final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
 
@@ -18,7 +20,10 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
     private(set) weak var delegate: LyricsKaraokeViewModelDelegate?
     private(set) weak var router: LyricsKaraokeRouter?
 
+    private(set) var application: Application
     private(set) var lyricsKaraokeService: LyricsKaraokeService
+
+    private(set) var lyricsStateError: BehaviorRelay<Error?> = BehaviorRelay(value: nil)
 
     let disposeBag = DisposeBag()
 
@@ -30,8 +35,9 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
         }
     }
 
-    init(router: LyricsKaraokeRouter, lyricsKaraokeService: LyricsKaraokeService) {
+    init(router: LyricsKaraokeRouter, application: Application, lyricsKaraokeService: LyricsKaraokeService) {
         self.router = router
+        self.application = application
         self.lyricsKaraokeService = lyricsKaraokeService
     }
 
@@ -42,6 +48,8 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
             .subscribe(onNext: { [weak self] (lyricsState) in
 
                 guard let self = self else { return }
+
+                self.lyricsStateError.accept(nil)
 
                 switch lyricsState {
                 case .unknown: break
@@ -57,7 +65,7 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
 
                 case .error(let error):
                     self.router?.routeToLyrics()
-                    self.delegate?.show(error: error)
+                    self.lyricsStateError.accept(error)
                 }
             })
             .disposed(by: disposeBag)
@@ -84,6 +92,16 @@ final class LyricsKaraokeViewModel: LyricsKaraokeViewModelProtocol {
             }
         })
         .disposed(by: disposeBag)
+
+        if let restApiServiceReachability = self.application.restApiServiceReachability {
+
+            restApiServiceReachability.rx.isReachable
+                .subscribe(onNext: { [unowned self] (isReachable) in
+                    guard isReachable, self.lyricsKaraokeService.lyricsState.value.isError else { return }
+                    self.lyricsKaraokeService.mode.accept(self.lyricsKaraokeService.mode.value)
+                })
+                .disposed(by: disposeBag)
+        }
 
         if self.lyricsKaraokeService.mode.value == .none {
             self.lyricsKaraokeService.mode.accept(.lyrics)

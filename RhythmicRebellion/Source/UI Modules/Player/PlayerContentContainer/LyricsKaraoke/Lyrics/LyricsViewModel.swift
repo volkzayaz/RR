@@ -48,7 +48,8 @@ final class LyricsViewModel: LyricsViewModelProtocol {
     func load(with delegate: LyricsViewModelDelegate) {
         self.delegate = delegate
 
-        self.lyricsKaraokeService.lyricsState.subscribe(onNext: { (lyricsState) in
+        self.lyricsKaraokeService.lyricsState
+            .subscribe(onNext: { (lyricsState) in
 
             self.infoText = ""
             self.lyrics = nil
