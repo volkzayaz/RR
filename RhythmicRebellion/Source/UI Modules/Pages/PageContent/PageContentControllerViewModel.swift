@@ -10,6 +10,7 @@
 import UIKit
 import WebKit
 import Alamofire
+import RxSwift
 
 final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
@@ -25,6 +26,8 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         case log
         case error
         case unknown
+        
+        case downloadAlbum
     }
 
     // MARK: - Private properties -
@@ -68,7 +71,9 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
                                      PageCommandType.setForceExplicit.rawValue,
                                      PageCommandType.toggleArtistFollowing.rawValue,
                                      PageCommandType.log.rawValue,
-                                     PageCommandType.error.rawValue]
+                                     PageCommandType.error.rawValue,
+                                    PageCommandType.downloadAlbum.rawValue
+        ]
     }
 
     func load(with delegate: PageContentViewModelDelegate) {
@@ -271,14 +276,14 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
 
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage) {
 
         do {
 
 //            print("didReceive message name: \(message.name)")
 
             let commandType = PageCommandType(rawValue: message.name) ?? .unknown
-
 
             switch commandType {
 
@@ -364,7 +369,19 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
                 } else {
                     self.application.follow(artistId: artistId, completion: followingCompletion)
                 }
-
+                
+            case .downloadAlbum:
+                
+                guard let albumId = message.body as? Int else { return }
+                
+                AlbumRequest.details(x: albumId)
+                    .rx.response(type: BaseReponse<Album>.self)
+                    .subscribe(onSuccess: { [weak r = self.router] d in
+                        r?.showDownloadAlbum(album: d.data)
+                    }, onError: { [weak d = self.delegate] e in
+                        d?.show(error: e)
+                    })
+                
             case .log: print("Log: \(message.body)")
             case .error: print("Error: \(message.body)")
 

@@ -1,5 +1,5 @@
 //
-//  DataResponse.swift
+//  BaseReponse.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 1/15/19.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct DataReponse<T: Decodable>: Decodable {
+struct BaseReponse<T: Decodable>: Decodable {
     let data: T
 }

@@ -76,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             self.appRouter = defaultAppRouter
         }
-
+        
         return self.appRouter != nil
     }
 

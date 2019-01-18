@@ -16,6 +16,7 @@ protocol PageContentRouterDelegate: ForcedAuthorizationRouter {
 protocol PageContentRouter: FlowRouter {
     func navigateToAuthorization()
     func pageFailed(with error: Error)
+    func showDownloadAlbum(album: Album)
 }
 
 final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompatible {
@@ -72,4 +73,23 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
     func navigateToAuthorization() {
         self.delegate?.routeToAuthorization(with: .signIn)
     }
+    
+    func showDownloadAlbum(album: Album) {
+        let vc = R.storyboard.main.playlistContentViewController()!
+        
+        let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
+        router.sourceController = vc
+        
+        let vm = PlaylistViewModel(router: router,
+                                   application: DataLayer.get.application,
+                                   player: DataLayer.get.player,
+                                   restApiService: DataLayer.get.restApiService,
+                                   provider: AlbumPlaylistProvider(album: album,
+                                                                   instantDownload: true))
+        vc.configure(viewModel: vm, router: router)
+        
+        sourceController?.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
 }
