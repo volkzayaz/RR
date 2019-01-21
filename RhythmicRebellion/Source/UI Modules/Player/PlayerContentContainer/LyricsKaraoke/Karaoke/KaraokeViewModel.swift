@@ -23,7 +23,8 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 
     private var karaoke: Karaoke?
 
-    private(set) var viewMode: KaraokeViewMode
+    var viewMode: KaraokeViewMode { return self.lyricsKaraokeService.karaokeViewMode }
+
     private(set) var currentItemIndexPath: IndexPath?
 
     var isVocalAudioFile: Bool { return self.lyricsKaraokeService.karaokeAudioFileType.value == .original }
@@ -49,8 +50,6 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
         self.router = router
         self.player = player
         self.lyricsKaraokeService = lyricsKaraokeService
-
-        self.viewMode = .onePhrase
     }
 
     private func contentFont() -> UIFont {
@@ -102,6 +101,8 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
             .disposed(by: disposeBag)
 
 
+
+
         self.delegate?.reloadUI()
         self.player.addWatcher(self)
     }
@@ -138,9 +139,9 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 
     func change(viewMode: KaraokeViewMode) {
 
-        guard self.viewMode != viewMode else { return }
+        guard self.lyricsKaraokeService.karaokeViewMode != viewMode else { return }
 
-        self.viewMode = viewMode
+        self.lyricsKaraokeService.karaokeViewMode = viewMode
         self.delegate?.refreshUI()
     }
 

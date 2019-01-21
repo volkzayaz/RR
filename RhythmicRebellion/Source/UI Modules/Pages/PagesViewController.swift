@@ -23,6 +23,9 @@ final class PagesViewController: UIViewController {
     func configure(viewModel: PagesViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
+        if self.isViewLoaded == true {
+            self.viewModel.load(with: self)
+        }
     }
 
     func setupCollectionViewLayout(for size: CGSize) {
@@ -52,8 +55,6 @@ final class PagesViewController: UIViewController {
 
             collectionViewFlowLayout.itemSize = itemSize
         }
-
-        print("collectionViewFlowLayout.itemSize: \(collectionViewFlowLayout.itemSize)")
     }
 
     // MARK: - Lifecycle -
@@ -80,7 +81,6 @@ final class PagesViewController: UIViewController {
         }) { (transitionCoordinatorContext) in
             self.setupCollectionViewLayout(for: size)
             self.collectionView.collectionViewLayout.invalidateLayout()
-            print("finish Transition to size")
         }
     }
 
@@ -94,8 +94,7 @@ final class PagesViewController: UIViewController {
         }) { (transitionCoordinatorContext) in
             self.setupCollectionViewLayout(for: self.view.bounds.size)
             self.collectionView.collectionViewLayout.invalidateLayout()
-            
-            print("finish Transition to newCollection")
+
         }
     }
 
@@ -106,6 +105,7 @@ final class PagesViewController: UIViewController {
 extension PagesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
         return self.viewModel.numberOfItems(in: section)
     }
 
@@ -129,15 +129,6 @@ extension PagesViewController: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.viewModel.selectItem(at: indexPath)
     }
-
-    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-
-    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-
-    }
-
 }
 
 // MARK: - Router -
@@ -166,16 +157,6 @@ extension PagesViewController: PagesViewModelDelegate {
     func reloadUI() {
         self.collectionView.reloadData()
     }
-
-    func reloadItemsUI(deletedAt: [IndexPath], insertedAt: [IndexPath], updatedAt: [IndexPath]) {
-        self.collectionView.performBatchUpdates({
-
-            if deletedAt.isEmpty == false { self.collectionView.deleteItems(at: deletedAt) }
-            if insertedAt.isEmpty == false { self.collectionView.insertItems(at: insertedAt) }
-            if updatedAt.isEmpty == false { self.collectionView.reloadItems(at: updatedAt) }
-
-        }, completion: nil)
-    }
 }
 
 
@@ -201,12 +182,13 @@ extension PagesViewController: ZoomAnimatorSourceViewController {
     }
 
     func sourceImageContainerView(for animator: ZoomAnimator, for viewController: UIViewController) -> (UIView & ZoomAnimatorSourceImageContainerView)? {
-//        self.collectionView.layoutIfNeeded()
 
         switch viewController {
         case let pageContentViewController as PageContentViewController:
             guard let pageIndexPath = self.viewModel.indexPath(for: pageContentViewController.viewModel.page),
-                let cell = self.collectionView.cellForItem(at: pageIndexPath) as? PageItemCollectionViewCell else { return nil }
+                let cell = self.collectionView.cellForItem(at: pageIndexPath) as? PageItemCollectionViewCell else {
+                    return nil
+            }
             return cell.containerView
         default: return nil
         }

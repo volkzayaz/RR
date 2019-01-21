@@ -8,8 +8,12 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol LyricsKaraokeViewModelProtocol: class {
+
+    var lyricsStateError: BehaviorRelay<Error?> { get }
 
     func load(with delegate: LyricsKaraokeViewModelDelegate)
 
