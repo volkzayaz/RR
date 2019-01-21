@@ -20,6 +20,8 @@ final class PageContentViewController: UIViewController {
     private(set) var viewModel: PageContentViewModel!
     private(set) var router: FlowRouter!
 
+    private var updateSnapshotTimer: Timer?
+
     // MARK: - Configuration -
 
     func configure(viewModel: PageContentViewModel, router: FlowRouter) {
@@ -85,11 +87,11 @@ extension PageContentViewController: WKNavigationDelegate {
 
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 
-       print("didFinish: \(navigation)")
-
         self.snapshotImageView?.removeFromSuperview()
         if self.viewModel.isNeedUpdateSnapshotImage {
-            self.perform(#selector(updateSnapshotImage), with: nil, afterDelay: 3.0)
+            self.updateSnapshotTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { [weak self] (timer) in
+                self?.updateSnapshotImage()
+            })
         }
     }
 
@@ -167,9 +169,11 @@ extension PageContentViewController: ZoomAnimatorDestinationViewController {
         if animator.isPresentation == false {
             self.webView?.stopLoading()
 
-            if self.snapshotImageView == nil, self.viewModel.isNeedUpdateSnapshotImage == true, let webView = self.webView,
-                let snapshotImage = webView.makeSnapshotImage(for: webView.bounds, afterScreenUpdates: false) {
-                self.viewModel.save(snapshotImage: snapshotImage)
+            if self.snapshotImageView == nil, self.viewModel.isNeedUpdateSnapshotImage == true, let webView = self.webView {
+                self.updateSnapshotTimer?.invalidate()
+                if let snapshotImage = webView.makeSnapshotImage(for: webView.bounds, afterScreenUpdates: false) {
+                    self.viewModel.save(snapshotImage: snapshotImage)
+                }
             }
         }
 
