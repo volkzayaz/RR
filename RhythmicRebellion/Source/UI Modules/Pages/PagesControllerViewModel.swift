@@ -97,36 +97,33 @@ extension PagesControllerViewModel : PagesLocalStorageServiceWatcher {
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page) {
         self.pages.append(page)
-
-        guard let pageIndex = self.pages.index(of: page) else { return }
-        self.delegate?.reloadItemsUI(deletedAt: [], insertedAt: [IndexPath(item: pageIndex, section: 0)], updatedAt: [])
+        self.delegate?.reloadUI()
     }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didUpdate page: Page) {
         guard let pageIndex = self.pages.index(of: page) else { return }
 
         self.pages[pageIndex] = page
-
-        self.delegate?.reloadItemsUI(deletedAt: [], insertedAt: [], updatedAt: [IndexPath(item: pageIndex, section: 0)])
+        self.delegate?.reloadUI()
     }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didDelete page: Page) {
         guard let pageIndex = self.pages.index(of: page) else { return }
 
         self.pages.remove(at: pageIndex)
-
-        self.delegate?.reloadItemsUI(deletedAt: [IndexPath(item: pageIndex, section: 0)], insertedAt: [], updatedAt: [])
+        self.delegate?.reloadUI()
     }
 
     func pagesLocalStorageServiceDidReset(_ pagesLocalStorageService: PagesLocalStorageService) {
+        self.pages.removeAll()
         self.router?.navigateToPagesList(animated: false)
         self.delegate?.reloadUI()
     }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didSaveSnapshotImageFor page: Page) {
         guard let pageIndex = self.pages.index(of: page) else { return }
-
-        self.delegate?.reloadItemsUI(deletedAt: [], insertedAt: [], updatedAt: [IndexPath(item: pageIndex, section: 0)])
+        
+        self.delegate?.reloadUI()
     }
 
 }
