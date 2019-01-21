@@ -64,8 +64,6 @@ class ZoomAnimator: NSObject {
             let transitionImageView = UIImageView(frame: fromFrame)
             transitionImageView.image = sourceImageContainerView.image
             transitionImageView.contentMode = sourceImageContainerView.imageContentMode
-//            print("zoomIn sourceImageContainerView.contentMode: \(sourceImageContainerView.imageContentMode.rawValue)")
-//            print("zoomIn transitionImageView.contentMode: \(transitionImageView.contentMode.rawValue)")
             transitionImageView.clipsToBounds = true
             containerView.addSubview(transitionImageView)
             self.transitionImageView = transitionImageView
@@ -109,20 +107,27 @@ class ZoomAnimator: NSObject {
 
         let containerView = transitionContext.containerView
 
+        containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
+
         toViewController.transitionWillBegin(with: self, for: fromViewController)
         fromViewController.transitionWillBegin(with: self)
 
         guard let sourceImageContainerView = toViewController.sourceImageContainerView(for: self, for: fromViewController),
-            let sourceImageContainerViewSuperview = sourceImageContainerView.superview else { return }
+            let sourceImageContainerViewSuperview = sourceImageContainerView.superview else {
 
-        containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+
+                fromViewController.transitionDidEnd(with: self)
+                toViewController.transitionDidEnd(with: self, for: toViewController)
+
+                return
+        }
 
         if self.transitionImageView == nil {
             let transitionImageView = UIImageView(frame: fromViewController.view.bounds)
             transitionImageView.image = sourceImageContainerView.image
             transitionImageView.contentMode = sourceImageContainerView.imageContentMode
 
-//            print("zoomOut transitionImageView.contentMode: \(transitionImageView.contentMode.rawValue)")
 
             transitionImageView.clipsToBounds = true
             containerView.addSubview(transitionImageView)
@@ -133,7 +138,6 @@ class ZoomAnimator: NSObject {
         sourceImageContainerView.isHidden = true
 
         let toFrame = sourceImageContainerViewSuperview.convert(sourceImageContainerView.frame, to: containerView)
-//        print("zoomAnimator toFrame: \(toFrame)")
 
         UIView.animate(withDuration: transitionDuration(using: transitionContext),
                        delay: 0,
