@@ -73,6 +73,8 @@ final class KaraokeViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         self.headerViewTopLayoutConstraint.constant = 0.0
         self.footerViewBottomLayoutConstraint.constant = 0.0
     }
@@ -81,6 +83,13 @@ final class KaraokeViewController: UIViewController {
         super.viewDidAppear(animated)
 
         self.scheduleHideControlsTimer()
+        self.viewModel.isIdleTimerDisabled = true
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        self.viewModel.isIdleTimerDisabled = false
     }
 
     override func viewDidLayoutSubviews() {

@@ -37,12 +37,23 @@ class LyricsKaraokeService {
 
     var karaokeAudioFileType: BehaviorRelay<AudioFileType> =  BehaviorRelay(value: .original)
 
+    private var isPlaying: BehaviorRelay<Bool>
+    var isIdleTimerDisabled: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+
+    private var disableIdleTimerSubscription: Disposable? {
+        willSet {
+            disableIdleTimerSubscription?.dispose()
+        }
+    }
+
+
     private(set) var tracksIdsLyrics = [Int : Lyrics]()
 
     let disposeBag = DisposeBag()
 
     deinit {
         self.application.removeWatcher(self)
+        self.player.removeWatcher(self)
     }
 
     init(with application: Application, player: Player) {
@@ -63,6 +74,8 @@ class LyricsKaraokeService {
 
         let explicitMaterialExcludedChanges = self.explicitMaterialExcluded.asObservable()
         let forceToPlayTracksIdsChanges = self.forceToPlayTracksIds.asObservable()
+
+        self.isPlaying = BehaviorRelay(value: self.player.isPlaying)
 
         let _ = Observable.combineLatest(modeChanges, plyerCurrentItemChanges, explicitMaterialExcludedChanges, forceToPlayTracksIdsChanges)
             .flatMap { [unowned self] (args) -> Observable<LyricsState> in
@@ -114,8 +127,22 @@ class LyricsKaraokeService {
             })
             .disposed(by: disposeBag)
 
+        _ = Observable.combineLatest(isPlaying.asObservable(), isIdleTimerDisabled.asObservable())
+            .subscribe(onNext: { [unowned self] (arg) in
+                let (isPlaying, isIdleTimerDisabled) = arg
+
+                guard isPlaying == true, isIdleTimerDisabled == true else {
+                    self.disableIdleTimerSubscription = nil
+                    return
+                }
+
+                self.disableIdleTimerSubscription = self.application.disableIdleTimerSubscription.subscribe()
+            })
+            .disposed(by: disposeBag)
+
 
         self.application.addWatcher(self)
+        self.player.addWatcher(self)
     }
 }
 
@@ -151,6 +178,14 @@ extension LyricsKaraokeService {
             }
         }
     }
+}
+
+extension LyricsKaraokeService: PlayerWatcher {
+
+    func player(player: Player, didChangePlayState isPlaying: Bool) {
+        self.isPlaying.accept(isPlaying)
+    }
+
 }
 
 extension LyricsKaraokeService: ApplicationWatcher {
