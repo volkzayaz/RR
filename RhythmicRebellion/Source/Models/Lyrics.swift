@@ -82,7 +82,7 @@ extension Karaoke: Equatable {
 public struct Lyrics: Codable {
 
     let id: Int
-    let lyrics: String
+    let lyrics: String?
     let karaoke: Karaoke?
 
     enum CodingKeys: String, CodingKey {
