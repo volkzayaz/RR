@@ -8,6 +8,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class LyricsKaraokeViewController: UIViewController, ContainerViewController {
 
@@ -21,6 +23,8 @@ final class LyricsKaraokeViewController: UIViewController, ContainerViewControll
 
     private(set) var viewModel: LyricsKaraokeViewModelProtocol!
     private(set) var router: FlowRouter!
+
+    let disposeBag = DisposeBag()
 
     // MARK: - Configuration -
 
@@ -37,6 +41,18 @@ final class LyricsKaraokeViewController: UIViewController, ContainerViewControll
         viewModel.load(with: self)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.viewModel?.lyricsStateError.notNil().subscribe(onNext: { (error) in
+            self.show(error: error)
+        })
+        .disposed(by: disposeBag)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
 }
 
 // MARK: - Router -
