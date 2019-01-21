@@ -30,5 +30,4 @@ protocol PagesViewModelDelegate: class, ErrorPresenting {
 
     func refreshUI()
     func reloadUI()
-    func reloadItemsUI(deletedAt: [IndexPath], insertedAt: [IndexPath], updatedAt: [IndexPath])
 }
