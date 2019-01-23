@@ -82,7 +82,7 @@ class LyricsKaraokeService {
                 let (mode, playerItem, explicitMaterialExcluded, forceToPlayTracksIds) = args
 
                 guard mode != .none else { return Observable<LyricsState>.just(.none) }
-                guard let track = playerItem?.playlistItem.track else { return Observable<LyricsState>.just(.none) }
+                guard let track = playerItem?.playlistItem.track, track.isPlayable == true, track.isInstrumental == false else { return Observable<LyricsState>.just(.none) }
 
                 if track.isCensorship == true, explicitMaterialExcluded == true, forceToPlayTracksIds.contains(track.id) == false {
                     return Observable<LyricsState>.just(.none)
@@ -92,7 +92,7 @@ class LyricsKaraokeService {
                     return TrackRequest.lyricks(track: track).rx
                         .response(type: TrackResponse<Lyrics>.self)
                         .do(onNext: { [weak self, trackId = track.id] (trackResponse) in
-//                            self?.tracksIdsLyrics[trackId] = trackResponse.data
+                            self?.tracksIdsLyrics[trackId] = trackResponse.data
                         })
                         .map({ (trackResponse) -> LyricsState in
                             return .lyrics(trackResponse.data)
