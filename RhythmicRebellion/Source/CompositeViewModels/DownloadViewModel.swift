@@ -55,13 +55,23 @@ struct DownloadViewModel {
     
     let remoteURL: String
     
-    init(remoteURL: String) {
+    ///@param instantStart - viewModel attempts to instantly start downloading resource at |remoteURL|
+    ///                      unless it is already been downloading or downloaded
+    init(remoteURL: String, instantStart: Bool = false) {
         
         self.remoteURL = remoteURL
         
         downloadManager.downloadStatus(for: remoteURL)
             .bind(to: dataState)
             .disposed(by: bag)
+        
+        if case .data(_)? = dataState.value {
+            return
+        }
+
+        if instantStart {
+            download()
+        }
         
     }
     

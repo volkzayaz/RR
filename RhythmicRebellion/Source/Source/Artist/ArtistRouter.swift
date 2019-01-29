@@ -31,7 +31,8 @@ struct ArtistRouter : MVVM_Router {
                                    application: DataLayer.get.application,
                                    player: DataLayer.get.player,
                                    restApiService: DataLayer.get.restApiService,
-                                   provider: AlbumPlaylistProvider(album: album))
+                                   provider: AlbumPlaylistProvider(album: album,
+                                                                   instantDownload: false))
         vc.configure(viewModel: vm, router: router)
 
         owner.navigationController?.pushViewController(vc, animated: true)

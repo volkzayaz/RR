@@ -9,7 +9,8 @@
 import Foundation
 
 enum AlbumRequest: BaseNetworkRouter {
-    
+
+    case details(x: Int)
     case downloadLink(album: Album)
     
 }
@@ -24,6 +25,11 @@ extension AlbumRequest {
             
             return anonymousRequest(method: .get,
                                     path: "fan/store/order/download-link/album/\(album.id)")
+            
+        case .details(let x):
+            
+            return personilisedRequest(method: .get,
+                                       path: "fan/artist/album/\(x)")
             
         }
         

@@ -20,7 +20,10 @@ protocol DeletablePlaylistProvider: PlaylistProvider {
 }
 
 protocol DownloadablePlaylistProvider: PlaylistProvider {
+    
     var downloadURL: Maybe<String> { get }
+    
+    var instantDownload: Bool { get }
 }
 
 struct FanPlaylistProvider: DeletablePlaylistProvider {
@@ -70,6 +73,7 @@ struct DefinedPlaylistProvider: PlaylistProvider {
 struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistProvider {
     
     let album: Album
+    let instantDownload: Bool
     
     func provide(completion: @escaping (Box<[Track]>) -> Void) {
         
@@ -91,8 +95,13 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     
     var id: Int { return album.id }
     var name: String { return album.name }
+    var thumbnailURL: URL? {
+        guard let x = album.image.simpleURL else { return nil }
+            
+        return URL(string: x)
+    }
+
     var isDefault: Bool { return false }
-    var thumbnailURL: URL? { return nil }
     var description: String? { return nil }
     var title: String? { return nil }
     var isFanPlaylist: Bool { return false }
@@ -100,7 +109,7 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     var downloadURL: Maybe<String> {
         
         return AlbumRequest.downloadLink(album: album)
-            .rx.response(type: DataReponse<String>.self)
+            .rx.response(type: BaseReponse<String>.self)
             .map { $0.data }
             
             
@@ -188,7 +197,7 @@ final class PlaylistViewModel {
         if let p = provider as? DownloadablePlaylistProvider {
             p.downloadURL
                 .silentCatch()
-                .map { DownloadViewModel(remoteURL: $0) }
+                .map { DownloadViewModel(remoteURL: $0, instantStart: p.instantDownload) }
                 .bind(to: downloadViewModel)
                 .disposed(by: bag)
         }
