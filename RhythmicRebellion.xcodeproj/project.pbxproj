@@ -1932,7 +1932,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift",
+				$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
