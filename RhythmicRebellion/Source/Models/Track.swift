@@ -187,5 +187,3 @@ extension Track: Equatable {
 extension Track: Hashable {
     public var hashValue: Int { return self.id }
 }
-
-

@@ -4,6 +4,13 @@ project '../RhythmicRebellion.xcodeproj'
 platform :ios, '10.0'
 use_frameworks!
 
+
+target 'RhythmicRebellionTests' do
+    
+    pod 'Nimble', '~> 7.0'
+    
+end
+    
 target 'RhythmicRebellion' do
 
     pod 'Fabric'

@@ -13,6 +13,11 @@
 		73116DF221E4B0CA00F2A19A /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF121E4B0CA00F2A19A /* DownloadManager.swift */; };
 		73116DF921E621D800F2A19A /* TrackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF621E621D800F2A19A /* TrackRouter.swift */; };
 		73116DFB21E621D800F2A19A /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73116DF821E621D800F2A19A /* TrackViewModel.swift */; };
+		731CC166220C2AD800C09FE6 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731CC165220C2AD800C09FE6 /* AudioPlayer.swift */; };
+		736456A2220C7610005BE389 /* PlaylistDeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456A1220C7610005BE389 /* PlaylistDeleteTests.swift */; };
+		736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */; };
+		736456B1220C81CC005BE389 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961420E3A15D00BF1F79 /* Track.swift */; };
+		736456B2220C821D005BE389 /* Fake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456A9220C7D4B005BE389 /* Fake.swift */; };
 		736598CF21D62FDE0092E499 /* TrackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 736598CE21D62FDE0092E499 /* TrackView.xib */; };
 		736598D621D65A220092E499 /* ArtistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736598D321D65A220092E499 /* ArtistRouter.swift */; };
 		736598D721D65A220092E499 /* ArtistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736598D421D65A220092E499 /* ArtistViewController.swift */; };
@@ -147,7 +152,6 @@
 		764D684D214A36AA00F52730 /* LanguagesSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764D684C214A36AA00F52730 /* LanguagesSelectableListControllerViewModel.swift */; };
 		764E7EDD2188C99300952182 /* PlaylistActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E7EDC2188C99300952182 /* PlaylistActions.swift */; };
 		7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961120E2615F00BF1F79 /* WebSocketService.swift */; };
-		7650961520E3A15D00BF1F79 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961420E3A15D00BF1F79 /* Track.swift */; };
 		7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961620E3A8C600BF1F79 /* AudioFile.swift */; };
 		7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961820E3B35000BF1F79 /* WebSocketCommand.swift */; };
 		7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961A20E4DC7800BF1F79 /* Artist.swift */; };
@@ -298,6 +302,7 @@
 		76F61E1E21AEA58800F758EF /* PageTrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F61E1D21AEA58800F758EF /* PageTrackState.swift */; };
 		76FA64C1218B2ECB00A132E9 /* FanPlaylistState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA64C0218B2ECB00A132E9 /* FanPlaylistState.swift */; };
 		76FF911221DF501500D4FE94 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FF911121DF501400D4FE94 /* RoundedButton.swift */; };
+		A7F42A6E16AAE7F75D33F1E5 /* Pods_RhythmicRebellionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B350D78B19F949C26942DB93 /* Pods_RhythmicRebellionTests.framework */; };
 		AB1423662124345700C926F5 /* UIImageView+Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1423652124345700C926F5 /* UIImageView+Placeholder.swift */; };
 		AB14236C2124487F00C926F5 /* AddToPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1423682124487E00C926F5 /* AddToPlaylistViewModel.swift */; };
 		AB14236D2124487F00C926F5 /* AddToPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1423692124487E00C926F5 /* AddToPlaylistViewController.swift */; };
@@ -311,14 +316,31 @@
 		F36396C3EBC6647FA74987E9 /* Pods_RhythmicRebellion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		736456A4220C7610005BE389 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76F1FA1F20DBA88100C9191F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76F1FA2620DBA88100C9191F;
+			remoteInfo = RhythmicRebellion;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7301E0DC21E8C8B700F9B5D5 /* NWise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NWise.swift; sourceTree = "<group>"; };
 		7301E0E121EE1E5900F9B5D5 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		7301E0E421EE271900F9B5D5 /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
 		73116DF121E4B0CA00F2A19A /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		73116DF621E621D800F2A19A /* TrackRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRouter.swift; sourceTree = "<group>"; };
 		73116DF821E621D800F2A19A /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
+		731CC165220C2AD800C09FE6 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		7364569F220C760F005BE389 /* RhythmicRebellionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RhythmicRebellionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		736456A1220C7610005BE389 /* PlaylistDeleteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDeleteTests.swift; sourceTree = "<group>"; };
+		736456A3220C7610005BE389 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		736456A9220C7D4B005BE389 /* Fake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fake.swift; sourceTree = "<group>"; };
+		736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInsertTests.swift; sourceTree = "<group>"; };
 		736598CE21D62FDE0092E499 /* TrackView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackView.xib; sourceTree = "<group>"; };
 		736598D321D65A220092E499 /* ArtistRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistRouter.swift; sourceTree = "<group>"; };
 		736598D421D65A220092E499 /* ArtistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistViewController.swift; sourceTree = "<group>"; };
@@ -617,10 +639,20 @@
 		AB1423762125A58200C926F5 /* ProgressPresenting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressPresenting.swift; sourceTree = "<group>"; };
 		ABB42BD8212B634E00EABC61 /* PlayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerItem.swift; sourceTree = "<group>"; };
 		ABD79E85212C9E77004139F6 /* EqualizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EqualizerView.swift; sourceTree = "<group>"; };
+		B350D78B19F949C26942DB93 /* Pods_RhythmicRebellionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D77BE8BAE85CBA5F751BD2E5 /* Pods-RhythmicRebellion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.debug.xcconfig"; sourceTree = "<group>"; };
+		F05180DA2C91E533BD4FA6D5 /* Pods-RhythmicRebellionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.release.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7364569C220C760F005BE389 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7F42A6E16AAE7F75D33F1E5 /* Pods_RhythmicRebellionTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		76F1FA2420DBA88100C9191F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -637,6 +669,8 @@
 			children = (
 				D77BE8BAE85CBA5F751BD2E5 /* Pods-RhythmicRebellion.debug.xcconfig */,
 				80BC96C5C2DF2EDD9FF2BB72 /* Pods-RhythmicRebellion.release.xcconfig */,
+				63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */,
+				F05180DA2C91E533BD4FA6D5 /* Pods-RhythmicRebellionTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -682,6 +716,24 @@
 				736598CE21D62FDE0092E499 /* TrackView.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		731CC164220C2A5A00C09FE6 /* v2 */ = {
+			isa = PBXGroup;
+			children = (
+				731CC165220C2AD800C09FE6 /* AudioPlayer.swift */,
+			);
+			path = v2;
+			sourceTree = "<group>";
+		};
+		736456A0220C7610005BE389 /* RhythmicRebellionTests */ = {
+			isa = PBXGroup;
+			children = (
+				736456A1220C7610005BE389 /* PlaylistDeleteTests.swift */,
+				736456A3220C7610005BE389 /* Info.plist */,
+				736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */,
+			);
+			path = RhythmicRebellionTests;
 			sourceTree = "<group>";
 		};
 		736598D021D65A080092E499 /* Artist */ = {
@@ -1275,6 +1327,7 @@
 				7621959A21A6B17B00808D18 /* SkipArtistAddonsState.swift */,
 				737622F021CD17E4005B603E /* Album.swift */,
 				7671D24521C3B5FB00187F77 /* Lyrics.swift */,
+				736456A9220C7D4B005BE389 /* Fake.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1617,6 +1670,7 @@
 			isa = PBXGroup;
 			children = (
 				76F1FA2920DBA88100C9191F /* RhythmicRebellion */,
+				736456A0220C7610005BE389 /* RhythmicRebellionTests */,
 				76F1FA2820DBA88100C9191F /* Products */,
 				5153B8BA1B187E1E75D48928 /* Pods */,
 				8F35D41E961A0855BE4F5819 /* Frameworks */,
@@ -1627,6 +1681,7 @@
 			isa = PBXGroup;
 			children = (
 				76F1FA2720DBA88100C9191F /* RhythmicRebellion.app */,
+				7364569F220C760F005BE389 /* RhythmicRebellionTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1693,6 +1748,7 @@
 		76F1FA6120DBAA2700C9191F /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				731CC164220C2A5A00C09FE6 /* v2 */,
 				767289C420ED1A13008A86B6 /* Player.swift */,
 				764CC02920F8D4FF009C3D28 /* PlayerState.swift */,
 				ABB42BD8212B634E00EABC61 /* PlayerItem.swift */,
@@ -1746,6 +1802,7 @@
 			isa = PBXGroup;
 			children = (
 				6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */,
+				B350D78B19F949C26942DB93 /* Pods_RhythmicRebellionTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1776,6 +1833,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7364569E220C760F005BE389 /* RhythmicRebellionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 736456A8220C7610005BE389 /* Build configuration list for PBXNativeTarget "RhythmicRebellionTests" */;
+			buildPhases = (
+				6DDA19BACA7CA278F7BFA385 /* [CP] Check Pods Manifest.lock */,
+				7364569B220C760F005BE389 /* Sources */,
+				7364569C220C760F005BE389 /* Frameworks */,
+				7364569D220C760F005BE389 /* Resources */,
+				4856DCE06161E38D78728B23 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				736456A5220C7610005BE389 /* PBXTargetDependency */,
+			);
+			name = RhythmicRebellionTests;
+			productName = RhythmicRebellionTests;
+			productReference = 7364569F220C760F005BE389 /* RhythmicRebellionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		76F1FA2620DBA88100C9191F /* RhythmicRebellion */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 76F1FA3920DBA88100C9191F /* Build configuration list for PBXNativeTarget "RhythmicRebellion" */;
@@ -1803,10 +1880,15 @@
 		76F1FA1F20DBA88100C9191F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0920;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Patron Empowerment, LLC";
 				TargetAttributes = {
+					7364569E220C760F005BE389 = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 76F1FA2620DBA88100C9191F;
+					};
 					76F1FA2620DBA88100C9191F = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1010;
@@ -1833,11 +1915,19 @@
 			projectRoot = "";
 			targets = (
 				76F1FA2620DBA88100C9191F /* RhythmicRebellion */,
+				7364569E220C760F005BE389 /* RhythmicRebellionTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7364569D220C760F005BE389 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		76F1FA2520DBA88100C9191F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1918,6 +2008,50 @@
 			shellScript = "\"${SRCROOT}/Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4856DCE06161E38D78728B23 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6DDA19BACA7CA278F7BFA385 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RhythmicRebellionTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		737622CC21CA4F8A005B603E /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1977,6 +2111,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7364569B220C760F005BE389 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */,
+				736456A2220C7610005BE389 /* PlaylistDeleteTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		76F1FA2320DBA88100C9191F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2004,6 +2147,7 @@
 				764D683F2148E86200F52730 /* ProfileSettingsViewModel.swift in Sources */,
 				763C905920FDDE96007C1F86 /* AuthorizationViewController.swift in Sources */,
 				767BA578211191EF00C390D8 /* PlaylistItemCollectionVIewCell.swift in Sources */,
+				736456B1220C81CC005BE389 /* Track.swift in Sources */,
 				7665335020FF1DE300FEC702 /* ProfileViewController.swift in Sources */,
 				76E9D86E214FE03900873A7C /* PlayerConfig.swift in Sources */,
 				7650962120E5029200BF1F79 /* Watchable.swift in Sources */,
@@ -2148,6 +2292,7 @@
 				76A45B41213926380080885D /* SelectableListRouter.swift in Sources */,
 				7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */,
 				7665335820FF414300FEC702 /* SignInRouter.swift in Sources */,
+				731CC166220C2AD800C09FE6 /* AudioPlayer.swift in Sources */,
 				763C904F20FCBABD007C1F86 /* TabBarViewModel.swift in Sources */,
 				767BA57D2111A15400C390D8 /* PlaylistItemViewModel.swift in Sources */,
 				769F4E88210A143C000DD23B /* PlayerPlaylistRootViewController.swift in Sources */,
@@ -2158,6 +2303,7 @@
 				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
 				7665334820FF1CFA00FEC702 /* PagesViewModel.swift in Sources */,
 				76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */,
+				736456B2220C821D005BE389 /* Fake.swift in Sources */,
 				769F4EBD210B6706000DD23B /* PromoControllerViewModel.swift in Sources */,
 				7641B2E021CA4DE6005535E6 /* LyricsKaraokeViewModelProtocol.swift in Sources */,
 				AB14236C2124487F00C926F5 /* AddToPlaylistViewModel.swift in Sources */,
@@ -2204,7 +2350,6 @@
 				7680942B21B00742002FB589 /* PageTrackForceToPlayState.swift in Sources */,
 				769F4EB0210B6631000DD23B /* VideoViewModel.swift in Sources */,
 				737622C621CA4ED8005B603E /* ArtistsFollowedRouter.swift in Sources */,
-				7650961520E3A15D00BF1F79 /* Track.swift in Sources */,
 				7641B2E621CA5609005535E6 /* ContainerTransitionSegue.swift in Sources */,
 				76A45B4C213944180080885D /* SelectableListItemTableViewCell.swift in Sources */,
 				76A45B40213926380080885D /* SelectableListControllerViewModel.swift in Sources */,
@@ -2270,6 +2415,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		736456A5220C7610005BE389 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 76F1FA2620DBA88100C9191F /* RhythmicRebellion */;
+			targetProxy = 736456A4220C7610005BE389 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		736598E821D66E6C0092E499 /* Localizable.strings */ = {
@@ -2347,6 +2500,49 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		736456A6220C7610005BE389 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = RhythmicRebellionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rythmic-rebellion.RhythmicRebellionTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RhythmicRebellion.app/RhythmicRebellion";
+			};
+			name = Debug;
+		};
+		736456A7220C7610005BE389 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F05180DA2C91E533BD4FA6D5 /* Pods-RhythmicRebellionTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = RhythmicRebellionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rythmic-rebellion.RhythmicRebellionTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RhythmicRebellion.app/RhythmicRebellion";
+			};
+			name = Release;
+		};
 		76F1FA3720DBA88100C9191F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2491,6 +2687,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		736456A8220C7610005BE389 /* Build configuration list for PBXNativeTarget "RhythmicRebellionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				736456A6220C7610005BE389 /* Debug */,
+				736456A7220C7610005BE389 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		76F1FA2220DBA88100C9191F /* Build configuration list for PBXProject "RhythmicRebellion" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
