@@ -96,6 +96,10 @@ class Player: NSObject, Watchable {
         case delete
     }
 
+    
+    var daPlaylist = DaPlaylist()
+    
+    
     typealias WatchType = PlayerWatcher
 
     let watchersContainer = WatchersContainer<PlayerWatcher>()
@@ -821,9 +825,9 @@ class Player: NSObject, Watchable {
     // MARK: - AVPlayer
 
     func replace(playerItems: [AVPlayerItem]) {
-
+        
         self.player.removeAllItems()
-
+        
         for playerItem in playerItems {
             self.player.insert(playerItem, after: nil)
         }
@@ -1187,6 +1191,12 @@ extension Player: WebSocketServiceWatcher {
 
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) {
 
+        let tracks = daPlaylist.orderedTracks
+        
+        daPlaylist.apply(patch: playlistItemsPatches.nullableReduxView)
+        
+        let tracks2 = daPlaylist.orderedTracks
+        
         if self.state.initialized && flush == false {
             guard self.deferredPlaylistItemsPatches.isEmpty else {
                 self.deferredPlaylistItemsPatches.append(playlistItemsPatches)

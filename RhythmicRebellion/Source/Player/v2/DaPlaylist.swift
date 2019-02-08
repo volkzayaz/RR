@@ -1,5 +1,5 @@
 //
-//  AudioPlayer.swift
+//  DaPlaylist.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 2/7/19.
@@ -7,16 +7,6 @@
 //
 
 import Foundation
-
-struct AudioPlayer {
-    
-    struct Props {
-        
-        //let name
-        
-    }
-    
-}
 
 typealias TrackOrderHash = String
 
@@ -205,6 +195,30 @@ struct DaPlaylist {
         apply(patch: res)
         
         return res
+    }
+    
+}
+
+extension Dictionary where Key == String, Value == Optional<PlayerPlaylistItemPatch> {
+    
+    var nullableReduxView: DaPlaylist.NullableReduxView {
+        
+        return mapValues { (maybePatch) -> [DaPlaylist.ViewKey: Any?]? in
+            
+            guard let x = maybePatch else {
+                return nil
+            }
+            
+            let p:[DaPlaylist.ViewKey: Any?]
+                 = [ .id       : x.trackId,
+                     .hash     : x.key,
+                     .next     : (x.nextKey?    .isNotNull ?? false) ? x.nextKey!.value! : nil,
+                     .previous : (x.previousKey?.isNotNull ?? false) ? x.previousKey!.value! : nil,
+                     ]
+            
+            return p
+        }
+        
     }
     
 }

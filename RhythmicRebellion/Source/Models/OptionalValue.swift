@@ -18,6 +18,10 @@ public enum OptionalValue<T: Codable>: Codable {
         case .value: return false
         }
     }
+    
+    var isNotNull: Bool {
+        return !isNull
+    }
 
     var value: T? {
         switch self {
