@@ -8,15 +8,20 @@
 
 import Foundation
 
-struct TrackState: Codable {
+struct TrackState: Codable, Equatable {
 
     let hash: String
-    let progress: TimeInterval
-    let isPlaying: Bool
+    var progress: TimeInterval
+    var isPlaying: Bool
 
-    enum CodingKeys: String, CodingKey {
-        case hash
-        case progress
-        case isPlaying
+    init(hash: String, progress: TimeInterval, isPlaying: Bool) {
+        self.hash = hash
+        self.progress = progress
+        self.isPlaying = isPlaying
     }
+ 
+    var isOwn: Bool {
+        return hash == WebSocketService.ownSignatureHash
+    }
+    
 }

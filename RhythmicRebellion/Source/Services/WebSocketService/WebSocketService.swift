@@ -9,6 +9,7 @@
 import Foundation
 import Starscream
 import os.log
+import RxSwift
 
 protocol WebSocketServiceWatcher: class {
 
@@ -58,10 +59,13 @@ extension WebSocketServiceWatcher {
 
 class WebSocketService: WebSocketDelegate, Watchable {
 
+    static let ownSignatureHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
+    
     typealias WatchType = WebSocketServiceWatcher
 
     let watchersContainer = WatchersContainer<WebSocketServiceWatcher>()
-
+    fileprivate let publishSubject = BehaviorSubject<WebSocketCommand.SuccessCommandData?>(value: nil)
+    
     enum State: Int {
         case disconnected
         case connecting
@@ -199,6 +203,9 @@ class WebSocketService: WebSocketDelegate, Watchable {
 
             switch webSoketCommand.data {
             case .success(let successWebSocketData):
+                
+                publishSubject.onNext(successWebSocketData)
+                
                 switch successWebSocketData {
 
                 case .userInit( _ ):
@@ -300,4 +307,20 @@ class WebSocketService: WebSocketDelegate, Watchable {
             print("websocketDidReceiveMessage: \(String(describing: String(data: data, encoding: .utf8)))")
         }
     }
+    
+    var didReceiveTracks: Single<[Track]> {
+        
+        return publishSubject.notNil()
+            .skip(1)
+            .map { x -> [Track]? in
+                
+                guard case .playListLoadTracks(let tracks) = x else { return nil }
+                
+                return tracks
+            }
+            .notNil()
+            .asSingle()
+        
+    }
+    
 }

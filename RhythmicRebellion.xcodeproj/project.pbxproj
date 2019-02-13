@@ -60,6 +60,7 @@
 		73B87A40220D9A410082A79A /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B87A3F220D9A410082A79A /* AudioPlayer.swift */; };
 		73B87A42220D9BD80082A79A /* AVPlayer+rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B87A41220D9BD80082A79A /* AVPlayer+rx.swift */; };
 		73B87A46220D9D570082A79A /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B87A45220D9D570082A79A /* Double+Extension.swift */; };
+		73B87A4A220DC3B80082A79A /* RRPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B87A49220DC3B80082A79A /* RRPlayer.swift */; };
 		73E0A9E021E62A4500679C01 /* TrackListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */; };
 		73E0A9E221E62EA900679C01 /* Alamofire+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */; };
 		73F7A0A121E78B7900B92433 /* AlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F7A0A021E78B7900B92433 /* AlbumRequest.swift */; };
@@ -386,6 +387,7 @@
 		73B87A3F220D9A410082A79A /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		73B87A41220D9BD80082A79A /* AVPlayer+rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVPlayer+rx.swift"; sourceTree = "<group>"; };
 		73B87A45220D9D570082A79A /* Double+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
+		73B87A49220DC3B80082A79A /* RRPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RRPlayer.swift; sourceTree = "<group>"; };
 		73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListRouter.swift; sourceTree = "<group>"; };
 		73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Rx.swift"; sourceTree = "<group>"; };
 		73F7A0A021E78B7900B92433 /* AlbumRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumRequest.swift; sourceTree = "<group>"; };
@@ -971,6 +973,7 @@
 			children = (
 				73B87A48220D9D9F0082A79A /* Actions */,
 				73B87A3F220D9A410082A79A /* AudioPlayer.swift */,
+				73B87A49220DC3B80082A79A /* RRPlayer.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -2330,6 +2333,7 @@
 				73F7A0A121E78B7900B92433 /* AlbumRequest.swift in Sources */,
 				76D39CF42112F63B00D47DFA /* ErrorPresenting.swift in Sources */,
 				76F1FA6820DBAEEC00C9191F /* PlayerViewController.swift in Sources */,
+				73B87A4A220DC3B80082A79A /* RRPlayer.swift in Sources */,
 				7665334820FF1CFA00FEC702 /* PagesViewModel.swift in Sources */,
 				76F1FA6E20DD161A00C9191F /* RoundedLabel.swift in Sources */,
 				736456B2220C821D005BE389 /* Fake.swift in Sources */,

@@ -7,59 +7,73 @@
 //
 
 import Foundation
+import RxSwift
 import RxCocoa
 
 private let _appState: BehaviorRelay<AppState> = {
     
     let x = AppState(player: DaPlayerState(playlist: DaPlayerState.Playlist(tracks: DaPlaylist(),
+                                                                            lastPatch: nil,
                                                                             addons: [],
                                                                             activeTrackHash: nil),
                                            playingNow: DaPlayerState.PlayingNow(musicType: nil,
-                                                                                isPlaying: false,
-                                                                                currentProgress: 0),
+                                                                                state: TrackState(hash: WebSocketService.ownSignatureHash,
+                                                                                                  progress: 0,
+                                                                                                  isPlaying: false)),
                                            isBlocked: false),
-                     trackDump: [] )
+                     allowedTimes: [:] )
     
     return BehaviorRelay(value: x)
     
 }()
 
+//var appStateSlice: AppState {
+//    return _appState.value
+//}
+
 var appState: Driver<AppState> {
     return _appState.asDriver()
 }
 
-struct AppState {
+struct AppState: Equatable {
     
     var player: DaPlayerState
     
 //    let user: User
-    var trackDump: Set<Track>
+    var allowedTimes: [Int: UInt]
     
 }
 
-struct DaPlayerState {
+struct DaPlayerState: Equatable {
     
-    struct Playlist {
+    var playlist: Playlist
+    var playingNow: PlayingNow
+    var isBlocked: Bool
+    
+    struct Playlist: Equatable {
         
         var tracks: DaPlaylist
+        var lastPatch: ReduxViewPatch?
         var addons: [Addon] //stack
         var activeTrackHash: TrackOrderHash?
         
-    }; var playlist: Playlist
+        struct ReduxViewPatch {
+            let isOwn: Bool
+            var patch: DaPlaylist.NullableReduxView
+        };
+    };
     
-    struct PlayingNow {
+    struct PlayingNow: Equatable {
         
-        enum MusicType {
+        var musicType: MusicType?
+        var state: TrackState
+        
+        enum MusicType: Equatable {
             case addon(Addon)
             case track(Track)
-        }; var musicType: MusicType?
+        };
         
-        var isPlaying: Bool
-        var currentProgress: TimeInterval
-        
-    }; var playingNow: PlayingNow
-    
-    var isBlocked: Bool
+    };
     
 }
 
@@ -68,8 +82,26 @@ enum Dispatcher {
     
     static func dispatch(action: Action) {
         
+        print("Dispatched \(type(of: action))")
+        
         let newState = action.perform(initialState: _appState.value)
+        guard newState != _appState.value else { return }
         _appState.accept(newState)
+        
+        print("New State: \(newState)")
+        
+    }
+    
+    static func dispatch(action: ActionCreator) {
+        
+        print("Dispatched \(type(of: action))")
+        
+        let newState = action.perform(initialState: _appState.value)
+        let _ = newState.subscribe(onSuccess: { (newState) in
+            _appState.accept(newState)
+            
+            print("New State: \(newState)")
+        })
         
     }
     
@@ -78,5 +110,11 @@ enum Dispatcher {
 protocol Action {
     
     func perform( initialState: AppState ) -> AppState
+    
+}
+
+protocol ActionCreator {
+    
+    func perform( initialState: AppState ) -> Single<AppState>
     
 }

@@ -1191,11 +1191,11 @@ extension Player: WebSocketServiceWatcher {
 
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) {
 
-        let tracks = daPlaylist.orderedTracks
-        
-        daPlaylist.apply(patch: playlistItemsPatches.nullableReduxView)
-        
-        let tracks2 = daPlaylist.orderedTracks
+//        let tracks = daPlaylist.orderedTracks
+//        
+//        daPlaylist.apply(patch: playlistItemsPatches.nullableReduxView)
+//        
+//        let tracks2 = daPlaylist.orderedTracks
         
         if self.state.initialized && flush == false {
             guard self.deferredPlaylistItemsPatches.isEmpty else {

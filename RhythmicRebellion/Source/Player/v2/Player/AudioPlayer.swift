@@ -16,11 +16,11 @@ import MediaPlayer
 extension AudioPlayer {
 
     var currentProgress: Driver<TimeInterval> {
-        return appState.map { $0.player.playingNow.currentProgress }
+        return appState.map { $0.player.playingNow.state.progress }
     }
     
     var leftProgressString: Driver<String> {
-        return appState.map { $0.player.playingNow.currentProgress.audioDurationString }
+        return appState.map { $0.player.playingNow.state.progress.audioDurationString }
     }
     
     var rightProgressString: Driver<String> {
@@ -45,11 +45,10 @@ extension AudioPlayer {
                 return "\(remain.audioDurationString)"
             }
         
-        
     }
     
     var isPlaying: Driver<Bool> {
-        return appState.map { $0.player.playingNow.isPlaying }
+        return appState.map { $0.player.playingNow.state.isPlaying }
                 .distinctUntilChanged()
     }
     
@@ -63,15 +62,14 @@ class AudioPlayer: NSObject {
         
         super.init()
         
-        ///binding progress indicator to AVPlayer updates
-        ///and reseting playback progress every time player ends playing
+        ///////---------
+        ///////Dispatching
+        ///////---------
+        
         let playbackEndedSignal = NotificationCenter.default.rx
             .notification(NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                           object: nil)
             .observeOn(MainScheduler.instance)
-            .do(onNext: { [weak p = player] (_) in
-                p?.seek(to: .zero)
-            })
         
         let playbackTimeSignal = appState.map { $0.player.playingNow.musicType }
             .notNil()
@@ -84,6 +82,12 @@ class AudioPlayer: NSObject {
             }
             .map { CMTimeGetSeconds($0) }
         
+        
+        playbackEndedSignal.subscribe(onNext: { (_) in
+                Dispatcher.dispatch(action: ProceedToNextItem())
+            })
+            .disposed(by: bag)
+        
         Observable.of (playbackTimeSignal,
                        playbackEndedSignal.map { _ in 0 })
             .merge()
@@ -92,9 +96,11 @@ class AudioPlayer: NSObject {
             })
             .disposed(by: bag)
         
+        
+        
         ///scrubbing
         let x = appState
-            .map { $0.player.playingNow.currentProgress }
+            .map { $0.player.playingNow.state.progress }
             .distinctUntilChanged { abs($0 - $1) > 1 }
         
         player.rx.status
@@ -121,7 +127,11 @@ class AudioPlayer: NSObject {
             })
             .disposed(by: bag)
         
-        appState.map { $0.player.playingNow.isPlaying }
+        ///////---------
+        ///////REACTING
+        ///////---------
+        
+        appState.map { $0.player.playingNow.state.isPlaying }
             .distinctUntilChanged()
             .drive(onNext: { [weak p = player] (isPlaying) in
                 
@@ -164,7 +174,7 @@ extension AudioPlayer {
     struct Scrub: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.playingNow.currentProgress = newValue
+        state.player.playingNow.state.progress = newValue
         return state
         }
         
@@ -174,7 +184,7 @@ extension AudioPlayer {
     struct Pause: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.playingNow.isPlaying = false
+        state.player.playingNow.state.isPlaying = false
         return state
         }
     }
@@ -182,7 +192,7 @@ extension AudioPlayer {
     struct Play: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.playingNow.isPlaying = true
+        state.player.playingNow.state.isPlaying = true
         return state
         }
     }
@@ -190,7 +200,7 @@ extension AudioPlayer {
     struct Switch: Action { func perform(initialState: AppState) -> AppState {
         
             var state = initialState
-            state.player.playingNow.isPlaying = !state.player.playingNow.isPlaying
+            state.player.playingNow.state.isPlaying = !state.player.playingNow.state.isPlaying
             return state
         }
     }
