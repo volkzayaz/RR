@@ -88,7 +88,7 @@ enum Dispatcher {
         guard newState != _appState.value else { return }
         _appState.accept(newState)
         
-        print("New State: \(newState)")
+        //print("New State: \(newState)")
         
     }
     
@@ -100,7 +100,7 @@ enum Dispatcher {
         let _ = newState.subscribe(onSuccess: { (newState) in
             _appState.accept(newState)
             
-            print("New State: \(newState)")
+          //  print("New State: \(newState)")
         })
         
     }
@@ -117,4 +117,52 @@ protocol ActionCreator {
     
     func perform( initialState: AppState ) -> Single<AppState>
     
+}
+
+
+////shorthands
+extension AppState {
+    
+    var currentTrack: OrderedTrack? {
+        guard let hash = player.playlist.activeTrackHash,
+              let t = player.playlist.tracks[hash] else {
+                return nil
+        }
+        
+        return t
+    }
+ 
+//    var canForward: Driver<Bool> {
+//        
+//        
+//        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems }
+//        
+//        switch currentQueueItem.content {
+//        case .addon(let addon): return addon.type == .artistBIO || addon.type == .songCommentary
+//        default: break
+//        }
+//        
+//        return self.state.initialized
+//    }
+//    
+//    var canBackward: Bool {
+//        guard let currentQueueItem = self.playerQueue.currentItem else { return self.state.initialized && self.playlist.hasPlaylisItems}
+//        
+//        switch currentQueueItem.content {
+//        case .addon(let addon): return addon.type == .artistBIO || addon.type == .songCommentary
+//        case .track(_), .stub(_):
+//            guard let trackProgress = self.currentTrackState?.progress, trackProgress > 0.3 else { return self.state.initialized }
+//            return true
+//        }
+//    }
+//    
+//    var canSeek: Bool {
+//        guard self.state.initialized, let currentQueueItem = self.playerQueue.currentItem else { return false }
+//        
+//        switch currentQueueItem.content {
+//        case .addon(_), .stub(_): return false
+//        case .track(_): return self.state.waitingAddons == false
+//        }
+//    }
+//    
 }

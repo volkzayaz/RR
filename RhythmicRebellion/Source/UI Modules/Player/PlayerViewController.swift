@@ -49,7 +49,11 @@ final class PlayerViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: PlayerViewModel!
+    private(set) var viewModel: PlayerViewModel! {
+        didSet {
+            refreshUI()
+        }
+    }
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
@@ -94,7 +98,7 @@ final class PlayerViewController: UIViewController {
 
         self.playerItemProgressViewTapGestureRecognizer.delegate = self
 
-        viewModel.load(with: self)
+        viewModel.load()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -214,66 +218,105 @@ extension PlayerViewController {
 
 // MARK: - ViewModel -
 
-extension PlayerViewController: PlayerViewModelDelegate {
+extension PlayerViewController {
 
     func updatePlayPauseState() {
 
-        var playerToolBarItems = self.toolBar.items
-        let playButtonIndex = playerToolBarItems?.index(of: self.playBarButtonItem)
-        let pauseButtonIndex = playerToolBarItems?.index(of: self.pauseBarButtonItem)
-        if self.viewModel.isPlaying {
-            if pauseButtonIndex == nil && playButtonIndex != nil {
-                playerToolBarItems?.remove(at: playButtonIndex!)
-                playerToolBarItems?.insert(self.pauseBarButtonItem, at: playButtonIndex!)
-            }
-        } else {
-            if pauseButtonIndex != nil && playButtonIndex == nil {
-                playerToolBarItems?.remove(at: pauseButtonIndex!)
-                playerToolBarItems?.insert(self.playBarButtonItem, at: pauseButtonIndex!)
-            }
-        }
-        self.toolBar.items = playerToolBarItems
-
-        self.playBarButtonItem.isEnabled = self.viewModel.canChangePlayState
+        viewModel.isPlaying
+            .drive(onNext: { [unowned self] (isPlaying) in
+                
+                var playerToolBarItems = self.toolBar.items
+                let playButtonIndex = playerToolBarItems?.index(of: self.playBarButtonItem)
+                let pauseButtonIndex = playerToolBarItems?.index(of: self.pauseBarButtonItem)
+                
+                
+                if isPlaying {
+                    if pauseButtonIndex == nil && playButtonIndex != nil {
+                        playerToolBarItems?.remove(at: playButtonIndex!)
+                        playerToolBarItems?.insert(self.pauseBarButtonItem, at: playButtonIndex!)
+                    }
+                } else {
+                    if pauseButtonIndex != nil && playButtonIndex == nil {
+                        playerToolBarItems?.remove(at: pauseButtonIndex!)
+                        playerToolBarItems?.insert(self.playBarButtonItem, at: pauseButtonIndex!)
+                    }
+                }
+                self.toolBar.items = playerToolBarItems
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.canChangePlayState
+            .drive(playBarButtonItem.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
     }
 
     func refreshUI() {
         guard self.isViewLoaded == true else { return }
 
-        if self.viewModel.isPlayerBlocked == true && self.blockOverlayView.superview == nil {
-
-            self.blockOverlayView.frame = self.view.bounds
-            self.view.addSubview(self.blockOverlayView)
-
-            NSLayoutConstraint.activate([self.blockOverlayView.topAnchor.constraint(equalTo: self.view.topAnchor),
-                                         self.blockOverlayView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-                                         self.blockOverlayView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-                                         self.blockOverlayView.rightAnchor.constraint(equalTo: self.view.rightAnchor)])
-
-        } else if self.viewModel.isPlayerBlocked == false && self.blockOverlayView.superview != nil {
-
-            self.blockOverlayView.removeFromSuperview()
-        }
-
-        self.playerItemNameLabel.text = self.viewModel.playerItemNameString
-        self.playerItemArtistNameLabel.text = self.viewModel.playerItemArtistNameString
+        viewModel.isPlayerBlocked
+            .drive(onNext: { [unowned self] (isBlocked) in
+                if isBlocked == true && self.blockOverlayView.superview == nil {
+                    
+                    self.blockOverlayView.frame = self.view.bounds
+                    self.view.addSubview(self.blockOverlayView)
+                    
+                    NSLayoutConstraint.activate([self.blockOverlayView.topAnchor.constraint(equalTo: self.view.topAnchor),
+                                                 self.blockOverlayView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+                                                 self.blockOverlayView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                                                 self.blockOverlayView.rightAnchor.constraint(equalTo: self.view.rightAnchor)])
+                    
+                } else if isBlocked == false && self.blockOverlayView.superview != nil {
+                    
+                    self.blockOverlayView.removeFromSuperview()
+                }
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.playerItemNameString
+            .drive(playerItemNameLabel.rx.text)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.playerItemArtistNameString
+            .drive(playerItemArtistNameLabel.rx.text)
+            .disposed(by: rx.disposeBag)
 
         self.playerItemNameSeparatorLabel.isHidden = self.playerItemNameLabel.text?.isEmpty ?? true || self.playerItemArtistNameLabel.text?.isEmpty ?? true
 
-        self.playerItemDurationLabel.text = self.viewModel.playerItemDurationString
-
+        viewModel.playerItemDurationString
+            .drive(playerItemDurationLabel.rx.text)
+            .disposed(by: rx.disposeBag)
+        
         self.forwardBarButtonItem.isEnabled = self.viewModel.canForward
         self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
 
         let playerItemTrackLikeState = self.viewModel.playerItemTrackLikeState
-        self.likeBarButtonItem.tintColor = playerItemTrackLikeState.isLiked ? #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
-        self.likeBarButtonItem.isEnabled = self.viewModel.canChangePlayerItemTrackLikeState
-        self.dislikeBarButtonItem.tintColor = playerItemTrackLikeState.isDisliked ? #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1)
-        self.dislikeBarButtonItem.isEnabled = self.viewModel.canChangePlayerItemTrackLikeState
+        
+        playerItemTrackLikeState.map { $0.isLiked ? #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1) }
+            .drive(onNext: { [unowned self] (x) in
+                self.likeBarButtonItem.tintColor = x
+            })
+            .disposed(by: rx.disposeBag)
+        
+        playerItemTrackLikeState.map { $0.isDisliked ? #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1) }
+            .drive(onNext: { [unowned self] (x) in
+                self.dislikeBarButtonItem.tintColor = x
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.canChangePlayerItemTrackLikeState
+            .drive(likeBarButtonItem.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
+//        viewModel.canSetPlayerItemProgress
+//            .drive(playerItemProgressView.rx.isUserInteractionEnabled)
+//            .disposed(by: rx.disposeBag)
 
-        self.playerItemProgressView.isUserInteractionEnabled = self.viewModel.canSetPlayerItemProgress
-
-        self.regularFollowButton.isSelected = self.viewModel.isArtistFollowed
+        viewModel.isArtistFollowed
+            .drive(regularFollowButton.rx.isSelected)
+            .disposed(by: rx.disposeBag)
+        
         self.compactFollowButton.isSelected = self.regularFollowButton.isSelected
         self.compactFollowButton.tintColor = self.regularFollowButton.tintColor
 
@@ -302,10 +345,18 @@ extension PlayerViewController: PlayerViewModelDelegate {
 
         self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
 
-        self.playerItemCurrentTimeLabel.text = self.viewModel.playerItemCurrentTimeString
-        if self.playerItemProgressView.isTracking == false {
-            self.playerItemProgressView.setValue(self.viewModel.playerItemProgressValue, animated: true)
-        }
+        viewModel.playerItemCurrentTimeString
+            .drive(playerItemCurrentTimeLabel.rx.text)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.playerItemProgressValue
+            .drive(onNext: { [unowned self] (x) in
+                if self.playerItemProgressView.isTracking == false {
+                    self.playerItemProgressView.setValue(x, animated: true)
+                }
+            })
+            .disposed(by: rx.disposeBag)
+        
 
         self.updatePlayPauseState()
     }

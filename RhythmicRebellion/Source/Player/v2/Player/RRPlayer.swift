@@ -11,12 +11,23 @@ import RxSwift
 
 class RRPlayer: NSObject {
     
-    let webSocket = RouterDependencies.get.webSocketService
+    let webSocket: WebSocketService
+    let audioPlayer = AudioPlayer()
     
-    override init() {
+    init(webSocket: WebSocketService) {
+        self.webSocket = webSocket
+        
         super.init()
         
         webSocket.addWatcher(self)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
+                                          isGuest: DataLayer.get.application.user!.isGuest))
+        }
+        
+        
+        bind()
     }
 }
 
@@ -54,12 +65,12 @@ extension RRPlayer {
         
     }
     
-    func seek(to time: TimeInterval) {
+    func seek(to fraction: Float) {
         
     }
     
     func `switch`(to track: OrderedTrack) {
-        
+        Dispatcher.dispatch(action: SwitchToTrack(orderHash: track.orderHash))
     }
     
 }
@@ -111,7 +122,11 @@ extension RRPlayer: WebSocketServiceWatcher {
     
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
         
-        ////change currentPlaying item in AppState
+        guard let t = trackId else {
+            return
+        }
+        
+        Dispatcher.dispatch(action: SwitchToTrack(orderHash: t.key))
         
     }
     
@@ -145,6 +160,7 @@ extension RRPlayer {
         
         /// sync player state
         appState.map { $0.player.playingNow.state }
+            .skip(1)
             .filter { $0.isOwn }
             .drive(onNext: { (x) in
                 
@@ -198,7 +214,7 @@ extension RRPlayer {
             .filter { $0.state.isOwn }
             .drive(onNext: { (x) in
                 
-                print("Checking restricted time \(x)")
+                //print("Checking restricted time \(x)")
                 
                 ///Dispatcher.dispatch(action: CheckRestrictedTime(newState: x))
             })
@@ -302,4 +318,16 @@ struct StoreTracks: Action {
         return state
     }
     
+}
+
+struct SwitchToTrack: Action {
+    let orderHash: TrackOrderHash
+    
+    func perform(initialState: AppState) -> AppState {
+        var state = initialState
+        
+        state.player.playlist.activeTrackHash = orderHash
+        
+        return state
+    }
 }

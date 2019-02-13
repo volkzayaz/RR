@@ -16,8 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var appRouter: AppRouter?
 
-    var player: RRPlayer!
-    
     func setupAppearance() {
 
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .top, barMetrics: .default)
@@ -73,14 +71,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             let routerDependencies = RouterDependencies(application: application,
                                                         player: player,
-                                                        lyricsKaraokeService: lyricsKaraokeService)
+                                                        lyricsKaraokeService: lyricsKaraokeService,
+                                                        daPlayer: RRPlayer(webSocket: application.webSocketService))
 
             let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
             defaultAppRouter.start(controller: appViewController)
 
             self.appRouter = defaultAppRouter
-            
-            self.player = RRPlayer()
         }
         
         return self.appRouter != nil

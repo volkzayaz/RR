@@ -36,7 +36,7 @@ extension Reactive where Base == AVPlayer {
                 interval = 0.99
             }
             
-            let observer = self.base.addPeriodicTimeObserver(forInterval: CMTime(seconds: interval,
+            let observer = self.base.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1,
                                                                                  preferredTimescale: CMTimeScale(NSEC_PER_SEC)),
                                                         queue: DispatchQueue.main) { (x) in
                 subscriber.onNext(x)

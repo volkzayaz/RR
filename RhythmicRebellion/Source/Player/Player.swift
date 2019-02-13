@@ -219,7 +219,9 @@ class Player: NSObject, Watchable {
         self.application = application
 
         super.init()
-
+        
+        return;
+        
         self.application.addWatcher(self)
         self.webSocketService.addWatcher(self)
 
@@ -893,7 +895,10 @@ class Player: NSObject, Watchable {
     }
 
     @objc func playerItemDidPlayToEndTime(_ notification: Notification) {
-
+        
+        ////Vlad
+        return;
+        
         guard self.playerQueue.containsOnlyTrack == false else { self.playForward(); return }
 
         self.playerQueue.dequeueFirst()

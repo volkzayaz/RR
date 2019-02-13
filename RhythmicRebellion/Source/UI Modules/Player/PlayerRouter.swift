@@ -90,7 +90,7 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
 
     func start(controller: PlayerViewController) {
         playerViewController = controller
-        let vm = PlayerControllerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player, lyricsKaraokeService: self.dependencies.lyricsKaraokeService)
+        let vm = PlayerViewModel(router: self, application: self.dependencies.application, player: self.dependencies.player, lyricsKaraokeService: self.dependencies.lyricsKaraokeService)
         controller.configure(viewModel: vm, router: self)
     }
 }

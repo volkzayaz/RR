@@ -68,15 +68,16 @@ class AudioPlayer: NSObject {
         
         let playbackEndedSignal = NotificationCenter.default.rx
             .notification(NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-                          object: nil)
+                          object: player)
             .observeOn(MainScheduler.instance)
         
         let playbackTimeSignal = appState.map { $0.player.playingNow.musicType }
             .notNil()
+            .distinctUntilChanged()
             .asObservable()
             .flatMapLatest { [unowned p = player] (x) -> Observable<CMTime> in
                 
-                let duration = p.currentItem!.asset.duration
+                let duration = CMTime(seconds: 240, preferredTimescale: 1) //p.currentItem!.asset.duration
                 
                 return p.rx.playbackTimeFor(time: duration)
             }
@@ -142,6 +143,7 @@ class AudioPlayer: NSObject {
             .disposed(by: bag)
         
         appState.map { $0.player.playingNow.musicType }
+            .distinctUntilChanged()
             .notNil()
             .drive(onNext: { [weak p = player] (item) in
                 

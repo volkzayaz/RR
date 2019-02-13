@@ -166,6 +166,8 @@ struct RouterDependencies {
     let player: Player
     let lyricsKaraokeService: LyricsKaraokeService
 
+    let daPlayer: RRPlayer!
+    
 }
 
 typealias DataLayer = RouterDependencies

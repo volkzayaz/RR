@@ -27,24 +27,40 @@ struct DefaultKaraokeIntervalsProgressViewModel: KaraokeIntervalsProgressViewMod
 
 }
 
-final class PlayerControllerViewModel: NSObject, PlayerViewModel {
+final class PlayerViewModel: NSObject {
 
     // MARK: - Public properties -
-    var playerItemDurationString: String {
-        guard let playerItemDuration = self.player.currentItemDuration else { return "--:--"}
-        return playerItemDuration.stringFormatted();
+    var playerItemDurationString: Driver<String> {
+        return appState.distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+            .map { newState in
+                guard let duration = newState.currentTrack?.track.audioFile?.duration else {
+                    return "--:--"
+                }
+                
+                return TimeInterval(duration).stringFormatted()
+            }
     }
     
-    var playerItemCurrentTimeString: String {
-        guard let playerItemCurrentTime = self.player.currentItemTime else { return "--:--"}
-        return playerItemCurrentTime.stringFormatted();
+    var playerItemCurrentTimeString: Driver<String> {
+        
+        return appState
+            .map { $0.player.playingNow.state }
+            .distinctUntilChanged()
+            .map { $0.progress.stringFormatted() }
+        
     }
 
-    var playerItemProgressValue: Float {
-        guard let playerItemDuration = self.player.currentItemDuration, playerItemDuration != 0.0,
-            let playerItemCurrentTime = self.player.currentItemTime else { return 0.0 }
-
-        return Float(playerItemCurrentTime / playerItemDuration)
+    var playerItemProgressValue: Driver<Float> {
+        
+        return appState
+            .distinctUntilChanged { $0.player.playingNow.state == $1.player.playingNow.state }
+            .map { newState in
+                
+                guard let totalTime = newState.currentTrack?.track.audioFile?.duration else { return 0 }
+                
+                return Float(newState.player.playingNow.state.progress / TimeInterval(totalTime))
+            }
+        
     }
 
     var playerItemRestrictedValue: Float {
@@ -54,52 +70,68 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         return Float(playerItemRestrictedTime / playerItemDuration)
     }
 
-    var playerItemNameString: String {
-        guard let playerCurrentQueueItem = self.player.currentQueueItem else { return "" }
+    var playerItemNameString: Driver<String> {
+        
+        return appState.map { $0.player.playingNow.musicType }
+            .distinctUntilChanged()
+            .map { i in
+                
+                guard let x = i else { return "" }
+                
+                switch x {
+                case .addon(let a): return a.type.title
+                case .track(let t): return t.name
 
-        switch playerCurrentQueueItem.content {
-        case .addon(let addon):
-            return addon.type.title
-        case .track(let track):
-            return track.name
-        case .stub(_):
-            return self.player.currentItem?.playlistItem.track.name ?? ""
-
-        }
+                    //???
+//                case .stub(_):
+//                    return self.player.currentItem?.playlistItem.track.name ?? ""
+                    
+                }
+                
+            }
+        
     }
 
-    var playerItemNameAttributedString: NSAttributedString {
-        return NSMutableAttributedString(string: self.playerItemNameString,
-                                         attributes: [NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.760392487, green: 0.7985035777, blue: 0.9999999404, alpha: 0.96),
-                                                      NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12.0)])
+    var playerItemArtistNameString: Driver<String> {
+        
+        return appState
+            .distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+            .map { $0.currentTrack?.track.artist.name ?? "" }
+        
     }
 
-    var playerItemArtistNameString: String {
-        guard let currentTrack = self.player.currentItem?.playlistItem.track else { return "" }
-        return currentTrack.artist.name
+    var playerItemTrackLikeState: Driver<Track.LikeStates> {
+        return appState
+            .distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+            .map { newState in
+                
+                guard let user = self.application.user,
+                      let currentTrack = newState.currentTrack else { return .none }
+                
+                return user.likeState(for: currentTrack.track)
+            }
     }
 
-    var playerItemArtistNameAttributedString: NSAttributedString {
-        return NSAttributedString(string: self.playerItemArtistNameString,
-                                  attributes: [NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 0.96),
-                                               NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12.0)])
+    var canChangePlayerItemTrackLikeState: Driver<Bool> {
+        return appState.map { $0.player.playingNow.musicType != nil }
     }
-
-    var playerItemTrackLikeState: Track.LikeStates {
-        guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return .none }
-        return user.likeState(for: currentPlayerItem.playlistItem.track)
+    var canChangePlayState: Driver<Bool> {
+        return appState.map { $0.player.playingNow.musicType != nil }
     }
-
-    var canChangePlayerItemTrackLikeState: Bool {
-        return self.player.currentItem != nil
-    }
-
+    
+    
     var playerItemPreviewOptionViewModel: TrackPreviewOptionViewModel?
 
-    var isPlayerBlocked: Bool { return self.player.state.blocked }
+    var isPlayerBlocked: Driver<Bool> {
+        return appState.map { $0.player.isBlocked }
+            .distinctUntilChanged()
+    }
 
-    var canChangePlayState: Bool { return self.player.currentItem != nil }
-    var isPlaying: Bool { return self.player.isPlaying }
+    
+    var isPlaying: Driver<Bool> {
+        return appState.map { $0.player.playingNow.state.isPlaying }
+                    .distinctUntilChanged()
+    }
 
     var canForward: Bool { return self.player.canForward }
     var canBackward: Bool { return self.player.canBackward }
@@ -108,10 +140,16 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     var canFollowArtist: Bool { return self.player.currentItem != nil }
 
-    var isArtistFollowed: Bool {
-        guard let user = self.application.user, let currentPlayerItem = self.player.currentItem else { return false }
-
-        return user.isFollower(for: currentPlayerItem.playlistItem.track.artist.id)
+    var isArtistFollowed: Driver<Bool> {
+        return appState
+            .distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+            .map { newState in
+                
+                guard let user = self.application.user,
+                      let artist = newState.currentTrack?.track.artist else { return false }
+                
+                return user.isFollower(for: artist.id)
+            }
     }
 
     var isKaraokeEnabled: Bool { return self.lyricsKaraokeService.mode.value == .karaoke }
@@ -121,7 +159,6 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
     // MARK: - Private properties -
 
-    private(set) weak var delegate: PlayerViewModelDelegate?
     private(set) weak var router: PlayerRouter?
     private(set) var application: Application
     private(set) var player: Player
@@ -149,11 +186,10 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         self.application.removeWatcher(self)
     }
 
-    func load(with delegate: PlayerViewModelDelegate) {
+    func load() {
 
         self.loadPlayerItemPreviewOptionViewModel()
-        self.delegate = delegate
-
+        
         self.lyricsKaraokeService.lyricsState.subscribe(onNext: { [unowned self] (lyricsState) in
 
             switch lyricsState {
@@ -163,12 +199,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
                 self.karaoke = nil
             }
 
-            self.delegate?.refreshKaraokeUI()
             })
             .disposed(by: disposeBag)
-
-
-        self.delegate?.refreshUI()
 
         self.player.addWatcher(self)
         self.application.addWatcher(self)
@@ -223,11 +255,13 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     // MARK: - Actions -
 
     func play() {
-        self.player.play()
+        DataLayer.get.daPlayer.play()
+        
     }
 
     func pause() {
-        self.player.pause()
+        DataLayer.get.daPlayer.pause()
+        
     }
 
     func forward() {
@@ -244,7 +278,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         self.application.update(track: track, likeState: .liked) { [weak self] (error) in
             guard let error = error else { return }
-            self?.delegate?.show(error: error)
+            
         }
     }
 
@@ -254,7 +288,7 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
 
         self.application.update(track: track, likeState: .disliked) { [weak self] (error) in
             guard let error = error else { return }
-            self?.delegate?.show(error: error)
+            
         }
     }
 
@@ -273,8 +307,8 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
         let followingCompletion: (Result<[String]>) -> Void = { [weak self] (followingResult) in
 
             switch followingResult {
-            case .failure(let error):
-                self?.delegate?.show(error: error)
+            //case .failure(let error):
+                
             default: break
             }
         }
@@ -298,19 +332,19 @@ final class PlayerControllerViewModel: NSObject, PlayerViewModel {
     }
 }
 
-extension PlayerControllerViewModel: PlayerWatcher {
+extension PlayerViewModel: PlayerWatcher {
 
     func playerDidChangePlaylist(player: Player) {
-        self.delegate?.refreshUI()
+        
     }
 
     func player(player: Player, didChange status: PlayerStatus) {
         self.loadPlayerItemPreviewOptionViewModel()
-        self.delegate?.refreshUI()
+        
     }
 
     func player(player: Player, didChangePlayState isPlaying: Bool) {
-        self.delegate?.refreshUI()
+        
     }
 
     func player(player: Player, didChangePlayerItem playerItem: PlayerItem?) {
@@ -320,37 +354,37 @@ extension PlayerControllerViewModel: PlayerWatcher {
             self.karaoke = nil
         }
 
-        self.delegate?.refreshUI()
+        
     }
 
     func player(player: Player, didChangePlayerQueueItem playerQueueItem: PlayerQueueItem) {
-        self.delegate?.refreshUI()
+        
     }
 
     func player(player: Player, didChangePlayerItemCurrentTime time: TimeInterval) {
-        self.delegate?.refreshProgressUI()
+        
     }
 
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) {
         self.loadPlayerItemPreviewOptionViewModel()
-        self.delegate?.refreshUI()
+        
     }
 
     func player(player: Player, didChangeBlockedState isBlocked: Bool) {
-        self.delegate?.refreshUI()
+        
     }
 }
 
-extension PlayerControllerViewModel: ApplicationWatcher {
+extension PlayerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let artist = self.player.currentItem?.playlistItem.track.artist, artist.id == artistFollowingState.artistId else { return }
         self.loadPlayerItemPreviewOptionViewModel()
-        self.delegate?.refreshUI()
+        
     }
 
     func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState) {
         guard let track = self.player.currentItem?.playlistItem.track, track.id == trackLikeState.id else { return }
-        self.delegate?.refreshUI()
+        
     }
 }
