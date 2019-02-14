@@ -19,15 +19,15 @@ class RRPlayer: NSObject {
         
         super.init()
         
-        //webSocket.addWatcher(self)
+        webSocket.addWatcher(self)
         
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//            webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
-//                                          isGuest: DataLayer.get.application.user!.isGuest))
-//        }
-//        
-//        
-//        bind()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
+                                          isGuest: DataLayer.get.application.user!.isGuest))
+        }
+        
+        
+        bind()
     }
 }
 
@@ -119,6 +119,9 @@ extension RRPlayer: WebSocketServiceWatcher {
     }
     
     func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) {
+        
+        ///TODO: get rid of PlaylistItemPatches.
+        ///Currently it's mapping contradicts reduxView protocol during remote delete operations
         
         let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
                                                            patch: playlistItemsPatches.nullableReduxView) )

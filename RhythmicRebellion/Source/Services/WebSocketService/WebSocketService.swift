@@ -249,7 +249,7 @@ class WebSocketService: WebSocketDelegate, Watchable {
                     })
 
                 case .playListUpdate(let playerPlaylistUpdate):
-
+                    
 //                #if DEBUG
 //                    print("recieve playListUpdate: \(String(data: data, encoding: .utf8))")
 //                #endif

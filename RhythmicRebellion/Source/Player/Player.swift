@@ -220,6 +220,8 @@ class Player: NSObject, Watchable {
 
         super.init()
         
+        return;
+        
         self.application.addWatcher(self)
         self.webSocketService.addWatcher(self)
 
