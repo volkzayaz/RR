@@ -78,6 +78,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaultAppRouter.start(controller: appViewController)
 
             self.appRouter = defaultAppRouter
+            
+            Dispatcher.kickOff()
         }
         
         return self.appRouter != nil

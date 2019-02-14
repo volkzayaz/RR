@@ -66,7 +66,7 @@ extension RRPlayer {
     }
     
     func seek(to fraction: Float) {
-        
+        Dispatcher.dispatch(action: ScrubToFraction(fraction: fraction))
     }
     
     func `switch`(to track: OrderedTrack) {
@@ -330,4 +330,23 @@ struct SwitchToTrack: Action {
         
         return state
     }
+}
+
+struct ScrubToFraction: Action {
+    
+    let fraction: Float
+    
+    func perform(initialState: AppState) -> AppState {
+        
+        guard let secs = initialState.currentTrack?.track.audioFile?.duration else {
+            return initialState
+        }
+
+        var state = initialState
+        
+        state.player.playingNow.state.progress = TimeInterval(secs) * Double(fraction)
+        
+        return state
+    }
+    
 }

@@ -80,28 +80,53 @@ struct DaPlayerState: Equatable {
 
 enum Dispatcher {
     
+    static let actions = BehaviorSubject<[ActionCreator]>(value: [])
+    
+    static func kickOff() {
+        
+        let newItem = actions.asObservable()
+            .filter { $0.count > 0 }
+            .map { $0.first! }
+        
+        ////kick off loop
+        recursivelyLoad(nextPageTrigger: newItem)
+            .subscribe()
+            //.disposed(by: bag)
+        
+    }
+    
+    static func recursivelyLoad(nextPageTrigger: Observable<ActionCreator>) -> Observable<AppState> {
+        
+        return nextPageTrigger
+            .take(1)
+            .delay(0, scheduler: MainScheduler.instance)
+            .flatMap { actionCreator in
+                actionCreator.perform(initialState: _appState.value)
+                    .do(onSuccess: { (newState) in
+                        
+                        guard newState != _appState.value else { return }
+                        _appState.accept(newState)
+                
+                    })
+            }
+            .do(onNext: { (newState) in
+                actions.onNext( Array(actions.unsafeValue.dropFirst()) )
+            })
+            .concat(Observable.deferred {
+                self.recursivelyLoad(nextPageTrigger: nextPageTrigger)
+            })
+        
+    }
+    
     static func dispatch(action: Action) {
         
-        print("Dispatched \(type(of: action))")
-        
-        let newState = action.perform(initialState: _appState.value)
-        guard newState != _appState.value else { return }
-        _appState.accept(newState)
-        
-        //print("New State: \(newState)")
+        actions.onNext(actions.unsafeValue + [ActionCreatorWrapper(action: action)])
         
     }
     
     static func dispatch(action: ActionCreator) {
         
-        print("Dispatched \(type(of: action))")
-        
-        let newState = action.perform(initialState: _appState.value)
-        let _ = newState.subscribe(onSuccess: { (newState) in
-            _appState.accept(newState)
-            
-          //  print("New State: \(newState)")
-        })
+        actions.onNext(actions.unsafeValue + [action])
         
     }
     
@@ -119,6 +144,14 @@ protocol ActionCreator {
     
 }
 
+struct ActionCreatorWrapper: ActionCreator {
+    let action: Action
+    
+    func perform(initialState: AppState) -> Single<AppState> {
+        return .just( action.perform(initialState: initialState) )
+    }
+    
+}
 
 ////shorthands
 extension AppState {

@@ -102,7 +102,7 @@ class AudioPlayer: NSObject {
         ///scrubbing
         let x = appState
             .map { $0.player.playingNow.state.progress }
-            .distinctUntilChanged { abs($0 - $1) > 1 }
+            .distinctUntilChanged { abs($0 - $1) < 1 }
         
         player.rx.status
             .map { $0 == .readyToPlay}
@@ -112,18 +112,7 @@ class AudioPlayer: NSObject {
             }
             .subscribe(onNext: { [weak p = player] requestedProgress in
                 
-                guard let player = p,
-                    let asset = player.currentItem?.asset,
-                    !CMTIME_IS_INVALID(asset.duration),
-                    let duration = CMTimeGetSeconds(asset.duration) as Float64?,
-                    duration.isFinite else {
-                        fatalError("Player must be initialised at this point")
-                }
-                
-                let time = duration * requestedProgress
-                player.seek(to: CMTimeMakeWithSeconds(time, preferredTimescale: Int32(NSEC_PER_SEC)))
-                
-                Dispatcher.dispatch(action: Play())
+                //p?.seek(to: CMTimeMakeWithSeconds(requestedProgress, preferredTimescale: Int32(NSEC_PER_SEC)))
                 
             })
             .disposed(by: bag)

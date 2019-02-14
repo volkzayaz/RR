@@ -72,7 +72,9 @@ final class PlayerViewModel: NSObject {
 
     var playerItemNameString: Driver<String> {
         
-        return appState.map { $0.player.playingNow.musicType }
+        return appState.map {
+            $0.player.playingNow.musicType
+            }
             .distinctUntilChanged()
             .map { i in
                 
@@ -293,10 +295,7 @@ final class PlayerViewModel: NSObject {
     }
 
     func setPlayerItemProgress(progress: Float) {
-
-        guard self.player.canSeek, let playerItemDuration = self.player.playerCurrentItemDuration, playerItemDuration != 0.0 else { return }
-
-        self.player.seek(to: TimeInterval(playerItemDuration * Double(progress)).rounded())
+        DataLayer.get.daPlayer.seek(to: progress)
     }
 
     func toggleArtistFollowing() {
