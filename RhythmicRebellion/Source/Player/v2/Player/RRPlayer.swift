@@ -131,7 +131,7 @@ extension RRPlayer: WebSocketServiceWatcher {
     }
     
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) {
-        
+        Dispatcher.dispatch(action: ChangeTrackState(trackState: trackState))
     }
     
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) {
@@ -346,6 +346,18 @@ struct ScrubToFraction: Action {
         
         state.player.playingNow.state.progress = TimeInterval(secs) * Double(fraction)
         
+        return state
+    }
+    
+}
+
+struct ChangeTrackState: Action {
+    
+    let trackState: TrackState
+    
+    func perform(initialState: AppState) -> AppState {
+        var state = initialState
+        state.player.playingNow.state = trackState
         return state
     }
     
