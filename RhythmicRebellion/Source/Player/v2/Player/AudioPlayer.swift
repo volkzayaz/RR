@@ -16,11 +16,11 @@ import MediaPlayer
 extension AudioPlayer {
 
     var currentProgress: Driver<TimeInterval> {
-        return appState.map { $0.player.playingNow.state.progress }
+        return appState.map { $0.player.currentItem?.state.progress ?? 0 }
     }
     
     var leftProgressString: Driver<String> {
-        return appState.map { $0.player.playingNow.state.progress.audioDurationString }
+        return appState.map { $0.player.currentItem?.state.progress.audioDurationString ?? "" }
     }
     
     var rightProgressString: Driver<String> {
@@ -48,7 +48,7 @@ extension AudioPlayer {
     }
     
     var isPlaying: Driver<Bool> {
-        return appState.map { $0.player.playingNow.state.isPlaying }
+        return appState.map { $0.player.currentItem?.state.isPlaying ?? false }
                 .distinctUntilChanged()
     }
     
@@ -73,7 +73,7 @@ class AudioPlayer: NSObject {
                           object: player)
             .observeOn(MainScheduler.instance)
         
-        let playbackTimeSignal = appState.map { $0.player.playingNow.musicType }
+        let playbackTimeSignal = appState.map { $0.player.currentItem?.musicType }
             .notNil()
             .distinctUntilChanged()
             .asObservable()
@@ -102,7 +102,7 @@ class AudioPlayer: NSObject {
         
         ///scrubbing
         let x = appState
-            .map { $0.player.playingNow.state.progress }
+            .map { $0.player.currentItem?.state.progress ?? 0 }
         
         player.rx.status
             .map { $0 == .readyToPlay}
@@ -133,7 +133,7 @@ class AudioPlayer: NSObject {
         ///////REACTING
         ///////---------
         
-        appState.map { $0.player.playingNow.state.isPlaying }
+        appState.map { $0.player.currentItem?.state.isPlaying ?? false }
             .distinctUntilChanged()
             .drive(onNext: { [weak p = player] (isPlaying) in
                 
@@ -143,7 +143,7 @@ class AudioPlayer: NSObject {
             })
             .disposed(by: bag)
         
-        appState.map { $0.player.playingNow.musicType }
+        appState.map { $0.player.currentItem?.musicType }
             .distinctUntilChanged()
             .notNil()
             .drive(onNext: { [weak p = player] (item) in
@@ -177,7 +177,7 @@ extension AudioPlayer {
     struct Scrub: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.playingNow.state.progress = newValue
+        state.player.currentItem?.state.progress = newValue
         return state
         }
         
@@ -187,7 +187,7 @@ extension AudioPlayer {
     struct Pause: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.playingNow.state.isPlaying = false
+        state.player.currentItem?.state.isPlaying = false
         return state
         }
     }
@@ -195,7 +195,7 @@ extension AudioPlayer {
     struct Play: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.playingNow.state.isPlaying = true
+        state.player.currentItem?.state.isPlaying = true
         return state
         }
     }
@@ -203,7 +203,8 @@ extension AudioPlayer {
     struct Switch: Action { func perform(initialState: AppState) -> AppState {
         
             var state = initialState
-            state.player.playingNow.state.isPlaying = !state.player.playingNow.state.isPlaying
+            let flip = !(state.player.currentItem?.state.isPlaying ?? true)
+            state.player.currentItem?.state.isPlaying = flip
             return state
         }
     }
@@ -211,11 +212,11 @@ extension AudioPlayer {
     struct ChangeTrack: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.playingNow.musicType = newValue
+        state.player.currentItem?.musicType = newValue
         return state
         }
         
-        let newValue: DaPlayerState.PlayingNow.MusicType
+        let newValue: DaPlayerState.MusicType
     }
     
 }

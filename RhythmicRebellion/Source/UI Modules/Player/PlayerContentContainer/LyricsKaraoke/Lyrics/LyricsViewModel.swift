@@ -27,8 +27,8 @@ final class LyricsViewModel: LyricsViewModelProtocol {
     private(set) var infoText: String = ""
 
     var canSwitchToKaraokeMode: Bool { return self.lyrics?.karaoke != nil
-                                        && self.player.state.blocked == false
-                                        && self.player.state.waitingAddons == false
+//                                        && self.player.currentItem.state.blocked == false
+//                                        && self.player.currentItem.state.waitingAddons == false
                                         && self.player.currentQueueItem?.isTrack == true
     }
 

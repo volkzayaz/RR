@@ -13,11 +13,11 @@ import RxSwift
 struct NowPlayingProvider : TrackProvider {
     
     var orderedTracks: [OrderedTrack] {
-        return appStateSlice.player.playlist.tracks.orderedTracks
+        return appStateSlice.player.tracks.orderedTracks
     }
     
     func provide() -> Observable<[Track]> {
-        return appState.map { $0.player.playlist.tracks }
+        return appState.map { $0.player.tracks }
                        .distinctUntilChanged()
                        .map { $0.orderedTracks.map { $0.track } }
                        .asObservable()

@@ -31,7 +31,7 @@ final class PlayerViewModel: NSObject {
 
     // MARK: - Public properties -
     var playerItemDurationString: Driver<String> {
-        return appState.distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+        return appState.distinctUntilChanged { $0.player.currentItem?.activeTrackHash == $1.player.currentItem?.activeTrackHash }
             .map { newState in
                 guard let duration = newState.currentTrack?.track.audioFile?.duration else {
                     return "--:--"
@@ -44,7 +44,8 @@ final class PlayerViewModel: NSObject {
     var playerItemCurrentTimeString: Driver<String> {
         
         return appState
-            .map { $0.player.playingNow.state }
+            .map { $0.player.currentItem?.state }
+            .notNil()
             .distinctUntilChanged()
             .map { $0.progress.stringFormatted() }
         
@@ -53,12 +54,15 @@ final class PlayerViewModel: NSObject {
     var playerItemProgressValue: Driver<Float> {
         
         return appState
-            .distinctUntilChanged { $0.player.playingNow.state == $1.player.playingNow.state }
+            .distinctUntilChanged { $0.player.currentItem == $1.player.currentItem }
             .map { newState in
                 
-                guard let totalTime = newState.currentTrack?.track.audioFile?.duration else { return 0 }
+                guard let totalTime = newState.currentTrack?.track.audioFile?.duration,
+                      let currentTime = newState.player.currentItem?.state.progress else {
+                        return 0
+                }
                 
-                return Float(newState.player.playingNow.state.progress / TimeInterval(totalTime))
+                return Float(currentTime / TimeInterval(totalTime))
             }
         
     }
@@ -73,7 +77,7 @@ final class PlayerViewModel: NSObject {
     var playerItemNameString: Driver<String> {
         
         return appState.map {
-            $0.player.playingNow.musicType
+            $0.player.currentItem?.musicType
             }
             .distinctUntilChanged()
             .map { i in
@@ -97,14 +101,14 @@ final class PlayerViewModel: NSObject {
     var playerItemArtistNameString: Driver<String> {
         
         return appState
-            .distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { $0.currentTrack?.track.artist.name ?? "" }
         
     }
 
     var playerItemTrackLikeState: Driver<Track.LikeStates> {
         return appState
-            .distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { newState in
                 
                 guard let user = self.application.user,
@@ -115,10 +119,10 @@ final class PlayerViewModel: NSObject {
     }
 
     var canChangePlayerItemTrackLikeState: Driver<Bool> {
-        return appState.map { $0.player.playingNow.musicType != nil }
+        return appState.map { $0.player.currentItem?.musicType != nil }
     }
     var canChangePlayState: Driver<Bool> {
-        return appState.map { $0.player.playingNow.musicType != nil }
+        return appState.map { $0.player.currentItem?.musicType != nil }
     }
     
     
@@ -131,7 +135,8 @@ final class PlayerViewModel: NSObject {
 
     
     var isPlaying: Driver<Bool> {
-        return appState.map { $0.player.playingNow.state.isPlaying }
+        return appState.map { $0.player.currentItem?.state.isPlaying }
+                    .notNil()
                     .distinctUntilChanged()
     }
 
@@ -144,7 +149,7 @@ final class PlayerViewModel: NSObject {
 
     var isArtistFollowed: Driver<Bool> {
         return appState
-            .distinctUntilChanged { $0.player.playlist.activeTrackHash == $1.player.playlist.activeTrackHash }
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { newState in
                 
                 guard let user = self.application.user,

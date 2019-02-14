@@ -12,14 +12,9 @@ import RxCocoa
 
 private let _appState: BehaviorRelay<AppState> = {
     
-    let x = AppState(player: DaPlayerState(playlist: DaPlayerState.Playlist(tracks: DaPlaylist(),
-                                                                            lastPatch: nil,
-                                                                            addons: [],
-                                                                            activeTrackHash: nil),
-                                           playingNow: DaPlayerState.PlayingNow(musicType: nil,
-                                                                                state: TrackState(hash: WebSocketService.ownSignatureHash,
-                                                                                                  progress: 0,
-                                                                                                  isPlaying: false)),
+    let x = AppState(player: DaPlayerState(tracks: DaPlaylist(),
+                                           lastPatch: nil,
+                                           currentItem: nil,
                                            isBlocked: false),
                      allowedTimes: [:] )
     
@@ -46,33 +41,28 @@ struct AppState: Equatable {
 
 struct DaPlayerState: Equatable {
     
-    var playlist: Playlist
-    var playingNow: PlayingNow
+    var tracks: DaPlaylist
+    var lastPatch: ReduxViewPatch?
+    
+    var currentItem: CurrentItem?
+    
+    struct CurrentItem: Equatable {
+        let activeTrackHash: TrackOrderHash
+        var addons: [Addon] //stack
+        var musicType: MusicType
+        var state: TrackState
+    }
+    
     var isBlocked: Bool
     
-    struct Playlist: Equatable {
-        
-        var tracks: DaPlaylist
-        var lastPatch: ReduxViewPatch?
-        var addons: [Addon] //stack
-        var activeTrackHash: TrackOrderHash?
-        
-        struct ReduxViewPatch {
-            let isOwn: Bool
-            var patch: DaPlaylist.NullableReduxView
-        };
+    struct ReduxViewPatch {
+        let isOwn: Bool
+        var patch: DaPlaylist.NullableReduxView
     };
     
-    struct PlayingNow: Equatable {
-        
-        var musicType: MusicType?
-        var state: TrackState
-        
-        enum MusicType: Equatable {
-            case addon(Addon)
-            case track(Track)
-        };
-        
+    enum MusicType: Equatable {
+        case addon(Addon)
+        case track(Track)
     };
     
 }
@@ -158,12 +148,22 @@ struct ActionCreatorWrapper: ActionCreator {
 extension AppState {
     
     var currentTrack: OrderedTrack? {
-        guard let hash = player.playlist.activeTrackHash,
-              let t = player.playlist.tracks[hash] else {
+        guard let hash = player.currentItem?.activeTrackHash,
+              let t = player.tracks[hash] else {
                 return nil
         }
         
         return t
+    }
+    
+    var nextTrack: OrderedTrack? {
+        guard let c = currentTrack else { return nil }
+        
+        return player.tracks.next(after: c.orderHash)
+    }
+    
+    var firstTrack: OrderedTrack? {
+        return player.tracks.orderedTracks.first
     }
  
 //    var canForward: Driver<Bool> {

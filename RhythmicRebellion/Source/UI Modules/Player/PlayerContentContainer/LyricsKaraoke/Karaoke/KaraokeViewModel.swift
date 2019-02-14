@@ -29,8 +29,8 @@ final class KaraokeViewModel: KaraokeViewModelProtocol {
 
     var isVocalAudioFile: Bool { return self.lyricsKaraokeService.karaokeAudioFileType.value == .original }
     var canChangeAudioFileType: Bool { return self.karaoke != nil
-                                            && self.player.state.blocked == false
-                                            && self.player.state.waitingAddons == false
+//                                            && self.player.currentItem.state.blocked == false
+//                                            && self.player.currentItem.state.waitingAddons == false
                                             && self.player.currentQueueItem?.isTrack == true }
 
     var isIdleTimerDisabled: Bool {

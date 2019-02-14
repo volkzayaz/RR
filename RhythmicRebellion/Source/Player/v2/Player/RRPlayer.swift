@@ -19,15 +19,15 @@ class RRPlayer: NSObject {
         
         super.init()
         
-        webSocket.addWatcher(self)
+        //webSocket.addWatcher(self)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
-                                          isGuest: DataLayer.get.application.user!.isGuest))
-        }
-        
-        
-        bind()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
+//                                          isGuest: DataLayer.get.application.user!.isGuest))
+//        }
+//        
+//        
+//        bind()
     }
 }
 
@@ -35,6 +35,9 @@ class RRPlayer: NSObject {
 extension RRPlayer {
 
     func play() {
+        
+        ///TODO: investiate memmory leak upon play/pause cycles
+        
         Dispatcher.dispatch(action: AudioPlayer.Play())
     }
     
@@ -74,7 +77,7 @@ extension RRPlayer {
     }
     
     func `switch`(to track: OrderedTrack) {
-        Dispatcher.dispatch(action: SwitchToTrack(orderHash: track.orderHash))
+        Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: track, shouldPlayImmidiatelly: true))
     }
     
 }
@@ -130,7 +133,7 @@ extension RRPlayer: WebSocketServiceWatcher {
             return
         }
         
-        Dispatcher.dispatch(action: SwitchToTrack(orderHash: t.key))
+        Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t.key))
         
     }
     
@@ -163,8 +166,8 @@ extension RRPlayer {
         /////-----
         
         /// sync player state
-        appState.map { $0.player.playingNow.state }
-            .skip(1)
+        appState.map { $0.player.currentItem?.state }
+            .notNil()
             .filter { $0.isOwn }
             .drive(onNext: { (x) in
                 
@@ -175,7 +178,7 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         /// sync playlist order (insert/delete/create/flush)
-        appState.map { $0.player.playlist.lastPatch }
+        appState.map { $0.player.lastPatch }
             .distinctUntilChanged()
             .notNil()
             .filter { $0.isOwn }
@@ -192,18 +195,17 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         ////sync current track ID
-        appState.map { $0.player.playlist }
-            .distinctUntilChanged()
+        appState.map { $0 }
+            .distinctUntilChanged { $0.player == $1.player }
         /// TODO: we should not send out commands for actions that are not our own
         ///.filter { $0.isOwn }
-            .drive(onNext: { (playlist) in
+            .drive(onNext: { (state) in
 
-                guard let hash = playlist.activeTrackHash,
-                      let id = playlist.tracks[hash]?.track.id else {
+                guard let orderedTrack = state.currentTrack else {
                     return
                 }
                 
-                let t = TrackId(id: id, key: hash)
+                let t = TrackId(id: orderedTrack.track.id, key: orderedTrack.orderHash)
                 
                 print("Sending out currentTrackID for syncing with webSocket: \(t)")
                 //self.webSocket.sendCommand(command: .setCurrentTrack(trackId: TrackId(id: id, key: hash)))
@@ -215,26 +217,13 @@ extension RRPlayer {
         ////apply RR specific logic
         
         ////Enforce playback termination if user exceeded play time quota
-        appState.map { $0.player.playingNow }
-            .filter { $0.state.isOwn }
+        appState.map { $0.player }
+            //.filter { $0.state.isOwn }
             .drive(onNext: { (x) in
                 
                 //print("Checking restricted time \(x)")
                 
                 ///Dispatcher.dispatch(action: CheckRestrictedTime(newState: x))
-            })
-            .disposed(by: rx.disposeBag)
-
-        ////dequeue next playable item upon change in current playback item
-        appState.map { $0.player.playlist }
-            .distinctUntilChanged { $0.activeTrackHash == $1.activeTrackHash }
-            .drive(onNext: { (playlist) in
-                
-                guard let hash = playlist.activeTrackHash,
-                      let orderedTrack = playlist.tracks[hash] else { return }
-                
-                Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack))
-                
             })
             .disposed(by: rx.disposeBag)
         
@@ -249,44 +238,66 @@ extension RRPlayer {
 
 struct CheckRestrictedTime: Action {
     
-    let newState: DaPlayerState.PlayingNow
+    //let newState: DaPlayerState.PlayingNow
     
     func perform(initialState: AppState) -> AppState {
         
-        guard case .track(let x)? = newState.musicType,
-              let allowedTime = initialState.allowedTimes[x.id],
-              allowedTime <= UInt(newState.state.progress) else {
-        
-            return initialState
-        }
-        
+//        guard case .track(let x)? = newState.musicType,
+//              let allowedTime = initialState.allowedTimes[x.id],
+//              allowedTime <= UInt(newState.state.progress) else {
+//        
+//            return initialState
+//        }
+//        
         fatalError("advance to next song, since we ellapsed listening time")
         
     }
 }
 
-struct ProceedToNextItem: Action {
+struct ProceedToNextItem: ActionCreator {
     
-    func perform(initialState: AppState) -> AppState {
+    func perform(initialState: AppState) -> Single<AppState> {
         
-        guard let activeTrack = initialState.player.playlist.activeTrackHash else {
-            return initialState
+        guard var currentItem = initialState.player.currentItem else {
+            return .just(initialState)
         }
         
         var state = initialState
         
-        if state.player.playlist.addons.count > 0 {
-            var addons = state.player.playlist.addons
+        if currentItem.addons.count > 0 {
+            var addons = currentItem.addons
             let next = addons.removeFirst()
             
-            state.player.playlist.addons = addons
-            state.player.playingNow.musicType = .addon(next)
+            currentItem.addons = addons
+            currentItem.musicType = .addon(next)
+            
+            state.player.currentItem = currentItem
+            
+            return .just(state)
         }
-        else if let next = state.player.playlist.tracks.next(after: activeTrack) {
-            state.player.playlist.activeTrackHash = next.orderHash
+        else if let next = state.nextTrack {
+            return PrepareNewTrack(orderedTrack: next,
+                                   shouldPlayImmidiatelly: true).perform(initialState: state)
         }
 
-        return state
+        return .just(state)
+    }
+    
+}
+
+struct PrepareNewTrackByHash: ActionCreator {
+    
+    let orderHash: TrackOrderHash
+    
+    func perform(initialState: AppState) -> Single<AppState> {
+        
+        guard let x = initialState.player.tracks[orderHash] else {
+            fatalErrorInDebug(" Can't start playing track with order key: \(orderHash). It is not found in reduxView: \(initialState.player.tracks) ")
+            return .just(initialState)
+        }
+        
+        return PrepareNewTrack(orderedTrack: x,
+                               shouldPlayImmidiatelly: false).perform(initialState: initialState)
     }
     
 }
@@ -294,6 +305,7 @@ struct ProceedToNextItem: Action {
 struct PrepareNewTrack: ActionCreator {
     
     let orderedTrack: OrderedTrack
+    let shouldPlayImmidiatelly: Bool
     
     func perform(initialState: AppState) -> Single<AppState> {
         
@@ -303,10 +315,13 @@ struct PrepareNewTrack: ActionCreator {
         ///3. start music playback
         
         var state = initialState
-        state.player.playingNow.musicType = .track(orderedTrack.track)
         
-//        state.player.playingNow.state.progress = 0
-//        state.player.playingNow.state.isPlaying = false
+        state.player.currentItem = DaPlayerState.CurrentItem(activeTrackHash: orderedTrack.orderHash,
+                                                             addons: [],
+                                                             musicType: .track(orderedTrack.track),
+                                                             state: .init(hash: WebSocketService.ownSignatureHash,
+                                                                          progress: 0,
+                                                                          isPlaying: shouldPlayImmidiatelly))
         
         return .just(state)
         
@@ -321,23 +336,11 @@ struct StoreTracks: Action {
     func perform(initialState: AppState) -> AppState {
         var state = initialState
         
-        tracks.forEach { state.player.playlist.tracks.trackDump[$0.id] = $0 }
+        tracks.forEach { state.player.tracks.trackDump[$0.id] = $0 }
         
         return state
     }
     
-}
-
-struct SwitchToTrack: Action {
-    let orderHash: TrackOrderHash
-    
-    func perform(initialState: AppState) -> AppState {
-        var state = initialState
-        
-        state.player.playlist.activeTrackHash = orderHash
-        
-        return state
-    }
 }
 
 struct ScrubToFraction: Action {
@@ -352,7 +355,7 @@ struct ScrubToFraction: Action {
 
         var state = initialState
         
-        state.player.playingNow.state.progress = TimeInterval(secs) * Double(fraction)
+        state.player.currentItem?.state.progress = TimeInterval(secs) * Double(fraction)
         
         return state
     }
@@ -365,7 +368,7 @@ struct ChangeTrackState: Action {
     
     func perform(initialState: AppState) -> AppState {
         var state = initialState
-        state.player.playingNow.state = trackState
+        state.player.currentItem?.state = trackState
         return state
     }
     
@@ -387,22 +390,19 @@ struct AddTracksToNowPlaying: ActionCreator {
             
             return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack, isOwnChange: true)
                 .perform(initialState: initialState)
-                .map { x in
-                    var newState = x
-            
-                    if let currentPlayable = initialState.currentTrack {
-                        newState.player.playlist.activeTrackHash = newState.player.playlist.tracks.next(after: currentPlayable.orderHash)?.orderHash
-                    }
-                    else {
-                        newState.player.playlist.activeTrackHash = newState.player.playlist.tracks.orderedTracks.first?.orderHash
+                .flatMap { newState in
+                    
+                    guard let newCurrentTrack = newState.nextTrack ?? newState.firstTrack else {
+                        return .just(newState)
                     }
                     
-                    return newState
+                    return PrepareNewTrack(orderedTrack: newCurrentTrack,
+                                           shouldPlayImmidiatelly: true).perform(initialState: newState)
                 }
             
         case .last:
             
-            return InsertTracks(tracks: tracks, afterTrack: initialState.player.playlist.tracks.orderedTracks.last, isOwnChange: true)
+            return InsertTracks(tracks: tracks, afterTrack: initialState.player.tracks.orderedTracks.last, isOwnChange: true)
                 .perform(initialState: initialState)
             
         }
@@ -418,20 +418,23 @@ struct RemoveTrack: ActionCreator {
     
     func perform(initialState: AppState) -> Single<AppState> {
         
-        let c = initialState.currentTrack
-        let o = orderedTrack
+        var maybeNextTrack: OrderedTrack? = nil
+        if initialState.currentTrack == orderedTrack {
+            maybeNextTrack = initialState.nextTrack ?? initialState.firstTrack
+        }
         
         return DeleteTrack(track: orderedTrack, isOwnChange: true)
                 .perform(initialState: initialState)
-                .map { x in
+                .flatMap { newState in
                     
-                    guard let c = c, o == c else {
-                        return x
+                    guard let c = maybeNextTrack else {
+                        return .just(newState)
                     }
                     
-                    var newState = x
-                    newState.player.playlist.activeTrackHash = initialState.player.playlist.tracks.next(after: c.orderHash)?.orderHash ?? initialState.player.playlist.tracks.orderedTracks.first?.orderHash
-                    return newState
+                    return PrepareNewTrack(orderedTrack: c,
+                                           shouldPlayImmidiatelly: initialState.player.currentItem?.state.isPlaying ?? false)
+                        .perform(initialState: newState)
+                    
                 }
         
     }

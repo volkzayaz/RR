@@ -293,9 +293,9 @@ extension DaPlaylist: Equatable {
     }
 }
 
-extension DaPlayerState.Playlist.ReduxViewPatch: Equatable {
+extension DaPlayerState.ReduxViewPatch: Equatable {
     
-    static func == (lhs: DaPlayerState.Playlist.ReduxViewPatch, rhs: DaPlayerState.Playlist.ReduxViewPatch) -> Bool {
+    static func == (lhs: DaPlayerState.ReduxViewPatch, rhs: DaPlayerState.ReduxViewPatch) -> Bool {
         
         for (key, value) in lhs.patch {
             
@@ -323,9 +323,9 @@ import RxSwift
 
 struct ApplyReduxViewPatch: ActionCreator {
     
-    let viewPatch: DaPlayerState.Playlist.ReduxViewPatch
+    let viewPatch: DaPlayerState.ReduxViewPatch
     let assosiatedTracks: [Track]
-    init (viewPatch: DaPlayerState.Playlist.ReduxViewPatch, assosiatedTracks: [Track] = []) {
+    init (viewPatch: DaPlayerState.ReduxViewPatch, assosiatedTracks: [Track] = []) {
         self.viewPatch = viewPatch
         self.assosiatedTracks = assosiatedTracks
     }
@@ -334,7 +334,7 @@ struct ApplyReduxViewPatch: ActionCreator {
 
         ///getting state
         var state = initialState
-        var tracks = state.player.playlist.tracks
+        var tracks = state.player.tracks
         
         ///applying transform
         tracks.apply(patch: viewPatch.patch)
@@ -350,8 +350,8 @@ struct ApplyReduxViewPatch: ActionCreator {
         }
         
         ////setting state
-        state.player.playlist.tracks = tracks
-        state.player.playlist.lastPatch = viewPatch
+        state.player.tracks = tracks
+        state.player.lastPatch = viewPatch
         
         guard diff.count > 0 else {
             return .just(state)
@@ -362,7 +362,7 @@ struct ApplyReduxViewPatch: ActionCreator {
         return x.didReceiveTracks.map { receivedTracks in
             receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }
             
-            state.player.playlist.tracks = tracks
+            state.player.tracks = tracks
             
             return state
         }
@@ -379,13 +379,13 @@ struct InsertTracks: ActionCreator {
     func perform(initialState: AppState) -> Single<AppState> {
         
         ///initial state
-        let tracks = initialState.player.playlist.tracks
+        let tracks = initialState.player.tracks
         
         ///getting state transform
         let patch = tracks.insertPatch(tracks: self.tracks, after: afterTrack)
         
         ///mapping state transform
-        let reduxPatch = DaPlayerState.Playlist.ReduxViewPatch(isOwn: isOwnChange, patch: patch)
+        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, patch: patch)
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,
@@ -402,13 +402,13 @@ struct DeleteTrack: ActionCreator {
     func perform(initialState: AppState) -> Single<AppState> {
         
         ///initial state
-        let tracks = initialState.player.playlist.tracks
+        let tracks = initialState.player.tracks
         
         ///getting state transform
         let patch = tracks.deletePatch(track: track)
         
         ///mapping state transform
-        let reduxPatch = DaPlayerState.Playlist.ReduxViewPatch(isOwn: isOwnChange, patch: patch)
+        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, patch: patch)
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,
