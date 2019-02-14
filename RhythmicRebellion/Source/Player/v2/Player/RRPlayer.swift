@@ -41,6 +41,10 @@ extension RRPlayer {
     func pause() {
         Dispatcher.dispatch(action: AudioPlayer.Pause())
     }
+    
+    func flip() {
+        Dispatcher.dispatch(action: AudioPlayer.Switch())
+    }
  
     func skipForward() {
         Dispatcher.dispatch(action: ProceedToNextItem())
@@ -58,11 +62,11 @@ extension RRPlayer {
         case now, next, last
     }
     func add(tracks: [Track], type: AddStyle) {
-        
+        Dispatcher.dispatch(action: AddTracksToNowPlaying(tracks: tracks, style: type))
     }
     
     func remove(track: OrderedTrack) {
-        
+        Dispatcher.dispatch(action: RemoveTrack(orderedTrack: track))
     }
     
     func seek(to fraction: Float) {
@@ -107,7 +111,7 @@ extension RRPlayer: WebSocketServiceWatcher {
         
         ////not sure what to do with app state other than reconnect
         
-        webSocket.reconnect()
+        //webSocket.reconnect()
         
     }
     
@@ -172,6 +176,7 @@ extension RRPlayer {
         
         /// sync playlist order (insert/delete/create/flush)
         appState.map { $0.player.playlist.lastPatch }
+            .distinctUntilChanged()
             .notNil()
             .filter { $0.isOwn }
             .filter { _ in true } ///TODO: here odd logic with filtering out masterSendDate should be present
@@ -300,6 +305,9 @@ struct PrepareNewTrack: ActionCreator {
         var state = initialState
         state.player.playingNow.musicType = .track(orderedTrack.track)
         
+//        state.player.playingNow.state.progress = 0
+//        state.player.playingNow.state.isPlaying = false
+        
         return .just(state)
         
     }
@@ -359,6 +367,73 @@ struct ChangeTrackState: Action {
         var state = initialState
         state.player.playingNow.state = trackState
         return state
+    }
+    
+}
+
+struct AddTracksToNowPlaying: ActionCreator {
+    
+    let tracks: [Track]
+    let style: RRPlayer.AddStyle
+    
+    func perform(initialState: AppState) -> Single<AppState> {
+        
+        switch style {
+        case .next:
+            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack, isOwnChange: true)
+                .perform(initialState: initialState)
+            
+        case .now:
+            
+            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack, isOwnChange: true)
+                .perform(initialState: initialState)
+                .map { x in
+                    var newState = x
+            
+                    if let currentPlayable = initialState.currentTrack {
+                        newState.player.playlist.activeTrackHash = newState.player.playlist.tracks.next(after: currentPlayable.orderHash)?.orderHash
+                    }
+                    else {
+                        newState.player.playlist.activeTrackHash = newState.player.playlist.tracks.orderedTracks.first?.orderHash
+                    }
+                    
+                    return newState
+                }
+            
+        case .last:
+            
+            return InsertTracks(tracks: tracks, afterTrack: initialState.player.playlist.tracks.orderedTracks.last, isOwnChange: true)
+                .perform(initialState: initialState)
+            
+        }
+        
+        
+    }
+    
+}
+
+struct RemoveTrack: ActionCreator {
+    
+    let orderedTrack: OrderedTrack
+    
+    func perform(initialState: AppState) -> Single<AppState> {
+        
+        let c = initialState.currentTrack
+        let o = orderedTrack
+        
+        return DeleteTrack(track: orderedTrack, isOwnChange: true)
+                .perform(initialState: initialState)
+                .map { x in
+                    
+                    guard let c = c, o == c else {
+                        return x
+                    }
+                    
+                    var newState = x
+                    newState.player.playlist.activeTrackHash = initialState.player.playlist.tracks.next(after: c.orderHash)?.orderHash ?? initialState.player.playlist.tracks.orderedTracks.first?.orderHash
+                    return newState
+                }
+        
     }
     
 }

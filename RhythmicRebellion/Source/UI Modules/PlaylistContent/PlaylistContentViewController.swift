@@ -132,7 +132,7 @@ final class PlaylistContentViewController: UIViewController {
     // MARK: - Actions -
 
     @IBAction func onRefresh(sender: UIRefreshControl) {
-        self.viewModel.tracksViewModel.loadItems()
+        self.viewModel.tracksViewModel.reload()
     }
 
     func showPlaylistActions(sourceRect: CGRect, sourceView: UIView) {

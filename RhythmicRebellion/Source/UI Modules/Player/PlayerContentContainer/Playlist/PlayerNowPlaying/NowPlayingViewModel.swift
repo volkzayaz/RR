@@ -8,17 +8,19 @@
 //
 
 import UIKit
+import RxSwift
 
 struct NowPlayingProvider : TrackProvider {
     
-    let player: Player
-    
-    var playlistItems: [PlayerPlaylistItem] {
-        return player.playlistItems
+    var orderedTracks: [OrderedTrack] {
+        return appStateSlice.player.playlist.tracks.orderedTracks
     }
     
-    func provide(completion: (Box<[Track]>) -> Void) {
-        return completion( .value( val: playlistItems.map { $0.track } ) )
+    func provide() -> Observable<[Track]> {
+        return appState.map { $0.player.playlist.tracks }
+                       .distinctUntilChanged()
+                       .map { $0.orderedTracks.map { $0.track } }
+                       .asObservable()
     }
     
 }
@@ -29,11 +31,10 @@ final class NowPlayingViewModel {
 
     private(set) weak var router: PlayerNowPlayingRouter!
     private(set) weak var application: Application!
-    private(set) weak var player: Player!
     
     let tracksViewModel: TrackListViewModel
-    private var playlistItems: [PlayerPlaylistItem] {
-        return (tracksViewModel.trackProivder as! NowPlayingProvider).playlistItems
+    private var orderedTracks: [OrderedTrack] {
+        return (tracksViewModel.trackProivder as! NowPlayingProvider).orderedTracks
     }
     
     private var errorPresenter: ErrorPresenting {
@@ -41,18 +42,16 @@ final class NowPlayingViewModel {
     }
     
     init(router: PlayerNowPlayingRouter,
-         application: Application,
-         player: Player) {
+         application: Application) {
         self.router = router
         self.application = application
-        self.player = player
         
         let actions: TrackListViewModel.ActionsProvider = { list, track, indexPath in
             
             var result: [ActionViewModel] = []
             
             let maybeUser = application.user as? FanUser
-            let playlistItem = (list.trackProivder as! NowPlayingProvider).playlistItems[indexPath.row]
+            let orderedTrack = (list.trackProivder as! NowPlayingProvider).orderedTracks[indexPath.row]
             
             //////1
             
@@ -70,7 +69,7 @@ final class NowPlayingViewModel {
             if track.isPlayable {
                 
                 let playNow = ActionViewModel(.playNow) {
-                    list.play(playlistItem: playlistItem)
+                    list.play(orderedTrack: orderedTrack)
                 }
                 
                 result.append(playNow)
@@ -80,7 +79,7 @@ final class NowPlayingViewModel {
             /////3
             
             let delete = ActionViewModel(.delete) {
-                list.delete(playlistItem: playlistItem)
+                list.remove(orderedTrack: orderedTrack)
             }
             
             result.append(delete)
@@ -95,27 +94,21 @@ final class NowPlayingViewModel {
                 return
             }
             
-            let playlistItem = (list.trackProivder as! NowPlayingProvider).playlistItems[indexPath.row]
+            let orderedTrack = (list.trackProivder as! NowPlayingProvider).orderedTracks[indexPath.row]
             
-            precondition(playlistItem.track == track, "Race condition appeared. Action performed with unsynced dataSource. Expected track \(track), received track \(playlistItem.track)")
+            precondition(orderedTrack.track == track, "Race condition appeared. Action performed with unsynced dataSource. Expected track \(track), received track \(orderedTrack.track)")
             
-            
-            ///This piece of logic is still a mystery for me.
-            ///Specifically, why is it different from same conditon present in PlaylistViewModel
-            let condition = !(player.currentItem?.playlistItem.track == track)
-            
-            if condition {
-                list.play(playlistItem: playlistItem)
+            if appStateSlice.currentTrack?.track != track {
+                list.play(orderedTrack: orderedTrack)
                 return
             }
-            
-            player.flipPlayState()
+
+            DataLayer.get.daPlayer.flip()
             
         }
         
         tracksViewModel = TrackListViewModel(application: application,
-                                             player: player,
-                                             dataProvider: NowPlayingProvider(player: player),
+                                             dataProvider: NowPlayingProvider(),
                                              router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)
@@ -139,9 +132,9 @@ extension NowPlayingViewModel {
 
         switch action {
         case .clear:
-            return ConfirmationAlertViewModel.Factory.makeClearPlaylistViewModel(actionCallback: { [weak self] (actionType) in
+            return ConfirmationAlertViewModel.Factory.makeClearPlaylistViewModel(actionCallback: { (actionType) in
                 switch actionType {
-                case .ok: self?.player?.clearPlaylist()
+                case .ok: DataLayer.get.daPlayer.clear()
                 default: break
                 }
             })
@@ -152,7 +145,8 @@ extension NowPlayingViewModel {
     func perform(action : PlayerNowPlayingTableHeaderView.Actions) {
         switch action {
         case .clear:
-            self.player?.clearPlaylist()
+            DataLayer.get.daPlayer.clear()
+            
         default:
             break
         }

@@ -33,12 +33,11 @@ struct FanPlaylistProvider: DeletablePlaylistProvider {
         return fanPlaylist
     }
     
-    func provide(completion: @escaping (Box<[Track]>) -> Void) {
-        
-        return DataLayer.get.application.restApiService
-            .fanTracks(for: playlist.id,
-                       completion: Box<[Track]>.transformed(boxed: completion))
-        
+    func provide() -> Observable<[Track]> {
+        return TrackRequest.fanTracks(playlistId: playlist.id)
+            .rx.response(type: PlaylistTracksResponse.self)
+            .map { $0.tracks }
+            .asObservable()
     }
     
     func delete(track: Track, completion: @escaping (Box<Void>) -> Void) {
@@ -60,12 +59,11 @@ struct DefinedPlaylistProvider: PlaylistProvider {
     
     let playlist: Playlist
     
-    func provide(completion: @escaping (Box<[Track]>) -> Void) {
-        
-        return DataLayer.get.application.restApiService
-            .tracks(for: playlist.id,
-                    completion: Box<[Track]>.transformed(boxed: completion))
-        
+    func provide() -> Observable<[Track]> {
+        return TrackRequest.tracks(playlistId: playlist.id)
+            .rx.response(type: PlaylistTracksResponse.self)
+            .map { $0.tracks }
+            .asObservable()
     }
     
 }
@@ -75,18 +73,12 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     let album: Album
     let instantDownload: Bool
     
-    func provide(completion: @escaping (Box<[Track]>) -> Void) {
-        
+    func provide() -> Observable<[Track]> {
         return ArtistRequest.albumRecords(album: album)
             .rx.response(type: ArtistResponse<Track>.self)
             .map { $0.data }
-            .subscribe(onSuccess: { completion( .value(val: $0) )},
-                       onError:   { completion( .error(er:  $0) )})
-            .disposed(by: bag)
-        
+            .asObservable()
     }
-    
-    fileprivate let bag = DisposeBag()
     
     ///surrogate getter
     var playlist: Playlist {
@@ -121,21 +113,16 @@ struct ArtistPlaylistProvider: PlaylistProvider {
     
     let artistPlaylist: ArtistPlaylist
     
-    func provide(completion: @escaping (Box<[Track]>) -> Void) {
-        
+    func provide() -> Observable<[Track]> {
         return ArtistRequest.playlistRecords(playlist: artistPlaylist)
             .rx.response(type: ArtistResponse<Track>.self)
             .map { $0.data }
-            .subscribe(onSuccess: { completion( .value(val: $0) )},
-                       onError:   { completion( .error(er:  $0) )})
-            .disposed(by: bag)
-        
+            .asObservable()
     }
     
     var playlist: Playlist {
         return artistPlaylist
     }
-    fileprivate let bag = DisposeBag()
     
 }
 
@@ -168,7 +155,6 @@ final class PlaylistViewModel {
     
     private(set) weak var router: PlaylistContentRouter!
     private(set) weak var application: Application!
-    private(set) weak var player: Player!
     
     private(set) weak var restApiService: RestApiService!
     
@@ -185,13 +171,11 @@ final class PlaylistViewModel {
 
     init(router: PlaylistContentRouter,
          application: Application,
-         player: Player,
          restApiService: RestApiService,
          provider: PlaylistProvider) {
         
         self.router = router
         self.application = application
-        self.player = player
         self.restApiService = restApiService
         
         if let p = provider as? DownloadablePlaylistProvider {
@@ -230,11 +214,11 @@ final class PlaylistViewModel {
                 }
                 
                 let playNext = ActionViewModel(.playNext) {
-                    list.addToPlayerPlaylist(tracks: [track], at: .next)
+                    list.play(tracks: [track], at: .next)
                 }
                 
                 let playLast = ActionViewModel(.playLast) {
-                    list.addToPlayerPlaylist(tracks: [track], at: .last)
+                    list.play(tracks: [track], at: .last)
                 }
             
                 result.append(playNow)
@@ -255,7 +239,7 @@ final class PlaylistViewModel {
                             list.delegate?.reloadObjects(at: [indexPath])
                             
                         case .value(_):
-                            list.loadItems()
+                            list.dropTrack(at: indexPath.row)
                             
                         }
                     }
@@ -278,21 +262,15 @@ final class PlaylistViewModel {
                 return
             }
             
-            ///This piece of logic is still a mystery for me.
-            ///Specifically, why is it different from same conditon present in NowPlayingViewModel
-            let condition = !(player.currentItem?.playlistItem.track.id == track.id)
-            
-            if condition {
+            if appStateSlice.currentTrack?.track != track {
                 list.play(tracks: [track])
                 return
             }
-            
-            player.flipPlayState()
+            DataLayer.get.daPlayer.flip()
             
         }
         
         tracksViewModel = TrackListViewModel(application: application,
-                                             player: player,
                                              dataProvider: provider,
                                              router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
@@ -334,7 +312,7 @@ extension PlaylistViewModel {
                 self?.errorPresenter.show(error: e)
             }
             
-            self?.tracksViewModel.loadItems()
+            self?.tracksViewModel.dropAllTracks()
         }
         
     }
@@ -380,8 +358,8 @@ extension PlaylistViewModel {
 
         switch actionType {
         case .playNow: tracksViewModel.play(tracks: tracksViewModel.tracks)
-        case .playNext: tracksViewModel.addToPlayerPlaylist(tracks: tracksViewModel.tracks, at: .next)
-        case .playLast: tracksViewModel.addToPlayerPlaylist(tracks: tracksViewModel.tracks, at: .last)
+        case .playNext: tracksViewModel.play(tracks: tracksViewModel.tracks, at: .next)
+        case .playLast: tracksViewModel.play(tracks: tracksViewModel.tracks, at: .last)
         case .replaceCurrent: tracksViewModel.replacePlayerPlaylist(with: tracksViewModel.tracks)
         case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .clear: self.clear(playlist: playlist)
@@ -455,7 +433,7 @@ extension PlaylistViewModel: ApplicationWatcher {
         guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.id == fanPlaylistState.id else { return }
         guard let _ = fanPlaylistState.playlist else { self.router?.dismiss(); return }
         
-        tracksViewModel.loadItems()
+        tracksViewModel.dropAllTracks()
         
     }
 

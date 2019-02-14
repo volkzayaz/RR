@@ -83,7 +83,7 @@ protocol TrackListBindings: class, ErrorPresenting, AlertActionsViewModelPersent
 protocol TrackProvider {
     
     ////provide list of tracks to play back
-    func provide( completion: @escaping (Box<[Track]>) -> Void )
+    func provide() -> Observable<[Track]>
     
 }
 
@@ -97,7 +97,6 @@ class TrackListViewModel {
 
     private(set) weak var delegate: TrackListBindings?
     private weak var application: Application?
-    private weak var player: Player!
     
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     private let trackPriceFormatter = MoneyFormatter()
@@ -106,6 +105,9 @@ class TrackListViewModel {
     private let router: TrackListRouter
     private let selectedProvider: SelectedProvider
     private let actionsProvider: ActionsProvider
+    
+    private let bag = DisposeBag()
+    private let reloadTrigger = BehaviorSubject<Void>(value: () )
     
     private(set) var tracks: [Track] = [] {
         didSet {
@@ -118,27 +120,23 @@ class TrackListViewModel {
         return tracks.isEmpty
     }
     
-    // MARK: - Lifecycle -
-    
     deinit {
         self.application?.removeWatcher(self)
-        self.player?.removeWatcher(self)
     }
     
     init(application: Application,
-         player: Player,
          dataProvider: TrackProvider,
          router: TrackListRouter,
          actionsProvider: @escaping ActionsProvider = { _, _, _ in [] },
          selectedProvider: @escaping SelectedProvider = { _, _, _ in }) {
     
         self.application = application
-        self.player = player
         
         self.trackProivder = dataProvider
         self.router = router
         self.selectedProvider = selectedProvider
         self.actionsProvider = actionsProvider
+
     }
     
 }
@@ -148,26 +146,17 @@ extension TrackListViewModel {
     func load(with delegate: TrackListBindings) {
         self.delegate = delegate
         
-        self.loadItems()
         self.application?.addWatcher(self)
-        self.player?.addWatcher(self)
-    }
-    
-    func loadItems() {
         
-        trackProivder.provide { [weak self] result in
-            
-            switch result {
-                
-            case .value(let val):
-                self?.tracks = val
-                
-            case .error(let er):
-                self?.delegate?.show(error: er, completion: { [weak self] in self?.delegate?.reloadUI() } )
-                
+        reloadTrigger.flatMapLatest { [unowned self] _ in
+                return self.trackProivder.provide()
             }
-            
-        }
+            .subscribe(onNext: { [weak self] (tracks) in
+                self?.tracks = tracks
+            }, onError: { [weak self] (er) in
+                self?.delegate?.show(error: er, completion: { [weak self] in self?.delegate?.reloadUI() } )
+            })
+            .disposed(by: bag)
         
     }
     
@@ -197,10 +186,10 @@ extension TrackListViewModel {
         return TrackViewModel(router: router.trackRouter(for: track),
                               track: track,
                               user: application?.user,
-                              player: player,
+                              player: DataLayer.get.player,
                               textImageGenerator: textImageGenerator,
-                              isCurrentInPlayer: player?.currentItem?.playlistItem.track == track,
-                              isLockedForActions: false) //self.lockedPlaylistItemsIds.contains(track.id)
+                              isCurrentInPlayer: appStateSlice.currentTrack?.track == track,
+                              isLockedForActions: false)
         
     }
     
@@ -292,56 +281,46 @@ extension TrackListViewModel {
         })
     }
     
-    func play(playlistItem: PlayerPlaylistItem) {
-        
-        self.player?.performAction(.playNow, for: playlistItem, completion: { [weak self] (error) in
-            guard let error = error else { return }
-            self?.delegate?.show(error: error)
-        })
-        
+    func play(orderedTrack: OrderedTrack) {
+        DataLayer.get.daPlayer.switch(to: orderedTrack)
     }
     
-    func delete(playlistItem: PlayerPlaylistItem) {
-        player?.performAction(.delete,
-                              for: playlistItem,
-                              completion: { [weak self] (error) in
-                                guard let error = error else { return }
-                                self?.delegate?.show(error: error)
-        })
+    func remove(orderedTrack: OrderedTrack) {
+        DataLayer.get.daPlayer.remove(track: orderedTrack)
     }
     
-    
-    
-    func play(tracks: [Track]) {
-        
-        self.player?.add(tracks: tracks, at: .next, completion: { [weak self] (playlistItems, error) in
-            guard let playlistItem = playlistItems?.first else {
-                guard let error = error else { return }
-                self?.delegate?.show(error: error)
-                return
-            }
-            
-            self?.play(playlistItem: playlistItem)
-        })
-    }
-    
-    func addToPlayerPlaylist(tracks: [Track], at position: Player.PlaylistPosition) {
-        guard tracks.isEmpty == false else { return }
-        
-        self.player?.add(tracks: tracks, at: position, completion: { [weak self] (playlistItems, error) in
-            guard let error = error else { return }
-            self?.delegate?.show(error: error)
-        })
+    func play(tracks: [Track], at style: RRPlayer.AddStyle = .now) {
+        DataLayer.get.daPlayer.add(tracks: tracks, type: style)
     }
     
     func replacePlayerPlaylist(with tracks: [Track]) {
-        guard tracks.isEmpty == false else { return }
         
-        self.player?.replace(with: tracks, completion: { [weak self] (playlistItems, error) in
-            guard let error = error else { return }
-            self?.delegate?.show(error: error)
-        })
+        fatalError("Replace unimplemented")
         
+        ///we don't know how to alter AppState, when repace happens
+        ///specifically, what do we do with reduxViewPatches
+        
+//        guard tracks.isEmpty == false else { return }
+//
+//        self.player?.replace(with: tracks, completion: { [weak self] (playlistItems, error) in
+//            guard let error = error else { return }
+//            self?.delegate?.show(error: error)
+//        })
+        
+    }
+    
+    func reload() {
+        reloadTrigger.onNext(())
+    }
+    
+    func dropTrack(at index: Int) {
+        var x = tracks
+        x.remove(at: index)
+        tracks = x
+    }
+    
+    func dropAllTracks() {
+        tracks = []
     }
     
 }
@@ -402,7 +381,7 @@ extension TrackListViewModel: ApplicationWatcher {
 extension TrackListViewModel: PlayerWatcher {
     
     func playerDidChangePlaylist(player: Player) {
-        self.loadItems()
+        //self.loadItems()
     }
     
     func player(player: Player, didChange status: PlayerStatus) {
@@ -419,18 +398,18 @@ extension TrackListViewModel: PlayerWatcher {
     
     func player(player: Player, didChangePlayerItemTotalPlayTime time: TimeInterval) {
         
-        guard let playerCurrentTrack = self.player?.currentItem?.playlistItem.track else { return }
-        
-        var indexPaths: [IndexPath] = []
-        
-        for (index, track) in tracks.enumerated() {
-            guard track.id == playerCurrentTrack.id else { continue }
-            indexPaths.append(IndexPath(row: index, section: 0))
-        }
-        
-        if indexPaths.isEmpty == false {
-            self.delegate?.reloadObjects(at: indexPaths)
-        }
+//        guard let playerCurrentTrack = self.player?.currentItem?.playlistItem.track else { return }
+//        
+//        var indexPaths: [IndexPath] = []
+//        
+//        for (index, track) in tracks.enumerated() {
+//            guard track.id == playerCurrentTrack.id else { continue }
+//            indexPaths.append(IndexPath(row: index, section: 0))
+//        }
+//        
+//        if indexPaths.isEmpty == false {
+//            self.delegate?.reloadObjects(at: indexPaths)
+//        }
     }
     
     

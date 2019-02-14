@@ -90,7 +90,6 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
         
         let vm = PlaylistViewModel(router: self,
                                    application: self.dependencies.application,
-                                   player: self.dependencies.player,
                                    restApiService: self.dependencies.restApiService,
                                    provider: provider)
 

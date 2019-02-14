@@ -27,9 +27,9 @@ private let _appState: BehaviorRelay<AppState> = {
     
 }()
 
-//var appStateSlice: AppState {
-//    return _appState.value
-//}
+var appStateSlice: AppState {
+    return _appState.value
+}
 
 var appState: Driver<AppState> {
     return _appState.asDriver()
@@ -118,9 +118,8 @@ enum Dispatcher {
         
     }
     
+    ///TODO: add proper logging for new AppState and actions dispatched
     static func dispatch(action: Action) {
-        
-        print("Adding new item: \(action)")
         
         actions.onNext(actions.unsafeValue + [ActionCreatorWrapper(action: action)])
         

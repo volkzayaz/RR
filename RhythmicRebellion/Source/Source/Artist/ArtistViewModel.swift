@@ -49,7 +49,6 @@ struct ArtistViewModel : MVVM_ViewModel {
         self.artist = artist
 
         tracksViewModel = TrackListViewModel(application: DataLayer.get.application,
-                                             player: DataLayer.get.player,
                                              dataProvider: TracksProvider(artist: artist),
                                              router: router.trackListRouter())
         
@@ -138,18 +137,15 @@ extension ArtistViewModel {
         
         let artist: Artist
         
-        func provide(completion: @escaping (Box<[Track]>) -> Void) {
+        func provide() -> Observable<[Track]> {
             
-            ArtistRequest.records(artist: artist)
+            return ArtistRequest.records(artist: artist)
                 .rx.response(type: ArtistResponse<Track>.self)
                 .map { $0.data }
-                .subscribe(onSuccess: { completion( .value(val: $0) )},
-                           onError:   { completion( .error(er:  $0) )})
-                .disposed(by: bag)
-                
+                .asObservable()
+            
         }
         
-        fileprivate let bag = DisposeBag()
     }
     
     enum Data: IdentifiableType, Equatable {

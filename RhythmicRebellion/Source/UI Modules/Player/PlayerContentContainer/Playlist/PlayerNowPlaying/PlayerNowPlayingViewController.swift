@@ -88,7 +88,7 @@ final class PlayerNowPlayingViewController: UIViewController {
 
     // MARK: - Actions -
     @IBAction func onRefresh(sender: UIRefreshControl) {
-        self.viewModel.tracksViewModel.loadItems()
+        self.viewModel.tracksViewModel.reload()
     }
 
     func showActions(itemAt indexPath: IndexPath, sourceRect: CGRect, sourceView: UIView) {

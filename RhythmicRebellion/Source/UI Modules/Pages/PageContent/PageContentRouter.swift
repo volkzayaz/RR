@@ -82,7 +82,6 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
         
         let vm = PlaylistViewModel(router: router,
                                    application: DataLayer.get.application,
-                                   player: DataLayer.get.player,
                                    restApiService: DataLayer.get.restApiService,
                                    provider: AlbumPlaylistProvider(album: album,
                                                                    instantDownload: true))

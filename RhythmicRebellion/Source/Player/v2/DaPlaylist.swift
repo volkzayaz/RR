@@ -10,7 +10,7 @@ import Foundation
 
 typealias TrackOrderHash = String
 
-struct OrderedTrack {
+struct OrderedTrack: Equatable {
     
     let track: Track
     let orderHash: TrackOrderHash
@@ -340,7 +340,7 @@ struct ApplyReduxViewPatch: ActionCreator {
         tracks.apply(patch: viewPatch.patch)
         
         ///fetching underlying tracks if needed
-        var diff = Set(tracks.trackDump.keys).subtracting(tracks.orderedTracks.map { $0.track.id })
+        var diff = Set(tracks.trackDump.keys).subtracting(tracks.reduxView.map { $0.value[.id]! as! Int })
         
         ///avoiding roundtrip to server
         assosiatedTracks.forEach { x in
@@ -394,7 +394,7 @@ struct InsertTracks: ActionCreator {
     }
 }
 
-struct DeleteTracks: ActionCreator {
+struct DeleteTrack: ActionCreator {
     
     let track: OrderedTrack
     let isOwnChange: Bool
