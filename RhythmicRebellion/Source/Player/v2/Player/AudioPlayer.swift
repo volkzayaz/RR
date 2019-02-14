@@ -58,6 +58,8 @@ class AudioPlayer: NSObject {
     
     fileprivate let player: AVQueuePlayer = AVQueuePlayer(items: [])
     
+    fileprivate var isSeeking = false
+    
     override init() {
         
         super.init()
@@ -93,16 +95,14 @@ class AudioPlayer: NSObject {
                        playbackEndedSignal.map { _ in 0 })
             .merge()
             .subscribe(onNext: { (x) in
+                if self.isSeeking { return }
                 Dispatcher.dispatch(action: Scrub(newValue: x))
             })
             .disposed(by: bag)
         
-        
-        
         ///scrubbing
         let x = appState
             .map { $0.player.playingNow.state.progress }
-            .distinctUntilChanged { abs($0 - $1) < 1 }
         
         player.rx.status
             .map { $0 == .readyToPlay}
@@ -112,7 +112,19 @@ class AudioPlayer: NSObject {
             }
             .subscribe(onNext: { [weak p = player] requestedProgress in
                 
-                //p?.seek(to: CMTimeMakeWithSeconds(requestedProgress, preferredTimescale: Int32(NSEC_PER_SEC)))
+                guard let player = p,
+                    let time = player.currentItem?.currentTime(),
+                    !CMTIME_IS_INVALID(time),
+                    abs(CMTimeGetSeconds(time) - requestedProgress) > 0.9 else {
+                    return
+                }
+                
+                self.isSeeking = true
+                player.seek(to: CMTimeMakeWithSeconds(requestedProgress, preferredTimescale: Int32(NSEC_PER_SEC))) { _ in
+                    self.isSeeking = false
+                }
+                
+                //Dispatcher.dispatch(action: Play())
                 
             })
             .disposed(by: bag)

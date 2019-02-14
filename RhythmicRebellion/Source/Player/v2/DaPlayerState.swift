@@ -99,7 +99,7 @@ enum Dispatcher {
         
         return nextPageTrigger
             .take(1)
-            .delay(0, scheduler: MainScheduler.instance)
+            .delay(0, scheduler: MainScheduler.instance) ///TODO: get rid of jumping into next run loop
             .flatMap { actionCreator in
                 actionCreator.perform(initialState: _appState.value)
                     .do(onSuccess: { (newState) in
@@ -119,6 +119,8 @@ enum Dispatcher {
     }
     
     static func dispatch(action: Action) {
+        
+        print("Adding new item: \(action)")
         
         actions.onNext(actions.unsafeValue + [ActionCreatorWrapper(action: action)])
         
