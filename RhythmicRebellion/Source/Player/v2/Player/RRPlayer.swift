@@ -118,16 +118,11 @@ extension RRPlayer: WebSocketServiceWatcher {
         
     }
     
-    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) {
-        
-        ///TODO: get rid of PlaylistItemPatches.
-        ///Currently it's mapping contradicts reduxView protocol during remote delete operations
-        
+    func didReceivePlaylist(patch: [String : [String : Any]?]) {
         let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
-                                                           patch: playlistItemsPatches.nullableReduxView) )
+                                                           patch: patch.nullableReduxView) )
         
         Dispatcher.dispatch(action: action )
-
     }
     
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {

@@ -139,17 +139,18 @@ struct DaPlaylist {
                 return
             }
             
-            if value.count == 1,
-               let first = maybeValue?.first,
-               var x = reduxView[orderHash] {
+            if var x = reduxView[orderHash] {
                
                 ///updated node
-                ///either ViewKey.next or ViewKey.prev is updated
+                ///ViewKey.next, ViewKey.prev are updated
+               
+                value.forEach { (key, value) in
+                    ///be aware, that we might get either value, or absence of it
+                    let maybeUpdate: Any? = value
+                    
+                    x[key] = maybeUpdate
+                }
                 
-                ///be aware, that we might get either value, or absence of it
-                let maybeUpdate: Any? = first.value
-                
-                x[first.key] = maybeUpdate
                 reduxView[orderHash] = x
                 
                 return
@@ -243,7 +244,7 @@ extension DaPlaylist: CustomStringConvertible {
     
 }
 
-extension Dictionary where Key == String, Value == Optional<PlayerPlaylistItemPatch> {
+extension Dictionary where Key == String, Value == Optional<Dictionary<String, Any>> {
     
     var nullableReduxView: DaPlaylist.NullableReduxView {
         
@@ -253,13 +254,18 @@ extension Dictionary where Key == String, Value == Optional<PlayerPlaylistItemPa
                 return nil
             }
             
-            let p:[DaPlaylist.ViewKey: Any?]
-                 = [ .id       : x.trackId,
-                     .hash     : x.key,
-                     .next     : (x.nextKey?    .isNotNull ?? false) ? x.nextKey!.value! : nil,
-                     .previous : (x.previousKey?.isNotNull ?? false) ? x.previousKey!.value! : nil,
-                     ]
+            var p: [DaPlaylist.ViewKey: Any?] = [:]
             
+            x.forEach { (key, value) in
+                
+                var v: Any? = value
+                if v is NSNull {
+                    v = nil
+                }
+                
+                p[ DaPlaylist.ViewKey(rawValue: key)! ] = v
+            }
+                
             return p
         }
         
@@ -340,7 +346,7 @@ struct ApplyReduxViewPatch: ActionCreator {
         tracks.apply(patch: viewPatch.patch)
         
         ///fetching underlying tracks if needed
-        var diff = Set(tracks.trackDump.keys).subtracting(tracks.reduxView.map { $0.value[.id]! as! Int })
+        var diff = Set(tracks.reduxView.map { $0.value[.id]! as! Int }).subtracting(tracks.trackDump.keys)
         
         ///avoiding roundtrip to server
         assosiatedTracks.forEach { x in

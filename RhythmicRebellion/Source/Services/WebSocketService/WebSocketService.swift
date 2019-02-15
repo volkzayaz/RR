@@ -32,6 +32,8 @@ protocol WebSocketServiceWatcher: class {
     func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool)
 
     func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState)
+    
+    func didReceivePlaylist(patch: [String: [String: Any]?])
 }
 
 extension WebSocketServiceWatcher {
@@ -55,6 +57,8 @@ extension WebSocketServiceWatcher {
     func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) { }
 
     func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) { }
+    
+    func didReceivePlaylist(patch: [String: [String: Any]?]) {}
 }
 
 class WebSocketService: WebSocketDelegate, Watchable {
@@ -194,6 +198,15 @@ class WebSocketService: WebSocketDelegate, Watchable {
 
     public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
 
+        if let x = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any],
+           let command = x["cmd"] as? String, command == "update",
+           let channel = x["channel"] as? String, channel == "playlist",
+           let d = x["data"] as? [String: [String: Any]?]   {
+            watchersContainer.invoke { (x) in
+                x.didReceivePlaylist(patch: d)
+            }
+        }
+        
         do {
 //            #if DEBUG
 //            print("webSocket did recieve command : \(String(data: data, encoding: .utf8))")
