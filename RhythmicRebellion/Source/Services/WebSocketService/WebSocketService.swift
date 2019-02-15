@@ -324,7 +324,6 @@ class WebSocketService: WebSocketDelegate, Watchable {
     var didReceiveTracks: Single<[Track]> {
         
         return publishSubject.notNil()
-            .skip(1)
             .map { x -> [Track]? in
                 
                 guard case .playListLoadTracks(let tracks) = x else { return nil }
@@ -332,6 +331,7 @@ class WebSocketService: WebSocketDelegate, Watchable {
                 return tracks
             }
             .notNil()
+            .take(1)
             .asSingle()
         
     }
