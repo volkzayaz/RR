@@ -142,9 +142,7 @@ extension RRPlayer: WebSocketServiceWatcher {
     }
     
     func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) {
-        
-        ////update appState with blocked
-        
+        Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked: isBlocked))
     }
     
     func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) {
@@ -452,6 +450,18 @@ struct RemoveTrack: ActionCreator {
                     
                 }
         
+    }
+    
+}
+
+struct ChangePlayerBlockState: Action {
+    
+    let isBlocked: Bool
+    
+    func perform(initialState: AppState) -> AppState {
+        var state = initialState
+        state.player.isBlocked = isBlocked
+        return state
     }
     
 }

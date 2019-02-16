@@ -133,7 +133,6 @@ final class PlayerViewModel: NSObject {
             .distinctUntilChanged()
     }
 
-    
     var isPlaying: Driver<Bool> {
         return appState.map { $0.player.currentItem?.state.isPlaying }
                     .notNil()
