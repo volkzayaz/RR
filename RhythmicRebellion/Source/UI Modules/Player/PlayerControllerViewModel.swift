@@ -140,10 +140,19 @@ final class PlayerViewModel: NSObject {
                     .distinctUntilChanged()
     }
 
-    var canForward: Bool { return self.player.canForward }
-    var canBackward: Bool { return self.player.canBackward }
+    var canForward: Driver<Bool> {
+        return appState.distinctUntilChanged { $0.player.currentItem == $1.player.currentItem }
+            .map { $0.canForward }
+    }
+    var canBackward: Driver<Bool> {
+        return appState.distinctUntilChanged { $0.player.currentItem == $1.player.currentItem }
+            .map { $0.canBackward }
+    }
 
-    var canSetPlayerItemProgress: Bool { return self.player.canSeek }
+    var canSetPlayerItemProgress: Driver<Bool> {
+        return appState.distinctUntilChanged { $0.player.currentItem == $1.player.currentItem }
+                       .map { $0.canSeek }
+    }
 
     var canFollowArtist: Bool { return self.player.currentItem != nil }
 
@@ -272,11 +281,11 @@ final class PlayerViewModel: NSObject {
     }
 
     func forward() {
-        self.player.playForward()
+        DataLayer.get.daPlayer.skipForward()
     }
 
     func backward() {
-        self.player.playBackward()
+        DataLayer.get.daPlayer.skipBack()
     }
 
     func toggleLike() {

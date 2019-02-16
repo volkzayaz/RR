@@ -54,7 +54,7 @@ extension RRPlayer {
     }
     
     func skipBack() {
-        
+        Dispatcher.dispatch(action: GetBackToPreviousItem())
     }
     
     func clear() {
@@ -281,6 +281,21 @@ struct ProceedToNextItem: ActionCreator {
         }
 
         return .just(state)
+    }
+    
+}
+
+struct GetBackToPreviousItem: ActionCreator {
+    
+    func perform(initialState: AppState) -> Single<AppState> {
+        
+        guard let currentHash = initialState.currentTrack?.orderHash,
+              let previousItem = initialState.player.tracks.previous(before: currentHash) else {
+            return .just(initialState)
+        }
+        
+        return PrepareNewTrack(orderedTrack: previousItem,
+                               shouldPlayImmidiatelly: true).perform(initialState: initialState)
     }
     
 }

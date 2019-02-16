@@ -288,9 +288,14 @@ extension PlayerViewController {
             .drive(playerItemDurationLabel.rx.text)
             .disposed(by: rx.disposeBag)
         
-        self.forwardBarButtonItem.isEnabled = self.viewModel.canForward
-        self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
-
+        viewModel.canForward
+            .drive(forwardBarButtonItem.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.canBackward
+            .drive(backwardBarButtonItem.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
         let playerItemTrackLikeState = self.viewModel.playerItemTrackLikeState
         
         playerItemTrackLikeState.map { $0.isLiked ? #colorLiteral(red: 1, green: 0.3632884026, blue: 0.7128098607, alpha: 1) : #colorLiteral(red: 0.7469480634, green: 0.7825777531, blue: 1, alpha: 1) }
@@ -309,9 +314,9 @@ extension PlayerViewController {
             .drive(likeBarButtonItem.rx.isEnabled)
             .disposed(by: rx.disposeBag)
         
-//        viewModel.canSetPlayerItemProgress
-//            .drive(playerItemProgressView.rx.isUserInteractionEnabled)
-//            .disposed(by: rx.disposeBag)
+        viewModel.canSetPlayerItemProgress
+            .drive(playerItemProgressView.rx.isUserInteractionEnabled)
+            .disposed(by: rx.disposeBag)
 
         viewModel.isArtistFollowed
             .drive(regularFollowButton.rx.isSelected)
@@ -342,8 +347,6 @@ extension PlayerViewController {
     func refreshProgressUI() {
 
         self.playerItemProgressView.restrictedValue = self.viewModel.playerItemRestrictedValue        
-
-        self.backwardBarButtonItem.isEnabled = self.viewModel.canBackward
 
         viewModel.playerItemCurrentTimeString
             .drive(playerItemCurrentTimeLabel.rx.text)

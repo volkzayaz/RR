@@ -70,7 +70,7 @@ class AudioPlayer: NSObject {
         
         let playbackEndedSignal = NotificationCenter.default.rx
             .notification(NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-                          object: player)
+                          object: nil)
             .observeOn(MainScheduler.instance)
         
         let playbackTimeSignal = appState.map { $0.player.currentItem?.musicType }
