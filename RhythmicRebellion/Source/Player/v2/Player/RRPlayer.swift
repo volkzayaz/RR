@@ -85,6 +85,8 @@ extension RRPlayer {
 ///web socket initiated
 extension RRPlayer: WebSocketServiceWatcher {
     
+    ///This call should be part of init WebSocket operation, that gives out bunch of tracks, initial reduxView and currentTrackState all at one go
+    
     func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) {
         
         Dispatcher.dispatch(action: StoreTracks(tracks: tracks))

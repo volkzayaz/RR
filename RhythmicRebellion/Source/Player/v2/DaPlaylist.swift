@@ -231,7 +231,7 @@ struct DaPlaylist {
 extension DaPlaylist: CustomStringConvertible {
     
     var description: String {
-        var res = "Stored Tracks: \([trackDump.map { "{id = \($0.key), \($0.value.name)};\n" }]) "
+        var res = "Stored Tracks: \([trackDump.map { "{id = \($0.key), \($0.value.name)}; " }]) "
         res.append("Tracks(ids) order:\n")
         
         orderedTracks.forEach {
