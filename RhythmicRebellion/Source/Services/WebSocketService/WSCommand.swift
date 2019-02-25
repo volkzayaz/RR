@@ -39,20 +39,24 @@ enum CommandType: String {
     case fanPlaylistsStates = "states-customPlaylistsStates"
 }
 
-////Anything that we receive from WebSocket
-protocol WebSocketCommand {
-    init(jsonData: Data)
-    var jsonData: Data { get }
-}
-
-///Any type that can be data of CodableWebSocketCommand
-protocol WebSocketCommandData: Codable {
+///Any type that can be represented by "data" field from WebSocket
+protocol WSCommandData {
     static var channel: String { get }
     static var command: String { get }
 }
 
+////Anything that we receive from WebSocket
+protocol WSCommand {
+    
+    associatedtype DataType: WSCommandData
+    var data: DataType { get }
+    
+    init(jsonData: Data) throws
+    var jsonData: Data { get }
+}
+
 ///WebSocket data that we can parse using Codable
-struct CodableWebSocketCommand<T: WebSocketCommandData>: Codable, WebSocketCommand {
+struct CodableWebSocketCommand<T: WSCommandData & Codable>: Codable, WSCommand {
     
     let channel: String
     let command: String
@@ -90,78 +94,19 @@ struct CodableWebSocketCommand<T: WebSocketCommandData>: Codable, WebSocketComma
     
 }
 
-extension Token: WebSocketCommandData {
-    static var channel: String { return "user" }
-    static var command: String { return "init" }
-}
-
-extension Array : WebSocketCommandData where Element: WebSocketCommandData {
-    static var channel: String { return Element.channel }
-    static var command: String { return Element.command }
-}
-
-typealias LoadTracks = Int
-extension LoadTracks: WebSocketCommandData {
-    static var channel: String { return "playlist" }
-    static var command: String { return "getTracks" }
-}
-
-extension Track : WebSocketCommandData {
-    static var channel: String { return "playlist" }
-    static var command: String { return "loadTracks" }
-}
-
-extension ListeningSettings: WebSocketCommandData {
-    static var channel: String { return "user" }
-    static var command: String { return "syncListeningSettings" }
-}
-
-extension TrackForceToPlayState: WebSocketCommandData {
-    static var channel: String { return "user" }
-    static var command: String { return "syncForceToPlay" }
-}
-
-extension SkipArtistAddonsState: WebSocketCommandData {
-    static var channel: String { return "user" }
-    static var command: String { return "syncSkipArtistBioCommentary" }
-}
-
-extension TrackLikeState: WebSocketCommandData {
-    static var channel: String { return "user" }
-    static var command: String { return "syncLike" }
-}
-
-extension ArtistFollowingState: WebSocketCommandData {
-    static var channel: String { return "user" }
-    static var command: String { return "syncFollowing" }
-}
-
-extension FanPlaylistState: WebSocketCommandData {
-    static var channel: String { return "states" }
-    static var command: String { return "customPlaylistsStates" }
-}
-
-
-struct TrackReduxViewPatch: WebSocketCommand {
+struct TrackReduxViewPatch: WSCommand {
     
-    let reduxView: DaPlaylist.NullableReduxView
+    let data: DaPlaylist.NullableReduxView
     
     init(jsonData: Data) {
         
         guard let x = try? JSONSerialization.jsonObject(with: jsonData, options: []),
-              let dictionary = x as? [String: Any] else {
-            fatalError("Error decoding data for TrackReduxViewPatch")
+            let dictionary = x as? [String: Any],
+            let data = dictionary[CodableWebSocketCommand<Int>.CodingKeys.data.rawValue] as? [TrackOrderHash: [String: Any?]?] else {
+                fatalError("Error decoding data for TrackReduxViewPatch")
         }
         
-        guard let channel = dictionary[CodableWebSocketCommand<Int>.CodingKeys.channel.rawValue] as? String,
-              let command = dictionary[CodableWebSocketCommand<Int>.CodingKeys.command.rawValue] as? String,
-              channel == TrackReduxViewPatch.channel,
-              command == TrackReduxViewPatch.command,
-              let data = dictionary[CodableWebSocketCommand<Int>.CodingKeys.data.rawValue] as? [TrackOrderHash: [String: Any?]?] else {
-              fatalError("Error decoding data for TrackReduxViewPatch")
-        }
-        
-        reduxView = data.mapValues { (maybePatch) -> [DaPlaylist.ViewKey: Any?]? in
+        self.data = data.mapValues { (maybePatch) -> [DaPlaylist.ViewKey: Any?]? in
             
             guard let x = maybePatch else {
                 return nil
@@ -186,20 +131,75 @@ struct TrackReduxViewPatch: WebSocketCommand {
     
     var jsonData: Data {
         
-        let x: [String: Any] = [ CodableWebSocketCommand<Int>.CodingKeys.channel.rawValue: TrackReduxViewPatch.channel,
-                                 CodableWebSocketCommand<Int>.CodingKeys.command.rawValue: TrackReduxViewPatch.command,
-                                 CodableWebSocketCommand<Int>.CodingKeys.data.rawValue   : reduxView]
+        let x: [String: Any] = [ CodableWebSocketCommand<Int>.CodingKeys.channel.rawValue: TrackReduxViewPatch.DataType.channel,
+                                 CodableWebSocketCommand<Int>.CodingKeys.command.rawValue: TrackReduxViewPatch.DataType.command,
+                                 CodableWebSocketCommand<Int>.CodingKeys.data.rawValue   : self.data]
         
         return try! JSONSerialization.data(withJSONObject: x, options: [])
     }
     
-    static var channel: String { return "update" }
-    static var command: String { return "playlist" }
-    
 }
 
-extension WebSocketCommand {
-//    static func initialCommand(token: Token) -> WebSocketCommand<Token> {
+
+extension Token: WSCommandData {
+    static var channel: String { return "user" }
+    static var command: String { return "init" }
+}
+
+extension Array : WSCommandData where Element: WSCommandData {
+    static var channel: String { return Element.channel }
+    static var command: String { return Element.command }
+}
+
+typealias LoadTracks = Int
+extension LoadTracks: WSCommandData {
+    static var channel: String { return "playlist" }
+    static var command: String { return "getTracks" }
+}
+
+extension Track : WSCommandData {
+    static var channel: String { return "playlist" }
+    static var command: String { return "loadTracks" }
+}
+
+extension ListeningSettings: WSCommandData {
+    static var channel: String { return "user" }
+    static var command: String { return "syncListeningSettings" }
+}
+
+extension TrackForceToPlayState: WSCommandData {
+    static var channel: String { return "user" }
+    static var command: String { return "syncForceToPlay" }
+}
+
+extension SkipArtistAddonsState: WSCommandData {
+    static var channel: String { return "user" }
+    static var command: String { return "syncSkipArtistBioCommentary" }
+}
+
+extension TrackLikeState: WSCommandData {
+    static var channel: String { return "user" }
+    static var command: String { return "syncLike" }
+}
+
+extension ArtistFollowingState: WSCommandData {
+    static var channel: String { return "user" }
+    static var command: String { return "syncFollowing" }
+}
+
+extension FanPlaylistState: WSCommandData {
+    static var channel: String { return "states" }
+    static var command: String { return "customPlaylistsStates" }
+}
+
+extension Dictionary: WSCommandData where Key == TrackOrderHash, Value == Dictionary<DaPlaylist.ViewKey, Any?>? {
+    static var channel: String { return "update" }
+    static var command: String { return "playlist" }
+}
+
+
+extension WSCommand {
+//    static func initialCommand(token: Token) -> WSCommand<Token> {
 //        return WebSocketCommand<Token>(data: token)
 //    }
 

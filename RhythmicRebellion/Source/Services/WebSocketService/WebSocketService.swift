@@ -60,16 +60,20 @@ import RxSwift
 //    func didReceivePlaylist(patch: [String: [String: Any]?]) {}
 //}
 
-class WebSocketService: WebSocketDelegate, Watchable {
+extension WebSocketService {
+    
+    var didReceivePlaylistPatch: Observable<DaPlaylist.NullableReduxView> {
+        return customCommandObservable(ofType: TrackReduxViewPatch.self)
+    }
+    
+}
+
+class WebSocketService {
 
     static let ownSignatureHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
     
-//    typealias WatchType = WebSocketServiceWatcher
-//    let watchersContainer = WatchersContainer<WebSocketServiceWatcher>()
-    
     var webSocket: WebSocket?
     var token: Token?
-
     fileprivate let r: URLRequest
     
     fileprivate lazy var rxInput: Observable<(data: Data, channel: String, command: String)> = {
@@ -96,15 +100,19 @@ class WebSocketService: WebSocketDelegate, Watchable {
         
     }()
     
-    func commandObservable<T: WebSocketCommandData>() -> Observable<T> {
+    func commandObservable<T: WSCommandData & Codable>() -> Observable<T> {
+        return customCommandObservable(ofType: CodableWebSocketCommand<T>.self)
+    }
+    
+    func customCommandObservable<T: WSCommand>(ofType: T.Type) -> Observable<T.DataType> {
 
-        return rxInput.filter { $0.channel == T.channel &&
-                                $0.command == T.command }
+        return rxInput.filter { $0.channel == T.DataType.channel &&
+                                $0.command == T.DataType.command }
             .map { x in
                 
-                let t: WebSocketCommand<T>
+                let t: T
                 do {
-                    t = try JSONDecoder().decode(WebSocketCommand<T>.self, from: x.data)
+                    t = try T(jsonData: x.data)
                 }
                 catch (let e) {
                     fatalError("Error decoding \(T.self). Details: \(e)")
@@ -127,7 +135,6 @@ class WebSocketService: WebSocketDelegate, Watchable {
     func makeWebSocket() -> WebSocket {
     
         let webSocket = WebSocket(request: r)
-        webSocket.delegate = self
         
         return webSocket
     }
@@ -141,8 +148,6 @@ class WebSocketService: WebSocketDelegate, Watchable {
         self.token = token
 
         print("connect with Token: \(String(describing: self.token))")
-
-        self.webSocket?.delegate = nil
 
         self.webSocket = self.makeWebSocket()
         self.webSocket?.connect()
@@ -167,17 +172,13 @@ class WebSocketService: WebSocketDelegate, Watchable {
         self.webSocket?.disconnect()
     }
 
-    func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {
+    func sendCommand<T: WSCommand>(command: T, completion: ((Error?) -> ())? = nil) {
 
         guard self.webSocket?.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
 
-        do {
-            let jsonData = command.jsonData
-
-            self.webSocket?.write(data: jsonData, completion: { completion?(nil) })
-        } catch (let error) {
-            completion?(AppError(WebSocketServiceError.custom(error)))
-        }
+        let jsonData = command.jsonData
+        
+        self.webSocket?.write(data: jsonData)
     }
 
     // MARK: - WebSocketDelegate -
@@ -193,7 +194,6 @@ class WebSocketService: WebSocketDelegate, Watchable {
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocketDidDisconnect: \(String(describing: error))")
 
-        self.webSocket?.delegate = nil
         self.webSocket = nil
 
 //        let commandCenter = MPRemoteCommandCenter.shared()
@@ -209,150 +209,5 @@ class WebSocketService: WebSocketDelegate, Watchable {
 //        }
     }
 
-    public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        guard let data = text.data(using: .utf8) else { return }
-
-        self.websocketDidReceiveData(socket: socket, data: data)
-    }
-
-    public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-
-        if let x = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any],
-           let command = x["cmd"] as? String, command == "update",
-           let channel = x["channel"] as? String, channel == "playlist",
-           let d = x["data"] as? [String: [String: Any]?]   {
-            watchersContainer.invoke { (x) in
-                x.didReceivePlaylist(patch: d)
-            }
-        }
-        
-        
-//        let webSoketCommand = try! JSONDecoder().decode(WebSocketCommand.self, from: data)
-//
-//        publishSubject.onNext(webSoketCommand.data)
-//
-//        switch webSoketCommand.data {
-//
-//        case .userInit( _ ):
-//            break
-//
-//        case .userSyncListeningSettings(let listeningSettings):
-//
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveListeningSettings: listeningSettings)
-//            })
-//
-//        case .userSyncForceToPlay(let trackForceToPlayState):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveTrackForceToPlayState: trackForceToPlayState)
-//            })
-//
-//        case .userSyncFollowing(let artistFollowingState):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveArtistFollowingState: artistFollowingState)
-//            })
-//
-//        case .userSyncPurchases(let purchases):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceivePurchases: purchases)
-//            })
-//
-//        case .userSyncSkipArtistAddons(let skipArtistAddonsState):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveSkipArtistAddonsState: skipArtistAddonsState)
-//            })
-//
-//        case .userSyncTrackLikeState(let trackLikeState):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveTrackLikeState: trackLikeState)
-//            })
-//
-//        case .playListLoadTracks(let tracks):
-//
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveTracks: tracks, flush: webSoketCommand.flush ?? false)
-//            })
-//
-//        case .playListUpdate(let playerPlaylistUpdate):
-//
-//            //                #if DEBUG
-//            //                    print("recieve playListUpdate: \(String(data: data, encoding: .utf8))")
-//            //                #endif
-//
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceivePlaylistUpdate: playerPlaylistUpdate, flush: webSoketCommand.flush ?? false)
-//            })
-//
-//        case .playListGetTracks( _): break
-//
-//        case .currentTrackId(let trackId):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveCurrentTrackId: trackId)
-//            })
-//
-//        case .currentTrackState(let trackState):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
-//            })
-//
-//        case .currentTrackBlock(let isBlocked):
-//
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveCurrentTrackBlock: isBlocked)
-//            })
-//
-//        case .checkAddons(let checkAddons):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveCheckAddons: checkAddons)
-//            })
-//
-//        case .playAddon( _): break
-//
-//        case .tracksTotalPlayTime(let tracksTotalPlayMSeconds):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didReceiveTracksTotalPlayTime: tracksTotalPlayMSeconds, flush: webSoketCommand.flush ?? false)
-//            })
-//
-//        case .fanPlaylistsStates(let fanPlaylistState):
-//            self.watchersContainer.invoke({ (observer) in
-//                observer.webSocketService(self, didRecieveFanPlaylistState: fanPlaylistState)
-//            })
-//
-//        case .failure(let error):
-//            print(error)
-
-        //}
-    }
-    
-//    var didReceiveTracks: Single<[Track]> {
-//        
-//        return publishSubject.notNil()
-//            .map { x -> [Track]? in
-//                
-//                guard case .playListLoadTracks(let tracks) = x else { return nil }
-//                
-//                return tracks
-//            }
-//            .notNil()
-//            .take(1)
-//            .asSingle()
-//        
-//    }
-//    
-//    var didReceiveAddons: Single<[Addon]> {
-//        
-//        return publishSubject.notNil()
-//            .map { x -> [Addon]? in
-//                
-//                guard case .checkAddons(let checkAddons) = x else { return nil }
-//                
-//                return []
-//            }
-//            .notNil()
-//            .take(1)
-//            .asSingle()
-//        
-//    }
-//    
 }
 

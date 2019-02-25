@@ -159,7 +159,7 @@
 		764E7EDD2188C99300952182 /* PlaylistActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E7EDC2188C99300952182 /* PlaylistActions.swift */; };
 		7650961220E2615F00BF1F79 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961120E2615F00BF1F79 /* WebSocketService.swift */; };
 		7650961720E3A8C600BF1F79 /* AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961620E3A8C600BF1F79 /* AudioFile.swift */; };
-		7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961820E3B35000BF1F79 /* WebSocketCommand.swift */; };
+		7650961920E3B35000BF1F79 /* WSCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961820E3B35000BF1F79 /* WSCommand.swift */; };
 		7650961B20E4DC7800BF1F79 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961A20E4DC7800BF1F79 /* Artist.swift */; };
 		7650961D20E4E11C00BF1F79 /* TrackId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961C20E4E11C00BF1F79 /* TrackId.swift */; };
 		7650961F20E4E45000BF1F79 /* TrackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7650961E20E4E45000BF1F79 /* TrackState.swift */; };
@@ -487,7 +487,7 @@
 		7650961120E2615F00BF1F79 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		7650961420E3A15D00BF1F79 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		7650961620E3A8C600BF1F79 /* AudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFile.swift; sourceTree = "<group>"; };
-		7650961820E3B35000BF1F79 /* WebSocketCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketCommand.swift; sourceTree = "<group>"; };
+		7650961820E3B35000BF1F79 /* WSCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSCommand.swift; sourceTree = "<group>"; };
 		7650961A20E4DC7800BF1F79 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		7650961C20E4E11C00BF1F79 /* TrackId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackId.swift; sourceTree = "<group>"; };
 		7650961E20E4E45000BF1F79 /* TrackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackState.swift; sourceTree = "<group>"; };
@@ -1008,7 +1008,7 @@
 			isa = PBXGroup;
 			children = (
 				7650961120E2615F00BF1F79 /* WebSocketService.swift */,
-				7650961820E3B35000BF1F79 /* WebSocketCommand.swift */,
+				7650961820E3B35000BF1F79 /* WSCommand.swift */,
 			);
 			path = WebSocketService;
 			sourceTree = "<group>";
@@ -2428,7 +2428,7 @@
 				736598DA21D65FB40092E499 /* TrackCells.swift in Sources */,
 				7641B2DE21CA4DE6005535E6 /* LyricsKaraokeRouter.swift in Sources */,
 				768486E8216B4C51000D0F79 /* MoneyFormatter.swift in Sources */,
-				7650961920E3B35000BF1F79 /* WebSocketCommand.swift in Sources */,
+				7650961920E3B35000BF1F79 /* WSCommand.swift in Sources */,
 				76C821A821425E3500A6F5AE /* HobbiesSelectableListControllerViewModel.swift in Sources */,
 				AB14237421246AD500C926F5 /* CreatePlaylistTableViewCell.swift in Sources */,
 				7641B2EE21CA88C2005535E6 /* KaraokeViewController.swift in Sources */,
