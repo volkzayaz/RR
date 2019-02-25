@@ -30,8 +30,7 @@ public struct Track: Codable {
         }
     }
 
-    enum TrackPreviewType: Int {
-        case unknown
+    enum TrackPreviewType: Int, Codable {
         case noPreview = 1
         case full = 2
         case limit45 = 3
@@ -47,7 +46,7 @@ public struct Track: Codable {
     let videoURLStrings: [String]?
     let isInstrumental: Bool
     let isFreeForPlaylist: Bool
-    let previewTypeValue: Int?
+    let previewType: TrackPreviewType?
     let previewLimitTimes: Int?
     let isFollowAllowFreeDownload: Bool
     let releaseDateFans: Date?
@@ -61,7 +60,6 @@ public struct Track: Codable {
     let backingAudioFile: DefaultAudioFile?
     let price: Money?
 
-    var previewType: TrackPreviewType { return TrackPreviewType(rawValue: self.previewTypeValue ?? 0) ?? .unknown }
     var isPlayable: Bool { return self.audioFile != nil }
 
     enum CodingKeys: String, CodingKey {
@@ -74,7 +72,7 @@ public struct Track: Codable {
         case videoURLStrings = "video"
         case isInstrumental = "is_instrumental"
         case isFreeForPlaylist = "is_free_for_playlist"
-        case previewTypeValue = "preview_type"
+        case previewType = "preview_type"
         case previewLimitTimes = "preview_limit_times"
         case isFollowAllowFreeDownload = "is_follow_allow_free_download"
         case releaseDateFans = "release_date_fans"
@@ -102,7 +100,7 @@ public struct Track: Codable {
         self.videoURLStrings = try? container.decode([String].self, forKey: .videoURLStrings)
         self.isInstrumental = try container.decode(Bool.self, forKey: .isInstrumental)
         self.isFreeForPlaylist = try container.decode(Bool.self, forKey: .isFreeForPlaylist)
-        self.previewTypeValue = try? container.decode(Int.self, forKey: .previewTypeValue)
+        self.previewType = try? container.decode(TrackPreviewType.self, forKey: .previewType)
         self.previewLimitTimes = try? container.decode(Int.self, forKey: .previewLimitTimes)
         self.isFollowAllowFreeDownload = try container.decode(Bool.self, forKey: .isFollowAllowFreeDownload)
 
@@ -139,7 +137,7 @@ public struct Track: Codable {
 
         try container.encode(self.isInstrumental, forKey: .isInstrumental)
         try container.encode(self.isFreeForPlaylist, forKey: .isFreeForPlaylist)
-        try container.encode(self.previewTypeValue, forKey: .previewTypeValue)
+        try container.encode(self.previewType, forKey: .previewType)
         try container.encode(self.previewLimitTimes, forKey: .previewLimitTimes)
         try container.encode(self.isFollowAllowFreeDownload, forKey: .isFollowAllowFreeDownload)
 

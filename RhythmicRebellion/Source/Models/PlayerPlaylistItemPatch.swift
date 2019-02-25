@@ -9,13 +9,11 @@
 import Foundation
 
 struct PlayerPlaylistItemPatch: Codable {
-
-    typealias KeyType = OptionalValue<String>
-
+    
     let trackId: Int?
     let key: String?
-    var nextKey: KeyType?
-    var previousKey: KeyType?
+    let nextKey: String??
+    let previousKey: String??
 
     enum CodingKeys: String, CodingKey {
         case trackId = "id"
@@ -24,7 +22,7 @@ struct PlayerPlaylistItemPatch: Codable {
         case previousKey = "previousTrackKey"
     }
 
-    init(trackId: Int? = nil, key: String? = nil, nextKey: KeyType? = nil, previousKey: KeyType? = nil) {
+    init(trackId: Int? = nil, key: String? = nil, nextKey: String? = nil, previousKey: String? = nil) {
         self.trackId = trackId
         self.key = key
 
@@ -34,24 +32,27 @@ struct PlayerPlaylistItemPatch: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-
+        
         self.trackId = try container.decodeIfPresent(Int.self, forKey: .trackId)
         self.key = try container.decodeIfPresent(String.self, forKey: .key)
 
-        if let nextKey = try container.decodeIfPresent(KeyType.self, forKey: .nextKey) {
-            self.nextKey = nextKey
-        } else if container.contains(.nextKey) {
-            self.nextKey = .null
+        if let nextKey = try container.decodeIfPresent(Optional<String>.self, forKey: .nextKey),
+           let x = nextKey {
+            self.nextKey = x ///value equals to string
+        } else if try container.decodeNil(forKey: .nextKey)  {
+            self.nextKey = nil as String? ///value equals to null
         } else {
-            self.nextKey = nil
+            self.nextKey = nil as String?? ///value is absent
         }
 
-        if let previousKey = try container.decodeIfPresent(KeyType.self, forKey: .previousKey) {
-            self.previousKey = previousKey
+        
+        if let previousKey = try container.decodeIfPresent(Optional<String>.self, forKey: .previousKey),
+            let x = previousKey {
+            self.previousKey = x
         } else if container.contains(.previousKey) {
-            self.previousKey = .null
+            self.previousKey = nil as String? ///value equals to null
         } else {
-            self.previousKey = nil
+            self.previousKey = nil as String?? ///value is absent
         }
     }
 

@@ -102,7 +102,7 @@ extension Track: Fakeble {
         self.writer = writer
         
         videoURLStrings = nil
-        previewTypeValue = nil
+        previewType = nil
         previewLimitTimes = nil
         releaseDateFans = nil
         featuring = nil

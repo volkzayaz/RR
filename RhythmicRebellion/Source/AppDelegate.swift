@@ -110,10 +110,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             appRouter.dependencies.application.fanUser { (userResult) in
                 switch userResult {
                 case .success(_):
-                    if appRouter.dependencies.application.webSocketService.state == .disconnected {
-                        appRouter.dependencies.application.webSocketService.reconnect()
-                    }
-
+                    appRouter.dependencies.application.webSocketService.reconnect()
+                    
                 default: break
                 }
             }

@@ -18,8 +18,11 @@ struct TrackPreviewOptionViewModel {
             guard let fanUser = user as? FanUser else { return .authorizationNeeded }
             guard fanUser.hasPurchase(for: track) == false else { return .freeForPlaylist }
             guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { return .freeForPlaylist }
+            guard let t = track.previewType else {
+                return .noPreview
+            }
 
-            switch track.previewType {
+            switch t {
             case .full:
                 guard let previewLimitTimes = track.previewLimitTimes else { return .freeForPlaylist }
                 guard previewLimitTimes > 0 else { return .fullLimitTimes(-1) }
@@ -36,7 +39,7 @@ struct TrackPreviewOptionViewModel {
             case .limit90: return .limitSeconds(90)
 
             case .noPreview: return .noPreview
-            case .unknown: return .noPreview
+            
             }
 
         }

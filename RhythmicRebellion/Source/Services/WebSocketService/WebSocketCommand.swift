@@ -19,65 +19,39 @@ struct CommandErrorData: Codable {
     }
 }
 
+enum CommandType: String {
+    case userInit = "user-init"
+    case userSyncListeningSettings = "user-syncListeningSettings"
+    case userSyncForceToPlay = "user-syncForceToPlay"
+    case userSyncFollowing = "user-syncFollowing"
+    case userSyncPurchases = "user-syncPurchases"
+    case userSyncSkipArtistAddons = "user-syncSkipArtistBioCommentary"
+    case userSyncTrackLikeState = "user-syncLike"
+    case playListLoadTracks = "playlist-loadTracks"
+    case playListUpdate = "playlist-update"
+    case playListGetTracks = "playlist-getTracks"
+    case currentTrackId = "currentTrack-setTrack"
+    case currentTrackState = "currentTrack-setState"
+    case currentTrackBlock = "currentTrack-setBlock"
+    case checkAddons = "addons-checkAddons"
+    case playAddon = "addons-playAddon"
+    case tracksTotalPlayTime = "previewOpt-srts_previews"
+    case fanPlaylistsStates = "states-customPlaylistsStates"
+}
 
-struct WebSocketCommand: Codable {
 
-    enum CommandType: String {
-        case userInit = "user-init"
-        case userSyncListeningSettings = "user-syncListeningSettings"
-        case userSyncForceToPlay = "user-syncForceToPlay"
-        case userSyncFollowing = "user-syncFollowing"
-        case userSyncPurchases = "user-syncPurchases"
-        case userSyncSkipArtistAddons = "user-syncSkipArtistBioCommentary"
-        case userSyncTrackLikeState = "user-syncLike"
-        case playListLoadTracks = "playlist-loadTracks"
-        case playListUpdate = "playlist-update"
-        case playListGetTracks = "playlist-getTracks"
-        case currentTrackId = "currentTrack-setTrack"
-        case currentTrackState = "currentTrack-setState"
-        case currentTrackBlock = "currentTrack-setBlock"
-        case checkAddons = "addons-checkAddons"
-        case playAddon = "addons-playAddon"
-        case tracksTotalPlayTime = "previewOpt-srts_previews"
-        case fanPlaylistsStates = "states-customPlaylistsStates"
-        case unknown
-    }
+protocol WebSocketCommandCodable: Codable {
+    static var channel: String { get }
+    static var command: String { get }
+    
+}
 
-    enum SuccessCommandData {
-        case userInit(Token)
-        case userSyncListeningSettings(ListeningSettings)
-        case userSyncForceToPlay(TrackForceToPlayState)
-        case userSyncFollowing(ArtistFollowingState)
-        case userSyncPurchases([Purchase])
-        case userSyncSkipArtistAddons(SkipArtistAddonsState)
-        case userSyncTrackLikeState(TrackLikeState)
-        case playListLoadTracks([Track])
-        case playListUpdate([String : PlayerPlaylistItemPatch?])
-        case playListGetTracks([Int])
-        case currentTrackId(TrackId?)
-        case currentTrackState(TrackState)
-        case currentTrackBlock(Bool)
-        case checkAddons(CheckAddons)
-        case playAddon(AddonState)
-        case tracksTotalPlayTime([Int: UInt64])
-        case fanPlaylistsStates(FanPlaylistState)
-    }
-
-    enum CommandData {
-        case success(SuccessCommandData)
-        case failure(CommandErrorData)
-        case unknown
-    }
-
-    var commandType: CommandType {
-        return CommandType(rawValue: self.channel + "-" + self.command) ?? .unknown
-    }
+struct WebSocketCommand<T: WebSocketCommandCodable>: Codable {
 
     let channel: String
     let command: String
-    var flush: Bool?
-
-    let data: CommandData
+    let data: T
+    let flush: Bool?
 
     enum CodingKeys: String, CodingKey {
         case channel
@@ -85,200 +59,246 @@ struct WebSocketCommand: Codable {
         case flush
         case data
     }
-
-    init (from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.channel = try container.decode(String.self, forKey: .channel)
-        self.command = try container.decode(String.self, forKey: .command)
-        self.flush = try container.decodeIfPresent(Bool.self, forKey: .flush)
-
-        let commandType = CommandType(rawValue: self.channel + "-" + self.command) ?? .unknown
-
-        do {
-            switch commandType {
-            case .userInit:
-                self.data = .success(.userInit(try container.decode(Token.self, forKey: .data)))
-            case .userSyncListeningSettings:
-                self.data = .success(.userSyncListeningSettings(try container.decode(ListeningSettings.self, forKey: .data)))
-            case .userSyncForceToPlay:
-                self.data = .success(.userSyncForceToPlay(try container.decode(TrackForceToPlayState.self, forKey: .data)))
-            case .userSyncFollowing:
-                self.data = .success(.userSyncFollowing(try container.decode(ArtistFollowingState.self, forKey: .data)))
-            case .userSyncPurchases:
-                self.data = .success(.userSyncPurchases(try container.decode([Purchase].self, forKey: .data)))
-            case .userSyncSkipArtistAddons:
-                self.data = .success(.userSyncSkipArtistAddons(try container.decode(SkipArtistAddonsState.self, forKey: .data)))
-            case .userSyncTrackLikeState:
-                self.data = .success(.userSyncTrackLikeState(try container.decode(TrackLikeState.self, forKey: .data)))
-            case .playListLoadTracks:
-                self.data = .success(.playListLoadTracks(try container.decode([Track].self, forKey: .data)))
-            case .playListUpdate:
-                self.data = .success(.playListUpdate(try container.decode([String : PlayerPlaylistItemPatch?].self, forKey: .data)))
-            case .playListGetTracks:
-                self.data = .success(.playListGetTracks([]))
-            case .currentTrackId:
-                self.data = .success(.currentTrackId(try container.decode(TrackId.self, forKey: .data)))
-            case .currentTrackState:
-                self.data = .success(.currentTrackState(try container.decode(TrackState.self, forKey: .data)))
-            case .currentTrackBlock:
-                self.data = .success(.currentTrackBlock(try container.decode(Bool.self, forKey: .data)))
-            case .checkAddons:
-                self.data = .success(.checkAddons(try container.decode(CheckAddons.self, forKey: .data)))
-            case .playAddon:
-                self.data = .success(.playAddon(try container.decode(AddonState.self, forKey: .data)))
-            case .tracksTotalPlayTime:
-                self.data = .success(.tracksTotalPlayTime(try container.decode([Int : UInt64].self, forKey: .data)))
-            case .fanPlaylistsStates:
-                self.data = .success(.fanPlaylistsStates(try container.decode(FanPlaylistState.self, forKey: .data)))
-            case .unknown:
-                self.data = .unknown
-            }
-        } catch (let error) {
-            guard let errorData = try container.decodeIfPresent(CommandErrorData.self, forKey: .data) else {
-                switch commandType {
-                case .currentTrackId:
-                    self.data = .success(.currentTrackId(nil))
-                    return
-                default:
-                    throw error
-                }
-            }
-            self.data = .failure(errorData)
-        }
-    }
-
-    init(channel: String, command: String, data: CommandData) {
-        self.channel = channel
-        self.command = command
+    
+    init(data: T) {
+        channel = T.channel
+        command = T.command
+        
         self.data = data
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(channel, forKey: .channel)
-        try container.encode(command, forKey: .command)
-        if let flush = self.flush {
-            try container.encode(flush, forKey: .flush)
-        }
-
-        switch data {
-        case .success(let successCommandData):
-            switch successCommandData {
-            case .userInit(let token):
-                try container.encode(token, forKey: .data)
-            case .userSyncListeningSettings(let listeningSettings):
-                try container.encode(listeningSettings, forKey: .data)
-            case .userSyncForceToPlay(let trackForceToPlayState):
-                try container.encode(trackForceToPlayState, forKey: .data)
-            case .userSyncFollowing(let artistFollowingState):
-                try container.encode(artistFollowingState, forKey: .data)
-            case .userSyncPurchases(let purchases):
-                try container.encode(purchases, forKey: .data)
-            case .userSyncSkipArtistAddons(let skipArtistAddonsState):
-                try container.encode(skipArtistAddonsState, forKey: .data)
-            case .userSyncTrackLikeState(let trackLikeState):
-                try container.encode(trackLikeState, forKey: .data)
-            case .playListLoadTracks(let traks):
-                try container.encode(traks, forKey: .data)
-            case .playListUpdate(let playerPlaylist):
-                try container.encode(playerPlaylist, forKey: .data)
-            case .playListGetTracks(let tracksIds):
-                try container.encode(tracksIds, forKey: .data)
-            case .currentTrackId(let trackId):
-                try container.encode(trackId, forKey: .data)
-            case .currentTrackState(let trackState):
-                try container.encode(trackState, forKey: .data)
-            case .currentTrackBlock(let isBlocked):
-                try container.encode(isBlocked, forKey: .data)
-            case .checkAddons(let checkAddons):
-                try container.encode(checkAddons, forKey: .data)
-            case .playAddon(let addonState):
-                try container.encode(addonState, forKey: .data)
-            case .tracksTotalPlayTime(let tracksTotalPlayTime):
-                try container.encode(Array(tracksTotalPlayTime.keys), forKey: .data)
-            case .fanPlaylistsStates(let fanPlaylistState):
-                try container.encode(fanPlaylistState, forKey: .data)
-            }
-        case .failure( let errorData):
-            try container.encode(errorData, forKey: .data)
-        case .unknown:
-            break
-        }
+        
+        self.flush = nil
     }
 }
 
+extension Token: WebSocketCommandCodable {
+    static var channel: String { return "user" }
+    static var command: String { return "init" }
+}
+
+extension Array : WebSocketCommandCodable where Element: WebSocketCommandCodable {
+    static var channel: String { return Element.channel }
+    static var command: String { return Element.command }
+}
+
+typealias LoadTracks = Int
+extension LoadTracks: WebSocketCommandCodable {
+    static var channel: String { return "playlist" }
+    static var command: String { return "getTracks" }
+}
+
+extension Track : WebSocketCommandCodable {
+    static var channel: String { return "playlist" }
+    static var command: String { return "loadTracks" }
+}
+
+extension ListeningSettings: WebSocketCommandCodable {
+    static var channel: String { return "user" }
+    static var command: String { return "syncListeningSettings" }
+}
+
+extension TrackForceToPlayState: WebSocketCommandCodable {
+    static var channel: String { return "user" }
+    static var command: String { return "syncForceToPlay" }
+}
+
+extension SkipArtistAddonsState: WebSocketCommandCodable {
+    static var channel: String { return "user" }
+    static var command: String { return "syncSkipArtistBioCommentary" }
+}
+
+extension TrackLikeState: WebSocketCommandCodable {
+    static var channel: String { return "user" }
+    static var command: String { return "syncLike" }
+}
+
+extension ArtistFollowingState: WebSocketCommandCodable {
+    static var channel: String { return "user" }
+    static var command: String { return "syncFollowing" }
+}
+
+extension FanPlaylistState: WebSocketCommandCodable {
+    static var channel: String { return "states" }
+    static var command: String { return "customPlaylistsStates" }
+}
+
+typealias PlaylistPatch = [String: Any?]
+extension Dictionary: WebSocketCommandCodable where Key == String, Value == Optional<Any> {
+    static var channel: String { return "update" }
+    static var command: String { return "playlist" }
+}
 
 extension WebSocketCommand {
-    static func initialCommand(token: Token) -> WebSocketCommand {
-        return WebSocketCommand(channel: "user", command: "init", data: .success(.userInit(token)))
+    static func initialCommand(token: Token) -> WebSocketCommand<Token> {
+        return WebSocketCommand<Token>(data: token)
     }
 
-    static func syncListeningSettings(listeningSettings: ListeningSettings) -> WebSocketCommand {
-        return WebSocketCommand(channel: "user", command: "syncListeningSettings", data: .success(.userSyncListeningSettings(listeningSettings)))
-    }
-
-    static func syncForceToPlay(trackForceToPlayState: TrackForceToPlayState) -> WebSocketCommand {
-        return WebSocketCommand(channel: "user", command: "syncForceToPlay", data: .success(.userSyncForceToPlay(trackForceToPlayState)))
-    }
-
-    static func syncFollowing(artistFollowingState: ArtistFollowingState) -> WebSocketCommand {
-        return WebSocketCommand(channel: "user", command: "syncFollowing", data: .success(.userSyncFollowing(artistFollowingState)))
-    }
-
-    static func syncArtistAddonsState(skipArtistAddonsState: SkipArtistAddonsState) -> WebSocketCommand {
-        return WebSocketCommand(channel: "user", command: "syncSkipArtistBioCommentary", data: .success(.userSyncSkipArtistAddons(skipArtistAddonsState)))
-    }
-
-    static func syncTrackLikeState(trackLikeState: TrackLikeState) -> WebSocketCommand {
-        return WebSocketCommand(channel: "user", command: "syncLike", data: .success(.userSyncTrackLikeState(trackLikeState)))
-    }
-
-    static func getTracks(tracksIds: [Int]) -> WebSocketCommand {
-        return WebSocketCommand(channel: "playlist", command: "getTracks", data: .success(.playListGetTracks(tracksIds)))
-    }
-
-    static func setCurrentTrack(trackId: TrackId) -> WebSocketCommand {
-        return WebSocketCommand(channel: "currentTrack", command: "setTrack", data: .success(.currentTrackId(trackId)))
-    }
-
-    static func setTrackState(trackState: TrackState) -> WebSocketCommand {
-        return WebSocketCommand(channel: "currentTrack", command: "setState", data: .success(.currentTrackState(trackState)))
-    }
-
-    static func setTrackBlock(isBlocked: Bool) -> WebSocketCommand {
-        return WebSocketCommand(channel: "currentTrack", command: "setBlock", data: .success(.currentTrackBlock(isBlocked)))
-    }
-
-    static func checkAddons(checkAddons: CheckAddons) -> WebSocketCommand {
-        return WebSocketCommand(channel: "addons", command: "checkAddons", data: .success(.checkAddons(checkAddons)))
-    }
-
-    static func playAddon(addonState: AddonState) -> WebSocketCommand {
-        return WebSocketCommand(channel: "addons", command: "playAddon", data: .success(.playAddon(addonState)))
-    }
-
-    static func loadTracks(tracks: [Track]) -> WebSocketCommand {
-        return WebSocketCommand(channel: "playlist", command: "loadTracks", data: .success(.playListLoadTracks(tracks)))
-    }
-
-    static func updatePlaylist(playlistItemsPatches: [String: PlayerPlaylistItemPatch?]) -> WebSocketCommand {
-        return WebSocketCommand(channel: "playlist", command: "update", data: .success(.playListUpdate(playlistItemsPatches)))
-    }
-
-    static func trackingTimeRequest(for trackIds: [Int]) -> WebSocketCommand {
-
-        let trackIdsData = trackIds.reduce([Int:UInt64]()) { (result, trackId) -> [Int:UInt64] in
-            var result = result
-            result[trackId] = 0
-            return result
-        }
-
-        return WebSocketCommand(channel: "previewOpt", command: "srts_previews", data: .success(.tracksTotalPlayTime(trackIdsData)))
-    }
-
-    static func fanPlaylistsStates(for fanPlaylistState: FanPlaylistState) -> WebSocketCommand {
-        return WebSocketCommand(channel: "states", command: "customPlaylistsStates", data: .success(.fanPlaylistsStates(fanPlaylistState)))
-    }
+//    static func syncListeningSettings(listeningSettings: ListeningSettings) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "user", command: "syncListeningSettings", data: listeningSettings)
+//    }
+//
+//    static func syncForceToPlay(trackForceToPlayState: TrackForceToPlayState) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "user", command: "syncForceToPlay", data: trackForceToPlayState)
+//    }
+//
+//    static func syncFollowing(artistFollowingState: ArtistFollowingState) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "user", command: "syncFollowing", data: artistFollowingState)
+//    }
+//
+//    static func syncArtistAddonsState(skipArtistAddonsState: SkipArtistAddonsState) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "user", command: "syncSkipArtistBioCommentary", data: skipArtistAddonsState)
+//    }
+//
+//    static func syncTrackLikeState(trackLikeState: TrackLikeState) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "user", command: "syncLike", data: trackLikeState)
+//    }
+//
+//    static func getTracks(tracksIds: [Int]) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "playlist", command: "getTracks", data: tracksIds)
+//    }
+//
+//    static func setCurrentTrack(trackId: TrackId) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "currentTrack", command: "setTrack", data: trackId)
+//    }
+//
+//    static func setTrackState(trackState: TrackState) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "currentTrack", command: "setState", data: trackState)
+//    }
+//
+//    static func setTrackBlock(isBlocked: Bool) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "currentTrack", command: "setBlock", data: isBlocked)
+//    }
+//
+//    static func checkAddons(checkAddons: CheckAddons) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "addons", command: "checkAddons", data: checkAddons)
+//    }
+//
+//    static func playAddon(addonState: AddonState) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "addons", command: "playAddon", data: addonState)
+//    }
+//
+//    static func loadTracks(tracks: [Track]) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "playlist", command: "loadTracks", data: tracks)
+//    }
+//
+//    static func updatePlaylist(playlistItemsPatches: [String: PlayerPlaylistItemPatch?]) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "playlist", command: "update", data: playlistItemsPatches)
+//    }
+//
+//    static func trackingTimeRequest(for trackIds: [Int]) -> WebSocketCommand {
+//
+//        let trackIdsData = trackIds.reduce([Int:UInt64]()) { (result, trackId) -> [Int:UInt64] in
+//            var result = result
+//            result[trackId] = 0
+//            return result
+//        }
+//
+//        return WebSocketCommand(channel: "previewOpt", command: "srts_previews", data: trackIdsData)
+//    }
+//
+//    static func fanPlaylistsStates(for fanPlaylistState: FanPlaylistState) -> WebSocketCommand {
+//        return WebSocketCommand(channel: "states", command: "customPlaylistsStates", data: fanPlaylistState)
+//    }
 
 }
 
+
+
+struct JSONCodingKeys: CodingKey {
+    var stringValue: String
+    
+    init?(stringValue: String) {
+        self.stringValue = stringValue
+    }
+    
+    var intValue: Int?
+    
+    init?(intValue: Int) {
+        self.init(stringValue: "\(intValue)")
+        self.intValue = intValue
+    }
+}
+
+
+extension KeyedDecodingContainer {
+    
+    func decode(_ type: Dictionary<String, Any>.Type, forKey key: K) throws -> Dictionary<String, Any> {
+        let container = try self.nestedContainer(keyedBy: JSONCodingKeys.self, forKey: key)
+        return try container.decode(type)
+    }
+    
+    func decodeIfPresent(_ type: Dictionary<String, Any>.Type, forKey key: K) throws -> Dictionary<String, Any>? {
+        guard contains(key) else {
+            return nil
+        }
+        guard try decodeNil(forKey: key) == false else {
+            return nil
+        }
+        return try decode(type, forKey: key)
+    }
+    
+    func decode(_ type: Array<Any>.Type, forKey key: K) throws -> Array<Any> {
+        var container = try self.nestedUnkeyedContainer(forKey: key)
+        return try container.decode(type)
+    }
+    
+    func decodeIfPresent(_ type: Array<Any>.Type, forKey key: K) throws -> Array<Any>? {
+        guard contains(key) else {
+            return nil
+        }
+        guard try decodeNil(forKey: key) == false else {
+            return nil
+        }
+        return try decode(type, forKey: key)
+    }
+    
+    func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
+        var dictionary = Dictionary<String, Any>()
+        
+        for key in allKeys {
+            if let boolValue = try? decode(Bool.self, forKey: key) {
+                dictionary[key.stringValue] = boolValue
+            } else if let stringValue = try? decode(String.self, forKey: key) {
+                dictionary[key.stringValue] = stringValue
+            } else if let intValue = try? decode(Int.self, forKey: key) {
+                dictionary[key.stringValue] = intValue
+            } else if let doubleValue = try? decode(Double.self, forKey: key) {
+                dictionary[key.stringValue] = doubleValue
+            } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self, forKey: key) {
+                dictionary[key.stringValue] = nestedDictionary
+            } else if let nestedArray = try? decode(Array<Any>.self, forKey: key) {
+                dictionary[key.stringValue] = nestedArray
+            }
+        }
+        return dictionary
+    }
+}
+
+extension UnkeyedDecodingContainer {
+    
+    mutating func decode(_ type: Array<Any>.Type) throws -> Array<Any> {
+        var array: [Any] = []
+        while isAtEnd == false {
+            // See if the current value in the JSON array is `null` first and prevent infite recursion with nested arrays.
+            if try decodeNil() {
+                continue
+            } else if let value = try? decode(Bool.self) {
+                array.append(value)
+            } else if let value = try? decode(Double.self) {
+                array.append(value)
+            } else if let value = try? decode(String.self) {
+                array.append(value)
+            } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self) {
+                array.append(nestedDictionary)
+            } else if let nestedArray = try? decode(Array<Any>.self) {
+                array.append(nestedArray)
+            }
+        }
+        return array
+    }
+    
+    mutating func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
+        
+        let nestedContainer = try self.nestedContainer(keyedBy: JSONCodingKeys.self)
+        return try nestedContainer.decode(type)
+    }
+}

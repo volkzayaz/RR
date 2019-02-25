@@ -8,110 +8,136 @@
 
 import Foundation
 import Starscream
-import os.log
 import RxSwift
 
-protocol WebSocketServiceWatcher: class {
-
-    func webSocketServiceDidConnect(_ service: WebSocketService)
-    func webSocketServiceDidDisconnect(_ service: WebSocketService)
-
-    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings)
-    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
-    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState)
-    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase])
-    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState)
-    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState)
-
-    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool)
-    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool)
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
-    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons)
-    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool)
-
-    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState)
-    
-    func didReceivePlaylist(patch: [String: [String: Any]?])
-}
-
-extension WebSocketServiceWatcher {
-
-    func webSocketServiceDidConnect(_ service: WebSocketService) { }
-    func webSocketServiceDidDisconnect(_ service: WebSocketService) { }
-
-    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) { }
-    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
-    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) { }
-    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) { }
-    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) { }
-    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) { }
-
-    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) { }
-    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) { }
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
-    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) { }
-    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) { }
-
-    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) { }
-    
-    func didReceivePlaylist(patch: [String: [String: Any]?]) {}
-}
+//protocol WebSocketServiceWatcher: class {
+//
+//    func webSocketServiceDidConnect(_ service: WebSocketService)
+//    func webSocketServiceDidDisconnect(_ service: WebSocketService)
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings)
+//    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
+//    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState)
+//    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase])
+//    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState)
+//    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState)
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool)
+//    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool)
+//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
+//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
+//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
+//    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons)
+//    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool)
+//
+//    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState)
+//
+//    func didReceivePlaylist(patch: [String: [String: Any]?])
+//}
+//
+//extension WebSocketServiceWatcher {
+//
+//    func webSocketServiceDidConnect(_ service: WebSocketService) { }
+//    func webSocketServiceDidDisconnect(_ service: WebSocketService) { }
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) { }
+//    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) { }
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) { }
+//    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) { }
+//    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) { }
+//
+//    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) { }
+//
+//    func didReceivePlaylist(patch: [String: [String: Any]?]) {}
+//}
 
 class WebSocketService: WebSocketDelegate, Watchable {
 
     static let ownSignatureHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
     
-    typealias WatchType = WebSocketServiceWatcher
-
-    let watchersContainer = WatchersContainer<WebSocketServiceWatcher>()
-    fileprivate let publishSubject = BehaviorSubject<WebSocketCommand.SuccessCommandData?>(value: nil)
+//    typealias WatchType = WebSocketServiceWatcher
+//    let watchersContainer = WatchersContainer<WebSocketServiceWatcher>()
     
-    enum State: Int {
-        case disconnected
-        case connecting
-        case connected
-
-        var isConnected: Bool {
-            switch self {
-            case .connected: return true
-            default: return false
-            }
-        }
-    }
-
     var webSocket: WebSocket?
     var token: Token?
 
+    fileprivate let r: URLRequest
+    
+    fileprivate lazy var rxInput: Observable<(data: Data, channel: String, command: String)> = {
+       
+        return Observable.create { (subscriber) -> Disposable in
+            
+            self.webSocket!.onText = { text in
+                
+                guard let data = text.data(using: .utf8),
+                      let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                      let cmd = json?["cmd"] as? String,
+                      let channel = json?["channel"] as? String else {
+                        return
+                }
+                
+                subscriber.onNext( (data, channel, cmd) )
+                
+            }
+            
+            return Disposables.create {
+                ///
+            }
+        }
+        
+    }()
+    
+    func commandObservable<T: WebSocketCommandCodable>() -> Observable<T> {
 
-    var webSocketURL: URL
-
-    var isReachable: Bool = false
-    private(set) var state: State
-
-    let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "WebSocketService")
-
+        return rxInput.filter { $0.channel == T.channel &&
+                                $0.command == T.command }
+            .map { x in
+                
+                let t: WebSocketCommand<T>
+                do {
+                    t = try JSONDecoder().decode(WebSocketCommand<T>.self, from: x.data)
+                }
+                catch (let e) {
+                    fatalError("Error decoding \(T.self). Details: \(e)")
+                }
+                
+                return t.data
+            }
+        
+    }
+    
     public init?(webSocketURI: String) {
         guard let webSocketURL = URL(string: webSocketURI) else { return nil }
         
-        self.webSocketURL = webSocketURL
-        self.state = .disconnected
+        var r = URLRequest(url: webSocketURL)
+        r.timeoutInterval = 1
+        self.r = r
+        
     }
 
     func makeWebSocket() -> WebSocket {
-        var request = URLRequest(url: self.webSocketURL)
-        request.timeoutInterval = 1
-
-        let webSocket = WebSocket(request: request)
+    
+        let webSocket = WebSocket(request: r)
         webSocket.delegate = self
-
+        
         return webSocket
     }
 
-    func connect(with token: Token) {
+    func connect(with token: Token?, forceReconnect: Bool = false) {
+        
+        if let x = webSocket, x.isConnected, forceReconnect == false { return }
+        
+        guard let token = token else { return }
+        
         self.token = token
 
         print("connect with Token: \(String(describing: self.token))")
@@ -119,20 +145,19 @@ class WebSocketService: WebSocketDelegate, Watchable {
         self.webSocket?.delegate = nil
 
         self.webSocket = self.makeWebSocket()
-        self.state = .connecting
         self.webSocket?.connect()
+        
+        ////request -> response:
+        ///1. Init = loadTracks + currentTrack + trackState
+        ///2. Addons =
+        
+        rxInput.subscribe(onNext: { (txt) in
+            print(txt)
+        })
     }
 
     func reconnect() {
-        guard let _ = self.token else { return }
-
-        print("reconnect with Token: \(String(describing: self.token))")
-
-        self.webSocket?.delegate = nil
-
-        self.webSocket = self.makeWebSocket()
-        self.state = .connecting
-        self.webSocket?.connect()
+        connect(with: self.token)
     }
 
     func disconnect() {
@@ -142,19 +167,12 @@ class WebSocketService: WebSocketDelegate, Watchable {
         self.webSocket?.disconnect()
     }
 
-    func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {
+    func sendCommand<T>(command: WebSocketCommand<T>, completion: ((Error?) -> ())? = nil) {
 
         guard self.webSocket?.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
 
         do {
             let jsonData = try JSONEncoder().encode(command)
-
-//            #if DEBUG
-//            if command.commandType == .fanPlaylistsStates {
-//                print("send fanPlaylistsStates: \(String(data: jsonData, encoding: .utf8))")
-//            }
-//            #endif
-
 
             self.webSocket?.write(data: jsonData, completion: { completion?(nil) })
         } catch (let error) {
@@ -165,29 +183,30 @@ class WebSocketService: WebSocketDelegate, Watchable {
     // MARK: - WebSocketDelegate -
     public func websocketDidConnect(socket: WebSocketClient) {
 
-        self.state = .connected
-
         if let token = self.token {
-            let initialCommand = WebSocketCommand.initialCommand(token: token)
+            let initialCommand = WebSocketCommand(data: token)
             self.sendCommand(command: initialCommand)
         }
 
-        self.watchersContainer.invoke({ (observer) in
-            observer.webSocketServiceDidConnect(self)
-        })
     }
 
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocketDidDisconnect: \(String(describing: error))")
 
-        self.state = .disconnected
-
         self.webSocket?.delegate = nil
         self.webSocket = nil
 
-        self.watchersContainer.invoke({ (observer) in
-            observer.webSocketServiceDidDisconnect(self)
-        })
+//        let commandCenter = MPRemoteCommandCenter.shared()
+//        commandCenter.nextTrackCommand.isEnabled = self.canForward
+//        commandCenter.previousTrackCommand.isEnabled = self.canBackward
+//
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.player(player: self, didChange: .failed)
+//        })
+//
+//        if self.audioSessionIsInterrupted == false && false { //self.webSocketService.isReachable {
+//            self.webSocketService.reconnect()
+//        }
     }
 
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -207,133 +226,133 @@ class WebSocketService: WebSocketDelegate, Watchable {
             }
         }
         
-        do {
-//            #if DEBUG
-//            print("webSocket did recieve command : \(String(data: data, encoding: .utf8))")
-//            #endif
+        
+//        let webSoketCommand = try! JSONDecoder().decode(WebSocketCommand.self, from: data)
+//
+//        publishSubject.onNext(webSoketCommand.data)
+//
+//        switch webSoketCommand.data {
+//
+//        case .userInit( _ ):
+//            break
+//
+//        case .userSyncListeningSettings(let listeningSettings):
+//
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveListeningSettings: listeningSettings)
+//            })
+//
+//        case .userSyncForceToPlay(let trackForceToPlayState):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveTrackForceToPlayState: trackForceToPlayState)
+//            })
+//
+//        case .userSyncFollowing(let artistFollowingState):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveArtistFollowingState: artistFollowingState)
+//            })
+//
+//        case .userSyncPurchases(let purchases):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceivePurchases: purchases)
+//            })
+//
+//        case .userSyncSkipArtistAddons(let skipArtistAddonsState):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveSkipArtistAddonsState: skipArtistAddonsState)
+//            })
+//
+//        case .userSyncTrackLikeState(let trackLikeState):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveTrackLikeState: trackLikeState)
+//            })
+//
+//        case .playListLoadTracks(let tracks):
+//
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveTracks: tracks, flush: webSoketCommand.flush ?? false)
+//            })
+//
+//        case .playListUpdate(let playerPlaylistUpdate):
+//
+//            //                #if DEBUG
+//            //                    print("recieve playListUpdate: \(String(data: data, encoding: .utf8))")
+//            //                #endif
+//
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceivePlaylistUpdate: playerPlaylistUpdate, flush: webSoketCommand.flush ?? false)
+//            })
+//
+//        case .playListGetTracks( _): break
+//
+//        case .currentTrackId(let trackId):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveCurrentTrackId: trackId)
+//            })
+//
+//        case .currentTrackState(let trackState):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
+//            })
+//
+//        case .currentTrackBlock(let isBlocked):
+//
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveCurrentTrackBlock: isBlocked)
+//            })
+//
+//        case .checkAddons(let checkAddons):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveCheckAddons: checkAddons)
+//            })
+//
+//        case .playAddon( _): break
+//
+//        case .tracksTotalPlayTime(let tracksTotalPlayMSeconds):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didReceiveTracksTotalPlayTime: tracksTotalPlayMSeconds, flush: webSoketCommand.flush ?? false)
+//            })
+//
+//        case .fanPlaylistsStates(let fanPlaylistState):
+//            self.watchersContainer.invoke({ (observer) in
+//                observer.webSocketService(self, didRecieveFanPlaylistState: fanPlaylistState)
+//            })
+//
+//        case .failure(let error):
+//            print(error)
 
-            let webSoketCommand = try JSONDecoder().decode(WebSocketCommand.self, from: data)
-
-            switch webSoketCommand.data {
-            case .success(let successWebSocketData):
-                
-                publishSubject.onNext(successWebSocketData)
-                
-                switch successWebSocketData {
-
-                case .userInit( _ ):
-                    break
-
-                case .userSyncListeningSettings(let listeningSettings):
-
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveListeningSettings: listeningSettings)
-                    })
-
-                case .userSyncForceToPlay(let trackForceToPlayState):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveTrackForceToPlayState: trackForceToPlayState)
-                    })
-
-                case .userSyncFollowing(let artistFollowingState):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveArtistFollowingState: artistFollowingState)
-                    })
-                    
-                case .userSyncPurchases(let purchases):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceivePurchases: purchases)
-                    })
-
-                case .userSyncSkipArtistAddons(let skipArtistAddonsState):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveSkipArtistAddonsState: skipArtistAddonsState)
-                    })
-
-                case .userSyncTrackLikeState(let trackLikeState):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveTrackLikeState: trackLikeState)
-                    })
-
-                case .playListLoadTracks(let tracks):
-
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveTracks: tracks, flush: webSoketCommand.flush ?? false)
-                    })
-
-                case .playListUpdate(let playerPlaylistUpdate):
-                    
-//                #if DEBUG
-//                    print("recieve playListUpdate: \(String(data: data, encoding: .utf8))")
-//                #endif
-
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceivePlaylistUpdate: playerPlaylistUpdate, flush: webSoketCommand.flush ?? false)
-                    })
-
-                case .playListGetTracks( _): break
-
-                case .currentTrackId(let trackId):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveCurrentTrackId: trackId)
-                    })
-
-                case .currentTrackState(let trackState):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveCurrentTrackState: trackState)
-                    })
-
-                case .currentTrackBlock(let isBlocked):
-
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveCurrentTrackBlock: isBlocked)
-                    })
-
-                case .checkAddons(let checkAddons):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveCheckAddons: checkAddons)
-                    })
-
-                case .playAddon( _): break
-
-                case .tracksTotalPlayTime(let tracksTotalPlayMSeconds):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didReceiveTracksTotalPlayTime: tracksTotalPlayMSeconds, flush: webSoketCommand.flush ?? false)
-                    })
-
-                case .fanPlaylistsStates(let fanPlaylistState):
-                    self.watchersContainer.invoke({ (observer) in
-                        observer.webSocketService(self, didRecieveFanPlaylistState: fanPlaylistState)
-                    })
-                }
-
-            case .failure(let error):
-                print(error)
-
-            case .unknown:
-                print("Unknown channel: \(webSoketCommand.channel) command: \(webSoketCommand.command)")
-                print("websocketDidReceiveMessage: \(String(describing: String(data: data, encoding: .utf8)))")
-            }
-
-        } catch (let error) {
-            print(error.localizedDescription)
-            print("websocketDidReceiveMessage: \(String(describing: String(data: data, encoding: .utf8)))")
-        }
+        //}
     }
     
-    var didReceiveTracks: Single<[Track]> {
-        
-        return publishSubject.notNil()
-            .map { x -> [Track]? in
-                
-                guard case .playListLoadTracks(let tracks) = x else { return nil }
-                
-                return tracks
-            }
-            .notNil()
-            .take(1)
-            .asSingle()
-        
-    }
-    
+//    var didReceiveTracks: Single<[Track]> {
+//        
+//        return publishSubject.notNil()
+//            .map { x -> [Track]? in
+//                
+//                guard case .playListLoadTracks(let tracks) = x else { return nil }
+//                
+//                return tracks
+//            }
+//            .notNil()
+//            .take(1)
+//            .asSingle()
+//        
+//    }
+//    
+//    var didReceiveAddons: Single<[Addon]> {
+//        
+//        return publishSubject.notNil()
+//            .map { x -> [Addon]? in
+//                
+//                guard case .checkAddons(let checkAddons) = x else { return nil }
+//                
+//                return []
+//            }
+//            .notNil()
+//            .take(1)
+//            .asSingle()
+//        
+//    }
+//    
 }
+

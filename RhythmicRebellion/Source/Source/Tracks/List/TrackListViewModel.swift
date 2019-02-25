@@ -282,6 +282,9 @@ extension TrackListViewModel {
     }
     
     func play(orderedTrack: OrderedTrack) {
+        
+        
+        
         DataLayer.get.daPlayer.switch(to: orderedTrack)
     }
     

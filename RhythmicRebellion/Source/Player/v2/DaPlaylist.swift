@@ -364,14 +364,21 @@ struct ApplyReduxViewPatch: ActionCreator {
         }
         
         let x = DataLayer.get.webSocketService
-        x.sendCommand(command: .getTracks(tracksIds: Array(diff)))
-        return x.didReceiveTracks.map { receivedTracks in
-            receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }
-            
-            state.player.tracks = tracks
-            
-            return state
-        }
+        x.sendCommand(command: WebSocketCommand<[Int]>(data: Array(diff)))
+        
+        return x
+            .commandObservable()
+            .take(1)
+            .map { (receivedTracks: [Track]) -> AppState in
+                
+                receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }
+                
+                state.player.tracks = tracks
+                
+                return state
+            }
+            .asSingle()
+        
     }
     
 }

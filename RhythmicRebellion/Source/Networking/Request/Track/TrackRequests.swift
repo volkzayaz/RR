@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alamofire
 
 enum TrackRequest: BaseNetworkRouter {
 
@@ -14,6 +15,8 @@ enum TrackRequest: BaseNetworkRouter {
     
     case fanTracks(playlistId: Int)
     case tracks(playlistId: Int)
+    
+    case addons(trackIds: [Int])
     
 }
 
@@ -33,6 +36,18 @@ extension TrackRequest {
         case .tracks(let playlistId):
             return anonymousRequest(method: .get,
                                     path: "player/records/\(playlistId)")
+            
+        case .addons(let trackIds):
+            
+            let jsonQuery = ["filters" : ["record_id" : ["in" : trackIds]]]
+            
+            let data = try JSONSerialization.data(withJSONObject: jsonQuery)
+            let param = String(data: data, encoding: .utf8)
+            
+            return anonymousRequest(method: .get,
+                                    path: "player/audio-add-ons-for-tracks",
+                                    params: ["jsonQuery" : param],
+                                    encoding: URLEncoding.queryString)
             
         }
     }

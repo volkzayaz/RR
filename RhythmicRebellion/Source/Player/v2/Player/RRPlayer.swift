@@ -194,7 +194,7 @@ extension RRPlayer {
         
         ////sync current track ID
         appState.map { $0 }
-            .distinctUntilChanged { $0.player == $1.player }
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
         /// TODO: we should not send out commands for actions that are not our own
         ///.filter { $0.isOwn }
             .drive(onNext: { (state) in

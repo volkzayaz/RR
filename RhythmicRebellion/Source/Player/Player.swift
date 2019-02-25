@@ -478,7 +478,6 @@ class Player: NSObject, Watchable {
     }
 
     func error() -> Error? {
-        guard self.webSocketService.isReachable else { return AppError(.offline) }
         guard self.state.initialized else { return AppError(.notInitialized) }
 
         return nil
@@ -498,8 +497,9 @@ class Player: NSObject, Watchable {
         guard let fanUser = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
         guard fanUser.hasPurchase(for: track) == false else { return nil }
         guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { return nil }
-
-        switch track.previewType {
+        guard let t = track.previewType else { return nil }
+        
+        switch t {
         case .full:
             guard let previewLimitTimes = track.previewLimitTimes, previewLimitTimes > 0 else { return TimeInterval(45) }
             guard let trackDuration = track.audioFile?.duration else { return TimeInterval(0) }
@@ -519,7 +519,9 @@ class Player: NSObject, Watchable {
     }
 
     func guestRestrictedTime(for track: Track) -> TimeInterval? {
-        switch track.previewType {
+        guard let t = track.previewType else { return TimeInterval(45) }
+        
+        switch t {
         case .full:
             guard let _ = track.previewLimitTimes else { return nil }
             return TimeInterval(45)
@@ -871,24 +873,24 @@ class Player: NSObject, Watchable {
                 options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
             }
 
-            if self.webSocketService.state.isConnected == false {
-
-//                os_log("audioSessionInterrupted websocket not connected", log: self.log)
-
-                self.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
-                if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
-                    self.initializationAction = .playCurrent
-                }
-                if self.webSocketService.state == .disconnected {
-//                    os_log("audioSessionInterrupted websocket reconnect", log: self.log)
-                    self.webSocketService.reconnect()
-                }
-            } else {
-                if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
-//                    os_log("audioSessionInterrupted just play ", log: self.log)
-                    self.play()
-                }
-            }
+//            if self.webSocketService.state.isConnected == false {
+//
+////                os_log("audioSessionInterrupted websocket not connected", log: self.log)
+//
+//                self.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+//                if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
+//                    self.initializationAction = .playCurrent
+//                }
+//                if self.webSocketService.state == .disconnected {
+////                    os_log("audioSessionInterrupted websocket reconnect", log: self.log)
+//                    self.webSocketService.reconnect()
+//                }
+//            } else {
+//                if options.contains(.shouldResume) && self.state.playingBeforeAudioSessionInterruption {
+////                    os_log("audioSessionInterrupted just play ", log: self.log)
+//                    self.play()
+//                }
+//            }
 
             self.state.playingBeforeAudioSessionInterruption = false
         }
@@ -1080,78 +1082,78 @@ extension Player: WebSocketServiceWatcher {
 
     //MARK: - Set State
     func set(trackId: TrackId, trackState: TrackState, shouldSendTrackingTimeRequest: Bool, completion: ((Error?) -> ())? = nil) {
-        let webSocketCommand = WebSocketCommand.setCurrentTrack(trackId: trackId)
-        self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
-            guard error == nil else { completion?(error); return }
-
-            if shouldSendTrackingTimeRequest {
-                let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: [trackId.id])
-                self?.webSocketService.sendCommand(command: trackingTimeRequestCommand)
-            }
-
-            self?.currentTrackId = trackId
-            self?.isMasterStateSendDate = Date()
-            self?.set(trackState: trackState, completion: completion)
-        }
+//        let webSocketCommand = WebSocketCommand<TrackId>(data: trackId)
+//        self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
+//            guard error == nil else { completion?(error); return }
+//
+//            if shouldSendTrackingTimeRequest {
+//                let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: [trackId.id])
+//                self?.webSocketService.sendCommand(command: trackingTimeRequestCommand)
+//            }
+//
+//            self?.currentTrackId = trackId
+//            self?.isMasterStateSendDate = Date()
+//            self?.set(trackState: trackState, completion: completion)
+//        }
     }
 
     func set(trackState: TrackState, completion: ((Error?) -> ())? = nil) {
 
         guard self.state.initialized else { completion?(self.error()); return }
 
-
-        let webSocketCommand = WebSocketCommand.setTrackState(trackState: trackState)
-        self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
-            guard error == nil else { print("Set trackstate erorr: \(error)"); completion?(error); return }
-
-            if let strongSelf = self, strongSelf.isMaster == false {
-                strongSelf.isMasterStateSendDate = Date()
-            }
-            self?.currentTrackState = trackState
-            completion?(nil)
-        }
+//
+//        let webSocketCommand = WebSocketCommand<TrackState>(data: trackState)
+//        self.webSocketService.sendCommand(command: webSocketCommand) { [weak self] (error) in
+//            guard error == nil else { print("Set trackstate erorr: \(error)"); completion?(error); return }
+//
+//            if let strongSelf = self, strongSelf.isMaster == false {
+//                strongSelf.isMasterStateSendDate = Date()
+//            }
+//            self?.currentTrackState = trackState
+//            completion?(nil)
+//        }
     }
 
     func set(trackBlocked: Bool, completion: ((Error?) -> ())? = nil) {
-        let webSocketCommand = WebSocketCommand.setTrackBlock(isBlocked: trackBlocked)
-        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+//        let webSocketCommand = WebSocketCommand<Bool>(data: trackBlocked)
+//        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
     func checkAddons(trackId: Int, addonsStates: [AddonState], completion: ((Error?) -> ())? = nil) {
         let checkAddons = CheckAddons(trackId: trackId, addonsStates: addonsStates)
-        let webSocketCommand = WebSocketCommand.checkAddons(checkAddons: checkAddons)
-
-        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+//        let webSocketCommand = WebSocketCommand.checkAddons(checkAddons: checkAddons)
+//
+//        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
     func playAddon(addon: Addon, track: Track, completion: ((Error?) -> ())? = nil) {
         let addonState = AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
-        let webSocketCommand = WebSocketCommand.playAddon(addonState: addonState)
-
-        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+//        let webSocketCommand = WebSocketCommand.playAddon(addonState: addonState)
+//
+//        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
     func loadTracks(tracks: [Track], completion: ((Error?) -> ())? = nil) {
-        let webSocketCommand = WebSocketCommand.loadTracks(tracks: tracks)
-        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+//        let webSocketCommand = WebSocketCommand.loadTracks(tracks: tracks)
+//        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
     func updatePlaylist(playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flushing: Bool = false, completion: ((Error?) -> ())? = nil) {
-        var webSocketCommand = WebSocketCommand.updatePlaylist(playlistItemsPatches: playlistItemsPatches)
-        if flushing {
-            webSocketCommand.flush = true
-        }
-        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+//        var webSocketCommand = WebSocketCommand.updatePlaylist(playlistItemsPatches: playlistItemsPatches)
+//        if flushing {
+//            webSocketCommand.flush = true
+//        }
+//        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
     func getTracks(tracksIds: [Int], completion: ((Error?) -> ())? = nil) {
-        let webSocketCommand = WebSocketCommand.getTracks(tracksIds: tracksIds)
-        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
+//        let webSocketCommand = WebSocketCommand.getTracks(tracksIds: tracksIds)
+//        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
     func trackingTimeRequest(for trackIds: [Int], completion: ((Error?) -> ())? = nil) {
-        let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackIds)
-        self.webSocketService.sendCommand(command: trackingTimeRequestCommand, completion: completion)
+//        let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackIds)
+//        self.webSocketService.sendCommand(command: trackingTimeRequestCommand, completion: completion)
     }
 
     //MARK: - WebSocketServiceObserver
@@ -1166,7 +1168,7 @@ extension Player: WebSocketServiceWatcher {
             observer.player(player: self, didChange: .failed)
         })
 
-        if self.audioSessionIsInterrupted == false && self.webSocketService.isReachable {
+        if self.audioSessionIsInterrupted == false && false { //self.webSocketService.isReachable {
             self.webSocketService.reconnect()
         }
     }
@@ -1189,8 +1191,8 @@ extension Player: WebSocketServiceWatcher {
 
         let trackIdsForTimeRequest = tracks.filter { self.shouldSendTrackingTimeRequest(for: $0) }.map { $0.id }
         if trackIdsForTimeRequest.isEmpty == false {
-            let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackIdsForTimeRequest)
-            self.webSocketService.sendCommand(command: trackingTimeRequestCommand)
+//            let trackingTimeRequestCommand = WebSocketCommand.trackingTimeRequest(for: trackIdsForTimeRequest)
+//            self.webSocketService.sendCommand(command: trackingTimeRequestCommand)
         }
     }
 
@@ -1338,10 +1340,10 @@ extension Player: ApplicationWatcher {
 
     func application(_ application: Application, didChange user: User) {
 
-        guard self.webSocketService.state.isConnected == true else {
-            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
-            return
-        }
+//        guard self.webSocketService.state.isConnected == true else {
+//            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
+//            return
+//        }
 
         let isOtherBlocked = self.state.waitingAddons || self.playerQueue.containsOnlyTrack == false
         let isPlaying = self.state.playing
@@ -1363,11 +1365,11 @@ extension Player: ApplicationWatcher {
     }
 
     func application(_ application: Application, didChangeUserToken user: User) {
-        guard self.webSocketService.state.isConnected == true else {
-            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
-            return
-        }
-
+        
+        webSocketService.connect(with: Token(token: user.wsToken,
+                                             isGuest: user.isGuest),
+                                 forceReconnect: true)
+        
         self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
         if self.state.initialized == false {
             self.webSocketService.reconnect()
@@ -1421,7 +1423,7 @@ extension Player {
         commandCenter.playCommand.addTarget { [weak self] event in
 
             guard self?.state.initialized ?? false else {
-                if self?.webSocketService.isReachable == true {
+                if false { // self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .playCurrent
                     self?.webSocketService.reconnect()
@@ -1446,7 +1448,7 @@ extension Player {
         commandCenter.pauseCommand.addTarget { [weak self] event in
 
             guard self?.state.initialized ?? false else {
-                if self?.webSocketService.isReachable == true {
+                if false {//self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .pause
                     return .success
@@ -1479,7 +1481,7 @@ extension Player {
 
         commandCenter.stopCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
             guard self?.state.initialized ?? false else {
-                if self?.webSocketService.isReachable == true {
+                if false { //self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .pause
                     return .success
@@ -1513,7 +1515,7 @@ extension Player {
         commandCenter.nextTrackCommand.addTarget { [weak self] event in
 
             guard self?.state.initialized ?? false else {
-                if self?.webSocketService.isReachable == true {
+                if false { //self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .playForward
                     return .success
@@ -1528,7 +1530,7 @@ extension Player {
         commandCenter.previousTrackCommand.addTarget { [weak self] event in
 
             guard self?.state.initialized ?? false else {
-                if self?.webSocketService.isReachable == true {
+                if false { //self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .playBackward
                     return .success
