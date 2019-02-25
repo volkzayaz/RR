@@ -84,25 +84,15 @@ class WebSocketService {
     
     //////Action with clear response
     
-    func connect(with token: Token, forceReconnect: Bool = false) -> Single<([Track], TrackId?, DaPlaylist.NullableReduxView)> {
+    func connect(with token: Token, forceReconnect: Bool = false) {
         
         webSocket.connect()
         
-        return didConnect.take(1).flatMap { [unowned self] _ -> Observable<([Track], TrackId?, DaPlaylist.NullableReduxView)> in
-            
-            self.sendCommand(command: CodableWebSocketCommand(data: token))
-
-            return Observable.combineLatest(self.didReceiveTracks.take(1),
-                                            self.didReceiveCurrentTrack.take(1),
-                                            self.didReceivePlaylistPatch.take(1)) { ($0, $1, $2) }
-            
-        }
-        .asSingle()
+        let _ = didConnect.take(1).subscribe(onNext: { [unowned self] _ in
+              self.sendCommand(command: CodableWebSocketCommand(data: token))
+        })
         
     }
-    
-    
-    
     
     
     func sendCommand<T: WSCommand>(command: T) {
