@@ -96,7 +96,7 @@ class WebSocketService: WebSocketDelegate, Watchable {
         
     }()
     
-    func commandObservable<T: WebSocketCommandCodable>() -> Observable<T> {
+    func commandObservable<T: WebSocketCommandData>() -> Observable<T> {
 
         return rxInput.filter { $0.channel == T.channel &&
                                 $0.command == T.command }
@@ -167,12 +167,12 @@ class WebSocketService: WebSocketDelegate, Watchable {
         self.webSocket?.disconnect()
     }
 
-    func sendCommand<T>(command: WebSocketCommand<T>, completion: ((Error?) -> ())? = nil) {
+    func sendCommand(command: WebSocketCommand, completion: ((Error?) -> ())? = nil) {
 
         guard self.webSocket?.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
 
         do {
-            let jsonData = try JSONEncoder().encode(command)
+            let jsonData = command.jsonData
 
             self.webSocket?.write(data: jsonData, completion: { completion?(nil) })
         } catch (let error) {
@@ -184,7 +184,7 @@ class WebSocketService: WebSocketDelegate, Watchable {
     public func websocketDidConnect(socket: WebSocketClient) {
 
         if let token = self.token {
-            let initialCommand = WebSocketCommand(data: token)
+            let initialCommand = CodableWebSocketCommand(data: token)
             self.sendCommand(command: initialCommand)
         }
 

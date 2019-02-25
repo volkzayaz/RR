@@ -137,7 +137,7 @@ class Application: Watchable {
             self.webSocketService.disconnect()
         }
 
-        self.webSocketService.addWatcher(self)
+        //self.webSocketService.addWatcher(self)
     }
 
     func start() {
@@ -262,7 +262,7 @@ class Application: Watchable {
 
                 self?.set(user: user)
                 
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: fanUser.profile.listeningSettings))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanUser.profile.listeningSettings))
                 
                 self?.notifyUserProfileListeningSettingsChanged()
                 completion?(.success(fanUser.profile.listeningSettings))
@@ -332,7 +332,7 @@ class Application: Watchable {
                 nextFanUser.profile.update(with: trackForceToPlayState)
                 self?.user = nextFanUser
 
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: trackForceToPlayState))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackForceToPlayState))
 
                 self?.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
                 completion?(.success(Array(nextFanUser.profile.forceToPlay)))
@@ -357,7 +357,7 @@ class Application: Watchable {
                 nextFanUser.profile.update(with: trackForceToPlayState)
                 self?.user = nextFanUser
 
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: trackForceToPlayState))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackForceToPlayState))
 
                 self?.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
                 completion?(.success(Array(nextFanUser.profile.forceToPlay)))
@@ -379,7 +379,7 @@ class Application: Watchable {
                 guard let updatedFanUser = updatedUser as? FanUser, fanUser == updatedFanUser else { completion(nil); return }
 
                 let skipArtistAddonsState = SkipArtistAddonsState(artistId: artist.id, isSkipped: updatedFanUser.isAddonsSkipped(for: artist))
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: skipArtistAddonsState))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: skipArtistAddonsState))
 
                 self?.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
                 completion(nil)
@@ -403,7 +403,7 @@ class Application: Watchable {
                 nextFanUser.profile.update(with: trackLikeState)
                 self?.user = nextFanUser
 
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: trackLikeState))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackLikeState))
 
                 self?.notifyUserProfileTraksLikeStetesChanged(with: trackLikeState)
                 completion?(nil)
@@ -427,7 +427,7 @@ class Application: Watchable {
                 nextFanUser.profile.update(with: artistFollowingState)
                 self?.user = nextFanUser
 
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: artistFollowingState))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: artistFollowingState))
 
                 self?.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
                 completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
@@ -451,7 +451,7 @@ class Application: Watchable {
                 nextFanUser.profile.update(with: artistFollowingState)
                 self?.user = nextFanUser
 
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: artistFollowingState))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: artistFollowingState))
 
                 self?.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
                 completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
@@ -472,7 +472,7 @@ class Application: Watchable {
             case .success(let fanPlaylist):
 
                 let fanPlaylistState = FanPlaylistState(id: fanPlaylist.id, playlist: fanPlaylist)
-                self?.webSocketService.sendCommand(command: WebSocketCommand(data: fanPlaylistState))
+                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanPlaylistState))
 
                 self?.notifyFanPlaylistChanged(with: fanPlaylistState)
 
@@ -490,7 +490,7 @@ class Application: Watchable {
             guard error == nil else { completion(error); return }
 
             let fanPlaylistState = FanPlaylistState(id: playlist.id, playlist: nil)
-            self?.webSocketService.sendCommand(command: WebSocketCommand(data: fanPlaylistState))
+            self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanPlaylistState))
 
             self?.notifyFanPlaylistChanged(with: fanPlaylistState)
 
@@ -588,7 +588,8 @@ extension Application {
     }
 }
 
-extension Application: WebSocketServiceWatcher {
+///TODO: handle responses from WebSocket
+extension Application {
 
     func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) {
         guard let currentFanUser = self.user as? FanUser else { return }

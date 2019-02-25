@@ -19,8 +19,6 @@ class RRPlayer: NSObject {
         
         super.init()
         
-        webSocket.addWatcher(self)
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
                                           isGuest: DataLayer.get.application.user!.isGuest))
@@ -83,7 +81,7 @@ extension RRPlayer {
 }
 
 ///web socket initiated
-extension RRPlayer: WebSocketServiceWatcher {
+extension RRPlayer {
     
     ///This call should be part of init WebSocket operation, that gives out bunch of tracks, initial reduxView and currentTrackState all at one go
     

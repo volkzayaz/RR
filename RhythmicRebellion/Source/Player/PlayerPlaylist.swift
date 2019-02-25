@@ -24,8 +24,8 @@ class PlayerPlaylistItem {
     }
 
     func apply(path: PlayerPlaylistItemPatch) {
-        if let pathNextKey = path.nextKey { self.nextKey = pathNextKey.value }
-        if let pathPreviousKey = path.previousKey { self.previousKey = pathPreviousKey.value }
+//        if let pathNextKey = path.nextKey { self.nextKey = pathNextKey.value }
+//        if let pathPreviousKey = path.previousKey { self.previousKey = pathPreviousKey.value }
     }
 
 }

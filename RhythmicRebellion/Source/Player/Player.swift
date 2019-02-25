@@ -223,7 +223,7 @@ class Player: NSObject, Watchable {
         return;
         
         self.application.addWatcher(self)
-        self.webSocketService.addWatcher(self)
+        
 
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 
@@ -266,7 +266,7 @@ class Player: NSObject, Watchable {
         removeObserver(self, forKeyPath: #keyPath(Player.player.currentItem.duration), context: &playerKVOContext)
 
         NotificationCenter.default.removeObserver(self)
-        self.webSocketService.removeWatcher(self)
+        
     }
 
     func loadConfig() {
@@ -979,7 +979,7 @@ class Player: NSObject, Watchable {
     }
 }
 
-extension Player: WebSocketServiceWatcher {
+extension Player {
 
     // MARK: - Apply State
 

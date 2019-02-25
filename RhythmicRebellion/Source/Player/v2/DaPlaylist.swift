@@ -364,7 +364,7 @@ struct ApplyReduxViewPatch: ActionCreator {
         }
         
         let x = DataLayer.get.webSocketService
-        x.sendCommand(command: WebSocketCommand<[Int]>(data: Array(diff)))
+        x.sendCommand(command: CodableWebSocketCommand(data: Array(diff)))
         
         return x
             .commandObservable()
