@@ -66,39 +66,25 @@ extension WebSocketService {
         return customCommandObservable(ofType: TrackReduxViewPatch.self)
     }
     
+    var didReceiveTracks: Observable<[Track]> {
+        return commandObservable()
+    }
+    
+    var didReceiveTrackState: Observable<TrackState> {
+        return commandObservable()
+    }
+    
+    var didReceiveCurrentTrack: Observable<TrackId?> {
+        return commandObservable()
+    }
+    
 }
 
 class WebSocketService {
 
     static let ownSignatureHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
     
-    var webSocket: WebSocket?
-    var token: Token?
-    fileprivate let r: URLRequest
-    
-    fileprivate lazy var rxInput: Observable<(data: Data, channel: String, command: String)> = {
-       
-        return Observable.create { (subscriber) -> Disposable in
-            
-            self.webSocket!.onText = { text in
-                
-                guard let data = text.data(using: .utf8),
-                      let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                      let cmd = json?["cmd"] as? String,
-                      let channel = json?["channel"] as? String else {
-                        return
-                }
-                
-                subscriber.onNext( (data, channel, cmd) )
-                
-            }
-            
-            return Disposables.create {
-                ///
-            }
-        }
-        
-    }()
+    let webSocket: WebSocket
     
     func commandObservable<T: WSCommandData & Codable>() -> Observable<T> {
         return customCommandObservable(ofType: CodableWebSocketCommand<T>.self)
@@ -123,32 +109,39 @@ class WebSocketService {
         
     }
     
-    public init?(webSocketURI: String) {
-        guard let webSocketURL = URL(string: webSocketURI) else { return nil }
+    init(url: String) {
+        guard let webSocketURL = URL(string: url) else {
+            fatalError("Can't create websocket. Unsupported URL \(url)")
+        }
         
         var r = URLRequest(url: webSocketURL)
         r.timeoutInterval = 1
-        self.r = r
         
+        self.webSocket = WebSocket(request: r)
     }
 
-    func makeWebSocket() -> WebSocket {
+    func disconnect() {
+        webSocket.disconnect()
+    }
+
     
-        let webSocket = WebSocket(request: r)
+    
+    
+    
+    func connect(with token: Token?, forceReconnect: Bool = false) -> Single<([Track], TrackState, TrackId)> {
         
-        return webSocket
-    }
-
-    func connect(with token: Token?, forceReconnect: Bool = false) {
+        let res = didConnect.take(1).flatMap { _ in
+            
+        }
         
         if let x = webSocket, x.isConnected, forceReconnect == false { return }
         
         guard let token = token else { return }
         
         self.token = token
-
+        
         print("connect with Token: \(String(describing: self.token))")
-
+        
         self.webSocket = self.makeWebSocket()
         self.webSocket?.connect()
         
@@ -160,25 +153,13 @@ class WebSocketService {
             print(txt)
         })
     }
-
-    func reconnect() {
-        connect(with: self.token)
-    }
-
-    func disconnect() {
-
-        print("WebSocket disconnect!!!!")
-
-        self.webSocket?.disconnect()
-    }
-
-    func sendCommand<T: WSCommand>(command: T, completion: ((Error?) -> ())? = nil) {
-
-        guard self.webSocket?.isConnected == true else { completion?(AppError(WebSocketServiceError.offline)); return }
-
-        let jsonData = command.jsonData
-        
-        self.webSocket?.write(data: jsonData)
+    
+    
+    
+    
+    
+    func sendCommand<T: WSCommand>(command: T) {
+        webSocket.write(data: command.jsonData)
     }
 
     // MARK: - WebSocketDelegate -
@@ -194,8 +175,6 @@ class WebSocketService {
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocketDidDisconnect: \(String(describing: error))")
 
-        self.webSocket = nil
-
 //        let commandCenter = MPRemoteCommandCenter.shared()
 //        commandCenter.nextTrackCommand.isEnabled = self.canForward
 //        commandCenter.previousTrackCommand.isEnabled = self.canBackward
@@ -209,5 +188,61 @@ class WebSocketService {
 //        }
     }
 
+    fileprivate lazy var rxInput: Observable<(data: Data, channel: String, command: String)> = {
+        
+        return Observable.create { [unowned w = self.webSocket] (subscriber) -> Disposable in
+            
+            w.onText = { text in
+                
+                guard let data = text.data(using: .utf8),
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                    let cmd = json?["cmd"] as? String,
+                    let channel = json?["channel"] as? String else {
+                        return
+                }
+                
+                subscriber.onNext( (data, channel, cmd) )
+                
+            }
+            
+            return Disposables.create {
+                ///
+            }
+            }
+            .share()
+        
+    }()
+    
+    lazy var didConnect: Observable<Void> = {
+        
+        return Observable.create { [unowned w = self.webSocket] (subscriber) -> Disposable in
+            
+            w.onConnect = {
+                subscriber.onNext( () )
+            }
+            
+            return Disposables.create {
+                ///
+            }
+        }
+        .share()
+        
+    }()
+    
+    lazy var didDisconnect: Observable<Void> = {
+        
+        return Observable.create { [unowned w = self.webSocket] (subscriber) -> Disposable in
+            
+            w.onDisconnect = { _ in
+                subscriber.onNext( () )
+            }
+            
+            return Disposables.create {
+                ///
+            }
+        }
+        .share()
+        
+    }()
+    
 }
-
