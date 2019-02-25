@@ -1169,7 +1169,7 @@ extension Player {
         })
 
         if self.audioSessionIsInterrupted == false && false { //self.webSocketService.isReachable {
-            self.webSocketService.reconnect()
+            //self.webSocketService.reconnect()
         }
     }
 
@@ -1359,7 +1359,7 @@ extension Player: ApplicationWatcher {
         self.playerQueue.reset()
         self.player.removeAllItems()
 
-        self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
+        //self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
 
         self.disconnect(isPlaying: isPlaying, isPlayingAddons: isOtherBlocked)
     }
@@ -1370,9 +1370,9 @@ extension Player: ApplicationWatcher {
                                              isGuest: user.isGuest),
                                  forceReconnect: true)
         
-        self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
+        //self.webSocketService.token = Token(token: user.wsToken, isGuest: user.isGuest)
         if self.state.initialized == false {
-            self.webSocketService.reconnect()
+            //self.webSocketService.reconnect()
         }
     }
 
@@ -1426,7 +1426,7 @@ extension Player {
                 if false { // self?.webSocketService.isReachable == true {
                     self?.playBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                     self?.initializationAction = .playCurrent
-                    self?.webSocketService.reconnect()
+                    //self?.webSocketService.reconnect()
                     return .success
                 } else if let _ = self?.currentItem {
                     if self?.player.rate == 0.0 {

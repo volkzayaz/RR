@@ -92,8 +92,10 @@ class Application: Watchable {
     var config: Config?
 
     init?() {
-        guard let restApiService = RestApiService(serverURI: URI.restApiService, originURI: URI.origin), let webSocketService = WebSocketService(webSocketURI: URI.webSocketService) else { return nil }
-
+        guard let restApiService = RestApiService(serverURI: URI.restApiService, originURI: URI.origin) else { return nil }
+        
+        let webSocketService = WebSocketService(url: URI.webSocketService)
+        
         self.restApiService = restApiService
         self.webSocketService = webSocketService
 

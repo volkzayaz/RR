@@ -10,56 +10,6 @@ import Foundation
 import Starscream
 import RxSwift
 
-//protocol WebSocketServiceWatcher: class {
-//
-//    func webSocketServiceDidConnect(_ service: WebSocketService)
-//    func webSocketServiceDidDisconnect(_ service: WebSocketService)
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings)
-//    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState)
-//    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState)
-//    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase])
-//    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState)
-//    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState)
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool)
-//    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool)
-//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?)
-//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState)
-//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool)
-//    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons)
-//    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool)
-//
-//    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState)
-//
-//    func didReceivePlaylist(patch: [String: [String: Any]?])
-//}
-//
-//extension WebSocketServiceWatcher {
-//
-//    func webSocketServiceDidConnect(_ service: WebSocketService) { }
-//    func webSocketServiceDidDisconnect(_ service: WebSocketService) { }
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) { }
-//    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) { }
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) { }
-//    func webSocketService(_ service: WebSocketService, didReceivePlaylistUpdate playlistItemsPatches: [String: PlayerPlaylistItemPatch?], flush: Bool) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) { }
-//    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) { }
-//
-//    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) { }
-//
-//    func didReceivePlaylist(patch: [String: [String: Any]?]) {}
-//}
-
 extension WebSocketService {
     
     var didReceivePlaylistPatch: Observable<DaPlaylist.NullableReduxView> {
@@ -78,6 +28,10 @@ extension WebSocketService {
         return commandObservable()
     }
     
+    var didReceiveTrackBlockState: Observable<TrackBlockState> {
+        return commandObservable()
+    }
+    
 }
 
 class WebSocketService {
@@ -92,8 +46,10 @@ class WebSocketService {
     
     func customCommandObservable<T: WSCommand>(ofType: T.Type) -> Observable<T.DataType> {
 
-        return rxInput.filter { $0.channel == T.DataType.channel &&
-                                $0.command == T.DataType.command }
+        return rxInput.filter { x in
+            return x.channel == T.DataType.channel &&
+                   x.command == T.DataType.command
+            }
             .map { x in
                 
                 let t: T
@@ -126,32 +82,23 @@ class WebSocketService {
 
     
     
+    //////Action with clear response
     
-    
-    func connect(with token: Token?, forceReconnect: Bool = false) -> Single<([Track], TrackState, TrackId)> {
+    func connect(with token: Token, forceReconnect: Bool = false) -> Single<([Track], TrackId?, DaPlaylist.NullableReduxView)> {
         
-        let res = didConnect.take(1).flatMap { _ in
+        webSocket.connect()
+        
+        return didConnect.take(1).flatMap { [unowned self] _ -> Observable<([Track], TrackId?, DaPlaylist.NullableReduxView)> in
+            
+            self.sendCommand(command: CodableWebSocketCommand(data: token))
+
+            return Observable.combineLatest(self.didReceiveTracks.take(1),
+                                            self.didReceiveCurrentTrack.take(1),
+                                            self.didReceivePlaylistPatch.take(1)) { ($0, $1, $2) }
             
         }
+        .asSingle()
         
-        if let x = webSocket, x.isConnected, forceReconnect == false { return }
-        
-        guard let token = token else { return }
-        
-        self.token = token
-        
-        print("connect with Token: \(String(describing: self.token))")
-        
-        self.webSocket = self.makeWebSocket()
-        self.webSocket?.connect()
-        
-        ////request -> response:
-        ///1. Init = loadTracks + currentTrack + trackState
-        ///2. Addons =
-        
-        rxInput.subscribe(onNext: { (txt) in
-            print(txt)
-        })
     }
     
     
@@ -160,32 +107,6 @@ class WebSocketService {
     
     func sendCommand<T: WSCommand>(command: T) {
         webSocket.write(data: command.jsonData)
-    }
-
-    // MARK: - WebSocketDelegate -
-    public func websocketDidConnect(socket: WebSocketClient) {
-
-        if let token = self.token {
-            let initialCommand = CodableWebSocketCommand(data: token)
-            self.sendCommand(command: initialCommand)
-        }
-
-    }
-
-    public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        print("websocketDidDisconnect: \(String(describing: error))")
-
-//        let commandCenter = MPRemoteCommandCenter.shared()
-//        commandCenter.nextTrackCommand.isEnabled = self.canForward
-//        commandCenter.previousTrackCommand.isEnabled = self.canBackward
-//
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.player(player: self, didChange: .failed)
-//        })
-//
-//        if self.audioSessionIsInterrupted == false && false { //self.webSocketService.isReachable {
-//            self.webSocketService.reconnect()
-//        }
     }
 
     fileprivate lazy var rxInput: Observable<(data: Data, channel: String, command: String)> = {
@@ -208,8 +129,8 @@ class WebSocketService {
             return Disposables.create {
                 ///
             }
-            }
-            .share()
+        }
+        .share()
         
     }()
     

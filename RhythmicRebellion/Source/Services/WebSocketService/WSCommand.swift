@@ -173,8 +173,8 @@ extension FanPlaylistState: WSCommandData {
 }
 
 extension Dictionary: WSCommandData where Key == TrackOrderHash, Value == Dictionary<DaPlaylist.ViewKey, Any?>? {
-    static var channel: String { return "update" }
-    static var command: String { return "playlist" }
+    static var channel: String { return "playlist" }
+    static var command: String { return "update" }
 }
 
 extension TrackState: WSCommandData {
@@ -182,7 +182,22 @@ extension TrackState: WSCommandData {
     static var command: String { return "setState" }
 }
 
+extension TrackId: WSCommandData {
+    static var channel: String { return "currentTrack" }
+    static var command: String { return "setTrack" }
+}
 
+typealias TrackBlockState = Bool
+extension TrackBlockState: WSCommandData {
+    static var channel: String { return "currentTrack" }
+    static var command: String { return "setBlock" }
+}
+
+
+extension Optional: WSCommandData where Wrapped: WSCommandData {
+    static var channel: String { return Wrapped.channel }
+    static var command: String { return Wrapped.command }
+}
 
 extension WSCommand {
 //    static func initialCommand(token: Token) -> WSCommand<Token> {

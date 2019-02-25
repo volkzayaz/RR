@@ -244,35 +244,6 @@ extension DaPlaylist: CustomStringConvertible {
     
 }
 
-extension Dictionary where Key == String, Value == Optional<Dictionary<String, Any>> {
-    
-    var nullableReduxView: DaPlaylist.NullableReduxView {
-        
-        return mapValues { (maybePatch) -> [DaPlaylist.ViewKey: Any?]? in
-            
-            guard let x = maybePatch else {
-                return nil
-            }
-            
-            var p: [DaPlaylist.ViewKey: Any?] = [:]
-            
-            x.forEach { (key, value) in
-                
-                var v: Any? = value
-                if v is NSNull {
-                    v = nil
-                }
-                
-                p[ DaPlaylist.ViewKey(rawValue: key)! ] = v
-            }
-                
-            return p
-        }
-        
-    }
-    
-}
-
 extension DaPlaylist: Equatable {
     static func == (lhs: DaPlaylist, rhs: DaPlaylist) -> Bool {
         

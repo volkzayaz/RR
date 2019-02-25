@@ -109,8 +109,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if appRouter.dependencies.application.user != nil {
             appRouter.dependencies.application.fanUser { (userResult) in
                 switch userResult {
-                case .success(_):
-                    appRouter.dependencies.application.webSocketService.reconnect()
+                case .success(_): break
+                    //appRouter.dependencies.application.webSocketService.reconnect()
                     
                 default: break
                 }

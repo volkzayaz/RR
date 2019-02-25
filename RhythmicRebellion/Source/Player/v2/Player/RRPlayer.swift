@@ -20,12 +20,18 @@ class RRPlayer: NSObject {
         super.init()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            
             webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
                                           isGuest: DataLayer.get.application.user!.isGuest))
+                .subscribe(onSuccess: { (tracks, state, current) in
+                    print("")
+                })
+            
         }
         
         
         bind()
+        bindWebSocket()
     }
 }
 
@@ -79,78 +85,6 @@ extension RRPlayer {
     }
     
 }
-
-///web socket initiated
-extension RRPlayer {
-    
-    ///This call should be part of init WebSocket operation, that gives out bunch of tracks, initial reduxView and currentTrackState all at one go
-    
-    func webSocketService(_ service: WebSocketService, didReceiveTracks tracks: [Track], flush: Bool) {
-        
-        Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
-        
-        ////old code requested timeTracking request here
-        
-    }
-    
-    ////rewrite these 1 for async calls with immediate response
-    
-    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) {
-        
-//        switch checkAddons.addons {
-//        case .addonsIds(let addonsIds): self.apply(addonsIds: addonsIds)
-//        default: break
-//        }
-    }
-    
-    //////
-    
-    func webSocketServiceDidConnect(_ service: WebSocketService) {
-        ///in case didDisconnect change app state
-        ///it should be equaled down in this method
-    }
-    
-    func webSocketServiceDidDisconnect(_ service: WebSocketService) {
-        
-        ////not sure what to do with app state other than reconnect
-        
-        //webSocket.reconnect()
-        
-    }
-    
-    func didReceivePlaylist(patch: [String : [String : Any]?]) {
-        let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
-                                                           patch: patch.nullableReduxView) )
-        
-        Dispatcher.dispatch(action: action )
-    }
-    
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackId trackId: TrackId?) {
-        
-        guard let t = trackId else {
-            return
-        }
-        
-        Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t.key))
-        
-    }
-    
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackState trackState: TrackState) {
-        Dispatcher.dispatch(action: ChangeTrackState(trackState: trackState))
-    }
-    
-    func webSocketService(_ service: WebSocketService, didReceiveCurrentTrackBlock isBlocked: Bool) {
-        Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked: isBlocked))
-    }
-    
-    func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) {
-        
-        ////update app state with new playback seconds
-        
-    }
-    
-}
-
 
 ///Push state into webSocket
 extension RRPlayer {
@@ -223,6 +157,53 @@ extension RRPlayer {
             })
             .disposed(by: rx.disposeBag)
         
+        
+    }
+    
+    func bindWebSocket() {
+        
+        webSocket.didReceivePlaylistPatch
+            .subscribe(onNext: { (patch) in
+                let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
+                                                                   patch: patch) )
+                
+                Dispatcher.dispatch(action: action )
+            })
+            .disposed(by: rx.disposeBag)
+        
+        webSocket.didReceiveTracks
+            .subscribe(onNext: { (tracks) in
+                
+                Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
+        webSocket.didReceiveCurrentTrack
+            .subscribe(onNext: { (trackId) in
+                
+                guard let t = trackId else { return }
+                
+                Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t.key))
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
+        webSocket.didReceiveTrackState
+            .subscribe(onNext: { (state) in
+                
+                Dispatcher.dispatch(action: ChangeTrackState(trackState: state))
+                
+            })
+            .disposed(by: rx.disposeBag)
+
+        webSocket.didReceiveTrackBlockState
+            .subscribe(onNext: { (state) in
+            
+                Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked: state))
+                
+            })
+            .disposed(by: rx.disposeBag)
         
     }
     
