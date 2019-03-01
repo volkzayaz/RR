@@ -140,11 +140,7 @@ class EqualizerView: UIView {
             self.layer.speed = 1.0
             self.layer.timeOffset = 0.0
             self.layer.beginTime = 0.0
-            let timeSincePause = self.layer.convertTime(CACurrentMediaTime(), from: nil) - pausedTime
-
-            print("timeSincePause: \(timeSincePause)")
-
-            layer.beginTime = timeSincePause;
+            
         } else {
 //            logIfShown(str: "RESUME walready playing")
         }

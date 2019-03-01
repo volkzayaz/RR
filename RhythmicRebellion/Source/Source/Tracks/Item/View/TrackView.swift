@@ -73,14 +73,7 @@ class TrackView: UIView {
     }
 
     func prepareToDisplay() {
-        if (!equalizer.isHidden) {
-            if (viewModel.isPlaying) {
-                equalizer.startAnimating()
-            } else {
-                equalizer.pause()
-            }
-        }
-
+        
         if self.downloadButton.state == .pending {
             self.downloadButton.pendingView.startSpin()
         }
@@ -89,8 +82,6 @@ class TrackView: UIView {
     }
 
     func prepareToEndDisplay() {
-        self.equalizer.pause()
-
         disposeBag = DisposeBag()
     }
 
@@ -98,17 +89,7 @@ class TrackView: UIView {
     func setup(viewModel: TrackViewModel, actionCallback:  @escaping ActionCallback) {
 
         self.viewModel = viewModel
-        if viewModel.isCurrentInPlayer && viewModel.isPlayable {
-            equalizer.isHidden = false
-            equalizerWidthConstraint.constant = 18
-            equalizerLeadingConstraint.constant = 15
-        } else {
-            equalizer.isHidden = true
-            equalizerWidthConstraint.constant = 0
-            equalizerLeadingConstraint.constant = 0
-        }
-
-
+        
         self.stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         self.actionButton.isHidden = false
@@ -173,13 +154,40 @@ class TrackView: UIView {
             .drive(onNext: { [weak d = downloadButton] (x) in
                 d?.stopDownloadButton.progress = x
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: disposeBag)
 
         viewModel.downloadViewModel.state
             .drive(onNext: { [weak d = downloadButton] (x) in
                 d?.state = x
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: disposeBag)
+        
+        viewModel.equalizerHidden
+            .drive(onNext: { [weak self] (isHidden) in
+                
+                self?.equalizer.isHidden = isHidden
+                
+                if (isHidden) {
+                
+                    self?.equalizerWidthConstraint.constant = 0
+                    self?.equalizerLeadingConstraint.constant = 0
+                    
+                } else {
+                    
+                    self?.equalizerWidthConstraint.constant = 18
+                    self?.equalizerLeadingConstraint.constant = 15
+                }
+                
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.isPlaying
+            .drive(onNext: { [weak e = equalizer] (isPlaying) in
+                isPlaying ?
+                    e?.startAnimating() :
+                    e?.pause()
+            })
+            .disposed(by: disposeBag)
         
     }
 

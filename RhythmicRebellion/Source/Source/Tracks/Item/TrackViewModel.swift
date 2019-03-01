@@ -44,8 +44,22 @@ extension TrackViewModel {
         
     }
     
-    var isPlaying: Bool {
-        return isCurrentInPlayer && player.isPlaying
+    var isPlaying: Driver<Bool> {
+        return appState.map { $0.player.currentItem?.state.isPlaying ?? false }
+                       .distinctUntilChanged()
+    }
+    
+    var equalizerHidden: Driver<Bool> {
+        
+        let t = track
+        return appState.map { $0.currentTrack?.track }
+            .distinctUntilChanged()
+            .map { x in
+                guard let x = x else { return true }
+            
+                return t != x
+            }
+        
     }
     
     var isCensorship: Bool {
@@ -61,33 +75,27 @@ extension TrackViewModel {
 
 struct TrackViewModel : MVVM_ViewModel {
     
-    let previewOptionViewModel: TrackPreviewOptionViewModel
+    
     
     var isLockedForActions: Bool
     
     let track: Track
     let user: User?
     
-    let isCurrentInPlayer: Bool
-    let player: Player
-    
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
     let downloadViewModel: DownloadViewModel
+    let previewOptionViewModel: TrackPreviewOptionViewModel
     
     init(router: TrackRouter, track: Track, user: User?,
-         player: Player,
-         textImageGenerator: TextImageGenerator, isCurrentInPlayer: Bool, isLockedForActions: Bool) {
+         textImageGenerator: TextImageGenerator, isLockedForActions: Bool) {
         
         self.router = router
         self.track = track
-        self.isCurrentInPlayer = isCurrentInPlayer
         self.user = user
-        self.player = player
         
         self.previewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
                                                                                           user: user,
-                                                                                          player: player,
                                                                                           textImageGenerator: textImageGenerator)
         
         self.isLockedForActions = isLockedForActions
@@ -123,8 +131,6 @@ extension TrackViewModel: Equatable {
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
         return lhs.track == rhs.track &&
-            lhs.isCurrentInPlayer == rhs.isCurrentInPlayer &&
-            lhs.isPlaying == rhs.isPlaying &&
             lhs.isCensorship == rhs.isCensorship
     }
     

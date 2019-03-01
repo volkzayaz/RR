@@ -244,7 +244,6 @@ final class PlayerViewModel: NSObject {
 
         self.playerItemPreviewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
                                                                                                     user: self.application.user,
-                                                                                                    player: self.player,
                                                                                                     textImageGenerator: self.textImageGenerator)
 
     }

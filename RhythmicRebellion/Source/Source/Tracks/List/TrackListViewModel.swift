@@ -186,9 +186,7 @@ extension TrackListViewModel {
         return TrackViewModel(router: router.trackRouter(for: track),
                               track: track,
                               user: application?.user,
-                              player: DataLayer.get.player,
                               textImageGenerator: textImageGenerator,
-                              isCurrentInPlayer: appStateSlice.currentTrack?.track == track,
                               isLockedForActions: false)
         
     }

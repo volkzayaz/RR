@@ -12,7 +12,7 @@ struct TrackPreviewOptionViewModel {
 
     struct Factory {
 
-        func previewOptionType(for track: Track, user: User?, player: Player?) -> PreviewOptionType {
+        func previewOptionType(for track: Track, user: User?) -> PreviewOptionType {
             guard track.isPlayable, let trackAudioFile = track.audioFile else { return .commigSoon }
             guard track.isFreeForPlaylist == false else { return .freeForPlaylist }
             guard let fanUser = user as? FanUser else { return .authorizationNeeded }
@@ -26,7 +26,9 @@ struct TrackPreviewOptionViewModel {
             case .full:
                 guard let previewLimitTimes = track.previewLimitTimes else { return .freeForPlaylist }
                 guard previewLimitTimes > 0 else { return .fullLimitTimes(-1) }
-                guard let trackTotalPlayMSeconds = player?.totalPlayMSeconds(for: track.id) else { return .fullLimitTimes(previewLimitTimes) }
+                
+                let trackTotalPlayMSeconds: UInt64 = 0
+                //guard let trackTotalPlayMSeconds = player?.totalPlayMSeconds(for: track.id) else { return .fullLimitTimes(previewLimitTimes) }
 
                 let trackMaxPlayMSeconds = UInt64(trackAudioFile.duration * 1000 * previewLimitTimes)
                 guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { return .fullLimitTimes(-1) }
@@ -44,9 +46,9 @@ struct TrackPreviewOptionViewModel {
 
         }
 
-        func makeViewModel(track: Track, user: User?, player: Player?, textImageGenerator: TextImageGenerator) -> TrackPreviewOptionViewModel {
+        func makeViewModel(track: Track, user: User?, textImageGenerator: TextImageGenerator) -> TrackPreviewOptionViewModel {
 
-            let previewOptionType = self.previewOptionType(for: track, user: user, player: player)
+            let previewOptionType = self.previewOptionType(for: track, user: user)
 
             return TrackPreviewOptionViewModel(previewOptionType: previewOptionType, textImageGenerator: textImageGenerator)
         }
