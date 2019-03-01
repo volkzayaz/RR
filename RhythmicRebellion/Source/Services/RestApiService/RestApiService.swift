@@ -528,30 +528,30 @@ class RestApiService {
     // MARK: - Player
 
     func audioAddons(for trackIds: [Int], completion: @escaping (Result<[Int : [Addon]]>) -> Void) {
-        guard let addonsForTracksURL = self.makeURL(with: "player/audio-add-ons-for-tracks") else { return }
-
-        let headers: HTTPHeaders = ["Accept" : "application/json"]
-        let jsonQuery = ["filters" : ["record_id" : ["in" : trackIds]]]
-
-        do {
-            let jsonQueryData = try JSONSerialization.data(withJSONObject: jsonQuery)
-            guard let jsonQueryString = String(data: jsonQueryData, encoding: .utf8) else { return }
-
-            let parameters: Parameters = ["jsonQuery" : jsonQueryString]
-
-            Alamofire.request(addonsForTracksURL, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
-                .validate()
-                .restApiResponse { (dataResponse: DataResponse<AddonsForTracksResponse>) in
-
-                    switch dataResponse.result {
-                    case .success(let addonsForTracksResponse): completion(.success(addonsForTracksResponse.trackAddons))
-                    case .failure(let error): completion(.failure(error))
-                    }
-            }
-
-        } catch (let error) {
-            completion(.failure(error))
-        }
+//        guard let addonsForTracksURL = self.makeURL(with: "player/audio-add-ons-for-tracks") else { return }
+//
+//        let headers: HTTPHeaders = ["Accept" : "application/json"]
+//        let jsonQuery = ["filters" : ["record_id" : ["in" : trackIds]]]
+//
+//        do {
+//            let jsonQueryData = try JSONSerialization.data(withJSONObject: jsonQuery)
+//            guard let jsonQueryString = String(data: jsonQueryData, encoding: .utf8) else { return }
+//
+//            let parameters: Parameters = ["jsonQuery" : jsonQueryString]
+//
+//            Alamofire.request(addonsForTracksURL, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
+//                .validate()
+//                .restApiResponse { (dataResponse: DataResponse<AddonsForTracksResponse>) in
+//
+//                    switch dataResponse.result {
+//                    case .success(let addonsForTracksResponse): completion(.success(addonsForTracksResponse.trackAddons))
+//                    case .failure(let error): completion(.failure(error))
+//                    }
+//            }
+//
+//        } catch (let error) {
+//            completion(.failure(error))
+//        }
     }
 
     func lyrics(for trackId: Int, completion: @escaping (Result<Lyrics>) -> Void) {

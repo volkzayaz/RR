@@ -94,9 +94,52 @@ class WebSocketService {
         
     }
     
+    func filter(addons: [Addon], for track: Track) -> Observable<[Addon]> {
+        
+        //return .just(addons)
+        
+        guard addons.count > 0 else {
+            return .just(addons)
+        }
+        
+        let x = CheckAddons<AddonState>(trackID: track.id,
+                                        representation: addons.map { AddonState(trackId: track.id, addon: $0) })
+        
+        sendCommand(command: CodableWebSocketCommand(data: x) )
+        
+        let response: Observable<CheckAddons<Int>> = commandObservable()
+        
+        return response.map { res in
+            
+            let filteredAddons = addons.filter { res.addonRepresentation.contains($0.id) }
+        
+            let addonsTypesWeight: [Addon.AddonType] = [.advertisement, .artistBIO, .songCommentary, .artistAnnouncements, .songIntroduction]
+            
+            return filteredAddons.sorted(by: { (firstAddon, secondAddon) -> Bool in
+                guard let firstAddonTypeWeight = addonsTypesWeight.index(of: firstAddon.type) else { return false }
+                guard let secondAddonTypeWeight = addonsTypesWeight.index(of: secondAddon.type) else { return true }
+                
+                return firstAddonTypeWeight <= secondAddonTypeWeight
+            })
+            
+        }
+        .take(1)
+        
+    }
+    
+    func markPlayed(addon: Addon, for track: Track) {
+        //return;
+        sendCommand(command: CodableWebSocketCommand(data: AddonState(trackId: track.id,
+                                                                      addon: addon))  )
+    }
+    
+    /////
+    
     
     func sendCommand<T: WSCommand>(command: T) {
-        webSocket.write(data: command.jsonData)
+        webSocket.write(data: command.jsonData, completion: {
+            
+        })
     }
 
     fileprivate lazy var rxInput: Observable<(data: Data, channel: String, command: String)> = {

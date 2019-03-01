@@ -76,9 +76,7 @@ final class PlayerViewModel: NSObject {
 
     var playerItemNameString: Driver<String> {
         
-        return appState.map {
-            $0.player.currentItem?.musicType
-            }
+        return appState.map { $0.activePlayable }
             .distinctUntilChanged()
             .map { i in
                 
@@ -119,10 +117,10 @@ final class PlayerViewModel: NSObject {
     }
 
     var canChangePlayerItemTrackLikeState: Driver<Bool> {
-        return appState.map { $0.player.currentItem?.musicType != nil }
+        return appState.map { $0.activePlayable != nil }
     }
     var canChangePlayState: Driver<Bool> {
-        return appState.map { $0.player.currentItem?.musicType != nil }
+        return appState.map { $0.activePlayable != nil }
     }
     
     

@@ -199,6 +199,16 @@ extension Optional: WSCommandData where Wrapped: WSCommandData {
     static var command: String { return Wrapped.command }
 }
 
+extension CheckAddons: WSCommandData {
+    static var channel: String { return "addons" }
+    static var command: String { return "checkAddons" }
+}
+
+extension AddonState: WSCommandData {
+    static var channel: String { return "addons" }
+    static var command: String { return "playAddon" }
+}
+
 extension WSCommand {
 //    static func initialCommand(token: Token) -> WSCommand<Token> {
 //        return WebSocketCommand<Token>(data: token)

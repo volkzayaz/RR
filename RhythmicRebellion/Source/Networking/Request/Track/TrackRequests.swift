@@ -16,7 +16,9 @@ enum TrackRequest: BaseNetworkRouter {
     case fanTracks(playlistId: Int)
     case tracks(playlistId: Int)
     
+    
     case addons(trackIds: [Int])
+    case artist(artistId: String)
     
 }
 
@@ -42,13 +44,49 @@ extension TrackRequest {
             let jsonQuery = ["filters" : ["record_id" : ["in" : trackIds]]]
             
             let data = try JSONSerialization.data(withJSONObject: jsonQuery)
-            let param = String(data: data, encoding: .utf8)
+            let param = String(data: data, encoding: .utf8)!
             
             return anonymousRequest(method: .get,
                                     path: "player/audio-add-ons-for-tracks",
                                     params: ["jsonQuery" : param],
                                     encoding: URLEncoding.queryString)
             
+        case .artist(let artistId):
+            
+            let jsonQuery = ["filters" : ["id" : ["in" : [artistId]]]]
+            
+            let data = try JSONSerialization.data(withJSONObject: jsonQuery)
+            let param = String(data: data, encoding: .utf8)!
+            
+            return anonymousRequest(method: .get,
+                                    path: "player/artist",
+                                    params: ["jsonQuery" : param],
+                                    encoding: URLEncoding.queryString)
+            
+        }
+    }
+}
+
+
+
+struct AddonsForTracksResponse: Codable {
+    
+    let trackAddons: [String : [Addon]]
+    
+    enum CodingKeys: String, CodingKey {
+        case trackAddons = "data"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        do {
+            self.trackAddons = try container.decode([String : [Addon]].self, forKey: .trackAddons)
+        } catch (let error) {
+            guard let emptyAddons = try? container.decodeIfPresent([Addon].self, forKey: .trackAddons),
+                emptyAddons?.isEmpty ?? false else { throw error }
+            
+            self.trackAddons = [:]
         }
     }
 }

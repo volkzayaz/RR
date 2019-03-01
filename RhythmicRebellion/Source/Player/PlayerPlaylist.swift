@@ -276,9 +276,10 @@ class PlayerPlaylist {
     }
 
     func addonsStates(for track: Track) -> [AddonState]? {
-        return self.tracksAddons[track.id]?.map({ (addon) -> AddonState in
-            return AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
-        })
+        return nil
+//        self.tracksAddons[track.id]?.map({ (addon) -> AddonState in
+//            return AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
+//        })
     }
 
     // MARK: Preview

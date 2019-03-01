@@ -149,39 +149,6 @@ struct FanProfileResponse: RestApiResponse {
     }
 }
 
-struct AddonsForTracksResponse: EmptyRestApiResponse {
-
-    let trackAddons: [Int : [Addon]]
-
-    enum CodingKeys: String, CodingKey {
-        case data
-    }
-
-    init() {
-        self.trackAddons = [Int : [Addon]]()
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        var intKeyAddonInfo = [Int : [Addon]]()
-
-        do {
-            let stringKeyAddonInfo = try container.decode([String : [Addon]].self, forKey: .data)
-
-            for (stringId, addons) in stringKeyAddonInfo {
-                guard let intKey = Int(stringId) else { continue }
-                intKeyAddonInfo[intKey] = addons
-            }
-
-            self.trackAddons = intKeyAddonInfo
-        } catch (let error) {
-            guard let emptyAddons = try? container.decodeIfPresent([Addon].self, forKey: .data), emptyAddons?.isEmpty ?? false else { throw error }
-            self.trackAddons = intKeyAddonInfo
-        }
-    }
-}
-
 struct ArtistsResponse: RestApiResponse {
 
     let artists: [Artist]

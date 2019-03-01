@@ -10,28 +10,26 @@ import Foundation
 
 struct Addon: Codable {
 
-    enum AddonType: Int {
+    enum AddonType: Int, Codable {
         case advertisement = 0
         case songIntroduction = 1
         case songCommentary = 2
         case artistBIO = 3
         case artistAnnouncements = 4
-        case unknown = 5
-
+        
         var title: String {
             switch self {
             case .songIntroduction: return NSLocalizedString("Intro", comment: "SongIntroduction addon title")
             case .songCommentary: return NSLocalizedString("Commentary", comment: "SongCommentary addon title")
             case .artistBIO: return NSLocalizedString("BIO", comment: "ArtistBIO addon title")
             case .artistAnnouncements: return NSLocalizedString("Announcement", comment: "ArtistAnnouncements addon title")
-
-            default: return ""
+            case .advertisement: return ""
+                
             }
         }
     }
 
     let id: Int
-    let typeValue: Int
     let trackId: Int?
     let ownerId: String
     let title: String
@@ -42,11 +40,11 @@ struct Addon: Codable {
     let updatedDate: Date?
     let audioFile: TrackAudioFile
 
-    var type: AddonType { return AddonType(rawValue: typeValue) ?? .unknown}
+    let type: AddonType
 
     enum CodingKeys: String, CodingKey {
         case id
-        case typeValue = "type"
+        case type
         case trackId = "record_id"
         case ownerId = "owner_id"
         case title
@@ -62,7 +60,7 @@ struct Addon: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.id = try container.decode(Int.self, forKey: .id)
-        self.typeValue = try container.decode(Int.self, forKey: .typeValue)
+        self.type = try container.decode(AddonType.self, forKey: .type)
         self.trackId = try? container.decode(Int.self, forKey: .trackId)
         self.ownerId = try container.decode(String.self, forKey: .ownerId)
         self.title = try container.decode(String.self, forKey: .title)
@@ -81,7 +79,7 @@ struct Addon: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(self.id, forKey: .id)
-        try container.encode(self.typeValue, forKey: .typeValue)
+        try container.encode(self.type, forKey: .type)
         try container.encode(self.trackId, forKey: .trackId)
         try container.encode(self.ownerId, forKey: .ownerId)
         try container.encode(self.title, forKey: .title)

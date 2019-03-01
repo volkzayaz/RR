@@ -49,7 +49,6 @@ struct DaPlayerState: Equatable {
     struct CurrentItem: Equatable {
         let activeTrackHash: TrackOrderHash
         var addons: [Addon] //stack
-        var musicType: MusicType
         var state: TrackState
     }
     
@@ -58,11 +57,6 @@ struct DaPlayerState: Equatable {
     struct ReduxViewPatch {
         let isOwn: Bool
         var patch: DaPlaylist.NullableReduxView
-    };
-    
-    enum MusicType: Equatable {
-        case addon(Addon)
-        case track(Track)
     };
     
 }
@@ -90,8 +84,12 @@ enum Dispatcher {
         return nextPageTrigger
             .take(1)
             .delay(0, scheduler: MainScheduler.instance) ///TODO: get rid of jumping into next run loop
-            .flatMap { actionCreator in
-                actionCreator.perform(initialState: _appState.value)
+            .flatMap { actionCreator -> Single<AppState> in
+                
+                let preState = actionCreator.prepare(initialState: _appState.value)
+                if preState != _appState.value { _appState.accept(preState) }
+                
+                return actionCreator.perform(initialState: _appState.value)
                     .do(onSuccess: { (newState) in
                         
                         guard newState != _appState.value else { return }
@@ -131,8 +129,18 @@ protocol Action {
 
 protocol ActionCreator {
     
+    ///in case your operation is heavy you might need tot quickly prepare app state for such operation
+    ///TODO: get rid of preapre and move to proper redux reducers
+    func prepare( initialState: AppState ) -> AppState
+    
     func perform( initialState: AppState ) -> Single<AppState>
     
+}
+
+extension ActionCreator {
+    func prepare(initialState: AppState) -> AppState {
+        return initialState
+    }
 }
 
 struct ActionCreatorWrapper: ActionCreator {
@@ -167,12 +175,8 @@ extension AppState {
     }
  
     var canForward: Bool {
-
-        guard let currentItem = player.currentItem else {
-            return false
-        }
         
-        guard case .addon(let addon) = currentItem.musicType else {
+        guard case .addon(let addon)? = activePlayable else {
             return true
         }
         
@@ -194,15 +198,28 @@ extension AppState {
 
     var canSeek: Bool {
         
-        guard let currentItem = player.currentItem else {
-            return false
-        }
-        
-        if case .track(_) = currentItem.musicType {
+        if case .track(_)? = activePlayable {
             return true
         }
         
         return false
+    }
+    
+    enum MusicType: Equatable {
+        case addon(Addon)
+        case track(Track)
+    };
+    var activePlayable: MusicType? {
+        
+        guard let currentItem = player.currentItem else {
+            return nil
+        }
+        
+        if let a = currentItem.addons.first {
+            return .addon(a)
+        }
+        
+        return .track(currentTrack!.track)
     }
     
 }

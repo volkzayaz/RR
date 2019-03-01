@@ -23,9 +23,6 @@ class RRPlayer: NSObject {
             
             webSocket.connect(with: Token(token: DataLayer.get.application.user!.wsToken,
                                           isGuest: DataLayer.get.application.user!.isGuest))
-                .subscribe(onSuccess: { (tracks, state, current) in
-                    print("")
-                })
             
         }
         
@@ -231,11 +228,16 @@ struct CheckRestrictedTime: Action {
     }
 }
 
+////TODO: Proceed To Next Item and Prepare new track share a lot of logic
+////especially in preparing addon.
+////We need to extract this logic into unified concept
+////without scattering Addons through multiple ActionCreators
 struct ProceedToNextItem: ActionCreator {
     
     func perform(initialState: AppState) -> Single<AppState> {
         
-        guard var currentItem = initialState.player.currentItem else {
+        guard var currentItem = initialState.player.currentItem,
+              let currentTrack = initialState.currentTrack else {
             return .just(initialState)
         }
         
@@ -246,9 +248,11 @@ struct ProceedToNextItem: ActionCreator {
             let next = addons.removeFirst()
             
             currentItem.addons = addons
-            currentItem.musicType = .addon(next)
             
             state.player.currentItem = currentItem
+            
+            DataLayer.get.webSocketService.markPlayed(addon: next,
+                                                      for: currentTrack.track)
             
             return .just(state)
         }
@@ -301,22 +305,62 @@ struct PrepareNewTrack: ActionCreator {
     
     func perform(initialState: AppState) -> Single<AppState> {
         
-        ///TODO: request addons and verify them
-        ///1. check addons
-        ///2. start playing addons if any
-        ///3. start music playback
+//        1) Собираемся проигрывать `trackID`
+//        2) Делаем `RestAPI player/audio-add-ons-for-tracks` & `RestAPI player/artist`
+//        3) Получаем набор `Array<Addon>`
+//        4) Делаем `WebSocket setBlock = true`
+//        5) Делаем `WebSocket. addons-checkAddons` с параметрами из шагов 1 и 3
+//        6) Получаем подмножество `Array<Addon>` из шага 3
+//        7) Сортируем подмножество из шага 7
+//        8) Посылаем `WebSocket. addons-playAddon`
+//        9) Играем Аддон
+//        10) Делаем `WebSocket setBlock = false`
+
+        ///2
+        let trackAddons = TrackRequest.addons(trackIds: [orderedTrack.track.id])
+            .rx.response(type: AddonsForTracksResponse.self)
+            .map { $0.trackAddons.first?.value ?? [] }
+            .asObservable()
+  
+        let artistAddons = TrackRequest.artist(artistId: orderedTrack.track.artist.id)
+            .rx.response(type: BaseReponse<[Artist]>.self)
+            .map { $0.data.first?.addons ?? [] }
+            .asObservable()
         
-        var state = initialState
         
-        state.player.currentItem = DaPlayerState.CurrentItem(activeTrackHash: orderedTrack.orderHash,
-                                                             addons: [],
-                                                             musicType: .track(orderedTrack.track),
-                                                             state: .init(hash: WebSocketService.ownSignatureHash,
-                                                                          progress: 0,
-                                                                          isPlaying: shouldPlayImmidiatelly))
+        ///3
+        return Observable.combineLatest(trackAddons,
+                                        artistAddons) { $0 + $1 }
+            ///5, 6, 7
+            .flatMap { addons -> Observable<[Addon]> in
+                return DataLayer.get.webSocketService.filter(addons: addons, for: self.orderedTrack.track)
+            }
+            .map { addons -> AppState in
+                
+                var state = initialState
+                
+                ///8
+                if let x = addons.first {
+                    DataLayer.get.webSocketService.markPlayed(addon: x,
+                                                              for: self.orderedTrack.track)
+                }
+                
+                ///9
+                state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
+                                                 addons: addons,
+                                                 state: .init(hash: WebSocketService.ownSignatureHash,
+                                                              progress: 0,
+                                                              isPlaying: self.shouldPlayImmidiatelly))
+                
+                return state
+                
+            }
+            .asSingle()
         
-        return .just(state)
-        
+    }
+    
+    func prepare(initialState: AppState) -> AppState {
+        return AudioPlayer.Pause().perform(initialState: initialState)
     }
     
 }

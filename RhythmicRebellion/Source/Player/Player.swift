@@ -1120,14 +1120,14 @@ extension Player {
     }
 
     func checkAddons(trackId: Int, addonsStates: [AddonState], completion: ((Error?) -> ())? = nil) {
-        let checkAddons = CheckAddons(trackId: trackId, addonsStates: addonsStates)
+        //let checkAddons = CheckAddons(trackId: trackId, addonsStates: addonsStates)
 //        let webSocketCommand = WebSocketCommand.checkAddons(checkAddons: checkAddons)
 //
 //        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
     }
 
     func playAddon(addon: Addon, track: Track, completion: ((Error?) -> ())? = nil) {
-        let addonState = AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
+        //let addonState = AddonState(id: addon.id, typeValue: addon.typeValue, trackId: track.id)
 //        let webSocketCommand = WebSocketCommand.playAddon(addonState: addonState)
 //
 //        self.webSocketService.sendCommand(command: webSocketCommand, completion: completion)
@@ -1271,12 +1271,12 @@ extension Player {
         })
     }
 
-    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons) {
+    func webSocketService(_ service: WebSocketService, didReceiveCheckAddons checkAddons: CheckAddons<Int>) {
 
-        switch checkAddons.addons {
-        case .addonsIds(let addonsIds): self.apply(addonsIds: addonsIds)
-        default: break
-        }
+//        switch checkAddons.addons {
+//        case .addonsIds(let addonsIds): self.apply(addonsIds: addonsIds)
+//        default: break
+//        }
     }
 
     func webSocketService(_ service: WebSocketService, didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64], flush: Bool) {

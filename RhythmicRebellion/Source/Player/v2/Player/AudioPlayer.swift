@@ -73,7 +73,7 @@ class AudioPlayer: NSObject {
                           object: nil)
             .observeOn(MainScheduler.instance)
         
-        let playbackTimeSignal = appState.map { $0.player.currentItem?.musicType }
+        let playbackTimeSignal = appState.map { $0.activePlayable }
             .notNil()
             .distinctUntilChanged()
             .asObservable()
@@ -143,7 +143,7 @@ class AudioPlayer: NSObject {
             })
             .disposed(by: bag)
         
-        appState.map { $0.player.currentItem?.musicType }
+        appState.map { $0.activePlayable }
             .distinctUntilChanged()
             .notNil()
             .drive(onNext: { [weak p = player] (item) in
@@ -207,16 +207,6 @@ extension AudioPlayer {
             state.player.currentItem?.state.isPlaying = flip
             return state
         }
-    }
-
-    struct ChangeTrack: Action { func perform(initialState: AppState) -> AppState {
-        
-        var state = initialState
-        state.player.currentItem?.musicType = newValue
-        return state
-        }
-        
-        let newValue: DaPlayerState.MusicType
     }
     
 }
