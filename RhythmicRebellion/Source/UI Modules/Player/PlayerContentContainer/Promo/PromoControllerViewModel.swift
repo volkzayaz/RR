@@ -83,7 +83,7 @@ final class PromoControllerViewModel: PromoViewModel {
 
     func visitArtistSite() {
         guard let artistURL = self.playerItem?.playlistItem.track.artist.url else { return }
-
+ 
         self.navigateToPage(with: artistURL)
     }
 
