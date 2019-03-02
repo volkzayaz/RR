@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>777669792178-94uhui69pcb4sneglo6k18hq86u56qd8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.777669792178-94uhui69pcb4sneglo6k18hq86u56qd8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCyEataBtzAPa4gQWSofiXt52NviICuFLU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>777669792178</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.patronempowerment.RhythmicRebellion</string>
+	<key>PROJECT_ID</key>
+	<string>rhythmicrebellion-36dd7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rhythmicrebellion-36dd7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:777669792178:ios:7ac6cde9b92dabd4</string>
+	<key>DATABASE_URL</key>
+	<string>https://rhythmicrebellion-36dd7.firebaseio.com</string>
+</dict>
+</plist>

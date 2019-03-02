@@ -1,41 +1,119 @@
+fastlane_version "1.105.0"
 
 default_platform :ios
 
-lane :pre_build do
-    cocoapods(podfile: "Pods/Podfile")
+platform :ios do
+    
+  before_all do
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
 
-    new_build_number = ENV['XCS_INTEGRATION_NUMBER']
-    set_info_plist_value(
-        path: "./RhythmicRebellion/Supporting Files/Info.plist",
-        key: "CFBundleVersion",
-        value: new_build_number)
-end
+    #ensure_git_status_clean
+    
+  end
 
-    lane :code_gen do
-    root_directory = "#{File.expand_path(File.dirname(__FILE__))}/../"
+  lane :beta do |options|
 
-    sh("#{root_directory}/Pods/R.swift/rswift generate -p \"#{root_directory}/WodProofSocial.xcodeproj\" -t WodProofSocial --bundleIdentifier com.olexabez.wodproof --productModuleName WodProofSocial --buildProductsDir \"#{root_directory}\" --developerDir \"#{root_directory}\" --sourceRoot \"#{root_directory}\" --sdkRoot \"$(SDKROOT)\"  \"#{root_directory}\"")
-end
+      #ensure_git_branch(
+      #                  branch: 'develop|hotfix'
+      #                  )
+      
+    version_number = 0
+    configuration = ""
+    environmentName = ""
+    
+    ##parsing options
+	if options[:patch]
+        version_number = increment_version_number(bump_type: "patch")
+    else
+        version_number = increment_version_number(bump_type: "minor")
+	end
+    
+    if options[:adhoc]
+        configuration = "AdHoc"
+        environmentName = "Production"
+    else
+        configuration = "Release"
+        environmentName = "Production"
+    end
 
-
-
-lane :upload_testflight do
-    scheme_name = 'RhythmicRebellion'
-    ipa_name = "RhythmicRebellion.ipa"
-
-    gym(
-        scheme: scheme_name,
-        skip_build_archive: true,
-        archive_path: ENV['XCS_ARCHIVE'],
-        codesigning_identity: 'iPhone Distribution: Olearis TOV (4M6W632NJ7)',
+    ##building ipa
+    gym(scheme: "RhythmicRebellion",
+        configuration: configuration,
+        include_bitcode: false,
         export_options: {
-            provisioningProfiles: { 
-                "com.olearis.RhythmicRebellion" => "Rhythmic Rebellion AppStore"
+            method: "ad-hoc",
+            provisioningProfiles: {
+                "com.patronempowerment.rhytmicrebellion" => "RhythmicRebellion AdHoc"
             }
-        })
+        }
+    )
+        
+    ###uploading to crashlytics
+    crashlytics(api_token: "a300d57f1f210d6200c91280eb4fe528696acb4d",
+                build_secret: "87cc9027feb4d5479bb34e4346cf3c66bc13355724b999f294d3d9a89613169e",
+                notes: changelog_from_git_commits,
+                groups: "Basic")
+    upload_symbols_to_crashlytics                    
 
-    pilot(
-        ipa: ipa_name,
-        skip_waiting_for_build_processing: true,
-        username: 'oleg@olearis.com')
+    ##cleaning up
+    File.delete("../RhythmicRebellion.ipa")
+    File.delete("../RhythmicRebellion.app.dSYM.zip")
+                    
+    ##notifying testers
+    slack( message: "New beta build is available. Check build details below or at your emails. \n\n*Please delete previous build from your device to avoid unexpected issues.*\n",
+          
+          use_webhook_configured_username_and_icon: true,
+          payload: {
+          'Version number' => get_version_number,
+          'Environment' => environmentName,
+          'Download Link' => "https://apps.crashlytics.com/projects"
+          #'Resolved Jira Issues' => "https://goo.gl/MvkR4m"
+          },
+          default_payloads: []
+          )
+
+          
+    ###keeping record
+    #commit_version_bump(message: "Version bump to v#{version_number}")
+    #add_git_tag tag: version_number
+    #push_to_git_remote
+    
+  end
+
+  lane :release do |options|
+      
+      ensure_git_branch(
+                        branch: 'master'
+                        )
+                        
+      ##building ipa
+      gym(scheme: "Smartreading",
+          configuration: "Release",
+          export_method: "app-store",
+          include_bitcode: true)
+
+      upload_to_app_store(skip_screenshots: true,
+                          skip_app_version_update: true,
+                          skip_metadata: true)
+                              
+      ##cleaning up
+      clean_build_artifacts
+      
+  end
+  
+  lane :refresh_dsym do |options|
+
+    download_dsyms(version: "latest")
+    upload_symbols_to_crashlytics(api_token: "d668ff606d7dd753f1bf7406761822024821b3d8")
+    clean_build_artifacts
+     
+  end
+
+  after_all do
+      
+      ###notifying developer
+      notification(subtitle: "Finished lane", message: "Finished build lane succesfully")
+      
+  end
+  
 end

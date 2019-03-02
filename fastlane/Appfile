@@ -1,8 +1,9 @@
-# The Appfile can be used to specify information that's used across all fastlane
-# tools, like your Apple or Google credentials, or the app's bundle identifier.
-#
-# For more details, check out the documentation at:
-# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md
+app_identifier "ru.begemotyc.SmartReading" # The bundle identifier of your app
+apple_id "volkzayaz@gmail.com" # Your Apple email address
 
-itc_team_id "118799036" # iTunes Connect Team ID
-team_id "4M6W632NJ7" # Developer Portal Team ID
+team_id "KMFR5T66ER"  # Developer Portal Team ID
+itc_team_id "117812747"
+
+
+# you can even provide different app identifiers, Apple IDs and team names per lane:
+# More information: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md

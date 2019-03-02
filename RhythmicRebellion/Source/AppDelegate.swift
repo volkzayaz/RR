@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import Fabric
 import Crashlytics
 
@@ -59,8 +60,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        FirebaseApp.configure()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            Crashlytics.sharedInstance().crash()
+        }
+        
+        
         Fabric.with([Crashlytics.self])
-
+        
         self.setupAppearance()
 
         let appViewController = self.window?.rootViewController as! AppViewController

@@ -67,9 +67,9 @@ class Application: Watchable {
     
     struct URI {
 
-        static let origin = "http://rr-3287.fan.rebellionretailsite.com"
-        static let restApiService = "http://rr-3287.api.rebellionretailsite.com"
-        static let webSocketService = "ws://rr-3287.rebellionretailsite.com:3000/"
+        static let origin = "http://dev.fan.rebellionretailsite.com"
+        static let restApiService = "http://dev.api.rebellionretailsite.com"
+        static let webSocketService = "ws://dev.rebellionretailsite.com:3000/"
 
 //        static let origin = "http://rhythmic-rebellion.com"
 //        static let restApiService =  "https://api.rhythmic-rebellion.com"
