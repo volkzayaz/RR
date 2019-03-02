@@ -234,7 +234,7 @@ struct CheckRestrictedTime: Action {
 ////without scattering Addons through multiple ActionCreators
 struct ProceedToNextItem: ActionCreator {
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
         guard var currentItem = initialState.player.currentItem,
               let currentTrack = initialState.currentTrack else {
@@ -268,7 +268,7 @@ struct ProceedToNextItem: ActionCreator {
 
 struct GetBackToPreviousItem: ActionCreator {
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
         guard let currentHash = initialState.currentTrack?.orderHash,
               let previousItem = initialState.player.tracks.previous(before: currentHash) else {
@@ -285,7 +285,7 @@ struct PrepareNewTrackByHash: ActionCreator {
     
     let orderHash: TrackOrderHash
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
         guard let x = initialState.player.tracks[orderHash] else {
             fatalErrorInDebug(" Can't start playing track with order key: \(orderHash). It is not found in reduxView: \(initialState.player.tracks) ")
@@ -303,7 +303,7 @@ struct PrepareNewTrack: ActionCreator {
     let orderedTrack: OrderedTrack
     let shouldPlayImmidiatelly: Bool
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
 //        1) Собираемся проигрывать `trackID`
 //        2) Делаем `RestAPI player/audio-add-ons-for-tracks` & `RestAPI player/artist`
@@ -327,6 +327,10 @@ struct PrepareNewTrack: ActionCreator {
             .map { $0.data.first?.addons ?? [] }
             .asObservable()
         
+        ///before preapering new track we need to pause old track and rewind to point 0 secs
+        var preState = initialState
+        preState.player.currentItem?.state = .init(progress: 0,
+                                                   isPlaying: false)
         
         ///3
         return Observable.combineLatest(trackAddons,
@@ -337,7 +341,7 @@ struct PrepareNewTrack: ActionCreator {
             }
             .map { addons -> AppState in
                 
-                var state = initialState
+                var state = preState
                 
                 ///8
                 if let x = addons.first {
@@ -355,7 +359,7 @@ struct PrepareNewTrack: ActionCreator {
                 return state
                 
             }
-            .asSingle()
+            .startWith(preState)
         
     }
     
@@ -411,7 +415,7 @@ struct AddTracksToNowPlaying: ActionCreator {
     let tracks: [Track]
     let style: RRPlayer.AddStyle
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
         switch style {
         case .next:
@@ -422,7 +426,7 @@ struct AddTracksToNowPlaying: ActionCreator {
             
             return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack, isOwnChange: true)
                 .perform(initialState: initialState)
-                .flatMap { newState in
+                .flatMap { newState -> Observable<AppState> in
                     
                     guard let newCurrentTrack = newState.nextTrack ?? newState.firstTrack else {
                         return .just(newState)
@@ -448,7 +452,7 @@ struct RemoveTrack: ActionCreator {
     
     let orderedTrack: OrderedTrack
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
         var maybeNextTrack: OrderedTrack? = nil
         if initialState.currentTrack == orderedTrack {
@@ -457,7 +461,7 @@ struct RemoveTrack: ActionCreator {
         
         return DeleteTrack(track: orderedTrack, isOwnChange: true)
                 .perform(initialState: initialState)
-                .flatMap { newState in
+                .flatMap { newState -> Observable<AppState> in
                     
                     guard let c = maybeNextTrack else {
                         return .just(newState)

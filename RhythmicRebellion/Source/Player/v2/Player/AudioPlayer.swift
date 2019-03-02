@@ -115,7 +115,8 @@ class AudioPlayer: NSObject {
                 guard let player = p,
                     let time = player.currentItem?.currentTime(),
                     !CMTIME_IS_INVALID(time),
-                    abs(CMTimeGetSeconds(time) - requestedProgress) > 0.9 else {
+                    abs(CMTimeGetSeconds(time) - requestedProgress) > 0.9 ///TODO: drop this hack. We need proper way of avoiding reaction to periodic time updates of the player
+                    else {
                     return
                 }
                 

@@ -84,20 +84,19 @@ enum Dispatcher {
         return nextPageTrigger
             .take(1)
             .delay(0, scheduler: MainScheduler.instance) ///TODO: get rid of jumping into next run loop
-            .flatMap { actionCreator -> Single<AppState> in
+            .flatMap { actionCreator -> Observable<AppState> in
                 
-                let preState = actionCreator.prepare(initialState: _appState.value)
-                if preState != _appState.value { _appState.accept(preState) }
+                print("Dispatching \(actionCreator.description)")
                 
                 return actionCreator.perform(initialState: _appState.value)
-                    .do(onSuccess: { (newState) in
+                    .do(onNext: { (newState) in
                         
                         guard newState != _appState.value else { return }
                         _appState.accept(newState)
                 
                     })
             }
-            .do(onNext: { (newState) in
+            .do(onCompleted: {
                 actions.onNext( Array(actions.unsafeValue.dropFirst()) )
             })
             .concat(Observable.deferred {
@@ -109,11 +108,17 @@ enum Dispatcher {
     ///TODO: add proper logging for new AppState and actions dispatched
     static func dispatch(action: Action) {
         
-        actions.onNext(actions.unsafeValue + [ActionCreatorWrapper(action: action)])
+        let wrapper = ActionCreatorWrapper(action: action)
+        
+        print("Enqueing \(wrapper.description)")
+        
+        actions.onNext(actions.unsafeValue + [wrapper])
         
     }
     
     static func dispatch(action: ActionCreator) {
+        
+        print("Enqueing \(action.description)")
         
         actions.onNext(actions.unsafeValue + [action])
         
@@ -124,16 +129,14 @@ enum Dispatcher {
 protocol Action {
     
     func perform( initialState: AppState ) -> AppState
-    
+
 }
 
-protocol ActionCreator {
+protocol ActionCreator: CustomStringConvertible {
     
-    ///in case your operation is heavy you might need tot quickly prepare app state for such operation
-    ///TODO: get rid of preapre and move to proper redux reducers
-    func prepare( initialState: AppState ) -> AppState
-    
-    func perform( initialState: AppState ) -> Single<AppState>
+    ///Make sure your Observable eventually completes.
+    ///Non completable observables will block the whole DispatchQueue
+    func perform( initialState: AppState ) -> Observable<AppState>
     
 }
 
@@ -141,13 +144,21 @@ extension ActionCreator {
     func prepare(initialState: AppState) -> AppState {
         return initialState
     }
+    
+    var description: String {
+        return "\(type(of: self))"
+    }
 }
 
 struct ActionCreatorWrapper: ActionCreator {
     let action: Action
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         return .just( action.perform(initialState: initialState) )
+    }
+    
+    var description: String {
+        return "Wrapper of type :\(type(of: action))"
     }
     
 }

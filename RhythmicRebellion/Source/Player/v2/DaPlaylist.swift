@@ -307,7 +307,7 @@ struct ApplyReduxViewPatch: ActionCreator {
         self.assosiatedTracks = assosiatedTracks
     }
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
 
         ///getting state
         var state = initialState
@@ -348,7 +348,6 @@ struct ApplyReduxViewPatch: ActionCreator {
                 
                 return state
             }
-            .asSingle()
         
     }
     
@@ -360,7 +359,7 @@ struct InsertTracks: ActionCreator {
     let afterTrack: OrderedTrack?
     let isOwnChange: Bool
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
         ///initial state
         let tracks = initialState.player.tracks
@@ -383,7 +382,7 @@ struct DeleteTrack: ActionCreator {
     let track: OrderedTrack
     let isOwnChange: Bool
     
-    func perform(initialState: AppState) -> Single<AppState> {
+    func perform(initialState: AppState) -> Observable<AppState> {
         
         ///initial state
         let tracks = initialState.player.tracks
