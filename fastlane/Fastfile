@@ -5,17 +5,17 @@ default_platform :ios
 platform :ios do
     
   before_all do
-    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
 
-    #ensure_git_status_clean
+    ensure_git_status_clean
     
   end
 
   lane :beta do |options|
 
-      #ensure_git_branch(
-      #                  branch: 'develop|hotfix'
-      #                  )
+      ensure_git_branch(
+                        branch: 'develop|hotfix'
+                        )
       
     version_number = 0
     configuration = ""
@@ -74,9 +74,9 @@ platform :ios do
 
           
     ###keeping record
-    #commit_version_bump(message: "Version bump to v#{version_number}")
-    #add_git_tag tag: version_number
-    #push_to_git_remote
+    commit_version_bump(message: "Version bump to v#{version_number}")
+    add_git_tag tag: version_number
+    push_to_git_remote
     
   end
 
@@ -87,7 +87,7 @@ platform :ios do
                         )
                         
       ##building ipa
-      gym(scheme: "Smartreading",
+      gym(scheme: "RhythmicRebellion",
           configuration: "Release",
           export_method: "app-store",
           include_bitcode: true)
@@ -104,7 +104,7 @@ platform :ios do
   lane :refresh_dsym do |options|
 
     download_dsyms(version: "latest")
-    upload_symbols_to_crashlytics(api_token: "d668ff606d7dd753f1bf7406761822024821b3d8")
+    upload_symbols_to_crashlytics(api_token: "a300d57f1f210d6200c91280eb4fe528696acb4d")
     clean_build_artifacts
      
   end

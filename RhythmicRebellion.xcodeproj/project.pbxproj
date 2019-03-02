@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		73017C182229862900962130 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73017C172229862900962130 /* GoogleService-Info.plist */; };
 		7301E0DD21E8C8B700F9B5D5 /* NWise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301E0DC21E8C8B700F9B5D5 /* NWise.swift */; };
 		7301E0E221EE1E5900F9B5D5 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301E0E121EE1E5900F9B5D5 /* DownloadViewModel.swift */; };
 		7301E0E521EE271900F9B5D5 /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301E0E421EE271900F9B5D5 /* BaseResponse.swift */; };
@@ -67,6 +66,7 @@
 		73B87A4A220DC3B80082A79A /* RRPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B87A49220DC3B80082A79A /* RRPlayer.swift */; };
 		73E0A9E021E62A4500679C01 /* TrackListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */; };
 		73E0A9E221E62EA900679C01 /* Alamofire+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */; };
+		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F7A0A121E78B7900B92433 /* AlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F7A0A021E78B7900B92433 /* AlbumRequest.swift */; };
 		7606BDD720FF471300D90D73 /* SignUpControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */; };
 		7606BDD820FF471300D90D73 /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7606BDD420FF471300D90D73 /* SignUpRouter.swift */; };
@@ -338,7 +338,6 @@
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.debug.xcconfig"; sourceTree = "<group>"; };
-		73017C172229862900962130 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7301E0DC21E8C8B700F9B5D5 /* NWise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NWise.swift; sourceTree = "<group>"; };
 		7301E0E121EE1E5900F9B5D5 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		7301E0E421EE271900F9B5D5 /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
@@ -397,6 +396,7 @@
 		73B87A49220DC3B80082A79A /* RRPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RRPlayer.swift; sourceTree = "<group>"; };
 		73E0A9DF21E62A4500679C01 /* TrackListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListRouter.swift; sourceTree = "<group>"; };
 		73E0A9E121E62EA900679C01 /* Alamofire+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Rx.swift"; sourceTree = "<group>"; };
+		73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73F7A0A021E78B7900B92433 /* AlbumRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumRequest.swift; sourceTree = "<group>"; };
 		7606BDD320FF471300D90D73 /* SignUpControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpControllerViewModel.swift; sourceTree = "<group>"; };
 		7606BDD420FF471300D90D73 /* SignUpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
@@ -1763,8 +1763,8 @@
 		76F1FA3C20DBA8DE00C9191F /* supporting_files */ = {
 			isa = PBXGroup;
 			children = (
+				73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */,
 				76F1FA3D20DBA8DE00C9191F /* Info.plist */,
-				73017C172229862900962130 /* GoogleService-Info.plist */,
 			);
 			path = supporting_files;
 			sourceTree = "<group>";
@@ -2012,9 +2012,9 @@
 				763157FE219D798700E1D7F5 /* Profile.storyboard in Resources */,
 				736598E621D66E6C0092E499 /* Localizable.strings in Resources */,
 				734F827D2229965E0006E1DE /* Appfile in Resources */,
-				73017C182229862900962130 /* GoogleService-Info.plist in Resources */,
 				76A45B46213927470080885D /* SelectableList.storyboard in Resources */,
 				763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */,
+				73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */,
 				737622F621CD28AF005B603E /* Artist.storyboard in Resources */,
 				7641B2E321CA4E5C005535E6 /* LyricsKaraoke.storyboard in Resources */,
 			);
