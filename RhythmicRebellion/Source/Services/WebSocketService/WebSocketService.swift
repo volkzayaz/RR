@@ -12,7 +12,7 @@ import RxSwift
 
 extension WebSocketService {
     
-    var didReceivePlaylistPatch: Observable<DaPlaylist.NullableReduxView> {
+    var didReceivePlaylistPatch: Observable<TrackReduxViewPatch> {
         return customCommandObservable(ofType: TrackReduxViewPatch.self)
     }
     
@@ -25,7 +25,14 @@ extension WebSocketService {
     }
     
     var didReceiveCurrentTrack: Observable<TrackId?> {
-        return commandObservable()
+        return commandObservable().map { (maybeTrack: TrackId?) in
+            if let x = maybeTrack, x.id == 0 {
+                ///socket returns {"id": 0, "key": ""}} instead of null for no track
+                return nil
+            }
+            
+            return maybeTrack
+        }
     }
     
     var didReceiveTrackBlockState: Observable<TrackBlockState> {
@@ -36,15 +43,24 @@ extension WebSocketService {
 
 class WebSocketService {
 
+    ///some of the webSocket commands (trackState) are signed by each client
+    ///our client will be signing commands with this hash
     static let ownSignatureHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
+    
+    ///some commands are not signed by hash, but our logic rely on
+    ///whether some particular command is created by our client, or alien client
+    ///we will be using this hash to mark commands as alien
+    ///not this hash will not be transported via webSocket to other clients
+    static let alienSignatureHash = String(randomWithLength: 8, allowedCharacters: .alphaNumeric)
     
     let webSocket: WebSocket
     
     func commandObservable<T: WSCommandData & Codable>() -> Observable<T> {
         return customCommandObservable(ofType: CodableWebSocketCommand<T>.self)
+            .map { $0.data }
     }
     
-    func customCommandObservable<T: WSCommand>(ofType: T.Type) -> Observable<T.DataType> {
+    func customCommandObservable<T: WSCommand>(ofType: T.Type) -> Observable<T> {
 
         return rxInput.filter { x in
             return x.channel == T.DataType.channel &&
@@ -60,7 +76,7 @@ class WebSocketService {
                     fatalError("Error decoding \(T.self). Details: \(e)")
                 }
                 
-                return t.data
+                return t
             }
         
     }
@@ -131,6 +147,14 @@ class WebSocketService {
         //return;
         sendCommand(command: CodableWebSocketCommand(data: AddonState(trackId: track.id,
                                                                       addon: addon))  )
+    }
+    
+    func fetchTracks(trackIds: [Int]) -> Observable<[Track]> {
+        
+        sendCommand(command: CodableWebSocketCommand(data: trackIds))
+        
+        return commandObservable().take(1)
+        
     }
     
     /////

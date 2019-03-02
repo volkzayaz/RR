@@ -127,9 +127,13 @@ struct DaPlaylist {
     typealias ReduxView         = [ TrackOrderHash: [ViewKey: Any?]  ]
     typealias NullableReduxView = [ TrackOrderHash: [ViewKey: Any?]? ]
     
-    fileprivate mutating func apply(patch: NullableReduxView) {
+    fileprivate mutating func apply(patch: DaPlayerState.ReduxViewPatch) {
         
-        patch.forEach { (orderHash, maybeValue) in
+        if patch.shouldFlush {
+            reduxView = [:]
+        }
+        
+        patch.patch.forEach { (orderHash, maybeValue) in
             
             guard let value = maybeValue else {
                 
@@ -247,7 +251,8 @@ extension DaPlaylist: CustomStringConvertible {
 extension DaPlaylist: Equatable {
     static func == (lhs: DaPlaylist, rhs: DaPlaylist) -> Bool {
         
-        guard lhs.trackDump == rhs.trackDump else { return false }
+        guard lhs.trackDump == rhs.trackDump,
+              lhs.reduxView.count == rhs.reduxView.count else { return false }
         
         for (key, value) in lhs.reduxView {
             
@@ -314,7 +319,7 @@ struct ApplyReduxViewPatch: ActionCreator {
         var tracks = state.player.tracks
         
         ///applying transform
-        tracks.apply(patch: viewPatch.patch)
+        tracks.apply(patch: viewPatch)
         
         ///fetching underlying tracks if needed
         var diff = Set(tracks.reduxView.map { $0.value[.id]! as! Int }).subtracting(tracks.trackDump.keys)
@@ -329,18 +334,17 @@ struct ApplyReduxViewPatch: ActionCreator {
         ////setting state
         state.player.tracks = tracks
         state.player.lastPatch = viewPatch
+        if viewPatch.shouldFlush {
+            state.player.currentItem = nil
+        }
         
         guard diff.count > 0 else {
             return .just(state)
         }
         
-        let x = DataLayer.get.webSocketService
-        x.sendCommand(command: CodableWebSocketCommand(data: Array(diff)))
-        
-        return x
-            .commandObservable()
-            .take(1)
-            .map { (receivedTracks: [Track]) -> AppState in
+        return DataLayer.get.webSocketService
+            .fetchTracks(trackIds: Array(diff))
+            .map { receivedTracks -> AppState in
                 
                 receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }
                 
@@ -368,7 +372,7 @@ struct InsertTracks: ActionCreator {
         let patch = tracks.insertPatch(tracks: self.tracks, after: afterTrack)
         
         ///mapping state transform
-        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, patch: patch)
+        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: false, patch: patch)
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,
@@ -391,7 +395,7 @@ struct DeleteTrack: ActionCreator {
         let patch = tracks.deletePatch(track: track)
         
         ///mapping state transform
-        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, patch: patch)
+        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: false, patch: patch)
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,

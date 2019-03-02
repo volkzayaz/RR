@@ -56,6 +56,7 @@ struct DaPlayerState: Equatable {
     
     struct ReduxViewPatch {
         let isOwn: Bool
+        let shouldFlush: Bool
         var patch: DaPlaylist.NullableReduxView
     };
     
@@ -158,7 +159,7 @@ struct ActionCreatorWrapper: ActionCreator {
     }
     
     var description: String {
-        return "Wrapper of type :\(type(of: action))"
+        return ":\(type(of: action))"
     }
     
 }

@@ -77,6 +77,7 @@ struct CodableWebSocketCommand<T: WSCommandData & Codable>: Codable, WSCommand {
 struct TrackReduxViewPatch: WSCommand {
     
     let data: DaPlaylist.NullableReduxView
+    let shouldFlush: Bool
     
     init(jsonData: Data) {
         
@@ -106,6 +107,8 @@ struct TrackReduxViewPatch: WSCommand {
             
             return p
         }
+        
+        self.shouldFlush = dictionary[CodableWebSocketCommand<Int>.CodingKeys.flush.rawValue] as? Bool ?? false
         
     }
     

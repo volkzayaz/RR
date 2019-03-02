@@ -162,7 +162,8 @@ extension RRPlayer {
         webSocket.didReceivePlaylistPatch
             .subscribe(onNext: { (patch) in
                 let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
-                                                                   patch: patch) )
+                                                                   shouldFlush: patch.shouldFlush,
+                                                                   patch: patch.data) )
                 
                 Dispatcher.dispatch(action: action )
             })
@@ -177,11 +178,9 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         webSocket.didReceiveCurrentTrack
-            .subscribe(onNext: { (trackId) in
+            .subscribe(onNext: { (t) in
                 
-                guard let t = trackId else { return }
-                
-                Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t.key))
+                Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t?.key))
                 
             })
             .disposed(by: rx.disposeBag)
@@ -283,9 +282,15 @@ struct GetBackToPreviousItem: ActionCreator {
 
 struct PrepareNewTrackByHash: ActionCreator {
     
-    let orderHash: TrackOrderHash
+    let orderHash: TrackOrderHash?
     
     func perform(initialState: AppState) -> Observable<AppState> {
+        
+        guard let orderHash = orderHash else {
+            var s = initialState
+            s.player.currentItem = nil
+            return .just(s)
+        }
         
         guard let x = initialState.player.tracks[orderHash] else {
             fatalErrorInDebug(" Can't start playing track with order key: \(orderHash). It is not found in reduxView: \(initialState.player.tracks) ")
@@ -293,7 +298,8 @@ struct PrepareNewTrackByHash: ActionCreator {
         }
         
         return PrepareNewTrack(orderedTrack: x,
-                               shouldPlayImmidiatelly: false).perform(initialState: initialState)
+                               shouldPlayImmidiatelly: false,
+                               signatureHash: WebSocketService.alienSignatureHash).perform(initialState: initialState)
     }
     
 }
@@ -302,6 +308,17 @@ struct PrepareNewTrack: ActionCreator {
     
     let orderedTrack: OrderedTrack
     let shouldPlayImmidiatelly: Bool
+    let signatureHash: String
+    
+    init(orderedTrack: OrderedTrack,
+         shouldPlayImmidiatelly: Bool,
+         signatureHash: String = WebSocketService.ownSignatureHash) {
+        
+        self.orderedTrack = orderedTrack
+        self.shouldPlayImmidiatelly = shouldPlayImmidiatelly
+        self.signatureHash = signatureHash
+
+    }
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
@@ -352,7 +369,7 @@ struct PrepareNewTrack: ActionCreator {
                 ///9
                 state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
                                                  addons: addons,
-                                                 state: .init(hash: WebSocketService.ownSignatureHash,
+                                                 state: .init(hash: self.signatureHash,
                                                               progress: 0,
                                                               isPlaying: self.shouldPlayImmidiatelly))
                 

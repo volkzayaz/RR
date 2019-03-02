@@ -94,8 +94,18 @@ class AudioPlayer: NSObject {
         Observable.of (playbackTimeSignal,
                        playbackEndedSignal.map { _ in 0 })
             .merge()
-            .subscribe(onNext: { (x) in
-                if self.isSeeking { return }
+            .subscribe(onNext: { [unowned self] (x) in
+                
+                ////This is a bad implementation of the event:
+                ////Whenever local audioPlayer played back some portion of audio
+                ///Unfortunatelly periodicTimeObserver fires even if player is not playing
+                ///if player seeked for new value
+                ///if player starts or pauses playback
+                ////therefore we manually filter out some of these events
+                
+                if self.isSeeking,
+                    self.player.rate > 0 { return }
+                
                 Dispatcher.dispatch(action: Scrub(newValue: x))
             })
             .disposed(by: bag)
@@ -136,13 +146,12 @@ class AudioPlayer: NSObject {
         
         appState.map { $0.player.currentItem?.state }
             .notNil()
-            .filter { $0.isOwn } ///we will not play/pause actual playback if it wasn't initiated by our client
-            .map { $0.isPlaying }
             .distinctUntilChanged()
-            .drive(onNext: { [weak p = player] (isPlaying) in
+            .drive(onNext: { [weak p = player] (state) in
                 
-                if isPlaying { p?.play() }
-                else         { p?.pause() }
+                ///we will not play actual playback item if it wasn't initiated by our client
+                if state.isPlaying && state.isOwn { p?.play() }
+                else                              { p?.pause() }
                 
             })
             .disposed(by: bag)
