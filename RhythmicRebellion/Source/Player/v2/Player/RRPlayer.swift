@@ -388,12 +388,8 @@ struct ScrubToFraction: Action {
         guard let secs = initialState.currentTrack?.track.audioFile?.duration else {
             return initialState
         }
-
-        var state = initialState
         
-        state.player.currentItem?.state.progress = TimeInterval(secs) * Double(fraction)
-        
-        return state
+        return AudioPlayer.Scrub(newValue: TimeInterval(secs) * Double(fraction)).perform(initialState: initialState)
     }
     
 }

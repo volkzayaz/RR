@@ -133,7 +133,10 @@ class AudioPlayer: NSObject {
         ///////REACTING
         ///////---------
         
-        appState.map { $0.player.currentItem?.state.isPlaying ?? false }
+        appState.map { $0.player.currentItem?.state }
+            .notNil()
+            .filter { $0.isOwn } ///we will not play/pause actual playback if it wasn't initiated by our client
+            .map { $0.isPlaying }
             .distinctUntilChanged()
             .drive(onNext: { [weak p = player] (isPlaying) in
                 
@@ -177,7 +180,13 @@ extension AudioPlayer {
     struct Scrub: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.currentItem?.state.progress = newValue
+        
+        guard let currentTrackState = state.player.currentItem?.state else {
+            return state
+        }
+        
+        state.player.currentItem?.state = .init(progress: newValue,
+                                                isPlaying: currentTrackState.isPlaying)
         return state
         }
         
@@ -187,7 +196,13 @@ extension AudioPlayer {
     struct Pause: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.currentItem?.state.isPlaying = false
+        
+        guard let currentTrackState = state.player.currentItem?.state else {
+            return state
+        }
+        
+        state.player.currentItem?.state = .init(progress: currentTrackState.progress,
+                                                isPlaying: false)
         return state
         }
     }
@@ -195,17 +210,28 @@ extension AudioPlayer {
     struct Play: Action { func perform(initialState: AppState) -> AppState {
         
         var state = initialState
-        state.player.currentItem?.state.isPlaying = true
+        
+        guard let currentTrackState = state.player.currentItem?.state else {
+            return state
+        }
+        
+        state.player.currentItem?.state = .init(progress: currentTrackState.progress,
+                                                isPlaying: true)
         return state
         }
     }
     
     struct Switch: Action { func perform(initialState: AppState) -> AppState {
         
-            var state = initialState
-            let flip = !(state.player.currentItem?.state.isPlaying ?? true)
-            state.player.currentItem?.state.isPlaying = flip
+        var state = initialState
+        
+        guard let currentTrackState = state.player.currentItem?.state else {
             return state
+        }
+        
+        state.player.currentItem?.state = .init(progress: currentTrackState.progress,
+                                                isPlaying: !currentTrackState.isPlaying)
+        return state
         }
     }
     

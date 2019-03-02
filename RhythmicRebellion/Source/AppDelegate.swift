@@ -61,11 +61,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         FirebaseApp.configure()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            Crashlytics.sharedInstance().crash()
-        }
-        
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//            Crashlytics.sharedInstance().crash()
+//        }
         
         Fabric.with([Crashlytics.self])
         
