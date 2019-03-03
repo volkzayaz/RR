@@ -22,6 +22,7 @@ extension WebSocketService {
     
     var didReceiveTrackState: Observable<TrackState> {
         return commandObservable()
+            .filter { _ in WebSocketService.masterDate.timeIntervalSinceNow < -0.4 }
     }
     
     var didReceiveCurrentTrack: Observable<TrackId?> {
@@ -52,6 +53,13 @@ class WebSocketService {
     ///we will be using this hash to mark commands as alien
     ///not this hash will not be transported via webSocket to other clients
     static let alienSignatureHash = String(randomWithLength: 8, allowedCharacters: .alphaNumeric)
+    
+    ///Piece of data needed by WebSocket protocol
+    ///Whenever you send out a setTrackState commad, you become a master client
+    ///The rest become slave clients
+    ///The rule is: If you've just became master, you must ignore all "currentTrack" and "trackState" commands
+    ///for the next 1 second ¯\_(ツ)_/¯
+    static var masterDate = Date(timeIntervalSince1970: 0)
     
     let webSocket: WebSocket
     
@@ -161,6 +169,12 @@ class WebSocketService {
     
     
     func sendCommand<T: WSCommand>(command: T) {
+        
+        ///take a look at masterDate definition for more explanation
+        if command.data is TrackState {
+            WebSocketService.masterDate = Date()
+        }
+        
         webSocket.write(data: command.jsonData, completion: {
             
         })

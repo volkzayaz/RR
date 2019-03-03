@@ -79,6 +79,11 @@ struct TrackReduxViewPatch: WSCommand {
     let data: DaPlaylist.NullableReduxView
     let shouldFlush: Bool
     
+    init(data: DaPlaylist.NullableReduxView, shouldFlush: Bool) {
+        self.data = data
+        self.shouldFlush = shouldFlush
+    }
+    
     init(jsonData: Data) {
         
         guard let x = try? JSONSerialization.jsonObject(with: jsonData, options: []),
@@ -114,11 +119,31 @@ struct TrackReduxViewPatch: WSCommand {
     
     var jsonData: Data {
         
+        let data: [String: [String: Any?]?] = self.data.mapValues { (maybePatch: [DaPlaylist.ViewKey: Any?]?) -> [String: Any?]? in
+            
+            guard let x = maybePatch else {
+                return nil
+            }
+            
+            var p: [String: Any?] = [:]
+            
+            x.forEach { (key, value) in
+                p[ key.rawValue ] = value ?? NSNull()
+            }
+            
+            return p
+        }
+        
+        
         let x: [String: Any] = [ CodableWebSocketCommand<Int>.CodingKeys.channel.rawValue: TrackReduxViewPatch.DataType.channel,
                                  CodableWebSocketCommand<Int>.CodingKeys.command.rawValue: TrackReduxViewPatch.DataType.command,
-                                 CodableWebSocketCommand<Int>.CodingKeys.data.rawValue   : self.data]
+                                 CodableWebSocketCommand<Int>.CodingKeys.data.rawValue   : data,
+                                 CodableWebSocketCommand<Int>.CodingKeys.flush.rawValue  : shouldFlush
+                                 ]
         
-        return try! JSONSerialization.data(withJSONObject: x, options: [])
+        let p = try! JSONSerialization.data(withJSONObject: x, options: [])
+        
+        return p
     }
     
 }

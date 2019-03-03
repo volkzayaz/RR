@@ -59,7 +59,7 @@ extension RRPlayer {
     }
     
     func clear() {
-        
+        Dispatcher.dispatch(action: ClearTracks())
     }
     
     enum AddStyle {
@@ -96,8 +96,9 @@ extension RRPlayer {
         appState.map { $0.player.currentItem?.state }
             .notNil()
             .filter { $0.isOwn }
-            .drive(onNext: { (x) in
+            .drive(onNext: { [weak w = webSocket] (x) in
                 
+                w?.sendCommand(command: CodableWebSocketCommand(data: x))
                 print("Sending out trackState for syncing with webSocket: \(x)")
                 
                 ///self.webSocket.sendCommand(command: WebSocketCommand.setTrackState(trackState: x))
@@ -113,10 +114,11 @@ extension RRPlayer {
                                   ///////some cool logic about skipping such requests
                                   ///guard Date().timeIntervalSince(self.isMasterStateSendDate) > 1.0 else { /*print("BadTime");*/ return }
                                   ////take into account Hash of this state
-            .drive(onNext: { (x) in
+            .drive(onNext: { [weak w = webSocket] (x) in
+                
+                w?.sendCommand(command: TrackReduxViewPatch(data: x.patch, shouldFlush: x.shouldFlush))
                 
                 print("Sending out patch for syncing with webSocket: \(x.patch)")
-                //self.webSocket.sendCommand(command: WebSocketCommand.updatePlaylist(playlistItemsPatches: [String : PlayerPlaylistItemPatch?]))
                 
             })
             .disposed(by: rx.disposeBag)
@@ -124,9 +126,8 @@ extension RRPlayer {
         ////sync current track ID
         appState.map { $0 }
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
-        /// TODO: we should not send out commands for actions that are not our own
-        ///.filter { $0.isOwn }
-            .drive(onNext: { (state) in
+            .filter { $0.player.currentItem?.state.isOwn ?? false }
+            .drive(onNext: { [weak w = webSocket] (state) in
 
                 guard let orderedTrack = state.currentTrack else {
                     return
@@ -134,8 +135,8 @@ extension RRPlayer {
                 
                 let t = TrackId(id: orderedTrack.track.id, key: orderedTrack.orderHash)
                 
+                w?.sendCommand(command: CodableWebSocketCommand(data: t))
                 print("Sending out currentTrackID for syncing with webSocket: \(t)")
-                //self.webSocket.sendCommand(command: .setCurrentTrack(trackId: TrackId(id: id, key: hash)))
             })
             .disposed(by: rx.disposeBag)
         
@@ -346,7 +347,8 @@ struct PrepareNewTrack: ActionCreator {
         
         ///before preapering new track we need to pause old track and rewind to point 0 secs
         var preState = initialState
-        preState.player.currentItem?.state = .init(progress: 0,
+        preState.player.currentItem?.state = .init(hash: self.signatureHash,
+                                                   progress: 0,
                                                    isPlaying: false)
         
         ///3

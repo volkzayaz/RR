@@ -127,11 +127,13 @@ struct DaPlaylist {
     typealias ReduxView         = [ TrackOrderHash: [ViewKey: Any?]  ]
     typealias NullableReduxView = [ TrackOrderHash: [ViewKey: Any?]? ]
     
+    fileprivate mutating func clear() {
+        reduxView = [:]
+    }
+    
     fileprivate mutating func apply(patch: DaPlayerState.ReduxViewPatch) {
         
-        if patch.shouldFlush {
-            reduxView = [:]
-        }
+        if patch.shouldFlush { clear() }
         
         patch.patch.forEach { (orderHash, maybeValue) in
             
@@ -279,6 +281,8 @@ extension DaPlayerState.ReduxViewPatch: Equatable {
     
     static func == (lhs: DaPlayerState.ReduxViewPatch, rhs: DaPlayerState.ReduxViewPatch) -> Bool {
         
+        guard lhs.patch.count == rhs.patch.count else { return false }
+        
         for (key, value) in lhs.patch {
             
             guard let x = rhs.patch[key] else {
@@ -403,3 +407,41 @@ struct DeleteTrack: ActionCreator {
         
     }
 }
+
+struct ClearTracks: ActionCreator {
+    
+    func perform(initialState: AppState) -> Observable<AppState> {
+        
+        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: true, shouldFlush: true, patch: [:])
+        
+        return ApplyReduxViewPatch(viewPatch: reduxPatch,
+                                   assosiatedTracks: []).perform(initialState: initialState)
+    }
+    
+}
+
+struct ReplaceTracks: ActionCreator {
+
+    let with: [Track]
+    let isOwnChange: Bool
+    
+    func perform(initialState: AppState) -> Observable<AppState> {
+        
+        ///initial state
+        var tracks = initialState.player.tracks
+        
+        ///getting state transform
+        tracks.clear() ///otherwise patch will try to insert tracks in the beggining
+        let patch = tracks.insertPatch(tracks: with, after: nil)
+        
+        ///mapping state transform
+        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: true, patch: patch)
+        
+        ///applying state transform
+        return ApplyReduxViewPatch(viewPatch: reduxPatch,
+                                   assosiatedTracks: with).perform(initialState: initialState)
+        
+    }
+    
+}
+

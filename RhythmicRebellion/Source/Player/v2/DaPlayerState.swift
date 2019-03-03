@@ -223,7 +223,8 @@ extension AppState {
     };
     var activePlayable: MusicType? {
         
-        guard let currentItem = player.currentItem else {
+        guard let currentItem = player.currentItem,
+              let t = currentTrack?.track else {
             return nil
         }
         
@@ -231,7 +232,7 @@ extension AppState {
             return .addon(a)
         }
         
-        return .track(currentTrack!.track)
+        return .track(t)
     }
     
 }
