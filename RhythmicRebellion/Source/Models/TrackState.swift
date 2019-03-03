@@ -10,6 +10,10 @@ import Foundation
 
 struct TrackState: Codable, Equatable {
 
+    enum CodingKeys: String, CodingKey {
+        case hash, progress, isPlaying
+    }
+    
     ///it is important that every TrackState change is signed with correct hash
     ///therefore progress and isPlaying fields are immutable
     ///we do so to enforce users to create new TrackState with correct hash,
@@ -19,14 +23,34 @@ struct TrackState: Codable, Equatable {
     let progress: TimeInterval
     let isPlaying: Bool
 
-    init(hash: String = WebSocketService.ownSignatureHash, progress: TimeInterval, isPlaying: Bool) {
+    let skipSeek: Void?
+    
+    init(hash: String = WebSocketService.ownSignatureHash, progress: TimeInterval, isPlaying: Bool, skipSeek: Void? = nil) {
         self.hash = hash
         self.progress = progress
         self.isPlaying = isPlaying
+        self.skipSeek = skipSeek
     }
  
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        
+        hash = try c.decode(String.self, forKey: .hash)
+        progress = try c.decode(TimeInterval.self, forKey: .progress)
+        isPlaying = try c.decode(Bool.self, forKey: .isPlaying)
+        
+        skipSeek = nil
+    }
+    
     var isOwn: Bool {
         return hash == WebSocketService.ownSignatureHash
+    }
+    
+    static func ==(lhs: TrackState, rhs: TrackState) -> Bool {
+        return lhs.hash == rhs.hash &&
+               lhs.progress == rhs.progress &&
+               lhs.isPlaying == rhs.isPlaying &&
+               (lhs.skipSeek == nil) == (rhs.skipSeek == nil)
     }
     
 }

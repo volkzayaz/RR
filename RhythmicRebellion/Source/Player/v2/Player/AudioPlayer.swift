@@ -68,12 +68,16 @@ class AudioPlayer: NSObject {
         ///////Dispatching
         ///////---------
         
-        let playbackEndedSignal = NotificationCenter.default.rx
-            .notification(NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+        NotificationCenter.default.rx
+            .notification(.AVPlayerItemDidPlayToEndTime,
                           object: nil)
-            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (_) in
+                Dispatcher.dispatch(action: ProceedToNextItem())
+            })
+            .disposed(by: bag)
         
-        let playbackTimeSignal = appState.map { $0.activePlayable }
+        
+        appState.map { $0.activePlayable }
             .notNil()
             .distinctUntilChanged()
             .asObservable()
@@ -82,37 +86,31 @@ class AudioPlayer: NSObject {
                 let duration = CMTime(seconds: 240, preferredTimescale: 1) //p.currentItem!.asset.duration
                 
                 return p.rx.playbackTimeFor(time: duration)
+                    .skip(1)///sends out initial 0 upon audio being ready to play.
+                            ///we are not interested in that event
             }
             .map { CMTimeGetSeconds($0) }
-        
-        
-        playbackEndedSignal.subscribe(onNext: { (_) in
-                Dispatcher.dispatch(action: ProceedToNextItem())
-            })
-            .disposed(by: bag)
-        
-        Observable.of (playbackTimeSignal,
-                       playbackEndedSignal.map { _ in 0 })
-            .merge()
             .subscribe(onNext: { [unowned self] (x) in
-                
+            
                 ////This is a bad implementation of the event:
                 ////Whenever local audioPlayer played back some portion of audio
                 ///Unfortunatelly periodicTimeObserver fires even if player is not playing
                 ///if player seeked for new value
                 ///if player starts or pauses playback
                 ////therefore we manually filter out some of these events
+                if self.isSeeking { return }
                 
-                if self.isSeeking,
-                    self.player.rate > 0 { return }
-                
-                Dispatcher.dispatch(action: Scrub(newValue: x))
+                Dispatcher.dispatch(action: OrganicScrub(newValue: x))
             })
             .disposed(by: bag)
         
-        ///scrubbing
+        ///////---------
+        ///////REACTING
+        ///////---------
+        
+        
         let x = appState
-            .map { $0.player.currentItem?.state.progress ?? 0 }
+            .map { $0.player.currentItem?.state }
         
         player.rx.status
             .map { $0 == .readyToPlay}
@@ -120,13 +118,14 @@ class AudioPlayer: NSObject {
             .flatMapLatest { _ in
                 return x.asObservable()
             }
-            .subscribe(onNext: { [weak p = player] requestedProgress in
+            .subscribe(onNext: { [weak p = player] state in
+                
+                let requestedProgress = state?.progress ?? 0
                 
                 guard let player = p,
                     let time = player.currentItem?.currentTime(),
                     !CMTIME_IS_INVALID(time),
-                    abs(CMTimeGetSeconds(time) - requestedProgress) > 0.9 ///TODO: drop this hack. We need proper way of avoiding reaction to periodic time updates of the player
-                    else {
+                    state?.skipSeek == nil else {
                     return
                 }
                 
@@ -135,14 +134,8 @@ class AudioPlayer: NSObject {
                     self.isSeeking = false
                 }
                 
-                //Dispatcher.dispatch(action: Play())
-                
             })
             .disposed(by: bag)
-        
-        ///////---------
-        ///////REACTING
-        ///////---------
         
         appState.map { $0.player.currentItem?.state }
             .notNil()
@@ -186,6 +179,24 @@ class AudioPlayer: NSObject {
 }
 
 extension AudioPlayer {
+
+    ///TODO: prepare proper naming and documentation on OrganicScrub and skipSeek stuff
+    private struct OrganicScrub: Action { func perform(initialState: AppState) -> AppState {
+        
+        var state = initialState
+        
+        guard let currentTrackState = state.player.currentItem?.state else {
+            return state
+        }
+        
+        state.player.currentItem?.state = .init(progress: newValue,
+                                                isPlaying: currentTrackState.isPlaying,
+                                                skipSeek: ())
+        return state
+        }
+        
+        let newValue: TimeInterval
+    }
     
     struct Scrub: Action { func perform(initialState: AppState) -> AppState {
         
