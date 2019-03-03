@@ -71,13 +71,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appViewController = self.window?.rootViewController as! AppViewController
 
         if let application = Application() {
-            let player = Player(with: application)
-            let lyricsKaraokeService = LyricsKaraokeService(with: application, player: player)
+            
+            let lyricsKaraokeService = LyricsKaraokeService(with: application)
 
             let routerDependencies = RouterDependencies(application: application,
-                                                        player: player,
                                                         lyricsKaraokeService: lyricsKaraokeService,
-                                                        daPlayer: RRPlayer(webSocket: application.webSocketService))
+                                                        daPlayer: RRPlayer(application: application))
 
             let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
             defaultAppRouter.start(controller: appViewController)
