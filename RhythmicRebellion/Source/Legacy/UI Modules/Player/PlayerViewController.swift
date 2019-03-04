@@ -353,7 +353,11 @@ extension PlayerViewController {
 
     func refreshProgressUI() {
 
-        self.playerItemProgressView.restrictedValue = self.viewModel.playerItemRestrictedValue        
+        viewModel.playerItemRestrictedValue
+            .drive(onNext: { [weak self] x in
+                self?.playerItemProgressView.restrictedValue = x
+            })
+            .disposed(by: rx.disposeBag)
 
         viewModel.playerItemCurrentTimeString
             .drive(playerItemCurrentTimeLabel.rx.text)

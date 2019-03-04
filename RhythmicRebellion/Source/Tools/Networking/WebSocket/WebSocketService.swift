@@ -40,6 +40,8 @@ extension WebSocketService {
         return commandObservable()
     }
     
+    //var did
+    
 }
 
 class WebSocketService {

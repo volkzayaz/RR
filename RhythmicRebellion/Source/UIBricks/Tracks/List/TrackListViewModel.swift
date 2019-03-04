@@ -430,15 +430,23 @@ import RxDataSources
 protocol TrackProvidable {
     var identity: String { get }
     var track: Track { get }
+    
+    func isEqualTo(orderedTrack: OrderedTrack) -> Bool
 }
 
 extension Track: TrackProvidable {
     public var identity: String { return "\(id)" }
     var track: Track { return self }
+    
+    func isEqualTo(orderedTrack: OrderedTrack) -> Bool {
+        return orderedTrack.track == self
+    }
 }
 
 extension OrderedTrack: TrackProvidable {
-    var identity: String {
-        return orderHash
+    var identity: String { return orderHash }
+    
+    func isEqualTo(orderedTrack: OrderedTrack) -> Bool {
+        return orderedTrack == self
     }
 }

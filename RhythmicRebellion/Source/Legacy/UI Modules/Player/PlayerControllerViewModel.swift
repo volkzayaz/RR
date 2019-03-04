@@ -67,14 +67,24 @@ final class PlayerViewModel: NSObject {
         
     }
 
-    var playerItemRestrictedValue: Float {
+    var playerItemRestrictedValue: Driver<Float> {
         
-        return 0
+        return appState.map { $0.currentTrack }
+            .distinctUntilChanged()
+            .map { maybeTrack in
+                
+                guard let track = maybeTrack?.track,
+                    let t = track.previewType,
+                    let audio = track.audioFile else { return 0 }
+                
+                switch t {
+                case .limit45: return Float(45) / Float(audio.duration)
+                case .limit90: return Float(90) / Float(audio.duration)
+                default      : return 0
+                }
         
-//        guard let playerItemDuration = self.player.currentItemDuration, playerItemDuration != 0.0,
-//            let playerItemRestrictedTime = self.player.currentItemRestrictedTime else { return 0.0 }
-//
-//        return Float(playerItemRestrictedTime / playerItemDuration)
+            }
+
     }
 
     var playerItemNameString: Driver<String> {

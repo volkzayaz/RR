@@ -101,13 +101,13 @@ extension TrackViewModel {
     
     var equalizerHidden: Driver<Bool> {
         
-        let t = track
-        return appState.map { $0.currentTrack?.track }
+        let t = trackProvidable
+        return appState.map { $0.currentTrack }
             .distinctUntilChanged()
             .map { x in
                 guard let x = x else { return true }
             
-                return t != x
+                return !t.isEqualTo(orderedTrack: x)
             }
         
     }

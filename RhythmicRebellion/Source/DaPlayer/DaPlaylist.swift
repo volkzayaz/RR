@@ -39,6 +39,10 @@ struct OrderedTrack: Equatable {
         return res
     }
     
+    static func ==(lhs: OrderedTrack, rhs: OrderedTrack) -> Bool {
+        return lhs.orderHash == rhs.orderHash
+    }
+    
 }
 
 
