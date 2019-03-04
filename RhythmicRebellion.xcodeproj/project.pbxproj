@@ -219,7 +219,7 @@
 		73F138BA222C289200FB8EBC /* PlayerPlaylistRootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1376C222C289200FB8EBC /* PlayerPlaylistRootRouter.swift */; };
 		73F138BB222C289200FB8EBC /* PlayerNowPlayingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1376E222C289200FB8EBC /* PlayerNowPlayingRouter.swift */; };
 		73F138BC222C289200FB8EBC /* NowPlayingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1376F222C289200FB8EBC /* NowPlayingViewModel.swift */; };
-		73F138BD222C289200FB8EBC /* PlayerNowPlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13770222C289200FB8EBC /* PlayerNowPlayingViewController.swift */; };
+		73F138BD222C289200FB8EBC /* NowPlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13770222C289200FB8EBC /* NowPlayingViewController.swift */; };
 		73F138BE222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13772222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift */; };
 		73F138BF222C289200FB8EBC /* PlayerMyPlaylistsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13774222C289200FB8EBC /* PlayerMyPlaylistsRouter.swift */; };
 		73F138C0222C289200FB8EBC /* PlayerMyPlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13775222C289200FB8EBC /* PlayerMyPlaylistsViewController.swift */; };
@@ -545,7 +545,7 @@
 		73F1376C222C289200FB8EBC /* PlayerPlaylistRootRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerPlaylistRootRouter.swift; sourceTree = "<group>"; };
 		73F1376E222C289200FB8EBC /* PlayerNowPlayingRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingRouter.swift; sourceTree = "<group>"; };
 		73F1376F222C289200FB8EBC /* NowPlayingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingViewModel.swift; sourceTree = "<group>"; };
-		73F13770222C289200FB8EBC /* PlayerNowPlayingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingViewController.swift; sourceTree = "<group>"; };
+		73F13770222C289200FB8EBC /* NowPlayingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingViewController.swift; sourceTree = "<group>"; };
 		73F13772222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingTableHeaderView.swift; sourceTree = "<group>"; };
 		73F13774222C289200FB8EBC /* PlayerMyPlaylistsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMyPlaylistsRouter.swift; sourceTree = "<group>"; };
 		73F13775222C289200FB8EBC /* PlayerMyPlaylistsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMyPlaylistsViewController.swift; sourceTree = "<group>"; };
@@ -1432,7 +1432,7 @@
 			children = (
 				73F1376E222C289200FB8EBC /* PlayerNowPlayingRouter.swift */,
 				73F1376F222C289200FB8EBC /* NowPlayingViewModel.swift */,
-				73F13770222C289200FB8EBC /* PlayerNowPlayingViewController.swift */,
+				73F13770222C289200FB8EBC /* NowPlayingViewController.swift */,
 				73F13771222C289200FB8EBC /* Views */,
 			);
 			path = PlayerNowPlaying;
@@ -2292,7 +2292,7 @@
 				73F138DA222C289200FB8EBC /* PlayerContentPresentationAnimator.swift in Sources */,
 				73F138D5222C289200FB8EBC /* LyricsKaraokeRouter.swift in Sources */,
 				73F138CF222C289200FB8EBC /* KaraokeViewModel.swift in Sources */,
-				73F138BD222C289200FB8EBC /* PlayerNowPlayingViewController.swift in Sources */,
+				73F138BD222C289200FB8EBC /* NowPlayingViewController.swift in Sources */,
 				73F13801222C289200FB8EBC /* ArtistRouter.swift in Sources */,
 				73F13918222C289200FB8EBC /* View+Extension.swift in Sources */,
 				73F13863222C289200FB8EBC /* ListeningSettingsViewController.swift in Sources */,

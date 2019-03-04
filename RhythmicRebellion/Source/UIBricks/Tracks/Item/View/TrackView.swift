@@ -176,7 +176,7 @@ class TrackView: UIView {
                 self?.equalizer.isHidden = isHidden
                 
                 if (isHidden) {
-                
+                    
                     self?.equalizerWidthConstraint.constant = 0
                     self?.equalizerLeadingConstraint.constant = 0
                     
@@ -185,6 +185,10 @@ class TrackView: UIView {
                     self?.equalizerWidthConstraint.constant = 18
                     self?.equalizerLeadingConstraint.constant = 15
                 }
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self?.layoutIfNeeded()
+                })
                 
             })
             .disposed(by: disposeBag)

@@ -83,17 +83,17 @@ protocol TrackListBindings: class, ErrorPresenting, AlertActionsViewModelPersent
 protocol TrackProvider {
     
     ////provide list of tracks to play back
-    func provide() -> Observable<[Track]>
+    func provide() -> Observable<[TrackProvidable]>
     
 }
 
 class TrackListViewModel {
 
     ////provide list of actions available for given track
-    typealias ActionsProvider = (TrackListViewModel, Track, IndexPath) -> [ActionViewModel]
+    typealias ActionsProvider = (TrackListViewModel, TrackProvidable, IndexPath) -> [ActionViewModel]
     
     ///handle track selection
-    typealias SelectedProvider = (TrackListViewModel, Track, IndexPath) -> Void
+    typealias SelectedProvider = (TrackListViewModel, TrackProvidable, IndexPath) -> Void
 
     private(set) weak var delegate: TrackListBindings?
     private weak var application: Application?
@@ -109,7 +109,7 @@ class TrackListViewModel {
     private let bag = DisposeBag()
     private let reloadTrigger = BehaviorSubject<Void>(value: () )
     
-    private(set) var tracks: [Track] = [] {
+    private(set) var tracks: [TrackProvidable] = [] {
         didSet {
             delegate?.reloadUI()
             delegate?.reloadPlaylistUI()
@@ -181,10 +181,10 @@ extension TrackListViewModel {
         return trackViewModel(for: track)
     }
     
-    func trackViewModel(for track: Track) -> TrackViewModel {
+    func trackViewModel(for track: TrackProvidable) -> TrackViewModel {
         
-        return TrackViewModel(router: router.trackRouter(for: track),
-                              track: track,
+        return TrackViewModel(router: router.trackRouter(for: track.track),
+                              trackProvidable: track,
                               user: application?.user,
                               textImageGenerator: textImageGenerator)
         
@@ -207,17 +207,17 @@ extension TrackListViewModel {
     
     func actions(forObjectAt indexPath: IndexPath) -> AlertActionsViewModel<ActionViewModel> {
         
-        let track = tracks[indexPath.row]
+        let t = tracks[indexPath.row]
         
         let cancel = [ActionViewModel(.cancel, actionCallback: {} )]
-        let actions = actionsProvider(self, track, indexPath)
+        let actions = actionsProvider(self, t, indexPath)
         
         let ftp = ActionViewModel(.forceToPlay) { [weak self] in
-            self?.forceToPlay(track: track)
+            self?.forceToPlay(track: t.track)
         }
         
         let dnp = ActionViewModel(.doNotPlay) { [weak self] in
-            self?.doNotPlay(track: track)
+            self?.doNotPlay(track: t.track)
         }
         
         let maybeUser = application?.user as? FanUser
@@ -225,19 +225,19 @@ extension TrackListViewModel {
         var result: [ActionViewModel] = []
         
         if let user = maybeUser,
-            user.isCensorshipTrack(track) &&
-                !user.profile.forceToPlay.contains(track.id) {
+            user.isCensorshipTrack(t.track) &&
+                !user.profile.forceToPlay.contains(t.track.id) {
             result.append(ftp)
         }
         
         if let user = maybeUser,
-            user.isCensorshipTrack(track) &&
-                user.profile.forceToPlay.contains(track.id) {
+            user.isCensorshipTrack(t.track) &&
+                user.profile.forceToPlay.contains(t.track.id) {
             result.append(dnp)
         }
         
         if let user = maybeUser,
-            user.hasPurchase(for: track) {
+            user.hasPurchase(for: t.track) {
             ///No proper action is available so far
             //result.append(add)
         }
@@ -336,8 +336,8 @@ extension TrackListViewModel: ApplicationWatcher {
         
         var indexPaths: [IndexPath] = []
         
-        for (index, track) in tracks.enumerated() {
-            guard track.artist.id == artistFollowingState.artistId else { continue }
+        for (index, t) in tracks.enumerated() {
+            guard t.track.artist.id == artistFollowingState.artistId else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
         
@@ -353,8 +353,8 @@ extension TrackListViewModel: ApplicationWatcher {
         
         var indexPaths: [IndexPath] = []
         
-        for (index, track) in tracks.enumerated() {
-            guard changedPurchasedTracksIds.contains(track.id) else { continue }
+        for (index, t) in tracks.enumerated() {
+            guard changedPurchasedTracksIds.contains(t.track.id) else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
         
@@ -423,4 +423,22 @@ extension TrackListViewModel {
     
     
     
+}
+
+import RxDataSources
+
+protocol TrackProvidable {
+    var identity: String { get }
+    var track: Track { get }
+}
+
+extension Track: TrackProvidable {
+    public var identity: String { return "\(id)" }
+    var track: Track { return self }
+}
+
+extension OrderedTrack: TrackProvidable {
+    var identity: String {
+        return orderHash
+    }
 }

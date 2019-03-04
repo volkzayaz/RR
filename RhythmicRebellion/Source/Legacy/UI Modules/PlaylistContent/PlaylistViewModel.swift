@@ -33,7 +33,7 @@ struct FanPlaylistProvider: DeletablePlaylistProvider {
         return fanPlaylist
     }
     
-    func provide() -> Observable<[Track]> {
+    func provide() -> Observable<[TrackProvidable]> {
         return TrackRequest.fanTracks(playlistId: playlist.id)
             .rx.response(type: PlaylistTracksResponse.self)
             .map { $0.tracks }
@@ -59,7 +59,7 @@ struct DefinedPlaylistProvider: PlaylistProvider {
     
     let playlist: Playlist
     
-    func provide() -> Observable<[Track]> {
+    func provide() -> Observable<[TrackProvidable]> {
         return TrackRequest.tracks(playlistId: playlist.id)
             .rx.response(type: PlaylistTracksResponse.self)
             .map { $0.tracks }
@@ -73,7 +73,7 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     let album: Album
     let instantDownload: Bool
     
-    func provide() -> Observable<[Track]> {
+    func provide() -> Observable<[TrackProvidable]> {
         return ArtistRequest.albumRecords(album: album)
             .rx.response(type: ArtistResponse<Track>.self)
             .map { $0.data }
@@ -113,7 +113,7 @@ struct ArtistPlaylistProvider: PlaylistProvider {
     
     let artistPlaylist: ArtistPlaylist
     
-    func provide() -> Observable<[Track]> {
+    func provide() -> Observable<[TrackProvidable]> {
         return ArtistRequest.playlistRecords(playlist: artistPlaylist)
             .rx.response(type: ArtistResponse<Track>.self)
             .map { $0.data }
@@ -187,7 +187,7 @@ final class PlaylistViewModel {
         }
         
         let actions = { (list: TrackListViewModel,
-                         track: Track,
+                         t: TrackProvidable,
                          indexPath: IndexPath) -> [ActionViewModel] in
             
             var result: [ActionViewModel] = []
@@ -199,7 +199,7 @@ final class PlaylistViewModel {
             if maybeUser?.isGuest == false {
                 
                 let toPlaylist = ActionViewModel(.toPlaylist) {
-                    router.showAddToPlaylist(for: [track])
+                    router.showAddToPlaylist(for: [t.track])
                 }
                 
                 result.append(toPlaylist)
@@ -207,18 +207,18 @@ final class PlaylistViewModel {
             
             //////2
             
-            if track.isPlayable {
+            if t.track.isPlayable {
             
                 let playNow = ActionViewModel(.playNow) {
-                    list.play(tracks: [track])
+                    list.play(tracks: [t.track])
                 }
                 
                 let playNext = ActionViewModel(.playNext) {
-                    list.play(tracks: [track], at: .next)
+                    list.play(tracks: [t.track], at: .next)
                 }
                 
                 let playLast = ActionViewModel(.playLast) {
-                    list.play(tracks: [track], at: .last)
+                    list.play(tracks: [t.track], at: .last)
                 }
             
                 result.append(playNow)
@@ -232,7 +232,7 @@ final class PlaylistViewModel {
                 
                 let delete = ActionViewModel(.delete) {
                     
-                    p.delete(track: track) { x in
+                    p.delete(track: t.track) { x in
                         switch x {
                         case .error(let error):
                             list.delegate?.show(error: error)
@@ -255,15 +255,15 @@ final class PlaylistViewModel {
         }
         
         let select = { (list: TrackListViewModel,
-                        track: Track,
+                        t: TrackProvidable,
                         indexPath: IndexPath) in
             
-            guard track.isPlayable else {
+            guard t.track.isPlayable else {
                 return
             }
             
-            if appStateSlice.currentTrack?.track != track {
-                list.play(tracks: [track])
+            if appStateSlice.currentTrack?.track != t.track {
+                list.play(tracks: [t.track])
                 return
             }
             DataLayer.get.daPlayer.flip()
@@ -357,10 +357,10 @@ extension PlaylistViewModel {
     func performeAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, for playlist: Playlist) {
 
         switch actionType {
-        case .playNow: tracksViewModel.play(tracks: tracksViewModel.tracks)
-        case .playNext: tracksViewModel.play(tracks: tracksViewModel.tracks, at: .next)
-        case .playLast: tracksViewModel.play(tracks: tracksViewModel.tracks, at: .last)
-        case .replaceCurrent: tracksViewModel.replacePlayerPlaylist(with: tracksViewModel.tracks)
+        case .playNow: tracksViewModel.play(tracks: tracksViewModel.tracks.map { $0.track })
+        case .playNext: tracksViewModel.play(tracks: tracksViewModel.tracks.map { $0.track }, at: .next)
+        case .playLast: tracksViewModel.play(tracks: tracksViewModel.tracks.map { $0.track }, at: .last)
+        case .replaceCurrent: tracksViewModel.replacePlayerPlaylist(with: tracksViewModel.tracks.map { $0.track })
         case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .clear: self.clear(playlist: playlist)
 

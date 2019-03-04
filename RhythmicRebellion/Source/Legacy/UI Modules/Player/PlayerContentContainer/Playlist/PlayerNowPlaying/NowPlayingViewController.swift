@@ -1,5 +1,5 @@
 //
-//  PlayerNowPlayingViewController.swift
+//  NowPlayingViewController.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 8/6/18.
@@ -10,8 +10,39 @@
 import UIKit
 import EasyTipView
 
-final class PlayerNowPlayingViewController: UIViewController {
+import RxSwift
+import RxCocoa
+import RxDataSources
 
+import Rswift
+
+final class NowPlayingViewController: UIViewController {
+
+    lazy var dataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<String, TrackViewModel>>(configureCell: { [unowned self] (_, tableView, ip, data) in
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.trackTableViewCellIdentifier,
+                                        for: ip)!
+        
+        let f = cell.trackView.actionButton.frame
+        let v = cell.trackView.actionButtonContainerView
+        
+        cell.trackView.setup(viewModel: data) { [unowned self] action in
+            
+            switch action {
+            case .showActions:
+                self.showActions(itemAt: ip,
+                                 sourceRect: f,
+                                 sourceView: v!)
+                
+            case .showHint(let sourceView, let hintText):
+                self.showHint(sourceView: sourceView, text: hintText)
+            }
+        }
+        
+        return cell
+
+    })
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var tableHeaderView: PlayerNowPlayingTableHeaderView!
     @IBOutlet var emptyPlaylistView: UIView!
@@ -55,7 +86,9 @@ final class PlayerNowPlayingViewController: UIViewController {
         self.tableView.tableHeaderView = self.tableHeaderView
         self.tableView.tableFooterView = UIView()
 
-        viewModel.load(with: self)
+        viewModel.dataSource
+            .drive(tableView.rx.items(dataSource: dataSource))
+            .disposed(by: rx.disposeBag)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -122,11 +155,7 @@ final class PlayerNowPlayingViewController: UIViewController {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate -
 
-extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDelegate {
-
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.tracksViewModel.numberOfItems(in: section)
-    }
+extension NowPlayingViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         (cell as! TrackTableViewCell).trackView.prepareToDisplay()
@@ -136,26 +165,6 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
         (cell as! TrackTableViewCell).trackView.prepareToEndDisplay()
     }
 
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let trackItemTableViewCell = TrackTableViewCell.reusableCell(in: tableView, at: indexPath)
-        let trackItemTableViewCellViewModel = self.viewModel.tracksViewModel.object(at: indexPath)
-
-        trackItemTableViewCell.trackView.setup(viewModel: trackItemTableViewCellViewModel) { [unowned self, weak trackItemTableViewCell, weak tableView] action in
-            guard let trackItemTableViewCell = trackItemTableViewCell, let indexPath = tableView?.indexPath(for: trackItemTableViewCell) else { return }
-
-            switch action {
-            case .showActions:
-                self.showActions(itemAt: indexPath,
-                                 sourceRect: trackItemTableViewCell.trackView.actionButton.frame,
-                                 sourceView: trackItemTableViewCell.trackView.actionButtonContainerView)
-            
-            case .showHint(let sourceView, let hintText): self.showHint(sourceView: sourceView, text: hintText)
-            }
-        }
-
-        return trackItemTableViewCell
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         viewModel.tracksViewModel.selectObject(at: indexPath)
@@ -177,7 +186,7 @@ extension PlayerNowPlayingViewController: UITableViewDataSource, UITableViewDele
 }
 
 // MARK: - Router -
-extension PlayerNowPlayingViewController {
+extension NowPlayingViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -193,10 +202,10 @@ extension PlayerNowPlayingViewController {
 
 }
 
-extension PlayerNowPlayingViewController: TrackListBindings {
+extension NowPlayingViewController: TrackListBindings {
 
     func reloadUI() {
-        self.tableView.reloadData()
+        //self.tableView.reloadData()
     }
 
     func reloadPlaylistUI() {
@@ -205,6 +214,6 @@ extension PlayerNowPlayingViewController: TrackListBindings {
     }
 
     func reloadObjects(at indexPaths: [IndexPath]) {
-        self.tableView.reloadRows(at: indexPaths, with: .none)
+        //self.tableView.reloadRows(at: indexPaths, with: .none)
     }
 }

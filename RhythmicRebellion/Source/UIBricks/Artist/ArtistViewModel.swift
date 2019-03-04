@@ -137,7 +137,7 @@ extension ArtistViewModel {
         
         let artist: Artist
         
-        func provide() -> Observable<[Track]> {
+        func provide() -> Observable<[TrackProvidable]> {
             
             return ArtistRequest.records(artist: artist)
                 .rx.response(type: ArtistResponse<Track>.self)
@@ -157,7 +157,7 @@ extension ArtistViewModel {
             switch self {
             case .album(let album):       return "album \(album.id)"
             case .playlist(let playlist): return "playlist \(playlist.id)"
-            case .track(let track):       return "track \(track.id)"
+            case .track(let t):       return "track \(t.track.id)"
             }
         }
         

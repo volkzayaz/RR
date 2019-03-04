@@ -10,6 +10,7 @@ import Foundation
 
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 import DownloadButton
 
@@ -122,9 +123,16 @@ extension TrackViewModel {
     
 }
 
-struct TrackViewModel : MVVM_ViewModel {
+struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     
-    let track: Track
+    var identity: String {
+        return trackProvidable.identity
+    }
+    
+    var track: Track {
+        return trackProvidable.track
+    }
+    fileprivate let trackProvidable: TrackProvidable
     let user: User?
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
@@ -132,16 +140,16 @@ struct TrackViewModel : MVVM_ViewModel {
     let downloadViewModel: DownloadViewModel
     let textImageGenerator: TextImageGenerator
     
-    init(router: TrackRouter, track: Track, user: User?,
+    init(router: TrackRouter, trackProvidable: TrackProvidable, user: User?,
          textImageGenerator: TextImageGenerator) {
         
         self.router = router
-        self.track = track
+        self.trackProvidable = trackProvidable
         self.user = user
     
         self.textImageGenerator = textImageGenerator
         
-        downloadViewModel = DownloadViewModel(remoteURL: track.audioFile!.urlString)
+        downloadViewModel = DownloadViewModel(remoteURL: trackProvidable.track.audioFile!.urlString)
         
         indicator.asDriver()
             .drive(onNext: { [weak h = router.owner] (loading) in

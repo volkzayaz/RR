@@ -9,6 +9,8 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
+import RxDataSources
 
 struct NowPlayingProvider : TrackProvider {
     
@@ -16,11 +18,21 @@ struct NowPlayingProvider : TrackProvider {
         return appStateSlice.player.tracks.orderedTracks
     }
     
-    func provide() -> Observable<[Track]> {
+    func provide() -> Observable<[TrackProvidable]> {
         return appState.map { $0.player.tracks }
                        .distinctUntilChanged()
-                       .map { $0.orderedTracks.map { $0.track } }
+                       .map { $0.orderedTracks }
                        .asObservable()
+    }
+    
+}
+
+extension NowPlayingViewModel {
+    
+    var dataSource: Driver<[AnimatableSectionModel<String, TrackViewModel>]> {
+        return data.asDriver().map { x in
+            return [AnimatableSectionModel(model: "", items: x)]
+        }
     }
     
 }
@@ -31,6 +43,11 @@ final class NowPlayingViewModel {
 
     private(set) weak var router: PlayerNowPlayingRouter!
     private(set) weak var application: Application!
+    
+    fileprivate let data = BehaviorRelay<[TrackViewModel]>(value: [])
+    fileprivate let trackObserver: TrackListViewModel.Observer
+    
+    fileprivate let bag = DisposeBag()
     
     let tracksViewModel: TrackListViewModel
     private var orderedTracks: [OrderedTrack] {
@@ -46,7 +63,7 @@ final class NowPlayingViewModel {
         self.router = router
         self.application = application
         
-        let actions: TrackListViewModel.ActionsProvider = { list, track, indexPath in
+        let actions: TrackListViewModel.ActionsProvider = { list, t, indexPath in
             
             var result: [ActionViewModel] = []
             
@@ -58,7 +75,7 @@ final class NowPlayingViewModel {
             if maybeUser?.isGuest == false {
                 
                 let toPlaylist = ActionViewModel(.toPlaylist) {
-                    router.showAddToPlaylist(for: [track])
+                    router.showAddToPlaylist(for: [t.track])
                 }
                 
                 result.append(toPlaylist)
@@ -66,7 +83,7 @@ final class NowPlayingViewModel {
             
             //////2
             
-            if track.isPlayable {
+            if t.track.isPlayable {
                 
                 let playNow = ActionViewModel(.playNow) {
                     list.play(orderedTrack: orderedTrack)
@@ -88,17 +105,17 @@ final class NowPlayingViewModel {
             
         }
         
-        let select: TrackListViewModel.SelectedProvider = { list, track, indexPath in
+        let select: TrackListViewModel.SelectedProvider = { list, t, indexPath in
             
-            guard track.isPlayable else {
+            guard t.track.isPlayable else {
                 return
             }
             
             let orderedTrack = (list.trackProivder as! NowPlayingProvider).orderedTracks[indexPath.row]
             
-            precondition(orderedTrack.track == track, "Race condition appeared. Action performed with unsynced dataSource. Expected track \(track), received track \(orderedTrack.track)")
+            precondition(orderedTrack.track == t.track, "Race condition appeared. Action performed with unsynced dataSource. Expected track \(t.track), received track \(orderedTrack.track)")
             
-            if appStateSlice.currentTrack?.track != track {
+            if appStateSlice.currentTrack?.track != t.track {
                 list.play(orderedTrack: orderedTrack)
                 return
             }
@@ -112,6 +129,13 @@ final class NowPlayingViewModel {
                                              router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)
+        
+        trackObserver = TrackListViewModel.Observer(list: tracksViewModel,
+                                                    handler: router.owner)
+        
+        trackObserver.trackViewModels
+            .bind(to: data)
+            .disposed(by: bag)
         
     }
 
