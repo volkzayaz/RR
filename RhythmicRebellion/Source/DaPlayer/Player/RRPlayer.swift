@@ -305,7 +305,7 @@ struct PrepareNewTrackByHash: ActionCreator {
         }
         
         guard let x = initialState.player.tracks[orderHash] else {
-            fatalErrorInDebug(" Can't start playing track with order key: \(orderHash). It is not found in reduxView: \(initialState.player.tracks) ")
+//            fatalErrorInDebug(" Can't start playing track with order key: \(orderHash). It is not found in reduxView: \(initialState.player.tracks) ")
             return .just(initialState)
         }
         

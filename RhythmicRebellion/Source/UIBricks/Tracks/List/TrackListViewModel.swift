@@ -186,8 +186,7 @@ extension TrackListViewModel {
         return TrackViewModel(router: router.trackRouter(for: track),
                               track: track,
                               user: application?.user,
-                              textImageGenerator: textImageGenerator,
-                              isLockedForActions: false)
+                              textImageGenerator: textImageGenerator)
         
     }
     

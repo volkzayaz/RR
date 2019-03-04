@@ -126,9 +126,46 @@ final class PlayerViewModel: NSObject {
         return appState.map { $0.activePlayable != nil }
     }
     
-    
-    var playerItemPreviewOptionViewModel: TrackPreviewOptionViewModel?
+    var preview: Driver<TrackPreviewOptionViewModel?> {
+        
+        let g = textImageGenerator
+        
+        //TODO: listen to user changes as well
+        
+        return appState.map { $0.currentTrack }
+            .distinctUntilChanged()
+            .flatMapLatest { (currentTrack) in
+                
+                guard let track = currentTrack?.track else { return .just(nil) }
+                
+                guard case .full? = track.previewType else {
+                    return .just(TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
+                                                                                      user: DataLayer.get.application.user, μSecondsPlayed: nil),
+                                                             textImageGenerator: g))
+                }
+                
+                return appState.map { $0.allowedTimes[track.id] }
+                    .distinctUntilChanged()
+                    .map { _ in
+                        
+                        ///TODO: take into account allowed times
+                        
+                        return TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
+                                                                                    user: DataLayer.get.application.user, μSecondsPlayed: 0),
+                                                           textImageGenerator: g)
+                        
+                }
+                
+        }
+        
+    }
 
+    var previewOptionImage: Driver<UIImage?> {
+        return preview.map { $0?.image }
+    }
+
+    let previewOptionHintText = BehaviorRelay<String?>(value: nil)
+    
     var isPlayerBlocked: Driver<Bool> {
         return appState.map { $0.player.isBlocked }
             .distinctUntilChanged()
@@ -195,6 +232,10 @@ final class PlayerViewModel: NSObject {
         self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
 
         super.init()
+        
+        preview.map { $0?.hintText }
+            .drive(previewOptionHintText)
+            .disposed(by: disposeBag)
     }
 
     deinit {
@@ -203,8 +244,6 @@ final class PlayerViewModel: NSObject {
 
     func load() {
 
-        self.loadPlayerItemPreviewOptionViewModel()
-        
         self.lyricsKaraokeService.lyricsState.subscribe(onNext: { [unowned self] (lyricsState) in
 
             switch lyricsState {
@@ -239,16 +278,6 @@ final class PlayerViewModel: NSObject {
                                                                            NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12.0)]))
 
         return descriptionAttributedString
-    }
-
-    func loadPlayerItemPreviewOptionViewModel() {
-
-        guard let track = appStateSlice.currentTrack?.track else { self.playerItemPreviewOptionViewModel = nil; return }
-
-        self.playerItemPreviewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
-                                                                                                    user: self.application.user,
-                                                                                                    textImageGenerator: self.textImageGenerator)
-
     }
 
     func karaokeIntervalsViewModel() -> DefaultKaraokeIntervalsProgressViewModel? {
@@ -349,7 +378,7 @@ extension PlayerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let artist = appStateSlice.currentTrack?.track.artist, artist.id == artistFollowingState.artistId else { return }
-        self.loadPlayerItemPreviewOptionViewModel()
+        
         
     }
 

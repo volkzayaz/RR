@@ -258,7 +258,6 @@
 		73F138E1222C289200FB8EBC /* PlayerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379E222C289200FB8EBC /* PlayerRouter.swift */; };
 		73F138E3222C289200FB8EBC /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A0222C289200FB8EBC /* Application.swift */; };
 		73F138E4222C289200FB8EBC /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A2222C289200FB8EBC /* RestApiServiceError.swift */; };
-		73F138E5222C289200FB8EBC /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A3222C289200FB8EBC /* AppError.swift */; };
 		73F138E8222C289200FB8EBC /* GenericError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A6222C289200FB8EBC /* GenericError.swift */; };
 		73F138E9222C289200FB8EBC /* LyricsKaraokeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A9222C289200FB8EBC /* LyricsKaraokeService.swift */; };
 		73F138EA222C289200FB8EBC /* RestApiRequestPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AB222C289200FB8EBC /* RestApiRequestPayloads.swift */; };
@@ -306,6 +305,7 @@
 		73F1391A222C28A300FB8EBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13919222C28A300FB8EBC /* AppDelegate.swift */; };
 		73F1391E222C295000FB8EBC /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1391C222C295000FB8EBC /* Setting.swift */; };
 		73F1391F222C295000FB8EBC /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1391D222C295000FB8EBC /* SettingsStore.swift */; };
+		73F13920222C35C900FB8EBC /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A3222C289200FB8EBC /* AppError.swift */; };
 		763157FB219D794500E1D7F5 /* Pages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 763157F9219D794500E1D7F5 /* Pages.storyboard */; };
 		763157FE219D798700E1D7F5 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 763157FC219D798700E1D7F5 /* Profile.storyboard */; };
 		763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 763931E221185F3B00A65257 /* PlayerPlaylist.storyboard */; };
@@ -2222,6 +2222,7 @@
 				73F1381E222C289200FB8EBC /* GenderSegmentedControl.swift in Sources */,
 				73F13844222C289200FB8EBC /* Token.swift in Sources */,
 				73F13917222C289200FB8EBC /* Dictionary+Extension.swift in Sources */,
+				73F13920222C35C900FB8EBC /* AppError.swift in Sources */,
 				73F1387F222C289200FB8EBC /* ProfileSettingsRouter.swift in Sources */,
 				73F13855222C289200FB8EBC /* AddNewSelectableListItemViewModel.swift in Sources */,
 				73F137F6222C289200FB8EBC /* TrackViewModel.swift in Sources */,
@@ -2445,7 +2446,6 @@
 				73F13818222C289200FB8EBC /* GenresContainerView.swift in Sources */,
 				73F1390F222C289200FB8EBC /* ViewController+ErrorMessage.swift in Sources */,
 				73F137FB222C289200FB8EBC /* DownloadViewModel.swift in Sources */,
-				73F138E5222C289200FB8EBC /* AppError.swift in Sources */,
 				73F138A3222C289200FB8EBC /* PageTrackForceToPlayState.swift in Sources */,
 				73F1391F222C295000FB8EBC /* SettingsStore.swift in Sources */,
 				73F138DD222C289200FB8EBC /* PromoViewController.swift in Sources */,

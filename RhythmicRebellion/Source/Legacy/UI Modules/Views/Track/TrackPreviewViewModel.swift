@@ -10,50 +10,6 @@ import UIKit
 
 struct TrackPreviewOptionViewModel {
 
-    struct Factory {
-
-        func previewOptionType(for track: Track, user: User?) -> PreviewOptionType {
-            guard track.isPlayable, let trackAudioFile = track.audioFile else { return .commigSoon }
-            guard track.isFreeForPlaylist == false else { return .freeForPlaylist }
-            guard let fanUser = user as? FanUser else { return .authorizationNeeded }
-            guard fanUser.hasPurchase(for: track) == false else { return .freeForPlaylist }
-            guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { return .freeForPlaylist }
-            guard let t = track.previewType else {
-                return .noPreview
-            }
-
-            switch t {
-            case .full:
-                guard let previewLimitTimes = track.previewLimitTimes else { return .freeForPlaylist }
-                guard previewLimitTimes > 0 else { return .fullLimitTimes(-1) }
-                
-                let trackTotalPlayMSeconds: UInt64 = 0
-                //guard let trackTotalPlayMSeconds = player?.totalPlayMSeconds(for: track.id) else { return .fullLimitTimes(previewLimitTimes) }
-
-                let trackMaxPlayMSeconds = UInt64(trackAudioFile.duration * 1000 * previewLimitTimes)
-                guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { return .fullLimitTimes(-1) }
-
-                let previewTimes = Int((trackMaxPlayMSeconds - trackTotalPlayMSeconds) / UInt64(trackAudioFile.duration * 1000))
-
-                return .fullLimitTimes(previewTimes)
-
-            case .limit45: return .limitSeconds(45)
-            case .limit90: return .limitSeconds(90)
-
-            case .noPreview: return .noPreview
-            
-            }
-
-        }
-
-        func makeViewModel(track: Track, user: User?, textImageGenerator: TextImageGenerator) -> TrackPreviewOptionViewModel {
-
-            let previewOptionType = self.previewOptionType(for: track, user: user)
-
-            return TrackPreviewOptionViewModel(previewOptionType: previewOptionType, textImageGenerator: textImageGenerator)
-        }
-    }
-
     enum PreviewOptionType {
         case commigSoon
         case noPreview
@@ -61,17 +17,41 @@ struct TrackPreviewOptionViewModel {
         case fullLimitTimes(Int)
         case limitSeconds(UInt)
         case authorizationNeeded
+        
+        init(with track: Track, user: User?, μSecondsPlayed: UInt64?) {
+            
+            guard track.isPlayable, let trackAudioFile = track.audioFile else { self = .commigSoon; return }
+            guard track.isFreeForPlaylist == false else { self = .freeForPlaylist; return }
+            guard let fanUser = user as? FanUser else { self = .authorizationNeeded; return; }
+            guard fanUser.hasPurchase(for: track) == false else { self = .freeForPlaylist; return }
+            guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { self = .freeForPlaylist; return }
+            guard let t = track.previewType else { self = .noPreview; return }
+            
+            switch t {
+            case .full:
+                guard let previewLimitTimes = track.previewLimitTimes else { self = .freeForPlaylist; return }
+                guard previewLimitTimes > 0 else { self = .fullLimitTimes(-1); return }
+                
+                guard let trackTotalPlayMSeconds = μSecondsPlayed else { self = .fullLimitTimes(previewLimitTimes); return }
+                
+                let trackMaxPlayMSeconds = UInt64(trackAudioFile.duration * 1000 * previewLimitTimes)
+                guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { self = .fullLimitTimes(-1); return }
+                
+                let previewTimes = Int((trackMaxPlayMSeconds - trackTotalPlayMSeconds) / UInt64(trackAudioFile.duration * 1000))
+                
+                self = .fullLimitTimes(previewTimes)
+                
+            case .limit45: self = .limitSeconds(45)
+            case .limit90: self = .limitSeconds(90)
+                
+            case .noPreview: self = .noPreview
+            }
+        }
     }
-
-    let textImageGenerator: TextImageGenerator
+    
     let previewOptionType: PreviewOptionType
-
-
-    init(previewOptionType: PreviewOptionType, textImageGenerator: TextImageGenerator) {
-        self.previewOptionType = previewOptionType
-        self.textImageGenerator = textImageGenerator
-    }
-
+    let textImageGenerator: TextImageGenerator
+    
     var image: UIImage? {
         switch previewOptionType {
         case .commigSoon: return nil

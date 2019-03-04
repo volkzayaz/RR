@@ -29,7 +29,7 @@ class TextImageGenerator {
 
             UIGraphicsBeginImageContextWithOptions(stringSize, false, 0)
             text.draw(in: CGRect(origin: CGPoint.zero, size: stringSize), withAttributes: attributes)
-            cachedImage = UIGraphicsGetImageFromCurrentImageContext();
+            cachedImage = UIGraphicsGetImageFromCurrentImageContext()?.withRenderingMode(.alwaysTemplate);
             UIGraphicsEndImageContext();
 
             self.cachedImages[text] = cachedImage

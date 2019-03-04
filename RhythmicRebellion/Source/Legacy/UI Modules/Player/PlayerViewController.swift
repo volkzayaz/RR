@@ -178,7 +178,7 @@ final class PlayerViewController: UIViewController {
     }
 
     @IBAction func onPlayerItemPreviewOptionButton(sender: UIButton) {
-        guard let parentView = self.parent?.view, let previewOptionHintText = self.viewModel.playerItemPreviewOptionViewModel?.hintText, previewOptionHintText.isEmpty == false else { return }
+        guard let parentView = self.parent?.view, let previewOptionHintText = self.viewModel.previewOptionHintText.value, previewOptionHintText.isEmpty == false else { return }
 
         let tipView = TipView(text: previewOptionHintText, preferences: EasyTipView.globalPreferences)
         tipView.showTouched(forView: sender, in: parentView)
@@ -343,7 +343,9 @@ extension PlayerViewController {
             tabBarItem.isEnabled = self.viewModel.canNavigate(to: navigationItemType)
         })
 
-        self.playerItemPreviewOptionButton.setImage(self.viewModel.playerItemPreviewOptionViewModel?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        viewModel.previewOptionImage
+            .drive(playerItemPreviewOptionButton.rx.image(for: .normal))
+            .disposed(by: rx.disposeBag)
 
         self.refreshProgressUI()
         self.refreshKaraokeUI()

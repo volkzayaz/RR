@@ -108,10 +108,10 @@ class TrackView: UIView {
             self.actionButtonConatinerViewTrailingConstraint.constant = 0
             self.actionButtonContainerView.isHidden = false
 
-            if viewModel.isLockedForActions {
-                self.actionButton.isHidden = true
-                self.actionActivityIndicatorView.startAnimating()
-            }
+//            if viewModel.isLockedForActions {
+//                self.actionButton.isHidden = true
+//                self.actionActivityIndicatorView.startAnimating()
+//            }
 
             if viewModel.isCensorship {
                 self.stackView.addArrangedSubview(self.censorshipMarkButton)
@@ -130,8 +130,10 @@ class TrackView: UIView {
 
             }
         
-            self.previewOptionsButton
-                .setImage(viewModel.previewOptionImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            viewModel.previewOptionImage
+                .drive(previewOptionsButton.rx.image(for: .normal))
+                .disposed(by: disposeBag)
+            
             self.stackView.addArrangedSubview(self.previewOptionsButton)
         }
 
@@ -145,7 +147,13 @@ class TrackView: UIView {
         self.descriptionLabel.text = viewModel.description
 
         self.censorshipMarkButtonHintText = viewModel.censorshipHintText
-        self.previewOptionsButtonHintText = viewModel.previewOptionHintText
+        
+        viewModel.previewOptionHintText
+            .drive(onNext: { [weak self] (t) in
+                self?.previewOptionsButtonHintText = t
+            })
+            .disposed(by: rx.disposeBag)
+            
         self.downloadButtonHintText = viewModel.downloadHintText
 
         self.actionCallback = actionCallback

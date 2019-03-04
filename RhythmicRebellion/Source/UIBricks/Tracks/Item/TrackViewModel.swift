@@ -22,8 +22,57 @@ extension TrackViewModel {
     
     var isPlayable: Bool { return track.isPlayable }
     
-    var previewOptionImage: UIImage? { return previewOptionViewModel.image }
-    var previewOptionHintText: String? { return previewOptionViewModel.hintText }
+    var previewOptionImage: Driver<UIImage?> {
+        
+        guard case .full? = track.previewType else {
+            return .just(TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
+                                                                              user: user, μSecondsPlayed: nil),
+                                                     textImageGenerator: textImageGenerator).image)
+        }
+        
+        let u = user
+        let t = track
+        let g = textImageGenerator
+        
+        return appState.map { $0.allowedTimes[t.id] }
+            .distinctUntilChanged()
+            .map { _ in
+                
+                ///TODO: take into account allowed times
+                
+                return TrackPreviewOptionViewModel(previewOptionType: .init(with: t,
+                                                                                  user: u, μSecondsPlayed: 0),
+                                                    textImageGenerator: g).image
+                
+            }
+        
+    }
+    
+    var previewOptionHintText: Driver<String?> {
+        
+        guard case .full? = track.previewType else {
+            return .just(TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
+                                                                              user: user, μSecondsPlayed: nil),
+                                                     textImageGenerator: textImageGenerator).hintText)
+        }
+        
+        let u = user
+        let t = track
+        let g = textImageGenerator
+        
+        return appState.map { $0.allowedTimes[t.id] }
+            .distinctUntilChanged()
+            .map { _ in
+                
+                ///TODO: take into account allowed times
+                
+                return TrackPreviewOptionViewModel(previewOptionType: .init(with: t,
+                                                                            user: u, μSecondsPlayed: 0),
+                                                   textImageGenerator: g).hintText
+                
+        }
+        
+    }
     
     var censorshipHintText: String? {
         guard self.isCensorship == true else { return nil }
@@ -75,30 +124,22 @@ extension TrackViewModel {
 
 struct TrackViewModel : MVVM_ViewModel {
     
-    
-    
-    var isLockedForActions: Bool
-    
     let track: Track
     let user: User?
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
     let downloadViewModel: DownloadViewModel
-    let previewOptionViewModel: TrackPreviewOptionViewModel
+    let textImageGenerator: TextImageGenerator
     
     init(router: TrackRouter, track: Track, user: User?,
-         textImageGenerator: TextImageGenerator, isLockedForActions: Bool) {
+         textImageGenerator: TextImageGenerator) {
         
         self.router = router
         self.track = track
         self.user = user
-        
-        self.previewOptionViewModel = TrackPreviewOptionViewModel.Factory().makeViewModel(track: track,
-                                                                                          user: user,
-                                                                                          textImageGenerator: textImageGenerator)
-        
-        self.isLockedForActions = isLockedForActions
+    
+        self.textImageGenerator = textImageGenerator
         
         downloadViewModel = DownloadViewModel(remoteURL: track.audioFile!.urlString)
         
