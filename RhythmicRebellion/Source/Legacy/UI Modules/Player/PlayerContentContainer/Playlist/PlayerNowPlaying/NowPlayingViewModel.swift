@@ -14,10 +14,6 @@ import RxDataSources
 
 struct NowPlayingProvider : TrackProvider {
     
-    var orderedTracks: [OrderedTrack] {
-        return appStateSlice.player.tracks.orderedTracks
-    }
-    
     func provide() -> Observable<[TrackProvidable]> {
         return appState.map { $0.player.tracks }
                        .distinctUntilChanged()
@@ -50,9 +46,6 @@ final class NowPlayingViewModel {
     fileprivate let bag = DisposeBag()
     
     let tracksViewModel: TrackListViewModel
-    private var orderedTracks: [OrderedTrack] {
-        return (tracksViewModel.trackProivder as! NowPlayingProvider).orderedTracks
-    }
     
     private var errorPresenter: ErrorPresenting {
         return tracksViewModel.delegate!
@@ -65,10 +58,13 @@ final class NowPlayingViewModel {
         
         let actions: TrackListViewModel.ActionsProvider = { list, t, indexPath in
             
+            guard let orderedTrack = t as? OrderedTrack else {
+                return []
+            }
+            
             var result: [ActionViewModel] = []
             
             let maybeUser = application.user as? FanUser
-            let orderedTrack = (list.trackProivder as! NowPlayingProvider).orderedTracks[indexPath.row]
             
             //////1
             
@@ -107,15 +103,15 @@ final class NowPlayingViewModel {
         
         let select: TrackListViewModel.SelectedProvider = { list, t, indexPath in
             
-            guard t.track.isPlayable else {
+            guard let orderedTrack = t as? OrderedTrack else {
                 return
             }
             
-            let orderedTrack = (list.trackProivder as! NowPlayingProvider).orderedTracks[indexPath.row]
+            guard orderedTrack.track.isPlayable else {
+                return
+            }
             
-            precondition(orderedTrack.track == t.track, "Race condition appeared. Action performed with unsynced dataSource. Expected track \(t.track), received track \(orderedTrack.track)")
-            
-            if appStateSlice.currentTrack?.track != t.track {
+            if appStateSlice.currentTrack != orderedTrack {
                 list.play(orderedTrack: orderedTrack)
                 return
             }

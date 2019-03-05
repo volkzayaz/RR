@@ -237,6 +237,8 @@ extension AddonState: WSCommandData {
     static var command: String { return "playAddon" }
 }
 
+//didReceiveTracksTotalPlayTime tracksTotalPlayMSeconds: [Int : UInt64]
+
 extension WSCommand {
 //    static func initialCommand(token: Token) -> WSCommand<Token> {
 //        return WebSocketCommand<Token>(data: token)

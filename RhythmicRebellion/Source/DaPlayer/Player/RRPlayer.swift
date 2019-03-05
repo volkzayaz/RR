@@ -121,10 +121,6 @@ extension RRPlayer {
             .distinctUntilChanged()
             .notNil()
             .filter { $0.isOwn }
-            .filter { _ in true } ///TODO: here odd logic with filtering out masterSendDate should be present
-                                  ///////some cool logic about skipping such requests
-                                  ///guard Date().timeIntervalSince(self.isMasterStateSendDate) > 1.0 else { /*print("BadTime");*/ return }
-                                  ////take into account Hash of this state
             .drive(onNext: { [weak w = webSocket] (x) in
                 
                 w?.sendCommand(command: TrackReduxViewPatch(data: x.patch, shouldFlush: x.shouldFlush))
