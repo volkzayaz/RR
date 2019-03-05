@@ -209,6 +209,12 @@ extension RRPlayer {
             })
             .disposed(by: rx.disposeBag)
         
+        webSocket.didReceivePreviewTimes
+            .subscribe(onNext: { (times) in
+                Dispatcher.dispatch(action: UpdateTrackPrviewTimes(newPreviewTimes: times)) 
+            })
+            .disposed(by: rx.disposeBag)
+        
     }
     
 }
@@ -506,6 +512,24 @@ struct ChangePlayerBlockState: Action {
     func perform(initialState: AppState) -> AppState {
         var state = initialState
         state.player.isBlocked = isBlocked
+        return state
+    }
+    
+}
+
+struct UpdateTrackPrviewTimes: Action {
+    
+    let newPreviewTimes: [Int: UInt64]
+    
+    func perform(initialState: AppState) -> AppState {
+        var state = initialState
+        
+        var oldState = state.player.tracks.previewTime
+        newPreviewTimes.forEach { (key, value) in
+            oldState[key] = value
+        }
+        state.player.tracks.previewTime = oldState
+        
         return state
     }
     

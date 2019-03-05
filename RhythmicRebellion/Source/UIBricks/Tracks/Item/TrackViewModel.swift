@@ -24,52 +24,33 @@ extension TrackViewModel {
     var isPlayable: Bool { return track.isPlayable }
     
     var previewOptionImage: Driver<UIImage?> {
-        
-        guard case .full? = track.previewType else {
-            return .just(TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
-                                                                              user: user, μSecondsPlayed: nil),
-                                                     textImageGenerator: textImageGenerator).image)
-        }
-        
-        let u = user
-        let t = track
-        let g = textImageGenerator
-        
-        return appState.map { $0.allowedTimes[t.id] }
-            .distinctUntilChanged()
-            .map { _ in
-                
-                ///TODO: take into account allowed times
-                
-                return TrackPreviewOptionViewModel(previewOptionType: .init(with: t,
-                                                                                  user: u, μSecondsPlayed: 0),
-                                                    textImageGenerator: g).image
-                
-            }
-        
+        return previewOption.map { $0?.image }
     }
     
     var previewOptionHintText: Driver<String?> {
+        return previewOption.map { $0?.hintText }
+    }
+    
+    fileprivate var previewOption: Driver<TrackPreviewOptionViewModel?> {
         
         guard case .full? = track.previewType else {
             return .just(TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
                                                                               user: user, μSecondsPlayed: nil),
-                                                     textImageGenerator: textImageGenerator).hintText)
+                                                     textImageGenerator: textImageGenerator))
         }
         
         let u = user
         let t = track
         let g = textImageGenerator
         
-        return appState.map { $0.allowedTimes[t.id] }
+        return appState.map { $0.player.tracks.previewTime[t.id] }
             .distinctUntilChanged()
-            .map { _ in
-                
-                ///TODO: take into account allowed times
+            .map { time in
                 
                 return TrackPreviewOptionViewModel(previewOptionType: .init(with: t,
-                                                                            user: u, μSecondsPlayed: 0),
-                                                   textImageGenerator: g).hintText
+                                                                            user: u,
+                                                                            μSecondsPlayed: time),
+                                                   textImageGenerator: g)
                 
         }
         

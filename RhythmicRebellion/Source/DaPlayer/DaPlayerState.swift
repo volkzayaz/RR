@@ -15,8 +15,8 @@ private let _appState: BehaviorRelay<AppState> = {
     let x = AppState(player: DaPlayerState(tracks: DaPlaylist(),
                                            lastPatch: nil,
                                            currentItem: nil,
-                                           isBlocked: false),
-                     allowedTimes: [:] )
+                                           isBlocked: false)
+                    )
     
     return BehaviorRelay(value: x)
     
@@ -35,7 +35,6 @@ struct AppState: Equatable {
     var player: DaPlayerState
     
 //    let user: User
-    var allowedTimes: [Int: UInt]
     
 }
 

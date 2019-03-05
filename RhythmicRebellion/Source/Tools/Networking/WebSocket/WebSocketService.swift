@@ -39,8 +39,18 @@ extension WebSocketService {
     var didReceiveTrackBlockState: Observable<TrackBlockState> {
         return commandObservable()
     }
+
+    var didReceivePreviewTimes: Observable<[Int: UInt64]> {
+        
+        let channel = "previewOpt"
+        let command = "srts_previews"
+        
+        return customCommandObservable(ofType: CodableWebSocketCommand<[Int: UInt64]>.self,
+                                       channel: channel, command: command)
+            .map { $0.data }
+    }
     
-    //var did
+    
     
 }
 
@@ -70,11 +80,17 @@ class WebSocketService {
             .map { $0.data }
     }
     
-    func customCommandObservable<T: WSCommand>(ofType: T.Type) -> Observable<T> {
+    func customCommandObservable<T: WSCommand>(ofType: T.Type) -> Observable<T> where T.DataType: WSCommandData {
+        return customCommandObservable(ofType: ofType,
+                                       channel: T.DataType.channel,
+                                       command: T.DataType.command)
+    }
+    
+    func customCommandObservable<T: WSCommand>(ofType: T.Type, channel: String, command: String) -> Observable<T>  {
 
         return rxInput.filter { x in
-            return x.channel == T.DataType.channel &&
-                   x.command == T.DataType.command
+            return x.channel == channel &&
+                   x.command == command
             }
             .map { x in
                 
@@ -106,8 +122,6 @@ class WebSocketService {
         webSocket.disconnect()
     }
 
-    
-    
     //////Action with clear response
     
     func connect(with token: Token) {
@@ -165,10 +179,25 @@ class WebSocketService {
     }
     
     func fetchTracks(trackIds: [Int]) -> Observable<[Track]> {
-        
-        sendCommand(command: CodableWebSocketCommand(data: trackIds))
+
+        sendCommand(command: CodableWebSocketCommand(data: trackIds,
+                                                     channel: "playlist",
+                                                     command: "getTracks"))
         
         return commandObservable().take(1)
+        
+    }
+    
+    ////normally we will receive organic updates via didReceivePreviewTimes
+    ////but if for some reason we are not, feel free to poke webSokcet for the update
+    func pokeForPreviewTime(for trackIds:[Int]) {
+        
+        let channel = "previewOpt"
+        let command = "srts_previews"
+        
+        sendCommand(command: CodableWebSocketCommand(data: trackIds,
+                                                     channel: channel,
+                                                     command: command))
         
     }
     

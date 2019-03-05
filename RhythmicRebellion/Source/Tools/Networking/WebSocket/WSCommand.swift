@@ -28,7 +28,7 @@ protocol WSCommandData {
 ////Anything that we receive from WebSocket
 protocol WSCommand {
     
-    associatedtype DataType: WSCommandData
+    associatedtype DataType
     var data: DataType { get }
     
     init(jsonData: Data) throws
@@ -36,7 +36,7 @@ protocol WSCommand {
 }
 
 ///WebSocket data that we can parse using Codable
-struct CodableWebSocketCommand<T: WSCommandData & Codable>: Codable, WSCommand {
+struct CodableWebSocketCommand<T: Codable>: Codable, WSCommand {
     
     let channel: String
     let command: String
@@ -50,9 +50,9 @@ struct CodableWebSocketCommand<T: WSCommandData & Codable>: Codable, WSCommand {
         case data
     }
     
-    init(data: T) {
-        channel = T.channel
-        command = T.command
+    init(data: T, channel: String, command: String) {
+        self.channel = channel
+        self.command = command
         
         self.data = data
         
@@ -70,6 +70,14 @@ struct CodableWebSocketCommand<T: WSCommandData & Codable>: Codable, WSCommand {
     
     var jsonData: Data {
         return try! JSONEncoder().encode(self)
+    }
+    
+}
+
+extension CodableWebSocketCommand where T: WSCommandData {
+    
+    init(data: T) {
+        self.init(data: data, channel: T.channel, command: T.command)
     }
     
 }
@@ -157,12 +165,6 @@ extension Token: WSCommandData {
 extension Array : WSCommandData where Element: WSCommandData {
     static var channel: String { return Element.channel }
     static var command: String { return Element.command }
-}
-
-typealias LoadTracks = Int
-extension LoadTracks: WSCommandData {
-    static var channel: String { return "playlist" }
-    static var command: String { return "getTracks" }
 }
 
 extension Track : WSCommandData {

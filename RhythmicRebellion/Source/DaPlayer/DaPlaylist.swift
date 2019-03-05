@@ -59,7 +59,18 @@ struct DaPlaylist {
      ....
      */
     var reduxView: ReduxView = [:]
+    
+    ///Dictionary of trackID and corresponding Track
+    ///All tracks that are present in reduxView
+    ///Are always a subset of this Dictionary
+    ///Mutated by ApplyReduxViewPatch
     var trackDump: [Int: Track] = [:]
+    
+    ///Dictionary of trackID and corresponding preview time
+    ///that has been already played by user
+    ///Mutated by RRPlayer.didReceivePreviewTimes
+    var previewTime: [Int: UInt64] = [:]
+    
     var orderedTracks: [OrderedTrack] {
         
         guard reduxView.count > 0 else { return [] }
@@ -257,7 +268,8 @@ extension DaPlaylist: CustomStringConvertible {
 extension DaPlaylist: Equatable {
     static func == (lhs: DaPlaylist, rhs: DaPlaylist) -> Bool {
         
-        guard lhs.trackDump == rhs.trackDump,
+        guard lhs.previewTime == rhs.previewTime,
+              lhs.trackDump == rhs.trackDump,
               lhs.reduxView.count == rhs.reduxView.count else { return false }
         
         for (key, value) in lhs.reduxView {
@@ -328,15 +340,16 @@ struct ApplyReduxViewPatch: ActionCreator {
         
         ///applying transform
         tracks.apply(patch: viewPatch)
+        let allTrackIds = Set(tracks.reduxView.map { $0.value[.id]! as! Int })
         
         ///fetching underlying tracks if needed
-        var diff = Set(tracks.reduxView.map { $0.value[.id]! as! Int }).subtracting(tracks.trackDump.keys)
+        var tracksDiff = allTrackIds.subtracting(tracks.trackDump.keys)
         
         ///avoiding roundtrip to server
         assosiatedTracks.forEach { x in
-            guard !diff.contains(x.id) else { return }
+            guard !tracksDiff.contains(x.id) else { return }
             tracks.trackDump[x.id] = x
-            diff.remove(x.id)
+            tracksDiff.remove(x.id)
         }
         
         ////setting state
@@ -346,12 +359,12 @@ struct ApplyReduxViewPatch: ActionCreator {
             state.player.currentItem = nil
         }
         
-        guard diff.count > 0 else {
+        guard tracksDiff.count > 0 else {
             return .just(state)
         }
         
         return DataLayer.get.webSocketService
-            .fetchTracks(trackIds: Array(diff))
+            .fetchTracks(trackIds: Array(tracksDiff))
             .map { receivedTracks -> AppState in
                 
                 receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }

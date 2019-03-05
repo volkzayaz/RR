@@ -154,14 +154,12 @@ final class PlayerViewModel: NSObject {
                                                              textImageGenerator: g))
                 }
                 
-                return appState.map { $0.allowedTimes[track.id] }
+                return appState.map { $0.player.tracks.previewTime[track.id] }
                     .distinctUntilChanged()
-                    .map { _ in
-                        
-                        ///TODO: take into account allowed times
+                    .map { time in
                         
                         return TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
-                                                                                    user: DataLayer.get.application.user, μSecondsPlayed: 0),
+                                                                                    user: DataLayer.get.application.user, μSecondsPlayed: time),
                                                            textImageGenerator: g)
                         
                 }
