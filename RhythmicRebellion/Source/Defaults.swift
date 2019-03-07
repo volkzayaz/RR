@@ -12,6 +12,7 @@ struct Defaults {
 
     private enum DefaultsKeys: String {
         case lastSignedUserEmail = "User.lastSignedEmail"
+        case env = "User.env"
     }
 
     static var lastSignedUserEmail: String? {
@@ -22,4 +23,15 @@ struct Defaults {
 
         get { return UserDefaults.standard.value(forKey: DefaultsKeys.lastSignedUserEmail.rawValue) as? String }
     }
+    
+    
+    static var Env: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: DefaultsKeys.env.rawValue)
+            UserDefaults.standard.synchronize()
+        }
+        
+        get { return UserDefaults.standard.value(forKey: DefaultsKeys.env.rawValue) as? String ?? "dev" }
+    }
+    
 }
