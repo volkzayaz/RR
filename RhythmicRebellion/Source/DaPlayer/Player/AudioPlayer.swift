@@ -99,6 +99,7 @@ class AudioPlayer: NSObject {
                 ///if player starts or pauses playback
                 ////therefore we manually filter out some of these events
                 if self.isSeeking { return }
+                if self.player.rate == 0 { return }
                 
                 Dispatcher.dispatch(action: OrganicScrub(newValue: x))
             })
