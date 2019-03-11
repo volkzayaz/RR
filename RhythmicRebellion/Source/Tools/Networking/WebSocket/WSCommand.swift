@@ -84,10 +84,10 @@ extension CodableWebSocketCommand where T: WSCommandData {
 
 struct TrackReduxViewPatch: WSCommand {
     
-    let data: DaPlaylist.NullableReduxView
+    let data: LinkedPlaylist.NullableReduxView
     let shouldFlush: Bool
     
-    init(data: DaPlaylist.NullableReduxView, shouldFlush: Bool) {
+    init(data: LinkedPlaylist.NullableReduxView, shouldFlush: Bool) {
         self.data = data
         self.shouldFlush = shouldFlush
     }
@@ -100,13 +100,13 @@ struct TrackReduxViewPatch: WSCommand {
                 fatalError("Error decoding data for TrackReduxViewPatch")
         }
         
-        self.data = data.mapValues { (maybePatch) -> [DaPlaylist.ViewKey: Any?]? in
+        self.data = data.mapValues { (maybePatch) -> [LinkedPlaylist.ViewKey: Any?]? in
             
             guard let x = maybePatch else {
                 return nil
             }
             
-            var p: [DaPlaylist.ViewKey: Any?] = [:]
+            var p: [LinkedPlaylist.ViewKey: Any?] = [:]
             
             x.forEach { (key, value) in
                 
@@ -115,7 +115,7 @@ struct TrackReduxViewPatch: WSCommand {
                     v = nil
                 }
                 
-                p[ DaPlaylist.ViewKey(rawValue: key)! ] = v
+                p[ LinkedPlaylist.ViewKey(rawValue: key)! ] = v
             }
             
             return p
@@ -127,7 +127,7 @@ struct TrackReduxViewPatch: WSCommand {
     
     var jsonData: Data {
         
-        let data: [String: [String: Any?]?] = self.data.mapValues { (maybePatch: [DaPlaylist.ViewKey: Any?]?) -> [String: Any?]? in
+        let data: [String: [String: Any?]?] = self.data.mapValues { (maybePatch: [LinkedPlaylist.ViewKey: Any?]?) -> [String: Any?]? in
             
             guard let x = maybePatch else {
                 return nil
@@ -202,7 +202,7 @@ extension FanPlaylistState: WSCommandData {
     static var command: String { return "customPlaylistsStates" }
 }
 
-extension Dictionary: WSCommandData where Key == TrackOrderHash, Value == Dictionary<DaPlaylist.ViewKey, Any?>? {
+extension Dictionary: WSCommandData where Key == TrackOrderHash, Value == Dictionary<LinkedPlaylist.ViewKey, Any?>? {
     static var channel: String { return "playlist" }
     static var command: String { return "update" }
 }

@@ -10,9 +10,9 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-private let _appState: BehaviorRelay<AppState> = {
+fileprivate let _appState: BehaviorRelay<AppState> = {
     
-    let x = AppState(player: DaPlayerState(tracks: DaPlaylist(),
+    let x = AppState(player: PlayerState(tracks: LinkedPlaylist(),
                                            lastPatch: nil,
                                            currentItem: nil,
                                            isBlocked: false)
@@ -32,15 +32,15 @@ var appState: Driver<AppState> {
 
 struct AppState: Equatable {
     
-    var player: DaPlayerState
+    var player: PlayerState
     
 //    let user: User
     
 }
 
-struct DaPlayerState: Equatable {
+struct PlayerState: Equatable {
     
-    var tracks: DaPlaylist
+    var tracks: LinkedPlaylist
     var lastPatch: ReduxViewPatch?
     
     var currentItem: CurrentItem?
@@ -56,87 +56,8 @@ struct DaPlayerState: Equatable {
     struct ReduxViewPatch {
         let isOwn: Bool
         let shouldFlush: Bool
-        var patch: DaPlaylist.NullableReduxView
+        var patch: LinkedPlaylist.NullableReduxView
     };
-    
-}
-
-
-enum Dispatcher {
-    
-    static let actions = BehaviorSubject<ActionCreator?>(value: nil)
-    
-    static func kickOff() {
-        
-        ///Serial execution
-        let _ =
-        actions.notNil().concatMap { actionCreator -> Observable<AppState> in
-            
-            Observable.deferred {
-                print("Dispatching \(actionCreator.description)")
-                return actionCreator.perform(initialState: _appState.value)
-            }
-            
-        }
-        .filter { $0 != _appState.value }
-        .bind(to: _appState)
-        
-    }
-    
-    static func dispatch(action: Action) {
-        
-        let wrapper = ActionCreatorWrapper(action: action)
-        
-        print("Enqueing \(wrapper.description)")
-        
-        actions.onNext(wrapper)
-        
-    }
-    
-    static func dispatch(action: ActionCreator) {
-        
-        print("Enqueing \(action.description)")
-        
-        actions.onNext(action)
-        
-    }
-    
-}
-
-protocol Action {
-    
-    func perform( initialState: AppState ) -> AppState
-
-}
-
-protocol ActionCreator: CustomStringConvertible {
-    
-    ///Make sure your Observable eventually completes.
-    ///Non completable observables will block the whole DispatchQueue
-    func perform( initialState: AppState ) -> Observable<AppState>
-    
-}
-
-extension ActionCreator {
-    func prepare(initialState: AppState) -> AppState {
-        return initialState
-    }
-    
-    var description: String {
-        return "\(type(of: self))"
-    }
-}
-
-struct ActionCreatorWrapper: ActionCreator {
-    let action: Action
-    
-    func perform(initialState: AppState) -> Observable<AppState> {
-        return .just( action.perform(initialState: initialState) )
-    }
-    
-    var description: String {
-        return ":\(type(of: action))"
-    }
     
 }
 
@@ -209,6 +130,14 @@ extension AppState {
         }
         
         return .track(t)
+    }
+    
+}
+
+extension Dispatcher {
+    
+    static var state: BehaviorRelay<AppState> {
+        return _appState
     }
     
 }

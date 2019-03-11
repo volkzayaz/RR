@@ -195,11 +195,11 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
     }
 
     private func play(tracks: [Track]) {
-        Dispatcher.dispatch(action: AddTracksToNowPlaying(tracks: tracks, style: .next))
+        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: .next))
     }
     
     private func addToPlayerPlaylist(tracks: [Track], at position: RRPlayer.AddStyle) {
-        Dispatcher.dispatch(action: AddTracksToNowPlaying(tracks: tracks, style: position))
+        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: position))
     }
     
     private func replacePlayerPlaylist(with tracks: [Track]) {

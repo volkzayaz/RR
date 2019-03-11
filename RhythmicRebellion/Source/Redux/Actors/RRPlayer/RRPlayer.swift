@@ -1,0 +1,234 @@
+//
+//  RRPlayer.swift
+//  RhythmicRebellion
+//
+//  Created by Vlad Soroka on 2/8/19.
+//  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
+//
+
+import Foundation
+import RxSwift
+
+/******
+ *  All the rules about syncing player state between clients lives in this actor
+ */
+
+class RRPlayer: NSObject {
+    
+    let webSocket: WebSocketService
+    let audioPlayer = AudioPlayer()
+    
+    init(application: Application) {
+        self.webSocket = application.webSocketService
+        
+        super.init()
+        
+        bind()
+        bindWebSocket()
+        
+        application.addWatcher(self)
+    }
+}
+
+///TODO: migrate to proper reactive callbacks
+///User changes
+extension RRPlayer : ApplicationWatcher {
+
+    func application(_ application: Application, didChangeUserToken user: User) {
+        webSocket.connect(with: Token(token: user.wsToken,
+                                      isGuest: user.isGuest))
+        
+    }
+    
+    func application(_ application: Application, didChange user: User) {
+        webSocket.connect(with: Token(token: user.wsToken,
+                                      isGuest: user.isGuest))
+    }
+    
+}
+
+////UI initiated
+extension RRPlayer {
+
+    func play() {
+        Dispatcher.dispatch(action: AudioPlayer.Play())
+    }
+    
+    func pause() {
+        Dispatcher.dispatch(action: AudioPlayer.Pause())
+    }
+    
+    func flip() {
+        Dispatcher.dispatch(action: AudioPlayer.Switch())
+    }
+ 
+    func skipForward() {
+        Dispatcher.dispatch(action: ProceedToNextItem())
+    }
+    
+    func skipBack() {
+        Dispatcher.dispatch(action: GetBackToPreviousItem())
+    }
+    
+    func clear() {
+        Dispatcher.dispatch(action: ClearTracks())
+    }
+    
+    enum AddStyle {
+        case now, next, last
+    }
+    func add(tracks: [Track], type: AddStyle) {
+        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: type))
+    }
+    
+    func remove(track: OrderedTrack) {
+        Dispatcher.dispatch(action: RemoveTrack(orderedTrack: track))
+    }
+    
+    func seek(to fraction: Float) {
+        Dispatcher.dispatch(action: ScrubToFraction(fraction: fraction))
+    }
+    
+    func `switch`(to track: OrderedTrack) {
+        Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: track, shouldPlayImmidiatelly: true))
+    }
+    
+}
+
+///Push state into webSocket
+extension RRPlayer {
+    
+    func bind() {
+
+        /////-----
+        ////Syncing using webSocket
+        /////-----
+        
+        /// sync player state
+        appState.map { $0.player.currentItem?.state }
+            .notNil()
+            .filter { $0.isOwn }
+            .drive(onNext: { [weak w = webSocket] (x) in
+                
+                w?.sendCommand(command: CodableWebSocketCommand(data: x))
+                print("Sending out trackState for syncing with webSocket: \(x)")
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
+        /// sync playlist order (insert/delete/create/flush)
+        appState.map { $0.player.lastPatch }
+            .distinctUntilChanged()
+            .notNil()
+            .filter { $0.isOwn }
+            .drive(onNext: { [weak w = webSocket] (x) in
+                
+                w?.sendCommand(command: TrackReduxViewPatch(data: x.patch, shouldFlush: x.shouldFlush))
+                
+                print("Sending out patch for syncing with webSocket: \(x.patch)")
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
+        ////sync current track ID
+        appState.map { $0 }
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
+            .filter { $0.player.currentItem?.state.isOwn ?? false }
+            .drive(onNext: { [weak w = webSocket] (state) in
+
+                guard let orderedTrack = state.currentTrack else {
+                    return
+                }
+                
+                let t = TrackId(id: orderedTrack.track.id, key: orderedTrack.orderHash)
+                
+                w?.sendCommand(command: CodableWebSocketCommand(data: t))
+                print("Sending out currentTrackID for syncing with webSocket: \(t)")
+            })
+            .disposed(by: rx.disposeBag)
+        
+        
+        
+        ////apply RR specific logic
+        
+        ////Enforce playback termination if user exceeded play time quota
+        appState.map { $0.player }
+            //.filter { $0.state.isOwn }
+            .drive(onNext: { (x) in
+                
+                //print("Checking restricted time \(x)")
+                
+                ///Dispatcher.dispatch(action: CheckRestrictedTime(newState: x))
+            })
+            .disposed(by: rx.disposeBag)
+        
+        
+    }
+    
+    func bindWebSocket() {
+        
+        webSocket.didReceivePlaylistPatch
+            .subscribe(onNext: { (patch) in
+                let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
+                                                                   shouldFlush: patch.shouldFlush,
+                                                                   patch: patch.data) )
+                
+                Dispatcher.dispatch(action: action )
+            })
+            .disposed(by: rx.disposeBag)
+        
+        webSocket.didReceiveTracks
+            .subscribe(onNext: { (tracks) in
+                Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
+            })
+            .disposed(by: rx.disposeBag)
+        
+        webSocket.didReceiveCurrentTrack
+            .subscribe(onNext: { (t) in
+                Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t?.key))
+            })
+            .disposed(by: rx.disposeBag)
+        
+        webSocket.didReceiveTrackState
+            .subscribe(onNext: { (state) in
+                Dispatcher.dispatch(action: ChangeTrackState(trackState: state))
+            })
+            .disposed(by: rx.disposeBag)
+
+        webSocket.didReceiveTrackBlockState
+            .subscribe(onNext: { (state) in
+                Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked: state))
+            })
+            .disposed(by: rx.disposeBag)
+        
+        webSocket.didReceivePreviewTimes
+            .subscribe(onNext: { (times) in
+                Dispatcher.dispatch(action: UpdateTrackPrviewTimes(newPreviewTimes: times)) 
+            })
+            .disposed(by: rx.disposeBag)
+        
+    }
+    
+}
+
+
+
+///////
+
+struct CheckRestrictedTime: Action {
+    
+    //let newState: DaPlayerState.PlayingNow
+    
+    func perform(initialState: AppState) -> AppState {
+        
+//        guard case .track(let x)? = newState.musicType,
+//              let allowedTime = initialState.allowedTimes[x.id],
+//              allowedTime <= UInt(newState.state.progress) else {
+//        
+//            return initialState
+//        }
+//        
+        fatalError("advance to next song, since we ellapsed listening time")
+        
+    }
+}

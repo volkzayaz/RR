@@ -1,5 +1,5 @@
 //
-//  DaPlaylist.swift
+//  LinkedPlaylist.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 2/7/19.
@@ -8,47 +8,9 @@
 
 import Foundation
 
-typealias TrackOrderHash = String
-
-struct OrderedTrack: Equatable {
+struct LinkedPlaylist {
     
-    let track: Track
-    let orderHash: TrackOrderHash
-    
-    init(track: Track, hash: String? = nil) {
-        self.track = track
-        orderHash = hash ?? String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
-    }
-    
-    func reduxView(previousTrack: OrderedTrack? = nil,
-                   nextTrack    : OrderedTrack? = nil) -> [DaPlaylist.ViewKey: Any?] {
-        
-        var res: [DaPlaylist.ViewKey: Any?] = [ .id       : track.id,
-                                                .hash     : orderHash,
-                                                .previous : nil,
-                                                .next     : nil ]
-        
-        if let x = previousTrack {
-            res[.previous] = x.orderHash
-        }
-        
-        if let x = nextTrack {
-            res[.next] = x.orderHash
-        }
-        
-        return res
-    }
-    
-    static func ==(lhs: OrderedTrack, rhs: OrderedTrack) -> Bool {
-        return lhs.orderHash == rhs.orderHash
-    }
-    
-}
-
-
-struct DaPlaylist {
-    
-    /*HashTable representation of two DoublyLinkedList
+    /*HashTable representation of DoublyLinkedList
      {
      "5tuvm": {
             id: 11,                     //Int     *points to underline track*
@@ -142,11 +104,11 @@ struct DaPlaylist {
     typealias ReduxView         = [ TrackOrderHash: [ViewKey: Any?]  ]
     typealias NullableReduxView = [ TrackOrderHash: [ViewKey: Any?]? ]
     
-    fileprivate mutating func clear() {
+    mutating func clear() {
         reduxView = [:]
     }
     
-    fileprivate mutating func apply(patch: DaPlayerState.ReduxViewPatch) {
+    mutating func apply(patch: PlayerState.ReduxViewPatch) {
         
         if patch.shouldFlush { clear() }
         
@@ -184,7 +146,7 @@ struct DaPlaylist {
         
     }
     
-    fileprivate func insertPatch(tracks: [Track], after: OrderedTrack?) -> NullableReduxView {
+    func insertPatch(tracks: [Track], after: OrderedTrack?) -> NullableReduxView {
         
         guard tracks.count > 0 else { return [:] }
         
@@ -228,7 +190,7 @@ struct DaPlaylist {
 
     }
     
-    fileprivate func deletePatch(track: OrderedTrack) -> NullableReduxView {
+    func deletePatch(track: OrderedTrack) -> NullableReduxView {
         
         guard let nodeToDelete = reduxView[track.orderHash],
               let prevHash = nodeToDelete[.previous] as? String?,
@@ -249,7 +211,7 @@ struct DaPlaylist {
     
 }
 
-extension DaPlaylist: CustomStringConvertible {
+extension LinkedPlaylist: CustomStringConvertible {
     
     var description: String {
         var res = "Stored Tracks: \([trackDump.map { "{id = \($0.key), \($0.value.name)}; " }]) "
@@ -265,8 +227,8 @@ extension DaPlaylist: CustomStringConvertible {
     
 }
 
-extension DaPlaylist: Equatable {
-    static func == (lhs: DaPlaylist, rhs: DaPlaylist) -> Bool {
+extension LinkedPlaylist: Equatable {
+    static func == (lhs: LinkedPlaylist, rhs: LinkedPlaylist) -> Bool {
         
         guard lhs.previewTime == rhs.previewTime,
               lhs.trackDump == rhs.trackDump,
@@ -293,9 +255,9 @@ extension DaPlaylist: Equatable {
     }
 }
 
-extension DaPlayerState.ReduxViewPatch: Equatable {
+extension PlayerState.ReduxViewPatch: Equatable {
     
-    static func == (lhs: DaPlayerState.ReduxViewPatch, rhs: DaPlayerState.ReduxViewPatch) -> Bool {
+    static func == (lhs: PlayerState.ReduxViewPatch, rhs: PlayerState.ReduxViewPatch) -> Bool {
         
         guard lhs.patch.count == rhs.patch.count else { return false }
         
@@ -320,145 +282,3 @@ extension DaPlayerState.ReduxViewPatch: Equatable {
     }
     
 }
-
-import RxSwift
-
-struct ApplyReduxViewPatch: ActionCreator {
-    
-    let viewPatch: DaPlayerState.ReduxViewPatch
-    let assosiatedTracks: [Track]
-    init (viewPatch: DaPlayerState.ReduxViewPatch, assosiatedTracks: [Track] = []) {
-        self.viewPatch = viewPatch
-        self.assosiatedTracks = assosiatedTracks
-    }
-    
-    func perform(initialState: AppState) -> Observable<AppState> {
-
-        ///getting state
-        var state = initialState
-        var tracks = state.player.tracks
-        
-        ///applying transform
-        tracks.apply(patch: viewPatch)
-        let allTrackIds = Set(tracks.reduxView.map { $0.value[.id]! as! Int })
-        
-        ///fetching underlying tracks if needed
-        var tracksDiff = allTrackIds.subtracting(tracks.trackDump.keys)
-        
-        ///avoiding roundtrip to server
-        assosiatedTracks.forEach { x in
-            guard !tracksDiff.contains(x.id) else { return }
-            tracks.trackDump[x.id] = x
-            tracksDiff.remove(x.id)
-        }
-        
-        ////setting state
-        state.player.tracks = tracks
-        state.player.lastPatch = viewPatch
-        if viewPatch.shouldFlush {
-            state.player.currentItem = nil
-        }
-        
-        guard tracksDiff.count > 0 else {
-            return .just(state)
-        }
-        
-        return DataLayer.get.webSocketService
-            .fetchTracks(trackIds: Array(tracksDiff))
-            .map { receivedTracks -> AppState in
-                
-                receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }
-                
-                state.player.tracks = tracks
-                
-                return state
-            }
-        
-    }
-    
-}
-
-struct InsertTracks: ActionCreator {
-    
-    let tracks: [Track]
-    let afterTrack: OrderedTrack?
-    let isOwnChange: Bool
-    
-    func perform(initialState: AppState) -> Observable<AppState> {
-        
-        ///initial state
-        let tracks = initialState.player.tracks
-        
-        ///getting state transform
-        let patch = tracks.insertPatch(tracks: self.tracks, after: afterTrack)
-        
-        ///mapping state transform
-        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: false, patch: patch)
-        
-        ///applying state transform
-        return ApplyReduxViewPatch(viewPatch: reduxPatch,
-                                   assosiatedTracks: self.tracks).perform(initialState: initialState)
-        
-    }
-}
-
-struct DeleteTrack: ActionCreator {
-    
-    let track: OrderedTrack
-    let isOwnChange: Bool
-    
-    func perform(initialState: AppState) -> Observable<AppState> {
-        
-        ///initial state
-        let tracks = initialState.player.tracks
-        
-        ///getting state transform
-        let patch = tracks.deletePatch(track: track)
-        
-        ///mapping state transform
-        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: false, patch: patch)
-        
-        ///applying state transform
-        return ApplyReduxViewPatch(viewPatch: reduxPatch,
-                                   assosiatedTracks: []).perform(initialState: initialState)
-        
-    }
-}
-
-struct ClearTracks: ActionCreator {
-    
-    func perform(initialState: AppState) -> Observable<AppState> {
-        
-        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: true, shouldFlush: true, patch: [:])
-        
-        return ApplyReduxViewPatch(viewPatch: reduxPatch,
-                                   assosiatedTracks: []).perform(initialState: initialState)
-    }
-    
-}
-
-struct ReplaceTracks: ActionCreator {
-
-    let with: [Track]
-    let isOwnChange: Bool
-    
-    func perform(initialState: AppState) -> Observable<AppState> {
-        
-        ///initial state
-        var tracks = initialState.player.tracks
-        
-        ///getting state transform
-        tracks.clear() ///otherwise patch will try to insert tracks in the beggining
-        let patch = tracks.insertPatch(tracks: with, after: nil)
-        
-        ///mapping state transform
-        let reduxPatch = DaPlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: true, patch: patch)
-        
-        ///applying state transform
-        return ApplyReduxViewPatch(viewPatch: reduxPatch,
-                                   assosiatedTracks: with).perform(initialState: initialState)
-        
-    }
-    
-}
-
