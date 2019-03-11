@@ -64,55 +64,32 @@ struct DaPlayerState: Equatable {
 
 enum Dispatcher {
     
-    static let actions = BehaviorSubject<[ActionCreator]>(value: [])
+    static let actions = BehaviorSubject<ActionCreator?>(value: nil)
     
     static func kickOff() {
         
-        let newItem = actions.asObservable()
-            .filter { $0.count > 0 }
-            .map { $0.first! }
-        
-        ////kick off loop
-        recursivelyLoad(nextPageTrigger: newItem)
-            .subscribe()
-            //.disposed(by: bag)
-        
-    }
-    
-    static func recursivelyLoad(nextPageTrigger: Observable<ActionCreator>) -> Observable<AppState> {
-        
-        return nextPageTrigger
-            .take(1)
-            .delay(0, scheduler: MainScheduler.instance) ///TODO: get rid of jumping into next run loop
-            .flatMap { actionCreator -> Observable<AppState> in
-                
+        ///Serial execution
+        let _ =
+        actions.notNil().concatMap { actionCreator -> Observable<AppState> in
+            
+            Observable.deferred {
                 print("Dispatching \(actionCreator.description)")
-                
                 return actionCreator.perform(initialState: _appState.value)
-                    .do(onNext: { (newState) in
-                        
-                        guard newState != _appState.value else { return }
-                        _appState.accept(newState)
-                
-                    })
             }
-            .do(onCompleted: {
-                actions.onNext( Array(actions.unsafeValue.dropFirst()) )
-            })
-            .concat(Observable.deferred {
-                self.recursivelyLoad(nextPageTrigger: nextPageTrigger)
-            })
+            
+        }
+        .filter { $0 != _appState.value }
+        .bind(to: _appState)
         
     }
     
-    ///TODO: add proper logging for new AppState and actions dispatched
     static func dispatch(action: Action) {
         
         let wrapper = ActionCreatorWrapper(action: action)
         
         print("Enqueing \(wrapper.description)")
         
-        actions.onNext(actions.unsafeValue + [wrapper])
+        actions.onNext(wrapper)
         
     }
     
@@ -120,7 +97,7 @@ enum Dispatcher {
         
         print("Enqueing \(action.description)")
         
-        actions.onNext(actions.unsafeValue + [action])
+        actions.onNext(action)
         
     }
     
