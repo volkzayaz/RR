@@ -64,6 +64,8 @@ class AudioPlayer: NSObject {
         
         super.init()
         
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+        
         ///////---------
         ///////Dispatching
         ///////---------
@@ -144,8 +146,18 @@ class AudioPlayer: NSObject {
             .drive(onNext: { [weak p = player] (state) in
                 
                 ///we will not play actual playback item if it wasn't initiated by our client
-                if state.isPlaying && state.isOwn { p?.play() }
-                else                              { p?.pause() }
+                if state.isPlaying && state.isOwn {
+                    
+                    ////subscequent calls to |play| make AVAudioSession.interruptionNotification act weird
+                    ////and sometimes make it not deliver .ended notification
+                    if p?.rate == 0 {
+                        p?.play()
+                    }
+                    
+                }
+                else {
+                    p?.pause()
+                }
                 
             })
             .disposed(by: bag)
@@ -172,6 +184,66 @@ class AudioPlayer: NSObject {
                 
             })
             .disposed(by: rx.disposeBag)
+        
+        ///////---------
+        ///////Audio Session juggling
+        ///////---------
+        
+        
+        ////1. AudioSession interruption (calls, notifications...)
+        let _ =
+        NotificationCenter.default
+            .addObserver(forName: AVAudioSession.interruptionNotification,
+                         object: AVAudioSession.sharedInstance(),
+                         queue: nil) { notification in
+                            
+                            guard let userInfo = notification.userInfo,
+                                let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+                                let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+                            
+                            if type == .began {
+                                
+                                Dispatcher.dispatch(action: Pause())
+                                
+                                return
+                            }
+                            
+                            if type == .ended,
+                               let raw = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt,
+                               AVAudioSession.InterruptionOptions(rawValue: raw).contains(.shouldResume) {
+                                
+                                Dispatcher.dispatch(action: Play())
+                                
+                            }
+        }
+        
+
+        ////2. Headphones unplug
+        let _ =
+        NotificationCenter.default
+            .addObserver(forName: AVAudioSession.routeChangeNotification,
+                         object: AVAudioSession.sharedInstance(),
+                         queue: nil) { notification in
+               
+                            guard let rawValue = notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
+                                  let changeReason = AVAudioSession.RouteChangeReason(rawValue: rawValue) else { return }
+                            
+                            switch changeReason {
+                                
+                            case .oldDeviceUnavailable:
+                                
+                                if let previousRoute = notification.userInfo?[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription,
+                                    previousRoute.outputs.contains(where: { $0.portType == .headphones }) {
+                                    
+                                    Dispatcher.dispatch(action: Pause())
+                                    
+                                }
+                                
+                            default: return
+                                
+                            }
+
+        }
         
     }
     

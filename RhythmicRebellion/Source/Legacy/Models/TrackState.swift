@@ -23,6 +23,7 @@ struct TrackState: Codable, Equatable {
     let progress: TimeInterval
     let isPlaying: Bool
 
+    ///TODO: remove skipSeek hack. Unify |progress| and seek request into single Entity
     let skipSeek: Void?
     
     init(hash: String = WebSocketService.ownSignatureHash, progress: TimeInterval, isPlaying: Bool, skipSeek: Void? = nil) {

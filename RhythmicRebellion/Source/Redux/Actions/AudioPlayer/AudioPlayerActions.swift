@@ -53,7 +53,8 @@ extension AudioPlayer {
         }
         
         state.player.currentItem?.state = .init(progress: currentTrackState.progress,
-                                                isPlaying: false)
+                                                isPlaying: false,
+                                                skipSeek: ())
         return state
         }
     }
@@ -67,7 +68,8 @@ extension AudioPlayer {
         }
         
         state.player.currentItem?.state = .init(progress: currentTrackState.progress,
-                                                isPlaying: true)
+                                                isPlaying: true,
+                                                skipSeek: ())
         return state
         }
     }
@@ -81,7 +83,8 @@ extension AudioPlayer {
         }
         
         state.player.currentItem?.state = .init(progress: currentTrackState.progress,
-                                                isPlaying: !currentTrackState.isPlaying)
+                                                isPlaying: !currentTrackState.isPlaying,
+                                                skipSeek: ())
         return state
         }
     }

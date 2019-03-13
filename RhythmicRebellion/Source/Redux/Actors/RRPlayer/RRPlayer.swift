@@ -110,7 +110,7 @@ extension RRPlayer {
             .filter { $0.isOwn }
             .drive(onNext: { [weak w = webSocket] (x) in
                 
-                w?.sendCommand(command: CodableWebSocketCommand(data: x))
+                //w?.sendCommand(command: CodableWebSocketCommand(data: x))
                 print("Sending out trackState for syncing with webSocket: \(x)")
                 
             })

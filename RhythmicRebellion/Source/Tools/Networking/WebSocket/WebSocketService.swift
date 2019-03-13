@@ -212,7 +212,7 @@ class WebSocketService {
         }
         
         webSocket.write(data: command.jsonData, completion: {
-            
+
         })
     }
 
