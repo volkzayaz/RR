@@ -167,6 +167,16 @@ extension RRPlayer {
     
     func bindWebSocket() {
         
+//        webSocket.didConnect
+//            .subscribe(onNext: {
+//                print("DidConnect")
+//            })
+//        
+//        webSocket.didDisconnect
+//            .subscribe(onNext: {
+//                print("DidDisconnect")
+//            })
+        
         webSocket.didReceivePlaylistPatch
             .subscribe(onNext: { (patch) in
                 let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
