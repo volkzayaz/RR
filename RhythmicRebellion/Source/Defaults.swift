@@ -31,7 +31,7 @@ struct Defaults {
             UserDefaults.standard.synchronize()
         }
         
-        get { return UserDefaults.standard.value(forKey: DefaultsKeys.env.rawValue) as? String ?? "rr-3287" }
+        get { return UserDefaults.standard.value(forKey: DefaultsKeys.env.rawValue) as? String ?? "dev" }
     }
     
 }

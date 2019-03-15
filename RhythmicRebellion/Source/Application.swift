@@ -68,19 +68,41 @@ class Application: Watchable {
     struct URI {
 
         static var origin: String {
-            return "http://\(String(describing: Defaults.Env)).fan.rebellionretailsite.com"
+            
+            let env = Defaults.Env
+            
+            guard env != "prod" else {
+                return "https://rhythmic-rebellion.com"
+            }
+            
+            return "http://\(String(describing: env)).fan.rebellionretailsite.com"
         }
         
         static var restApiService: String {
-            return "http://\(String(describing: Defaults.Env)).api.rebellionretailsite.com"
+            
+            let env = Defaults.Env
+            
+            guard env != "prod" else {
+                return "https://api.rhythmic-rebellion.com"
+            }
+            
+            return "http://\(String(describing: env)).fan.rebellionretailsite.com"
+            
         }
         
         static var webSocketService: String {
-            return "ws://\(String(describing: Defaults.Env)).rebellionretailsite.com:3000/"
+            
+            let env = Defaults.Env
+            
+            guard env != "prod" else {
+                return "wss://ws.rebellion-services.com"
+            }
+            
+            return "ws://\(String(describing: env)).rebellionretailsite.com:3000/"
         }
         
     }
-
+    
     let restApiService: RestApiService
     let webSocketService: WebSocketService
 

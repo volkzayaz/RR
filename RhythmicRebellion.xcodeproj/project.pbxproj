@@ -1870,7 +1870,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/CloudTagView/CloudTagView.framework",
@@ -1915,7 +1915,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		737622CC21CA4F8A005B603E /* R.swift */ = {
@@ -1932,7 +1932,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift,
+				"$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
