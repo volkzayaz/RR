@@ -86,7 +86,7 @@ class Application: Watchable {
                 return "https://api.rhythmic-rebellion.com"
             }
             
-            return "http://\(String(describing: env)).fan.rebellionretailsite.com"
+            return "http://\(String(describing: env)).api.rebellionretailsite.com"
             
         }
         

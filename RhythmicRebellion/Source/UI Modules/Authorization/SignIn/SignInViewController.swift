@@ -102,6 +102,7 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         self.keyboardWillHideObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.main) { [unowned  self] (notification) in
             self.keyboardWillHide(notification: notification)
         }
+        
     }
 
     override func viewDidDisappear(_ animated: Bool) {

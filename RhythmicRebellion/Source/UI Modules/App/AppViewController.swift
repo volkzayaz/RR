@@ -43,6 +43,30 @@ final class AppViewController: UIViewController {
         viewModel.load(with: self)
     }
     
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        resignFirstResponder()
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        
+        if (motion == .motionShake)
+        {
+            UIAlertView(title: "Info", message: "Current Environent: \(Defaults.Env)"
+            , delegate: nil, cancelButtonTitle: "Ok").show()
+        }
+        
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 
         super.traitCollectionDidChange(previousTraitCollection)
