@@ -37,7 +37,7 @@ struct MediaWidget {
                 ///TODO: investigate case: why some Track has nullable AudioFile property. Does it make sence to have track with no audioFile
                       let trackDuration = currentTrack.track.audioFile?.duration else {
                         
-                        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+                        MPNowPlayingInfoCenter.default().nowPlayingInfo = [:]
                         return
                 }
                 
