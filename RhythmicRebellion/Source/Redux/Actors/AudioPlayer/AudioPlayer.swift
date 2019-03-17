@@ -64,7 +64,7 @@ class AudioPlayer: NSObject {
         
         super.init()
         
-        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
         
         ///////---------
         ///////Dispatching

@@ -10,13 +10,15 @@ import Foundation
 import RxSwift
 
 /******
- *  All the rules about syncing player state between clients lives in this actor
+ *  All the rules about syncing player state between clients live in this actor
  */
 
+///TODO: drop NSObject conformance once Application is reactified
 class RRPlayer: NSObject {
     
     let webSocket: WebSocketService
     let audioPlayer = AudioPlayer()
+    let mediaWidget = MediaWidget()
     
     init(application: Application) {
         self.webSocket = application.webSocketService

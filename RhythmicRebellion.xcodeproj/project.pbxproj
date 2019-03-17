@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FE9223E5B1900571383 /* MediaWidget.swift */; };
 		734F827D2229965E0006E1DE /* Appfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82742229965E0006E1DE /* Appfile */; };
 		734F827F2229965E0006E1DE /* Fastfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82762229965E0006E1DE /* Fastfile */; };
 		734F828722299CD90006E1DE /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 734F828622299CD90006E1DE /* Info.plist */; };
@@ -351,6 +352,7 @@
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.debug.xcconfig"; sourceTree = "<group>"; };
+		730D1FE9223E5B1900571383 /* MediaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWidget.swift; sourceTree = "<group>"; };
 		734F82742229965E0006E1DE /* Appfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Appfile; sourceTree = "<group>"; };
 		734F82762229965E0006E1DE /* Fastfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Fastfile; sourceTree = "<group>"; };
 		734F828622299CD90006E1DE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -719,6 +721,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		730D1FE8223E5AD200571383 /* MediaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				730D1FE9223E5B1900571383 /* MediaWidget.swift */,
+			);
+			path = MediaWidget;
+			sourceTree = "<group>";
+		};
 		734F82722229965E0006E1DE /* fastlane */ = {
 			isa = PBXGroup;
 			children = (
@@ -796,6 +806,7 @@
 		7361C00F223687A1008EA36E /* Actors */ = {
 			isa = PBXGroup;
 			children = (
+				730D1FE8223E5AD200571383 /* MediaWidget */,
 				7361C01722368E35008EA36E /* RRPlayer */,
 				7361C01322368830008EA36E /* AudioPlayer */,
 				7361C010223687B3008EA36E /* LinkedPlaylist */,
@@ -2271,7 +2282,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift",
+				$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2427,6 +2438,7 @@
 				73F13898222C289200FB8EBC /* AuthorizationViewModel.swift in Sources */,
 				73F13916222C289200FB8EBC /* TimeInterval+Extension.swift in Sources */,
 				73F138CD222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift in Sources */,
+				730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */,
 				73F13896222C289200FB8EBC /* SignInViewController.swift in Sources */,
 				7361C02E2236917C008EA36E /* ChangeBlockState.swift in Sources */,
 				73F138FC222C289200FB8EBC /* TrackRequests.swift in Sources */,
