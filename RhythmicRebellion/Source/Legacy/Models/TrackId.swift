@@ -19,6 +19,16 @@ struct TrackId: Codable {
         case skipStat
     }
 
+    init?(orderedTrack: OrderedTrack?) {
+        
+        guard let o = orderedTrack else {
+            return nil
+        }
+        
+        self.init(id: o.track.id, key: o.orderHash)
+        
+    }
+    
     init(id: Int, key: String, skipStat: Bool? = nil) {
         self.id = id
         self.key = key
@@ -48,6 +58,6 @@ struct TrackId: Codable {
 
 extension TrackId: Equatable {
     static func == (lhs: TrackId, rhs: TrackId) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.key == rhs.key
     }
 }

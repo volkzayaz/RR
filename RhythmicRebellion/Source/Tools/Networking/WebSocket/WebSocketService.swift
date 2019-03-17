@@ -26,14 +26,7 @@ extension WebSocketService {
     }
     
     var didReceiveCurrentTrack: Observable<TrackId?> {
-        return commandObservable().map { (maybeTrack: TrackId?) in
-            if let x = maybeTrack, x.id == 0 {
-                ///socket returns {"id": 0, "key": ""}} instead of null for no track
-                return nil
-            }
-            
-            return maybeTrack
-        }
+        return commandObservable()
     }
     
     var didReceiveTrackBlockState: Observable<TrackBlockState> {
@@ -63,7 +56,7 @@ class WebSocketService {
     ///some commands are not signed by hash, but our logic rely on
     ///whether some particular command is created by our client, or alien client
     ///we will be using this hash to mark commands as alien
-    ///not this hash will not be transported via webSocket to other clients
+    ///note this hash will not be transported via webSocket to other clients
     static let alienSignatureHash = String(randomWithLength: 8, allowedCharacters: .alphaNumeric)
     
     ///Piece of data needed by WebSocket protocol
@@ -210,6 +203,8 @@ class WebSocketService {
         if command.data is TrackState {
             WebSocketService.masterDate = Date()
         }
+        
+        let str = String(bytes: command.jsonData, encoding: .utf8)
         
         webSocket.write(data: command.jsonData, completion: {
 

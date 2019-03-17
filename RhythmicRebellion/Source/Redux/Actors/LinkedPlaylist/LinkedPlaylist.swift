@@ -63,6 +63,10 @@ struct LinkedPlaylist {
         return res
     }
     
+    var count: Int {
+        return reduxView.count
+    }
+    
     subscript(index: TrackOrderHash) -> OrderedTrack? {
         get {
             guard let item = reduxView[index],

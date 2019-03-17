@@ -20,10 +20,11 @@ struct DeleteTrack: ActionCreator {
         let tracks = initialState.player.tracks
         
         ///getting state transform
-        let patch = tracks.deletePatch(track: track)
+        let shouldFlush = tracks.count == 1 ///WebSite requires separate "flush" call for last delete cases
+        let patch = shouldFlush ? [:] : tracks.deletePatch(track: track)
         
         ///mapping state transform
-        let reduxPatch = PlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: false, patch: patch)
+        let reduxPatch = PlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: shouldFlush, patch: patch)
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,

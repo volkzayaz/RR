@@ -30,6 +30,15 @@ class RRPlayer: NSObject {
         
         application.addWatcher(self)
     }
+    
+    ////TODO: awful hack. Works for the case:
+    ////To sync appState's currentItem we usually user currentItem.state.isOwn hash
+    ////we only send out currentItems, that are signed with our own hash
+    ////however in case currentItem is nil (which is also needs syncing if was created by us)
+    ////we have no way of knowing if currentItem = nil is produced by our client or alien client
+    ////hence this hacky bool
+    private var shouldSkipSingleNilInCurrentItem: Bool = false
+    
 }
 
 ///TODO: migrate to proper reactive callbacks
@@ -112,9 +121,30 @@ extension RRPlayer {
             .filter { $0.isOwn }
             .drive(onNext: { [weak w = webSocket] (x) in
                 
-                //w?.sendCommand(command: CodableWebSocketCommand(data: x))
+                w?.sendCommand(command: CodableWebSocketCommand(data: x))
                 print("Sending out trackState for syncing with webSocket: \(x)")
                 
+            })
+            .disposed(by: rx.disposeBag)
+        
+        ////sync current track ID
+        appState.map { $0 }
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
+            .skip(1)
+            .drive(onNext: { [weak w = webSocket, weak self] (state) in
+
+                if let x = state.player.currentItem, !x.state.isOwn { return }
+                if self?.shouldSkipSingleNilInCurrentItem ?? false {
+                    self?.shouldSkipSingleNilInCurrentItem = false
+                    return
+                }
+                
+                let t = TrackId(orderedTrack: state.currentTrack)
+                
+                let command = CodableWebSocketCommand(data: t)
+                
+                w?.sendCommand(command: command)
+                print("Sending out currentTrackID for syncing with webSocket: \(String(describing: t))")
             })
             .disposed(by: rx.disposeBag)
         
@@ -131,24 +161,6 @@ extension RRPlayer {
                 
             })
             .disposed(by: rx.disposeBag)
-        
-        ////sync current track ID
-        appState.map { $0 }
-            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
-            .filter { $0.player.currentItem?.state.isOwn ?? false }
-            .drive(onNext: { [weak w = webSocket] (state) in
-
-                guard let orderedTrack = state.currentTrack else {
-                    return
-                }
-                
-                let t = TrackId(id: orderedTrack.track.id, key: orderedTrack.orderHash)
-                
-                w?.sendCommand(command: CodableWebSocketCommand(data: t))
-                print("Sending out currentTrackID for syncing with webSocket: \(t)")
-            })
-            .disposed(by: rx.disposeBag)
-        
         
         
         ////apply RR specific logic
@@ -196,7 +208,10 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         webSocket.didReceiveCurrentTrack
-            .subscribe(onNext: { (t) in
+            .subscribe(onNext: { [weak self] (t) in
+                
+                self?.shouldSkipSingleNilInCurrentItem = true
+                
                 Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t?.key))
             })
             .disposed(by: rx.disposeBag)

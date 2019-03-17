@@ -16,7 +16,8 @@ struct RemoveTrack: ActionCreator {
     func perform(initialState: AppState) -> Observable<AppState> {
         
         var maybeNextTrack: OrderedTrack? = nil
-        if initialState.currentTrack == orderedTrack {
+        if initialState.currentTrack == orderedTrack,
+           initialState.player.tracks.count > 1 { ///in case we're deleting very last track from playlist
             maybeNextTrack = initialState.nextTrack ?? initialState.firstTrack
         }
         
