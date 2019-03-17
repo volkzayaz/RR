@@ -48,10 +48,16 @@ enum Dispatcher {
         let _ =
         actions.notNil().concatMap { actionCreator -> Observable<AppState> in
             
-                Observable.deferred {
+            let forceCompleteTrigger = Observable.just( () ).delay(10, scheduler: MainScheduler.instance)
+                .do(onNext: {
+                    fatalErrorInDebug("Action \(actionCreator) exceeded 10 seconds quota to update appState. State that was mutated: \(state.value) ")
+                })
+            
+                return Observable.deferred { () -> Observable<AppState> in
                     print("Dispatching \(actionCreator.description)")
                     return actionCreator.perform(initialState: state.value)
                 }
+                .takeUntil(forceCompleteTrigger)
             
             }
             .filter { $0 != state.value }

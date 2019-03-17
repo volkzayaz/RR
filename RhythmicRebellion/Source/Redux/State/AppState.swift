@@ -30,6 +30,8 @@ var appState: Driver<AppState> {
     return _appState.asDriver()
 }
 
+//TODO: implement nice human readable string description of AppState
+
 struct AppState: Equatable {
     
     var player: PlayerState
