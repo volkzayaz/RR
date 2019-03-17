@@ -26,11 +26,11 @@ final class NowPlayingViewController: UIViewController {
         let f = cell.trackView.actionButton.frame
         let v = cell.trackView.actionButtonContainerView
         
-        cell.trackView.setup(viewModel: data) { [unowned self] action in
+        cell.trackView.setup(viewModel: data) { [unowned self, unowned c = cell, unowned tv = tableView] action in
             
             switch action {
             case .showActions:
-                self.showActions(itemAt: ip,
+                self.showActions(itemAt: tv.indexPath(for: c)!,
                                  sourceRect: f,
                                  sourceView: v!)
                 
@@ -59,6 +59,7 @@ final class NowPlayingViewController: UIViewController {
     func configure(viewModel: NowPlayingViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
+        
     }
 
     // MARK: - Lifecycle -

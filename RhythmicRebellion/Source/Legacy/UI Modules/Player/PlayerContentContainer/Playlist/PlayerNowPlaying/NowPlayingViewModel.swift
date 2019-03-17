@@ -56,7 +56,7 @@ final class NowPlayingViewModel {
         self.router = router
         self.application = application
         
-        let actions: TrackListViewModel.ActionsProvider = { list, t, indexPath in
+        let actions: TrackListViewModel.ActionsProvider = { list, t, _ in
             
             guard let orderedTrack = t as? OrderedTrack else {
                 return []
@@ -101,7 +101,7 @@ final class NowPlayingViewModel {
             
         }
         
-        let select: TrackListViewModel.SelectedProvider = { list, t, indexPath in
+        let select: TrackListViewModel.SelectedProvider = { list, t, _ in
             
             guard let orderedTrack = t as? OrderedTrack else {
                 return
