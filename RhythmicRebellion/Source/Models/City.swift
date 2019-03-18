@@ -15,7 +15,7 @@ protocol CityInfo {
     var countryCode: String { get }
     var regionCode: String { get }
 
-    init(with city: CityInfo)
+    init?(with city: CityInfo?)
 }
 
 struct City: CityInfo, Decodable {
@@ -32,7 +32,10 @@ struct City: CityInfo, Decodable {
         case regionCode = "admin1_code"
     }
 
-    init(with city: CityInfo) {
+    init?(with city: CityInfo?) {
+        
+        guard let city = city else { return nil }
+        
         self.id = city.id
         self.name = city.name
         self.countryCode = city.countryCode
@@ -76,7 +79,10 @@ struct ProfileCity: CityInfo, Codable {
         case regionCode = "stateCode"
     }
 
-    init(with city: CityInfo) {
+    init?(with city: CityInfo?) {
+        
+        guard let city = city else { return nil }
+        
         self.id = city.id
         self.name = city.name
         self.countryCode = city.countryCode

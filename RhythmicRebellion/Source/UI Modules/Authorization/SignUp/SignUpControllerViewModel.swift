@@ -185,8 +185,8 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerGenderField(_ genderField: GenderValidatableField) {
-        let genderRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Gender field is required.",
-                                                                           comment: "Gender validataion message"))]
+        let genderRules: [Rule] = []
+        
         self.validator.registerField(genderField, rules: genderRules)
 
         self.genderField = genderField
@@ -225,10 +225,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerZipField(_ zipField: ValidatableField) {
-        let zipRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Zip field is required",
-                                                                        comment: "Zip validataion message")),
-                                MaxLengthRule(length: 15, message: NSLocalizedString("Max length is %ld",
-                                                                                     comment: "Zip validataion template"))]
+        let zipRules: [Rule] = []
 
         self.validator.registerField(zipField, rules: zipRules)
 
@@ -242,8 +239,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerRegionField(_ regionField: RegionValidatableField) {
-        let regionRules: [Rule] = [RequiredRule(message: NSLocalizedString("The State field is required.",
-                                                                           comment: "State validataion message"))]
+        let regionRules: [Rule] = []
 
         self.validator.registerField(regionField, rules: regionRules)
 
@@ -257,8 +253,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     }
 
     func registerCityField(_ cityField: CityValidatableField) {
-        let cityRules: [Rule] = [RequiredRule(message: NSLocalizedString("The City field is required.",
-                                                                         comment: "City validataion message"))]
+        let cityRules: [Rule] = []
 
         self.validator.registerField(cityField, rules: cityRules )
 
@@ -494,23 +489,23 @@ final class SignUpControllerViewModel: SignUpViewModel {
                 let nickname = self.nicknameField?.validationText,
                 let firstName = self.firstNameField?.validationText,
                 let birhDate = self.birthDateField?.date,
-                let gender = self.genderField?.gender,
                 let country = self.countryField?.country,
-                let region = self.regionField?.region,
-                let city = self.cityField?.city,
-                let zip = self.zipField?.validationText,
                 let phone = self.phoneField?.validationText,
                 let hobbies = self.hobbiesField?.hobbies,
                 let howHear = self.howHearField?.howHear else { return }
 
-            let location = ProfileLocation(country: country, region: region, city: city, zip: zip)
+            let location = ProfileLocation(country: country,
+                                           region: self.regionField?.region,
+                                           city: self.cityField?.city,
+                                           zip: self.zipField?.validationText)
+            
             let registrationPayload = RestApiFanUserRegistrationRequestPayload(email: email,
                                                                                password: password,
                                                                                passwordConfirmation: passwordConfirmation,
                                                                                nickname: nickname,
                                                                                realName: firstName,
                                                                                birthDate: birhDate,
-                                                                               gender: gender,
+                                                                               gender: self.genderField?.gender,
                                                                                location: location,
                                                                                phone: phone,
                                                                                hobbies: hobbies,

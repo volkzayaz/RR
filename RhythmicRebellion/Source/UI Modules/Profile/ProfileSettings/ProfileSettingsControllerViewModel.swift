@@ -77,8 +77,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.delegate?.refreshBirthDateField(with: userProfile.birthDate)
         self.delegate?.refreshCountryField(with: Country(with: userProfile.location.country))
         self.delegate?.refreshZipField(with: userProfile.location.zip)
-        self.delegate?.refreshRegionField(with: Region(with: userProfile.location.region))
-        self.delegate?.refreshCityField(with: City(with: userProfile.location.city))
+        self.delegate?.refreshRegionField(with: userProfile.location.region != nil ? Region(with: userProfile.location.region!) : nil)
+        self.delegate?.refreshCityField(with: userProfile.location.city != nil ? City(with: userProfile.location.city!) : nil)
         self.delegate?.refreshPhoneField(with: userProfile.phone)
         self.delegate?.refreshHobbiesField(with: userProfile.hobbies)
         self.delegate?.refreshGenresField(with: userProfile.genres)
@@ -187,8 +187,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerGenderField(_ genderField: GenderValidatableField) {
-        let genderRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Gender field is required.",
-                                                                           comment: "Gender validataion message"))]
+        let genderRules: [Rule] = []
+        
         self.validator.registerField(genderField, rules: genderRules)
 
         self.genderField = genderField
@@ -227,10 +227,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerZipField(_ zipField: ValidatableField) {
-        let zipRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Zip field is required",
-                                                                        comment: "Zip validataion message")),
-                                MaxLengthRule(length: 15, message: NSLocalizedString("Max length is %ld",
-                                                                                     comment: "Zip validataion template"))]
+        let zipRules: [Rule] = []
+        
         self.validator.registerField(zipField, rules: zipRules)
 
         self.zipField = zipField
@@ -243,8 +241,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerRegionField(_ regionField: RegionValidatableField) {
-        let regionRules: [Rule] = [RequiredRule(message: NSLocalizedString("The State field is required.",
-                                                                           comment: "State validataion message"))]
+        let regionRules: [Rule] = []
+        
         self.validator.registerField(regionField, rules: regionRules)
 
         self.regionField = regionField
@@ -257,8 +255,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func registerCityField(_ cityField: CityValidatableField) {
-        let cityRules: [Rule] = [RequiredRule(message: NSLocalizedString("The City field is required.",
-                                                                         comment: "City validataion message"))]
+        let cityRules: [Rule] = []
+        
         self.validator.registerField(cityField, rules: cityRules )
 
         self.cityField = cityField
