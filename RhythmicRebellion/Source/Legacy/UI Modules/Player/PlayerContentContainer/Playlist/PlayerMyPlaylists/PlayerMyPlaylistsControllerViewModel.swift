@@ -107,7 +107,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     }
     
     private func replacePlayerPlaylist(with tracks: [Track]) {
-        Dispatcher.dispatch(action: ReplaceTracks(with: tracks, isOwnChange: true))
+        Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
     }
 
 

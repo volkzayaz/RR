@@ -98,7 +98,7 @@ final class HomeControllerViewModel: HomeViewModel {
     }
 
     private func replacePlayerPlaylist(with tracks: [Track]) {
-        Dispatcher.dispatch(action: ReplaceTracks(with: tracks, isOwnChange: true))
+        Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
     }
 
     // MARK: - Playlist Actions -

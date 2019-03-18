@@ -18,12 +18,12 @@ struct AddTracksToLinkedPlaying: ActionCreator {
         
         switch style {
         case .next:
-            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack, isOwnChange: true)
+            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack)
                 .perform(initialState: initialState)
             
         case .now:
             
-            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack, isOwnChange: true)
+            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack)
                 .perform(initialState: initialState)
                 .flatMap { newState -> Observable<AppState> in
                     
@@ -37,7 +37,7 @@ struct AddTracksToLinkedPlaying: ActionCreator {
             
         case .last:
             
-            return InsertTracks(tracks: tracks, afterTrack: initialState.player.tracks.orderedTracks.last, isOwnChange: true)
+            return InsertTracks(tracks: tracks, afterTrack: initialState.player.tracks.orderedTracks.last)
                 .perform(initialState: initialState)
             
         }

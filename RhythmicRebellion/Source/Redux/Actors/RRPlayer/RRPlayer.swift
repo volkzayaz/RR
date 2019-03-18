@@ -31,14 +31,6 @@ class RRPlayer: NSObject {
         application.addWatcher(self)
     }
     
-    ////TODO: awful hack. Works for the case:
-    ////To sync appState's currentItem we usually user currentItem.state.isOwn hash
-    ////we only send out currentItems, that are signed with our own hash
-    ////however in case currentItem is nil (which is also needs syncing if was created by us)
-    ////we have no way of knowing if currentItem = nil is produced by our client or alien client
-    ////hence this hacky bool
-    private var shouldSkipSingleNilInCurrentItem: Bool = false
-    
 }
 
 ///TODO: migrate to proper reactive callbacks
@@ -115,10 +107,11 @@ extension RRPlayer {
         ////Syncing using webSocket
         /////-----
         
+        let webSocketAcceptableChange = appState.filter { $0.player.lastChangeSignatureHash.isOwn }
+        
         /// sync player state
-        appState.map { $0.player.currentItem?.state }
+        webSocketAcceptableChange.map { $0.player.currentItem?.state }
             .notNil()
-            .filter { $0.isOwn }
             .drive(onNext: { [weak w = webSocket] (x) in
                 
                 w?.sendCommand(command: CodableWebSocketCommand(data: x))
@@ -128,16 +121,9 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         ////sync current track ID
-        appState.map { $0 }
+        webSocketAcceptableChange.map { $0 }
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
-            .skip(1)
-            .drive(onNext: { [weak w = webSocket, weak self] (state) in
-
-                if let x = state.player.currentItem, !x.state.isOwn { return }
-                if self?.shouldSkipSingleNilInCurrentItem ?? false {
-                    self?.shouldSkipSingleNilInCurrentItem = false
-                    return
-                }
+            .drive(onNext: { [weak w = webSocket] (state) in
                 
                 let t = TrackId(orderedTrack: state.currentTrack)
                 
@@ -149,15 +135,28 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         /// sync playlist order (insert/delete/create/flush)
-        appState.map { $0.player.lastPatch }
+        webSocketAcceptableChange.map { $0.player.lastPatch }
             .distinctUntilChanged()
             .notNil()
-            .filter { $0.isOwn }
             .drive(onNext: { [weak w = webSocket] (x) in
                 
                 w?.sendCommand(command: TrackReduxViewPatch(data: x.patch, shouldFlush: x.shouldFlush))
                 
                 print("Sending out patch for syncing with webSocket: \(x.patch)")
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
+        /// sync blocked state
+        webSocketAcceptableChange.map { $0.player.isBlocked }
+            .distinctUntilChanged()
+            .drive(onNext: { [weak w = webSocket] (x) in
+                
+                let data: TrackBlockState = x
+                
+                w?.sendCommand(command: CodableWebSocketCommand(data: data))
+                
+                print("Sending out block state via webSoccket isBlocked = \(x)")
                 
             })
             .disposed(by: rx.disposeBag)
@@ -193,44 +192,41 @@ extension RRPlayer {
         
         webSocket.didReceivePlaylistPatch
             .subscribe(onNext: { (patch) in
-                let action = ApplyReduxViewPatch( viewPatch: .init(isOwn: false,
-                                                                   shouldFlush: patch.shouldFlush,
+                let action = ApplyReduxViewPatch( viewPatch: .init(shouldFlush: patch.shouldFlush,
                                                                    patch: patch.data) )
                 
-                Dispatcher.dispatch(action: action )
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: action) )
             })
             .disposed(by: rx.disposeBag)
         
         webSocket.didReceiveTracks
             .subscribe(onNext: { (tracks) in
-                Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: StoreTracks(tracks: tracks)) )
             })
             .disposed(by: rx.disposeBag)
         
         webSocket.didReceiveCurrentTrack
-            .subscribe(onNext: { [weak self] (t) in
-                
-                self?.shouldSkipSingleNilInCurrentItem = true
-                
-                Dispatcher.dispatch(action: PrepareNewTrackByHash(orderHash: t?.key))
+            .subscribe(onNext: { (t) in
+
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: PrepareNewTrackByHash(orderHash: t?.key)))
             })
             .disposed(by: rx.disposeBag)
         
         webSocket.didReceiveTrackState
             .subscribe(onNext: { (state) in
-                Dispatcher.dispatch(action: ChangeTrackState(trackState: state))
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: ChangeTrackState(trackState: state)))
             })
             .disposed(by: rx.disposeBag)
 
         webSocket.didReceiveTrackBlockState
             .subscribe(onNext: { (state) in
-                Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked: state))
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: ChangePlayerBlockState(isBlocked: state)))
             })
             .disposed(by: rx.disposeBag)
         
         webSocket.didReceivePreviewTimes
             .subscribe(onNext: { (times) in
-                Dispatcher.dispatch(action: UpdateTrackPrviewTimes(newPreviewTimes: times)) 
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateTrackPrviewTimes(newPreviewTimes: times)))
             })
             .disposed(by: rx.disposeBag)
         

@@ -13,7 +13,7 @@ struct ClearTracks: ActionCreator {
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
-        let reduxPatch = PlayerState.ReduxViewPatch(isOwn: true, shouldFlush: true, patch: [:])
+        let reduxPatch = PlayerState.ReduxViewPatch(shouldFlush: true, patch: [:])
         
         return ApplyReduxViewPatch(viewPatch: reduxPatch,
                                    assosiatedTracks: []).perform(initialState: initialState)

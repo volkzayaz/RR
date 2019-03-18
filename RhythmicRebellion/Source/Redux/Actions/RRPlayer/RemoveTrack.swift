@@ -21,7 +21,7 @@ struct RemoveTrack: ActionCreator {
             maybeNextTrack = initialState.nextTrack ?? initialState.firstTrack
         }
         
-        return DeleteTrack(track: orderedTrack, isOwnChange: true)
+        return DeleteTrack(track: orderedTrack)
             .perform(initialState: initialState)
             .flatMap { newState -> Observable<AppState> in
                 

@@ -15,7 +15,8 @@ fileprivate let _appState: BehaviorRelay<AppState> = {
     let x = AppState(player: PlayerState(tracks: LinkedPlaylist(),
                                            lastPatch: nil,
                                            currentItem: nil,
-                                           isBlocked: false)
+                                           isBlocked: false,
+                                           lastChangeSignatureHash: WebSocketService.ownSignatureHash)
                     )
     
     return BehaviorRelay(value: x)
@@ -46,8 +47,9 @@ struct PlayerState: Equatable {
     var lastPatch: ReduxViewPatch?
     
     var currentItem: CurrentItem?
-    
     var isBlocked: Bool
+    
+    var lastChangeSignatureHash: String
     
     struct CurrentItem: Equatable {
         let activeTrackHash: TrackOrderHash
@@ -56,7 +58,6 @@ struct PlayerState: Equatable {
     }
     
     struct ReduxViewPatch {
-        let isOwn: Bool
         let shouldFlush: Bool
         var patch: LinkedPlaylist.NullableReduxView
     };

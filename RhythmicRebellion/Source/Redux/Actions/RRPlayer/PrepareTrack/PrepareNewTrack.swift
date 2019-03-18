@@ -13,29 +13,27 @@ struct PrepareNewTrack: ActionCreator {
     
     let orderedTrack: OrderedTrack
     let shouldPlayImmidiatelly: Bool
-    let signatureHash: String
+    let canSkipAddons: Bool
     
     init(orderedTrack: OrderedTrack,
          shouldPlayImmidiatelly: Bool,
-         signatureHash: String = WebSocketService.ownSignatureHash) {
+         canSkipAddons: Bool = false) {
         
         self.orderedTrack = orderedTrack
         self.shouldPlayImmidiatelly = shouldPlayImmidiatelly
-        self.signatureHash = signatureHash
+        self.canSkipAddons = canSkipAddons
         
     }
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
-        guard signatureHash == WebSocketService.ownSignatureHash else {
-            ///no need to do anything since we're just mimic master at this point
+        guard !canSkipAddons else {
             
             var state = initialState
             
             state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
                                              addons: [],
-                                             state: .init(hash: self.signatureHash,
-                                                          progress: 0,
+                                             state: .init(progress: 0,
                                                           isPlaying: self.shouldPlayImmidiatelly))
             
             return .just(state)
@@ -65,8 +63,7 @@ struct PrepareNewTrack: ActionCreator {
         
         ///before preapering new track we need to pause old track and rewind to point 0 secs
         var preState = initialState
-        preState.player.currentItem?.state = .init(hash: signatureHash,
-                                                   progress: 0,
+        preState.player.currentItem?.state = .init(progress: 0,
                                                    isPlaying: false)
         
         ///3
@@ -89,8 +86,7 @@ struct PrepareNewTrack: ActionCreator {
                 ///9
                 state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
                                                  addons: addons,
-                                                 state: .init(hash: self.signatureHash,
-                                                              progress: 0,
+                                                 state: .init(progress: 0,
                                                               isPlaying: self.shouldPlayImmidiatelly))
                 
                 return state

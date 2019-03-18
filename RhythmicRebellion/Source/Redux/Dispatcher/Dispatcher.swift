@@ -9,21 +9,6 @@
 import RxSwift
 import RxCocoa
 
-///Syncrhonous action
-protocol Action {
-    
-    func perform( initialState: AppState ) -> AppState
-    
-}
-
-///Asyncrhonous action
-protocol ActionCreator: CustomStringConvertible {
-    
-    ///Make sure your Observable eventually completes.
-    ///Non completable observables will block the whole execution Queue
-    func perform( initialState: AppState ) -> Observable<AppState>
-    
-}
 
 enum Dispatcher {
     
@@ -56,6 +41,14 @@ enum Dispatcher {
                 return Observable.deferred { () -> Observable<AppState> in
                     print("Dispatching \(actionCreator.description)")
                     return actionCreator.perform(initialState: state.value)
+                        .map { state in
+                            
+                            ////signing action with it's signature
+                            
+                            var x = state
+                            x.player.lastChangeSignatureHash = actionCreator.signature
+                            return x
+                        }
                 }
                 .takeUntil(forceCompleteTrigger)
             
@@ -63,29 +56,6 @@ enum Dispatcher {
             .filter { $0 != state.value }
             .bind(to: state)
         
-    }
-    
-}
-
-extension ActionCreator {
-    func prepare(initialState: AppState) -> AppState {
-        return initialState
-    }
-    
-    var description: String {
-        return "\(type(of: self))"
-    }
-}
-
-struct ActionCreatorWrapper: ActionCreator {
-    let action: Action
-    
-    func perform(initialState: AppState) -> Observable<AppState> {
-        return .just( action.perform(initialState: initialState) )
-    }
-    
-    var description: String {
-        return ":\(type(of: action))"
     }
     
 }

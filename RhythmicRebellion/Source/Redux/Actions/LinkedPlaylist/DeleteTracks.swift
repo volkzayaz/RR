@@ -12,7 +12,6 @@ import RxSwift
 struct DeleteTrack: ActionCreator {
     
     let track: OrderedTrack
-    let isOwnChange: Bool
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
@@ -24,7 +23,7 @@ struct DeleteTrack: ActionCreator {
         let patch = shouldFlush ? [:] : tracks.deletePatch(track: track)
         
         ///mapping state transform
-        let reduxPatch = PlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: shouldFlush, patch: patch)
+        let reduxPatch = PlayerState.ReduxViewPatch(shouldFlush: shouldFlush, patch: patch)
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,

@@ -13,7 +13,6 @@ struct InsertTracks: ActionCreator {
     
     let tracks: [Track]
     let afterTrack: OrderedTrack?
-    let isOwnChange: Bool
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
@@ -24,7 +23,7 @@ struct InsertTracks: ActionCreator {
         let patch = tracks.insertPatch(tracks: self.tracks, after: afterTrack)
         
         ///mapping state transform
-        let reduxPatch = PlayerState.ReduxViewPatch(isOwn: isOwnChange, shouldFlush: false, patch: patch)
+        let reduxPatch = PlayerState.ReduxViewPatch(shouldFlush: false, patch: patch)
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,

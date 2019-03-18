@@ -30,7 +30,7 @@ struct PrepareNewTrackByHash: ActionCreator {
         
         return PrepareNewTrack(orderedTrack: x,
                                shouldPlayImmidiatelly: false,
-                               signatureHash: WebSocketService.alienSignatureHash).perform(initialState: initialState)
+                               canSkipAddons: true).perform(initialState: initialState)
     }
     
 }

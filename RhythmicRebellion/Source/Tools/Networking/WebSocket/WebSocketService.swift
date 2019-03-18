@@ -50,17 +50,25 @@ extension WebSocketService {
     
 }
 
+typealias Signature = String
+
+extension Signature {
+    var isOwn: Bool {
+        return self == WebSocketService.ownSignatureHash
+    }
+}
+
 class WebSocketService {
 
     ///some of the webSocket commands (trackState) are signed by each client
     ///our client will be signing commands with this hash
-    static let ownSignatureHash = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
+    static let ownSignatureHash: Signature = String(randomWithLength: 11, allowedCharacters: .alphaNumeric)
     
     ///some commands are not signed by hash, but our logic rely on
     ///whether some particular command is created by our client, or alien client
     ///we will be using this hash to mark commands as alien
     ///note this hash will not be transported via webSocket to other clients
-    static let alienSignatureHash = String(randomWithLength: 8, allowedCharacters: .alphaNumeric)
+    static let alienSignatureHash: Signature = String(randomWithLength: 8, allowedCharacters: .alphaNumeric)
     
     ///Piece of data needed by WebSocket protocol
     ///Whenever you send out a setTrackState commad, you become a master client
