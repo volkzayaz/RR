@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Token: Codable {
+struct Token: Codable, Equatable {
 
     let token: String
     let isGuest: Bool

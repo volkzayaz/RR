@@ -7,7 +7,10 @@
 //
 
 import Foundation
+
 import Starscream
+import Reachability
+
 import RxSwift
 
 extension WebSocketService {
@@ -66,7 +69,10 @@ class WebSocketService {
     ///for the next 1 second ¯\_(ツ)_/¯
     static var masterDate = Date(timeIntervalSince1970: 0)
     
-    let webSocket: WebSocket
+    private let webSocket: WebSocket
+    private let reachability: Reachability
+    private let tokenPipe = BehaviorSubject<Token?>(value: nil)
+    private let bag = DisposeBag()
     
     func commandObservable<T: WSCommandData & Codable>() -> Observable<T> {
         return customCommandObservable(ofType: CodableWebSocketCommand<T>.self)
@@ -108,7 +114,36 @@ class WebSocketService {
         var r = URLRequest(url: webSocketURL)
         r.timeoutInterval = 1
         
-        self.webSocket = WebSocket(request: r)
+        webSocket = WebSocket(request: r)
+        reachability = Reachability(hostname: webSocketURL.host!)!
+        
+            try! self.reachability.startNotifier()
+        
+        Observable.combineLatest(reachability.rx.isReachable.distinctUntilChanged(),
+                                 didDisconnect.startWith( () ),
+                                 tokenPipe.asObservable().notNil().distinctUntilChanged())
+            .flatMapLatest { [unowned self] (isReachable, disconnectTrigger, token) -> Observable<CodableWebSocketCommand<Token>> in
+                
+                print("\(isReachable)/\(disconnectTrigger)/\(token)")
+                
+                guard isReachable else { return Observable.never() }
+                
+                if self.webSocket.isConnected {
+                    return .just(CodableWebSocketCommand(data: token))
+                }
+                
+                self.webSocket.connect()
+                
+                return self.didConnect.take(1).map { _ in
+                    return CodableWebSocketCommand(data: token)
+                }
+                
+            }
+            .subscribe(onNext: { (command: CodableWebSocketCommand<Token>) in
+                self.sendCommand(command: command)
+            })
+            .disposed(by: bag)
+        
     }
 
     func disconnect() {
@@ -118,18 +153,7 @@ class WebSocketService {
     //////Action with clear response
     
     func connect(with token: Token) {
-        
-        if webSocket.isConnected {
-            self.sendCommand(command: CodableWebSocketCommand(data: token))
-            return
-        }
-        
-        webSocket.connect()
-        
-        let _ = didConnect.take(1).subscribe(onNext: { [unowned self] _ in
-              self.sendCommand(command: CodableWebSocketCommand(data: token))
-        })
-        
+        tokenPipe.onNext(token)
     }
     
     func filter(addons: [Addon], for track: Track) -> Observable<[Addon]> {
@@ -205,6 +229,7 @@ class WebSocketService {
         }
         
         let str = String(bytes: command.jsonData, encoding: .utf8)
+        print("Sending out \(str)")
         
         webSocket.write(data: command.jsonData, completion: {
 

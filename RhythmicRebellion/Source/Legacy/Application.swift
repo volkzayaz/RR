@@ -79,8 +79,7 @@ class Application: Watchable {
     let webSocketService: WebSocketService
 
     let restApiServiceReachability: Reachability?
-    private let webSocketServiceReachability: Reachability?
-
+    
     let pagesLocalStorageService : PagesLocalStorageService
 
     let disableIdleTimerSubscription: Observable<Void>
@@ -101,7 +100,7 @@ class Application: Watchable {
         self.pagesLocalStorageService = PagesLocalStorageService()
 
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
-        self.webSocketServiceReachability = Reachability(hostname: URL(string: URI.webSocketService)!.host!)
+        
 
         self.disableIdleTimerSubscription = Observable<Void>.create({ (observer) -> Disposable in
                 UIApplication.shared.isIdleTimerDisabled = true
@@ -127,22 +126,9 @@ class Application: Watchable {
             })
         }
 
-        self.webSocketServiceReachability?.whenReachable = { [unowned self] _ in
-            guard let user = self.user else { return }
-            //self.webSocketService.isReachable = true
-            self.webSocketService.connect(with: Token(token: user.wsToken, isGuest: user.isGuest))
-        }
-
-        self.webSocketServiceReachability?.whenUnreachable = { [unowned self] _ in
-            //self.webSocketService.isReachable = false
-            self.webSocketService.disconnect()
-        }
-
-        //self.webSocketService.addWatcher(self)
     }
 
     func start() {
-        _ = try? self.webSocketServiceReachability?.startNotifier()
         _ = try? self.restApiServiceReachability?.startNotifier()
     }
 
