@@ -47,13 +47,13 @@ struct PlayerState: Equatable {
     
     var currentItem: CurrentItem?
     
+    var isBlocked: Bool
+    
     struct CurrentItem: Equatable {
         let activeTrackHash: TrackOrderHash
         var addons: [Addon] //stack
         var state: TrackState
     }
-    
-    var isBlocked: Bool
     
     struct ReduxViewPatch {
         let isOwn: Bool

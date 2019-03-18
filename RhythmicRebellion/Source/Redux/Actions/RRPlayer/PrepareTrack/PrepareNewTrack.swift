@@ -27,6 +27,20 @@ struct PrepareNewTrack: ActionCreator {
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
+        guard signatureHash == WebSocketService.ownSignatureHash else {
+            ///no need to do anything since we're just mimic master at this point
+            
+            var state = initialState
+            
+            state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
+                                             addons: [],
+                                             state: .init(hash: self.signatureHash,
+                                                          progress: 0,
+                                                          isPlaying: self.shouldPlayImmidiatelly))
+            
+            return .just(state)
+        }
+        
         //        1) Собираемся проигрывать `trackID`
         //        2) Делаем `RestAPI player/audio-add-ons-for-tracks` & `RestAPI player/artist`
         //        3) Получаем набор `Array<Addon>`
