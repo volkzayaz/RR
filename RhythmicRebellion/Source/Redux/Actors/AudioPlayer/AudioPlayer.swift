@@ -140,6 +140,7 @@ class AudioPlayer: NSObject {
             })
             .disposed(by: bag)
         
+        ///TODO: verify case when playback started on this device, but pause is clicked on other device
         appState
             .filter { $0.player.lastChangeSignatureHash.isOwn }
             .map { $0.player.currentItem?.state }

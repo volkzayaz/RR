@@ -49,7 +49,11 @@ struct PlayerState: Equatable {
     var currentItem: CurrentItem?
     var isBlocked: Bool
     
-    var lastChangeSignatureHash: String
+    ///represents whether last action was initiated by current client or some other client
+    ///use `isOwn` to distinguish between two
+    ///for example AudioPlayer might want to start playback only if currentClient initiated play
+    ///but play button want to change it's state regardless of action origin
+    var lastChangeSignatureHash: Signature
     
     struct CurrentItem: Equatable {
         let activeTrackHash: TrackOrderHash
