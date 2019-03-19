@@ -135,9 +135,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
         try container.encode(self.realName, forKey: .realName)
         try container.encodeAsString(self.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)
         
-        if let gender = self.gender {
-            try container.encode(gender.rawValue, forKey: .gender)
-        }
+        try container.encode(self.gender?.rawValue ?? 0, forKey: .gender)
         
         if let phone = self.phone, phone.isEmpty == false {
             try container.encode(phone, forKey: .phone)

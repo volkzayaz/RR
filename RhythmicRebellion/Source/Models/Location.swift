@@ -34,9 +34,9 @@ struct ProfileLocation: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.country = try container.decode(ProfileCountry.self, forKey: .country)
-        self.region = try container.decode(ProfileRegion.self, forKey: .region)
-        self.city = try container.decode(ProfileCity.self, forKey: .city)
-        self.zip = try container.decode(String.self, forKey: .zip)
+        self.region = try container.decodeIfPresent(ProfileRegion.self, forKey: .region)
+        self.city = try container.decodeIfPresent(ProfileCity.self, forKey: .city)
+        self.zip = try container.decodeIfPresent(String.self, forKey: .zip)
     }
 
 
