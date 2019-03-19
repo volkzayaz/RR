@@ -32,8 +32,14 @@ struct ProceedToNextItem: ActionCreator {
             
             state.player.currentItem = currentItem
             
+            ///TODO: markPlayed + setBlock is duplicating in PrepareNextTrack as well.
+            ///////  should be unified along with addons proceeding
             DataLayer.get.webSocketService.markPlayed(addon: next,
                                                       for: currentTrack.track)
+            
+            if addons.count == 0 {
+                state.player.isBlocked = false
+            }
             
             return .just(state)
         }
