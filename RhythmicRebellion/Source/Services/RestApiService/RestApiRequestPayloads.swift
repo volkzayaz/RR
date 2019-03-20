@@ -43,7 +43,7 @@ struct RestApiProfileSettingsRequestPayload: RestApiProfileRequestPayload {
         try container.encode(self.userProfile.firstName, forKey: .firstName)
         try container.encode(self.userProfile.nickname, forKey: .nickname)
         try container.encodeAsString(self.userProfile.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)
-        try container.encode(self.userProfile.gender?.rawValue, forKey: .gender)
+        try container.encode(self.userProfile.gender?.rawValue ?? 0, forKey: .gender)
         try container.encode(self.userProfile.phone, forKey: .phone)
         try container.encode(self.userProfile.location, forKey: .location)
         try container.encode(self.userProfile.hobbies, forKey: .hobbies)

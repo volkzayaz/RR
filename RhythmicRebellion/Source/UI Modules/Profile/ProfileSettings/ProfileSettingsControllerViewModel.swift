@@ -584,20 +584,18 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
             guard let firstName = self.firstNameField?.validationText,
                 let nickname = self.nicknameField?.validationText,
                 let birhDate = self.birthDateField?.date,
-                let gender = self.genderField?.gender,
                 let country = self.countryField?.country,
-                let region = self.regionField?.region,
-                let city = self.cityField?.city,
-                let zip = self.zipField?.validationText,
                 let hobbies = self.hobbiesField?.hobbies,
                 let phoneField = self.phoneField else { return }
 
             var updatingUserProfile = userProfile
             updatingUserProfile.firstName = firstName
             updatingUserProfile.nickname = nickname
-            updatingUserProfile.gender = gender
+            updatingUserProfile.gender = self.genderField?.gender
             updatingUserProfile.birthDate = birhDate
-            updatingUserProfile.location = ProfileLocation(country: country, region: region, city: city, zip: zip)
+            updatingUserProfile.location = ProfileLocation(country: country,
+                                                           region: regionField?.region,
+                                                           city: cityField?.city, zip: zipField?.validationText)
             updatingUserProfile.phone = phoneField.validationText.isEmpty ? nil : self.phoneField?.validationText
             updatingUserProfile.hobbies = hobbies
             updatingUserProfile.genres = self.genresField?.genres
