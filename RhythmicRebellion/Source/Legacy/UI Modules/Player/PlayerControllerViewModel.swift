@@ -176,8 +176,14 @@ final class PlayerViewModel: NSObject {
     
     var isPlayerBlocked: Driver<Bool> {
         return appState
-            .filter { !$0.player.lastChangeSignatureHash.isOwn }
-            .map { $0.player.isBlocked }
+            .map { state in
+                
+                guard state.player.lastChangeSignatureHash.isOwn else {
+                    return false
+                }
+                
+                return state.player.isBlocked
+            }
             .distinctUntilChanged()
     }
 
