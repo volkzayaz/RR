@@ -178,7 +178,7 @@ final class PlayerViewModel: NSObject {
         return appState
             .map { state in
                 
-                guard state.player.lastChangeSignatureHash.isOwn else {
+                guard !state.player.lastChangeSignatureHash.isOwn else {
                     return false
                 }
                 
