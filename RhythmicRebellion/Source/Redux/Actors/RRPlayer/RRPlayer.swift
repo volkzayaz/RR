@@ -122,6 +122,7 @@ extension RRPlayer {
         
         ////sync current track ID
         webSocketAcceptableChange.map { $0 }
+            .skip(1) ///initial nil
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .drive(onNext: { [weak w = webSocket] (state) in
                 

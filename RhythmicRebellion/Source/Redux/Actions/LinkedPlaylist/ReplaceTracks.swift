@@ -27,7 +27,18 @@ struct ReplaceTracks: ActionCreator {
         
         ///applying state transform
         return ApplyReduxViewPatch(viewPatch: reduxPatch,
-                                   assosiatedTracks: with).perform(initialState: initialState)
+                                   assosiatedTracks: with)
+            .perform(initialState: initialState)
+            .flatMap { newState -> Observable<AppState> in
+           
+                ///starting new track playback
+                guard let newCurrentTrack = newState.firstTrack else {
+                    return .just(newState)
+                }
+                
+                return PrepareNewTrack(orderedTrack: newCurrentTrack,
+                                       shouldPlayImmidiatelly: true).perform(initialState: newState)
+            }
         
     }
     

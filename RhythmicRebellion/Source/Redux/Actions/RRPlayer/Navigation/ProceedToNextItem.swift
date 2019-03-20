@@ -47,6 +47,10 @@ struct ProceedToNextItem: ActionCreator {
             return PrepareNewTrack(orderedTrack: next,
                                    shouldPlayImmidiatelly: true).perform(initialState: state)
         }
+        else if let first = state.firstTrack {
+            return PrepareNewTrack(orderedTrack: first,
+                                   shouldPlayImmidiatelly: true).perform(initialState: state)
+        }
         
         return .just(state)
     }

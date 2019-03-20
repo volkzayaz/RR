@@ -291,19 +291,7 @@ extension TrackListViewModel {
     }
     
     func replacePlayerPlaylist(with tracks: [Track]) {
-        
-        fatalError("Replace unimplemented")
-        
-        ///we don't know how to alter AppState, when repace happens
-        ///specifically, what do we do with reduxViewPatches
-        
-//        guard tracks.isEmpty == false else { return }
-//
-//        self.player?.replace(with: tracks, completion: { [weak self] (playlistItems, error) in
-//            guard let error = error else { return }
-//            self?.delegate?.show(error: error)
-//        })
-        
+        Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
     }
     
     func reload() {
