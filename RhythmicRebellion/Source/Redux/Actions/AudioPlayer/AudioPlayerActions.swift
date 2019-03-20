@@ -7,25 +7,50 @@
 //
 
 import Foundation
+import RxSwift
 
 extension AudioPlayer {
     
     ///TODO: prepare proper naming and documentation on OrganicScrub and skipSeek stuff
-    struct OrganicScrub: Action { func perform(initialState: AppState) -> AppState {
-        
-        var state = initialState
-        
-        guard let currentTrackState = state.player.currentItem?.state else {
-            return state
-        }
-        
-        state.player.currentItem?.state = .init(progress: newValue,
-                                                isPlaying: currentTrackState.isPlaying,
-                                                skipSeek: ())
-        return state
-        }
-        
+    struct OrganicScrub: ActionCreator {
+    
         let newValue: TimeInterval
+        
+        func perform(initialState: AppState) -> Observable<AppState> {
+        
+            var state = initialState
+            
+            guard let currentTrackState = state.player.currentItem?.state,
+                  let currentTrack = state.currentTrack else {
+                return .just(state)
+            }
+            
+            ////Preview Rules
+            
+            if case .limit45? = currentTrack.track.previewType, newValue > 45 {
+                return ProceedToNextItem().perform(initialState: initialState)
+            }
+            else if case .limit90? = currentTrack.track.previewType, newValue > 90 {
+                return ProceedToNextItem().perform(initialState: initialState)
+            }
+            else if case .full? = currentTrack.track.previewType,
+                 let audioDuration = currentTrack.track.audioFile?.duration,
+                 let fullPreviewsAmount = currentTrack.track.previewLimitTimes,
+                 let μSecondsEllapsed = state.player.tracks.previewTime[currentTrack.track.id],
+                 (fullPreviewsAmount * audioDuration) - Int(μSecondsEllapsed / 1000) < 0,
+                 newValue > 45 {
+                return ProceedToNextItem().perform(initialState: initialState)
+            }
+                
+                
+            state.player.currentItem?.state = .init(progress: newValue,
+                                                    isPlaying: currentTrackState.isPlaying,
+                                                    skipSeek: ())
+            
+            return .just(state)
+        
+        }
+        
     }
     
     struct Scrub: Action { func perform(initialState: AppState) -> AppState {
