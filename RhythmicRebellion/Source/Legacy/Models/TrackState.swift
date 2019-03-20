@@ -14,11 +14,6 @@ struct TrackState: Codable, Equatable {
         case hash, progress, isPlaying
     }
     
-    ///it is important that every TrackState change is signed with correct hash
-    ///therefore progress and isPlaying fields are immutable
-    ///we do so to enforce users to create new TrackState with correct hash,
-    ///rather than reuse existing trackState and potentially forget, to update hash
-    
     let hash: String
     let progress: TimeInterval
     let isPlaying: Bool
