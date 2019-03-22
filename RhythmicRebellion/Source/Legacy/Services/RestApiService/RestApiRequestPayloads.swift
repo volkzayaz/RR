@@ -43,7 +43,7 @@ struct RestApiProfileSettingsRequestPayload: RestApiProfileRequestPayload {
         try container.encode(self.userProfile.firstName, forKey: .firstName)
         try container.encode(self.userProfile.nickname, forKey: .nickname)
         try container.encodeAsString(self.userProfile.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)
-        try container.encode(self.userProfile.gender?.rawValue, forKey: .gender)
+        try container.encode(self.userProfile.gender?.rawValue ?? 0, forKey: .gender)
         try container.encode(self.userProfile.phone, forKey: .phone)
         try container.encode(self.userProfile.location, forKey: .location)
         try container.encode(self.userProfile.hobbies, forKey: .hobbies)
@@ -78,7 +78,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
     var nickname: String
     var realName: String
     var birthDate: Date
-    var gender: Gender
+    var gender: Gender?
     var location: ProfileLocation
     var phone: String?
     var hobbies: [Hobby]
@@ -105,7 +105,7 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
          nickname: String,
          realName: String,
          birthDate: Date,
-         gender: Gender,
+         gender: Gender?,
          location: ProfileLocation,
          phone: String?,
          hobbies: [Hobby],
@@ -134,7 +134,9 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
         try container.encode(self.nickname, forKey: .nickname)
         try container.encode(self.realName, forKey: .realName)
         try container.encodeAsString(self.birthDate, forKey: .birthDate, dateFormatter: dateFormatter)
-        try container.encode(self.gender.rawValue, forKey: .gender)
+        
+        try container.encode(self.gender?.rawValue ?? 0, forKey: .gender)
+        
         if let phone = self.phone, phone.isEmpty == false {
             try container.encode(phone, forKey: .phone)
         }

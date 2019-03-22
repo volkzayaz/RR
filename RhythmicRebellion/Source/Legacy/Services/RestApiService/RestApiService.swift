@@ -75,7 +75,8 @@ class RestApiService {
         guard let fanLoginURL = self.makeURL(with: "fan/login") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin": ""]
         let parameters: Parameters = ["email" : email, "password" : password]
 
         Alamofire.request(fanLoginURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)

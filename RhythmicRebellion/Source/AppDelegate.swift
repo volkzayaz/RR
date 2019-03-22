@@ -65,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Fabric.with([Crashlytics.self])
         
+        application.applicationSupportsShakeToEdit = true
         
         self.setupAppearance()
 

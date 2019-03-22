@@ -108,7 +108,7 @@ struct UserProfile: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let dateFormatter = ModelSupport.sharedInstance.dateTimeFormattre
+        let dateFormatter = ModelSupport.sharedInstance.dateFormatter
 
 
         self.id = try container.decode(Int.self, forKey: .id)
@@ -178,9 +178,7 @@ struct UserProfile: Codable {
         try container.encode(self.nickname, forKey: .nickname)
         try container.encode(self.firstName, forKey: .firstName)
 
-        if let gender = self.gender {
-            try container.encode(gender.rawValue, forKey: .gender)
-        }
+        try container.encode(gender?.rawValue ?? 0, forKey: .gender)
 
         try container.encodeAsString(self.birthDate, forKey: .birthDate, dateFormatter: dateTimeFormatter)
         try container.encode(self.location, forKey: .location)

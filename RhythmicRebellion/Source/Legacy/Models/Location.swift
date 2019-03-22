@@ -11,9 +11,9 @@ import Foundation
 struct ProfileLocation: Codable {
 
     var country: ProfileCountry
-    var region: ProfileRegion
-    var city: ProfileCity
-    var zip: String
+    var region: ProfileRegion?
+    var city: ProfileCity?
+    var zip: String?
 
     enum CodingKeys: String, CodingKey {
         case country
@@ -22,10 +22,10 @@ struct ProfileLocation: Codable {
         case zip
     }
 
-    public init(country: CountryInfo, region: RegionInfo, city: CityInfo, zip: String) {
+    public init(country: CountryInfo, region: RegionInfo?, city: CityInfo?, zip: String?) {
         self.country = ProfileCountry(with: country)
-        self.region = ProfileRegion(with: region)
-        self.city = ProfileCity(with: city)
+        self.region = region != nil ? ProfileRegion(with: region!) : nil
+        self.city = city != nil ? ProfileCity(with: city!) : nil
         self.zip = zip
     }
 
@@ -34,9 +34,9 @@ struct ProfileLocation: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.country = try container.decode(ProfileCountry.self, forKey: .country)
-        self.region = try container.decode(ProfileRegion.self, forKey: .region)
-        self.city = try container.decode(ProfileCity.self, forKey: .city)
-        self.zip = try container.decode(String.self, forKey: .zip)
+        self.region = try container.decodeIfPresent(ProfileRegion.self, forKey: .region)
+        self.city = try container.decodeIfPresent(ProfileCity.self, forKey: .city)
+        self.zip = try container.decodeIfPresent(String.self, forKey: .zip)
     }
 
 
@@ -44,9 +44,10 @@ struct ProfileLocation: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(self.country, forKey: .country)
-        try container.encode(self.region, forKey: .region)
-        try container.encode(self.city, forKey: .city)
-        try container.encode(self.zip, forKey: .zip)
+        
+        try container.encodeIfPresent(self.region, forKey: .region)
+        try container.encodeIfPresent(self.city, forKey: .city)
+        try container.encodeIfPresent(self.zip, forKey: .zip)
     }
 }
 

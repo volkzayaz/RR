@@ -96,6 +96,19 @@ final class SignInControllerViewModel: SignInViewModel {
     }
 
     func signIn() {
+        
+        if let e = self.emailField?.validationText, e.starts(with: "#") {
+
+            SettingsStore.environment.value = String(e.dropFirst())
+            HTTPCookieStorage.shared.removeCookies(since: Date(timeIntervalSince1970: 0))
+            
+            UIAlertView(title: "Success", message: "Changed environment to \(e.dropFirst()). Reload application to start using it.", delegate: nil, cancelButtonTitle: "Ok").show()
+            
+            return
+        }
+        
+        
+        
         self.validator.validate { [unowned self] (error) in
             guard error.isEmpty else { return }
             guard let email = self.emailField?.validationText, let password = self.passwordField?.validationText else { return }
