@@ -79,7 +79,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         let iOSWebViewScriptSource = "let iphoneWebView = true;"
         let iOSWebViewScript = WKUserScript(source: iOSWebViewScriptSource, injectionTime: .atDocumentStart, forMainFrameOnly: true)
 
-        let playerDisabledScriptSource = "let style = document.createElement('style'); style.innerHTML = '.rr-player-root {display: none !important}';setInterval(()=>document.head.appendChild(style),0);"
+        let playerDisabledScriptSource = "let style = document.createElement('style'); style.innerHTML = '.rr-player-root {display: none !important}';setTimeout(()=>document.head.appendChild(style),0);"
         let playerDisabledScript = WKUserScript(source: playerDisabledScriptSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
 
         var scripts = [iOSWebViewScript, playerDisabledScript]

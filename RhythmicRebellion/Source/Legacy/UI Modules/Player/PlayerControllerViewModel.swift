@@ -223,6 +223,11 @@ final class PlayerViewModel: NSObject {
             }
     }
 
+    var canNavigate: Driver<Bool> {
+        return appState.distinctUntilChanged { $0.currentTrack == $1.currentTrack }
+            .map { $0.currentTrack != nil }
+    }
+    
     var isKaraokeEnabled: Bool { return self.lyricsKaraokeService.mode.value == .karaoke }
     var karaoke: Karaoke?
     var karaokeModelId: Int? { return self.karaoke?.id }
@@ -375,13 +380,6 @@ final class PlayerViewModel: NSObject {
             self.application.unfollow(artistId: track.artist.id, completion: followingCompletion)
         } else {
             self.application.follow(artistId: track.artist.id, completion: followingCompletion)
-        }
-    }
-
-    func canNavigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) -> Bool {
-        switch playerNavigationItemType {
-        case .lyrics, .promo, .video: return appStateSlice.currentTrack?.track != nil
-        case .playlist: return true
         }
     }
 

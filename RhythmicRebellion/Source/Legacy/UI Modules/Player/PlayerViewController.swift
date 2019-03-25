@@ -333,14 +333,28 @@ extension PlayerViewController {
             .drive(compactFollowButton.rx.isEnabled)
             .disposed(by: rx.disposeBag)
         
-        self.lyricsButton.isEnabled = self.viewModel.canNavigate(to: .lyrics)
-        self.videoButton.isEnabled = self.viewModel.canNavigate(to: .video)
-        self.playlistButton.isEnabled = self.viewModel.canNavigate(to: .playlist)
-        self.promoButton.isEnabled = self.viewModel.canNavigate(to: .promo)
-
+        viewModel.canNavigate
+            .drive(lyricsButton.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.canNavigate
+            .drive(videoButton.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.canNavigate
+            .drive(promoButton.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
+        self.playlistButton.isEnabled = true
+        
         self.compactTabBar.items?.forEach({ (tabBarItem) in
-            guard let navigationItemType = PlayerNavigationItem.NavigationType(rawValue: tabBarItem.tag) else { return }
-            tabBarItem.isEnabled = self.viewModel.canNavigate(to: navigationItemType)
+            
+            self.viewModel.canNavigate
+                .drive(onNext: { (x) in
+                    tabBarItem.isEnabled = x
+                })
+                .disposed(by: self.rx.disposeBag)
+            
         })
 
         viewModel.previewOptionImage
