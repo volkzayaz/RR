@@ -57,7 +57,8 @@ class RestApiService {
         guard let fanUserURL = self.makeURL(with: "fan/user") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(fanUserURL, method: .get, headers: headers)
             .validate()
@@ -76,7 +77,7 @@ class RestApiService {
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
                                     "Content-Type" : "application/json",
-                                    "Origin": ""]
+                                    "Origin" : self.originURI]
         let parameters: Parameters = ["email" : email, "password" : password]
 
         Alamofire.request(fanLoginURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
@@ -94,7 +95,8 @@ class RestApiService {
         guard let fanLogoutURL = self.makeURL(with: "fan/logout") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(fanLogoutURL, method: .post, headers: headers)
             .validate()
@@ -227,7 +229,8 @@ class RestApiService {
         guard let fanProfileURL = fanProfileURL(for: profilePayload) else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         do {
             let request = try self.makeRequest(with: fanProfileURL,
@@ -251,7 +254,8 @@ class RestApiService {
         guard let playlistsURL = self.makeURL(with: "fan/playlist") else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
         
         Alamofire.request(playlistsURL, method: .get, headers: headers)
             .validate()
@@ -268,7 +272,8 @@ class RestApiService {
         guard let playlistsURL = self.makeURL(with: "fan/playlist/" + String(playlistId) + "/record") else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(playlistsURL, method: .get, headers: headers)
             .validate()
@@ -344,7 +349,8 @@ class RestApiService {
         guard let moveTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/attach-items") else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         let parameters: Parameters = ["records" : tracks.map { ["id" : $0.id] }]
         
@@ -362,7 +368,8 @@ class RestApiService {
         guard let removeTrackURL = self.makeURL(with: "fan/playlist/" + String(playlist.id) + "/record/" + String(track.id)) else { return }
         
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
         
         Alamofire.request(removeTrackURL, method: .delete, headers: headers)
             .validate()
@@ -389,7 +396,8 @@ class RestApiService {
         guard let createPlaylistURL = self.makeURL(with: "fan/playlist") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
         
         let parameters: Parameters = ["name" : name]
 
@@ -634,7 +642,8 @@ class RestApiService {
         guard let configURL = self.makeURL(with: "player/config") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(configURL, method: .get, headers: headers)
             .validate()
@@ -652,7 +661,8 @@ class RestApiService {
         guard let configURL = self.makeURL(with: "config") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(configURL, method: .get, headers: headers)
             .validate()
@@ -670,7 +680,8 @@ class RestApiService {
         guard let countriesURL = self.makeURL(with: "song-characteristics/list-genre") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(countriesURL, method: .get, headers: headers)
             .validate()
@@ -687,7 +698,8 @@ class RestApiService {
         guard let countriesURL = self.makeURL(with: "gis/country") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(countriesURL, method: .get, headers: headers)
             .validate()
@@ -704,7 +716,8 @@ class RestApiService {
         guard let statesURL = self.makeURL(with: "gis/country/" + country.code + "/state") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(statesURL, method: .get, headers: headers)
             .validate()
@@ -721,7 +734,8 @@ class RestApiService {
         guard let citiesURL = self.makeURL(with: "gis/country/" + region.countryCode + "/state/" + String(region.id)) else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         Alamofire.request(citiesURL, method: .get, headers: headers)
             .validate()
@@ -738,7 +752,8 @@ class RestApiService {
         guard let locationURL = self.makeURL(with: "gis/location") else { return }
 
         let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json"]
+                                    "Content-Type" : "application/json",
+                                    "Origin" : self.originURI]
 
         let parameters: Parameters = ["country_code": country.code,
                                       "postal_code": zip]

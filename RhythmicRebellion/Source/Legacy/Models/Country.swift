@@ -62,7 +62,7 @@ struct ProfileCountry: CountryInfo, Codable {
 
     enum CodingKeys: String, CodingKey {
         case id
-        case code = "countryCode"
+        case code = "country_code"
         case name
     }
 

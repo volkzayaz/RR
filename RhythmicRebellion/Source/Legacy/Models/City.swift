@@ -74,9 +74,8 @@ struct ProfileCity: CityInfo, Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
-        case countryCode = "countryCode"
-        case regionId = "stateId"
-        case regionCode = "stateCode"
+        case countryCode = "country_code"
+        case regionCode = "admin1_code"
     }
 
     init?(with city: CityInfo?) {

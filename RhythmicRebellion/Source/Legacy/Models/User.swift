@@ -72,7 +72,6 @@ struct UserProfile: Codable {
     var location: ProfileLocation
     var phone: String?
     var hobbies: [Hobby]
-    let howHearId: Int
     var genres: [Genre]?
     var language: String?
     var forceToPlay: Set<Int>
@@ -94,7 +93,6 @@ struct UserProfile: Codable {
         case location
         case phone
         case hobbies
-        case howHearId = "how_hear"
         case genres
         case language
         case forceToPlay = "force_to_play"
@@ -125,8 +123,7 @@ struct UserProfile: Codable {
         self.location = try container.decode(ProfileLocation.self, forKey: .location)
         self.phone = try container.decodeIfPresent(String.self, forKey: .phone)
         self.hobbies = try container.decode([Hobby].self, forKey: .hobbies)
-        self.howHearId = try container.decode(Int.self, forKey: .howHearId)
-
+        
         self.genres = try container.decodeIfPresent([Genre].self, forKey: .genres)
         self.language = try container.decodeIfPresent(String.self, forKey: .language)
 
@@ -186,7 +183,6 @@ struct UserProfile: Codable {
         try container.encode(self.phone, forKey: .phone)
 
         try container.encode(self.hobbies, forKey: .hobbies)
-        try container.encode(self.howHearId, forKey: .howHearId)
 
         try container.encode(self.genres, forKey: .genres)
         try container.encode(self.language, forKey: .language)
