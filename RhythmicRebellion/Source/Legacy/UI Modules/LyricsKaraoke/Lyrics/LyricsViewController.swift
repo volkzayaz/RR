@@ -8,6 +8,7 @@
 //
 
 import UIKit
+import RxCocoa
 
 final class LyricsViewController: UIViewController {
 
@@ -16,12 +17,12 @@ final class LyricsViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: LyricsViewModelProtocol!
+    private(set) var viewModel: LyricsViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: LyricsViewModelProtocol, router: FlowRouter) {
+    func configure(viewModel: LyricsViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -31,7 +32,14 @@ final class LyricsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.load(with: self)
+        viewModel.canSwitchToKaraoke
+            .drive(karaokeModeButton.rx.isEnabled)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.displayText
+            .drive(textView.rx.text)
+            .disposed(by: rx.disposeBag)
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -60,16 +68,6 @@ extension LyricsViewController {
             return false
         }
         return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
-    }
-
-}
-
-extension LyricsViewController: LyricsViewModelDelegate {
-
-    func refreshUI() {
-
-        self.textView.text = self.viewModel.infoText.isEmpty ? self.viewModel.lyricsText : self.viewModel.infoText
-        self.karaokeModeButton.isEnabled = self.viewModel.canSwitchToKaraokeMode
     }
 
 }

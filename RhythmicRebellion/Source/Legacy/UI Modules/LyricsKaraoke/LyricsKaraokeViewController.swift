@@ -21,14 +21,10 @@ final class LyricsKaraokeViewController: UIViewController, ContainerViewControll
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: LyricsKaraokeViewModelProtocol!
+    private(set) var viewModel: LyricsKaraokeViewModel!
     private(set) var router: FlowRouter!
 
-    let disposeBag = DisposeBag()
-
-    // MARK: - Configuration -
-
-    func configure(viewModel: LyricsKaraokeViewModelProtocol, router: FlowRouter) {
+    func configure(viewModel: LyricsKaraokeViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -38,21 +34,9 @@ final class LyricsKaraokeViewController: UIViewController, ContainerViewControll
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.load(with: self)
+        viewModel.load()
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        self.viewModel?.lyricsStateError.notNil().subscribe(onNext: { (error) in
-            self.show(error: error)
-        })
-        .disposed(by: disposeBag)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
+    
 }
 
 // MARK: - Router -
@@ -72,11 +56,4 @@ extension LyricsKaraokeViewController {
 
 }
 
-extension LyricsKaraokeViewController: LyricsKaraokeViewModelDelegate {
-
-    func refreshUI() {
-
-    }
-
-}
 

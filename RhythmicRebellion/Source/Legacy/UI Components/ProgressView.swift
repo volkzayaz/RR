@@ -8,14 +8,6 @@
 
 import UIKit
 
-protocol KaraokeIntervalProgressViewModel {
-
-    var startValue: Float { get }
-    var endValue: Float { get }
-    var color: UIColor { get }
-}
-
-
 class KaraokeIntervalView: UIView {
 
     let startValue: Float
@@ -33,12 +25,6 @@ class KaraokeIntervalView: UIView {
 
         self.backgroundColor = viewModel.color
     }
-}
-
-protocol KaraokeIntervalsProgressViewModel {
-
-    var id: Int { get }
-    var intervals: [KaraokeIntervalProgressViewModel] { get }
 }
 
 @IBDesignable

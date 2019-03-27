@@ -8,8 +8,7 @@
 //
 
 import UIKit
-import AlamofireImage
-
+import RxCocoa
 
 final class KaraokeViewController: UIViewController {
 
@@ -27,14 +26,14 @@ final class KaraokeViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: KaraokeViewModelProtocol!
+    private(set) var viewModel: KaraokeViewModel!
     private(set) var router: FlowRouter!
 
     private weak var hideControlsTimer: Timer?
 
     // MARK: - Configuration -
 
-    func configure(viewModel: KaraokeViewModelProtocol, router: FlowRouter) {
+    func configure(viewModel: KaraokeViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
     }
@@ -69,7 +68,68 @@ final class KaraokeViewController: UIViewController {
         self.footerView.vocaltrackButton.setBackgroundColor(#colorLiteral(red: 0.7294117647, green: 0.768627451, blue: 0.9803921569, alpha: 1), for: [UIControl.State.selected, UIControl.State.highlighted])
         self.footerView.vocaltrackButton.setBackgroundColor(#colorLiteral(red: 0.7294117647, green: 0.768627451, blue: 0.9803921569, alpha: 1), for: UIControl.State.selected)
 
-        viewModel.load(with: self)
+        viewModel.mode
+            .drive(onNext: { [unowned self] (mode) in
+                
+                switch mode {
+                case .scroll:
+                    
+                    self.footerView.scrollViewModeButton.isSelected = true
+                    self.footerView.onePhraseViewModeButton.isSelected = false
+                    
+                    guard (self.collectionView.collectionViewLayout as? KaraokeScrollCollectionViewFlowLayout) == nil else { return }
+                    
+                    let karaokeScrollCollectionViewFlowLayout = KaraokeScrollCollectionViewFlowLayout()
+                    karaokeScrollCollectionViewFlowLayout.minimumLineSpacing = 10.0
+                    karaokeScrollCollectionViewFlowLayout.minimumInteritemSpacing = 0.0
+                    
+                    self.collectionView.setCollectionViewLayout(karaokeScrollCollectionViewFlowLayout, animated: false)
+                    
+                case .onePhrase:
+                    
+                    self.footerView.scrollViewModeButton.isSelected = false
+                    self.footerView.onePhraseViewModeButton.isSelected = true
+                    
+                    guard (self.collectionView.collectionViewLayout as? KaraokeOnePhraseCollectionViewFlowLayout) == nil else { return }
+                    
+                    let karaokeOnePhraseCollectionViewFlowLayout = KaraokeOnePhraseCollectionViewFlowLayout()
+                    
+                    self.collectionView.setCollectionViewLayout(karaokeOnePhraseCollectionViewFlowLayout, animated: false)
+                    
+                }
+                
+                self.collectionView.reloadData()
+                
+                if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
+                    self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
+                }
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.vocalButtonSelected
+            .drive(onNext: { [weak f = footerView] (isSelected) in
+                f?.vocaltrackButton.isSelected = isSelected
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.canChangeAudioFileType
+            .drive(onNext: { [weak f = footerView] (isEnabled) in
+                f?.vocaltrackButton.isEnabled = isEnabled
+            })
+            .disposed(by: rx.disposeBag)
+    
+        viewModel.thumbnailURL
+            .flatMapLatest { (maybeURL) -> Driver<UIImage?> in
+                
+                guard let url = maybeURL else { return .just(nil) }
+                
+                return ImageRetreiver.imageForURLWithoutProgress(url: url)
+            }
+            .map { $0 ?? UIImage(named: "TrackImagePlaceholder") }
+            .drive(imageView.rx.image)
+            .disposed(by: rx.disposeBag)
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -83,13 +143,13 @@ final class KaraokeViewController: UIViewController {
         super.viewDidAppear(animated)
 
         self.scheduleHideControlsTimer()
-        self.viewModel.isIdleTimerDisabled = true
+     //   self.viewModel.isIdleTimerDisabled = true
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        self.viewModel.isIdleTimerDisabled = false
+//        self.viewModel.isIdleTimerDisabled = false
     }
 
     override func viewDidLayoutSubviews() {
@@ -178,11 +238,11 @@ final class KaraokeViewController: UIViewController {
     }
 
     @IBAction func onScrollViewMode() {
-        self.viewModel.change(viewMode: .scroll)
+        self.viewModel.change(mode: .scroll)
     }
 
     @IBAction func onOnePhraseViewMode() {
-        self.viewModel.change(viewMode: .onePhrase)
+        self.viewModel.change(mode: .onePhrase)
     }
 
     @IBAction func onVocalTrack() {
@@ -214,7 +274,7 @@ extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDel
             fatalError("Incorrect KaraokeCollectionViewLayout")
         }
 
-        return karaokeCollectionViewFlowLayout.itemSize(at: indexPath, with: self.viewModel)
+        return karaokeCollectionViewFlowLayout.itemSize(at: indexPath, with: self.viewModel!)
     }
 }
 
@@ -235,23 +295,9 @@ extension KaraokeViewController {
 
 }
 
-extension KaraokeViewController: KaraokeViewModelDelegate {
+extension KaraokeViewController {
 
     func reloadUI() {
-
-        if let thumbnailURL = viewModel.thumbnailURL() {
-            self.imageView.image = nil
-            self.imageView.af_setImage(withURL: thumbnailURL,
-                                       placeholderImage: UIImage(named: "TrackImagePlaceholder")) { [weak self] (thumbnailImageResponse) in
-
-                                        switch thumbnailImageResponse.result {
-                                        case .success(let thumbnailImage):
-                                            self?.imageView.image = thumbnailImage
-
-                                        default: break
-                                        }
-            }
-        }
 
         self.collectionView.reloadData()
 
@@ -259,52 +305,7 @@ extension KaraokeViewController: KaraokeViewModelDelegate {
     }
 
 
-    func refreshViewModeUI() {
-
-        switch self.viewModel.viewMode {
-        case .scroll:
-
-            self.footerView.scrollViewModeButton.isSelected = true
-            self.footerView.onePhraseViewModeButton.isSelected = false
-
-            guard (self.collectionView.collectionViewLayout as? KaraokeScrollCollectionViewFlowLayout) == nil else { return }
-
-            let karaokeScrollCollectionViewFlowLayout = KaraokeScrollCollectionViewFlowLayout()
-            karaokeScrollCollectionViewFlowLayout.minimumLineSpacing = 10.0
-            karaokeScrollCollectionViewFlowLayout.minimumInteritemSpacing = 0.0
-
-
-            self.collectionView.setCollectionViewLayout(karaokeScrollCollectionViewFlowLayout, animated: false)
-            self.collectionView.reloadData()
-
-            if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
-                self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
-            }
-
-
-        case .onePhrase:
-
-            self.footerView.scrollViewModeButton.isSelected = false
-            self.footerView.onePhraseViewModeButton.isSelected = true
-
-            guard (self.collectionView.collectionViewLayout as? KaraokeOnePhraseCollectionViewFlowLayout) == nil else { return }
-
-            let karaokeOnePhraseCollectionViewFlowLayout = KaraokeOnePhraseCollectionViewFlowLayout()
-
-            self.collectionView.setCollectionViewLayout(karaokeOnePhraseCollectionViewFlowLayout, animated: false)
-            self.collectionView.reloadData()
-            if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
-                self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
-            }
-        }
-    }
-
     func refreshUI() {
-
-        self.refreshViewModeUI()
-
-        self.footerView.vocaltrackButton.isSelected = self.viewModel.isVocalAudioFile
-        self.footerView.vocaltrackButton.isEnabled = self.viewModel.canChangeAudioFileType
 
         if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
             self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: true)

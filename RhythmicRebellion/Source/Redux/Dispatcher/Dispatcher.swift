@@ -35,7 +35,7 @@ enum Dispatcher {
             
             let forceCompleteTrigger = Observable.just( () ).delay(10, scheduler: MainScheduler.instance)
                 .do(onNext: {
-                    fatalErrorInDebug("Action \(actionCreator) exceeded 10 seconds quota to update appState. State that was mutated: \(state.value) ")
+                    //fatalErrorInDebug("Action \(actionCreator) exceeded 10 seconds quota to update appState. State that was mutated: \(state.value) ")
                 })
             
                 return Observable.deferred { () -> Observable<AppState> in

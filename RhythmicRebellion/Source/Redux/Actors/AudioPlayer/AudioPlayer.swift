@@ -142,13 +142,12 @@ class AudioPlayer: NSObject {
         
         ///TODO: verify case when playback started on this device, but pause is clicked on other device
         appState
+            .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
             .filter { $0.player.lastChangeSignatureHash.isOwn }
             .map { $0.player.currentItem?.state }
             .notNil()
-            .distinctUntilChanged()
             .drive(onNext: { [weak p = player] (state) in
                 
-                ///we will not play actual playback item if it wasn't initiated by our client
                 if state.isPlaying {
                     
                     ////subscequent calls to |play| make AVAudioSession.interruptionNotification act weird
@@ -172,8 +171,9 @@ class AudioPlayer: NSObject {
                 
                 let url: URL
                 switch item {
-                case .addon(let x): url = URL(string: x.audioFile.urlString)!
-                case .track(let x): url = URL(string: x.audioFile!.urlString)!
+                case .addon(let x):         url = URL(string: x.audioFile.urlString)!
+                case .track(let x):         url = URL(string: x.audioFile!.urlString)!
+                case .minusOneTrack(let x): url = URL(string: x.backingAudioFile!.urlString)!
                 }
                 
                 if let x = p?.currentItem?.asset as? AVURLAsset,

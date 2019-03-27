@@ -57,7 +57,7 @@ final class DefaultLyricsRouter:  LyricsRouter, FlowRouterSegueCompatible {
 
     func start(controller: LyricsViewController) {
         sourceController = controller
-        let vm = LyricsViewModel(router: self, application: self.dependencies.application, lyricsKaraokeService: self.dependencies.lyricsKaraokeService)
+        let vm = LyricsViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 

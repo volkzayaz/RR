@@ -35,6 +35,8 @@
 		736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */; };
 		736598E621D66E6C0092E499 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 736598E821D66E6C0092E499 /* Localizable.strings */; };
 		737622F621CD28AF005B603E /* Artist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 737622F521CD28AF005B603E /* Artist.storyboard */; };
+		739FFA28224BA3FF007A88CA /* PrepareLyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */; };
+		739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
 		73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */; };
@@ -249,15 +251,12 @@
 		73F138C3222C289200FB8EBC /* PlayerContentContainerControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13778222C289200FB8EBC /* PlayerContentContainerControllerViewModel.swift */; };
 		73F138C4222C289200FB8EBC /* PlayerContentContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13779222C289200FB8EBC /* PlayerContentContainerViewModel.swift */; };
 		73F138C5222C289200FB8EBC /* PlayerContentContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1377A222C289200FB8EBC /* PlayerContentContainerViewController.swift */; };
-		73F138C6222C289200FB8EBC /* LyricsKaraokeViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1377C222C289200FB8EBC /* LyricsKaraokeViewModelProtocol.swift */; };
-		73F138C7222C289200FB8EBC /* LyricsViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1377E222C289200FB8EBC /* LyricsViewModelProtocol.swift */; };
 		73F138C8222C289200FB8EBC /* LyricsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1377F222C289200FB8EBC /* LyricsViewModel.swift */; };
 		73F138C9222C289200FB8EBC /* LyricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13780222C289200FB8EBC /* LyricsViewController.swift */; };
 		73F138CA222C289200FB8EBC /* LyricsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13781222C289200FB8EBC /* LyricsRouter.swift */; };
 		73F138CB222C289200FB8EBC /* LyricsKaraokeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13782222C289200FB8EBC /* LyricsKaraokeViewModel.swift */; };
 		73F138CC222C289200FB8EBC /* KaraokeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13784222C289200FB8EBC /* KaraokeRouter.swift */; };
 		73F138CD222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13786222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift */; };
-		73F138CE222C289200FB8EBC /* KaraokeViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13787222C289200FB8EBC /* KaraokeViewModelProtocol.swift */; };
 		73F138CF222C289200FB8EBC /* KaraokeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13788222C289200FB8EBC /* KaraokeViewModel.swift */; };
 		73F138D0222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378A222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift */; };
 		73F138D1222C289200FB8EBC /* KaraokeIntervalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378C222C289200FB8EBC /* KaraokeIntervalCell.swift */; };
@@ -280,7 +279,6 @@
 		73F138E3222C289200FB8EBC /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A0222C289200FB8EBC /* Application.swift */; };
 		73F138E4222C289200FB8EBC /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A2222C289200FB8EBC /* RestApiServiceError.swift */; };
 		73F138E8222C289200FB8EBC /* GenericError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A6222C289200FB8EBC /* GenericError.swift */; };
-		73F138E9222C289200FB8EBC /* LyricsKaraokeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A9222C289200FB8EBC /* LyricsKaraokeService.swift */; };
 		73F138EA222C289200FB8EBC /* RestApiRequestPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AB222C289200FB8EBC /* RestApiRequestPayloads.swift */; };
 		73F138EB222C289200FB8EBC /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AC222C289200FB8EBC /* RestApiService.swift */; };
 		73F138EC222C289200FB8EBC /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AD222C289200FB8EBC /* RestApiResponse.swift */; };
@@ -382,6 +380,8 @@
 		736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInsertTests.swift; sourceTree = "<group>"; };
 		736598E721D66E6C0092E499 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		737622F521CD28AF005B603E /* Artist.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Artist.storyboard; sourceTree = "<group>"; };
+		739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareLyrics.swift; sourceTree = "<group>"; };
+		739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLyricsMode.swift; sourceTree = "<group>"; };
 		73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
 		73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCollectionCell.swift; sourceTree = "<group>"; };
@@ -596,15 +596,12 @@
 		73F13778222C289200FB8EBC /* PlayerContentContainerControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContentContainerControllerViewModel.swift; sourceTree = "<group>"; };
 		73F13779222C289200FB8EBC /* PlayerContentContainerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContentContainerViewModel.swift; sourceTree = "<group>"; };
 		73F1377A222C289200FB8EBC /* PlayerContentContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContentContainerViewController.swift; sourceTree = "<group>"; };
-		73F1377C222C289200FB8EBC /* LyricsKaraokeViewModelProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsKaraokeViewModelProtocol.swift; sourceTree = "<group>"; };
-		73F1377E222C289200FB8EBC /* LyricsViewModelProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsViewModelProtocol.swift; sourceTree = "<group>"; };
 		73F1377F222C289200FB8EBC /* LyricsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsViewModel.swift; sourceTree = "<group>"; };
 		73F13780222C289200FB8EBC /* LyricsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsViewController.swift; sourceTree = "<group>"; };
 		73F13781222C289200FB8EBC /* LyricsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsRouter.swift; sourceTree = "<group>"; };
 		73F13782222C289200FB8EBC /* LyricsKaraokeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsKaraokeViewModel.swift; sourceTree = "<group>"; };
 		73F13784222C289200FB8EBC /* KaraokeRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeRouter.swift; sourceTree = "<group>"; };
 		73F13786222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKaraokeIntervalViewModel.swift; sourceTree = "<group>"; };
-		73F13787222C289200FB8EBC /* KaraokeViewModelProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeViewModelProtocol.swift; sourceTree = "<group>"; };
 		73F13788222C289200FB8EBC /* KaraokeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeViewModel.swift; sourceTree = "<group>"; };
 		73F1378A222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		73F1378C222C289200FB8EBC /* KaraokeIntervalCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeIntervalCell.swift; sourceTree = "<group>"; };
@@ -786,6 +783,7 @@
 		7361C00322368475008EA36E /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				739FFA26224B6E05007A88CA /* Lyrics */,
 				7361C01822368E79008EA36E /* RRPlayer */,
 				7361C01422368D58008EA36E /* AudioPlayer */,
 				7361C00422368490008EA36E /* LinkedPlaylist */,
@@ -900,6 +898,15 @@
 				736598E821D66E6C0092E499 /* Localizable.strings */,
 			);
 			path = Strings;
+			sourceTree = "<group>";
+		};
+		739FFA26224B6E05007A88CA /* Lyrics */ = {
+			isa = PBXGroup;
+			children = (
+				739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */,
+				739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */,
+			);
+			path = Lyrics;
 			sourceTree = "<group>";
 		};
 		73F13666222C289200FB8EBC /* UIBricks */ = {
@@ -1121,6 +1128,8 @@
 				73F13728222C289200FB8EBC /* Authorization */,
 				73F1373C222C289200FB8EBC /* Views */,
 				73F13743222C289200FB8EBC /* Pages */,
+				73F1377B222C289200FB8EBC /* LyricsKaraoke */,
+				73F13758222C289200FB8EBC /* PlayerContentContainer */,
 				73F13756222C289200FB8EBC /* Player */,
 			);
 			path = "UI Modules";
@@ -1506,7 +1515,6 @@
 			isa = PBXGroup;
 			children = (
 				73F13757222C289200FB8EBC /* PlayerControllerViewModel.swift */,
-				73F13758222C289200FB8EBC /* PlayerContentContainer */,
 				73F1379C222C289200FB8EBC /* PlayerViewModel.swift */,
 				73F1379D222C289200FB8EBC /* PlayerViewController.swift */,
 				73F1379E222C289200FB8EBC /* PlayerRouter.swift */,
@@ -1522,7 +1530,6 @@
 				73F13778222C289200FB8EBC /* PlayerContentContainerControllerViewModel.swift */,
 				73F13779222C289200FB8EBC /* PlayerContentContainerViewModel.swift */,
 				73F1377A222C289200FB8EBC /* PlayerContentContainerViewController.swift */,
-				73F1377B222C289200FB8EBC /* LyricsKaraoke */,
 				73F13792222C289200FB8EBC /* PlayerContentContainerRouter.swift */,
 				73F13793222C289200FB8EBC /* Presentation */,
 				73F13797222C289200FB8EBC /* Promo */,
@@ -1611,10 +1618,9 @@
 		73F1377B222C289200FB8EBC /* LyricsKaraoke */ = {
 			isa = PBXGroup;
 			children = (
-				73F1377C222C289200FB8EBC /* LyricsKaraokeViewModelProtocol.swift */,
+				73F13783222C289200FB8EBC /* Karaoke */,
 				73F1377D222C289200FB8EBC /* Lyrics */,
 				73F13782222C289200FB8EBC /* LyricsKaraokeViewModel.swift */,
-				73F13783222C289200FB8EBC /* Karaoke */,
 				73F13790222C289200FB8EBC /* LyricsKaraokeRouter.swift */,
 				73F13791222C289200FB8EBC /* LyricsKaraokeViewController.swift */,
 			);
@@ -1624,7 +1630,6 @@
 		73F1377D222C289200FB8EBC /* Lyrics */ = {
 			isa = PBXGroup;
 			children = (
-				73F1377E222C289200FB8EBC /* LyricsViewModelProtocol.swift */,
 				73F1377F222C289200FB8EBC /* LyricsViewModel.swift */,
 				73F13780222C289200FB8EBC /* LyricsViewController.swift */,
 				73F13781222C289200FB8EBC /* LyricsRouter.swift */,
@@ -1637,7 +1642,6 @@
 			children = (
 				73F13784222C289200FB8EBC /* KaraokeRouter.swift */,
 				73F13785222C289200FB8EBC /* ViewModels */,
-				73F13787222C289200FB8EBC /* KaraokeViewModelProtocol.swift */,
 				73F13788222C289200FB8EBC /* KaraokeViewModel.swift */,
 				73F13789222C289200FB8EBC /* Layouts */,
 				73F1378B222C289200FB8EBC /* Views */,
@@ -2445,7 +2449,6 @@
 				73F13896222C289200FB8EBC /* SignInViewController.swift in Sources */,
 				7361C02E2236917C008EA36E /* ChangeBlockState.swift in Sources */,
 				73F138FC222C289200FB8EBC /* TrackRequests.swift in Sources */,
-				73F138C7222C289200FB8EBC /* LyricsViewModelProtocol.swift in Sources */,
 				73F1382F222C289200FB8EBC /* City.swift in Sources */,
 				73F13833222C289200FB8EBC /* AudioFile.swift in Sources */,
 				73F138DA222C289200FB8EBC /* PlayerContentPresentationAnimator.swift in Sources */,
@@ -2542,12 +2545,12 @@
 				73F1385D222C289200FB8EBC /* SelectableListRouter.swift in Sources */,
 				7361C02422369018008EA36E /* ScrubToFractionAction.swift in Sources */,
 				73F138A4222C289200FB8EBC /* PageContentRouter.swift in Sources */,
-				73F138C6222C289200FB8EBC /* LyricsKaraokeViewModelProtocol.swift in Sources */,
 				73F138BF222C289200FB8EBC /* PlayerMyPlaylistsRouter.swift in Sources */,
 				73F1385E222C289200FB8EBC /* RegionsSelectableListControllerViewModel.swift in Sources */,
 				73F13868222C289200FB8EBC /* CellsViewModels.swift in Sources */,
 				73F138C3222C289200FB8EBC /* PlayerContentContainerControllerViewModel.swift in Sources */,
 				73F13909222C289200FB8EBC /* NSObject+Rx.swift in Sources */,
+				739FFA28224BA3FF007A88CA /* PrepareLyrics.swift in Sources */,
 				73F13910222C289200FB8EBC /* PresentMessage.swift in Sources */,
 				73F1387A222C289200FB8EBC /* ChangePasswordViewController.swift in Sources */,
 				73F138A6222C289200FB8EBC /* ZoomAnimator.swift in Sources */,
@@ -2569,7 +2572,6 @@
 				73F13867222C289200FB8EBC /* ListeningSettingsRouter.swift in Sources */,
 				73F13882222C289200FB8EBC /* ProfileItemViewModel.swift in Sources */,
 				73F13806222C289200FB8EBC /* LinkedPlaylist.swift in Sources */,
-				73F138CE222C289200FB8EBC /* KaraokeViewModelProtocol.swift in Sources */,
 				73F13862222C289200FB8EBC /* TabBarControllerViewModel.swift in Sources */,
 				73F1386C222C289200FB8EBC /* TabBarViewController.swift in Sources */,
 				73F1386F222C289200FB8EBC /* ApplicationContentContainerControllerViewModel.swift in Sources */,
@@ -2583,8 +2585,8 @@
 				73F1382A222C289200FB8EBC /* TrackId.swift in Sources */,
 				73F1385F222C289200FB8EBC /* SelectableListItemTableViewCell.swift in Sources */,
 				73F13852222C289200FB8EBC /* AppControllerViewModel.swift in Sources */,
-				73F138E9222C289200FB8EBC /* LyricsKaraokeService.swift in Sources */,
 				73F13831222C289200FB8EBC /* Hobby.swift in Sources */,
+				739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */,
 				73F13912222C289200FB8EBC /* CatchError.swift in Sources */,
 				7361C0262236909F008EA36E /* StoreTracks.swift in Sources */,
 				73F138EA222C289200FB8EBC /* RestApiRequestPayloads.swift in Sources */,

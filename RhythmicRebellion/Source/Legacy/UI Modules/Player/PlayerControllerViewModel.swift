@@ -14,13 +14,13 @@ import Alamofire
 import RxSwift
 import RxCocoa
 
-struct DefaultKaraokeIntervalProgressViewModel: KaraokeIntervalProgressViewModel {
+struct KaraokeIntervalProgressViewModel {
     var startValue: Float
     var endValue: Float
     var color: UIColor
 }
 
-struct DefaultKaraokeIntervalsProgressViewModel: KaraokeIntervalsProgressViewModel {
+struct KaraokeIntervalsProgressViewModel {
 
     let id: Int
     let intervals: [KaraokeIntervalProgressViewModel]
@@ -98,11 +98,7 @@ final class PlayerViewModel: NSObject {
                 switch x {
                 case .addon(let a): return a.type.title
                 case .track(let t): return t.name
-
-                    //???
-//                case .stub(_):
-//                    return self.player.currentItem?.playlistItem.track.name ?? ""
-                    
+                case .minusOneTrack(let t): return "Minus one song. \(t.name)"
                 }
                 
             }
@@ -228,28 +224,52 @@ final class PlayerViewModel: NSObject {
             .map { $0.currentTrack != nil }
     }
     
-    var isKaraokeEnabled: Bool { return self.lyricsKaraokeService.mode.value == .karaoke }
-    var karaoke: Karaoke?
-    var karaokeModelId: Int? { return self.karaoke?.id }
+    var karaokeEnabled: Driver<Bool> {
+        return appState.map { $0.player.currentItem?.lyrics?.data.karaoke != nil }
+    }
+    
+    var karaokeIntervalsViewModel: Driver<KaraokeIntervalsProgressViewModel?> {
+        
+        return appState.map { ($0.player.currentItem?.lyrics?.data.karaoke, $0.player.currentItem?.state.progress) }
+            .distinctUntilChanged({ (lhs: (Karaoke?, TimeInterval?), rhs: (Karaoke?, TimeInterval?)) -> Bool in
+                return lhs.0 == rhs.0 && lhs.1 == rhs.1
+            })
+            .map { (maybeKaraoke, maybeProgress) in
 
+                guard let karaoke = maybeKaraoke, let progress = maybeProgress else {
+                    return nil
+                }
 
+                let karaokeIntervalViewModels = karaoke.intervals
+                    .compactMap { x -> KaraokeIntervalProgressViewModel? in
+                        guard !x.content.isEmpty else { return nil }
+                        
+                        return KaraokeIntervalProgressViewModel(startValue: Float(x.start / progress),
+                                                                endValue: Float(x.end / progress),
+                                                                color: #colorLiteral(red: 0.9725490196, green: 0.9058823529, blue: 0.1098039216, alpha: 1))
+                    }
+                
+                return KaraokeIntervalsProgressViewModel(id: karaoke.id, intervals: karaokeIntervalViewModels)
+                
+            }
+        
+    }
+    
     // MARK: - Private properties -
 
     private(set) weak var router: PlayerRouter?
     private(set) var application: Application
-    private(set) var lyricsKaraokeService: LyricsKaraokeService
-
+    
     private(set) var textImageGenerator: TextImageGenerator
 
     let disposeBag = DisposeBag()
 
     // MARK: - Lifecycle -
 
-    init(router: PlayerRouter, application: Application, lyricsKaraokeService: LyricsKaraokeService) {
+    init(router: PlayerRouter, application: Application) {
         self.router = router
         self.application = application
-        self.lyricsKaraokeService = lyricsKaraokeService
-
+        
         self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
 
         super.init()
@@ -264,19 +284,6 @@ final class PlayerViewModel: NSObject {
     }
 
     func load() {
-
-        self.lyricsKaraokeService.lyricsState.subscribe(onNext: { [unowned self] (lyricsState) in
-
-            switch lyricsState {
-            case .lyrics(let lyrics):
-                self.karaoke = lyrics.karaoke
-            default:
-                self.karaoke = nil
-            }
-
-            })
-            .disposed(by: disposeBag)
-
         self.application.addWatcher(self)
     }
 
@@ -301,22 +308,7 @@ final class PlayerViewModel: NSObject {
         return descriptionAttributedString
     }
 
-    func karaokeIntervalsViewModel() -> DefaultKaraokeIntervalsProgressViewModel? {
 
-        guard self.lyricsKaraokeService.mode.value == .karaoke else { return nil }
-        guard let karaoke = self.karaoke,
-              let playerItemDuration = appStateSlice.currentTrack?.track.audioFile?.duration else { return nil }
-
-        let karaokeIntervalViewModels: [DefaultKaraokeIntervalProgressViewModel] = karaoke.intervals.compactMap {
-            guard $0.content.isEmpty == false else { return nil }
-
-            return DefaultKaraokeIntervalProgressViewModel(startValue: Float($0.start / Double(playerItemDuration)),
-                                                           endValue: Float($0.end / Double(playerItemDuration)),
-                                                           color: #colorLiteral(red: 0.9725490196, green: 0.9058823529, blue: 0.1098039216, alpha: 1))
-        }
-
-        return DefaultKaraokeIntervalsProgressViewModel(id: karaoke.id, intervals: karaokeIntervalViewModels)
-    }
 
     // MARK: - Actions -
 

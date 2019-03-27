@@ -163,8 +163,7 @@ struct RouterDependencies {
     }
     
     let application: Application
-    let lyricsKaraokeService: LyricsKaraokeService
-
+    
     let daPlayer: RRPlayer!
     
 }

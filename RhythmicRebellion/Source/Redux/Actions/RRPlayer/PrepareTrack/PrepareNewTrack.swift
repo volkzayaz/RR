@@ -34,7 +34,8 @@ struct PrepareNewTrack: ActionCreator {
             state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
                                              addons: [],
                                              state: .init(progress: 0,
-                                                          isPlaying: self.shouldPlayImmidiatelly))
+                                                          isPlaying: self.shouldPlayImmidiatelly),
+                                             lyrics: nil)
             
             return .just(state)
         }
@@ -90,7 +91,8 @@ struct PrepareNewTrack: ActionCreator {
                 state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
                                                  addons: addons,
                                                  state: .init(progress: 0,
-                                                              isPlaying: self.shouldPlayImmidiatelly))
+                                                              isPlaying: self.shouldPlayImmidiatelly),
+                                                 lyrics: nil)
                 
                 return state
                 

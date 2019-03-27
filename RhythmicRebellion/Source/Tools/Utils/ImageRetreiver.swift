@@ -30,7 +30,7 @@ enum ImageRetreiverError: Error {
 */
 extension ImageRetreiver {
     
-    static func imageForURLWithoutProgress(url: String) -> Driver<UIImage?> {
+    static func imageForURLWithoutProgress<T: URLConvertible>(url: T) -> Driver<UIImage?> {
         
         return self.imageForURL(url: url)
             .map { res -> UIImage? in

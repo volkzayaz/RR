@@ -90,33 +90,24 @@ class LyricsKaraokeService {
 
                 return Observable<LyricsState>.just(.none)
                 
-//                guard mode != .none else { return Observable<LyricsState>.just(.none) }
-//                guard let track = playerItem?.playlistItem.track,
-//                    track.isPlayable == true, track.isInstrumental == false else { return Observable<LyricsState>.just(.none) }
-//
-//                if track.isCensorship == true, explicitMaterialExcluded == true, forceToPlayTracksIds.contains(track.id) == false {
-//                    return Observable<LyricsState>.just(.none)
-//                }
-//
-//                guard let lyrics = self.tracksIdsLyrics[track.id] else {
-//                    return TrackRequest.lyrics(track: track).rx
-//                        .response(type: TrackResponse<Lyrics>.self)
-//                        .do(onNext: { [weak self, trackId = track.id] (trackResponse) in
-//                            self?.tracksIdsLyrics[trackId] = trackResponse.data
-//                        })
-//                        .map({ (trackResponse) -> LyricsState in
-//                            return .lyrics(trackResponse.data)
-//                        })
-//                        .asObservable()
-//                        .catchError({ (error) -> Observable<LyricsKaraokeService.LyricsState> in
-//                            return Observable<LyricsState>.just(.error(error))
-//                        })
-//                }
-//                return Observable<LyricsState>.just(.lyrics(lyrics))
+                guard mode != .none,
+                      let track = playerItem?.playlistItem.track,
+                      track.isPlayable == true, track.isInstrumental == false,
+                      track.isCensorship == false, explicitMaterialExcluded == false,
+                      forceToPlayTracksIds.contains(track.id) == true  else {
+                    return .just(.none)
+                }
+                
+                return TrackRequest.lyrics(track: track).rx
+                    .response(type: BaseReponse<Lyrics>.self)
+                    .map { .lyrics($0.data) }
+                    .asObservable()
+                    .catchError({ (error) -> Observable<LyricsKaraokeService.LyricsState> in
+                        return Observable<LyricsState>.just(.error(error))
+                    })
+                
             }
-            .subscribe(onNext: { (lyricsState) in
-                self.lyricsState.accept(lyricsState)
-            })
+            .bind(to: lyricsState)
             .disposed(by: disposeBag)
 
 

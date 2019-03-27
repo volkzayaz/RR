@@ -59,6 +59,28 @@ struct PlayerState: Equatable {
         let activeTrackHash: TrackOrderHash
         var addons: [Addon] //stack
         var state: TrackState
+        var lyrics: Lyrics?
+    }
+    
+    struct Lyrics: Equatable {
+        let data: RhythmicRebellion.Lyrics
+        var mode: Mode
+        
+        enum Mode: Equatable {
+            case plain
+            case karaoke(config: KaraokeConfig)
+            
+            struct KaraokeConfig: Equatable {
+                
+                var track: Track
+                var mode: Mode
+                
+                enum Track { case backing, vocal }
+                enum Mode { case scroll, onePhrase }
+                
+            }
+            
+        }
     }
     
     struct ReduxViewPatch {
@@ -124,6 +146,7 @@ extension AppState {
     enum MusicType: Equatable {
         case addon(Addon)
         case track(Track)
+        case minusOneTrack(Track)
     };
     var activePlayable: MusicType? {
         
@@ -136,9 +159,27 @@ extension AppState {
             return .addon(a)
         }
         
+        if case .karaoke(let config)? = currentItem.lyrics?.mode,
+           case .backing = config.track {
+            return .minusOneTrack(t)
+        }
+        
         return .track(t)
     }
     
+}
+
+extension PlayerState.Lyrics.Mode.KaraokeConfig {
+    var flipTrack: PlayerState.Lyrics.Mode.KaraokeConfig {
+        var x = self
+        
+        switch x.track {
+        case .backing: x.track = .vocal
+        case .vocal:   x.track = .backing
+        }
+        
+        return x
+    }
 }
 
 extension Dispatcher {

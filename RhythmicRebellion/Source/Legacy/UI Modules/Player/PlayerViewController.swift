@@ -361,8 +361,18 @@ extension PlayerViewController {
             .drive(playerItemPreviewOptionButton.rx.image(for: .normal))
             .disposed(by: rx.disposeBag)
 
+        viewModel.karaokeEnabled
+            .drive(playerItemProgressView.rx.isSelected)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.karaokeIntervalsViewModel
+            .drive(onNext: { [unowned self] (vm) in
+                self.playerItemProgressView.update(with: vm)
+            })
+            .disposed(by: rx.disposeBag)
+        
         self.refreshProgressUI()
-        self.refreshKaraokeUI()
+        
     }
 
     func refreshProgressUI() {
@@ -384,21 +394,10 @@ extension PlayerViewController {
                 }
             })
             .disposed(by: rx.disposeBag)
-        
 
         self.updatePlayPauseState()
     }
 
-    func refreshKaraokeUI() {
-
-        self.playerItemProgressView.isSelected = self.viewModel.karaokeModelId != nil && self.viewModel.isKaraokeEnabled
-
-        guard let karaokeModelId = self.viewModel.karaokeModelId, self.viewModel.isKaraokeEnabled else { self.playerItemProgressView.update(with: nil); return }
-        guard self.playerItemProgressView.karaokeIntervalsViewModelId != karaokeModelId else { return }
-
-        let karaokeIntervalsViewModel = self.viewModel.karaokeIntervalsViewModel()
-        self.playerItemProgressView.update(with: karaokeIntervalsViewModel)
-    }
 }
 
 // MARK: - UITabBarDelegate

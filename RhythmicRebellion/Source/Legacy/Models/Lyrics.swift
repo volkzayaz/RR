@@ -10,8 +10,8 @@ import Foundation
 
 struct KaraokeInterval: Codable {
 
-    let start: Double
-    let end: Double
+    let start: TimeInterval
+    let end: TimeInterval
     let content: String
 }
 
@@ -82,7 +82,7 @@ extension Karaoke: Equatable {
 public struct Lyrics: Codable {
 
     let id: Int
-    let lyrics: String?
+    let lyrics: String
     let karaoke: Karaoke?
 
     enum CodingKeys: String, CodingKey {
