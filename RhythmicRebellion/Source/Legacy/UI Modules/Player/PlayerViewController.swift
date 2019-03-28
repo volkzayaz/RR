@@ -347,16 +347,6 @@ extension PlayerViewController {
         
         self.playlistButton.isEnabled = true
         
-        self.compactTabBar.items?.forEach({ (tabBarItem) in
-            
-            self.viewModel.canNavigate
-                .drive(onNext: { (x) in
-                    tabBarItem.isEnabled = x
-                })
-                .disposed(by: self.rx.disposeBag)
-            
-        })
-
         viewModel.previewOptionImage
             .drive(playerItemPreviewOptionButton.rx.image(for: .normal))
             .disposed(by: rx.disposeBag)

@@ -32,11 +32,11 @@ final class LyricsKaraokeViewModel {
             .drive(onNext: { [weak r = router] (currentItem) in
                 
                 guard case .karaoke(_)? = currentItem?.lyrics?.mode else {
-                    r?.routeToKaraoke()
+                    r?.routeToLyrics()
                     return
                 }
                 
-                r?.routeToLyrics()
+                r?.routeToKaraoke()
             })
             .disposed(by: disposeBag)
         
