@@ -75,7 +75,9 @@ class Application: Watchable {
                 return "https://rhythmic-rebellion.com"
             }
             
-            return "http://\(String(describing: env)).fan.rebellionretailsite.com"
+            let `protocol` = env == "staging" ? "https" : "http"
+            
+            return "\(`protocol`)://\(String(describing: env)).fan.rebellionretailsite.com"
         }
         
         static var restApiService: String {
@@ -86,7 +88,9 @@ class Application: Watchable {
                 return "https://api.rhythmic-rebellion.com"
             }
             
-            return "http://\(String(describing: env)).api.rebellionretailsite.com"
+            let `protocol` = env == "staging" ? "https" : "http"
+            
+            return "\(`protocol`)://\(String(describing: env)).api.rebellionretailsite.com"
             
         }
         
@@ -96,6 +100,10 @@ class Application: Watchable {
             
             guard env != "prod" else {
                 return "wss://ws.rebellion-services.com"
+            }
+            
+            guard env != "staging" else {
+                return "wss://staging.ws.rebellionretailsite.com:3000/"
             }
             
             return "ws://\(String(describing: env)).rebellionretailsite.com:3000/"
