@@ -110,7 +110,10 @@ extension RRPlayer {
         let webSocketAcceptableChange = appState.filter { $0.player.lastChangeSignatureHash.isOwn }
         
         /// sync player state
-        webSocketAcceptableChange.map { $0.player.currentItem?.state }
+        appState
+            .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
+            .filter { $0.player.lastChangeSignatureHash.isOwn }
+            .map { $0.player.currentItem?.state }
             .notNil()
             .drive(onNext: { [weak w = webSocket] (x) in
                 
@@ -121,9 +124,10 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         ////sync current track ID
-        webSocketAcceptableChange.map { $0 }
-            .skip(1) ///initial nil
+        appState
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
+            .filter { $0.player.lastChangeSignatureHash.isOwn }
+            .skip(1) ///initial nil
             .drive(onNext: { [weak w = webSocket] (state) in
                 
                 let t = TrackId(orderedTrack: state.currentTrack)
@@ -136,8 +140,10 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         /// sync playlist order (insert/delete/create/flush)
-        webSocketAcceptableChange.map { $0.player.lastPatch }
-            .distinctUntilChanged()
+        appState
+            .distinctUntilChanged { $0.player.lastPatch == $1.player.lastPatch }
+            .filter { $0.player.lastChangeSignatureHash.isOwn }
+            .map { $0.player.lastPatch }
             .notNil()
             .drive(onNext: { [weak w = webSocket] (x) in
                 
@@ -149,8 +155,11 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         /// sync blocked state
-        webSocketAcceptableChange.map { $0.player.isBlocked }
-            .distinctUntilChanged()
+        webSocketAcceptableChange
+            .distinctUntilChanged { $0.player.isBlocked == $1.player.isBlocked }
+            .filter { $0.player.lastChangeSignatureHash.isOwn }
+            .map { $0.player.isBlocked }
+            .skip(1)///initial state
             .drive(onNext: { [weak w = webSocket] (x) in
                 
                 let data: TrackBlockState = x
@@ -162,34 +171,9 @@ extension RRPlayer {
             })
             .disposed(by: rx.disposeBag)
         
-        
-        ////apply RR specific logic
-        
-        ////Enforce playback termination if user exceeded play time quota
-        appState.map { $0.player }
-            //.filter { $0.state.isOwn }
-            .drive(onNext: { (x) in
-                
-                //print("Checking restricted time \(x)")
-                
-                ///Dispatcher.dispatch(action: CheckRestrictedTime(newState: x))
-            })
-            .disposed(by: rx.disposeBag)
-        
-        
     }
     
     func bindWebSocket() {
-        
-//        webSocket.didConnect
-//            .subscribe(onNext: {
-//                print("DidConnect")
-//            })
-//        
-//        webSocket.didDisconnect
-//            .subscribe(onNext: {
-//                print("DidDisconnect")
-//            })
         
         webSocket.didReceivePlaylistPatch
             .subscribe(onNext: { (patch) in
@@ -233,26 +217,4 @@ extension RRPlayer {
         
     }
     
-}
-
-
-
-///////
-
-struct CheckRestrictedTime: Action {
-    
-    //let newState: DaPlayerState.PlayingNow
-    
-    func perform(initialState: AppState) -> AppState {
-        
-//        guard case .track(let x)? = newState.musicType,
-//              let allowedTime = initialState.allowedTimes[x.id],
-//              allowedTime <= UInt(newState.state.progress) else {
-//        
-//            return initialState
-//        }
-//        
-        fatalError("advance to next song, since we ellapsed listening time")
-        
-    }
 }
