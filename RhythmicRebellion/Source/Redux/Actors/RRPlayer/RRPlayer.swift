@@ -31,6 +31,13 @@ class RRPlayer: NSObject {
         application.addWatcher(self)
     }
     
+    ///Piece of data needed by WebSocket protocol
+    ///Whenever you send out a setTrackState commad, you become a master client
+    ///The rest become slave clients
+    ///The rule is: If you've just became master, you must ignore all "currentTrack" and "trackState" commands
+    ///for the next 1 second ¯\_(ツ)_/¯
+    fileprivate let masterDate = BehaviorSubject(value: Date())
+    
 }
 
 ///TODO: migrate to proper reactive callbacks
@@ -107,8 +114,6 @@ extension RRPlayer {
         ////Syncing using webSocket
         /////-----
         
-        let webSocketAcceptableChange = appState.filter { $0.player.lastChangeSignatureHash.isOwn }
-        
         /// sync player state
         appState
             .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
@@ -155,7 +160,7 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         /// sync blocked state
-        webSocketAcceptableChange
+        appState
             .distinctUntilChanged { $0.player.isBlocked == $1.player.isBlocked }
             .filter { $0.player.lastChangeSignatureHash.isOwn }
             .map { $0.player.isBlocked }
@@ -169,6 +174,14 @@ extension RRPlayer {
                 print("Sending out block state via webSoccket isBlocked = \(x)")
                 
             })
+            .disposed(by: rx.disposeBag)
+        
+        ////sync master date
+        appState.distinctUntilChanged { $0.player.lastChangeSignatureHash == $1.player.lastChangeSignatureHash }
+            .filter { $0.player.lastChangeSignatureHash.isOwn }
+            .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
+            .map { _ in Date() }
+            .drive(masterDate)
             .disposed(by: rx.disposeBag)
         
     }
@@ -198,6 +211,7 @@ extension RRPlayer {
             .disposed(by: rx.disposeBag)
         
         webSocket.didReceiveTrackState
+            .filter { _ in self.masterDate.unsafeValue.timeIntervalSinceNow < -0.4 }
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: ChangeTrackState(trackState: state)))
             })

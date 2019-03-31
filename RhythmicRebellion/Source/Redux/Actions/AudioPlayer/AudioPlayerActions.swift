@@ -18,6 +18,10 @@ extension AudioPlayer {
         
         func perform(initialState: AppState) -> Observable<AppState> {
         
+            guard initialState.player.lastChangeSignatureHash.isOwn else {
+                return .just(initialState)
+            }
+            
             var state = initialState
             
             guard let currentTrackState = state.player.currentItem?.state,

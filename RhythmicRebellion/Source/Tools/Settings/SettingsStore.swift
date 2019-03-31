@@ -15,6 +15,6 @@ extension SettingsStore {
                                                                initialValue: nil)
     
     static var environment: Setting<String> = Setting(key: "com.rhythmicrebellion.defaults.env",
-                                                      initialValue: "ios-460")
+                                                      initialValue: "dev")
     
 }

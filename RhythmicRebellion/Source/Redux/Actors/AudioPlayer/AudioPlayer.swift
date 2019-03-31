@@ -143,22 +143,21 @@ class AudioPlayer: NSObject {
         ///TODO: verify case when playback started on this device, but pause is clicked on other device
         appState
             .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
-            .filter { $0.player.lastChangeSignatureHash.isOwn }
-            .map { $0.player.currentItem?.state }
-            .notNil()
             .drive(onNext: { [weak p = player] (state) in
-                
-                if state.isPlaying {
+            
+                guard let s = state.player.currentItem?.state,
+                    s.isPlaying,
+                    state.player.lastChangeSignatureHash.isOwn else {
                     
-                    ////subscequent calls to |play| make AVAudioSession.interruptionNotification act weird
-                    ////and sometimes make it not deliver .ended notification
-                    if p?.rate == 0 {
-                        p?.play()
-                    }
-                    
-                }
-                else {
                     p?.pause()
+                        
+                    return
+                }
+                
+                ////subscequent calls to |play| make AVAudioSession.interruptionNotification act weird
+                ////and sometimes make it not deliver .ended notification
+                if p?.rate == 0 {
+                    p?.play()
                 }
                 
             })
