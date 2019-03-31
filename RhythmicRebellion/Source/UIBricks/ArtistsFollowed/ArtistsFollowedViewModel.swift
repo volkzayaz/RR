@@ -46,11 +46,11 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
             .distinctUntilChanged()
             .debounce(0.3, scheduler: MainScheduler.instance)
             .filter { q in
-                guard q.lengthOfBytes(using: String.Encoding.utf8) < 3 else { return true }
+                guard q.lengthOfBytes(using: .utf8) < 3 else { return true }
                 
                 ///if (q == 0 || q > 2)
                 
-                return q.lengthOfBytes(using: String.Encoding.utf8) == 0
+                return q.isEmpty
             }
         
         let listUpdated = DataLayer.get.application.followingState
@@ -64,7 +64,7 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
             .asObservable()
         
         artistFollowed.map { _ in }
-            .startWith( () )
+            //.startWith( () )
             .flatMapLatest { [unowned buffer = quickUnfollowBuffer] _ -> Observable<([Artist], [String], String)> in
                 
                 let filterOutArtists = Observable.of( buffer.asObservable().skip(1).notNil(),

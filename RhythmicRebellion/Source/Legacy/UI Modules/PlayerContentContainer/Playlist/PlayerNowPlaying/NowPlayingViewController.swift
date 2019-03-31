@@ -174,16 +174,8 @@ extension NowPlayingViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
     }
-//
-//    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        guard section == 0, self.viewModel.tracksViewModel.isPlaylistEmpty else { return 0.0 }
-//        return 44.0
-//    }
-//
-//    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard section == 0, self.viewModel.tracksViewModel.isPlaylistEmpty else { return nil }
-//        return self.emptyPlaylistView
-//    }
+
+
 }
 
 // MARK: - Router -

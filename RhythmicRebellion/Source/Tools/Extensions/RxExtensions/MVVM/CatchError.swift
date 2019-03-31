@@ -26,7 +26,7 @@ enum Box<T> {
 
 extension ObservableConvertibleType {
 
-    private var identifier : String { return "com.  rx.extensions.erroridentifier" }
+    private var identifier : String { return "com.rx.extensions.erroridentifier" }
     
     func silentCatch<T: CanPresentMessage>
         (handler: T?) -> Observable<E> where T: AnyObject {
