@@ -32,9 +32,8 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     }
 
     private func checkDirtyState() {
-        guard let fanUser = self.application?.user as? FanUser else { self.isDirty = false; return}
-
-        let isDirty = self.listeningSettings != fanUser.profile.listeningSettings
+        
+        let isDirty = self.listeningSettings != self.application?.user?.profile?.listeningSettings
 
         if self.isDirty != isDirty {
             self.isDirty = isDirty
@@ -46,11 +45,11 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     func load(with delegate: ListeningSettingsViewModelDelegate) {
         self.delegate = delegate
 
-        guard let fanUser = self.application?.user as? FanUser else { return }
+        guard let profile = self.application?.user?.profile else { return }
 
         self.application?.addWatcher(self)
 
-        self.listeningSettings = fanUser.profile.listeningSettings
+        self.listeningSettings = profile.listeningSettings
         self.listeningSettingsSections = self.makeListeningSettingsSections()
 
         self.delegate?.reloadUI()
@@ -65,8 +64,8 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
             switch fanUserResult {
             case .success(let user):
-                guard let fanUser = user as? FanUser else { return }
-                self.listeningSettings = fanUser.profile.listeningSettings
+                
+                self.listeningSettings = user.profile?.listeningSettings ?? .defaultSettings()
                 self.listeningSettingsSections = self.makeListeningSettingsSections()
                 self.checkDirtyState()
                 self.delegate?.reloadUI()
@@ -226,9 +225,9 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
 
-            if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.isSongCommentaryDate = fanUser.profile.listeningSettings.isSongCommentaryDate
-                self.listeningSettings.songCommentaryDate = fanUser.profile.listeningSettings.songCommentaryDate
+            if let profile = self.application?.user?.profile {
+                self.listeningSettings.isSongCommentaryDate = profile.listeningSettings.isSongCommentaryDate
+                self.listeningSettings.songCommentaryDate = profile.listeningSettings.songCommentaryDate
             }
 
             let songComentarySectionItemsCount = songComentarySection.items.count
@@ -257,8 +256,8 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
 
-            if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.songCommentaryDate = fanUser.profile.listeningSettings.songCommentaryDate
+            if let profile = self.application?.user?.profile {
+                self.listeningSettings.songCommentaryDate = profile.listeningSettings.songCommentaryDate
             }
 
             let songComentarySectionItemsCount = songComentarySection.items.count
@@ -316,9 +315,9 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
 
-            if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.isHearArtistsBioDate = fanUser.profile.listeningSettings.isHearArtistsBioDate
-                self.listeningSettings.artistsBioDate = fanUser.profile.listeningSettings.artistsBioDate
+            if let profile = self.application?.user?.profile {
+                self.listeningSettings.isHearArtistsBioDate =  profile.listeningSettings.isHearArtistsBioDate
+                self.listeningSettings.artistsBioDate = profile.listeningSettings.artistsBioDate
             }
 
             let artistsBIOSectionItemsCount = artistsBIOSection.items.count
@@ -346,10 +345,9 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
             }
 
         } else {
-            if let fanUser = self.application?.user as? FanUser {
-                self.listeningSettings.artistsBioDate = fanUser.profile.listeningSettings.artistsBioDate
-            }
-
+            
+            self.listeningSettings.artistsBioDate = self.application?.user?.profile?.listeningSettings.artistsBioDate
+            
             let artistsBIOSectionItemsCount = artistsBIOSection.items.count
             artistsBIOSection.items.removeLast()
             self.delegate?.listeningSettingsSection(artistsBIOSection, didDeleteItem: artistsBIOSectionItemsCount - 1)

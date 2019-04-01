@@ -220,19 +220,19 @@ extension TrackListViewModel {
             self?.doNotPlay(track: t.track)
         }
         
-        let maybeUser = application?.user as? FanUser
+        let maybeUser = application?.user as? User
         
         var result: [ActionViewModel] = []
         
         if let user = maybeUser,
             user.isCensorshipTrack(t.track) &&
-                !user.profile.forceToPlay.contains(t.track.id) {
+            !(user.profile?.forceToPlay.contains(t.track.id) ?? false) {
             result.append(ftp)
         }
         
         if let user = maybeUser,
             user.isCensorshipTrack(t.track) &&
-                user.profile.forceToPlay.contains(t.track.id) {
+            user.profile?.forceToPlay.contains(t.track.id) ?? false {
             result.append(dnp)
         }
         
@@ -261,16 +261,17 @@ extension TrackListViewModel {
     func forceToPlay(track: Track) {
         
         application?.allowPlayTrackWithExplicitMaterial(trackId: track.id,
-                                                completion: { [weak self] res in
-                                                    if case .failure(let error) = res {
-                                                        self?.delegate?.show(error: error)
-                                                    }
+                                                        shouldAllow: true,
+                                                        completion: { [weak self] res in
+                                                            if case .failure(let error) = res {
+                                                                self?.delegate?.show(error: error)
+                                                            }
             })
     }
 
     func doNotPlay(track: Track) {
         
-        application?.disallowPlayTrackWithExplicitMaterial(trackId: track.id,
+        application?.allowPlayTrackWithExplicitMaterial(trackId: track.id, shouldAllow: false,
                                                         completion: { [weak self] res in
                                                             if case .failure(let error) = res {
                                                                 self?.delegate?.show(error: error)

@@ -425,14 +425,14 @@ class RestApiService {
         }
     }
 
-    func fanAllowPlayTrackWithExplicitMaterial(trackId: Int, completion: @escaping (Result<(TrackForceToPlayState)>) -> Void) {
+    func fanAllowPlayTrackWithExplicitMaterial(trackId: Int, shouldAllow: Bool, completion: @escaping (Result<(TrackForceToPlayState)>) -> Void) {
         guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(trackId) + "/force-to-play") else { return }
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",
                                     "Origin" : self.originURI]
 
-        Alamofire.request(forceToPlayURL, method: .post, headers: headers)
+        Alamofire.request(forceToPlayURL, method: shouldAllow ? .post : .delete, headers: headers)
             .validate()
             .restApiResponse { (dataResponse: DataResponse<TrackForceToPlayResponse>) in
                 switch dataResponse.result {
@@ -442,31 +442,16 @@ class RestApiService {
         }
     }
 
-    func fanDisallowPlayTrackWithExplicitMaterial(trackId: Int, completion: @escaping (Result<TrackForceToPlayState>) -> Void) {
-        guard let forceToPlayURL = self.makeURL(with: "fan/listen-record/" + String(trackId) + "/force-to-play") else { return }
-
-        let headers: HTTPHeaders = ["Accept": "application/json",
-                                    "Content-Type": "application/json",
-                                    "Origin" : self.originURI]
-
-        Alamofire.request(forceToPlayURL, method: .delete, headers: headers)
-            .validate()
-            .restApiResponse { (dataResponse: DataResponse<TrackForceToPlayResponse>) in
-                switch dataResponse.result {
-                case .success(let trackForceToPlayResponse): completion(.success(trackForceToPlayResponse.state))
-                case .failure(let error): completion(.failure(error))
-                }
-        }
-    }
-
-    func fanFollow(artistId: String, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
+    func fanFollow(shouldFollow: Bool, artistId: String, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
         guard let followArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artistId)) else { return }
 
         let headers: HTTPHeaders = ["Accept": "application/json",
                                     "Content-Type": "application/json",
                                     "Origin" : self.originURI]
 
-        Alamofire.request(followArtistURL, method: .post, headers: headers)
+        Alamofire.request(followArtistURL,
+                          method: shouldFollow ? .post : .delete,
+                          headers: headers)
             .validate()
             .restApiResponse { (dataResponse: DataResponse<FollowArtistResponse>) in
                 switch dataResponse.result {
@@ -475,23 +460,6 @@ class RestApiService {
                     completion(.success(followArtistResponse.state))
                 case .failure(let error): completion(.failure(error))
                 }
-        }
-    }
-
-    func fanUnfollow(artistId: String, completion: @escaping (Result<ArtistFollowingState>) -> Void) {
-        guard let unfollowArtistURL = self.makeURL(with: "fan/artist-follow/" + String(artistId)) else { return }
-
-        let headers: HTTPHeaders = ["Accept": "application/json",
-                                    "Content-Type": "application/json",
-                                    "Origin" : self.originURI]
-
-        Alamofire.request(unfollowArtistURL, method: .delete, headers: headers)
-            .validate()
-            .response { (response) in
-                guard let error = response.error else { completion(.success(ArtistFollowingState(artistId: artistId, isFollowed: false)))
-                                                        return }
-
-                completion(.failure(error))
         }
     }
 

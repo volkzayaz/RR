@@ -70,7 +70,7 @@ final class LyricsViewModel {
     }
 
     func switchToKaraoke() {
-        guard DataLayer.get.application.user as? FanUser != nil else {
+        guard DataLayer.get.application.user as? User != nil else {
             router?.routeToAuthorization(with: .signIn)
             return
         }

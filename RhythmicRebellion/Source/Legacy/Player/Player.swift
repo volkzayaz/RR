@@ -488,7 +488,7 @@ class Player: NSObject, Watchable {
 
     func restrictedTime(for track: Track) -> TimeInterval? {
         guard track.isFreeForPlaylist == false else { return nil }
-        guard let fanUser = self.application.user as? FanUser else { return self.guestRestrictedTime(for: track) }
+        guard let fanUser = self.application.user as? User else { return self.guestRestrictedTime(for: track) }
         guard fanUser.hasPurchase(for: track) == false else { return nil }
         guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { return nil }
         guard let t = track.previewType else { return nil }

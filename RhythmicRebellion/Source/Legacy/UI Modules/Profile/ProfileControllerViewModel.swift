@@ -25,7 +25,7 @@ enum ProfileItem: Int {
 
 final class ProfileControllerViewModel: ProfileViewModel {
 
-    var userName: String { return self.fanUser?.profile.nickname ?? "" }
+    var userName: String { return self.fanUser?.profile?.nickname ?? "" }
 
     // MARK: - Private properties -
 
@@ -33,7 +33,7 @@ final class ProfileControllerViewModel: ProfileViewModel {
     private(set) weak var router: ProfileRouter?
     private(set) weak var application: Application?
 
-    private var fanUser: FanUser?
+    private var fanUser: User?
     private var profileItems: [ProfileItem]
 
     // MARK: - Lifecycle -
@@ -50,12 +50,12 @@ final class ProfileControllerViewModel: ProfileViewModel {
     }
 
     func load(with delegate: ProfileViewModelDelegate) {
-        guard let fanUser = self.application?.user as? FanUser else { return }
+        guard application?.user?.isGuest ?? true == false else { return }
 
         self.delegate = delegate
         self.application?.addWatcher(self)
 
-        self.fanUser = fanUser
+        self.fanUser = application?.user
         self.profileItems = [.profileSettings, .changeEmail, .changePassword]
 
         self.delegate?.reloadUI()
@@ -68,9 +68,9 @@ final class ProfileControllerViewModel: ProfileViewModel {
         self.application?.fanUser(completion: { (fanUserResult) in
             switch fanUserResult {
             case .success(let user):
-                guard let fanUser = user as? FanUser else { return }
+                
 
-                self.fanUser = fanUser
+                self.fanUser = user
                 self.delegate?.refreshUI()
 
             case .failure(let error):
@@ -117,9 +117,9 @@ extension ProfileControllerViewModel: ApplicationWatcher {
 
     func application(_ application: Application, didChangeUserProfile profile: UserProfile) {
 
-        guard let fanUser = application.user as? FanUser else { return }
+        guard !(application.user?.isGuest ?? true) else { return }
 
-        self.fanUser = fanUser
+        self.fanUser = application.user
         self.delegate?.refreshUI()
     }
 }

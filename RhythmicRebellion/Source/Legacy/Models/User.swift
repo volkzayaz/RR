@@ -9,69 +9,26 @@
 import Foundation
 
 
-public enum UserStubTrackAudioFileReason {
-    case censorship
-}
-
-
-public protocol User: Codable {
-
-    var isGuest: Bool { get }
-    var wsToken: String { get }
-
-    func isCensorshipTrack(_ track: Track) -> Bool
-    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason?
-
-    func isFollower(for artistId: String) -> Bool
-    func hasPurchase(for track: Track) -> Bool
-
-    func likeState(for track: Track) -> Track.LikeStates
-    func isAddonsSkipped(for artist: Artist) -> Bool
-}
-
-
-struct GuestUser: User {
-
-    let isGuest: Bool
-    let wsToken: String
-
-    enum CodingKeys: String, CodingKey {
-        case wsToken = "ws_token"
-        case isGuest = "guest"
-    }
-
-    func isCensorshipTrack(_ track: Track) -> Bool {
-        return track.isCensorship
-    }
-
-    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
-
-        guard self.isCensorshipTrack(track) else { return nil}
-        return .censorship
-    }
-
-    func isFollower(for artistId: String) -> Bool { return false }
-    func hasPurchase(for track: Track) -> Bool { return false }
-    func likeState(for track: Track) -> Track.LikeStates { return .none }
-    func isAddonsSkipped(for artist: Artist) -> Bool { return false }
-}
-
-
-struct FanUser: User {
+struct User: Codable, Equatable {
     
-    var profile: UserProfile
+    var profile: UserProfile?
     let wsToken: String
-    let isGuest: Bool = false
+    var isGuest: Bool {
+        return profile == nil
+    }
     
     enum CodingKeys: String, CodingKey {
         case wsToken = "ws_token"
+        case guest
     }
     
     init(from decoder: Decoder) throws {
-        self.profile = try UserProfile(from: decoder)
-        
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.wsToken = try container.decode(String.self, forKey: .wsToken)
+        
+        let isGuest = try container.decode(Bool.self, forKey: .guest)
+        profile = isGuest ? nil : try UserProfile(from: decoder)
+        
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -81,36 +38,47 @@ struct FanUser: User {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.wsToken, forKey: .wsToken)
         
+        try container.encode(profile == nil, forKey: .guest)
+        
     }
     
     func isCensorshipTrack(_ track: Track) -> Bool {
-        return track.isCensorship && self.profile.listeningSettings.isExplicitMaterialExcluded
+        return track.isCensorship && self.profile?.listeningSettings.isExplicitMaterialExcluded ?? true
     }
     
     
     func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
         
-        guard self.isCensorshipTrack(track), !self.profile.forceToPlay.contains(track.id) else { return nil }
+        guard self.isCensorshipTrack(track), !(self.profile?.forceToPlay.contains(track.id) ?? false) else { return nil }
         return .censorship
     }
     
     func isFollower(for artistId: String) -> Bool {
-        return self.profile.followedArtistsIds.contains(artistId)
+        return self.profile?.followedArtistsIds.contains(artistId) ?? false
     }
     
     func hasPurchase(for track: Track) -> Bool {
-        return self.profile.purchasedTracksIds.contains(track.id)
+        return self.profile?.purchasedTracksIds.contains(track.id) ?? false
     }
     
     func likeState(for track: Track) -> Track.LikeStates {
-        guard let trackLikeState = self.profile.tracksLikeStates[track.id] else { return .none }
+        guard let trackLikeState = self.profile?.tracksLikeStates[track.id] else { return .none }
         return trackLikeState
     }
     
     func isAddonsSkipped(for artist: Artist) -> Bool {
-        return self.profile.skipAddonsArtistsIds.contains(artist.id)
+        return self.profile?.skipAddonsArtistsIds.contains(artist.id) ?? false
     }
     
+    static func == (lhs: User, rhs: User) -> Bool {
+        guard lhs.profile?.id == rhs.profile?.id else { return false }
+        return true
+    }
+    
+}
+
+public enum UserStubTrackAudioFileReason {
+    case censorship
 }
 
 struct UserProfile: Codable {
@@ -303,27 +271,3 @@ extension UserProfile: Equatable {
                 lhs.language == rhs.language
     }
 }
-
-extension FanUser: Equatable {
-    static func == (lhs: FanUser, rhs: FanUser) -> Bool {
-        guard lhs.profile.id == rhs.profile.id else { return false }
-        return true
-    }
-}
-
-func == (lhs: User, rhs: User) -> Bool {
-    if let _ = lhs as? GuestUser, let _ = rhs as? GuestUser { return true }
-    if let lhsFanUser = lhs as? FanUser, let rhsFanUser = rhs as? FanUser { return lhsFanUser == rhsFanUser }
-
-    return false
-}
-
-func != (lhs: User, rhs: User) -> Bool {
-    if let _ = lhs as? GuestUser, let _ = rhs as? GuestUser { return false }
-    if let lhsFanUser = lhs as? FanUser, let rhsFanUser = rhs as? FanUser { return lhsFanUser.profile.id != rhsFanUser.profile.id }
-
-    return true
-}
-
-
-

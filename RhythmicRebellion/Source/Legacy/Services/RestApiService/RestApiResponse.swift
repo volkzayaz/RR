@@ -55,21 +55,11 @@ struct FanUserResponse: RestApiResponse {
         case data
     }
 
-    enum DataCodingKeys: String, CodingKey {
-        case guest
-    }
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let dataContainer = try container.nestedContainer(keyedBy: DataCodingKeys.self, forKey: .data)
 
-        let isGuest = try dataContainer.decode(Bool.self, forKey: .guest)
-
-        if isGuest {
-            self.user = try container.decode(GuestUser.self, forKey: .data)
-        } else {
-            self.user = try container.decode(FanUser.self, forKey: .data)
-        }
+        self.user = try container.decode(User.self, forKey: .data)
+        
     }
 }
 
@@ -89,15 +79,7 @@ struct FanLoginResponse: RestApiResponse {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        let userContainer = try container.nestedContainer(keyedBy: UserCodingKeys.self, forKey: .user)
-
-        let isGuest = try userContainer.decode(Bool.self, forKey: .guest)
-
-        if isGuest {
-            self.user = try container.decode(GuestUser.self, forKey: .user)
-        } else {
-            self.user = try container.decode(FanUser.self, forKey: .user)
-        }
+        self.user = try container.decode(User.self, forKey: .user)
     }
 }
 
@@ -145,7 +127,7 @@ struct FanProfileResponse: RestApiResponse {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.user = try container.decode(FanUser.self, forKey: .data)
+        self.user = try container.decode(User.self, forKey: .data)
     }
 }
 

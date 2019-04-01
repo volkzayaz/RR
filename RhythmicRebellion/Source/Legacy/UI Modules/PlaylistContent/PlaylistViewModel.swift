@@ -192,7 +192,7 @@ final class PlaylistViewModel {
             
             var result: [ActionViewModel] = []
             
-            let maybeUser = application.user as? FanUser
+            let maybeUser = application.user as? User
             
             //////1
             

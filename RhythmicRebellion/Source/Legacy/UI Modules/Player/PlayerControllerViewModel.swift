@@ -332,7 +332,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleLike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard (self.application.user as? FanUser) != nil else { self.routeToAuthorization(); return }
+        guard (self.application.user as? User) != nil else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked) { [weak self] (error) in
             guard let error = error else { return }
@@ -342,7 +342,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleDislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard (self.application.user as? FanUser) != nil else { self.routeToAuthorization(); return }
+        guard (self.application.user as? User) != nil else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .disliked) { [weak self] (error) in
             guard let error = error else { return }
@@ -357,22 +357,10 @@ final class PlayerViewModel: NSObject {
     func toggleArtistFollowing() {
 
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard let fanUser = self.application.user as? FanUser else { self.routeToAuthorization(); return }
-
-        let followingCompletion: (Result<[String]>) -> Void = { [weak self] (followingResult) in
-
-            switch followingResult {
-            //case .failure(let error):
-                
-            default: break
-            }
-        }
-
-        if fanUser.isFollower(for: track.artist.id) {
-            self.application.unfollow(artistId: track.artist.id, completion: followingCompletion)
-        } else {
-            self.application.follow(artistId: track.artist.id, completion: followingCompletion)
-        }
+        guard let user = application.user, user.isGuest else { self.routeToAuthorization(); return }
+        
+        self.application.follow(shouldFollow: !user.isFollower(for: track.artist.id),
+                                artistId: track.artist.id)
     }
 
     func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) {

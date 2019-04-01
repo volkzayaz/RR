@@ -93,7 +93,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     func load(with delegate: ProfileSettingsViewModelDelegate) {
         self.delegate = delegate
 
-        guard let fanUser = self.application?.user as? FanUser else { return }
+        guard let profile = self.application?.user?.profile else { return }
 
         self.validator.styleTransformers(success:{ [unowned self] (validationRule) -> Void in
             self.delegate?.refreshField(field: validationRule.field, didValidate: nil)
@@ -101,8 +101,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
                 self.delegate?.refreshField(field: validationError.field, didValidate: validationError)
         })
 
-        self.userProfile = fanUser.profile
-        self.refreshDelegate(with: fanUser.profile)
+        self.userProfile = profile
+        self.refreshDelegate(with: profile)
 
         if self.application?.config == nil {
             self.loadConfig { [weak self] (configResult) in
@@ -120,10 +120,11 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.application?.fanUser(completion: { (fanUserResult) in
             switch fanUserResult {
             case .success(let user):
-                guard let fanUser = user as? FanUser else { return }
-
-                self.userProfile = fanUser.profile
-                self.refreshDelegate(with: fanUser.profile)
+                
+                if let p = user.profile {
+                    self.userProfile = p
+                    self.refreshDelegate(with: p)
+                }
 
             case .failure(let error):
                 self.delegate?.show(error: error)

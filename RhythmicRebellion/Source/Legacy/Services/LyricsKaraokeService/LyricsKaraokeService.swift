@@ -64,7 +64,7 @@ class LyricsKaraokeService {
 
         self.application = application
         
-        let user = self.application.user as? FanUser
+        let user = self.application.user as? User
 
         self.explicitMaterialExcluded = BehaviorRelay(value: user?.profile.listeningSettings.isExplicitMaterialExcluded ?? true)
         self.forceToPlayTracksIds = BehaviorRelay(value: user?.profile.forceToPlay ?? Set<Int>())
@@ -204,7 +204,7 @@ extension LyricsKaraokeService: ApplicationWatcher {
 
     func application(_ application: Application, didChange user: User) {
 
-        let fanUser = self.application.user as? FanUser
+        let fanUser = self.application.user as? User
 
         self.explicitMaterialExcluded.accept(fanUser?.profile.listeningSettings.isExplicitMaterialExcluded ?? true)
         self.forceToPlayTracksIds.accept(fanUser?.profile.forceToPlay ?? Set<Int>())

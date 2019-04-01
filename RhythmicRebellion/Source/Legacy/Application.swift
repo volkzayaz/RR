@@ -174,8 +174,9 @@ class Application: Watchable {
 
         guard let prevUser = self.user else {
             self.user = user
-            if let fanUser = user as? FanUser {
-                SettingsStore.lastSignedUserEmail.value = fanUser.profile.email
+            
+            if let fanUser = user as? User {
+                SettingsStore.lastSignedUserEmail.value = fanUser.profile?.email
             } else {
                 DownloadManager.default.clearArtifacts()
                 self.pagesLocalStorageService.reset()
@@ -189,17 +190,14 @@ class Application: Watchable {
         self.user = user
 
         if prevUser != user {
-            if let fanUser = user as? FanUser {
-                SettingsStore.lastSignedUserEmail.value = fanUser.profile.email
-            }
-
+            
+            SettingsStore.lastSignedUserEmail.value = user.profile?.email
+            
             DownloadManager.default.clearArtifacts()
             self.pagesLocalStorageService.reset()
             self.notifyUserChanged()
         } else {
-            if let prevFanUser = prevUser as? FanUser,
-                    let fanUser = user as? FanUser,
-                prevFanUser.profile != fanUser.profile {
+            if prevUser.profile != user.profile {
 
                 self.notifyUserProfileChanged()
             }
@@ -270,14 +268,15 @@ class Application: Watchable {
 
             switch updateUserResult {
             case .success(let user):
-                guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
+
 
                 self?.set(user: user)
                 
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanUser.profile.listeningSettings))
+                //self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanUser.profile?.listeningSettings))
                 
                 self?.notifyUserProfileListeningSettingsChanged()
-                completion?(.success(fanUser.profile.listeningSettings))
+                
+                completion?(.success( listeningSettings ))
 
             case .failure(let error):
                 completion?(.failure(error))
@@ -295,10 +294,10 @@ class Application: Watchable {
 
             switch updateUserResult {
             case .success(let user):
-                guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
+                
 
                 self?.set(user: user)
-                completion?(.success(fanUser.profile))
+                completion?(.success(profileSettings))
 
             case .failure(let error):
                 completion?(.failure(error))
@@ -317,10 +316,10 @@ class Application: Watchable {
 
             switch changePasswordResult {
             case .success(let user):
-                guard let fanUser = user as? FanUser else { completion?(.failure(AppError("Unexpected Server response"))); return }
+                
 
-                self?.set(user: fanUser)
-                completion?(.success(fanUser))
+                self?.set(user: user)
+                completion?(.success(user))
 
             case .failure(let error):
                 completion?(.failure(error))
@@ -330,24 +329,24 @@ class Application: Watchable {
 
     // MARK: Tracks
 
-    func allowPlayTrackWithExplicitMaterial(trackId: Int, completion: ((Result<[Int]>) -> Void)? = nil) {
+    func allowPlayTrackWithExplicitMaterial(trackId: Int, shouldAllow: Bool, completion: ((Result<[Int]>) -> Void)? = nil) {
 
-        guard let fanUser = self.user as? FanUser else { return }
+        
 
-        self.restApiService.fanAllowPlayTrackWithExplicitMaterial(trackId: trackId) { [weak self] (allowPlayTrackResult) in
+        self.restApiService.fanAllowPlayTrackWithExplicitMaterial(trackId: trackId, shouldAllow: shouldAllow) { [weak self] (allowPlayTrackResult) in
 
             switch allowPlayTrackResult {
             case .success(let trackForceToPlayState):
-                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
-
-                var nextFanUser = currentFanUser
-                nextFanUser.profile.update(with: trackForceToPlayState)
+                
+                var nextFanUser = self?.user
+                nextFanUser?.profile?.update(with: trackForceToPlayState)
                 self?.user = nextFanUser
 
                 self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackForceToPlayState))
 
                 self?.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
-                completion?(.success(Array(nextFanUser.profile.forceToPlay)))
+                
+                completion?(.success(Array(nextFanUser?.profile?.forceToPlay ?? [])))
 
             case .failure(let error):
                 completion?(.failure(error))
@@ -355,42 +354,17 @@ class Application: Watchable {
         }
     }
 
-    func disallowPlayTrackWithExplicitMaterial(trackId: Int, completion: ((Result<[Int]>) -> Void)? = nil) {
-
-        guard let fanUser = self.user as? FanUser else { return }
-
-        self.restApiService.fanDisallowPlayTrackWithExplicitMaterial(trackId: trackId) { [weak self] (allowPlayTrackResult) in
-
-            switch allowPlayTrackResult {
-            case .success(let trackForceToPlayState):
-                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
-
-                var nextFanUser = currentFanUser
-                nextFanUser.profile.update(with: trackForceToPlayState)
-                self?.user = nextFanUser
-
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackForceToPlayState))
-
-                self?.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
-                completion?(.success(Array(nextFanUser.profile.forceToPlay)))
-
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
 
     func updateSkipAddons(for artist: Artist, skip: Bool, completion: @escaping (Error?) -> Void) {
-
-        guard let fanUser = self.user as? FanUser else { return }
 
         self.restApiService.updateSkipArtistAddons(for: artist, skip: skip) { [weak self] (skipArtistAddonsResult) in
             switch skipArtistAddonsResult {
             case .success(let updatedUser):
                 self?.set(user: updatedUser)
-                guard let updatedFanUser = updatedUser as? FanUser, fanUser == updatedFanUser else { completion(nil); return }
-
-                let skipArtistAddonsState = SkipArtistAddonsState(artistId: artist.id, isSkipped: updatedFanUser.isAddonsSkipped(for: artist))
+                
+                let skipArtistAddonsState = SkipArtistAddonsState(artistId: artist.id,
+                                                                  isSkipped: updatedUser.isAddonsSkipped(for: artist))
+                
                 self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: skipArtistAddonsState))
 
                 self?.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
@@ -404,15 +378,14 @@ class Application: Watchable {
     }
 
     func update(track: Track, likeState: Track.LikeStates, completion: ((Error?) -> Void)? = nil) {
-        guard let fanUser = self.user as? FanUser else { return }
+        
 
         self.restApiService.fanUpdate(track: track, likeState: likeState) { [weak self] (trackLikeStateResult) in
             switch trackLikeStateResult {
             case .success(let trackLikeState):
-                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
 
-                var nextFanUser = currentFanUser
-                nextFanUser.profile.update(with: trackLikeState)
+                var nextFanUser = self?.user
+                nextFanUser?.profile?.update(with: trackLikeState)
                 self?.user = nextFanUser
 
                 self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackLikeState))
@@ -426,58 +399,34 @@ class Application: Watchable {
     }
 
     // MARK: Artists
-    func follow(artistId: String, completion: ((Result<[String]>) -> Void)? = nil) {
-        guard let fanUser = self.user as? FanUser else { return }
+    func follow(shouldFollow: Bool, artistId: String, completion: ((Error?) -> Void)? = nil) {
+        
 
-        self.restApiService.fanFollow(artistId: artistId) { [weak self] (followArtistResult) in
+        self.restApiService.fanFollow(shouldFollow: shouldFollow, artistId: artistId) { [weak self] (followArtistResult) in
 
             switch followArtistResult {
             case .success(let artistFollowingState):
-                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
 
-                var nextFanUser = currentFanUser
-                nextFanUser.profile.update(with: artistFollowingState)
+                var nextFanUser = self?.user
+                nextFanUser?.profile?.update(with: artistFollowingState)
                 self?.user = nextFanUser
 
                 self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: artistFollowingState))
 
                 self?.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
-                completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
+                completion?(nil)
 
             case .failure(let error):
-                completion?(.failure(error))
+                completion?(error)
             }
         }
     }
 
-    func unfollow(artistId: String, completion: ((Result<[String]>) -> Void)? = nil) {
-        guard let fanUser = self.user as? FanUser else { return }
-
-        self.restApiService.fanUnfollow(artistId: artistId) { [weak self] (unfollowArtistResult) in
-
-            switch unfollowArtistResult {
-            case .success(let artistFollowingState):
-                guard let currentFanUser = self?.user as? FanUser, currentFanUser == fanUser else { return }
-
-                var nextFanUser = currentFanUser
-                nextFanUser.profile.update(with: artistFollowingState)
-                self?.user = nextFanUser
-
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: artistFollowingState))
-
-                self?.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
-                completion?(.success(Array(nextFanUser.profile.followedArtistsIds)))
-
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
 
     // MARK: Fan Playlists
 
     func createPlaylist(with name: String, completion: @escaping (Result<FanPlaylist>) -> Void) {
-        guard (self.user as? FanUser) != nil else { return }
+        
 
         self.restApiService.fanCreatePlaylist(with: name) { [weak self] (fanPlaylistResult) in
             switch fanPlaylistResult {
@@ -496,8 +445,7 @@ class Application: Watchable {
     }
 
     func delete(playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
-        guard (self.user as? FanUser) != nil else { return }
-
+        
         self.restApiService.fanDelete(playlist: playlist) { [weak self] (error) in
             guard error == nil else { completion(error); return }
 
@@ -532,45 +480,45 @@ extension Application {
     }
 
     func notifyUserProfileChanged() {
-        guard let fanUser = self.user as? FanUser else { return }
+        
 
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUserProfile: fanUser.profile)
-        })
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.application(self, didChangeUserProfile: fanUser.profile)
+//        })
     }
 
     func notifyUserProfileListeningSettingsChanged() {
-        guard let fanUser = self.user as? FanUser else { return }
+        
 
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUserProfile: fanUser.profile.listeningSettings)
-        })
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.application(self, didChangeUserProfile: fanUser.profile?.listeningSettings)
+//        })
     }
 
     func notifyUserProfileForceToPlayChanged(with trackForceToPlayState: TrackForceToPlayState) {
-        guard let fanUser = self.user as? FanUser else { return }
+        
 
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUserProfile: Array(fanUser.profile.forceToPlay), with: trackForceToPlayState)
-        })
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.application(self, didChangeUserProfile: Array(fanUser.profile?.forceToPlay), with: trackForceToPlayState)
+//        })
     }
 
     func notifyUserProfileFollowedArtistsIdsChanged(with artistFollowingState: ArtistFollowingState) {
-        guard let fanUser = self.user as? FanUser else { return }
+        
 
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUserProfile: Array(fanUser.profile.followedArtistsIds), with: artistFollowingState)
-        })
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.application(self, didChangeUserProfile: Array(fanUser.profile?.followedArtistsIds), with: artistFollowingState)
+//        })
         
         followingStateSubject.on( .next(artistFollowingState) )
     }
 
     func notifyUserProfileSkipAddonsArtistsIdsChanged(with skipArtistAddonsState: SkipArtistAddonsState) {
-        guard let fanUser = self.user as? FanUser else { return }
+        
 
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUserProfile: Array(fanUser.profile.skipAddonsArtistsIds), with: skipArtistAddonsState)
-        })
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.application(self, didChangeUserProfile: Array(fanUser.profile?.skipAddonsArtistsIds), with: skipArtistAddonsState)
+//        })
     }
 
     func notifyUserProfileChanged(purchasedTracksIds: Set<Int>, previousPurchasedTracksIds: Set<Int>) {
@@ -592,82 +540,81 @@ extension Application {
     }
 
     func notifyUserProfileTraksLikeStetesChanged(with trackLikeState: TrackLikeState) {
-        guard let fanUser = self.user as? FanUser else { return }
-
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUserProfile: fanUser.profile.tracksLikeStates, with: trackLikeState)
-        })
+        
+//        self.watchersContainer.invoke({ (observer) in
+//            observer.application(self, didChangeUserProfile: fanUser.profile?.tracksLikeStates, with: trackLikeState)
+//        })
     }
 }
 
 ///TODO: handle responses from WebSocket
 extension Application {
 
-    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) {
-        guard let currentFanUser = self.user as? FanUser else { return }
-
-        var fanUser = currentFanUser
-        fanUser.profile.listeningSettings = listeningSettings
-        self.user = fanUser
-
-        self.notifyUserProfileListeningSettingsChanged()
-    }
-
-    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) {
-        guard let currentFanUser = self.user as? FanUser else { return }
-
-        var fanUser = currentFanUser
-        fanUser.profile.update(with: trackForceToPlayState)
-        self.user = fanUser
-
-        self.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
-    }
-
-    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) {
-
-        guard let currentFanUser = self.user as? FanUser else { return }
-
-        var fanUser = currentFanUser
-        fanUser.profile.update(with: artistFollowingState)
-        self.user = fanUser
-
-        self.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
-    }
-
-    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) {
-        guard let currentFanUser = self.user as? FanUser else { return }
-
-        var fanUser = currentFanUser
-        fanUser.profile.update(with: skipArtistAddonsState)
-        self.user = fanUser
-
-        self.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
-    }
-
-    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {
-        guard let currentFanUser = self.user as? FanUser else { return }
-
-        var fanUser = currentFanUser
-        fanUser.profile.update(with: purchases)
-        self.user = fanUser
-
-        notifyUserProfileChanged(purchasedTracksIds: fanUser.profile.purchasedTracksIds,
-                                 previousPurchasedTracksIds: currentFanUser.profile.purchasedTracksIds)
-    }
-
-    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) {
-        guard (self.user as? FanUser) != nil else { return }
-
-        notifyFanPlaylistChanged(with: fanPlaylistState)
-    }
-
-    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) {
-        guard let currentFanUser = self.user as? FanUser else { return }
-
-        var fanUser = currentFanUser
-        fanUser.profile.update(with: trackLikeState)
-        self.user = fanUser
-
-        self.notifyUserProfileTraksLikeStetesChanged(with: trackLikeState)
-    }
+//    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) {
+//        guard let currentFanUser = self.user as? User else { return }
+//
+//        var fanUser = currentFanUser
+//        fanUser.profile?.listeningSettings = listeningSettings
+//        self.user = fanUser
+//
+//        self.notifyUserProfileListeningSettingsChanged()
+//    }
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) {
+//        guard let currentFanUser = self.user as? User else { return }
+//
+//        var fanUser = currentFanUser
+//        fanUser.profile?.update(with: trackForceToPlayState)
+//        self.user = fanUser
+//
+//        self.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
+//    }
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) {
+//
+//        guard let currentFanUser = self.user as? User else { return }
+//
+//        var fanUser = currentFanUser
+//        fanUser.profile?.update(with: artistFollowingState)
+//        self.user = fanUser
+//
+//        self.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
+//    }
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) {
+//        guard let currentFanUser = self.user as? User else { return }
+//
+//        var fanUser = currentFanUser
+//        fanUser.profile?.update(with: skipArtistAddonsState)
+//        self.user = fanUser
+//
+//        self.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
+//    }
+//
+//    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {
+//        guard let currentFanUser = self.user as? User else { return }
+//
+//        var fanUser = currentFanUser
+//        fanUser.profile?.update(with: purchases)
+//        self.user = fanUser
+//
+//        notifyUserProfileChanged(purchasedTracksIds: fanUser.profile?.purchasedTracksIds,
+//                                 previousPurchasedTracksIds: currentFanUser.profile.purchasedTracksIds)
+//    }
+//
+//    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) {
+//        guard (self.user as? User) != nil else { return }
+//
+//        notifyFanPlaylistChanged(with: fanPlaylistState)
+//    }
+//
+//    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) {
+//        guard let currentFanUser = self.user as? User else { return }
+//
+//        var fanUser = currentFanUser
+//        fanUser.profile?.update(with: trackLikeState)
+//        self.user = fanUser
+//
+//        self.notifyUserProfileTraksLikeStetesChanged(with: trackLikeState)
+//    }
 }

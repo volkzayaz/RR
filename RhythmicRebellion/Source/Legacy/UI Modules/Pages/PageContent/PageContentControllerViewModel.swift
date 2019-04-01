@@ -133,27 +133,17 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
     func updateUserOnPage() {
         guard let user = self.application.user else { return }
-
-        do {
-
-            let data: Data
-
-            switch user {
-            case let fanUser as FanUser: data = try JSONEncoder().encode(fanUser)
-            case let guestUser as GuestUser: data = try JSONEncoder().encode(guestUser)
-            default: fatalError("Unknown user type")
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8) else { return }
-
-            let javaScriptString = "window.externalDataSource.updateUser('" + stringData + "')"
-
-//            print("updateUserOnPage javaScriptString: \(javaScriptString)")
-
-            self.delegate?.evaluateJavaScript(javaScriptString: javaScriptString, completionHandler: nil)
-        } catch {
-
-        }
+        
+        let data = try! JSONEncoder().encode(user)
+        
+        guard let stringData = String(data: data, encoding: .utf8) else { return }
+        
+        let javaScriptString = "window.externalDataSource.updateUser('" + stringData + "')"
+        
+        //            print("updateUserOnPage javaScriptString: \(javaScriptString)")
+        
+        self.delegate?.evaluateJavaScript(javaScriptString: javaScriptString, completionHandler: nil)
+        
     }
 
     func updateCurrentTrackStateOnPage() {
@@ -319,31 +309,23 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
                 guard let jsonString = message.body as? String, let trackForceToPlayState = self.getTrackForceToPlayState(from: jsonString) else { return }
 
 //                print("setForceExplicit: \(trackForceToPlayState)")
-
-                if trackForceToPlayState.isForcedToPlay {
-                    self.application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId)
-                } else {
-                    self.application.disallowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId)
-                }
-
+    
+                application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId,
+                                                               shouldAllow: trackForceToPlayState.isForcedToPlay)
+                
             case .toggleArtistFollowing:
 
                 guard let artistId = message.body as? String else { return }
-                guard let fanUser = self.application.user as? FanUser else { self.router?.navigateToAuthorization(); return }
+                guard let fanUser = self.application.user as? User else { self.router?.navigateToAuthorization(); return }
+
                 
-                let followingCompletion: (Result<[String]>) -> Void = { [weak self] (followingResult) in
-
-                    switch followingResult {
-                    case .failure(let error):
-                        self?.delegate?.show(error: error)
-                    default: break
-                    }
-                }
-
-                if fanUser.isFollower(for: artistId) {
-                    self.application.unfollow(artistId: artistId, completion: followingCompletion)
-                } else {
-                    self.application.follow(artistId: artistId, completion: followingCompletion)
+                self.application.follow(shouldFollow: !fanUser.isFollower(for: artistId),
+                                        artistId: artistId) { [weak self] (res) in
+                                            
+                                            if let error = res {
+                                                self?.delegate?.show(error: error)
+                                            }
+                                            
                 }
                 
             case .downloadAlbum:
