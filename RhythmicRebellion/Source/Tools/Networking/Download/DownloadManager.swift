@@ -58,8 +58,12 @@ struct DownloadManager {
     
     ///clears download directory
     func clearArtifacts() {
-        ////TODO: drop documents directory with downloaded songs and albums
-        ////
+        
+        ///TODO: clear only folder beloning to this download manager
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        for path in try! FileManager.default.contentsOfDirectory(atPath: documentsURL.path) {
+            try? FileManager.default.removeItem(atPath: path)
+        }
     }
     
 }
