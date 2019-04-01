@@ -340,13 +340,9 @@ struct ConfigResponse: RestApiResponse {
     let config: Config
 
     enum CodingKeys: String, CodingKey {
-        case data
+        case config = "data"
     }
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.config = try container.decode(Config.self, forKey: .data)
-    }
 }
 
 struct GenresResponse: RestApiResponse {

@@ -45,8 +45,6 @@ extension WebSocketService {
             .map { $0.data }
     }
     
-    
-    
 }
 
 typealias Signature = String

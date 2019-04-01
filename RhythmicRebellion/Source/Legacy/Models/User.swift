@@ -29,11 +29,6 @@ public protocol User: Codable {
     func isAddonsSkipped(for artist: Artist) -> Bool
 }
 
-//func == (lhs: User, rhs: User) -> Bool {
-//    guard type(of: lhs) == type(of: rhs) else { return false }
-//    return lhs.wsToken == rhs.wsToken
-//}
-
 
 struct GuestUser: User {
 
@@ -59,6 +54,63 @@ struct GuestUser: User {
     func hasPurchase(for track: Track) -> Bool { return false }
     func likeState(for track: Track) -> Track.LikeStates { return .none }
     func isAddonsSkipped(for artist: Artist) -> Bool { return false }
+}
+
+
+struct FanUser: User {
+    
+    var profile: UserProfile
+    let wsToken: String
+    let isGuest: Bool = false
+    
+    enum CodingKeys: String, CodingKey {
+        case wsToken = "ws_token"
+    }
+    
+    init(from decoder: Decoder) throws {
+        self.profile = try UserProfile(from: decoder)
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.wsToken = try container.decode(String.self, forKey: .wsToken)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        
+        try self.profile.encode(to: encoder)
+        
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.wsToken, forKey: .wsToken)
+        
+    }
+    
+    func isCensorshipTrack(_ track: Track) -> Bool {
+        return track.isCensorship && self.profile.listeningSettings.isExplicitMaterialExcluded
+    }
+    
+    
+    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
+        
+        guard self.isCensorshipTrack(track), !self.profile.forceToPlay.contains(track.id) else { return nil }
+        return .censorship
+    }
+    
+    func isFollower(for artistId: String) -> Bool {
+        return self.profile.followedArtistsIds.contains(artistId)
+    }
+    
+    func hasPurchase(for track: Track) -> Bool {
+        return self.profile.purchasedTracksIds.contains(track.id)
+    }
+    
+    func likeState(for track: Track) -> Track.LikeStates {
+        guard let trackLikeState = self.profile.tracksLikeStates[track.id] else { return .none }
+        return trackLikeState
+    }
+    
+    func isAddonsSkipped(for artist: Artist) -> Bool {
+        return self.profile.skipAddonsArtistsIds.contains(artist.id)
+    }
+    
 }
 
 struct UserProfile: Codable {
@@ -250,62 +302,6 @@ extension UserProfile: Equatable {
                 lhs.genres == rhs.genres &&
                 lhs.language == rhs.language
     }
-}
-
-struct FanUser: User {
-
-    var profile: UserProfile
-    let wsToken: String
-    let isGuest: Bool = false
-
-    enum CodingKeys: String, CodingKey {
-        case wsToken = "ws_token"
-    }
-
-    init(from decoder: Decoder) throws {
-        self.profile = try UserProfile(from: decoder)
-
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.wsToken = try container.decode(String.self, forKey: .wsToken)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-
-        try self.profile.encode(to: encoder)
-
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.wsToken, forKey: .wsToken)
-
-    }
-
-    func isCensorshipTrack(_ track: Track) -> Bool {
-        return track.isCensorship && self.profile.listeningSettings.isExplicitMaterialExcluded
-    }
-
-
-    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
-
-        guard self.isCensorshipTrack(track), !self.profile.forceToPlay.contains(track.id) else { return nil }
-        return .censorship
-    }
-
-    func isFollower(for artistId: String) -> Bool {
-        return self.profile.followedArtistsIds.contains(artistId)
-    }
-
-    func hasPurchase(for track: Track) -> Bool {
-        return self.profile.purchasedTracksIds.contains(track.id)
-    }
-
-    func likeState(for track: Track) -> Track.LikeStates {
-        guard let trackLikeState = self.profile.tracksLikeStates[track.id] else { return .none }
-        return trackLikeState
-    }
-
-    func isAddonsSkipped(for artist: Artist) -> Bool {
-        return self.profile.skipAddonsArtistsIds.contains(artist.id)
-    }
-
 }
 
 extension FanUser: Equatable {

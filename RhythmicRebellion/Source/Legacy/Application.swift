@@ -113,16 +113,17 @@ class Application: Watchable {
 
     let restApiService: RestApiService
     let webSocketService: WebSocketService
-
+    let pagesLocalStorageService = PagesLocalStorageService()
+    
+    
     let restApiServiceReachability: Reachability?
     
-    let pagesLocalStorageService : PagesLocalStorageService
-
-    let disableIdleTimerSubscription: Observable<Void>
+    
 
     private var needsLoadUser: Bool = false
 
     var user: User? = nil
+    
     var config: Config?
 
     init?() {
@@ -133,20 +134,8 @@ class Application: Watchable {
         self.restApiService = restApiService
         self.webSocketService = webSocketService
 
-        self.pagesLocalStorageService = PagesLocalStorageService()
-
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
         
-
-        self.disableIdleTimerSubscription = Observable<Void>.create({ (observer) -> Disposable in
-                UIApplication.shared.isIdleTimerDisabled = true
-                return Disposables.create {
-                    UIApplication.shared.isIdleTimerDisabled = false
-                }
-            })
-            .share()
-
-
         self.restApiServiceReachability?.whenReachable = { [unowned self] _ in
             if self.config == nil { self.loadConfig() }
             if self.user == nil || self.needsLoadUser { self.fanUser() }
