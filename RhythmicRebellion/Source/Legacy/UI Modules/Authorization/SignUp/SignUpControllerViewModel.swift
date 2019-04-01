@@ -439,18 +439,18 @@ final class SignUpControllerViewModel: SignUpViewModel {
         guard countryFieldValidationError == nil && zipFieldValidationError == nil,
             let country = countryField.country else { return }
 
-        self.restApiService?.location(for: country, zip: zipField.validationText, completion: { [weak self] (detailedLocationResult) in
-
-            guard let `self` = self else { return }
-            guard let countryField = self.countryField, let zipField = self.zipField,
-                let regionField = self.regionField, let cityField = self.cityField else { return }
-
-            switch detailedLocationResult {
-            case .success(let detailedLocation):
-
+        let _ =
+        ConfigRequest.location(for: country, zip: zipField.validationText)
+            .rx.baseResponse(type: DetailedLocation.self)
+            .subscribe(onSuccess: { [weak self] (detailedLocation) in
+                
+                guard let `self` = self else { return }
+                guard let countryField = self.countryField, let zipField = self.zipField,
+                    let regionField = self.regionField, let cityField = self.cityField else { return }
+                
                 self.regions = detailedLocation.regions
                 self.cities = detailedLocation.cities
-
+                
                 self.delegate?.refreshCountryField(with: detailedLocation.country)
                 self.validator.validateField(countryField, callback: { (validationError) in })
                 self.delegate?.refreshZipField(with: detailedLocation.zip)
@@ -459,24 +459,28 @@ final class SignUpControllerViewModel: SignUpViewModel {
                 self.validator.validateField(regionField, callback: { (validationError) in })
                 self.delegate?.refreshCityField(with: detailedLocation.city)
                 self.validator.validateField(cityField, callback: { (validationError) in })
-
-            case .failure(let error):
+                
+            }, onError: { [weak self] error in
+                
+                guard let s = self else { return }
+                
                 guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                    self.delegate?.show(error: error)
+                    s.delegate?.show(error: error)
                     return
                 }
-
+                
                 switch appErrorGroup {
                 case RestApiServiceError.serverError( let errorDescription, _ ):
-
-                    let validationError = ValidationError(field: regionField, errorLabel: nil, error: errorDescription)
-                    self.delegate?.refreshField(field: regionField, didValidate: validationError)
-
+                    
+                    let validationError = ValidationError(field: s.regionField!, errorLabel: nil, error: errorDescription)
+                    self?.delegate?.refreshField(field: s.regionField!, didValidate: validationError)
+                    
                 default:
-                    self.delegate?.show(error: error)
+                    s.delegate?.show(error: error)
                 }
-            }
-        })
+                
+            })
+        
     }
 
     func signUp() {
@@ -552,52 +556,53 @@ final class SignUpControllerViewModel: SignUpViewModel {
 extension SignUpControllerViewModel {
 
     func reloadCountries(completion: @escaping (Result<[Country]>) -> Void) {
-        self.restApiService?.countries(completion: { [weak self] (contriesResult) in
-            switch contriesResult {
-            case .success(let countries):
+        
+        let _ =
+        ConfigRequest.countries.rx.baseResponse(type: [Country].self)
+            .subscribe(onSuccess: { [weak self] (countries) in
+                
                 self?.countries = countries
                 if let selectedCountry = self?.countryField?.country, countries.contains(selectedCountry) == false {
                     self?.delegate?.refreshCountryField(with: nil)
                 }
                 completion(.success(countries))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        })
+                
+            })
+        
     }
 
     func reloadRegions(completion: @escaping (Result<[Region]>) -> Void) {
         guard let country = self.countryField?.country else { completion(.success([])); return }
 
-        self.restApiService?.regions(for: country, completion: { [weak self] (regionsResult) in
-            switch regionsResult {
-            case .success(let regions):
+        let _ =
+        ConfigRequest.regions(for: country).rx.baseResponse(type: [Region].self)
+            .subscribe(onSuccess: { [weak self] (regions) in
+                
                 self?.regions = regions
                 if let selectedRegion = self?.regionField?.region, regions.contains(selectedRegion) == false {
                     self?.delegate?.refreshRegionField(with: nil)
                 }
                 completion(.success(regions))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        })
+                
+            })
+        
     }
 
     func reloadCities(completion: @escaping (Result<[City]>) -> Void) {
         guard let region = self.regionField?.region else { completion(.success([])); return }
 
-        self.restApiService?.cities(for: region, completion: { [weak self] (citiesResult) in
-            switch citiesResult {
-            case .success(let cities):
+        let _ =
+        ConfigRequest.cities(for: region).rx.baseResponse(type: [City].self)
+            .subscribe(onSuccess: { [weak self] (cities) in
+                
                 self?.cities = cities
                 if let selectedCity = self?.cityField?.city, cities.contains(selectedCity) == false {
                     self?.delegate?.refreshCityField(with: nil)
                 }
                 completion(.success(cities))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        })
+                
+            })
+        
     }
 
     // MARK: - HobbiesDataSource -

@@ -159,15 +159,12 @@ class Application: Watchable {
 
     func loadConfig(completion: ((Result<Config>) -> Void)? = nil) {
 
-        self.restApiService.config { [weak self] (configResult) in
-
-            switch configResult {
-            case .success(let config): self?.config = config
-            default: break
-            }
-
-            completion?(configResult)
-        }
+        let _ =
+        ConfigRequest.user.rx.baseResponse(type: Config.self)
+            .subscribe(onSuccess: { (config) in
+                completion?( .success(config) )
+            })
+        
     }
 
     func set(user: User) {

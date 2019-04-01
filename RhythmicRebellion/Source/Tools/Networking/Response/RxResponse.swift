@@ -23,6 +23,13 @@ extension Reactive where Base : BaseNetworkRouter {
             }
     }
     
+    func baseResponse<T: Decodable>(type: T.Type) -> Maybe<T> {
+        return base.rxResponse()
+            .map { (input) -> T in
+                return try JSONDecoder().decode(BaseReponse<T>.self, from: input).data
+        }
+    }
+    
 }
 
 extension URLRequestConvertible {

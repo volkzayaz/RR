@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FE9223E5B1900571383 /* MediaWidget.swift */; };
 		730D1FEE223FD65A00571383 /* BaseActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FED223FD65A00571383 /* BaseActions.swift */; };
+		7327C9682252403800692810 /* ConfigRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327C9672252403800692810 /* ConfigRequest.swift */; };
 		734F827D2229965E0006E1DE /* Appfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82742229965E0006E1DE /* Appfile */; };
 		734F827F2229965E0006E1DE /* Fastfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82762229965E0006E1DE /* Fastfile */; };
 		734F828722299CD90006E1DE /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 734F828622299CD90006E1DE /* Info.plist */; };
@@ -353,6 +354,7 @@
 		63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.debug.xcconfig"; sourceTree = "<group>"; };
 		730D1FE9223E5B1900571383 /* MediaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWidget.swift; sourceTree = "<group>"; };
 		730D1FED223FD65A00571383 /* BaseActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseActions.swift; sourceTree = "<group>"; };
+		7327C9672252403800692810 /* ConfigRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigRequest.swift; sourceTree = "<group>"; };
 		734F82742229965E0006E1DE /* Appfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Appfile; sourceTree = "<group>"; };
 		734F82762229965E0006E1DE /* Fastfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Fastfile; sourceTree = "<group>"; };
 		734F828622299CD90006E1DE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -726,6 +728,14 @@
 				730D1FE9223E5B1900571383 /* MediaWidget.swift */,
 			);
 			path = MediaWidget;
+			sourceTree = "<group>";
+		};
+		7327C9662252402800692810 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				7327C9672252403800692810 /* ConfigRequest.swift */,
+			);
+			path = Configs;
 			sourceTree = "<group>";
 		};
 		734F82722229965E0006E1DE /* fastlane */ = {
@@ -1830,6 +1840,7 @@
 		73F137C7222C289200FB8EBC /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				7327C9662252402800692810 /* Configs */,
 				73F137C8222C289200FB8EBC /* Track */,
 				73F137CA222C289200FB8EBC /* BaseRouter.swift */,
 				73F137CB222C289200FB8EBC /* Following */,
@@ -2596,6 +2607,7 @@
 				73F13857222C289200FB8EBC /* SelectableListViewController.swift in Sources */,
 				73F1382C222C289200FB8EBC /* Genre.swift in Sources */,
 				73F13830222C289200FB8EBC /* Price.swift in Sources */,
+				7327C9682252403800692810 /* ConfigRequest.swift in Sources */,
 				73F138F5222C289200FB8EBC /* WSCommand.swift in Sources */,
 				73F1388C222C289200FB8EBC /* RestorePasswordControllerViewModel.swift in Sources */,
 				73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */,
