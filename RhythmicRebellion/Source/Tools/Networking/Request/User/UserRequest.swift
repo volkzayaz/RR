@@ -24,6 +24,11 @@ enum UserRequest: BaseNetworkRouter {
     case changeEmail(to: String, currentPassword: String) ////Empty
     case changePassword(old: String, new: String, confirm: String) ///BaseResponse<User>
     
+    case allowExplicitMaterial(trackId: Int, shouldAllow: Bool)/// TrackForceToPlayState
+    case skipAddonRule(for: Artist, shouldSkip: Bool) ///BaseResponse<User>
+    
+    case like(track: Track, state: Track.LikeStates) ///TrackLikeState
+    case follow(artistId: String, shouldFollow: Bool) ///ArtistFollowingState
 }
 
 extension UserRequest {
@@ -84,6 +89,27 @@ extension UserRequest {
                                     params: ["current_password": old,
                                              "new_password": new,
                                              "new_password_confirmation": confirm])
+            
+        case .allowExplicitMaterial(let trackId, let shouldAllow):
+            
+            return anonymousRequest(method: shouldAllow ? .post : .delete,
+                                    path: "fan/listen-record/\(trackId)/force-to-play")
+         
+        case .skipAddonRule(let `for`, let shouldSkip):
+            
+            return anonymousRequest(method: shouldSkip ? .delete : .post,
+                                    path: "fan/profile/skip-add-ons-for-artist/\(`for`.id)")
+
+        case .like(let track, let state):
+            
+            return anonymousRequest(method: .post,
+                                    path: "fan/record-like/\(track.id)",
+                                    params: ["type": state.rawValue])
+            
+        case .follow(let artistId, let shouldFollow):
+            
+            return anonymousRequest(method: shouldFollow ? .post : .delete,
+                                    path: "fan/artist-follow/\(artistId)")
             
         }
         

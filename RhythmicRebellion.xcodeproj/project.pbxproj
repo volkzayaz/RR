@@ -40,6 +40,7 @@
 		739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */; };
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
+		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
 		73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */; };
@@ -388,6 +389,7 @@
 		739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLyricsMode.swift; sourceTree = "<group>"; };
 		73B97A6F2253995400B43D71 /* SetNewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUser.swift; sourceTree = "<group>"; };
 		73B97A7222539DC500B43D71 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
+		73B97A742253B20400B43D71 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
 		73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
 		73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCollectionCell.swift; sourceTree = "<group>"; };
@@ -928,6 +930,7 @@
 			isa = PBXGroup;
 			children = (
 				73B97A6F2253995400B43D71 /* SetNewUser.swift */,
+				73B97A742253B20400B43D71 /* UpdateUser.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2477,6 +2480,7 @@
 				73F1381A222C289200FB8EBC /* RoundedLabel.swift in Sources */,
 				73F13800222C289200FB8EBC /* ArtistViewController.swift in Sources */,
 				73F13898222C289200FB8EBC /* AuthorizationViewModel.swift in Sources */,
+				73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */,
 				73F13916222C289200FB8EBC /* TimeInterval+Extension.swift in Sources */,
 				73F138CD222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift in Sources */,
 				730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */,

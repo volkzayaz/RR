@@ -94,11 +94,11 @@ final class PromoViewModel {
     func setSkipAddons(skip: Bool) {
         guard let artist = appStateSlice.currentTrack?.track.artist else { self.delegate?.refreshUI(); return }
 
-        self.application.updateSkipAddons(for: artist, skip: skip) { [weak self] (error) in
-            guard let error = error else { return }
-
-            self?.delegate?.show(error: error)
-        }
+        self.application.updateSkipAddons(for: artist, skip: skip)
+            .subscribe(onError: { [weak self] (error) in
+                self?.delegate?.show(error: error)
+            })
+        
     }
 
     func navigateToPage(with url: URL) {

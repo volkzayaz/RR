@@ -332,22 +332,18 @@ final class PlayerViewModel: NSObject {
 
     func toggleLike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard (self.application.user as? User) != nil else { self.routeToAuthorization(); return }
+        guard self.application.user?.isGuest ?? false else { self.routeToAuthorization(); return }
 
-        self.application.update(track: track, likeState: .liked) { [weak self] (error) in
-            guard let error = error else { return }
-            
-        }
+        self.application.update(track: track, likeState: .liked).subscribe()
+        
     }
 
     func toggleDislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard (self.application.user as? User) != nil else { self.routeToAuthorization(); return }
 
-        self.application.update(track: track, likeState: .disliked) { [weak self] (error) in
-            guard let error = error else { return }
-            
-        }
+        self.application.update(track: track, likeState: .liked).subscribe()
+        
     }
 
     func setPlayerItemProgress(progress: Float) {

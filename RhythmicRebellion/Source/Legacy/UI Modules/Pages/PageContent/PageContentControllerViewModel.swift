@@ -311,22 +311,18 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
 //                print("setForceExplicit: \(trackForceToPlayState)")
     
                 application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId,
-                                                               shouldAllow: trackForceToPlayState.isForcedToPlay)
+                                                               shouldAllow: trackForceToPlayState.isForcedToPlay).subscribe()
                 
             case .toggleArtistFollowing:
 
                 guard let artistId = message.body as? String else { return }
                 guard let fanUser = self.application.user as? User else { self.router?.navigateToAuthorization(); return }
 
-                
                 self.application.follow(shouldFollow: !fanUser.isFollower(for: artistId),
-                                        artistId: artistId) { [weak self] (res) in
-                                            
-                                            if let error = res {
-                                                self?.delegate?.show(error: error)
-                                            }
-                                            
-                }
+                                        artistId: artistId)
+                    .subscribe(onError: { [weak self] (error) in
+                        self?.delegate?.show(error: error)
+                    })
                 
             case .downloadAlbum:
                 

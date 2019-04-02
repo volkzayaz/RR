@@ -215,104 +215,6 @@ class Application: Watchable {
         self.needsLoadUser = false
     }
 
-    
-
-    // MARK: Tracks
-
-    func allowPlayTrackWithExplicitMaterial(trackId: Int, shouldAllow: Bool, completion: ((Result<[Int]>) -> Void)? = nil) {
-
-        
-
-        self.restApiService.fanAllowPlayTrackWithExplicitMaterial(trackId: trackId, shouldAllow: shouldAllow) { [weak self] (allowPlayTrackResult) in
-
-            switch allowPlayTrackResult {
-            case .success(let trackForceToPlayState):
-                
-                var nextFanUser = self?.user
-                nextFanUser?.profile?.update(with: trackForceToPlayState)
-                self?.user = nextFanUser
-
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackForceToPlayState))
-
-                self?.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
-                
-                completion?(.success(Array(nextFanUser?.profile?.forceToPlay ?? [])))
-
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
-
-
-    func updateSkipAddons(for artist: Artist, skip: Bool, completion: @escaping (Error?) -> Void) {
-
-        self.restApiService.updateSkipArtistAddons(for: artist, skip: skip) { [weak self] (skipArtistAddonsResult) in
-            switch skipArtistAddonsResult {
-            case .success(let updatedUser):
-                self?.set(user: updatedUser)
-                
-                let skipArtistAddonsState = SkipArtistAddonsState(artistId: artist.id,
-                                                                  isSkipped: updatedUser.isAddonsSkipped(for: artist))
-                
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: skipArtistAddonsState))
-
-                self?.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
-                completion(nil)
-
-            case .failure(let error):
-                completion(error)
-            }
-        }
-
-    }
-
-    func update(track: Track, likeState: Track.LikeStates, completion: ((Error?) -> Void)? = nil) {
-        
-
-        self.restApiService.fanUpdate(track: track, likeState: likeState) { [weak self] (trackLikeStateResult) in
-            switch trackLikeStateResult {
-            case .success(let trackLikeState):
-
-                var nextFanUser = self?.user
-                nextFanUser?.profile?.update(with: trackLikeState)
-                self?.user = nextFanUser
-
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: trackLikeState))
-
-                self?.notifyUserProfileTraksLikeStetesChanged(with: trackLikeState)
-                completion?(nil)
-
-            case .failure(let error): completion?(error)
-            }
-        }
-    }
-
-    // MARK: Artists
-    func follow(shouldFollow: Bool, artistId: String, completion: ((Error?) -> Void)? = nil) {
-        
-
-        self.restApiService.fanFollow(shouldFollow: shouldFollow, artistId: artistId) { [weak self] (followArtistResult) in
-
-            switch followArtistResult {
-            case .success(let artistFollowingState):
-
-                var nextFanUser = self?.user
-                nextFanUser?.profile?.update(with: artistFollowingState)
-                self?.user = nextFanUser
-
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: artistFollowingState))
-
-                self?.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
-                completion?(nil)
-
-            case .failure(let error):
-                completion?(error)
-            }
-        }
-    }
-
-
     // MARK: Fan Playlists
 
     func createPlaylist(with name: String, completion: @escaping (Result<FanPlaylist>) -> Void) {
@@ -348,6 +250,75 @@ class Application: Watchable {
         }
     }
 
+}
+
+extension Application { /// UserManager
+    
+    func allowPlayTrackWithExplicitMaterial(trackId: Int, shouldAllow: Bool) -> Maybe<Void> {
+     
+        return UserRequest.allowExplicitMaterial(trackId: trackId, shouldAllow: shouldAllow)
+            .rx.response(type: TrackForceToPlayState.self)
+            .do(onNext: { (newState) in
+                
+                Dispatcher.dispatch(action: UpdateUser { user in
+                    user?.profile?.update(with: newState)
+                })
+                
+                DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: newState))
+            })
+            .map { _ in () }
+        
+    }
+    
+    func updateSkipAddons(for artist: Artist, skip: Bool) -> Maybe<Void> {
+        
+        return UserRequest.skipAddonRule(for: artist, shouldSkip: skip)
+            .rx.baseResponse(type: User.self)
+            .do(onNext: { (user) in
+                
+                Dispatcher.dispatch(action: SetNewUser(user: user))
+                
+                let skipArtistAddonsState = SkipArtistAddonsState(artistId: artist.id,
+                                                                  isSkipped: user.isAddonsSkipped(for: artist))
+                
+                DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: skipArtistAddonsState))
+            })
+            .map { _ in () }
+        
+    }
+    
+    func update(track: Track, likeState: Track.LikeStates) -> Maybe<Void> {
+        
+        return UserRequest.like(track: track, state: likeState)
+            .rx.response(type: TrackLikeState.self)
+            .do(onNext: { (state) in
+                
+                Dispatcher.dispatch(action: UpdateUser { user in
+                    user?.profile?.update(with: state)
+                })
+                
+                DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: state))
+            })
+            .map { _ in () }
+        
+    }
+    
+    func follow(shouldFollow: Bool, artistId: String) -> Maybe<Void> {
+        
+        return UserRequest.follow(artistId: artistId, shouldFollow: shouldFollow)
+            .rx.response(type: ArtistFollowingState.self)
+            .do(onNext: { (state) in
+                
+                Dispatcher.dispatch(action: UpdateUser { user in
+                    user?.profile?.update(with: state)
+                })
+                
+                DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: state))
+            })
+            .map { _ in () }
+        
+    }
+    
 }
 
 extension Application {

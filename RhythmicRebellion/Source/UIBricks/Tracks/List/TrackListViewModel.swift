@@ -259,24 +259,25 @@ extension TrackListViewModel {
 extension TrackListViewModel {
     
     func forceToPlay(track: Track) {
-        
+
+        let _ =
         application?.allowPlayTrackWithExplicitMaterial(trackId: track.id,
-                                                        shouldAllow: true,
-                                                        completion: { [weak self] res in
-                                                            if case .failure(let error) = res {
-                                                                self?.delegate?.show(error: error)
-                                                            }
+                                                        shouldAllow: true)
+            .subscribe(onError: { [weak self] error in
+                self?.delegate?.show(error: error)
             })
+
     }
 
     func doNotPlay(track: Track) {
         
-        application?.allowPlayTrackWithExplicitMaterial(trackId: track.id, shouldAllow: false,
-                                                        completion: { [weak self] res in
-                                                            if case .failure(let error) = res {
-                                                                self?.delegate?.show(error: error)
-                                                            }
-        })
+        let _ =
+        application?.allowPlayTrackWithExplicitMaterial(trackId: track.id,
+                                                        shouldAllow: false)
+            .subscribe(onError: { [weak self] error in
+                self?.delegate?.show(error: error)
+            })
+        
     }
     
     func play(orderedTrack: OrderedTrack) {
