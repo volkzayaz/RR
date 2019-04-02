@@ -106,18 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        guard let appRouter = self.appRouter else { return }
 
-        if appRouter.dependencies.application.user != nil {
-            appRouter.dependencies.application.fanUser { (userResult) in
-                switch userResult {
-                case .success(_): break
-                    //appRouter.dependencies.application.webSocketService.reconnect()
-                    
-                default: break
-                }
-            }
-        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

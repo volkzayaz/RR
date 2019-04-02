@@ -80,6 +80,23 @@ extension BaseNetworkRouter {
             
     }
     
+    func anonymousRequest<T: Encodable>(method: Alamofire.HTTPMethod,
+                                        path: String,
+                                        encodableParam: T? = nil) -> URLRequest {
+        
+        var request = anonymousRequest(method: method, path: path)
+        
+        do {
+            request.httpBody = try JSONEncoder().encode(encodableParam)
+        }
+        catch (let error) {
+            fatalError("Error encoding request \(request), for params: \(encodableParam), details - \(error)")
+        }
+        
+        return request
+    }
+                          
+    
     var baseURL: String {
         return Application.URI.restApiService + "/api/"
     }

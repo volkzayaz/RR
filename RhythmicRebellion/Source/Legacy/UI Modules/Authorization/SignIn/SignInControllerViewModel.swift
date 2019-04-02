@@ -10,11 +10,6 @@
 import Foundation
 import SwiftValidator
 
-struct SignInUserCredentials: UserCredentials {
-    let email: String
-    let password: String
-}
-
 final class SignInControllerViewModel: SignInViewModel {
 
     // MARK: - Public properties
@@ -113,25 +108,30 @@ final class SignInControllerViewModel: SignInViewModel {
             guard error.isEmpty else { return }
             guard let email = self.emailField?.validationText, let password = self.passwordField?.validationText else { return }
 
-            let signInUserCredentials = SignInUserCredentials(email: email, password: password)
-
-            self.application?.signIn(with: signInUserCredentials, completion: { [weak self] (error) in
-
-                guard let error = error else { return }
-                guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                    self?.delegate?.show(error: error)
-                    return
-                }
-
-                switch appErrorGroup {
-                case RestApiServiceError.serverError( _, let errors):
-                    self?.signInErrorDescription = errors["email"]?.first
-                default:
-                    self?.delegate?.show(error: error)
-                }
-
-                self?.delegate?.refreshUI()
-            })
+            let _ =
+            UserRequest.signIn(login: email, password: password)
+                .rx.baseResponse(type: User.self)
+                .subscribe(onSuccess: { (user) in
+                    
+                    Dispatcher.dispatch(action: SetNewUser(user: user))
+                    
+                }, onError: { error in
+                    
+                    guard let appError = error as? AppError, let appErrorGroup = appError.source else {
+                        self.delegate?.show(error: error)
+                        return
+                    }
+                    
+                    switch appErrorGroup {
+                    case RestApiServiceError.serverError( _, let errors):
+                        self.signInErrorDescription = errors["email"]?.first
+                    default:
+                        self.delegate?.show(error: error)
+                    }
+                    
+                    self.delegate?.refreshUI()
+                })
+            
         }
     }
 

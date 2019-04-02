@@ -106,37 +106,37 @@ final class ChangeEmailControllerViewModel: ChangeEmailViewModel {
             guard let newEmail = self.newEmailField?.validationText,
                 let currentPassword = self.currentPasswordField?.validationText else { return }
 
-            let changeEmailPayload = RestApiFanUserChangeEmailRequestPayload(with: newEmail, currentPassword: currentPassword)
-
-            self.restApiService?.fanUser(changeEmail: changeEmailPayload, completion: { [weak self] (changeEmailResult) in
-
-                switch changeEmailResult {
-                case .success():
-                    self?.isChangeEmailSucced = true
-                    self?.delegate?.refreshUI()
-                case .failure(let error):
+            let _ =
+            UserRequest.changeEmail(to: newEmail, currentPassword: currentPassword)
+                .rx.rawJSONResponse()
+                .subscribe(onSuccess: { (_) in
+                    self.isChangeEmailSucced = true
+                    self.delegate?.refreshUI()
+                }, onError: { error in
+                    
                     guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                         return
                     }
-
+                    
                     switch appErrorGroup {
                     case RestApiServiceError.serverError( let errorDescription, let errors):
-                        self?.changeEmailErrorDescription = errorDescription
+                        self.changeEmailErrorDescription = errorDescription
                         for (key, errorStrings) in errors {
-                            guard let validatebleField = self?.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
-
+                            guard let validatebleField = self.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
+                            
                             let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
-                            self?.delegate?.refreshField(field: validatebleField, didValidate: validationError)
+                            self.delegate?.refreshField(field: validatebleField, didValidate: validationError)
                         }
-
+                        
                     default:
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                     }
+                    
+                    self.delegate?.refreshUI()
+                    
+                })
 
-                    self?.delegate?.refreshUI()
-                }
-            })
         }
     }
 

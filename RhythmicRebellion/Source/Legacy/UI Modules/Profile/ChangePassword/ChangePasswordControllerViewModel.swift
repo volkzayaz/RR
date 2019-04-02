@@ -129,39 +129,42 @@ final class ChangePasswordControllerViewModel: ChangePasswordViewModel {
             guard let currentPassword = self.currentPasswordField?.validationText,
                 let newPassword = self.newPasswordField?.validationText,
                 let confirmPassword = self.confirmPasswordField?.validationText else { return }
+            
+            let _ =
+            UserRequest.changePassword(old: currentPassword, new: newPassword, confirm: confirmPassword)
+                .rx.baseResponse(type: User.self)
+                .subscribe(onSuccess: { (user) in
+                    
+                    Dispatcher.dispatch(action: SetNewUser(user: user))
+                    self.isChangePasswordSucced = true
+                    self.delegate?.refreshUI()
+                    
+                }, onError: { error in
 
-            self.application.changePassword(currentPassword: currentPassword,
-                                            newPassword: newPassword,
-                                            newPasswordConfirmation:confirmPassword,
-                                            completion: { [weak self] (changePasswordResult) in
-                                                switch changePasswordResult {
-                                                case .success(_):
-                                                    self?.isChangePasswordSucced = true
-                                                    self?.delegate?.refreshUI()
-                                                case .failure(let error):
-                                                    guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                                                        self?.delegate?.show(error: error)
-                                                        return
-                                                    }
+                    guard let appError = error as? AppError, let appErrorGroup = appError.source else {
+                        self.delegate?.show(error: error)
+                        return
+                    }
+                    
+                    switch appErrorGroup {
+                    case RestApiServiceError.serverError( let errorDescription, let errors):
+                        self.changePasswordErrorDescription = errorDescription
+                        for (key, errorStrings) in errors {
+                            guard let validatebleField = self.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
+                            
+                            let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
+                            self.delegate?.refreshField(field: validatebleField, didValidate: validationError)
+                        }
+                        
+                    default:
+                        self.delegate?.show(error: error)
+                    }
+                    
+                    self.delegate?.refreshUI()
 
-                                                    switch appErrorGroup {
-                                                    case RestApiServiceError.serverError( let errorDescription, let errors):
-                                                        self?.changePasswordErrorDescription = errorDescription
-                                                        for (key, errorStrings) in errors {
-                                                            guard let validatebleField = self?.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
-
-                                                            let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
-                                                            self?.delegate?.refreshField(field: validatebleField, didValidate: validationError)
-                                                        }
-
-                                                    default:
-                                                        self?.delegate?.show(error: error)
-                                                    }
-
-                                                    self?.delegate?.refreshUI()
-
-                                                }
-            })
+                })
+            
+            
         }
     }
 

@@ -12,11 +12,7 @@ protocol RestApiRequestPayload: Encodable {
 
 }
 
-protocol RestApiProfileRequestPayload: RestApiRequestPayload {
-
-}
-
-struct RestApiProfileSettingsRequestPayload: RestApiProfileRequestPayload {
+struct UserProfilePayload: Encodable {
 
     let userProfile: UserProfile
 
@@ -52,7 +48,7 @@ struct RestApiProfileSettingsRequestPayload: RestApiProfileRequestPayload {
     }
 }
 
-struct RestApiListeningSettingsRequestPayload: RestApiProfileRequestPayload {
+struct ListeningSettingsPayload: Encodable {
 
     let listeningSettings: ListeningSettings
 
@@ -64,13 +60,9 @@ struct RestApiListeningSettingsRequestPayload: RestApiProfileRequestPayload {
         self.listeningSettings = listeningSettings
     }
 
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(listeningSettings, forKey: .listeningSettings)
-    }
 }
 
-struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
+struct RegisterData: Encodable {
 
     let email: String
     let password: String
@@ -148,72 +140,3 @@ struct RestApiFanUserRegistrationRequestPayload: RestApiRequestPayload {
 
 }
 
-struct RestApiFanUserRestorePasswordRequestPayload: RestApiRequestPayload {
-
-    let email: String
-
-    enum CodingKeys: String, CodingKey {
-        case email
-    }
-
-    init(with email: String) {
-        self.email = email
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(self.email, forKey: .email)
-    }
-}
-
-struct RestApiFanUserChangeEmailRequestPayload: RestApiRequestPayload {
-
-    let email: String
-    let currentPassword: String
-
-    enum CodingKeys: String, CodingKey {
-        case email
-        case currentPassword = "current_password"
-    }
-
-    init(with email: String, currentPassword: String) {
-        self.email = email
-        self.currentPassword = currentPassword
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(self.email, forKey: .email)
-        try container.encode(self.currentPassword, forKey: .currentPassword)
-    }
-
-}
-
-struct RestApiFanUserChangePasswordRequestPayload: RestApiRequestPayload {
-
-    let currentPassword: String
-    let newPassword: String
-    let newPasswordConfirmation: String
-
-    enum CodingKeys: String, CodingKey {
-        case currentPassword = "current_password"
-        case newPassword = "new_password"
-        case newPasswordConfirmation = "new_password_confirmation"
-    }
-
-    init(currentPassword: String, newPassword: String, newPasswordConfirmation: String) {
-        self.currentPassword = currentPassword
-        self.newPassword = newPassword
-        self.newPasswordConfirmation = newPasswordConfirmation
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(self.currentPassword, forKey: .currentPassword)
-        try container.encode(self.newPassword, forKey: .newPassword)
-        try container.encode(self.newPasswordConfirmation, forKey: .newPasswordConfirmation)
-    }
-}

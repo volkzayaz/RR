@@ -101,40 +101,37 @@ final class RestorePasswordControllerViewModel: RestorePasswordViewModel {
             guard error.isEmpty else { return }
             guard let email = self.emailField?.validationText else { return }
 
-            let restorePasswordRequestPayload = RestApiFanUserRestorePasswordRequestPayload(with: email)
-
-            self.restApiService?.fanUser(restorePassword: restorePasswordRequestPayload, completion: { [weak self] (restorePasswordResult) in
-
-                switch (restorePasswordResult) {
-                case .success(_):
-                    self?.isRestorePasswordSucced = true
-                    self?.delegate?.refreshUI()
-
-
-                case .failure(let error):
+            let _ =
+            UserRequest.restorePassword(email: email)
+                .rx.response(type: FanForgotPasswordResponse.self)
+                .subscribe(onSuccess: { (_) in
+                    
+                    self.isRestorePasswordSucced = true
+                    self.delegate?.refreshUI()
+                    
+                }, onError: { error in
                     guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                         return
                     }
-
+                    
                     switch appErrorGroup {
                     case RestApiServiceError.serverError( let errorDescription, let errors):
-                        self?.restorePasswordErrorDescription = errorDescription
+                        self.restorePasswordErrorDescription = errorDescription
                         for (key, errorStrings) in errors {
-                            guard let validatebleField = self?.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
-
+                            guard let validatebleField = self.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
+                            
                             let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
-                            self?.delegate?.refreshField(field: validatebleField, didValidate: validationError)
+                            self.delegate?.refreshField(field: validatebleField, didValidate: validationError)
                         }
-
+                        
                     default:
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                     }
-
-                    self?.delegate?.refreshUI()
-                }
-
-            })
+                    
+                    self.delegate?.refreshUI()
+                })
+            
         }
     }
 }

@@ -117,19 +117,20 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     }
 
     func loadUser() {
-        self.application?.fanUser(completion: { (fanUserResult) in
-            switch fanUserResult {
-            case .success(let user):
+        
+        let _ =
+        UserRequest.login.rx.baseResponse(type: User.self)
+            .subscribe(onSuccess: { (user) in
                 
                 if let p = user.profile {
                     self.userProfile = p
                     self.refreshDelegate(with: p)
                 }
-
-            case .failure(let error):
+                
+            }, onError: { error in
                 self.delegate?.show(error: error)
-            }
-        })
+            })
+
     }
 
     func loadConfig(completion: @escaping (Result<Config>) -> Void) {
@@ -604,39 +605,41 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
             updatingUserProfile.genres = self.genresField?.genres
             updatingUserProfile.language = self.languageField?.language?.id
 
-            self.application?.update(profileSettings: updatingUserProfile, completion: { [weak self] (userProfileResult) in
-
-                switch (userProfileResult) {
-                case .success(let userProfile):
-                    self?.userProfile = userProfile
-                    self?.refreshDelegate(with: userProfile)
-                    self?.checkIsDirty()
-                    self?.navigateBack()
-
-
-                case .failure(let error):
+            let _ =
+            UserRequest.updateProfile(UserProfilePayload(with: updatingUserProfile))
+                .rx.baseResponse(type: User.self)
+                .subscribe(onSuccess: { (user) in
+                    
+                    self.userProfile = user.profile
+                    if let p = user.profile {
+                        self.refreshDelegate(with: p)
+                    }
+                    self.checkIsDirty()
+                    self.navigateBack()
+                    
+                }, onError: { error in
                     guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                         return
                     }
-
+                    
                     switch appErrorGroup {
                     case RestApiServiceError.serverError( let errorDescription, let errors):
-                        self?.profileSettingsErrorDescription = errorDescription
+                        self.profileSettingsErrorDescription = errorDescription
                         for (key, errorStrings) in errors {
-                            guard let validatebleField = self?.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
-
+                            guard let validatebleField = self.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
+                            
                             let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
-                            self?.delegate?.refreshField(field: validatebleField, didValidate: validationError)
+                            self.delegate?.refreshField(field: validatebleField, didValidate: validationError)
                         }
-
+                        
                     default:
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                     }
-
-                    self?.delegate?.refreshUI()
-                }
-            })
+                    
+                    self.delegate?.refreshUI()
+                })
+            
         }
     }
 

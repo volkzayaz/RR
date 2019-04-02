@@ -65,18 +65,16 @@ final class ProfileControllerViewModel: ProfileViewModel {
     }
 
     func loadUser() {
-        self.application?.fanUser(completion: { (fanUserResult) in
-            switch fanUserResult {
-            case .success(let user):
-                
-
+        
+        let _ =
+        UserRequest.login.rx.baseResponse(type: User.self)
+            .subscribe(onSuccess: { (user) in
                 self.fanUser = user
                 self.delegate?.refreshUI()
-
-            case .failure(let error):
+            }, onError: { error in
                 self.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.refreshUI() })
-            }
-        })
+            })
+        
     }
 
     func numberOfItems(in section: Int) -> Int {
@@ -105,11 +103,15 @@ final class ProfileControllerViewModel: ProfileViewModel {
     }
 
     func logout() {
-        self.application?.logout(completion: { (error) in
-            guard let error = error else { return }
-
-            self.delegate?.show(error: error)
-        })
+        
+        let _ =
+        UserRequest.logout.rx.baseResponse(type: User.self)
+            .subscribe(onSuccess: { guestUser in
+                Dispatcher.dispatch(action: SetNewUser(user: guestUser))
+            }, onError: { error in
+                self.delegate?.show(error: error)
+            })
+        
     }
 }
 

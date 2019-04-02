@@ -59,44 +59,42 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     func reload() {
 
-        self.application?.fanUser(completion: { [weak self] (fanUserResult) in
-            guard let `self` = self else { return }
-
-            switch fanUserResult {
-            case .success(let user):
+        let _ =
+        UserRequest.login.rx.baseResponse(type: User.self)
+            .subscribe(onSuccess: { [weak self] user in
                 
-                self.listeningSettings = user.profile?.listeningSettings ?? .defaultSettings()
-                self.listeningSettingsSections = self.makeListeningSettingsSections()
-                self.checkDirtyState()
-                self.delegate?.reloadUI()
-
-            case .failure(let error):
-                self.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
-            }
-        })
+                self?.listeningSettings = user.profile?.listeningSettings ?? .defaultSettings()
+                self?.listeningSettingsSections = self!.makeListeningSettingsSections()
+                self?.checkDirtyState()
+                self?.delegate?.reloadUI()
+                
+            }, onError: { [weak self] error in
+                self?.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
+            })
+        
     }
 
     func save() {
 
         self.isSaving = true
 
-        self.application?.update(listeningSettings: self.listeningSettings, completion: { [weak self] (updateListeningSettingsResult) in
-            guard let `self` = self else { return }
-
-            self.isSaving = false
-
-            switch updateListeningSettingsResult {
-            case .success(let listeningSettings):
-                self.listeningSettings = listeningSettings
-                self.listeningSettingsSections = self.makeListeningSettingsSections()
-                self.checkDirtyState()
-                self.delegate?.reloadUI()
-
-            case .failure(let error):
-                self.delegate?.show(error: error)
-            }
-
-        })
+        let _ =
+        UserRequest.updateListeningSettings(ListeningSettingsPayload(with: listeningSettings))
+            .rx.baseResponse(type: User.self)
+            .subscribe(onSuccess: { [weak self] user in
+                
+                self?.isSaving = false
+                
+                self?.listeningSettingsSections = self!.makeListeningSettingsSections()
+                self?.checkDirtyState()
+                self?.delegate?.reloadUI()
+                
+                }, onError: { [weak self] error in
+                    
+                    self?.isSaving = false
+                    
+                    self?.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
+            })
 
     }
 

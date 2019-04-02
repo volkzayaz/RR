@@ -16,7 +16,8 @@ fileprivate let _appState: BehaviorRelay<AppState> = {
                                            lastPatch: nil,
                                            currentItem: nil,
                                            isBlocked: false,
-                                           lastChangeSignatureHash: WebSocketService.ownSignatureHash)
+                                           lastChangeSignatureHash: WebSocketService.ownSignatureHash),
+                     user: nil
                     )
     
     return BehaviorRelay(value: x)
@@ -36,8 +37,7 @@ var appState: Driver<AppState> {
 struct AppState: Equatable {
     
     var player: PlayerState
-    
-//    let user: User
+    var user: User?
     
 }
 

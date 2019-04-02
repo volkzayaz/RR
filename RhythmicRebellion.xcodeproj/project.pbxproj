@@ -38,6 +38,8 @@
 		737622F621CD28AF005B603E /* Artist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 737622F521CD28AF005B603E /* Artist.storyboard */; };
 		739FFA28224BA3FF007A88CA /* PrepareLyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */; };
 		739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */; };
+		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
+		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
 		73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */; };
@@ -384,6 +386,8 @@
 		737622F521CD28AF005B603E /* Artist.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Artist.storyboard; sourceTree = "<group>"; };
 		739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareLyrics.swift; sourceTree = "<group>"; };
 		739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLyricsMode.swift; sourceTree = "<group>"; };
+		73B97A6F2253995400B43D71 /* SetNewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUser.swift; sourceTree = "<group>"; };
+		73B97A7222539DC500B43D71 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
 		73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCollectionCell.swift; sourceTree = "<group>"; };
@@ -793,6 +797,7 @@
 		7361C00322368475008EA36E /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				73B97A6E225398C100B43D71 /* User */,
 				739FFA26224B6E05007A88CA /* Lyrics */,
 				7361C01822368E79008EA36E /* RRPlayer */,
 				7361C01422368D58008EA36E /* AudioPlayer */,
@@ -917,6 +922,22 @@
 				739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */,
 			);
 			path = Lyrics;
+			sourceTree = "<group>";
+		};
+		73B97A6E225398C100B43D71 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				73B97A6F2253995400B43D71 /* SetNewUser.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		73B97A7122539DAC00B43D71 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				73B97A7222539DC500B43D71 /* UserRequest.swift */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		73F13666222C289200FB8EBC /* UIBricks */ = {
@@ -1840,6 +1861,7 @@
 		73F137C7222C289200FB8EBC /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				73B97A7122539DAC00B43D71 /* User */,
 				7327C9662252402800692810 /* Configs */,
 				73F137C8222C289200FB8EBC /* Track */,
 				73F137CA222C289200FB8EBC /* BaseRouter.swift */,
@@ -2367,6 +2389,7 @@
 				7361C01E22368EF3008EA36E /* PrepareNewTrackByHash.swift in Sources */,
 				73F13853222C289200FB8EBC /* SelectableListControllerViewModel.swift in Sources */,
 				73F1388D222C289200FB8EBC /* RestorePasswordViewController.swift in Sources */,
+				73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */,
 				73F138FE222C289200FB8EBC /* FollowingRouter.swift in Sources */,
 				73F138C8222C289200FB8EBC /* LyricsViewModel.swift in Sources */,
 				73F138FD222C289200FB8EBC /* BaseRouter.swift in Sources */,
@@ -2533,6 +2556,7 @@
 				73F1382D222C289200FB8EBC /* FanPlaylistState.swift in Sources */,
 				73F138A1222C289200FB8EBC /* PageContentControllerViewModel.swift in Sources */,
 				73F13820222C289200FB8EBC /* AddonState.swift in Sources */,
+				73B97A702253995400B43D71 /* SetNewUser.swift in Sources */,
 				73F138D7222C289200FB8EBC /* PlayerContentContainerRouter.swift in Sources */,
 				73F13864222C289200FB8EBC /* DatePickerTableViewCell.swift in Sources */,
 				73F138A2222C289200FB8EBC /* PageTrackState.swift in Sources */,

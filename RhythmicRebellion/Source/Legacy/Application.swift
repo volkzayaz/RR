@@ -138,7 +138,15 @@ class Application: Watchable {
         
         self.restApiServiceReachability?.whenReachable = { [unowned self] _ in
             if self.config == nil { self.loadConfig() }
-            if self.user == nil || self.needsLoadUser { self.fanUser() }
+            if self.user == nil || self.needsLoadUser {
+
+                let _ =
+                UserRequest.login.rx.baseResponse(type: User.self)
+                    .subscribe(onSuccess: { (user) in
+                        Dispatcher.dispatch(action: SetNewUser(user: user))
+                    })
+                
+            }
 
             self.watchersContainer.invoke({ (observer) in
                 observer.application(self, restApiServiceDidChangeReachableState: true)
@@ -207,122 +215,7 @@ class Application: Watchable {
         self.needsLoadUser = false
     }
 
-    func fanUser(completion: ((Result<User>) -> Void)? = nil) {
-        self.restApiService.fanUser { [weak self] (fanUserResult) in
-
-            switch (fanUserResult) {
-            case .success(let user):
-                self?.set(user: user)
-                completion?(.success(user))
-
-            case .failure(let error):
-                if self?.restApiServiceReachability?.connection == Reachability.Connection.none {
-                    self?.needsLoadUser = true
-                }
-                completion?(.failure(error))
-            }
-        }
-
-    }
-
-    func signIn(with credentials: UserCredentials, completion: ((Error?) -> Void)? = nil) {
-
-        self.restApiService.fanLogin(email: credentials.email, password: credentials.password, completion: { [weak self] (loginUserResult) in
-
-            switch (loginUserResult) {
-            case .success(let user):
-                self?.set(user: user)
-                completion?(nil)
-
-            case .failure(let error):
-                completion?(error)
-            }
-        })
-    }
-
-    func logout(completion: ((Error?) -> Void)? = nil) {
-        guard let user = self.user, user.isGuest == false else { return }
-
-        self.restApiService.fanLogout { [weak self] (logoutUserResult) in
-            switch logoutUserResult {
-            case .success(let user):
-                self?.set(user: user)
-                completion?(nil)
-
-            case .failure(let error):
-                completion?(error)
-            }
-        }
-    }
-
-    func update(listeningSettings: ListeningSettings, completion: ((Result<ListeningSettings>) -> Void)? = nil) {
-
-        guard let user = self.user, user.isGuest == false else { return }
-
-        let listeningSettingsRequestPayload = RestApiListeningSettingsRequestPayload(with: listeningSettings)
-
-        self.restApiService.fanUser(update: listeningSettingsRequestPayload) { [weak self] (updateUserResult) in
-
-            switch updateUserResult {
-            case .success(let user):
-
-
-                self?.set(user: user)
-                
-                //self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanUser.profile?.listeningSettings))
-                
-                self?.notifyUserProfileListeningSettingsChanged()
-                
-                completion?(.success( listeningSettings ))
-
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
-
-    func update(profileSettings: UserProfile, completion: ((Result<UserProfile>) -> Void)? = nil) {
-
-        guard let user = self.user, user.isGuest == false else { return }
-
-        let profileSettingsRequestPayload = RestApiProfileSettingsRequestPayload(with: profileSettings)
-
-        self.restApiService.fanUser(update: profileSettingsRequestPayload) { [weak self] (updateUserResult) in
-
-            switch updateUserResult {
-            case .success(let user):
-                
-
-                self?.set(user: user)
-                completion?(.success(profileSettings))
-
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
-
-    func changePassword(currentPassword: String, newPassword: String, newPasswordConfirmation: String, completion: ((Result<User>) -> Void)? = nil) {
-        guard let user = self.user, user.isGuest == false else { return }
-
-        let changePasswordRequestPayload = RestApiFanUserChangePasswordRequestPayload(currentPassword: currentPassword,
-                                                                                      newPassword: newPassword,
-                                                                                      newPasswordConfirmation: newPasswordConfirmation)
-
-        self.restApiService.fanUser(changePassword: changePasswordRequestPayload) { [weak self] (changePasswordResult) in
-
-            switch changePasswordResult {
-            case .success(let user):
-                
-
-                self?.set(user: user)
-                completion?(.success(user))
-
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        }
-    }
+    
 
     // MARK: Tracks
 

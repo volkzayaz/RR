@@ -503,7 +503,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
                                            city: self.cityField?.city,
                                            zip: self.zipField?.validationText)
             
-            let registrationPayload = RestApiFanUserRegistrationRequestPayload(email: email,
+            let registrationPayload = RegisterData(email: email,
                                                                                password: password,
                                                                                passwordConfirmation: passwordConfirmation,
                                                                                nickname: nickname,
@@ -515,38 +515,39 @@ final class SignUpControllerViewModel: SignUpViewModel {
                                                                                hobbies: hobbies,
                                                                                howHear: howHear)
 
-            self.restApiService?.fanUser(register: registrationPayload, completion: { [weak self] (registrationResult) in
-
-                switch (registrationResult) {
-                case .success(let userProfile):
-                    self?.registeredUserProfile = userProfile
-                    self?.delegate?.refreshUI()
+            let _ =
+            UserRequest.register(data: registrationPayload)
+                .rx.baseResponse(type: FanRegistrationResponse.self)
+                .subscribe(onSuccess: { (resp) in
                     
-
-                case .failure(let error):
+                    self.registeredUserProfile = resp.userProfile
+                    self.delegate?.refreshUI()
+                    
+                }, onError: { error in
+                    
                     guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                         return
                     }
-
+                    
                     switch appErrorGroup {
                     case RestApiServiceError.serverError( let errorDescription, let errors):
-                        self?.signUpErrorDescription = errorDescription
+                        self.signUpErrorDescription = errorDescription
                         for (key, errorStrings) in errors {
-                            guard let validatebleField = self?.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
-
+                            guard let validatebleField = self.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
+                            
                             let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
-                            self?.delegate?.refreshField(field: validatebleField, didValidate: validationError)
+                            self.delegate?.refreshField(field: validatebleField, didValidate: validationError)
                         }
-
+                        
                     default:
-                        self?.delegate?.show(error: error)
+                        self.delegate?.show(error: error)
                     }
+                    
+                    self.delegate?.refreshUI()
+                    
+                })
 
-                    self?.delegate?.refreshUI()
-                }
-
-            })
         }
     }
 }
