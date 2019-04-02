@@ -559,7 +559,7 @@ extension SignUpControllerViewModel {
     func reloadCountries(completion: @escaping (Result<[Country]>) -> Void) {
         
         let _ =
-        ConfigRequest.countries.rx.baseResponse(type: [Country].self)
+        ConfigRequest.countries.rx.response(type: [Country].self)
             .subscribe(onSuccess: { [weak self] (countries) in
                 
                 self?.countries = countries
@@ -576,7 +576,7 @@ extension SignUpControllerViewModel {
         guard let country = self.countryField?.country else { completion(.success([])); return }
 
         let _ =
-        ConfigRequest.regions(for: country).rx.baseResponse(type: [Region].self)
+        ConfigRequest.regions(for: country).rx.response(type: [Region].self)
             .subscribe(onSuccess: { [weak self] (regions) in
                 
                 self?.regions = regions
@@ -593,7 +593,7 @@ extension SignUpControllerViewModel {
         guard let region = self.regionField?.region else { completion(.success([])); return }
 
         let _ =
-        ConfigRequest.cities(for: region).rx.baseResponse(type: [City].self)
+        ConfigRequest.cities(for: region).rx.response(type: [City].self)
             .subscribe(onSuccess: { [weak self] (cities) in
                 
                 self?.cities = cities
