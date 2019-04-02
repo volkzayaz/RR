@@ -9,20 +9,10 @@
 
 import Foundation
 
-final class TabBarControllerViewModel: TabBarViewModel {
+struct TabBarViewModel {
 
-    enum UserType {
-        case guest
-        case authorized
-    }
-
-    // MARK: - Private properties -
-
-    private(set) weak var delegate: TabBarViewModelDelegate?
     private(set) weak var router: TabBarRouter?
     private(set) weak var application: Application?
-
-    private var userType: UserType
 
     // MARK: - Lifecycle -
 
@@ -30,44 +20,20 @@ final class TabBarControllerViewModel: TabBarViewModel {
         self.router = router
         self.application = application
 
-        self.userType = application.user?.isGuest ?? true ? .guest : .authorized
-    }
-
-    deinit {
-        self.application?.removeWatcher(self)
-    }
-
-    func tabTypes(for userType: UserType) -> [TabType] {
+        let _ =
+        appState.map { $0.user?.isGuest }
+            .notNil()
+            .distinctUntilChanged()
+            .drive( onNext: { isGuest in
+                
+                let types: [TabType] = isGuest ?
+                    [.home, .pages, .authorization] :
+                    [.home, .settings, .pages, .profile, /*.myMusic, .search, .mixer*/]
+                
+                router.updateTabs(for: types)
+                router.selectTab(for: !isGuest ? .home : .authorization)
+            })
         
-        guard userType == .authorized else { return [.home, .pages, .authorization] }
-
-        return [.home, .settings, .pages, .profile, /*.myMusic, .search, .mixer*/]
     }
 
-    func load(with delegate: TabBarViewModelDelegate) {
-        self.delegate = delegate
-
-        self.userType = self.application?.user?.isGuest ?? true ? .guest : .authorized
-        self.router?.updateTabs(for: self.tabTypes(for: self.userType))
-
-
-        self.application?.addWatcher(self)
-    }
 }
-
-extension TabBarControllerViewModel: ApplicationWatcher {
-
-    func application(_ application: Application, didChange user: User) {
-
-        let userType: UserType = user.isGuest ? .guest : .authorized
-
-        self.router?.updateTabs(for: self.tabTypes(for: userType))
-
-        guard self.userType != userType else { return }
-
-        self.userType = userType
-
-        self.router?.selectTab(for: self.userType == .authorized ? .home : .authorization)
-    }
-}
-

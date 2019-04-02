@@ -39,8 +39,28 @@ final class PlayerPlaylistRootViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        viewModel.load(with: self)
-        updateSegment()
+        
+        
+        viewModel.showOnlyNowPlaying
+            .drive(onNext: { [unowned self] (shouldShow) in
+                
+                var lastSelectedIndex = self.playlistTypeSegment.selectedSegmentIndex
+                self.playlistTypeSegment.removeAllSegments()
+                self.playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("Now Playing", comment: "Now playing playlist title"), at: 0, animated: false)
+                
+                if !shouldShow {
+                    self.playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("My Playlists", comment: "My Playlists playlist title"), at: 1, animated: false)
+                    self.playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("Following", comment: "Following playlist title"), at: 2, animated: false)
+                } else {
+                    lastSelectedIndex = 0
+                }
+                
+                self.playlistTypeSegment.selectedSegmentIndex = lastSelectedIndex
+                self.updateChildren()
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
     }
 
     // MARK: - Acitions -
@@ -56,21 +76,6 @@ final class PlayerPlaylistRootViewController: UIViewController {
         self.followingContainerView.isHidden = segmentType != .following
     }
     
-    private func updateSegment() {
-        var lastSelectedIndex = playlistTypeSegment.selectedSegmentIndex
-        playlistTypeSegment.removeAllSegments()
-        playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("Now Playing", comment: "Now playing playlist title"), at: 0, animated: false)
-        
-        if !viewModel.showOnlyNowPlaying {
-            playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("My Playlists", comment: "My Playlists playlist title"), at: 1, animated: false)
-            playlistTypeSegment.insertSegment(withTitle: NSLocalizedString("Following", comment: "Following playlist title"), at: 2, animated: false)
-        } else {
-            lastSelectedIndex = 0
-        }
-        
-        playlistTypeSegment.selectedSegmentIndex = lastSelectedIndex
-        updateChildren()
-    }
 }
 
 // MARK: - Router -
@@ -90,8 +95,3 @@ extension PlayerPlaylistRootViewController {
 
 }
 
-extension PlayerPlaylistRootViewController: PlayerPlaylistRootViewModelDelegate {
-    func refreshUI() {
-        updateSegment()
-    }
-}

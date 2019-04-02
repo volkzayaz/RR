@@ -49,7 +49,7 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRout
 
     private(set) var dependencies: RouterDependencies
     
-    private(set) weak var viewModel: PlayerPlaylistRootViewModel?
+    private(set) var viewModel: PlayerPlaylistRootViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -85,7 +85,7 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRout
 
     func start(controller: PlayerPlaylistRootViewController) {
         sourceController = controller
-        let vm = PlayerPlaylistRootControllerViewModel(router: self, application: dependencies.application)
+        let vm = PlayerPlaylistRootViewModel(router: self, application: dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }
 }

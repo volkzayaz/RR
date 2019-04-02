@@ -64,7 +64,7 @@ final class NowPlayingViewModel {
             
             var result: [ActionViewModel] = []
             
-            let maybeUser = application.user as? User
+            let maybeUser = appStateSlice.user
             
             //////1
             

@@ -25,7 +25,7 @@ enum ProfileItem: Int {
 
 final class ProfileControllerViewModel: ProfileViewModel {
 
-    var userName: String { return self.fanUser?.profile?.nickname ?? "" }
+    var userName: String { return self.fanUser?.nickname ?? "" }
 
     // MARK: - Private properties -
 
@@ -33,7 +33,7 @@ final class ProfileControllerViewModel: ProfileViewModel {
     private(set) weak var router: ProfileRouter?
     private(set) weak var application: Application?
 
-    private var fanUser: User?
+    private var fanUser: UserProfile?
     private var profileItems: [ProfileItem]
 
     // MARK: - Lifecycle -
@@ -43,19 +43,22 @@ final class ProfileControllerViewModel: ProfileViewModel {
         self.application = application
 
         self.profileItems = []
-    }
-
-    deinit {
-        self.application?.removeWatcher(self)
+        
+        let _ =
+        appState.map { $0.user?.profile }
+                .notNil()
+                .distinctUntilChanged()
+            .drive ( onNext: { x in
+                self.fanUser = x
+                self.delegate?.refreshUI()
+            })
+        
     }
 
     func load(with delegate: ProfileViewModelDelegate) {
-        guard application?.user?.isGuest ?? true == false else { return }
 
         self.delegate = delegate
-        self.application?.addWatcher(self)
-
-        self.fanUser = application?.user
+        
         self.profileItems = [.profileSettings, .changeEmail, .changePassword]
 
         self.delegate?.reloadUI()
@@ -69,7 +72,7 @@ final class ProfileControllerViewModel: ProfileViewModel {
         let _ =
         UserRequest.login.rx.baseResponse(type: User.self)
             .subscribe(onSuccess: { (user) in
-                self.fanUser = user
+                self.fanUser = user.profile
                 self.delegate?.refreshUI()
             }, onError: { error in
                 self.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.refreshUI() })
@@ -112,16 +115,5 @@ final class ProfileControllerViewModel: ProfileViewModel {
                 self.delegate?.show(error: error)
             })
         
-    }
-}
-
-extension ProfileControllerViewModel: ApplicationWatcher {
-
-    func application(_ application: Application, didChangeUserProfile profile: UserProfile) {
-
-        guard !(application.user?.isGuest ?? true) else { return }
-
-        self.fanUser = application.user
-        self.delegate?.refreshUI()
     }
 }

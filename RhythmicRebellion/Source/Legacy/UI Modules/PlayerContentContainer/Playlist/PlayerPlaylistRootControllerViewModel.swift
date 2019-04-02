@@ -8,12 +8,10 @@
 //
 
 import Foundation
+import RxCocoa
 
-final class PlayerPlaylistRootControllerViewModel: PlayerPlaylistRootViewModel {
+struct PlayerPlaylistRootViewModel {
 
-    // MARK: - Private properties -
-
-    private(set) weak var delegate: PlayerPlaylistRootViewModelDelegate?
     private(set) weak var router: PlayerPlaylistRootRouter?
 
     private let application : Application
@@ -23,19 +21,10 @@ final class PlayerPlaylistRootControllerViewModel: PlayerPlaylistRootViewModel {
         self.router = router
         self.application = application
     }
-
-    func load(with delegate: PlayerPlaylistRootViewModelDelegate) {
-        self.delegate = delegate
-        application.addWatcher(self)
-    }
     
-    var showOnlyNowPlaying: Bool {
-        return application.user?.isGuest ?? true
+    var showOnlyNowPlaying: Driver<Bool> {
+        return appState.map { $0.user == nil }
+                       .distinctUntilChanged()
     }
 }
 
-extension PlayerPlaylistRootControllerViewModel : ApplicationWatcher {
-    func application(_ application: Application, didChange user: User) {
-        self.delegate?.refreshUI()
-    }
-}

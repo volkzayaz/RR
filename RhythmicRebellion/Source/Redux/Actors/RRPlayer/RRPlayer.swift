@@ -94,10 +94,11 @@ extension RRPlayer {
         
         appState.map { $0.user }
             .notNil()
-            .distinctUntilChanged { $0.wsToken == $1.wsToken }
-            .drive(onNext: { [weak ws = webSocket] (user) in
-                ws?.connect(with: Token(token: user.wsToken,
-                                        isGuest: user.isGuest))
+            .map { Token(token: $0.wsToken,
+                         isGuest: $0.isGuest) }
+            .distinctUntilChanged()
+            .drive(onNext: { [weak ws = webSocket] (token) in
+                ws?.connect(with: token)
             })
             .disposed(by: bag)
         

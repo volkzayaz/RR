@@ -132,7 +132,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
     }
 
     func updateUserOnPage() {
-        guard let user = self.application.user else { return }
+        guard let user = appStateSlice.user else { return }
         
         let data = try! JSONEncoder().encode(user)
         
@@ -316,7 +316,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
             case .toggleArtistFollowing:
 
                 guard let artistId = message.body as? String else { return }
-                guard let fanUser = self.application.user as? User else { self.router?.navigateToAuthorization(); return }
+                guard let fanUser = appStateSlice.user as? User else { self.router?.navigateToAuthorization(); return }
 
                 self.application.follow(shouldFollow: !fanUser.isFollower(for: artistId),
                                         artistId: artistId)

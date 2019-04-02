@@ -59,7 +59,7 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
 
     weak var playerContentContainerRouter: PlayerContentContainerRouter?
     
-    private(set) weak var viewModel: TabBarViewModel?
+    private(set) var viewModel: TabBarViewModel?
     private(set) weak var tabBarViewController: TabBarViewController?
 
     var sourceController: UIViewController? { return tabBarViewController }
@@ -85,7 +85,7 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
         tabBarViewController = controller
         childViewContollers = controller.viewControllers
         tabBarViewController?.delegate = self
-        let vm = TabBarControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = TabBarViewModel(router: self, application: self.dependencies.application)
 
         controller.configure(viewModel: vm, router: self, viewControllers: [])
     }

@@ -118,7 +118,7 @@ final class PlayerViewModel: NSObject {
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { newState in
                 
-                guard let user = self.application.user,
+                guard let user = newState.user,
                       let currentTrack = newState.currentTrack else { return .none }
                 
                 return user.likeState(for: currentTrack.track)
@@ -138,15 +138,17 @@ final class PlayerViewModel: NSObject {
         
         //TODO: listen to user changes as well
         
-        return appState.map { $0.currentTrack }
-            .distinctUntilChanged()
-            .flatMapLatest { (currentTrack) in
+        return appState
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
+            .flatMapLatest { (newState) in
+                
+                let currentTrack = newState.currentTrack
                 
                 guard let track = currentTrack?.track else { return .just(nil) }
                 
                 guard case .full? = track.previewType else {
                     return .just(TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
-                                                                                      user: DataLayer.get.application.user, μSecondsPlayed: nil),
+                                                                                      user: newState.user, μSecondsPlayed: nil),
                                                              textImageGenerator: g))
                 }
                 
@@ -155,7 +157,7 @@ final class PlayerViewModel: NSObject {
                     .map { time in
                         
                         return TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
-                                                                                    user: DataLayer.get.application.user, μSecondsPlayed: time),
+                                                                                    user: newState.user, μSecondsPlayed: time),
                                                            textImageGenerator: g)
                         
                 }
@@ -212,7 +214,7 @@ final class PlayerViewModel: NSObject {
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { newState in
                 
-                guard let user = self.application.user,
+                guard let user = newState.user,
                       let artist = newState.currentTrack?.track.artist else { return false }
                 
                 return user.isFollower(for: artist.id)
@@ -332,7 +334,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleLike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard self.application.user?.isGuest ?? false else { self.routeToAuthorization(); return }
+        guard appStateSlice.user?.isGuest ?? false else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked).subscribe()
         
@@ -340,7 +342,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleDislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard (self.application.user as? User) != nil else { self.routeToAuthorization(); return }
+        guard appStateSlice.user?.isGuest ?? false else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked).subscribe()
         
@@ -353,7 +355,7 @@ final class PlayerViewModel: NSObject {
     func toggleArtistFollowing() {
 
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard let user = application.user, user.isGuest else { self.routeToAuthorization(); return }
+        guard let user = appStateSlice.user, user.isGuest else { self.routeToAuthorization(); return }
         
         self.application.follow(shouldFollow: !user.isFollower(for: track.artist.id),
                                 artistId: track.artist.id)

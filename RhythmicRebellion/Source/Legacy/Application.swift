@@ -81,13 +81,7 @@ class Application: Watchable {
     
     
     let restApiServiceReachability: Reachability?
-    
-    
 
-    private var needsLoadUser: Bool = false
-
-    var user: User? = nil
-    
     var config: Config?
 
     init?() {
@@ -98,20 +92,16 @@ class Application: Watchable {
         self.restApiService = restApiService
         self.webSocketService = webSocketService
 
+        let _ =
+        UserRequest.login.rx.baseResponse(type: User.self)
+            .subscribe(onSuccess: { (user) in
+                Dispatcher.dispatch(action: SetNewUser(user: user))
+            })
+        
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
         
         self.restApiServiceReachability?.whenReachable = { [unowned self] _ in
             if self.config == nil { self.loadConfig() }
-            if self.user == nil || self.needsLoadUser {
-
-                let _ =
-                UserRequest.login.rx.baseResponse(type: User.self)
-                    .subscribe(onSuccess: { (user) in
-                        Dispatcher.dispatch(action: SetNewUser(user: user))
-                    })
-                
-            }
-
         }
 
         self.restApiServiceReachability?.whenUnreachable = { [unowned self] _ in

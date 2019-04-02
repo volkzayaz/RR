@@ -185,7 +185,7 @@ extension TrackListViewModel {
         
         return TrackViewModel(router: router.trackRouter(for: track.track),
                               trackProvidable: track,
-                              user: application?.user,
+                              user: appStateSlice.user,
                               textImageGenerator: textImageGenerator)
         
     }
@@ -220,7 +220,7 @@ extension TrackListViewModel {
             self?.doNotPlay(track: t.track)
         }
         
-        let maybeUser = application?.user as? User
+        let maybeUser = appStateSlice.user as? User
         
         var result: [ActionViewModel] = []
         

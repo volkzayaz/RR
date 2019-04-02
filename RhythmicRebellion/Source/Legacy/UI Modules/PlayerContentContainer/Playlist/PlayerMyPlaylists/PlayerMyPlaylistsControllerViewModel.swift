@@ -37,7 +37,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     func load(with delegate: PlayerMyPlaylistsViewModelDelegate) {
         self.delegate = delegate
 
-        if (!(self.application.user?.isGuest ?? true)) {
+        if (!(appStateSlice.user?.isGuest ?? true)) {
             self.loadPlaylists()
             self.delegate?.reloadUI()
         }
@@ -46,7 +46,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     }
 
     func reload() {
-        if (!(self.application.user?.isGuest ?? true)) {
+        if (!(appStateSlice.user?.isGuest ?? true)) {
             self.loadPlaylists()
         }
     }
@@ -170,7 +170,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     func isAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, availableFor playlist: FanPlaylist, with playlistItems: [Track]) -> Bool {
         switch actionType {
         case .playNow, .playNext, .playLast, .replaceCurrent: return playlistItems.isEmpty == false
-        case .toPlaylist: return self.application.user?.isGuest == false && playlistItems.isEmpty == false
+        case .toPlaylist: return appStateSlice.user?.isGuest == false && playlistItems.isEmpty == false
         case .delete: return playlist.isDefault == false
         case .clear: return false
         default: return true

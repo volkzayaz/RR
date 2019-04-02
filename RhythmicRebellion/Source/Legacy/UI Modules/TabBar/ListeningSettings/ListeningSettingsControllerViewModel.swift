@@ -33,7 +33,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     private func checkDirtyState() {
         
-        let isDirty = self.listeningSettings != self.application?.user?.profile?.listeningSettings
+        let isDirty = self.listeningSettings != appStateSlice.user?.profile?.listeningSettings
 
         if self.isDirty != isDirty {
             self.isDirty = isDirty
@@ -45,7 +45,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     func load(with delegate: ListeningSettingsViewModelDelegate) {
         self.delegate = delegate
 
-        guard let profile = self.application?.user?.profile else { return }
+        guard let profile = appStateSlice.user?.profile else { return }
 
         self.application?.addWatcher(self)
 
@@ -223,7 +223,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
 
-            if let profile = self.application?.user?.profile {
+            if let profile = appStateSlice.user?.profile {
                 self.listeningSettings.isSongCommentaryDate = profile.listeningSettings.isSongCommentaryDate
                 self.listeningSettings.songCommentaryDate = profile.listeningSettings.songCommentaryDate
             }
@@ -254,7 +254,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
 
-            if let profile = self.application?.user?.profile {
+            if let profile = appStateSlice.user?.profile {
                 self.listeningSettings.songCommentaryDate = profile.listeningSettings.songCommentaryDate
             }
 
@@ -313,7 +313,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
 
-            if let profile = self.application?.user?.profile {
+            if let profile = appStateSlice.user?.profile {
                 self.listeningSettings.isHearArtistsBioDate =  profile.listeningSettings.isHearArtistsBioDate
                 self.listeningSettings.artistsBioDate = profile.listeningSettings.artistsBioDate
             }
@@ -344,7 +344,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         } else {
             
-            self.listeningSettings.artistsBioDate = self.application?.user?.profile?.listeningSettings.artistsBioDate
+            self.listeningSettings.artistsBioDate = appStateSlice.user?.profile?.listeningSettings.artistsBioDate
             
             let artistsBIOSectionItemsCount = artistsBIOSection.items.count
             artistsBIOSection.items.removeLast()

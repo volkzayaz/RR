@@ -40,7 +40,7 @@ extension LyricsViewModel {
             }
             
             if track.isCensorship,
-               let user = DataLayer.get.application.user,
+               let user = state.user,
                user.stubTrackAudioFileReason(for: track) == .censorship {
                 return "\n Contains explicit material \n"
             }
@@ -70,7 +70,7 @@ final class LyricsViewModel {
     }
 
     func switchToKaraoke() {
-        guard DataLayer.get.application.user as? User != nil else {
+        guard let _ = appStateSlice.user else {
             router?.routeToAuthorization(with: .signIn)
             return
         }

@@ -29,9 +29,15 @@ final class PromoViewModel {
     }
     
     var isAddonsSkipped: Driver<Bool> {
-        return currentTrack.map { t in
-            return DataLayer.get.application.user?.isAddonsSkipped(for: t.artist) ?? false
-        }
+        
+        return appState.distinctUntilChanged { $0.currentTrack?.track == $0.currentTrack?.track }
+            .map { (state) -> Bool? in
+                
+                guard let t = state.currentTrack?.track else { return nil }
+                
+                return state.user?.isAddonsSkipped(for: t.artist)
+            }
+            .notNil()
         
     }
 
@@ -48,9 +54,14 @@ final class PromoViewModel {
     }
     
     var canToggleSkipAddons: Driver<Bool> {
-        return currentTrack.map { _ in
-            return DataLayer.get.application.user?.isGuest == false
-        }
+        return appState.distinctUntilChanged { $0.currentTrack?.track == $0.currentTrack?.track }
+            .map { (state) -> Bool? in
+            
+                guard state.currentTrack?.track != nil else { return nil }
+                
+                return state.user?.isGuest
+            }
+            .notNil()
     }
     
     // MARK: - Private properties -

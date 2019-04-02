@@ -35,7 +35,6 @@ final class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.load(with: self)
 //        self.view.clipsToBounds = true
 
     }
@@ -62,14 +61,6 @@ extension TabBarViewController {
             return false
         }
         return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
-    }
-
-}
-
-extension TabBarViewController: TabBarViewModelDelegate {
-
-    func refreshUI() {
-
     }
 
 }
