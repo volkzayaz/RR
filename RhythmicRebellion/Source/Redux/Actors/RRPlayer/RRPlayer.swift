@@ -14,7 +14,7 @@ import RxSwift
  */
 
 ///TODO: drop NSObject conformance once Application is reactified
-class RRPlayer: NSObject {
+class RRPlayer {
     
     let webSocket: WebSocketService
     let audioPlayer = AudioPlayer()
@@ -23,12 +23,10 @@ class RRPlayer: NSObject {
     init(application: Application) {
         self.webSocket = application.webSocketService
         
-        super.init()
-        
+        connect()
         bind()
         bindWebSocket()
         
-        application.addWatcher(self)
     }
     
     ///Piece of data needed by WebSocket protocol
@@ -38,23 +36,7 @@ class RRPlayer: NSObject {
     ///for the next 1 second ¯\_(ツ)_/¯
     fileprivate let masterDate = BehaviorSubject(value: Date())
     
-}
-
-///TODO: migrate to proper reactive callbacks
-///User changes
-extension RRPlayer : ApplicationWatcher {
-
-    func application(_ application: Application, didChangeUserToken user: User) {
-        webSocket.connect(with: Token(token: user.wsToken,
-                                      isGuest: user.isGuest))
-        
-    }
-    
-    func application(_ application: Application, didChange user: User) {
-        webSocket.connect(with: Token(token: user.wsToken,
-                                      isGuest: user.isGuest))
-    }
-    
+    fileprivate let bag = DisposeBag()
 }
 
 ////UI initiated
@@ -108,6 +90,19 @@ extension RRPlayer {
 ///Push state into webSocket
 extension RRPlayer {
     
+    func connect() {
+        
+        appState.map { $0.user }
+            .notNil()
+            .distinctUntilChanged { $0.wsToken == $1.wsToken }
+            .drive(onNext: { [weak ws = webSocket] (user) in
+                ws?.connect(with: Token(token: user.wsToken,
+                                        isGuest: user.isGuest))
+            })
+            .disposed(by: bag)
+        
+    }
+    
     func bind() {
 
         /////-----
@@ -126,7 +121,7 @@ extension RRPlayer {
                 print("Sending out trackState for syncing with webSocket: \(x)")
                 
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         ////sync current track ID
         appState
@@ -142,7 +137,7 @@ extension RRPlayer {
                 w?.sendCommand(command: command)
                 print("Sending out currentTrackID for syncing with webSocket: \(String(describing: t))")
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         /// sync playlist order (insert/delete/create/flush)
         appState
@@ -157,7 +152,7 @@ extension RRPlayer {
                 print("Sending out patch for syncing with webSocket: \(x.patch)")
                 
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         /// sync blocked state
         appState
@@ -174,7 +169,7 @@ extension RRPlayer {
                 print("Sending out block state via webSoccket isBlocked = \(x)")
                 
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         ////sync master date
         appState.distinctUntilChanged { $0.player.lastChangeSignatureHash == $1.player.lastChangeSignatureHash }
@@ -182,7 +177,7 @@ extension RRPlayer {
             .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
             .map { _ in Date() }
             .drive(masterDate)
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
     }
     
@@ -195,39 +190,100 @@ extension RRPlayer {
                 
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: action) )
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         webSocket.didReceiveTracks
             .subscribe(onNext: { (tracks) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: StoreTracks(tracks: tracks)) )
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         webSocket.didReceiveCurrentTrack
             .subscribe(onNext: { (t) in
-
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: PrepareNewTrackByHash(orderHash: t?.key)))
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         webSocket.didReceiveTrackState
             .filter { _ in self.masterDate.unsafeValue.timeIntervalSinceNow < -0.4 }
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: ChangeTrackState(trackState: state)))
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
 
         webSocket.didReceiveTrackBlockState
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: ChangePlayerBlockState(isBlocked: state)))
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
         
         webSocket.didReceivePreviewTimes
             .subscribe(onNext: { (times) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateTrackPrviewTimes(newPreviewTimes: times)))
             })
-            .disposed(by: rx.disposeBag)
+            .disposed(by: bag)
+        
+        ////User mutations
+        
+        webSocket.didReceiveListeningSettings
+            .subscribe(onNext: { (state) in
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
+                    user?.profile?.listeningSettings = state
+                }))
+            })
+            .disposed(by: bag)
+        
+        webSocket.didReceiveTrackForceToPlayState
+            .subscribe(onNext: { (state) in
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
+                    user?.profile?.update(with: state)
+                }))
+            })
+            .disposed(by: bag)
+        
+        webSocket.didReceiveArtistFollowingState
+            .subscribe(onNext: { (state) in
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
+                    user?.profile?.update(with: state)
+                }))
+            })
+            .disposed(by: bag)
+        
+        webSocket.didReceiveSkipArtistAddonsState
+            .subscribe(onNext: { (state) in
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
+                    user?.profile?.update(with: state)
+                }))
+            })
+            .disposed(by: bag)
+        
+        webSocket.didReceiveTrackLikeState
+            .subscribe(onNext: { (state) in
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
+                    user?.profile?.update(with: state)
+                }))
+            })
+            .disposed(by: bag)
+        
+        
+        
+            //    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {
+            //        guard let currentFanUser = self.user as? User else { return }
+            //
+            //        var fanUser = currentFanUser
+            //        fanUser.profile?.update(with: purchases)
+            //        self.user = fanUser
+            //
+            //        notifyUserProfileChanged(purchasedTracksIds: fanUser.profile?.purchasedTracksIds,
+            //                                 previousPurchasedTracksIds: currentFanUser.profile.purchasedTracksIds)
+            //    }
+            //
+            //    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) {
+            //        guard (self.user as? User) != nil else { return }
+            //
+            //        notifyFanPlaylistChanged(with: fanPlaylistState)
+            //    }
+            //
         
     }
     

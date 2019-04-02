@@ -45,6 +45,27 @@ extension WebSocketService {
             .map { $0.data }
     }
     
+    ////User mutations
+    var didReceiveListeningSettings: Observable<ListeningSettings> {
+        return commandObservable()
+    }
+    
+    var didReceiveTrackForceToPlayState: Observable<TrackForceToPlayState> {
+        return commandObservable()
+    }
+    
+    var didReceiveArtistFollowingState: Observable<ArtistFollowingState> {
+        return commandObservable()
+    }
+    
+    var didReceiveSkipArtistAddonsState: Observable<SkipArtistAddonsState> {
+        return commandObservable()
+    }
+    
+    var didReceiveTrackLikeState: Observable<TrackLikeState> {
+        return commandObservable()
+    }
+    
 }
 
 typealias Signature = String

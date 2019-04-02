@@ -11,6 +11,8 @@ import Firebase
 import Fabric
 import Crashlytics
 
+import AlamofireNetworkActivityLogger
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -71,6 +73,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let appViewController = self.window?.rootViewController as! AppViewController
 
+        NetworkActivityLogger.shared.level = .debug
+        NetworkActivityLogger.shared.startLogging()
+        
         if let application = Application() {
             
             let routerDependencies = RouterDependencies(application: application,

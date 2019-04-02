@@ -110,10 +110,10 @@ final class SignInControllerViewModel: SignInViewModel {
 
             let _ =
             UserRequest.signIn(login: email, password: password)
-                .rx.baseResponse(type: User.self)
-                .subscribe(onSuccess: { (user) in
+                .rx.response(type: FanLoginResponse.self)
+                .subscribe(onSuccess: { (resp) in
                     
-                    Dispatcher.dispatch(action: SetNewUser(user: user))
+                    Dispatcher.dispatch(action: SetNewUser(user: resp.user))
                     
                 }, onError: { error in
                     

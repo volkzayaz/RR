@@ -2,6 +2,8 @@ PODS:
   - Alamofire (4.8.1)
   - AlamofireImage (3.5.0):
     - Alamofire (~> 4.8)
+  - AlamofireNetworkActivityLogger (2.3.0):
+    - Alamofire (~> 4.6)
   - CloudTagView (3.0.0)
   - Crashlytics (3.12.0):
     - Fabric (~> 1.9.0)
@@ -86,6 +88,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 4.7)
   - AlamofireImage (~> 3.3)
+  - AlamofireNetworkActivityLogger
   - CloudTagView (~> 3.0.0)
   - Crashlytics (~> 3.12.0)
   - DownloadButton
@@ -108,6 +111,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - AlamofireImage
+    - AlamofireNetworkActivityLogger
     - CloudTagView
     - Crashlytics
     - Differentiator
@@ -149,6 +153,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   AlamofireImage: 1aea346f4dda2f6c67622fa5a89fcbb80d79cc16
+  AlamofireNetworkActivityLogger: 6f3076652ab7fa6c819b59be08ea038d339e36d8
   CloudTagView: c4eebbb9cf88d8de849e4ae0c3323e95ccc236b2
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
@@ -178,6 +183,6 @@ SPEC CHECKSUMS:
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
 
-PODFILE CHECKSUM: 5e6c6fc32d9f848015fa3b4ee8e38bf033b4f691
+PODFILE CHECKSUM: 3d9767f8bf4837ce4ff90a8a13c96f885018dce7
 
 COCOAPODS: 1.6.1

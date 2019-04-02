@@ -10,7 +10,7 @@
 import Foundation
 import SwiftValidator
 
-struct RestoreUserCredentials: UserCredentials {
+struct RestoreUserCredentials {
     let email: String
     let password: String = ""
 }

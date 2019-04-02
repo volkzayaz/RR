@@ -11,11 +11,6 @@ import Reachability
 import Alamofire
 import RxSwift
 
-protocol UserCredentials {
-    var email: String { get }
-    var password: String { get }
-}
-
 protocol ApplicationWatcher: class {
 
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int])
@@ -176,6 +171,7 @@ class Application: Watchable {
 
 }
 
+////TODO: apply optimistic policy for all 4 requests
 extension Application { /// UserManager
     
     func allowPlayTrackWithExplicitMaterial(trackId: Int, shouldAllow: Bool) -> Maybe<Void> {
@@ -229,7 +225,6 @@ extension Application { /// UserManager
     
     func follow(shouldFollow: Bool, artistId: String) -> Maybe<Void> {
         
-        ////TODO: apply optimistic policy
         return UserRequest.follow(artistId: artistId, shouldFollow: shouldFollow)
             .rx.response(type: ArtistFollowingState.self)
             .do(onNext: { (state) in
@@ -266,76 +261,4 @@ extension Application {
         })
     }
 
-}
-
-///TODO: handle responses from WebSocket
-extension Application {
-
-//    func webSocketService(_ service: WebSocketService, didReceiveListeningSettings listeningSettings: ListeningSettings) {
-//        guard let currentFanUser = self.user as? User else { return }
-//
-//        var fanUser = currentFanUser
-//        fanUser.profile?.listeningSettings = listeningSettings
-//        self.user = fanUser
-//
-//        self.notifyUserProfileListeningSettingsChanged()
-//    }
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveTrackForceToPlayState trackForceToPlayState: TrackForceToPlayState) {
-//        guard let currentFanUser = self.user as? User else { return }
-//
-//        var fanUser = currentFanUser
-//        fanUser.profile?.update(with: trackForceToPlayState)
-//        self.user = fanUser
-//
-//        self.notifyUserProfileForceToPlayChanged(with: trackForceToPlayState)
-//    }
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveArtistFollowingState artistFollowingState: ArtistFollowingState) {
-//
-//        guard let currentFanUser = self.user as? User else { return }
-//
-//        var fanUser = currentFanUser
-//        fanUser.profile?.update(with: artistFollowingState)
-//        self.user = fanUser
-//
-//        self.notifyUserProfileFollowedArtistsIdsChanged(with: artistFollowingState)
-//    }
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveSkipArtistAddonsState skipArtistAddonsState: SkipArtistAddonsState) {
-//        guard let currentFanUser = self.user as? User else { return }
-//
-//        var fanUser = currentFanUser
-//        fanUser.profile?.update(with: skipArtistAddonsState)
-//        self.user = fanUser
-//
-//        self.notifyUserProfileSkipAddonsArtistsIdsChanged(with: skipArtistAddonsState)
-//    }
-//
-//    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {
-//        guard let currentFanUser = self.user as? User else { return }
-//
-//        var fanUser = currentFanUser
-//        fanUser.profile?.update(with: purchases)
-//        self.user = fanUser
-//
-//        notifyUserProfileChanged(purchasedTracksIds: fanUser.profile?.purchasedTracksIds,
-//                                 previousPurchasedTracksIds: currentFanUser.profile.purchasedTracksIds)
-//    }
-//
-//    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) {
-//        guard (self.user as? User) != nil else { return }
-//
-//        notifyFanPlaylistChanged(with: fanPlaylistState)
-//    }
-//
-//    func webSocketService(_ service: WebSocketService, didReceiveTrackLikeState trackLikeState: TrackLikeState) {
-//        guard let currentFanUser = self.user as? User else { return }
-//
-//        var fanUser = currentFanUser
-//        fanUser.profile?.update(with: trackLikeState)
-//        self.user = fanUser
-//
-//        self.notifyUserProfileTraksLikeStetesChanged(with: trackLikeState)
-//    }
 }
