@@ -18,36 +18,13 @@ protocol UserCredentials {
 
 protocol ApplicationWatcher: class {
 
-    func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool)
-
-    func application(_ application: Application, didChange user: User)
-    func application(_ application: Application, didChangeUserToken user: User)
-
-    func application(_ application: Application, didChangeUserProfile userProfile: UserProfile)
-    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings)
-    func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState)
-    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState)
-    func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState)
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int])
-    func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState)
-
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState)
 }
 
 extension ApplicationWatcher {
-    func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) { }
     
-    func application(_ application: Application, didChange user: User) { }
-    func application(_ application: Application, didChangeUserToken user: User) { }
-
-    func application(_ application: Application, didChangeUserProfile userProfile: UserProfile) { }
-    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) { }
-    func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) { }
-    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) { }
-    func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState) { }
     func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) { }
-    func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState) { }
-
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) { }
 }
 
@@ -56,14 +33,6 @@ class Application: Watchable {
     typealias WatchType = ApplicationWatcher
 
     let watchersContainer = WatchersContainer<ApplicationWatcher>()
-
-    ////TODO: move watcherContainer to strongly typed Observable Commands
-    ////WebSocketCommand<T>
-    
-    fileprivate let followingStateSubject = BehaviorSubject<ArtistFollowingState?>(value: nil)
-    var followingState: Observable<ArtistFollowingState> {
-        return followingStateSubject.asObservable().skip(1).notNil()
-    }
     
     struct URI {
         
@@ -148,15 +117,10 @@ class Application: Watchable {
                 
             }
 
-            self.watchersContainer.invoke({ (observer) in
-                observer.application(self, restApiServiceDidChangeReachableState: true)
-            })
         }
 
         self.restApiServiceReachability?.whenUnreachable = { [unowned self] _ in
-            self.watchersContainer.invoke({ (observer) in
-                observer.application(self, restApiServiceDidChangeReachableState: false)
-            })
+            
         }
 
     }
@@ -173,46 +137,6 @@ class Application: Watchable {
                 completion?( .success(config) )
             })
         
-    }
-
-    func set(user: User) {
-
-        guard let prevUser = self.user else {
-            self.user = user
-            
-            if let fanUser = user as? User {
-                SettingsStore.lastSignedUserEmail.value = fanUser.profile?.email
-            } else {
-                DownloadManager.default.clearArtifacts()
-                self.pagesLocalStorageService.reset()
-            }
-
-            self.notifyUserChanged()
-            self.needsLoadUser = false
-            return
-        }
-
-        self.user = user
-
-        if prevUser != user {
-            
-            SettingsStore.lastSignedUserEmail.value = user.profile?.email
-            
-            DownloadManager.default.clearArtifacts()
-            self.pagesLocalStorageService.reset()
-            self.notifyUserChanged()
-        } else {
-            if prevUser.profile != user.profile {
-
-                self.notifyUserProfileChanged()
-            }
-
-            if prevUser.wsToken != user.wsToken {
-                self.notifyUserTokenChanged()
-            }
-        }
-
-        self.needsLoadUser = false
     }
 
     // MARK: Fan Playlists
@@ -305,6 +229,7 @@ extension Application { /// UserManager
     
     func follow(shouldFollow: Bool, artistId: String) -> Maybe<Void> {
         
+        ////TODO: apply optimistic policy
         return UserRequest.follow(artistId: artistId, shouldFollow: shouldFollow)
             .rx.response(type: ArtistFollowingState.self)
             .do(onNext: { (state) in
@@ -322,65 +247,6 @@ extension Application { /// UserManager
 }
 
 extension Application {
-
-    func notifyUserChanged() {
-
-        guard let user = self.user else { return }
-
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChange: user)
-        })
-    }
-
-    func notifyUserTokenChanged() {
-        guard let user = self.user else { return }
-
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeUserToken: user)
-        })
-    }
-
-    func notifyUserProfileChanged() {
-        
-
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.application(self, didChangeUserProfile: fanUser.profile)
-//        })
-    }
-
-    func notifyUserProfileListeningSettingsChanged() {
-        
-
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.application(self, didChangeUserProfile: fanUser.profile?.listeningSettings)
-//        })
-    }
-
-    func notifyUserProfileForceToPlayChanged(with trackForceToPlayState: TrackForceToPlayState) {
-        
-
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.application(self, didChangeUserProfile: Array(fanUser.profile?.forceToPlay), with: trackForceToPlayState)
-//        })
-    }
-
-    func notifyUserProfileFollowedArtistsIdsChanged(with artistFollowingState: ArtistFollowingState) {
-        
-
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.application(self, didChangeUserProfile: Array(fanUser.profile?.followedArtistsIds), with: artistFollowingState)
-//        })
-        
-        followingStateSubject.on( .next(artistFollowingState) )
-    }
-
-    func notifyUserProfileSkipAddonsArtistsIdsChanged(with skipArtistAddonsState: SkipArtistAddonsState) {
-        
-
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.application(self, didChangeUserProfile: Array(fanUser.profile?.skipAddonsArtistsIds), with: skipArtistAddonsState)
-//        })
-    }
 
     func notifyUserProfileChanged(purchasedTracksIds: Set<Int>, previousPurchasedTracksIds: Set<Int>) {
 
@@ -400,12 +266,6 @@ extension Application {
         })
     }
 
-    func notifyUserProfileTraksLikeStetesChanged(with trackLikeState: TrackLikeState) {
-        
-//        self.watchersContainer.invoke({ (observer) in
-//            observer.application(self, didChangeUserProfile: fanUser.profile?.tracksLikeStates, with: trackLikeState)
-//        })
-    }
 }
 
 ///TODO: handle responses from WebSocket

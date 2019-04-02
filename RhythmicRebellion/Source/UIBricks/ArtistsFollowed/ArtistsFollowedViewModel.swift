@@ -34,11 +34,6 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
     fileprivate let searchQuery = BehaviorRelay(value: "")
     fileprivate let data = BehaviorRelay<[Artist]>(value: [])
     
-    ///upon unfollowing directly from dataSource
-    ///we will not wait until socket signals us
-    ///we will directly remove corresponding artist from the datasource
-    fileprivate let quickUnfollowBuffer = BehaviorSubject<ArtistFollowingState?>(value: nil)
-    
     init(router: ArtistsFollowedRouter) {
         self.router = router
         
@@ -53,40 +48,35 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
                 return q.isEmpty
             }
         
-        let listUpdated = DataLayer.get.application.followingState
-        
-        let artistUnfollowed = listUpdated.filter { !$0.isFollowed }
-        let artistFollowed   = listUpdated.filter {  $0.isFollowed }
+        let listUpdated = appState.map { $0.user?.profile?.followedArtistsIds }
+                                .notNil()
+                                .distinctUntilChanged()
+                                .asObservable()
         
         let dataRequest = ArtistsFollowingRequest.list.rx
             .response(type: [Artist].self)
             .trackView(viewIndicator: indicator)
             .asObservable()
         
-        artistFollowed.map { _ in }
-            //.startWith( () )
-            .flatMapLatest { [unowned buffer = quickUnfollowBuffer] _ -> Observable<([Artist], [String], String)> in
+        listUpdated.distinctUntilChanged { (prev: Set<String>, next: Set<String>) -> Bool in
+                return next.isSubset(of: next) == false ///new items are contained within followed Set
+            }
+            .flatMapLatest { followedArtists -> Observable<([Artist], String)> in
                 
-                let filterOutArtists = Observable.of( buffer.asObservable().skip(1).notNil(),
-                                                      artistUnfollowed)
-                    .merge()
-                    .scan([], accumulator: { $0 + [$1.artistId] })
-                    .startWith([])
-                
-                return Observable.combineLatest(dataRequest,
-                                                filterOutArtists, queryChanges) { ($0, $1, $2) }
+                return Observable.combineLatest(dataRequest, queryChanges, listUpdated)
+                    .map { args in
+                        return (args.0.filter { args.2.contains($0.id) }, args.1)
+                    }
             }
             .map { arg -> [Artist] in
                 
-                let (artists, kicked, query) = arg
-                
-                let list = artists.filter { !kicked.contains($0.id) }
+                let (artists, query) = arg
                 
                 let q = query.lowercased()
                 
-                guard !q.isEmpty else { return list }
+                guard !q.isEmpty else { return artists }
                 
-                return list.filter { $0.name.lowercased().contains(q) }
+                return artists.filter { $0.name.lowercased().contains(q) }
                 
             }
             .silentCatch(handler: router.owner)
@@ -119,9 +109,6 @@ extension ArtistsFollowedViewModel {
     }
  
     func unfollow(artist: Artist) {
-        
-        quickUnfollowBuffer.onNext( ArtistFollowingState(artistId: artist.id,
-                                                         isFollowed: false) )
         
         let _ =
         DataLayer.get.application.follow(shouldFollow: false,
