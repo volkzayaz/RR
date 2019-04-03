@@ -104,7 +104,7 @@ extension PageContentViewController: WKNavigationDelegate {
     }
 
     public func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        print("didReceiveServerRedirectForProvisionalNavigation: \(navigation)")
+        print("didReceiveServerRedirectForProvisionalNavigation: \(String(describing: navigation))")
     }
 }
 

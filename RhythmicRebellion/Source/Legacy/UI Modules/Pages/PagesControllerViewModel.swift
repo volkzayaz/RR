@@ -121,7 +121,7 @@ extension PagesControllerViewModel : PagesLocalStorageServiceWatcher {
     }
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didSaveSnapshotImageFor page: Page) {
-        guard let pageIndex = self.pages.index(of: page) else { return }
+        guard let _ = self.pages.index(of: page) else { return }
         
         self.delegate?.reloadUI()
     }

@@ -75,7 +75,7 @@ extension BaseNetworkRouter {
                 return try encoding.encode(request, with: params)
             }
             catch (let error) {
-                fatalError("Error encoding request \(request), for params: \(params), details - \(error)")
+                fatalError("Error encoding request \(request), for params: \(String(describing: params)), details - \(error)")
             }
             
     }
@@ -90,7 +90,7 @@ extension BaseNetworkRouter {
             request.httpBody = try JSONEncoder().encode(encodableParam)
         }
         catch (let error) {
-            fatalError("Error encoding request \(request), for params: \(encodableParam), details - \(error)")
+            fatalError("Error encoding request \(request), for params: \(String(describing: encodableParam)), details - \(error)")
         }
         
         return request

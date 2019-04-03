@@ -82,7 +82,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         let playerDisabledScriptSource = "let style = document.createElement('style'); style.innerHTML = '.rr-player-root {display: none !important}';setTimeout(()=>document.head.appendChild(style),0);"
         let playerDisabledScript = WKUserScript(source: playerDisabledScriptSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
 
-        var scripts = [iOSWebViewScript, playerDisabledScript]
+        let scripts = [iOSWebViewScript, playerDisabledScript]
 
 //        #if DEBUG
 //            let consoleLogSource = """
@@ -244,108 +244,105 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
 
-        do {
-
-//            print("didReceive message name: \(message.name)")
-
-            let commandType = PageCommandType(rawValue: message.name) ?? .unknown
-
-            switch commandType {
-
-            case .getInitialData:
-                self.updateUserOnPage()
-                self.updateCurrentTrackStateOnPage()
-
-            case .getSrtsPreviews:
-//                print("getSrtsPreviews")
-                guard let jsonString = message.body as? String, let trackIds = self.getTrackIds(from: jsonString) else { return }
-                self.requestedTimeTrackIds = trackIds
-
-                var trackIdsToRequest: [Int] = []
-                var tracksTotalPlayMSeconds: [Int : UInt64] = [:]
-
-                for trackId in trackIds {
-                    fatalError("Unimplemented preview logic")
-//                    guard let trackTotalPlayMSeconds = self.player.totalPlayMSeconds(for: trackId) else { trackIdsToRequest.append(trackId); continue}
-//                    tracksTotalPlayMSeconds[trackId] = trackTotalPlayMSeconds
-                }
-
-                if tracksTotalPlayMSeconds.isEmpty == false {
-                    self.updatePreviewOptOnPage(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
-                }
-
-                if trackIdsToRequest.isEmpty == false {
-//                    self.player.trackingTimeRequest(for: trackIdsToRequest)
-                }
-
-            case .playNow:
-//                print("playNow!!!!")
-                guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-
-//                print("playNow: \(tracks)")
-
-                self.play(tracks: tracks)
-
-            case .playNext:
-//                print("playNext!!!!")
-                guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-//                print("playNext: \(tracks)")
-                self.addToPlayerPlaylist(tracks: tracks, at: .next)
-
-            case .playLast:
-//                print("playLast!!!!")
-                guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-//                print("playLast: \(tracks)")
-                self.addToPlayerPlaylist(tracks: tracks, at: .last)
-
-            case .replace:
-//                print("replace!!!!")
-                guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-//                print("replace: \(tracks)")
-                self.replacePlayerPlaylist(with: tracks)
-
-            case .setForceExplicit:
-//                print("setForceExplicit!!!!")
-                guard let jsonString = message.body as? String, let trackForceToPlayState = self.getTrackForceToPlayState(from: jsonString) else { return }
-
-//                print("setForceExplicit: \(trackForceToPlayState)")
-    
-                application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId,
-                                                               shouldAllow: trackForceToPlayState.isForcedToPlay).subscribe()
-                
-            case .toggleArtistFollowing:
-
-                guard let artistId = message.body as? String else { return }
-                guard let fanUser = appStateSlice.user as? User else { self.router?.navigateToAuthorization(); return }
-
-                self.application.follow(shouldFollow: !fanUser.isFollower(for: artistId),
-                                        artistId: artistId)
-                    .subscribe(onError: { [weak self] (error) in
-                        self?.delegate?.show(error: error)
-                    })
-                
-            case .downloadAlbum:
-                
-                guard let albumId = message.body as? Int else { return }
-                
-                AlbumRequest.details(x: albumId)
-                    .rx.response(type: BaseReponse<Album>.self)
-                    .subscribe(onSuccess: { [weak r = self.router] d in
-                        r?.showDownloadAlbum(album: d.data)
+        
+        //            print("didReceive message name: \(message.name)")
+        
+        let commandType = PageCommandType(rawValue: message.name) ?? .unknown
+        
+        switch commandType {
+            
+        case .getInitialData:
+            self.updateUserOnPage()
+            self.updateCurrentTrackStateOnPage()
+            
+        case .getSrtsPreviews:
+            //                print("getSrtsPreviews")
+            guard let jsonString = message.body as? String, let trackIds = self.getTrackIds(from: jsonString) else { return }
+            self.requestedTimeTrackIds = trackIds
+            
+            var trackIdsToRequest: [Int] = []
+            var tracksTotalPlayMSeconds: [Int : UInt64] = [:]
+            
+            for trackId in trackIds {
+                fatalError("Unimplemented preview logic")
+                //                    guard let trackTotalPlayMSeconds = self.player.totalPlayMSeconds(for: trackId) else { trackIdsToRequest.append(trackId); continue}
+                //                    tracksTotalPlayMSeconds[trackId] = trackTotalPlayMSeconds
+            }
+            
+            if tracksTotalPlayMSeconds.isEmpty == false {
+                self.updatePreviewOptOnPage(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
+            }
+            
+            if trackIdsToRequest.isEmpty == false {
+                //                    self.player.trackingTimeRequest(for: trackIdsToRequest)
+            }
+            
+        case .playNow:
+            //                print("playNow!!!!")
+            guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
+            
+            //                print("playNow: \(tracks)")
+            
+            self.play(tracks: tracks)
+            
+        case .playNext:
+            //                print("playNext!!!!")
+            guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
+            //                print("playNext: \(tracks)")
+            self.addToPlayerPlaylist(tracks: tracks, at: .next)
+            
+        case .playLast:
+            //                print("playLast!!!!")
+            guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
+            //                print("playLast: \(tracks)")
+            self.addToPlayerPlaylist(tracks: tracks, at: .last)
+            
+        case .replace:
+            //                print("replace!!!!")
+            guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
+            //                print("replace: \(tracks)")
+            self.replacePlayerPlaylist(with: tracks)
+            
+        case .setForceExplicit:
+            //                print("setForceExplicit!!!!")
+            guard let jsonString = message.body as? String, let trackForceToPlayState = self.getTrackForceToPlayState(from: jsonString) else { return }
+            
+            //                print("setForceExplicit: \(trackForceToPlayState)")
+            
+            application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId,
+                                                           shouldAllow: trackForceToPlayState.isForcedToPlay).subscribe()
+            
+        case .toggleArtistFollowing:
+            
+            guard let artistId = message.body as? String else { return }
+            guard appStateSlice.user.isGuest else { self.router?.navigateToAuthorization(); return }
+            
+            self.application.follow(shouldFollow: !appStateSlice.user.isFollower(for: artistId),
+                                    artistId: artistId)
+                .subscribe(onError: { [weak self] (error) in
+                    self?.delegate?.show(error: error)
+                })
+            
+        case .downloadAlbum:
+            
+            guard let albumId = message.body as? Int else { return }
+            
+            AlbumRequest.details(x: albumId)
+                .rx.response(type: BaseReponse<Album>.self)
+                .subscribe(onSuccess: { [weak r = self.router] d in
+                    r?.showDownloadAlbum(album: d.data)
                     }, onError: { [weak d = self.delegate] e in
                         d?.show(error: e)
-                    })
-                
-            case .log: print("Log: \(message.body)")
-            case .error: print("Error: \(message.body)")
-
-
-            case .unknown: print("Unknown page command : \(message.name) body: \(message.body)")
-            }
-
-        } catch {
-
+                })
+            
+        case .log: print("Log: \(message.body)")
+        case .error: print("Error: \(message.body)")
+            
+            
+        case .unknown: print("Unknown page command : \(message.name) body: \(message.body)")
         }
+
+        
     }
 }
 

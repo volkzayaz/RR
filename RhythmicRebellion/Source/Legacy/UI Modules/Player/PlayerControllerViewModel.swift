@@ -336,7 +336,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleLike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user.isGuest ?? false else { self.routeToAuthorization(); return }
+        guard appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked).subscribe()
         
@@ -344,7 +344,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleDislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user.isGuest ?? false else { self.routeToAuthorization(); return }
+        guard appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked).subscribe()
         

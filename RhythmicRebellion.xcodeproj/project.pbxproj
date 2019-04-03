@@ -41,6 +41,7 @@
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
+		73B97A7622550B6800B43D71 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AE222C289200FB8EBC /* Alamofire+Extension.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
 		73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */; };
@@ -284,7 +285,6 @@
 		73F138EA222C289200FB8EBC /* RestApiRequestPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AB222C289200FB8EBC /* RestApiRequestPayloads.swift */; };
 		73F138EB222C289200FB8EBC /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AC222C289200FB8EBC /* RestApiService.swift */; };
 		73F138EC222C289200FB8EBC /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AD222C289200FB8EBC /* RestApiResponse.swift */; };
-		73F138ED222C289200FB8EBC /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AE222C289200FB8EBC /* Alamofire+Extension.swift */; };
 		73F138EE222C289200FB8EBC /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137B0222C289200FB8EBC /* Page.swift */; };
 		73F138EF222C289200FB8EBC /* PagesLocalStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137B1222C289200FB8EBC /* PagesLocalStorageService.swift */; };
 		73F138F5222C289200FB8EBC /* WSCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137BB222C289200FB8EBC /* WSCommand.swift */; };
@@ -2480,6 +2480,7 @@
 				730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */,
 				73F13896222C289200FB8EBC /* SignInViewController.swift in Sources */,
 				7361C02E2236917C008EA36E /* ChangeBlockState.swift in Sources */,
+				73B97A7622550B6800B43D71 /* Alamofire+Extension.swift in Sources */,
 				73F138FC222C289200FB8EBC /* TrackRequests.swift in Sources */,
 				73F1382F222C289200FB8EBC /* City.swift in Sources */,
 				73F13833222C289200FB8EBC /* AudioFile.swift in Sources */,
@@ -2639,7 +2640,6 @@
 				73F1390C222C289200FB8EBC /* SpinnerView.swift in Sources */,
 				73F13854222C289200FB8EBC /* SelectableListItemViewModel.swift in Sources */,
 				73F1383B222C289200FB8EBC /* Fake.swift in Sources */,
-				73F138ED222C289200FB8EBC /* Alamofire+Extension.swift in Sources */,
 				73F138D1222C289200FB8EBC /* KaraokeIntervalCell.swift in Sources */,
 				7361C02C22369144008EA36E /* RemoveTrack.swift in Sources */,
 				73F13866222C289200FB8EBC /* ListeningSettingsViewModel.swift in Sources */,

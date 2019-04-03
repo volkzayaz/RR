@@ -23,7 +23,7 @@ struct PlayerPlaylistRootViewModel {
     }
     
     var showOnlyNowPlaying: Driver<Bool> {
-        return appState.map { $0.user == nil }
+        return appState.map { $0.user.isGuest }
                        .distinctUntilChanged()
     }
 }

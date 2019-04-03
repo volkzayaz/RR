@@ -242,7 +242,7 @@ class WebSocketService {
     
     func sendCommand<T: WSCommand>(command: T) {
         
-        let str = String(bytes: command.jsonData, encoding: .utf8)
+        //let str = String(bytes: command.jsonData, encoding: .utf8)
         //print("Sending out \(str)")
         
         webSocket.write(data: command.jsonData, completion: {

@@ -63,13 +63,13 @@ extension TrackViewModel {
     
     var downloadHintText: String? {
         
-        let userHasPurchase = user.hasPurchase(for: track) ?? false
+        let userHasPurchase = user.hasPurchase(for: track)
         
         guard track.isFollowAllowFreeDownload || userHasPurchase else {
             return nil
         }
         
-        if user.isGuest ?? true { return R.string.localizable.freeDownloadForFans() }
+        if user.isGuest { return R.string.localizable.freeDownloadForFans() }
         
         return R.string.localizable.freeDownloadForFollowers()
         
@@ -94,11 +94,11 @@ extension TrackViewModel {
     }
     
     var isCensorship: Bool {
-        return user.isCensorshipTrack(track) ?? track.isCensorship
+        return user.isCensorshipTrack(track)
     }
     
     var downloadDisabled: Bool {
-        let userHasPurchase = user.hasPurchase(for: track) ?? false
+        let userHasPurchase = user.hasPurchase(for: track)
         return !(track.isFollowAllowFreeDownload || userHasPurchase)
     }
     

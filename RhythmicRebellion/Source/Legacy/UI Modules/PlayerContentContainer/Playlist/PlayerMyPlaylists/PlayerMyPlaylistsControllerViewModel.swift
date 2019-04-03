@@ -37,7 +37,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     func load(with delegate: PlayerMyPlaylistsViewModelDelegate) {
         self.delegate = delegate
 
-        if (!(appStateSlice.user.isGuest ?? true)) {
+        if (!(appStateSlice.user.isGuest)) {
             self.loadPlaylists()
             self.delegate?.reloadUI()
         }
@@ -46,7 +46,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     }
 
     func reload() {
-        if (!(appStateSlice.user.isGuest ?? true)) {
+        if (!(appStateSlice.user.isGuest)) {
             self.loadPlaylists()
         }
     }

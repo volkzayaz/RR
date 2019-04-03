@@ -22,7 +22,7 @@ struct TrackPreviewOptionViewModel {
             
             guard track.isPlayable, let trackAudioFile = track.audioFile else { self = .commigSoon; return }
             guard track.isFreeForPlaylist == false else { self = .freeForPlaylist; return }
-            guard let fanUser = user as? User else { self = .authorizationNeeded; return; }
+            guard let fanUser = user else { self = .authorizationNeeded; return; }
             guard fanUser.hasPurchase(for: track) == false else { self = .freeForPlaylist; return }
             guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { self = .freeForPlaylist; return }
             guard let t = track.previewType else { self = .noPreview; return }

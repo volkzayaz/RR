@@ -25,7 +25,7 @@ extension Request {
     {
         guard error == nil else {
             let stringData = String(data: data ?? Data() , encoding: .utf8)
-            print("errorData: \(stringData)")
+            print("errorData: \(String(describing: stringData))")
 
             guard let errorData = data, errorData.count > 0,
                 let restApiResponse = try? JSONDecoder().decode(ErrorResponse.self, from: errorData) else { return .failure(error!) }
@@ -66,7 +66,7 @@ extension Request {
 
             return .success(restApiResponse)
         } catch {
-            print("Decode \(T.self) failed for data: \(String(data: validData, encoding: .utf8))")
+            print("Decode \(T.self) failed for data: \(String(describing: String(data: validData, encoding: .utf8)))")
             return .failure(AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: error)))
         }
     }

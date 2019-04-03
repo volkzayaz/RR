@@ -136,7 +136,7 @@ class EqualizerView: UIView {
             startAnimating()
         } else if paused {
 //            logIfShown(str: "RESUME")
-            let pausedTime = self.layer.timeOffset
+            
             self.layer.speed = 1.0
             self.layer.timeOffset = 0.0
             self.layer.beginTime = 0.0

@@ -41,7 +41,7 @@ final class TabBarViewController: UITabBarController {
 
     override func targetViewController(forAction action: Selector, sender: Any?) -> UIViewController? {
 
-        print("targetViewController action: \(action) sender: \(sender)")
+        print("targetViewController action: \(action) sender: \(String(describing: sender))")
 
         return super.targetViewController(forAction: action, sender: sender)
     }
