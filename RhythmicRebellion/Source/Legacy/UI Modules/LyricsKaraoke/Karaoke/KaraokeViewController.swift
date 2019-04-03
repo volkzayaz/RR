@@ -130,6 +130,19 @@ final class KaraokeViewController: UIViewController {
             .drive(imageView.rx.image)
             .disposed(by: rx.disposeBag)
         
+        viewModel.currentIndexPathChanges
+            .skip(1)
+            .drive(onNext: { [weak self] _ in
+                self?.refreshUI()
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.karaokeChanges
+            .drive(onNext: { [weak self] _ in
+                self?.reloadUI()
+            })
+            .disposed(by: rx.disposeBag)
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {

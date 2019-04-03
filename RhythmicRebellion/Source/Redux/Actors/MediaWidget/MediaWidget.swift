@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 import MediaPlayer
 
 struct MediaWidget {
@@ -90,6 +91,27 @@ struct MediaWidget {
             Dispatcher.dispatch(action: GetBackToPreviousItem())
         })
         
+        
+        appState.map { $0.canForward }
+            .distinctUntilChanged()
+            .drive(musicPlayer.nextTrackCommand.rx.isEnabled)
+            .disposed(by: bag)
+        
+        appState.map { $0.canBackward }
+            .distinctUntilChanged()
+            .drive(musicPlayer.previousTrackCommand.rx.isEnabled)
+            .disposed(by: bag)
+        
     }
     
+}
+
+extension Reactive where Base: MPRemoteCommand {
+    
+    /// Bindable sink for `enabled` property.
+    public var isEnabled: Binder<Bool> {
+        return Binder(self.base) { command, value in
+            command.isEnabled = value
+        }
+    }
 }

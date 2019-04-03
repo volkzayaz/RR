@@ -234,22 +234,24 @@ final class PlayerViewModel: NSObject {
     
     var karaokeIntervalsViewModel: Driver<KaraokeIntervalsProgressViewModel?> {
         
-        return appState.map { ($0.player.currentItem?.lyrics?.data.karaoke, $0.player.currentItem?.state.progress) }
-            .distinctUntilChanged({ (lhs: (Karaoke?, TimeInterval?), rhs: (Karaoke?, TimeInterval?)) -> Bool in
+        return appState.map { ($0.player.currentItem?.lyrics?.data.karaoke, $0.currentTrack?.track.audioFile?.duration) }
+            .distinctUntilChanged({ (lhs: (Karaoke?, Int?), rhs: (Karaoke?, Int?)) -> Bool in
                 return lhs.0 == rhs.0 && lhs.1 == rhs.1
             })
-            .map { (maybeKaraoke, maybeProgress) in
+            .map { (maybeKaraoke, maybeDuration) in
 
-                guard let karaoke = maybeKaraoke, let progress = maybeProgress else {
+                guard let karaoke = maybeKaraoke, let duration = maybeDuration else {
                     return nil
                 }
 
+                let d = TimeInterval(duration)
+                
                 let karaokeIntervalViewModels = karaoke.intervals
                     .compactMap { x -> KaraokeIntervalProgressViewModel? in
                         guard !x.content.isEmpty else { return nil }
                         
-                        return KaraokeIntervalProgressViewModel(startValue: Float(x.start / progress),
-                                                                endValue: Float(x.end / progress),
+                        return KaraokeIntervalProgressViewModel(startValue: Float(x.range.lowerBound / d),
+                                                                endValue: Float(x.range.upperBound / d),
                                                                 color: #colorLiteral(red: 0.9725490196, green: 0.9058823529, blue: 0.1098039216, alpha: 1))
                     }
                 

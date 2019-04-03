@@ -66,19 +66,18 @@ extension KaraokeViewModel {
             }
          
             ////WTF is going on here?
-            guard let intervalIndex = intervals.firstIndex(where: { (interval) -> Bool in
-                return interval.start <= progress + 0.3 &&
-                       interval.end > progress }) else {
-                    
-                    guard let previousIntervalIndex = intervals.firstIndex(where: { (interval) -> Bool in
-                        return interval.start > progress }) else {
-                            return nil
-                        }
-                    
-                    return IndexPath(item: max(0, previousIntervalIndex - 1), section: 0)
+            
+            if let intervalIndex = intervals.firstIndex(where: { $0.range.contains(progress) }) {
+                return IndexPath(item: intervalIndex, section: 0)
             }
             
-            return IndexPath(item: intervalIndex, section: 0)
+            if let previousIntervalIndex = intervals.firstIndex(where: { (interval) -> Bool in
+                return interval.range.lowerBound > progress
+            }) {
+                return IndexPath(item: max(0, previousIntervalIndex - 1), section: 0)
+            }
+            
+            return nil
             
         }
             .do(onNext: { [weak self] (ip) in

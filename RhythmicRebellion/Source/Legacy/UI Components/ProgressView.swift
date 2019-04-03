@@ -10,16 +10,16 @@ import UIKit
 
 class KaraokeIntervalView: UIView {
 
-    let startValue: Float
-    let endValue: Float
+    let startValue: CGFloat
+    let endValue: CGFloat
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     init(with viewModel: KaraokeIntervalProgressViewModel) {
-        self.startValue = viewModel.startValue
-        self.endValue = viewModel.endValue
+        self.startValue = CGFloat(viewModel.startValue)
+        self.endValue = CGFloat(viewModel.endValue)
 
         super.init(frame: CGRect.zero)
 
@@ -44,8 +44,11 @@ class ProgressView: UISlider {
 
     func frame(for karaokeIntervalView: KaraokeIntervalView, in bounds: CGRect, thumbRect: CGRect) -> CGRect {
 
-        let origin = CGPoint(x: ((self.bounds.width - thumbRect.width) * CGFloat(karaokeIntervalView.startValue) + thumbRect.width).rounded(), y: bounds.minY + 0.5)
-        let size = CGSize(width: ((bounds.width - thumbRect.width) * CGFloat(karaokeIntervalView.endValue) + thumbRect.width - origin.x).rounded(), height: bounds.height - 1)
+        let origin = CGPoint(x: ((bounds.width - thumbRect.width) * karaokeIntervalView.startValue + thumbRect.width).rounded(),
+                             y: bounds.minY + 0.5)
+        
+        let size = CGSize(width: ((bounds.width - thumbRect.width) * karaokeIntervalView.endValue + thumbRect.width - origin.x).rounded(),
+                          height: bounds.height - 1)
 
         return CGRect(origin: origin, size: size)
     }
