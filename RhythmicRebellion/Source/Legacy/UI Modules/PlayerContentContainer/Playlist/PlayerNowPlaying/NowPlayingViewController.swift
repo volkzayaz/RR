@@ -194,19 +194,3 @@ extension NowPlayingViewController {
     }
 
 }
-
-extension NowPlayingViewController: TrackListBindings {
-
-    func reloadUI() {
-        //self.tableView.reloadData()
-    }
-
-    func reloadPlaylistUI() {
-        guard self.viewModel.tracksViewModel.isPlaylistEmpty == false else { self.tableView.tableHeaderView = nil; return }
-        self.tableView.tableHeaderView = self.tableHeaderView
-    }
-
-    func reloadObjects(at indexPaths: [IndexPath]) {
-        //self.tableView.reloadRows(at: indexPaths, with: .none)
-    }
-}

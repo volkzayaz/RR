@@ -73,8 +73,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let appViewController = self.window?.rootViewController as! AppViewController
 
-        NetworkActivityLogger.shared.level = .debug
-        NetworkActivityLogger.shared.startLogging()
+//        NetworkActivityLogger.shared.level = .debug
+//        NetworkActivityLogger.shared.startLogging()
         
         if let application = Application() {
             
