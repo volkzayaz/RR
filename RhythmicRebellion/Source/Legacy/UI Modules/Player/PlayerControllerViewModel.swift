@@ -173,10 +173,12 @@ final class PlayerViewModel: NSObject {
     let previewOptionHintText = BehaviorRelay<String?>(value: nil)
     
     var isPlayerBlocked: Driver<Bool> {
-        return appState
+        return appState.distinctUntilChanged({ (lhs, rhs) -> Bool in
+                return lhs.player.isBlocked == rhs.player.isBlocked
+            })
             .map { state in
                 
-                guard !state.player.lastChangeSignatureHash.isOwn else {
+                if state.player.lastChangeSignatureHash.isOwn {
                     return false
                 }
                 

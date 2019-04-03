@@ -220,7 +220,7 @@ extension TrackListViewModel {
             self?.doNotPlay(track: t.track)
         }
         
-        let maybeUser = appStateSlice.user as? User
+        let maybeUser = appStateSlice.user
         
         var result: [ActionViewModel] = []
         

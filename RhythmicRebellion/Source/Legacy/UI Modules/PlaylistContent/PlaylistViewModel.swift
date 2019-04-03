@@ -195,20 +195,9 @@ final class PlaylistViewModel {
             let maybeUser = appStateSlice.user
             
             //////1
-            
-            if maybeUser?.isGuest == false {
-                
-                let toPlaylist = ActionViewModel(.toPlaylist) {
-                    router.showAddToPlaylist(for: [t.track])
-                }
-                
-                result.append(toPlaylist)
-            }
-            
-            //////2
-            
+
             if t.track.isPlayable {
-            
+                
                 let playNow = ActionViewModel(.playNow) {
                     list.play(tracks: [t.track])
                 }
@@ -220,10 +209,21 @@ final class PlaylistViewModel {
                 let playLast = ActionViewModel(.playLast) {
                     list.play(tracks: [t.track], at: .last)
                 }
-            
+                
                 result.append(playNow)
                 result.append(playNext)
                 result.append(playLast)
+            }
+            
+            //////2
+            
+            if maybeUser?.isGuest == false {
+                
+                let toPlaylist = ActionViewModel(.toPlaylist) {
+                    router.showAddToPlaylist(for: [t.track])
+                }
+                
+                result.append(toPlaylist)
             }
             
             /////3

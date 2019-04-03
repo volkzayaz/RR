@@ -111,9 +111,7 @@ extension RRPlayer {
         /////-----
         
         /// sync player state
-        appState
-            .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
-            .filter { $0.player.lastChangeSignatureHash.isOwn }
+        appState.ownChangesOnlyOf { $0.player.currentItem?.state }
             .map { $0.player.currentItem?.state }
             .notNil()
             .drive(onNext: { [weak w = webSocket] (x) in
@@ -125,9 +123,7 @@ extension RRPlayer {
             .disposed(by: bag)
         
         ////sync current track ID
-        appState
-            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
-            .filter { $0.player.lastChangeSignatureHash.isOwn }
+        appState.ownChangesOnlyOf { $0.currentTrack }
             .skip(1) ///initial nil
             .drive(onNext: { [weak w = webSocket] (state) in
                 
@@ -141,9 +137,7 @@ extension RRPlayer {
             .disposed(by: bag)
         
         /// sync playlist order (insert/delete/create/flush)
-        appState
-            .distinctUntilChanged { $0.player.lastPatch == $1.player.lastPatch }
-            .filter { $0.player.lastChangeSignatureHash.isOwn }
+        appState.ownChangesOnlyOf { $0.player.lastPatch }
             .map { $0.player.lastPatch }
             .notNil()
             .drive(onNext: { [weak w = webSocket] (x) in
@@ -156,9 +150,7 @@ extension RRPlayer {
             .disposed(by: bag)
         
         /// sync blocked state
-        appState
-            .distinctUntilChanged { $0.player.isBlocked == $1.player.isBlocked }
-            .filter { $0.player.lastChangeSignatureHash.isOwn }
+        appState.ownChangesOnlyOf { $0.player.isBlocked }
             .map { $0.player.isBlocked }
             .skip(1)///initial state
             .drive(onNext: { [weak w = webSocket] (x) in
@@ -173,8 +165,7 @@ extension RRPlayer {
             .disposed(by: bag)
         
         ////sync master date
-        appState.distinctUntilChanged { $0.player.lastChangeSignatureHash == $1.player.lastChangeSignatureHash }
-            .filter { $0.player.lastChangeSignatureHash.isOwn }
+        appState.ownChangesOnlyOf { $0.player.lastChangeSignatureHash }
             .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
             .map { _ in Date() }
             .drive(masterDate)
@@ -285,6 +276,20 @@ extension RRPlayer {
             //        notifyFanPlaylistChanged(with: fanPlaylistState)
             //    }
             //
+        
+    }
+    
+}
+
+import RxCocoa
+extension Driver where E == AppState {
+    
+    func ownChangesOnlyOf<T: Equatable>( mapper: @escaping (AppState) -> T) -> SharedSequence {
+        
+        return distinctUntilChanged({ (lhs, rhs) -> Bool in
+                return mapper(lhs) == mapper(rhs)
+            })
+            .filter { $0.player.lastChangeSignatureHash.isOwn }
         
     }
     
