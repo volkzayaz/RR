@@ -159,7 +159,7 @@ struct RouterDependencies {
     var pagesLocalStorageService: PagesLocalStorageService { return self.application.pagesLocalStorageService }
     
     var webSocketService: WebSocketService {
-        return self.application.webSocketService
+        return daPlayer.webSocket
     }
     
     let application: Application

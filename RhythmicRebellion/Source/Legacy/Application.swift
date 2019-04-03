@@ -76,9 +76,7 @@ class Application: Watchable {
     }
 
     let restApiService: RestApiService
-    let webSocketService: WebSocketService
     let pagesLocalStorageService = PagesLocalStorageService()
-    
     
     let restApiServiceReachability: Reachability?
 
@@ -87,11 +85,8 @@ class Application: Watchable {
     init?() {
         guard let restApiService = RestApiService(serverURI: URI.restApiService, originURI: URI.origin) else { return nil }
         
-        let webSocketService = WebSocketService(url: URI.webSocketService)
-        
         self.restApiService = restApiService
-        self.webSocketService = webSocketService
-
+        
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
 
         initAppState()
