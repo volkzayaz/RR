@@ -79,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let application = Application() {
             
             let routerDependencies = RouterDependencies(application: application,
-                                                        daPlayer: RRPlayer(application: application))
+                                                        daPlayer: RRPlayer())
 
             let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
             defaultAppRouter.start(controller: appViewController)

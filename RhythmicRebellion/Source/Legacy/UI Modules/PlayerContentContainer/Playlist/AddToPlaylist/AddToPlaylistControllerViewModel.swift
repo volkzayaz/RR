@@ -93,17 +93,23 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
     func createPlaylist(with name: String) {
         self.delegate?.showProgress()
-        application.createPlaylist(with: name) {[weak self] (result) in
-            self?.delegate?.hideProgress()
-            switch result {
-            case .success(let playlist):
+        application.createPlaylist(with: name)
+            .subscribe(onSuccess: { [weak self] playlist in
+                
+                self?.delegate?.hideProgress()
+                
                 self?.playlists.insert(playlist, at: 0)
                 self?.delegate?.reloadUI()
                 self?.select(playlist: playlist)
-            case .failure(let error):
+
+                
+            }, onError: { [weak self] (error) in
+                
+                self?.delegate?.hideProgress()
+                
                 self?.delegate?.show(error: error)
-            }
-        }
+            })
+        
     }
 
     func cancel() {

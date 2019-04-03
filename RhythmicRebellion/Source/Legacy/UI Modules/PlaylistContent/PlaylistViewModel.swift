@@ -367,12 +367,11 @@ extension PlaylistViewModel {
         case .delete:
             guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.isDefault == false else { return }
 
-            self.application?.delete(playlist: fanPlaylist, completion: { [weak self] (error) in
-                guard let error = error else { return }
-                
-                self?.errorPresenter.show(error: error)
-            })
-
+            self.application?.delete(playlist: fanPlaylist)
+                .subscribe(onError: { [weak self] (error) in
+                    self?.errorPresenter.show(error: error)
+                })
+            
         case .cancel: break
         }
     }

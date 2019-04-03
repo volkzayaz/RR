@@ -16,12 +16,11 @@ import RxSwift
 ///TODO: drop NSObject conformance once Application is reactified
 class RRPlayer {
     
-    let webSocket: WebSocketService
+    let webSocket = WebSocketService(url: Application.URI.webSocketService)
     let audioPlayer = AudioPlayer()
     let mediaWidget = MediaWidget()
     
-    init(application: Application) {
-        self.webSocket = application.webSocketService
+    init() {
         
         connect()
         bind()

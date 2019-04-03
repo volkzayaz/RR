@@ -115,40 +115,6 @@ class Application: Watchable {
         
     }
 
-    // MARK: Fan Playlists
-
-    func createPlaylist(with name: String, completion: @escaping (Result<FanPlaylist>) -> Void) {
-        
-
-        self.restApiService.fanCreatePlaylist(with: name) { [weak self] (fanPlaylistResult) in
-            switch fanPlaylistResult {
-            case .success(let fanPlaylist):
-
-                let fanPlaylistState = FanPlaylistState(id: fanPlaylist.id, playlist: fanPlaylist)
-                self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanPlaylistState))
-
-                self?.notifyFanPlaylistChanged(with: fanPlaylistState)
-
-            default: break
-            }
-
-            completion(fanPlaylistResult)
-        }
-    }
-
-    func delete(playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
-        
-        self.restApiService.fanDelete(playlist: playlist) { [weak self] (error) in
-            guard error == nil else { completion(error); return }
-
-            let fanPlaylistState = FanPlaylistState(id: playlist.id, playlist: nil)
-            self?.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanPlaylistState))
-
-            self?.notifyFanPlaylistChanged(with: fanPlaylistState)
-
-            completion(nil)
-        }
-    }
 
 }
 
@@ -225,6 +191,33 @@ extension Application { /// UserManager
     
 }
 
+extension Application { /// PlaylistManager
+    
+    func createPlaylist(with name: String) -> Maybe<FanPlaylist> {
+        return PlaylistRequest.create(name: name)
+            .rx.response(type: FanPlaylist.self)
+            .do(onNext: { playlist in
+                
+                let fanPlaylistState = FanPlaylistState(id: playlist.id, playlist: playlist)
+                DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanPlaylistState))
+                
+            })
+    }
+    
+    func delete(playlist: FanPlaylist) -> Maybe<Void> {
+        return PlaylistRequest.delete(playlist: playlist)
+            .rx.emptyResponse()
+            .do(onNext: {
+                
+                let fanPlaylistState = FanPlaylistState(id: playlist.id, playlist: nil)
+                DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanPlaylistState))
+                
+            })
+    }
+    
+}
+
+
 extension Application {
 
     func notifyUserProfileChanged(purchasedTracksIds: Set<Int>, previousPurchasedTracksIds: Set<Int>) {
@@ -236,12 +229,6 @@ extension Application {
 
         self.watchersContainer.invoke({ (observer) in
             observer.application(self, didChangeUserProfile: Array(purchasedTracksIds), added: addedPurchasedTracksIds, removed: removedPurchasedTracksIds)
-        })
-    }
-
-    func notifyFanPlaylistChanged(with fanPlaylistState: FanPlaylistState) {
-        self.watchersContainer.invoke({ (observer) in
-            observer.application(self, didChangeFanPlaylist: fanPlaylistState)
         })
     }
 

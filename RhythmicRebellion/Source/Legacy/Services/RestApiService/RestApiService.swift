@@ -178,39 +178,6 @@ class RestApiService {
                 completion(response.error)
         }
     }
-    
-    func fanCreatePlaylist(with name: String, completion: @escaping (Result<FanPlaylist>) -> Void) {
-        guard let createPlaylistURL = self.makeURL(with: "fan/playlist") else { return }
-
-        let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json",
-                                    "Origin" : self.originURI]
-        
-        let parameters: Parameters = ["name" : name]
-
-        Alamofire.request(createPlaylistURL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-            .validate()
-            .restApiResponse { (dataResponse: DataResponse<FanPlaylistResponse>) in
-                switch dataResponse.result {
-                case .success(let playlistsResponse): completion(.success(playlistsResponse.playlist))
-                case .failure(let error): completion(.failure(error))
-                }
-        }
-    }
-
-    func fanDelete(playlist: FanPlaylist, completion: @escaping (Error?) -> Void) {
-        guard let deletePlaylistURL = self.makeURL(with: "fan/playlist/" + String(playlist.id)) else { return }
-
-        let headers: HTTPHeaders = ["Accept" : "application/json",
-                                    "Content-Type" : "application/json",
-                                    "Origin" : self.originURI]
-
-        Alamofire.request(deletePlaylistURL, method: .delete, headers: headers)
-            .validate()
-            .response { (response) in
-                completion(response.error)
-        }
-    }
 
     func playlists(completion: @escaping (Result<[DefinedPlaylist]>) -> Void) {
         guard let playlistsURL = self.makeURL(with: "player/playlists") else { return }

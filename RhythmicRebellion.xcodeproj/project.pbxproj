@@ -35,6 +35,7 @@
 		736456A2220C7610005BE389 /* PlaylistDeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456A1220C7610005BE389 /* PlaylistDeleteTests.swift */; };
 		736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */; };
 		736598E621D66E6C0092E499 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 736598E821D66E6C0092E499 /* Localizable.strings */; };
+		73732119225523E000606E09 /* PlaylistRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73732118225523E000606E09 /* PlaylistRequest.swift */; };
 		737622F621CD28AF005B603E /* Artist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 737622F521CD28AF005B603E /* Artist.storyboard */; };
 		739FFA28224BA3FF007A88CA /* PrepareLyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */; };
 		739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */; };
@@ -382,6 +383,7 @@
 		736456A1220C7610005BE389 /* PlaylistDeleteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDeleteTests.swift; sourceTree = "<group>"; };
 		736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInsertTests.swift; sourceTree = "<group>"; };
 		736598E721D66E6C0092E499 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		73732118225523E000606E09 /* PlaylistRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRequest.swift; sourceTree = "<group>"; };
 		737622F521CD28AF005B603E /* Artist.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Artist.storyboard; sourceTree = "<group>"; };
 		739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareLyrics.swift; sourceTree = "<group>"; };
 		739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLyricsMode.swift; sourceTree = "<group>"; };
@@ -911,6 +913,14 @@
 				736598E821D66E6C0092E499 /* Localizable.strings */,
 			);
 			path = Strings;
+			sourceTree = "<group>";
+		};
+		73732117225523C900606E09 /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				73732118225523E000606E09 /* PlaylistRequest.swift */,
+			);
+			path = Playlist;
 			sourceTree = "<group>";
 		};
 		739FFA26224B6E05007A88CA /* Lyrics */ = {
@@ -1858,6 +1868,7 @@
 		73F137C7222C289200FB8EBC /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				73732117225523C900606E09 /* Playlist */,
 				73B97A7122539DAC00B43D71 /* User */,
 				7327C9662252402800692810 /* Configs */,
 				73F137C8222C289200FB8EBC /* Track */,
@@ -2388,6 +2399,7 @@
 				7361C01E22368EF3008EA36E /* PrepareNewTrackByHash.swift in Sources */,
 				73F13853222C289200FB8EBC /* SelectableListControllerViewModel.swift in Sources */,
 				73F1388D222C289200FB8EBC /* RestorePasswordViewController.swift in Sources */,
+				73732119225523E000606E09 /* PlaylistRequest.swift in Sources */,
 				73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */,
 				73F138FE222C289200FB8EBC /* FollowingRouter.swift in Sources */,
 				73F138C8222C289200FB8EBC /* LyricsViewModel.swift in Sources */,

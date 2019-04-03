@@ -159,10 +159,11 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
         case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .clear: self.clear(playlist: playlist)
         case .delete:
-            self.application.delete(playlist: playlist) { [weak self] (error) in
-                guard let error = error else { return }
-                self?.delegate?.show(error: error)
-            }
+            self.application.delete(playlist: playlist)
+                .subscribe(onError: { [weak self] (error) in
+                    self?.delegate?.show(error: error)
+                })
+            
         case .cancel: break
         }
     }
