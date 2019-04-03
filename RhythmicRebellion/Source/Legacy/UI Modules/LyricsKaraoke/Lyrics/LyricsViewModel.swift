@@ -39,9 +39,7 @@ extension LyricsViewModel {
                 return "\n This is an instrumental song \n"
             }
             
-            if track.isCensorship,
-               let user = state.user,
-               user.stubTrackAudioFileReason(for: track) == .censorship {
+            if track.isCensorship {
                 return "\n Contains explicit material \n"
             }
             
