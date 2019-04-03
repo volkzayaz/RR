@@ -132,7 +132,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
     }
 
     func updateUserOnPage() {
-        guard let user = appStateSlice.user else { return }
+        let user = appStateSlice.user
         
         let data = try! JSONEncoder().encode(user)
         

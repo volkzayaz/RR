@@ -140,7 +140,6 @@ class AudioPlayer: NSObject {
             })
             .disposed(by: bag)
         
-        ///TODO: verify case when playback started on this device, but pause is clicked on other device
         appState
             .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
             .drive(onNext: { [weak p = player] (state) in
@@ -173,6 +172,7 @@ class AudioPlayer: NSObject {
                 case .addon(let x):         url = URL(string: x.audioFile.urlString)!
                 case .track(let x):         url = URL(string: x.audioFile!.urlString)!
                 case .minusOneTrack(let x): url = URL(string: x.backingAudioFile!.urlString)!
+                case .stub(let x):          url = URL(string: x.urlString)!
                 }
                 
                 if let x = p?.currentItem?.asset as? AVURLAsset,

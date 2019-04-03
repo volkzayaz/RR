@@ -93,7 +93,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     func load(with delegate: ProfileSettingsViewModelDelegate) {
         self.delegate = delegate
 
-        guard let profile = appStateSlice.user?.profile else { return }
+        guard let profile = appStateSlice.user.profile else { return }
 
         self.validator.styleTransformers(success:{ [unowned self] (validationRule) -> Void in
             self.delegate?.refreshField(field: validationRule.field, didValidate: nil)

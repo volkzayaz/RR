@@ -530,7 +530,7 @@ class Player: NSObject, Watchable {
     func stubReason(for track: Track) -> TrackStubReason? {
         guard let _ = track.audioFile else { return .noAudoFile(nil) }
         guard track.previewType != .noPreview else { return .noPreview(self.config?.noPreviewAudioFile) }
-        guard let userStubTrackAudioFileReason = self.application.user?.stubTrackAudioFileReason(for: track) else { return nil }
+        guard let userStubTrackAudioFileReason = self.application.user.stubTrackAudioFileReason(for: track) else { return nil }
 
         switch userStubTrackAudioFileReason {
         case .censorship: return .containseExplicitMaterial(self.config?.explicitMaterialAudioFile)
@@ -1286,8 +1286,8 @@ extension Player {
         })
 
         guard let currentPlayerItem = self.currentItem,
-            self.application.user?.hasPurchase(for: currentPlayerItem.playlistItem.track) == false,
-            (currentPlayerItem.playlistItem.track.isFollowAllowFreeDownload && self.application.user?.isFollower(for: currentPlayerItem.playlistItem.track.artist.id) ?? false) == false,
+            self.application.user.hasPurchase(for: currentPlayerItem.playlistItem.track) == false,
+            (currentPlayerItem.playlistItem.track.isFollowAllowFreeDownload && self.application.user.isFollower(for: currentPlayerItem.playlistItem.track.artist.id) ?? false) == false,
             currentPlayerItem.restrictedTime == nil,
             let currentTrackTotalPlayMSeconds = tracksTotalPlayMSeconds[currentPlayerItem.playlistItem.track.id] else { return }
 

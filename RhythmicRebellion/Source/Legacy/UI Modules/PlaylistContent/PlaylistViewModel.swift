@@ -192,7 +192,7 @@ final class PlaylistViewModel {
             
             var result: [ActionViewModel] = []
             
-            let maybeUser = appStateSlice.user
+            let user = appStateSlice.user
             
             //////1
 
@@ -217,7 +217,7 @@ final class PlaylistViewModel {
             
             //////2
             
-            if maybeUser?.isGuest == false {
+            if user.isGuest == false {
                 
                 let toPlaylist = ActionViewModel(.toPlaylist) {
                     router.showAddToPlaylist(for: [t.track])
@@ -380,7 +380,7 @@ extension PlaylistViewModel {
     func isAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, availableFor playlist: Playlist) -> Bool {
         switch actionType {
         case .playNow, .playNext, .playLast, .replaceCurrent: return self.tracksViewModel.isPlaylistEmpty == false
-        case .toPlaylist: return appStateSlice.user?.isGuest == false && self.tracksViewModel.isPlaylistEmpty == false
+        case .toPlaylist: return appStateSlice.user.isGuest == false && self.tracksViewModel.isPlaylistEmpty == false
         case .delete: return playlist.isFanPlaylist && playlist.isDefault == false
         case .clear: return false
         default: return true

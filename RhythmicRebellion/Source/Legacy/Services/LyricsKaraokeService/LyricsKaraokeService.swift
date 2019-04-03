@@ -66,8 +66,8 @@ class LyricsKaraokeService {
         
         let user = appStateSlice.user
 
-        self.explicitMaterialExcluded = BehaviorRelay(value: user?.profile.listeningSettings.isExplicitMaterialExcluded ?? true)
-        self.forceToPlayTracksIds = BehaviorRelay(value: user?.profile.forceToPlay ?? Set<Int>())
+        self.explicitMaterialExcluded = BehaviorRelay(value: user.profile.listeningSettings.isExplicitMaterialExcluded ?? true)
+        self.forceToPlayTracksIds = BehaviorRelay(value: user.profile.forceToPlay ?? Set<Int>())
 
         //let plyerCurrentItemChanges = self.player.currentItemObservable.asObservable()
         let modeChanges = self.mode.asObservable()

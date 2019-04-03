@@ -63,13 +63,13 @@ extension TrackViewModel {
     
     var downloadHintText: String? {
         
-        let userHasPurchase = user?.hasPurchase(for: track) ?? false
+        let userHasPurchase = user.hasPurchase(for: track) ?? false
         
         guard track.isFollowAllowFreeDownload || userHasPurchase else {
             return nil
         }
         
-        if user?.isGuest ?? true { return R.string.localizable.freeDownloadForFans() }
+        if user.isGuest ?? true { return R.string.localizable.freeDownloadForFans() }
         
         return R.string.localizable.freeDownloadForFollowers()
         
@@ -94,11 +94,11 @@ extension TrackViewModel {
     }
     
     var isCensorship: Bool {
-        return user?.isCensorshipTrack(track) ?? track.isCensorship
+        return user.isCensorshipTrack(track) ?? track.isCensorship
     }
     
     var downloadDisabled: Bool {
-        let userHasPurchase = user?.hasPurchase(for: track) ?? false
+        let userHasPurchase = user.hasPurchase(for: track) ?? false
         return !(track.isFollowAllowFreeDownload || userHasPurchase)
     }
     
@@ -114,14 +114,14 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
         return trackProvidable.track
     }
     fileprivate let trackProvidable: TrackProvidable
-    let user: User?
+    let user: User
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
     let downloadViewModel: DownloadViewModel
     let textImageGenerator: TextImageGenerator
     
-    init(router: TrackRouter, trackProvidable: TrackProvidable, user: User?,
+    init(router: TrackRouter, trackProvidable: TrackProvidable, user: User,
          textImageGenerator: TextImageGenerator) {
         
         self.router = router

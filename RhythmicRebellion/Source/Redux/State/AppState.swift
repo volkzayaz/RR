@@ -10,26 +10,44 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-fileprivate let _appState: BehaviorRelay<AppState> = {
+fileprivate let _appState = BehaviorRelay<AppState?>(value: nil)
+
+extension Application {
     
-    let x = AppState(player: PlayerState(tracks: LinkedPlaylist(),
-                                           lastPatch: nil,
-                                           currentItem: nil,
-                                           isBlocked: false,
-                                           lastChangeSignatureHash: WebSocketService.ownSignatureHash),
-                     user: nil
-                    )
+    func initAppState() {
+        
+        let u = UserRequest.login.rx.baseResponse(type: User.self).asObservable()
+        let c = ConfigRequest.player.rx.baseResponse(type: PlayerConfig.self).asObservable()
+        
+        let _ =
+        Observable.combineLatest(u, c)
+            .take(1)
+            .map { (arg) in
+                
+                let (user, config) = arg
+                
+                return AppState(player: PlayerState(tracks: LinkedPlaylist(),
+                                                    lastPatch: nil,
+                                                    currentItem: nil,
+                                                    isBlocked: false,
+                                                    lastChangeSignatureHash: WebSocketService.ownSignatureHash,
+                                                    config: config),
+                                user: user
+                )
+                
+            }
+            .bind(to: _appState)
+        
+    }
     
-    return BehaviorRelay(value: x)
-    
-}()
+}
 
 var appStateSlice: AppState {
-    return _appState.value
+    return _appState.value!
 }
 
 var appState: Driver<AppState> {
-    return _appState.asDriver()
+    return _appState.asDriver().notNil()
 }
 
 //TODO: implement nice human readable string description of AppState
@@ -37,7 +55,7 @@ var appState: Driver<AppState> {
 struct AppState: Equatable {
     
     var player: PlayerState
-    var user: User?
+    var user: User
     
 }
 
@@ -61,6 +79,8 @@ struct PlayerState: Equatable {
         var state: TrackState
         var lyrics: Lyrics?
     }
+    
+    let config: PlayerConfig
     
     struct Lyrics: Equatable {
         let data: RhythmicRebellion.Lyrics
@@ -123,15 +143,7 @@ extension AppState {
     }
 
     var canBackward: Bool {
-        
         return canForward
-        
-        ///TODO: understand why this piece of logic is present here
-        
-//        case .track(_), .stub(_):
-//            guard let trackProgress = self.currentTrackState?.progress, trackProgress > 0.3 else { return self.state.initialized }
-        
-        
     }
 
     var canSeek: Bool {
@@ -144,26 +156,39 @@ extension AppState {
     }
     
     enum MusicType: Equatable {
-        case addon(Addon)
-        case track(Track)
-        case minusOneTrack(Track)
+        case addon(Addon) /// small sounds prior to track such as announcements/intro/bio etc.
+        case track(Track) /// audio track
+        case minusOneTrack(Track) /// audio track without vocal for Karaoke
+        case stub(DefaultAudioFile) /// audio stub in case track playback is not possible (no preview/censorship etc.)
     };
     var activePlayable: MusicType? {
         
+        ///could be no track at all
         guard let currentItem = player.currentItem,
               let t = currentTrack?.track else {
             return nil
         }
         
+        ///possible stubs
+        if case .noPreview? = t.previewType, !user.isFollower(for: t.artist.id) {
+            return .stub(player.config.noPreviewAudioFile)
+        }
+        else if t.isCensorship, user.isCensorshipTrack(t) {
+            return .stub(player.config.explicitMaterialAudioFile)
+        }
+        
+        ///addon might be in the stack
         if let a = currentItem.addons.first {
             return .addon(a)
         }
         
+        ///karaoke mode might ask us to play minusOne track
         if case .karaoke(let config)? = currentItem.lyrics?.mode,
            case .backing = config.track {
             return .minusOneTrack(t)
         }
         
+        ///phew, regular track it is
         return .track(t)
     }
     
@@ -184,7 +209,7 @@ extension PlayerState.Lyrics.Mode.KaraokeConfig {
 
 extension Dispatcher {
     
-    static var state: BehaviorRelay<AppState> {
+    static var state: BehaviorRelay<AppState?> {
         return _appState
     }
     

@@ -10,7 +10,7 @@ import Foundation
 
 struct SetNewUser: Action {
     
-    let user: User?
+    let user: User
     
     func perform(initialState: AppState) -> AppState {
         
@@ -19,11 +19,11 @@ struct SetNewUser: Action {
         
         
         ///TODO: hide this global state change inside AppState
-        if let email = user?.profile?.email {
+        if let email = user.profile?.email {
             SettingsStore.lastSignedUserEmail.value = email
         }
         
-        if user == nil {
+        if user.isGuest { ///logout
             DownloadManager.default.clearArtifacts()
             DataLayer.get.application.pagesLocalStorageService.reset()
         }

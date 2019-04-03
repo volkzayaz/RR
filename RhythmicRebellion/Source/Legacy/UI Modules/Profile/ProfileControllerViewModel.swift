@@ -45,7 +45,7 @@ final class ProfileControllerViewModel: ProfileViewModel {
         self.profileItems = []
         
         let _ =
-        appState.map { $0.user?.profile }
+        appState.map { $0.user.profile }
                 .notNil()
                 .distinctUntilChanged()
             .drive ( onNext: { x in

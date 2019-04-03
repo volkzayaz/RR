@@ -64,11 +64,11 @@ final class NowPlayingViewModel {
             
             var result: [ActionViewModel] = []
             
-            let maybeUser = appStateSlice.user
+            let user = appStateSlice.user
             
             //////1
             
-            if maybeUser?.isGuest == false {
+            if user.isGuest == false {
                 
                 let toPlaylist = ActionViewModel(.toPlaylist) {
                     router.showAddToPlaylist(for: [t.track])

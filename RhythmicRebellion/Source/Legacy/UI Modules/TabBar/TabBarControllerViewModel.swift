@@ -21,8 +21,7 @@ struct TabBarViewModel {
         self.application = application
 
         let _ =
-        appState.map { $0.user?.isGuest }
-            .notNil()
+        appState.map { $0.user.isGuest }
             .distinctUntilChanged()
             .drive( onNext: { isGuest in
                 

@@ -10,7 +10,7 @@ import Foundation
 
 struct UpdateUser: Action {
     
-    let update: (inout User?) -> Void
+    let update: (inout User) -> Void
 
     func perform(initialState: AppState) -> AppState {
         var state = initialState

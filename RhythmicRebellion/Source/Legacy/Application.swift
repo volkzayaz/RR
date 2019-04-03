@@ -92,13 +92,9 @@ class Application: Watchable {
         self.restApiService = restApiService
         self.webSocketService = webSocketService
 
-        let _ =
-        UserRequest.login.rx.baseResponse(type: User.self)
-            .subscribe(onSuccess: { (user) in
-                Dispatcher.dispatch(action: SetNewUser(user: user))
-            })
-        
         self.restApiServiceReachability = Reachability(hostname: restApiService.serverURL.host!)
+
+        initAppState()
         
         self.restApiServiceReachability?.whenReachable = { [unowned self] _ in
             if self.config == nil { self.loadConfig() }
@@ -171,7 +167,7 @@ extension Application { /// UserManager
             .do(onNext: { (newState) in
                 
                 Dispatcher.dispatch(action: UpdateUser { user in
-                    user?.profile?.update(with: newState)
+                    user.profile?.update(with: newState)
                 })
                 
                 DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: newState))
@@ -204,7 +200,7 @@ extension Application { /// UserManager
             .do(onNext: { (state) in
                 
                 Dispatcher.dispatch(action: UpdateUser { user in
-                    user?.profile?.update(with: state)
+                    user.profile?.update(with: state)
                 })
                 
                 DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: state))
@@ -223,7 +219,7 @@ extension Application { /// UserManager
                                                  isFollowed: shouldFollow)
                 
                 Dispatcher.dispatch(action: UpdateUser { user in
-                    user?.profile?.update(with: state)
+                    user.profile?.update(with: state)
                 })
                 
                 DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: state))

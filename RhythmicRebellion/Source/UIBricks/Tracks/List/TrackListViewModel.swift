@@ -220,24 +220,22 @@ extension TrackListViewModel {
             self?.doNotPlay(track: t.track)
         }
         
-        let maybeUser = appStateSlice.user
+        let user = appStateSlice.user
         
         var result: [ActionViewModel] = []
         
-        if let user = maybeUser,
+        if !user.isGuest,
             user.isCensorshipTrack(t.track) &&
             !(user.profile?.forceToPlay.contains(t.track.id) ?? false) {
             result.append(ftp)
         }
         
-        if let user = maybeUser,
-            user.isCensorshipTrack(t.track) &&
+        if  user.isCensorshipTrack(t.track) &&
             user.profile?.forceToPlay.contains(t.track.id) ?? false {
             result.append(dnp)
         }
         
-        if let user = maybeUser,
-            user.hasPurchase(for: t.track) {
+        if user.hasPurchase(for: t.track) {
             ///No proper action is available so far
             //result.append(add)
         }

@@ -35,7 +35,7 @@ final class PromoViewModel {
                 
                 guard let t = state.currentTrack?.track else { return nil }
                 
-                return state.user?.isAddonsSkipped(for: t.artist)
+                return state.user.isAddonsSkipped(for: t.artist)
             }
             .notNil()
         
@@ -59,7 +59,7 @@ final class PromoViewModel {
             
                 guard state.currentTrack?.track != nil else { return nil }
                 
-                return state.user?.isGuest
+                return state.user.isGuest
             }
             .notNil()
     }

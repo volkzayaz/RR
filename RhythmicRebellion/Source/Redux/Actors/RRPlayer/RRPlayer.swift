@@ -93,7 +93,6 @@ extension RRPlayer {
     func connect() {
         
         appState.map { $0.user }
-            .notNil()
             .map { Token(token: $0.wsToken,
                          isGuest: $0.isGuest) }
             .distinctUntilChanged()
@@ -220,7 +219,7 @@ extension RRPlayer {
         webSocket.didReceiveListeningSettings
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
-                    user?.profile?.listeningSettings = state
+                    user.profile?.listeningSettings = state
                 }))
             })
             .disposed(by: bag)
@@ -228,7 +227,7 @@ extension RRPlayer {
         webSocket.didReceiveTrackForceToPlayState
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
-                    user?.profile?.update(with: state)
+                    user.profile?.update(with: state)
                 }))
             })
             .disposed(by: bag)
@@ -236,7 +235,7 @@ extension RRPlayer {
         webSocket.didReceiveArtistFollowingState
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
-                    user?.profile?.update(with: state)
+                    user.profile?.update(with: state)
                 }))
             })
             .disposed(by: bag)
@@ -244,7 +243,7 @@ extension RRPlayer {
         webSocket.didReceiveSkipArtistAddonsState
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
-                    user?.profile?.update(with: state)
+                    user.profile?.update(with: state)
                 }))
             })
             .disposed(by: bag)
@@ -252,7 +251,7 @@ extension RRPlayer {
         webSocket.didReceiveTrackLikeState
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateUser { user in
-                    user?.profile?.update(with: state)
+                    user.profile?.update(with: state)
                 }))
             })
             .disposed(by: bag)

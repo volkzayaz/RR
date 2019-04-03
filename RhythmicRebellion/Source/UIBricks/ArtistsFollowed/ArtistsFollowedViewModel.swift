@@ -48,7 +48,7 @@ struct ArtistsFollowedViewModel : MVVM_ViewModel {
                 return q.isEmpty
             }
         
-        let listUpdated = appState.map { $0.user?.profile?.followedArtistsIds }
+        let listUpdated = appState.map { $0.user.profile?.followedArtistsIds }
                                 .notNil()
                                 .distinctUntilChanged()
                                 .asObservable()

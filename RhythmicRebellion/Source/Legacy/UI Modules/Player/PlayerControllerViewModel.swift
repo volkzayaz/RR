@@ -99,6 +99,7 @@ final class PlayerViewModel: NSObject {
                 case .addon(let a): return a.type.title
                 case .track(let t): return t.name
                 case .minusOneTrack(let t): return "Minus one song. \(t.name)"
+                case .stub(_): return ""
                 }
                 
             }
@@ -118,10 +119,9 @@ final class PlayerViewModel: NSObject {
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { newState in
                 
-                guard let user = newState.user,
-                      let currentTrack = newState.currentTrack else { return .none }
+                guard let currentTrack = newState.currentTrack else { return .none }
                 
-                return user.likeState(for: currentTrack.track)
+                return newState.user.likeState(for: currentTrack.track)
             }
     }
 
@@ -215,10 +215,9 @@ final class PlayerViewModel: NSObject {
         
         return appState.map { newState in
             
-                guard let user   = newState.user,
-                      let artist = newState.currentTrack?.track.artist else { return false }
+                guard let artist = newState.currentTrack?.track.artist else { return false }
                 
-                return user.isFollower(for: artist.id)
+                return newState.user.isFollower(for: artist.id)
             }
     }
 
@@ -337,7 +336,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleLike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user?.isGuest ?? false else { self.routeToAuthorization(); return }
+        guard appStateSlice.user.isGuest ?? false else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked).subscribe()
         
@@ -345,7 +344,7 @@ final class PlayerViewModel: NSObject {
 
     func toggleDislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user?.isGuest ?? false else { self.routeToAuthorization(); return }
+        guard appStateSlice.user.isGuest ?? false else { self.routeToAuthorization(); return }
 
         self.application.update(track: track, likeState: .liked).subscribe()
         
@@ -358,9 +357,9 @@ final class PlayerViewModel: NSObject {
     func toggleArtistFollowing() {
 
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard let user = appStateSlice.user, !user.isGuest else { self.routeToAuthorization(); return }
+        guard !appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
         
-        self.application.follow(shouldFollow: !user.isFollower(for: track.artist.id),
+        self.application.follow(shouldFollow: !appStateSlice.user.isFollower(for: track.artist.id),
                                 artistId: track.artist.id)
             .subscribe()
     }
