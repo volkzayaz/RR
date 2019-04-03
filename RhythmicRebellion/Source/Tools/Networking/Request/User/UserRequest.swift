@@ -28,7 +28,7 @@ enum UserRequest: BaseNetworkRouter {
     case skipAddonRule(for: Artist, shouldSkip: Bool) ///BaseResponse<User>
     
     case like(track: Track, state: Track.LikeStates) ///TrackLikeState
-    case follow(artistId: String, shouldFollow: Bool) ///ArtistFollowingState
+    case follow(artistId: String, shouldFollow: Bool) ///Empty
 }
 
 extension UserRequest {

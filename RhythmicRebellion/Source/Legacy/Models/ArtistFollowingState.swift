@@ -13,8 +13,13 @@ struct ArtistFollowingState: Codable, Hashable {
     let isFollowed: Bool
 
     enum CodingKeys: String, CodingKey {
-        case artistId = "id"
+        case artistId = "artist_id"
         case isFollowed = "state"
+    }
+    
+    init(artistId: String, isFollowed: Bool) {
+        self.artistId = artistId
+        self.isFollowed = isFollowed
     }
     
     public var hashValue: Int { return artistId.hashValue }

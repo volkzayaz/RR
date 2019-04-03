@@ -70,11 +70,6 @@ struct User: Codable, Equatable {
         return self.profile?.skipAddonsArtistsIds.contains(artist.id) ?? false
     }
     
-    static func == (lhs: User, rhs: User) -> Bool {
-        guard lhs.profile?.id == rhs.profile?.id else { return false }
-        return true
-    }
-    
 }
 
 public enum UserStubTrackAudioFileReason {
@@ -268,6 +263,8 @@ extension UserProfile: Equatable {
                 lhs.phone == rhs.phone &&
                 lhs.hobbies == rhs.hobbies &&
                 lhs.genres == rhs.genres &&
-                lhs.language == rhs.language
+                lhs.language == rhs.language &&
+                lhs.followedArtistsIds == rhs.followedArtistsIds &&
+                lhs.tracksLikeStates == rhs.tracksLikeStates
     }
 }

@@ -212,11 +212,10 @@ final class PlayerViewModel: NSObject {
     }
 
     var isArtistFollowed: Driver<Bool> {
-        return appState
-            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
-            .map { newState in
-                
-                guard let user = newState.user,
+        
+        return appState.map { newState in
+            
+                guard let user   = newState.user,
                       let artist = newState.currentTrack?.track.artist else { return false }
                 
                 return user.isFollower(for: artist.id)
@@ -359,10 +358,11 @@ final class PlayerViewModel: NSObject {
     func toggleArtistFollowing() {
 
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard let user = appStateSlice.user, user.isGuest else { self.routeToAuthorization(); return }
+        guard let user = appStateSlice.user, !user.isGuest else { self.routeToAuthorization(); return }
         
         self.application.follow(shouldFollow: !user.isFollower(for: track.artist.id),
                                 artistId: track.artist.id)
+            .subscribe()
     }
 
     func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) {

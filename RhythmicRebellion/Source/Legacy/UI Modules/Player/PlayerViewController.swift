@@ -319,12 +319,14 @@ extension PlayerViewController {
             .disposed(by: rx.disposeBag)
 
         viewModel.isArtistFollowed
-            .drive(regularFollowButton.rx.isSelected)
+            .drive(onNext: { [weak self] (isSelected) in
+                self?.regularFollowButton.isSelected = isSelected
+                
+                self?.compactFollowButton.isSelected = isSelected
+                self?.compactFollowButton.tintColor = self?.regularFollowButton.tintColor
+            })
             .disposed(by: rx.disposeBag)
         
-        self.compactFollowButton.isSelected = self.regularFollowButton.isSelected
-        self.compactFollowButton.tintColor = self.regularFollowButton.tintColor
-
         viewModel.canFollowArtist
             .drive(regularFollowButton.rx.isEnabled)
             .disposed(by: rx.disposeBag)

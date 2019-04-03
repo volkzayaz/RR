@@ -216,8 +216,11 @@ extension Application { /// UserManager
     func follow(shouldFollow: Bool, artistId: String) -> Maybe<Void> {
         
         return UserRequest.follow(artistId: artistId, shouldFollow: shouldFollow)
-            .rx.response(type: ArtistFollowingState.self)
-            .do(onNext: { (state) in
+            .rx.emptyResponse()
+            .do(onNext: {
+                
+                let state = ArtistFollowingState(artistId: artistId,
+                                                 isFollowed: shouldFollow)
                 
                 Dispatcher.dispatch(action: UpdateUser { user in
                     user?.profile?.update(with: state)

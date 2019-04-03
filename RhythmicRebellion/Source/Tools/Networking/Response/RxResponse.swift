@@ -16,6 +16,11 @@ extension Reactive where Base : BaseNetworkRouter {
         return base.rxJSONResponse()
     }
     
+    func emptyResponse() -> Maybe<Void> {
+        return base.rxResponse()
+            .map { _ in }
+    }
+    
     func response<T: Decodable>(type: T.Type) -> Maybe<T> {
         return base.rxResponse()
             .map { (input) -> T in
