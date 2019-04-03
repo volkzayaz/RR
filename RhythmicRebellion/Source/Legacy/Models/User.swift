@@ -33,11 +33,11 @@ struct User: Codable, Equatable {
     
     public func encode(to encoder: Encoder) throws {
         
-        try self.profile.encode(to: encoder)
+        //try self.profile.encode(to: encoder)
         
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.wsToken, forKey: .wsToken)
         
+        try container.encode(self.wsToken, forKey: .wsToken)
         try container.encode(profile == nil, forKey: .guest)
         
     }

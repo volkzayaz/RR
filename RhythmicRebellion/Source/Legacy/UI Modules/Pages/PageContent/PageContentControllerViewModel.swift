@@ -185,7 +185,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
     }
 
     private func play(tracks: [Track]) {
-        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: .next))
+        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: .now))
     }
     
     private func addToPlayerPlaylist(tracks: [Track], at position: RRPlayer.AddStyle) {
