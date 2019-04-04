@@ -85,7 +85,7 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
         tabBarViewController = controller
         childViewContollers = controller.viewControllers
         tabBarViewController?.delegate = self
-        let vm = TabBarViewModel(router: self, application: self.dependencies.application)
+        let vm = TabBarViewModel(router: self)
 
         controller.configure(viewModel: vm, router: self, viewControllers: [])
     }

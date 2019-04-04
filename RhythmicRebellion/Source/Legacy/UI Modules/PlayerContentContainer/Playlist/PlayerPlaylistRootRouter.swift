@@ -85,7 +85,7 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRout
 
     func start(controller: PlayerPlaylistRootViewController) {
         sourceController = controller
-        let vm = PlayerPlaylistRootViewModel(router: self, application: dependencies.application)
+        let vm = PlayerPlaylistRootViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

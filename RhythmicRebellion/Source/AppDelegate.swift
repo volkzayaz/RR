@@ -76,18 +76,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        NetworkActivityLogger.shared.level = .debug
 //        NetworkActivityLogger.shared.startLogging()
         
-        if let application = Application() {
-            
-            let routerDependencies = RouterDependencies(application: application,
-                                                        daPlayer: RRPlayer())
-
-            let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
-            defaultAppRouter.start(controller: appViewController)
-
-            self.appRouter = defaultAppRouter
-            
-            Dispatcher.kickOff()
-        }
+        let routerDependencies = RouterDependencies(daPlayer: RRPlayer())
+        
+        let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
+        defaultAppRouter.start(controller: appViewController)
+        
+        self.appRouter = defaultAppRouter
+        
+        initAppState()
+        Dispatcher.kickOff()
         
         return self.appRouter != nil
     }

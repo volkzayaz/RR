@@ -35,7 +35,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
     private(set) weak var delegate: PageContentViewModelDelegate?
     private(set) weak var router: PageContentRouter?
 
-    private(set) var application: Application
+    
     private(set) var pagesLocalStorage: PagesLocalStorageService
 
     private(set) var page: Page
@@ -53,10 +53,10 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         
     }
 
-    init(router: PageContentRouter, page: Page, application: Application, pagesLocalStorage: PagesLocalStorageService) {
+    init(router: PageContentRouter, page: Page, pagesLocalStorage: PagesLocalStorageService) {
         self.router = router
         self.page = page
-        self.application = application
+        
         self.pagesLocalStorage = pagesLocalStorage
         self.requestedTimeTrackIds = []
         self.handledCommandsNames = [PageCommandType.getInitialData.rawValue,
@@ -364,35 +364,35 @@ extension PageContentControllerViewModel {
 
 extension PageContentControllerViewModel {
 
-    func application(_ application: Application, didChange user: User) {
+    func application( didChange user: User) {
         self.updateUserOnPage()
     }
 
-    func application(_ application: Application, didChangeUserProfile userProfile: UserProfile) {
+    func application( didChangeUserProfile userProfile: UserProfile) {
         self.updateUserOnPage()
     }
 
-    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
+    func application( didChangeUserProfile listeningSettings: ListeningSettings) {
         self.updateUserOnPage()
     }
 
-    func application(_ application: Application, didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) {
+    func application( didChangeUserProfile forceToPlayTracksIds: [Int], with trackForceToPlayState: TrackForceToPlayState) {
         self.updateUserOnPage()
     }
 
-    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+    func application( didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         self.updateUserOnPage()
     }
 
-    func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState) {
+    func application( didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState) {
         self.updateUserOnPage()
     }
 
-    func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
+    func application( didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
         self.updateUserOnPage()
     }
 
-    func application(_ application: Application, didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState) {
+    func application( didChangeUserProfile tracksLikeStates: [Int : Track.LikeStates], with trackLikeState: TrackLikeState) {
         self.updateUserOnPage()
     }
 

@@ -262,7 +262,7 @@ final class PlayerViewModel: NSObject {
     // MARK: - Private properties -
 
     private(set) weak var router: PlayerRouter?
-    private(set) var application: Application
+    
     
     private(set) var textImageGenerator: TextImageGenerator
 
@@ -270,9 +270,9 @@ final class PlayerViewModel: NSObject {
 
     // MARK: - Lifecycle -
 
-    init(router: PlayerRouter, application: Application) {
+    init(router: PlayerRouter) {
         self.router = router
-        self.application = application
+        
         
         self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
 
@@ -371,7 +371,7 @@ final class PlayerViewModel: NSObject {
 
 extension PlayerViewModel {
 
-    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+    func application( didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let artist = appStateSlice.currentTrack?.track.artist, artist.id == artistFollowingState.artistId else { return }
         
         

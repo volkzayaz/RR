@@ -52,7 +52,7 @@ final class DefaultListeningSettingsRouter:  ListeningSettingsRouter, FlowRouter
 
     func start(controller: ListeningSettingsViewController) {
         sourceController = controller
-        let vm = ListeningSettingsControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = ListeningSettingsControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

@@ -17,7 +17,7 @@ final class AppControllerViewModel: AppViewModel {
     private(set) weak var delegate: AppViewModelDelegate?
     private(set) weak var router: AppRouter?
 
-    private(set) weak var application: Application?
+    
 
     var isPlayerDisclosed: Bool = false
 
@@ -25,9 +25,9 @@ final class AppControllerViewModel: AppViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: AppRouter, application: Application) {
+    init(router: AppRouter) {
         self.router = router
-        self.application = application
+        
     }
 
     func load(with delegate: AppViewModelDelegate) {

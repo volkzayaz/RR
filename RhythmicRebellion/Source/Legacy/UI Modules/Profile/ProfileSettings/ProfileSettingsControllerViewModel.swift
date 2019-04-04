@@ -24,7 +24,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     private(set) weak var delegate: ProfileSettingsViewModelDelegate?
     private(set) weak var router: ProfileSettingsRouter?
-    private(set) weak var application: Application?
+    
     
 
     private(set) var countries: [Country]
@@ -59,9 +59,9 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     
     // MARK: - Lifecycle -
 
-    init(router: ProfileSettingsRouter, application: Application) {
+    init(router: ProfileSettingsRouter) {
         self.router = router
-        self.application = application
+        
         
         self.validator = Validator()
 

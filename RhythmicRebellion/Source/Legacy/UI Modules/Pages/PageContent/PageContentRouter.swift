@@ -62,7 +62,7 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
 
     func start(controller: PageContentViewController, page: Page) {
         sourceController = controller
-        let vm = PageContentControllerViewModel(router: self, page: page, application: self.dependencies.application, pagesLocalStorage: self.dependencies.pagesLocalStorageService)
+        let vm = PageContentControllerViewModel(router: self, page: page, pagesLocalStorage: self.dependencies.pagesLocalStorageService)
         controller.configure(viewModel: vm, router: self)
     }
 
@@ -81,7 +81,7 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
         router.sourceController = vc
         
         let vm = PlaylistViewModel(router: router,
-                                   application: DataLayer.get.application,
+                                   
                                    provider: AlbumPlaylistProvider(album: album,
                                                                    instantDownload: true))
         vc.configure(viewModel: vm, router: router)

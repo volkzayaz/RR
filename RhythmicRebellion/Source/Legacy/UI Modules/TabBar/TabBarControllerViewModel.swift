@@ -12,13 +12,13 @@ import Foundation
 struct TabBarViewModel {
 
     private(set) weak var router: TabBarRouter?
-    private(set) weak var application: Application?
+    
 
     // MARK: - Lifecycle -
 
-    init(router: TabBarRouter, application: Application) {
+    init(router: TabBarRouter) {
         self.router = router
-        self.application = application
+        
 
         let _ =
         appState.map { $0.user.isGuest }

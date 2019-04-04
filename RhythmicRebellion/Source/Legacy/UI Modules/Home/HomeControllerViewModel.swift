@@ -17,16 +17,16 @@ final class HomeControllerViewModel: HomeViewModel {
     private(set) weak var delegate: HomeViewModelDelegate?
     private(set) weak var router: HomeRouter?
 
-    private(set) var application: Application
+    
 
     private(set) var playlists: [DefinedPlaylist] = [DefinedPlaylist]()
     private(set) var playlistsActivities: [Int : Int] = [Int : Int]()
 
     // MARK: - Lifecycle -
 
-    init(router: HomeRouter, application: Application) {
+    init(router: HomeRouter) {
         self.router = router
-        self.application = application
+        
         
     }
 

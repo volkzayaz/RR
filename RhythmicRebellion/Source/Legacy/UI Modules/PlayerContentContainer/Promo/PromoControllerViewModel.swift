@@ -69,7 +69,7 @@ final class PromoViewModel {
     private(set) weak var delegate: PromoViewModelDelegate?
     private(set) weak var router: PromoRouter?
 
-    private(set) var application: Application
+    
 
     private var currentTrack: Driver<Track> {
         return appState.map { $0.currentTrack?.track }
@@ -80,9 +80,9 @@ final class PromoViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: PromoRouter, application: Application) {
+    init(router: PromoRouter) {
         self.router = router
-        self.application = application
+        
     }
 
     func load(with delegate: PromoViewModelDelegate) {

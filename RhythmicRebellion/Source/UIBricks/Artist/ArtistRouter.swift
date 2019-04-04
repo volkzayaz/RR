@@ -28,7 +28,7 @@ struct ArtistRouter : MVVM_Router {
         router.sourceController = vc
         
         let vm = PlaylistViewModel(router: router,
-                                   application: DataLayer.get.application,
+                                   
                                    provider: AlbumPlaylistProvider(album: album,
                                                                    instantDownload: false))
         vc.configure(viewModel: vm, router: router)
@@ -44,7 +44,7 @@ struct ArtistRouter : MVVM_Router {
         let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
         
         let vm = PlaylistViewModel(router: router,
-                                   application: DataLayer.get.application,
+                                   
                                    provider: ArtistPlaylistProvider(artistPlaylist: playlist))
         vc.configure(viewModel: vm, router: router)
         

@@ -26,7 +26,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
 
     private(set) weak var delegate: SignUpViewModelDelegate?
     private(set) weak var router: SignUpRouter?
-    private(set) weak var application: Application?
+    
     
 
     private(set) var countries: [Country]
@@ -58,10 +58,10 @@ final class SignUpControllerViewModel: SignUpViewModel {
     
     // MARK: - Lifecycle -
 
-    init(router: SignUpRouter, application: Application) {
+    init(router: SignUpRouter) {
         self.router = router
         
-        self.application = application
+        
 
         self.countries = [Country]()
         self.regions = [Region]()

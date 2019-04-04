@@ -161,8 +161,6 @@ struct RouterDependencies {
         return daPlayer.webSocket
     }
     
-    let application: Application
-    
     let daPlayer: RRPlayer!
     
 }

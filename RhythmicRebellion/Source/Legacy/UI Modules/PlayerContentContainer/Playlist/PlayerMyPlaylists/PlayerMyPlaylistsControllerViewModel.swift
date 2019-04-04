@@ -16,16 +16,14 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     private(set) weak var delegate: PlayerMyPlaylistsViewModelDelegate?
     private(set) weak var router: PlayerMyPlaylistsRouter?
 
-    private let application: Application
-    
     private(set) var playlists: [FanPlaylist] = [FanPlaylist]()
     private(set) var playlistsActivities: [Int : Int] = [Int : Int]()
 
     // MARK: - Lifecycle -
 
-    init(router: PlayerMyPlaylistsRouter, application: Application) {
+    init(router: PlayerMyPlaylistsRouter) {
         self.router = router
-        self.application = application
+        
         
     }
 
@@ -233,7 +231,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
 
 extension PlayerMyPlaylistsControllerViewModel {
 
-    func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
+    func application( didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
 
         guard let playlist = self.playlists.filter( { return $0.id == fanPlaylistState.id } ).first,
             let playlistIndex = self.playlists.index(of: playlist) else {

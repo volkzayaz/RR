@@ -60,7 +60,7 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
 
     func start(controller: PromoViewController) {
         sourceController = controller
-        let vm = PromoViewModel(router: self, application: self.dependencies.application)
+        let vm = PromoViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 

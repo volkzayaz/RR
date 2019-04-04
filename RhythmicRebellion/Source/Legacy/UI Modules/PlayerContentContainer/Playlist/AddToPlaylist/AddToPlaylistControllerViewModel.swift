@@ -16,7 +16,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
     private(set) weak var delegate: AddToPlaylistViewModelDelegate?
     private(set) weak var router: AddToPlaylistRouter?
-    private(set) var application: Application
+    
     
     private(set) var playlists: [FanPlaylist] = [FanPlaylist]()
     private let excludedPlaylists: [FanPlaylist]
@@ -28,9 +28,9 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
         
     }
 
-    init(router: AddToPlaylistRouter, application: Application, excludedPlaylists: [FanPlaylist]) {
+    init(router: AddToPlaylistRouter, excludedPlaylists: [FanPlaylist]) {
         self.router = router
-        self.application = application
+        
         
 
         self.excludedPlaylists = excludedPlaylists
@@ -118,7 +118,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
 extension AddToPlaylistControllerViewModel {
 
-    func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
+    func application( didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
         guard let playlist = self.playlists.filter( { return $0.id == fanPlaylistState.id } ).first,
             let playlistIndex = self.playlists.index(of: playlist) else {
 

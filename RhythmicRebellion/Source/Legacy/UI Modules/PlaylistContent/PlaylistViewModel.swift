@@ -154,7 +154,6 @@ final class PlaylistViewModel {
     }
     
     private(set) weak var router: PlaylistContentRouter!
-    private(set) weak var application: Application!
     
     let playlistHeaderViewModel: PlaylistHeaderViewModel
     
@@ -164,11 +163,10 @@ final class PlaylistViewModel {
     // MARK: - Lifecycle -
 
     init(router: PlaylistContentRouter,
-         application: Application,
          provider: PlaylistProvider) {
         
         self.router = router
-        self.application = application
+        
         
         
         if let p = provider as? DownloadablePlaylistProvider {
@@ -263,8 +261,7 @@ final class PlaylistViewModel {
             
         }
         
-        tracksViewModel = TrackListViewModel(application: application,
-                                             dataProvider: provider,
+        tracksViewModel = TrackListViewModel(dataProvider: provider,
                                              router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)
@@ -419,7 +416,7 @@ extension PlaylistViewModel {
 
 extension PlaylistViewModel {
 
-    func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
+    func application( didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
         guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.id == fanPlaylistState.id else { return }
         guard let _ = fanPlaylistState.playlist else { self.router?.dismiss(); return }
         

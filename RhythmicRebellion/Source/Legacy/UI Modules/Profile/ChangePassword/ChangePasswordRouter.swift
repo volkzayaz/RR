@@ -56,12 +56,12 @@ final class DefaultChangePasswordRouter:  ChangePasswordRouter, FlowRouterSegueC
     
     func start(controller: ChangePasswordViewController) {
         changePasswordViewController = controller
-        let vm = ChangePasswordControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = ChangePasswordControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 
     func restart() {
-        let vm = ChangePasswordControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = ChangePasswordControllerViewModel(router: self)
         self.changePasswordViewController?.configure(viewModel: vm, router: self)
     }
 }

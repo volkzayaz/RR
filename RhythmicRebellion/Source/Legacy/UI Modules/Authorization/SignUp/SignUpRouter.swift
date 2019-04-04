@@ -123,7 +123,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
 
     func start(controller: SignUpViewController) {
         sourceController = controller
-        let vm = SignUpControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = SignUpControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
         self.viewModel = vm
     }

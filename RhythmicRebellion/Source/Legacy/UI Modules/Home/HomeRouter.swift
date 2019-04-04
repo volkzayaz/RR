@@ -67,7 +67,7 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
 
     func start(controller: HomeViewController) {
         sourceController = controller
-        let vm = HomeControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = HomeControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 

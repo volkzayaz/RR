@@ -21,7 +21,7 @@ final class ChangePasswordControllerViewModel: ChangePasswordViewModel {
 
     // MARK: - Private properties -
 
-    private(set) var application: Application
+    
 
     private(set) weak var delegate: ChangePasswordViewModelDelegate?
     private(set) weak var router: ChangePasswordRouter?
@@ -40,9 +40,9 @@ final class ChangePasswordControllerViewModel: ChangePasswordViewModel {
 
 
 
-    init(router: ChangePasswordRouter, application: Application) {
+    init(router: ChangePasswordRouter) {
         self.router = router
-        self.application = application
+        
         self.validator = Validator()
     }
 

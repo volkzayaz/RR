@@ -23,7 +23,7 @@ final class SignInControllerViewModel: SignInViewModel {
 
     private(set) weak var delegate: SignInViewModelDelegate?
     private(set) weak var router: SignInRouter?
-    private(set) weak var application: Application?
+    
 
     private(set) var signInErrorDescription: String?
 
@@ -33,9 +33,9 @@ final class SignInControllerViewModel: SignInViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: SignInRouter, application: Application) {
+    init(router: SignInRouter) {
         self.router = router
-        self.application = application
+        
         self.validator = Validator()
     }
 

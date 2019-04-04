@@ -96,7 +96,6 @@ class TrackListViewModel {
     typealias SelectedProvider = (TrackListViewModel, TrackProvidable, IndexPath) -> Void
 
     private(set) weak var delegate: TrackListBindings?
-    private weak var application: Application?
     
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     private let trackPriceFormatter = MoneyFormatter()
@@ -120,13 +119,12 @@ class TrackListViewModel {
         return tracks.isEmpty
     }
     
-    init(application: Application,
-         dataProvider: TrackProvider,
+    init(dataProvider: TrackProvider,
          router: TrackListRouter,
          actionsProvider: @escaping ActionsProvider = { _, _, _ in [] },
          selectedProvider: @escaping SelectedProvider = { _, _, _ in }) {
     
-        self.application = application
+        
         
         self.trackProivder = dataProvider
         self.router = router
@@ -314,7 +312,7 @@ extension TrackListViewModel {
 
 extension TrackListViewModel {
     
-    func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
+    func application( didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         
         var indexPaths: [IndexPath] = []
         
@@ -328,7 +326,7 @@ extension TrackListViewModel {
         }
     }
     
-    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
+    func application( didChangeUserProfile listeningSettings: ListeningSettings) {
         self.delegate?.reloadUI()
     }
     

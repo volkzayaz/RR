@@ -90,7 +90,7 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
 
     func start(controller: PlayerViewController) {
         playerViewController = controller
-        let vm = PlayerViewModel(router: self, application: self.dependencies.application)
+        let vm = PlayerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

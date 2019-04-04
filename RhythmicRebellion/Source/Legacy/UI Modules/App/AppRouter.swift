@@ -80,7 +80,7 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
 
     func start(controller: AppViewController) {
         appViewController = controller
-        let vm = AppControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = AppControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 }

@@ -14,12 +14,8 @@ struct PlayerPlaylistRootViewModel {
 
     private(set) weak var router: PlayerPlaylistRootRouter?
 
-    private let application : Application
-    // MARK: - Lifecycle -
-
-    init(router: PlayerPlaylistRootRouter, application: Application) {
+    init(router: PlayerPlaylistRootRouter) {
         self.router = router
-        self.application = application
     }
     
     var showOnlyNowPlaying: Driver<Bool> {

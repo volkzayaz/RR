@@ -48,7 +48,7 @@ struct ArtistViewModel : MVVM_ViewModel {
         self.router = router
         self.artist = artist
 
-        tracksViewModel = TrackListViewModel(application: DataLayer.get.application,
+        tracksViewModel = TrackListViewModel(
                                              dataProvider: TracksProvider(artist: artist),
                                              router: router.trackListRouter())
         

@@ -38,7 +38,6 @@ final class NowPlayingViewModel {
     // MARK: - Private properties -
 
     private(set) weak var router: PlayerNowPlayingRouter!
-    private(set) weak var application: Application!
     
     fileprivate let data = BehaviorRelay<[TrackViewModel]>(value: [])
     fileprivate let trackObserver: TrackListViewModel.Observer
@@ -51,10 +50,9 @@ final class NowPlayingViewModel {
         return tracksViewModel.delegate!
     }
     
-    init(router: PlayerNowPlayingRouter,
-         application: Application) {
+    init(router: PlayerNowPlayingRouter) {
         self.router = router
-        self.application = application
+        
         
         let actions: TrackListViewModel.ActionsProvider = { list, t, _ in
             
@@ -120,8 +118,7 @@ final class NowPlayingViewModel {
             
         }
         
-        tracksViewModel = TrackListViewModel(application: application,
-                                             dataProvider: NowPlayingProvider(),
+        tracksViewModel = TrackListViewModel(dataProvider: NowPlayingProvider(),
                                              router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions,
                                              selectedProvider: select)

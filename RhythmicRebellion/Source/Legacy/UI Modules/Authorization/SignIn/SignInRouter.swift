@@ -60,7 +60,7 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
 
     func start(controller: SignInViewController) {
         signInViewController = controller
-        let vm = SignInControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = SignInControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 
@@ -69,7 +69,7 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
     }
 
     func restart() {
-        let vm = SignInControllerViewModel(router: self, application: self.dependencies.application)
+        let vm = SignInControllerViewModel(router: self)
         signInViewController?.configure(viewModel: vm, router: self)
     }
 

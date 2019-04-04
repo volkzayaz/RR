@@ -281,7 +281,6 @@
 		73F138DF222C289200FB8EBC /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379C222C289200FB8EBC /* PlayerViewModel.swift */; };
 		73F138E0222C289200FB8EBC /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379D222C289200FB8EBC /* PlayerViewController.swift */; };
 		73F138E1222C289200FB8EBC /* PlayerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379E222C289200FB8EBC /* PlayerRouter.swift */; };
-		73F138E3222C289200FB8EBC /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A0222C289200FB8EBC /* Application.swift */; };
 		73F138E4222C289200FB8EBC /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A2222C289200FB8EBC /* RestApiServiceError.swift */; };
 		73F138E8222C289200FB8EBC /* GenericError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A6222C289200FB8EBC /* GenericError.swift */; };
 		73F138EA222C289200FB8EBC /* UserRequestPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AB222C289200FB8EBC /* UserRequestPayload.swift */; };
@@ -629,7 +628,6 @@
 		73F1379C222C289200FB8EBC /* PlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		73F1379D222C289200FB8EBC /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		73F1379E222C289200FB8EBC /* PlayerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerRouter.swift; sourceTree = "<group>"; };
-		73F137A0222C289200FB8EBC /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		73F137A2222C289200FB8EBC /* RestApiServiceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiServiceError.swift; sourceTree = "<group>"; };
 		73F137A3222C289200FB8EBC /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		73F137A6222C289200FB8EBC /* GenericError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericError.swift; sourceTree = "<group>"; };
@@ -1078,7 +1076,6 @@
 				73F136A6222C289200FB8EBC /* Models */,
 				73F136CC222C289200FB8EBC /* Watchable.swift */,
 				73F136CD222C289200FB8EBC /* UI Modules */,
-				73F137A0222C289200FB8EBC /* Application.swift */,
 				73F137A1222C289200FB8EBC /* Errors */,
 				73F137A7222C289200FB8EBC /* Services */,
 			);
@@ -2433,7 +2430,6 @@
 				73F138B8222C289200FB8EBC /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */,
 				73F13835222C289200FB8EBC /* PlayerConfig.swift in Sources */,
 				73F1384E222C289200FB8EBC /* ConfirmationAlertViewModel.swift in Sources */,
-				73F138E3222C289200FB8EBC /* Application.swift in Sources */,
 				73F1383A222C289200FB8EBC /* PlayerPlaylistItemPatch.swift in Sources */,
 				73F1390E222C289200FB8EBC /* AnimationStatus.swift in Sources */,
 				73F13848222C289200FB8EBC /* HomeViewController.swift in Sources */,

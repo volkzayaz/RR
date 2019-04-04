@@ -16,7 +16,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     private(set) weak var delegate: ListeningSettingsViewModelDelegate?
     private(set) weak var router: ListeningSettingsRouter?
-    private(set) weak var application: Application?
+    
 
     private var listeningSettings: ListeningSettings = ListeningSettings.defaultSettings()
     private(set) var listeningSettingsSections: [ListeningSettingsSectionViewModel] = [ListeningSettingsSectionViewModel]()
@@ -26,9 +26,9 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: ListeningSettingsRouter, application: Application) {
+    init(router: ListeningSettingsRouter) {
         self.router = router
-        self.application = application
+        
     }
 
     private func checkDirtyState() {
@@ -353,7 +353,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
 extension ListeningSettingsControllerViewModel {
 
-    func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
+    func application( didChangeUserProfile listeningSettings: ListeningSettings) {
 
         guard self.isSaving == false else { return }
 

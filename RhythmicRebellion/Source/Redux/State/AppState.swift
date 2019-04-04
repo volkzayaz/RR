@@ -12,33 +12,29 @@ import RxCocoa
 
 fileprivate let _appState = BehaviorRelay<AppState?>(value: nil)
 
-extension Application {
+func initAppState() {
     
-    func initAppState() {
-        
-        let u = UserRequest.login.rx.baseResponse(type: User.self).asObservable()
-        let c = ConfigRequest.player.rx.baseResponse(type: PlayerConfig.self).asObservable()
-        
-        let _ =
-        Observable.combineLatest(u, c)
-            .take(1)
-            .map { (arg) in
-                
-                let (user, config) = arg
-                
-                return AppState(player: PlayerState(tracks: LinkedPlaylist(),
-                                                    lastPatch: nil,
-                                                    currentItem: nil,
-                                                    isBlocked: false,
-                                                    lastChangeSignatureHash: WebSocketService.ownSignatureHash,
-                                                    config: config),
-                                user: user
-                )
-                
-            }
-            .bind(to: _appState)
-        
-    }
+    let u = UserRequest.login.rx.baseResponse(type: User.self).asObservable()
+    let c = ConfigRequest.player.rx.baseResponse(type: PlayerConfig.self).asObservable()
+    
+    let _ =
+    Observable.combineLatest(u, c)
+        .take(1)
+        .map { (arg) in
+            
+            let (user, config) = arg
+            
+            return AppState(player: PlayerState(tracks: LinkedPlaylist(),
+                                                lastPatch: nil,
+                                                currentItem: nil,
+                                                isBlocked: false,
+                                                lastChangeSignatureHash: WebSocketService.ownSignatureHash,
+                                                config: config),
+                            user: user
+            )
+            
+        }
+        .bind(to: _appState)
     
 }
 

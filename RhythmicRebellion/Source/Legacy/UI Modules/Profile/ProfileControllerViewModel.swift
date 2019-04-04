@@ -31,16 +31,16 @@ final class ProfileControllerViewModel: ProfileViewModel {
 
     private(set) weak var delegate: ProfileViewModelDelegate?
     private(set) weak var router: ProfileRouter?
-    private(set) weak var application: Application?
+    
 
     private var fanUser: UserProfile?
     private var profileItems: [ProfileItem]
 
     // MARK: - Lifecycle -
 
-    init(router: ProfileRouter, application: Application) {
+    init(router: ProfileRouter) {
         self.router = router
-        self.application = application
+        
 
         self.profileItems = []
         
