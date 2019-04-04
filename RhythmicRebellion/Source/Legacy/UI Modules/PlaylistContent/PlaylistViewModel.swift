@@ -42,15 +42,15 @@ struct FanPlaylistProvider: DeletablePlaylistProvider {
     
     func delete(track: Track, completion: @escaping (Box<Void>) -> Void) {
         
-        return DataLayer.get.application.restApiService
-            .fanDelete(track,
-                       from: fanPlaylist,
-                       completion: { er in
-                        
-                        if let error = er { completion( .error(er:  error)) }
-                        else              { completion( .value(val: ()   )) }
-                            
+        let _ =
+        PlaylistRequest.deleteTrack(track, from: fanPlaylist)
+            .rx.emptyResponse()
+            .subscribe(onSuccess: {
+                completion( .value(val: ()   ))
+            }, onError: { error in
+                completion( .error(er:  error))
             })
+            
     }
     
 }
@@ -165,10 +165,6 @@ final class PlaylistViewModel {
     
     // MARK: - Lifecycle -
 
-    deinit {
-        self.application?.removeWatcher(self)
-    }
-
     init(router: PlaylistContentRouter,
          application: Application,
          restApiService: RestApiService,
@@ -282,8 +278,6 @@ final class PlaylistViewModel {
 
     func load(with delegate: TrackListBindings) {
         tracksViewModel.load(with: delegate)
-        
-        application.addWatcher(self)
     }
     
     func openIn(sourceRect: CGRect, sourceView: UIView) {
@@ -304,16 +298,16 @@ extension PlaylistViewModel {
     // MARK: Action support
 
     private func clear(playlist: Playlist) {
-        
+        `
         guard let fanPlaylist = playlist as? FanPlaylist else { return }
 
-        self.restApiService?.fanClear(playlist: fanPlaylist) { [weak self] (error) in
-            if let e = error {
-                self?.errorPresenter.show(error: e)
-            }
-            
-            self?.tracksViewModel.dropAllTracks()
-        }
+        PlaylistRequest.clear(playlist: fanPlaylist)
+            .rx.emptyResponse()
+            .subscribe(onSuccess: { [weak self] in
+                self?.tracksViewModel.dropAllTracks()
+            }, onError: { [weak self] error in
+                self?.errorPresenter.show(error: error)
+            })
         
     }
     
@@ -367,7 +361,7 @@ extension PlaylistViewModel {
         case .delete:
             guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.isDefault == false else { return }
 
-            self.application?.delete(playlist: fanPlaylist)
+            PlaylistManager.delete(playlist: fanPlaylist)
                 .subscribe(onError: { [weak self] (error) in
                     self?.errorPresenter.show(error: error)
                 })
@@ -426,7 +420,7 @@ extension PlaylistViewModel {
 }
 
 
-extension PlaylistViewModel: ApplicationWatcher {
+extension PlaylistViewModel {
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
         guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.id == fanPlaylistState.id else { return }

@@ -45,15 +45,15 @@ final class HomeControllerViewModel: HomeViewModel {
 
     func loadPlaylists() {
 
-        self.restApiService.playlists { [weak self] (definedPlaylistsResult) in
-            switch definedPlaylistsResult {
-            case .success(let definedPlaylists):
+        PlaylistRequest.rrList
+            .rx.response(type: [DefinedPlaylist].self)
+            .subscribe(onSuccess: { [weak self] (definedPlaylists) in
                 self?.playlists = definedPlaylists
                 self?.delegate?.reloadUI()
-            case .failure(let error):
-                self?.delegate?.show(error: error, completion: { [weak self] in self?.delegate?.reloadUI() })
-            }
-        }
+            }, onError: { [weak self] (error) in
+                    self?.delegate?.show(error: error, completion: { [weak self] in  self?.delegate?.reloadUI() })
+            })
+        
     }
 
     func numberOfItems(in section: Int) -> Int {
@@ -160,44 +160,49 @@ final class HomeControllerViewModel: HomeViewModel {
         self.increaseActivity(for: playlist)
         self.delegate?.reloadItem(at: indexPath,completion: nil)
 
-        self.restApiService.tracks(for: playlist.id) { [weak self] (tracksResult) in
-
-            guard let self = self else { return }
-            guard let playlistIndex = self.playlists.index(of: playlist) else { self.playlistsActivities[playlist.id] = nil; return }
-
-            let playlistIndexPath = IndexPath(item: playlistIndex, section: 0)
-            self.decreaseActivity(for: playlist)
-
-            switch tracksResult {
-            case .success(let tracks):
-
+        TrackRequest.tracks(playlistId: playlist.id)
+            .rx.response(type: [Track].self)
+            .subscribe(onSuccess: { [weak self] (tracks) in
+                
+                guard let self = self else { return }
+                guard let playlistIndex = self.playlists.index(of: playlist) else { self.playlistsActivities[playlist.id] = nil; return }
+                
+                let playlistIndexPath = IndexPath(item: playlistIndex, section: 0)
+                self.decreaseActivity(for: playlist)
+                
                 let filteredPlaylistActionsTypes = self.actionTypes(for: playlist).filter {
                     return self.isAction(with: $0, availableFor: playlist, with: tracks)
                 }
-
+                
                 let playlistActions = PlaylistActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredPlaylistActionsTypes) { [weak self] (actionType) in
                     guard let self = self else { return }
                     guard let confirmationViewModel = self.confirmation(for: actionType, with: playlist, with: tracks) else {
                         self.performeAction(with: actionType, for: playlist, with: tracks)
                         return
                     }
-
+                    
                     self.delegate?.showConfirmation(confirmationViewModel: confirmationViewModel)
                 }
-
+                
                 let title = filteredPlaylistActionsTypes.isEmpty ? playlist.name : nil
                 let message = filteredPlaylistActionsTypes.isEmpty ? NSLocalizedString("No actions available", comment: "Empty playlist actions message") : nil
-
+                
                 self.delegate?.reloadItem(at: playlistIndexPath, completion: {
                     completion(playlistIndexPath, PlaylistActionsViewModels.ViewModel(title: title, message: message, actions: playlistActions))
                 })
 
-
-            case .failure(let error):
-                self.delegate?.reloadItem(at: playlistIndexPath, completion: nil)
-                self.delegate?.show(error: error)
-            }
-
-        }
+                
+                }, onError: { (error) in
+                    
+                    guard let playlistIndex = self.playlists.index(of: playlist) else { self.playlistsActivities[playlist.id] = nil; return }
+                    
+                    let playlistIndexPath = IndexPath(item: playlistIndex, section: 0)
+                    self.decreaseActivity(for: playlist)
+                    
+                    self.delegate?.reloadItem(at: playlistIndexPath, completion: nil)
+                    self.delegate?.show(error: error)
+                    
+            })
+        
     }
 }

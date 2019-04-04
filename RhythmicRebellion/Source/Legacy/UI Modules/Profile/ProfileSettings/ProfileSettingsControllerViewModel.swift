@@ -31,7 +31,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     private(set) var regions: [Region]
     private(set) var cities: [City]
     private(set) var loadedGenres: [Genre]
-    var languages: [Language] { return self.application?.config?.languages ?? [] }
+    var languages: [Language] { return self.config?.languages ?? [] }
 
     private let validator: Validator
 
@@ -55,6 +55,8 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     private var genresField: GenresValidatableField?
     private var languageField: LanguageValidatableField?
 
+    var config: Config?
+    
     // MARK: - Lifecycle -
 
     init(router: ProfileSettingsRouter, application: Application, restApiService: RestApiService) {
@@ -104,7 +106,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
         self.userProfile = profile
         self.refreshDelegate(with: profile)
 
-        if self.application?.config == nil {
+        if self.config == nil {
             self.loadConfig { [weak self] (configResult) in
                 switch configResult {
                 case .success( _): self?.loadUser()
@@ -135,19 +137,20 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
 
     func loadConfig(completion: @escaping (Result<Config>) -> Void) {
 
-        self.application?.loadConfig(completion: { [weak self] (configResult) in
-            switch configResult {
-            case .success(let config):
-
+        let _ =
+        ConfigRequest.user.rx.baseResponse(type: Config.self)
+            .subscribe(onSuccess: { [weak self] (config) in
+                
                 if let selectedLanguageId = self?.userProfile?.language, let selectedLanguage = config.languages.filter( {$0.id == selectedLanguageId} ).first {
                     self?.delegate?.refreshLanguageField(with: selectedLanguage)
                 }
-
-            default: break
-            }
-
-            completion(configResult)
-        })
+                
+                self?.config = config
+                
+                completion(.success(config))
+                
+            })
+        
     }
 
     func unsavedChangesConfirmationViewModel() -> ConfirmationAlertViewModel.ViewModel {
@@ -701,7 +704,7 @@ extension ProfileSettingsControllerViewModel {
     }
 
     // MARK: - HobbiesDataSource -
-    var hobbies: [Hobby] { return self.hobbies(for: self.application?.config?.hobbies ?? []) }
+    var hobbies: [Hobby] { return self.hobbies(for: self.config?.hobbies ?? []) }
 
     func hobbies(for loadedHobbies: [Hobby]) -> [Hobby] {
         let additionalHobbies = self.userProfile?.hobbies.filter { $0.id == nil}

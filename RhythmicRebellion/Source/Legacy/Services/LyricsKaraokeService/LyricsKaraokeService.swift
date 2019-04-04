@@ -57,7 +57,7 @@ class LyricsKaraokeService {
     let disposeBag = DisposeBag()
 
     deinit {
-        self.application.removeWatcher(self)
+        
     }
 
     init(with application: Application) {
@@ -146,7 +146,7 @@ class LyricsKaraokeService {
             .disposed(by: disposeBag)
 
 
-        self.application.addWatcher(self)
+        
     }
 }
 
@@ -192,7 +192,7 @@ extension LyricsKaraokeService {
 
 }
 
-extension LyricsKaraokeService: ApplicationWatcher {
+extension LyricsKaraokeService {
 
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
         self.explicitMaterialExcluded.accept(listeningSettings.isExplicitMaterialExcluded)

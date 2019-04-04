@@ -216,7 +216,7 @@ class Player: NSObject, Watchable {
         
         return;
         
-        self.application.addWatcher(self)
+        
         
 
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidPlayToEndTime(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
@@ -1302,7 +1302,7 @@ extension Player {
     }
 }
 
-extension Player: ApplicationWatcher {
+extension Player {
 
     func application(_ application: Application, restApiServiceDidChangeReachableState isReachable: Bool) {
         guard isReachable == true, self.config == nil else { return }

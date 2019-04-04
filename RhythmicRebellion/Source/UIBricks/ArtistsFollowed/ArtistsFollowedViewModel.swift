@@ -111,8 +111,8 @@ extension ArtistsFollowedViewModel {
     func unfollow(artist: Artist) {
         
         let _ =
-        DataLayer.get.application.follow(shouldFollow: false,
-                                         artistId: artist.id)
+        UserManager.follow(shouldFollow: false,
+                           artistId: artist.id)
             .silentCatch(handler: router.owner)
             .subscribe()
         

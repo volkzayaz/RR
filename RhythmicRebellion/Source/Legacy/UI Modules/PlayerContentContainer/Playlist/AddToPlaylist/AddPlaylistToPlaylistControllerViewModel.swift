@@ -34,22 +34,32 @@ final class AddPlaylistToPlaylistControllerViewModel: AddToPlaylistControllerVie
     }
 
     func attach(_ attachingPlaylist: DefinedPlaylist, to playlist: FanPlaylist) {
-        self.delegate?.showProgress()
-        self.restApiService.fanAttach(playlist: attachingPlaylist, to: playlist) { [weak self] (error) in
-            self?.delegate?.hideProgress()
-            guard let error = error else { self?.router?.dismiss(); return }
-            self?.delegate?.show(error: error)
-        }
+        //self.delegate?.showProgress()
+        
+        PlaylistRequest.attachRR(playlist: attachingPlaylist, to: playlist)
+            .rx.emptyResponse()
+            .subscribe()
+        
+//        self.restApiService.fanAttach(playlist: attachingPlaylist, to: playlist) { [weak self] (error) in
+//            self?.delegate?.hideProgress()
+//            guard let error = error else { self?.router?.dismiss(); return }
+//            self?.delegate?.show(error: error)
+//        }
     }
 
     func attach(_ attachingPlaylist: FanPlaylist, to playlist: FanPlaylist) {
-        self.delegate?.showProgress()
-        self.restApiService.fanAttach(playlist: attachingPlaylist, to: playlist) { [weak self] (attachPlaylistResult) in
-            self?.delegate?.hideProgress()
-            switch attachPlaylistResult {
-            case .success(_): self?.router?.dismiss()
-            case .failure(let error): self?.delegate?.show(error: error)
-            }
-        }
+        
+        PlaylistRequest.attach(playlist: attachingPlaylist, to: playlist)
+            .rx.emptyResponse()
+            .subscribe()
+        
+//        self.delegate?.showProgress()
+//        self.restApiService.fanAttach(playlist: attachingPlaylist, to: playlist) { [weak self] (attachPlaylistResult) in
+//            self?.delegate?.hideProgress()
+//            switch attachPlaylistResult {
+//            case .success(_): self?.router?.dismiss()
+//            case .failure(let error): self?.delegate?.show(error: error)
+//            }
+//        }
     }
 }

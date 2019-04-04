@@ -24,10 +24,6 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
 
     // MARK: - Lifecycle -
 
-    deinit {
-        self.application.removeWatcher(self)
-    }
-
     init(router: PlayerMyPlaylistsRouter, application: Application, restApiService: RestApiService) {
         self.router = router
         self.application = application
@@ -42,7 +38,6 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
             self.delegate?.reloadUI()
         }
 
-        self.application.addWatcher(self)
     }
 
     func reload() {
@@ -52,16 +47,16 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     }
 
     func loadPlaylists() {
-        self.restApiService.fanPlaylists(completion: { [weak self] (playlistsResult) in
-
-            switch playlistsResult {
-            case .success(let playlists):
+        
+        PlaylistRequest.fanList
+            .rx.response(type: [FanPlaylist].self)
+            .subscribe(onSuccess: { [weak self] (playlists) in
                 self?.playlists = playlists
                 self?.delegate?.reloadUI()
-            case .failure(let error):
+            }, onError: { [weak self] (error) in
                 self?.delegate?.show(error: error, completion: { [weak self] in  self?.delegate?.reloadUI() })
-            }
-        })
+            })
+        
     }
 
     func numberOfItems(in section: Int) -> Int {
@@ -114,11 +109,15 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     private func clear(playlist: Playlist) {
         guard let fanPlaylist = playlist as? FanPlaylist else { return }
 
-        self.restApiService.fanClear(playlist: fanPlaylist, completion: { [weak self] (error) in
-            guard let error = error else { return }
-
-            self?.delegate?.show(error: error)
-        })
+        PlaylistRequest.clear(playlist: fanPlaylist)
+            .rx.emptyResponse()
+            .subscribe()
+        
+//        self.restApiService.fanClear(playlist: fanPlaylist, completion: { [weak self] (error) in
+//            guard let error = error else { return }
+//
+//            self?.delegate?.show(error: error)
+//        })
     }
 
     // MARK: - Playlist Actions -
@@ -159,7 +158,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
         case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .clear: self.clear(playlist: playlist)
         case .delete:
-            self.application.delete(playlist: playlist)
+            PlaylistManager.delete(playlist: playlist)
                 .subscribe(onError: { [weak self] (error) in
                     self?.delegate?.show(error: error)
                 })
@@ -186,49 +185,54 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
         self.increaseActivity(for: playlist)
         self.delegate?.reloadItem(at: indexPath,completion: nil)
 
-        self.restApiService.fanTracks(for: playlist.id) { [weak self] (tracksResult) in
-
-            guard let self = self else { return }
-            guard let playlistIndex = self.playlists.index(of: playlist) else { self.playlistsActivities[playlist.id] = nil; return }
-
-            let playlistIndexPath = IndexPath(item: playlistIndex, section: 0)
-            self.decreaseActivity(for: playlist)
-
-            switch tracksResult {
-            case .success(let tracks):
-
+        TrackRequest.fanTracks(playlistId: playlist.id)
+            .rx.response(type: [Track].self)
+            .subscribe(onSuccess: { [weak self] (tracks) in
+            
+                guard let self = self else { return }
+                guard let playlistIndex = self.playlists.index(of: playlist) else { self.playlistsActivities[playlist.id] = nil; return }
+                
+                let playlistIndexPath = IndexPath(item: playlistIndex, section: 0)
+                self.decreaseActivity(for: playlist)
+                
                 let filteredPlaylistActionsTypes = self.actionTypes(for: playlist).filter {
                     return self.isAction(with: $0, availableFor: playlist, with: tracks)
                 }
-
+                
                 let playlistActions = PlaylistActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredPlaylistActionsTypes) { [weak self] (actionType) in
                     guard let self = self else { return }
                     guard let confirmationViewModel = self.confirmation(for: actionType, with: playlist, with: tracks) else {
                         self.performeAction(with: actionType, for: playlist, with: tracks)
                         return
                     }
-
+                    
                     self.delegate?.showConfirmation(confirmationViewModel: confirmationViewModel)
                 }
-
+                
                 let title = filteredPlaylistActionsTypes.isEmpty ? playlist.name : nil
                 let message = filteredPlaylistActionsTypes.isEmpty ? NSLocalizedString("No actions available", comment: "Empty playlist actions message") : nil
-
+                
                 self.delegate?.reloadItem(at: playlistIndexPath, completion: {
                     completion(playlistIndexPath, PlaylistActionsViewModels.ViewModel(title: title, message: message, actions: playlistActions))
                 })
-
-
-            case .failure(let error):
+                
+                
+            }, onError: { (error) in
+                
+                guard let playlistIndex = self.playlists.index(of: playlist) else { self.playlistsActivities[playlist.id] = nil; return }
+                
+                let playlistIndexPath = IndexPath(item: playlistIndex, section: 0)
+                self.decreaseActivity(for: playlist)
+                
                 self.delegate?.reloadItem(at: playlistIndexPath, completion: nil)
                 self.delegate?.show(error: error)
-            }
-
-        }
+                
+            })
+       
     }
 }
 
-extension PlayerMyPlaylistsControllerViewModel: ApplicationWatcher {
+extension PlayerMyPlaylistsControllerViewModel {
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
 

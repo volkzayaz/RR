@@ -80,10 +80,6 @@ final class PromoViewModel {
 
     // MARK: - Lifecycle -
 
-    deinit {
-        self.application.removeWatcher(self)
-    }
-
     init(router: PromoRouter, application: Application) {
         self.router = router
         self.application = application
@@ -94,7 +90,7 @@ final class PromoViewModel {
 
         self.delegate?.refreshUI()
 
-        self.application.addWatcher(self)       
+               
     }
 
     func thumbnailURL() -> URL? {
@@ -105,7 +101,7 @@ final class PromoViewModel {
     func setSkipAddons(skip: Bool) {
         guard let artist = appStateSlice.currentTrack?.track.artist else { self.delegate?.refreshUI(); return }
 
-        self.application.updateSkipAddons(for: artist, skip: skip)
+        UserManager.updateSkipAddons(for: artist, skip: skip)
             .subscribe(onError: { [weak self] (error) in
                 self?.delegate?.show(error: error)
             })
@@ -137,14 +133,5 @@ extension PromoViewModel {
 
     func player(didChangePlayerItem playerItem: Void /*PlayerItem?*/) {
         self.delegate?.refreshUI()
-    }
-}
-
-extension PromoViewModel: ApplicationWatcher {
-
-    func application(_ application: Application, didChangeUserProfile skipAddonsArtistsIds: [String], with skipArtistAddonsState: SkipArtistAddonsState) {
-        guard skipArtistAddonsState.artistId == appStateSlice.currentTrack?.track.artist.id else { return }
-
-        //self.delegate?.refreshUI()
     }
 }

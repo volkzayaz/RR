@@ -284,11 +284,11 @@ final class PlayerViewModel: NSObject {
     }
 
     deinit {
-        self.application.removeWatcher(self)
+        
     }
 
     func load() {
-        self.application.addWatcher(self)
+        
     }
 
     func routeToAuthorization() {
@@ -338,7 +338,7 @@ final class PlayerViewModel: NSObject {
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
 
-        self.application.update(track: track, likeState: .liked).subscribe()
+        UserManager.update(track: track, likeState: .liked).subscribe()
         
     }
 
@@ -346,7 +346,7 @@ final class PlayerViewModel: NSObject {
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
 
-        self.application.update(track: track, likeState: .liked).subscribe()
+        UserManager.update(track: track, likeState: .liked).subscribe()
         
     }
 
@@ -359,7 +359,7 @@ final class PlayerViewModel: NSObject {
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard !appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
         
-        self.application.follow(shouldFollow: !appStateSlice.user.isFollower(for: track.artist.id),
+        UserManager.follow(shouldFollow: !appStateSlice.user.isFollower(for: track.artist.id),
                                 artistId: track.artist.id)
             .subscribe()
     }
@@ -369,7 +369,7 @@ final class PlayerViewModel: NSObject {
     }
 }
 
-extension PlayerViewModel: ApplicationWatcher {
+extension PlayerViewModel {
 
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         guard let artist = appStateSlice.currentTrack?.track.artist, artist.id == artistFollowingState.artistId else { return }

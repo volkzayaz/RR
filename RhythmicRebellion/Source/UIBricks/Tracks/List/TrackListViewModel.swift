@@ -120,10 +120,6 @@ class TrackListViewModel {
         return tracks.isEmpty
     }
     
-    deinit {
-        self.application?.removeWatcher(self)
-    }
-    
     init(application: Application,
          dataProvider: TrackProvider,
          router: TrackListRouter,
@@ -145,8 +141,6 @@ extension TrackListViewModel {
     
     func load(with delegate: TrackListBindings) {
         self.delegate = delegate
-        
-        self.application?.addWatcher(self)
         
         reloadTrigger.flatMapLatest { [unowned self] _ in
                 return self.trackProivder.provide()
@@ -259,7 +253,7 @@ extension TrackListViewModel {
     func forceToPlay(track: Track) {
 
         let _ =
-        application?.allowPlayTrackWithExplicitMaterial(trackId: track.id,
+        UserManager.allowPlayTrackWithExplicitMaterial(trackId: track.id,
                                                         shouldAllow: true)
             .subscribe(onError: { [weak self] error in
                 self?.delegate?.show(error: error)
@@ -270,7 +264,7 @@ extension TrackListViewModel {
     func doNotPlay(track: Track) {
         
         let _ =
-        application?.allowPlayTrackWithExplicitMaterial(trackId: track.id,
+        UserManager.allowPlayTrackWithExplicitMaterial(trackId: track.id,
                                                         shouldAllow: false)
             .subscribe(onError: { [weak self] error in
                 self?.delegate?.show(error: error)
@@ -318,7 +312,7 @@ extension TrackListViewModel {
 /////////////////
 
 
-extension TrackListViewModel: ApplicationWatcher {
+extension TrackListViewModel {
     
     func application(_ application: Application, didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
         
@@ -326,23 +320,6 @@ extension TrackListViewModel: ApplicationWatcher {
         
         for (index, t) in tracks.enumerated() {
             guard t.track.artist.id == artistFollowingState.artistId else { continue }
-            indexPaths.append(IndexPath(row: index, section: 0))
-        }
-        
-        if indexPaths.isEmpty == false {
-            self.delegate?.reloadObjects(at: indexPaths)
-        }
-    }
-    
-    func application(_ application: Application, didChangeUserProfile purchasedTracksIds: [Int], added: [Int], removed: [Int]) {
-        
-        var changedPurchasedTracksIds = Array(added)
-        changedPurchasedTracksIds.append(contentsOf: removed)
-        
-        var indexPaths: [IndexPath] = []
-        
-        for (index, t) in tracks.enumerated() {
-            guard changedPurchasedTracksIds.contains(t.track.id) else { continue }
             indexPaths.append(IndexPath(row: index, section: 0))
         }
         

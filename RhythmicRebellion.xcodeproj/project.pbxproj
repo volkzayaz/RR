@@ -36,6 +36,8 @@
 		736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */; };
 		736598E621D66E6C0092E499 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 736598E821D66E6C0092E499 /* Localizable.strings */; };
 		73732119225523E000606E09 /* PlaylistRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73732118225523E000606E09 /* PlaylistRequest.swift */; };
+		7373211C22552A4500606E09 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7373211B22552A4500606E09 /* UserManager.swift */; };
+		7373211E22552A5B00606E09 /* PlaylistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7373211D22552A5B00606E09 /* PlaylistManager.swift */; };
 		737622F621CD28AF005B603E /* Artist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 737622F521CD28AF005B603E /* Artist.storyboard */; };
 		739FFA28224BA3FF007A88CA /* PrepareLyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */; };
 		739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */; };
@@ -384,6 +386,8 @@
 		736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInsertTests.swift; sourceTree = "<group>"; };
 		736598E721D66E6C0092E499 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		73732118225523E000606E09 /* PlaylistRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRequest.swift; sourceTree = "<group>"; };
+		7373211B22552A4500606E09 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		7373211D22552A5B00606E09 /* PlaylistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistManager.swift; sourceTree = "<group>"; };
 		737622F521CD28AF005B603E /* Artist.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Artist.storyboard; sourceTree = "<group>"; };
 		739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareLyrics.swift; sourceTree = "<group>"; };
 		739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLyricsMode.swift; sourceTree = "<group>"; };
@@ -921,6 +925,15 @@
 				73732118225523E000606E09 /* PlaylistRequest.swift */,
 			);
 			path = Playlist;
+			sourceTree = "<group>";
+		};
+		7373211A22552A3300606E09 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				7373211B22552A4500606E09 /* UserManager.swift */,
+				7373211D22552A5B00606E09 /* PlaylistManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		739FFA26224B6E05007A88CA /* Lyrics */ = {
@@ -2069,6 +2082,7 @@
 			isa = PBXGroup;
 			children = (
 				7361BFFC223681DD008EA36E /* Redux */,
+				7373211A22552A3300606E09 /* Managers */,
 				73F1368A222C289200FB8EBC /* Legacy */,
 				73F137B8222C289200FB8EBC /* Tools */,
 				73F13666222C289200FB8EBC /* UIBricks */,
@@ -2504,10 +2518,12 @@
 				73F13918222C289200FB8EBC /* View+Extension.swift in Sources */,
 				73F13863222C289200FB8EBC /* ListeningSettingsViewController.swift in Sources */,
 				73F138AD222C289200FB8EBC /* VideoControllerViewModel.swift in Sources */,
+				7373211C22552A4500606E09 /* UserManager.swift in Sources */,
 				73F13874222C289200FB8EBC /* PlaylistHeaderViewModel.swift in Sources */,
 				73F1390A222C289200FB8EBC /* NWise.swift in Sources */,
 				73F13911222C289200FB8EBC /* MVVM.swift in Sources */,
 				73F1380C222C289200FB8EBC /* ProgressView.swift in Sources */,
+				7373211E22552A5B00606E09 /* PlaylistManager.swift in Sources */,
 				73F1384A222C289200FB8EBC /* PlaylistItemViewModel.swift in Sources */,
 				73F13891222C289200FB8EBC /* SignUpControllerViewModel.swift in Sources */,
 				73F138C4222C289200FB8EBC /* PlayerContentContainerViewModel.swift in Sources */,

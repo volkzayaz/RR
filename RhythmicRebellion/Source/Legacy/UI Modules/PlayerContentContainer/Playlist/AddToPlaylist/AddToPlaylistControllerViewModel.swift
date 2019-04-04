@@ -26,7 +26,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     // MARK: - Lifecycle -
 
     deinit {
-        self.application.removeWatcher(self)
+        
     }
 
     init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, excludedPlaylists: [FanPlaylist]) {
@@ -44,21 +44,20 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
         self.loadPlaylists()
         self.delegate?.reloadUI()
 
-        self.application.addWatcher(self)
+        
     }
     
     func loadPlaylists() {
-        self.restApiService.fanPlaylists(completion: { [weak self] (playlistsResult) in
-            guard let `self` = self else { return }
-
-            switch playlistsResult {
-            case .success(let playlists):
-                self.playlists = playlists.filter { self.excludedPlaylists.contains($0) == false }
-                self.delegate?.reloadUI()
-            case .failure(let error):
-                self.delegate?.show(error: error)
-            }
-        })
+        
+        PlaylistRequest.fanList
+            .rx.response(type: [FanPlaylist].self)
+            .subscribe(onSuccess: { [weak self] (playlists) in
+                self?.playlists = playlists
+                self?.delegate?.reloadUI()
+                }, onError: { [weak self] (error) in
+                    self?.delegate?.show(error: error, completion: { [weak self] in  self?.delegate?.reloadUI() })
+            })
+        
     }
     
     func numberOfItems() -> Int {
@@ -93,7 +92,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
     func createPlaylist(with name: String) {
         self.delegate?.showProgress()
-        application.createPlaylist(with: name)
+        PlaylistManager.createPlaylist(with: name)
             .subscribe(onSuccess: { [weak self] playlist in
                 
                 self?.delegate?.hideProgress()
@@ -118,7 +117,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     }
 }
 
-extension AddToPlaylistControllerViewModel: ApplicationWatcher {
+extension AddToPlaylistControllerViewModel {
 
     func application(_ application: Application, didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
         guard let playlist = self.playlists.filter( { return $0.id == fanPlaylistState.id } ).first,

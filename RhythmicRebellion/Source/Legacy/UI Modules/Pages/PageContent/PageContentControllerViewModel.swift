@@ -50,7 +50,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
     deinit {
         print("PageContentControllerViewModel deinit")
-        self.application.removeWatcher(self)
+        
     }
 
     init(router: PageContentRouter, page: Page, application: Application, pagesLocalStorage: PagesLocalStorageService) {
@@ -114,7 +114,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
 
 //        self.delegate?.evaluateJavaScript(javaScriptString: playerDisabledScriptSource, completionHandler: nil)
 
-        self.application.addWatcher(self)
+        
 
     }
 
@@ -309,7 +309,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
             
             //                print("setForceExplicit: \(trackForceToPlayState)")
             
-            application.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId,
+            UserManager.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId,
                                                            shouldAllow: trackForceToPlayState.isForcedToPlay).subscribe()
             
         case .toggleArtistFollowing:
@@ -317,7 +317,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
             guard let artistId = message.body as? String else { return }
             guard appStateSlice.user.isGuest else { self.router?.navigateToAuthorization(); return }
             
-            self.application.follow(shouldFollow: !appStateSlice.user.isFollower(for: artistId),
+            UserManager.follow(shouldFollow: !appStateSlice.user.isFollower(for: artistId),
                                     artistId: artistId)
                 .subscribe(onError: { [weak self] (error) in
                     self?.delegate?.show(error: error)
@@ -362,7 +362,7 @@ extension PageContentControllerViewModel {
     }
 }
 
-extension PageContentControllerViewModel: ApplicationWatcher {
+extension PageContentControllerViewModel {
 
     func application(_ application: Application, didChange user: User) {
         self.updateUserOnPage()

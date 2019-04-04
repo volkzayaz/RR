@@ -33,7 +33,6 @@ final class AppControllerViewModel: AppViewModel {
     func load(with delegate: AppViewModelDelegate) {
         self.delegate = delegate
 
-        self.application?.start()
     }
 
     func togglePlayerDisclosure() {

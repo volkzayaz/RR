@@ -47,8 +47,6 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         guard let profile = appStateSlice.user.profile else { return }
 
-        self.application?.addWatcher(self)
-
         self.listeningSettings = profile.listeningSettings
         self.listeningSettingsSections = self.makeListeningSettingsSections()
 
@@ -353,7 +351,7 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
     }
 }
 
-extension ListeningSettingsControllerViewModel: ApplicationWatcher {
+extension ListeningSettingsControllerViewModel {
 
     func application(_ application: Application, didChangeUserProfile listeningSettings: ListeningSettings) {
 

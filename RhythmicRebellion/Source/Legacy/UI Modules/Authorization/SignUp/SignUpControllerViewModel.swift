@@ -32,7 +32,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     private(set) var countries: [Country]
     private(set) var regions: [Region]
     private(set) var cities: [City]
-    var howHearList: [HowHear] { return self.application?.config?.howHearList ?? [] }
+    var howHearList: [HowHear] { return self.config?.howHearList ?? [] }
     private let validator: Validator
 
     private(set) var signUpErrorDescription: String?
@@ -54,6 +54,8 @@ final class SignUpControllerViewModel: SignUpViewModel {
     private var hobbiesField: HobbiesValidatableField?
     private var howHearField: HowHearValidatableField?
 
+    var config: Config?
+    
     // MARK: - Lifecycle -
 
     init(router: SignUpRouter, application: Application, restApiService: RestApiService) {
@@ -78,7 +80,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         })
 
 
-        if self.application?.config == nil {
+        if self.config == nil {
             self.loadConfig()
         }
 
@@ -94,21 +96,22 @@ final class SignUpControllerViewModel: SignUpViewModel {
         self.delegate?.refreshUI()
     }
 
-    func loadConfig(completion: ((Result<Config>) -> Void)? = nil) {
+    func loadConfig(completion: @escaping (Result<Config>) -> Void = { _ in }) {
 
-        self.application?.loadConfig(completion: { [weak self] (configResult) in
-            switch configResult {
-            case .success(let config):
-
+        let _ =
+        ConfigRequest.user.rx.baseResponse(type: Config.self)
+            .subscribe(onSuccess: { [weak self] (config) in
+                
                 if let selectedHowHear = self?.howHearField?.howHear, config.howHearList.contains(selectedHowHear) == false {
                     self?.delegate?.refreshHowHearField(with: nil)
                 }
-
-            default: break
-            }
-
-            completion?(configResult)
-        })
+                
+                self?.config = config
+                
+                completion(.success(config))
+                
+            })
+        
     }
 
     func registerEmailField(_ emailField: ValidatableField) {
@@ -607,7 +610,7 @@ extension SignUpControllerViewModel {
     }
 
     // MARK: - HobbiesDataSource -
-    var hobbies: [Hobby] { return self.hobbies(for: self.application?.config?.hobbies ?? []) }
+    var hobbies: [Hobby] { return self.hobbies(for: self.config?.hobbies ?? []) }
 
     func hobbies(for loadedHobbies: [Hobby]) -> [Hobby] {
         let selectedAdditionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? []

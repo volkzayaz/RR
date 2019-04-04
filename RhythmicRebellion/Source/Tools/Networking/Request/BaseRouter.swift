@@ -68,7 +68,7 @@ extension BaseNetworkRouter {
             else {
                 request.setValue("application/json", forHTTPHeaderField: "Accept")
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.setValue(Application.URI.origin, forHTTPHeaderField: "Origin")
+                request.setValue(URI.origin, forHTTPHeaderField: "Origin")
             }
             
             do {
@@ -98,8 +98,54 @@ extension BaseNetworkRouter {
                           
     
     var baseURL: String {
-        return Application.URI.restApiService + "/api/"
+        return URI.restApiService + "/api/"
     }
  
 }
 
+
+struct URI {
+    
+    static var origin: String {
+        
+        let env = SettingsStore.environment.value
+        
+        guard env != "prod" else {
+            return "https://rhythmic-rebellion.com"
+        }
+        
+        let `protocol` = env == "staging" ? "https" : "http"
+        
+        return "\(`protocol`)://\(String(describing: env)).fan.rebellionretailsite.com"
+    }
+    
+    static var restApiService: String {
+        
+        let env = SettingsStore.environment.value
+        
+        guard env != "prod" else {
+            return "https://api.rhythmic-rebellion.com"
+        }
+        
+        let `protocol` = env == "staging" ? "https" : "http"
+        
+        return "\(`protocol`)://\(String(describing: env)).api.rebellionretailsite.com"
+        
+    }
+    
+    static var webSocketService: String {
+        
+        let env = SettingsStore.environment.value
+        
+        guard env != "prod" else {
+            return "wss://ws.rebellion-services.com"
+        }
+        
+        guard env != "staging" else {
+            return "wss://staging.ws.rebellionretailsite.com:3000/"
+        }
+        
+        return "ws://\(String(describing: env)).rebellionretailsite.com:3000/"
+    }
+    
+}

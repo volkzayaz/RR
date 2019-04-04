@@ -18,15 +18,22 @@ final class AddTracksToPlaylistControllerViewModel: AddToPlaylistControllerViewM
     }
 
     override func select(playlist: FanPlaylist) {
-        self.delegate?.showProgress()
-        restApiService.fanAttach(self.tracks, to: playlist) {[weak self] (result) in
-            self?.delegate?.hideProgress()
-            switch result {
-            case .success(_):
-                self?.router?.dismiss()
-            case .failure(let error):
-                self?.delegate?.show(error: error)
-            }
-        }
+        //self.delegate?.showProgress()
+        
+        PlaylistRequest.attachTracks(tracks, to: playlist)
+            .rx.emptyResponse()
+            .subscribe(onSuccess: {
+                self.router?.dismiss()
+            })
+//
+//        restApiService.fanAttach(self.tracks, to: playlist) {[weak self] (result) in
+//            self?.delegate?.hideProgress()
+//            switch result {
+//            case .success(_):
+//                self?.router?.dismiss()
+//            case .failure(let error):
+//                self?.delegate?.show(error: error)
+//            }
+//        }
     }
 }

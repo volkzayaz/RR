@@ -156,7 +156,7 @@ struct PresentationSource {
 struct RouterDependencies {
 
     var restApiService: RestApiService { return self.application.restApiService }
-    var pagesLocalStorageService: PagesLocalStorageService { return self.application.pagesLocalStorageService }
+    var pagesLocalStorageService: PagesLocalStorageService { return daPlayer.pagesLocalStorageService }
     
     var webSocketService: WebSocketService {
         return daPlayer.webSocket
