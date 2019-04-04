@@ -12,7 +12,7 @@ final class AddPlaylistToPlaylistControllerViewModel: AddToPlaylistControllerVie
 
     let attachingPlaylist: Playlist
 
-    init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, playlist: Playlist) {
+    init(router: AddToPlaylistRouter, application: Application, playlist: Playlist) {
 
         self.attachingPlaylist = playlist
         var excludedPlaylists: [FanPlaylist] = [FanPlaylist]()
@@ -21,7 +21,7 @@ final class AddPlaylistToPlaylistControllerViewModel: AddToPlaylistControllerVie
             excludedPlaylists.append(attachingFanPlaylist)
         }
 
-        super.init(router: router, application: application, restApiService: restApiService, excludedPlaylists: excludedPlaylists)
+        super.init(router: router, application: application, excludedPlaylists: excludedPlaylists)
     }
 
     override func select(playlist: FanPlaylist) {

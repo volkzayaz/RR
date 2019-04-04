@@ -25,7 +25,7 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     private(set) weak var delegate: ProfileSettingsViewModelDelegate?
     private(set) weak var router: ProfileSettingsRouter?
     private(set) weak var application: Application?
-    private(set) weak var restApiService: RestApiService?
+    
 
     private(set) var countries: [Country]
     private(set) var regions: [Region]
@@ -59,10 +59,10 @@ final class ProfileSettingsControllerViewModel: ProfileSettingsViewModel {
     
     // MARK: - Lifecycle -
 
-    init(router: ProfileSettingsRouter, application: Application, restApiService: RestApiService) {
+    init(router: ProfileSettingsRouter, application: Application) {
         self.router = router
         self.application = application
-        self.restApiService = restApiService
+        
         self.validator = Validator()
 
         self.countries = []

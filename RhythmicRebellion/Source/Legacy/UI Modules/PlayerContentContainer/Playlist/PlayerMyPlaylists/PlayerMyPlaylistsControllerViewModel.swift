@@ -17,17 +17,16 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     private(set) weak var router: PlayerMyPlaylistsRouter?
 
     private let application: Application
-    private let restApiService: RestApiService
-
+    
     private(set) var playlists: [FanPlaylist] = [FanPlaylist]()
     private(set) var playlistsActivities: [Int : Int] = [Int : Int]()
 
     // MARK: - Lifecycle -
 
-    init(router: PlayerMyPlaylistsRouter, application: Application, restApiService: RestApiService) {
+    init(router: PlayerMyPlaylistsRouter, application: Application) {
         self.router = router
         self.application = application
-        self.restApiService = restApiService
+        
     }
 
     func load(with delegate: PlayerMyPlaylistsViewModelDelegate) {

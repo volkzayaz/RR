@@ -28,7 +28,7 @@ final class RestorePasswordControllerViewModel: RestorePasswordViewModel {
 
     private(set) weak var delegate: RestorePasswordViewModelDelegate?
     private(set) weak var router: RestorePasswordRouter?
-    private(set) weak var restApiService: RestApiService?
+    
 
     private var initialEmail: String?
 
@@ -42,9 +42,9 @@ final class RestorePasswordControllerViewModel: RestorePasswordViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: RestorePasswordRouter, restApiService: RestApiService, email: String?)  {
+    init(router: RestorePasswordRouter, email: String?)  {
         self.router = router
-        self.restApiService = restApiService
+        
         self.validator = Validator()
         self.initialEmail = email
     }

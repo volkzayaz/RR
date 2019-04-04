@@ -27,7 +27,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     private(set) weak var delegate: SignUpViewModelDelegate?
     private(set) weak var router: SignUpRouter?
     private(set) weak var application: Application?
-    private(set) weak var restApiService: RestApiService?
+    
 
     private(set) var countries: [Country]
     private(set) var regions: [Region]
@@ -58,9 +58,9 @@ final class SignUpControllerViewModel: SignUpViewModel {
     
     // MARK: - Lifecycle -
 
-    init(router: SignUpRouter, application: Application, restApiService: RestApiService) {
+    init(router: SignUpRouter, application: Application) {
         self.router = router
-        self.restApiService = restApiService
+        
         self.application = application
 
         self.countries = [Country]()

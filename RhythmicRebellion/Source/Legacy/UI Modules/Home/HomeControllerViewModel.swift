@@ -18,17 +18,16 @@ final class HomeControllerViewModel: HomeViewModel {
     private(set) weak var router: HomeRouter?
 
     private(set) var application: Application
-    private(set) var restApiService: RestApiService
 
     private(set) var playlists: [DefinedPlaylist] = [DefinedPlaylist]()
     private(set) var playlistsActivities: [Int : Int] = [Int : Int]()
 
     // MARK: - Lifecycle -
 
-    init(router: HomeRouter, application: Application, restApiService: RestApiService) {
+    init(router: HomeRouter, application: Application) {
         self.router = router
         self.application = application
-        self.restApiService = restApiService
+        
     }
 
     func load(with delegate: HomeViewModelDelegate) {

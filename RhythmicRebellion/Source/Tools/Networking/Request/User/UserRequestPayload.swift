@@ -2,15 +2,11 @@
 //  RestApiRequestPayloads.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 7/25/18.
+//  Created by Vlad Soroka on 7/25/18.
 //  Copyright © 2018 Patron Empowerment, LLC. All rights reserved.
 //
 
 import Foundation
-
-protocol RestApiRequestPayload: Encodable {
-
-}
 
 struct UserProfilePayload: Encodable {
 

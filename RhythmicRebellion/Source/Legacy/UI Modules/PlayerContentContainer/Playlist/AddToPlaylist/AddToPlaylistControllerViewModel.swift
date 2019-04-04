@@ -17,7 +17,6 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     private(set) weak var delegate: AddToPlaylistViewModelDelegate?
     private(set) weak var router: AddToPlaylistRouter?
     private(set) var application: Application
-    private(set) var restApiService : RestApiService
     
     private(set) var playlists: [FanPlaylist] = [FanPlaylist]()
     private let excludedPlaylists: [FanPlaylist]
@@ -29,10 +28,10 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
         
     }
 
-    init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, excludedPlaylists: [FanPlaylist]) {
+    init(router: AddToPlaylistRouter, application: Application, excludedPlaylists: [FanPlaylist]) {
         self.router = router
         self.application = application
-        self.restApiService = restApiService
+        
 
         self.excludedPlaylists = excludedPlaylists
 

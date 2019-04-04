@@ -12,9 +12,9 @@ final class AddTracksToPlaylistControllerViewModel: AddToPlaylistControllerViewM
 
     private let tracks : [Track]
 
-    init(router: AddToPlaylistRouter, application: Application, restApiService: RestApiService, tracks : [Track]) {
+    init(router: AddToPlaylistRouter, application: Application, tracks : [Track]) {
         self.tracks = tracks
-        super.init(router: router, application: application, restApiService: restApiService, excludedPlaylists: [])
+        super.init(router: router, application: application, excludedPlaylists: [])
     }
 
     override func select(playlist: FanPlaylist) {

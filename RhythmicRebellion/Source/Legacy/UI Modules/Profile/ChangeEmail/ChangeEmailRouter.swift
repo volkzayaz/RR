@@ -57,12 +57,12 @@ final class DefaultChangeEmailRouter:  ChangeEmailRouter, FlowRouterSegueCompati
 
     func start(controller: ChangeEmailViewController) {
         changeEmailViewController = controller
-        let vm = ChangeEmailControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
+        let vm = ChangeEmailControllerViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 
     func restart() {
-        let vm = ChangeEmailControllerViewModel(router: self, restApiService: self.dependencies.restApiService)
+        let vm = ChangeEmailControllerViewModel(router: self)
         self.changeEmailViewController?.configure(viewModel: vm, router: self)
     }
 }

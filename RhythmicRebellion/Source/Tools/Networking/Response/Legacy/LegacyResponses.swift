@@ -1,5 +1,5 @@
 //
-//  RestApiResponse.swift
+//  Decodable.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 7/11/18.
@@ -9,19 +9,7 @@
 import Foundation
 import Alamofire
 
-public protocol RestApiResponse: Decodable {    
-}
-
-public protocol EmptyRestApiResponse: RestApiResponse {
-    init()
-}
-
-struct DefaultEmptyRestApiResponse: EmptyRestApiResponse {
-    init() {
-    }
-}
-
-struct ErrorResponse: RestApiResponse {
+struct ErrorResponse: Decodable {
 
     let message: String
     let errors: [String: [String]]
@@ -47,7 +35,7 @@ struct ErrorResponse: RestApiResponse {
     }
 }
 
-struct FanUserResponse: RestApiResponse {
+struct FanUserResponse: Decodable {
 
     let user: User
 
@@ -63,7 +51,7 @@ struct FanUserResponse: RestApiResponse {
     }
 }
 
-struct FanLoginResponse: RestApiResponse {
+struct FanLoginResponse: Decodable {
 
     let user: User
 
@@ -83,7 +71,7 @@ struct FanLoginResponse: RestApiResponse {
     }
 }
 
-struct FanForgotPasswordResponse: RestApiResponse {
+struct FanForgotPasswordResponse: Decodable {
 
     let message: String
 
@@ -98,7 +86,7 @@ struct FanForgotPasswordResponse: RestApiResponse {
     }
 }
 
-struct FanRegistrationResponse: RestApiResponse {
+struct FanRegistrationResponse: Decodable {
 
     let userProfile: UserProfile
     let message: String
@@ -117,7 +105,7 @@ struct FanRegistrationResponse: RestApiResponse {
 }
 
 
-struct FanProfileResponse: RestApiResponse {
+struct FanProfileResponse: Decodable {
 
     let user: User
 
@@ -131,7 +119,7 @@ struct FanProfileResponse: RestApiResponse {
     }
 }
 
-struct ArtistsResponse: RestApiResponse {
+struct ArtistsResponse: Decodable {
 
     let artists: [Artist]
 
@@ -146,7 +134,7 @@ struct ArtistsResponse: RestApiResponse {
 }
 
 
-struct DefinedPlaylistsResponse: RestApiResponse {
+struct DefinedPlaylistsResponse: Decodable {
 
     let playlists: [DefinedPlaylist]
 
@@ -156,7 +144,7 @@ struct DefinedPlaylistsResponse: RestApiResponse {
     }
 }
 
-struct FanPlaylistsResponse: RestApiResponse {
+struct FanPlaylistsResponse: Decodable {
     
     let playlists: [FanPlaylist]
     
@@ -167,7 +155,7 @@ struct FanPlaylistsResponse: RestApiResponse {
 }
 
 
-struct PlaylistTracksResponse: RestApiResponse {
+struct PlaylistTracksResponse: Decodable {
     let tracks: [Track]
 
     enum CodingKeys: String, CodingKey {
@@ -180,7 +168,7 @@ struct PlaylistTracksResponse: RestApiResponse {
     }
 }
 
-struct FanPlaylistResponse: RestApiResponse {
+struct FanPlaylistResponse: Decodable {
     
     let playlist: FanPlaylist
     
@@ -190,7 +178,7 @@ struct FanPlaylistResponse: RestApiResponse {
     }
 }
 
-struct AttachTracksResponse: RestApiResponse {
+struct AttachTracksResponse: Decodable {
     let recordIds: [Int]
     
     enum CodingKeys: String, CodingKey {
@@ -208,7 +196,7 @@ struct AttachTracksResponse: RestApiResponse {
     }
 }
 
-struct AttachDefinedPlaylistResponse: RestApiResponse {
+struct AttachDefinedPlaylistResponse: Decodable {
     let recordIds: [Int: Int]
 
     enum CodingKeys: String, CodingKey {
@@ -231,7 +219,7 @@ struct AttachDefinedPlaylistResponse: RestApiResponse {
     }
 }
 
-struct TrackForceToPlayResponse: RestApiResponse {
+struct TrackForceToPlayResponse: Decodable {
 
     let fanId: Int
     let state: TrackForceToPlayState
@@ -251,7 +239,7 @@ struct TrackForceToPlayResponse: RestApiResponse {
     }
 }
 
-struct FollowArtistResponse: RestApiResponse {
+struct FollowArtistResponse: Decodable {
 
     let fanUserId: Int
     let state: ArtistFollowingState
@@ -271,7 +259,7 @@ struct FollowArtistResponse: RestApiResponse {
 
 }
 
-struct TrackLikeStateResponse: RestApiResponse {
+struct TrackLikeStateResponse: Decodable {
 
     let fanUserId: Int
     let state: TrackLikeState
@@ -292,7 +280,7 @@ struct TrackLikeStateResponse: RestApiResponse {
 
 }
 
-struct LyricsResponse: RestApiResponse {
+struct LyricsResponse: Decodable {
 
     let lyrics: Lyrics
 
@@ -303,7 +291,7 @@ struct LyricsResponse: RestApiResponse {
 
 // MARK: - Config -
 
-struct ConfigResponse: RestApiResponse {
+struct ConfigResponse: Decodable {
 
     let config: Config
 
@@ -313,7 +301,7 @@ struct ConfigResponse: RestApiResponse {
 
 }
 
-struct GenresResponse: RestApiResponse {
+struct GenresResponse: Decodable {
 
     let genres: [Genre]
 
@@ -327,7 +315,7 @@ struct GenresResponse: RestApiResponse {
     }
 }
 
-struct CountriesResponse: RestApiResponse {
+struct CountriesResponse: Decodable {
 
     let countries: [Country]
 
@@ -337,7 +325,7 @@ struct CountriesResponse: RestApiResponse {
     }
 }
 
-struct RegionsResponse: RestApiResponse {
+struct RegionsResponse: Decodable {
 
     let regions: [Region]
 
@@ -347,7 +335,7 @@ struct RegionsResponse: RestApiResponse {
     }
 }
 
-struct CitiesResponse: RestApiResponse {
+struct CitiesResponse: Decodable {
 
     let cities: [City]
 
@@ -357,7 +345,7 @@ struct CitiesResponse: RestApiResponse {
     }
 }
 
-struct DetailedLocationResponse: RestApiResponse {
+struct DetailedLocationResponse: Decodable {
 
     let detailedLocation: DetailedLocation
 

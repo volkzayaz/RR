@@ -23,7 +23,7 @@ final class ChangeEmailControllerViewModel: ChangeEmailViewModel {
 
     private(set) weak var delegate: ChangeEmailViewModelDelegate?
     private(set) weak var router: ChangeEmailRouter?
-    private(set) weak var restApiService: RestApiService?
+    
 
     private(set) var changeEmailErrorDescription: String?
 
@@ -35,9 +35,9 @@ final class ChangeEmailControllerViewModel: ChangeEmailViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: ChangeEmailRouter, restApiService: RestApiService) {
+    init(router: ChangeEmailRouter) {
         self.router = router
-        self.restApiService = restApiService
+        
         
         self.validator = Validator()
     }

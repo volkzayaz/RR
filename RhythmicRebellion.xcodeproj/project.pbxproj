@@ -44,7 +44,6 @@
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
-		73B97A7622550B6800B43D71 /* Alamofire+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AE222C289200FB8EBC /* Alamofire+Extension.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
 		73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */; };
@@ -285,9 +284,8 @@
 		73F138E3222C289200FB8EBC /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A0222C289200FB8EBC /* Application.swift */; };
 		73F138E4222C289200FB8EBC /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A2222C289200FB8EBC /* RestApiServiceError.swift */; };
 		73F138E8222C289200FB8EBC /* GenericError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A6222C289200FB8EBC /* GenericError.swift */; };
-		73F138EA222C289200FB8EBC /* RestApiRequestPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AB222C289200FB8EBC /* RestApiRequestPayloads.swift */; };
-		73F138EB222C289200FB8EBC /* RestApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AC222C289200FB8EBC /* RestApiService.swift */; };
-		73F138EC222C289200FB8EBC /* RestApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AD222C289200FB8EBC /* RestApiResponse.swift */; };
+		73F138EA222C289200FB8EBC /* UserRequestPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AB222C289200FB8EBC /* UserRequestPayload.swift */; };
+		73F138EC222C289200FB8EBC /* LegacyResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137AD222C289200FB8EBC /* LegacyResponses.swift */; };
 		73F138EE222C289200FB8EBC /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137B0222C289200FB8EBC /* Page.swift */; };
 		73F138EF222C289200FB8EBC /* PagesLocalStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137B1222C289200FB8EBC /* PagesLocalStorageService.swift */; };
 		73F138F5222C289200FB8EBC /* WSCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137BB222C289200FB8EBC /* WSCommand.swift */; };
@@ -635,14 +633,10 @@
 		73F137A2222C289200FB8EBC /* RestApiServiceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiServiceError.swift; sourceTree = "<group>"; };
 		73F137A3222C289200FB8EBC /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		73F137A6222C289200FB8EBC /* GenericError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericError.swift; sourceTree = "<group>"; };
-		73F137A9222C289200FB8EBC /* LyricsKaraokeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsKaraokeService.swift; sourceTree = "<group>"; };
-		73F137AB222C289200FB8EBC /* RestApiRequestPayloads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiRequestPayloads.swift; sourceTree = "<group>"; };
-		73F137AC222C289200FB8EBC /* RestApiService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiService.swift; sourceTree = "<group>"; };
-		73F137AD222C289200FB8EBC /* RestApiResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiResponse.swift; sourceTree = "<group>"; };
-		73F137AE222C289200FB8EBC /* Alamofire+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extension.swift"; sourceTree = "<group>"; };
+		73F137AB222C289200FB8EBC /* UserRequestPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserRequestPayload.swift; sourceTree = "<group>"; };
+		73F137AD222C289200FB8EBC /* LegacyResponses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyResponses.swift; sourceTree = "<group>"; };
 		73F137B0222C289200FB8EBC /* Page.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		73F137B1222C289200FB8EBC /* PagesLocalStorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesLocalStorageService.swift; sourceTree = "<group>"; };
-		73F137B6222C289200FB8EBC /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		73F137BB222C289200FB8EBC /* WSCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSCommand.swift; sourceTree = "<group>"; };
 		73F137BC222C289200FB8EBC /* WebSocketService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		73F137BF222C289200FB8EBC /* TrackResponses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackResponses.swift; sourceTree = "<group>"; };
@@ -936,6 +930,14 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		737321202255E01800606E09 /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				73F137AD222C289200FB8EBC /* LegacyResponses.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
 		739FFA26224B6E05007A88CA /* Lyrics */ = {
 			isa = PBXGroup;
 			children = (
@@ -957,6 +959,7 @@
 		73B97A7122539DAC00B43D71 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				73F137AB222C289200FB8EBC /* UserRequestPayload.swift */,
 				73B97A7222539DC500B43D71 /* UserRequest.swift */,
 			);
 			path = User;
@@ -1078,7 +1081,6 @@
 				73F137A0222C289200FB8EBC /* Application.swift */,
 				73F137A1222C289200FB8EBC /* Errors */,
 				73F137A7222C289200FB8EBC /* Services */,
-				73F137B2222C289200FB8EBC /* Player */,
 			);
 			path = Legacy;
 			sourceTree = "<group>";
@@ -1761,30 +1763,9 @@
 		73F137A7222C289200FB8EBC /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				73F137A8222C289200FB8EBC /* LyricsKaraokeService */,
-				73F137AA222C289200FB8EBC /* RestApiService */,
 				73F137AF222C289200FB8EBC /* PagesLocalStorageService */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		73F137A8222C289200FB8EBC /* LyricsKaraokeService */ = {
-			isa = PBXGroup;
-			children = (
-				73F137A9222C289200FB8EBC /* LyricsKaraokeService.swift */,
-			);
-			path = LyricsKaraokeService;
-			sourceTree = "<group>";
-		};
-		73F137AA222C289200FB8EBC /* RestApiService */ = {
-			isa = PBXGroup;
-			children = (
-				73F137AB222C289200FB8EBC /* RestApiRequestPayloads.swift */,
-				73F137AC222C289200FB8EBC /* RestApiService.swift */,
-				73F137AD222C289200FB8EBC /* RestApiResponse.swift */,
-				73F137AE222C289200FB8EBC /* Alamofire+Extension.swift */,
-			);
-			path = RestApiService;
 			sourceTree = "<group>";
 		};
 		73F137AF222C289200FB8EBC /* PagesLocalStorageService */ = {
@@ -1794,14 +1775,6 @@
 				73F137B1222C289200FB8EBC /* PagesLocalStorageService.swift */,
 			);
 			path = PagesLocalStorageService;
-			sourceTree = "<group>";
-		};
-		73F137B2222C289200FB8EBC /* Player */ = {
-			isa = PBXGroup;
-			children = (
-				73F137B6222C289200FB8EBC /* Player.swift */,
-			);
-			path = Player;
 			sourceTree = "<group>";
 		};
 		73F137B8222C289200FB8EBC /* Tools */ = {
@@ -1838,6 +1811,7 @@
 		73F137BD222C289200FB8EBC /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				737321202255E01800606E09 /* Legacy */,
 				73F137BE222C289200FB8EBC /* Track */,
 				73F137C0222C289200FB8EBC /* RxResponse.swift */,
 				73F137C1222C289200FB8EBC /* Data */,
@@ -2506,7 +2480,6 @@
 				730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */,
 				73F13896222C289200FB8EBC /* SignInViewController.swift in Sources */,
 				7361C02E2236917C008EA36E /* ChangeBlockState.swift in Sources */,
-				73B97A7622550B6800B43D71 /* Alamofire+Extension.swift in Sources */,
 				73F138FC222C289200FB8EBC /* TrackRequests.swift in Sources */,
 				73F1382F222C289200FB8EBC /* City.swift in Sources */,
 				73F13833222C289200FB8EBC /* AudioFile.swift in Sources */,
@@ -2552,11 +2525,10 @@
 				73F138B3222C289200FB8EBC /* CreatePlaylistTableViewCell.swift in Sources */,
 				73F138CC222C289200FB8EBC /* KaraokeRouter.swift in Sources */,
 				73F13805222C289200FB8EBC /* AudioPlayer.swift in Sources */,
-				73F138EB222C289200FB8EBC /* RestApiService.swift in Sources */,
 				73F13841222C289200FB8EBC /* CheckAddons.swift in Sources */,
 				73F138D0222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift in Sources */,
 				73F13828222C289200FB8EBC /* Lyrics.swift in Sources */,
-				73F138EC222C289200FB8EBC /* RestApiResponse.swift in Sources */,
+				73F138EC222C289200FB8EBC /* LegacyResponses.swift in Sources */,
 				73F1384D222C289200FB8EBC /* PlaylistActions.swift in Sources */,
 				73F138DE222C289200FB8EBC /* PromoControllerViewModel.swift in Sources */,
 				73F13812222C289200FB8EBC /* ScrollableContentViewController.swift in Sources */,
@@ -2651,7 +2623,7 @@
 				739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */,
 				73F13912222C289200FB8EBC /* CatchError.swift in Sources */,
 				7361C0262236909F008EA36E /* StoreTracks.swift in Sources */,
-				73F138EA222C289200FB8EBC /* RestApiRequestPayloads.swift in Sources */,
+				73F138EA222C289200FB8EBC /* UserRequestPayload.swift in Sources */,
 				73F13881222C289200FB8EBC /* ProfileViewController.swift in Sources */,
 				73F1383E222C289200FB8EBC /* Country.swift in Sources */,
 				73F13817222C289200FB8EBC /* UIImageView+Placeholder.swift in Sources */,

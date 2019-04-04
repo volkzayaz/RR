@@ -66,8 +66,8 @@ final class DefaultPlayerMyPlaylistsRouter:  PlayerMyPlaylistsRouter, FlowRouter
     func start(controller: PlayerMyPlaylistsViewController) {
         sourceController = controller
         let vm = PlayerMyPlaylistsControllerViewModel(router: self,
-                                                      application: dependencies.application,
-                                                      restApiService: self.dependencies.restApiService)
+                                                      application: dependencies.application)
+                                                      
         controller.configure(viewModel: vm, router: self)
     }
 

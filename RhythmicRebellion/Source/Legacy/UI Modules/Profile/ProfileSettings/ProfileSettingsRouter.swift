@@ -139,7 +139,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
     func start(controller: ProfileSettingsViewController) {
         sourceController = controller
-        let vm = ProfileSettingsControllerViewModel(router: self, application: self.dependencies.application, restApiService: self.dependencies.restApiService)
+        let vm = ProfileSettingsControllerViewModel(router: self, application: self.dependencies.application)
         controller.configure(viewModel: vm, router: self)
     }
 

@@ -156,8 +156,6 @@ final class PlaylistViewModel {
     private(set) weak var router: PlaylistContentRouter!
     private(set) weak var application: Application!
     
-    private(set) weak var restApiService: RestApiService!
-    
     let playlistHeaderViewModel: PlaylistHeaderViewModel
     
     let downloadViewModel = BehaviorRelay<DownloadViewModel?>(value: nil)
@@ -167,12 +165,11 @@ final class PlaylistViewModel {
 
     init(router: PlaylistContentRouter,
          application: Application,
-         restApiService: RestApiService,
          provider: PlaylistProvider) {
         
         self.router = router
         self.application = application
-        self.restApiService = restApiService
+        
         
         if let p = provider as? DownloadablePlaylistProvider {
             p.downloadURL
@@ -298,7 +295,7 @@ extension PlaylistViewModel {
     // MARK: Action support
 
     private func clear(playlist: Playlist) {
-        `
+        
         guard let fanPlaylist = playlist as? FanPlaylist else { return }
 
         PlaylistRequest.clear(playlist: fanPlaylist)

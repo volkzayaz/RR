@@ -52,7 +52,7 @@ final class DefaultRestorePasswordRouter:  RestorePasswordRouter, FlowRouterSegu
 
     func start(controller: RestorePasswordViewController, email: String?) {
         sourceController = controller
-        let vm = RestorePasswordControllerViewModel(router: self, restApiService: self.dependencies.restApiService, email: email)
+        let vm = RestorePasswordControllerViewModel(router: self, email: email)
         controller.configure(viewModel: vm, router: self)
     }
 }
