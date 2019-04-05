@@ -127,7 +127,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.viewModel.registerZipField(self.zipTextField)
         self.viewModel.registerRegionField(self.regionTextField)
         self.viewModel.registerCityField(self.cityTextField)
-        self.viewModel.registerPhoneField(MaskedValidatebleFieldWrapper(with: self.phoneTextField))
+        self.viewModel.registerPhoneField(MaskedFieldWrapperWrapper(with: self.phoneTextField))
         self.viewModel.registerHobbiesField(self.hobbiesContainerView)
         self.viewModel.registerHowHearField(self.howHearTextField)
     }

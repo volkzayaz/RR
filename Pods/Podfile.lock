@@ -105,7 +105,7 @@ DEPENDENCIES:
   - RxReachability
   - SnapKit (~> 4.2.0)
   - Starscream (= 3.0.5)
-  - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, branch `master`)
+  - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, tag `4.2.0`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -142,13 +142,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   SwiftValidator:
-    :branch: master
     :git: https://github.com/jpotts18/SwiftValidator.git
+    :tag: 4.2.0
 
 CHECKOUT OPTIONS:
   SwiftValidator:
-    :commit: c0ee801a2d107eca5f748d07932b449666d8effd
     :git: https://github.com/jpotts18/SwiftValidator.git
+    :tag: 4.2.0
 
 SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
@@ -181,8 +181,8 @@ SPEC CHECKSUMS:
   RxSwift: 92fcf68dfef21f3e2ab1965363d9e7b3d787597e
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
-  SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
+  SwiftValidator: 58c155c8ae8421ef716a96e52a49984dd54c700c
 
-PODFILE CHECKSUM: 3d9767f8bf4837ce4ff90a8a13c96f885018dce7
+PODFILE CHECKSUM: be896e1fd8e3d812bfc350a21c3110910e5bb9f5
 
 COCOAPODS: 1.6.1

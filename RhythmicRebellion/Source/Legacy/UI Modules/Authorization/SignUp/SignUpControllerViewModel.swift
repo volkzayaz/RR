@@ -44,15 +44,15 @@ final class SignUpControllerViewModel: SignUpViewModel {
     private var passwordConfirmationField: ValidatableField?
     private var nicknameField: ValidatableField?
     private var firstNameField: ValidatableField?
-    private var genderField: GenderValidatableField?
-    private var birthDateField: DateValidatableField?
-    private var countryField: CountryValidatableField?
+    private var genderField: GenderSegmentedControl?
+    private var birthDateField: DateTextField?
+    private var countryField: CountryTextField?
     private var zipField: ValidatableField?
-    private var regionField: RegionValidatableField?
-    private var cityField: CityValidatableField?
-    private var phoneField: MaskedValidatebleField?
-    private var hobbiesField: HobbiesValidatableField?
-    private var howHearField: HowHearValidatableField?
+    private var regionField: RegionTextField?
+    private var cityField: CityTextField?
+    private var phoneField: MaskedFieldWrapperWrapper?
+    private var hobbiesField: HobbiesContainerView?
+    private var howHearField: HowHearTextField?
 
     var config: Config?
     
@@ -187,8 +187,15 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerGenderField(_ genderField: GenderValidatableField) {
+    func registerGenderField(_ genderField: GenderSegmentedControl) {
         let genderRules: [Rule] = []
+        
+        
+        let x: ValidatableField = genderField
+        
+        validator.registerField(genderField, rules: [])
+        
+        
         
         self.validator.registerField(genderField, rules: genderRules)
 
@@ -197,7 +204,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         self.delegate?.refreshField(field: genderField, didValidate: nil)
     }
 
-    func registerBirhDateField(_ birthDateField: DateValidatableField) {
+    func registerBirhDateField(_ birthDateField: DateTextField) {
         let birthDateRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Birth Date field is required.",
                                                                               comment: "Birth Date validataion message"))]
 
@@ -212,7 +219,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerCountryField(_ countryField: CountryValidatableField) {
+    func registerCountryField(_ countryField: CountryTextField) {
         let countryRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Country field is required",
                                                                             comment: "Country validataion message"))]
 
@@ -241,7 +248,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerRegionField(_ regionField: RegionValidatableField) {
+    func registerRegionField(_ regionField: RegionTextField) {
         let regionRules: [Rule] = []
 
         self.validator.registerField(regionField, rules: regionRules)
@@ -255,7 +262,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerCityField(_ cityField: CityValidatableField) {
+    func registerCityField(_ cityField: CityTextField) {
         let cityRules: [Rule] = []
 
         self.validator.registerField(cityField, rules: cityRules )
@@ -269,7 +276,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerPhoneField(_ phoneField: MaskedValidatebleField) {
+    func registerPhoneField(_ phoneField: MaskedFieldWrapperWrapper) {
         let phoneRules: [Rule] = []
 
         self.validator.registerField(phoneField, rules: phoneRules )
@@ -283,7 +290,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerHobbiesField(_ hobbiesField: HobbiesValidatableField) {
+    func registerHobbiesField(_ hobbiesField: HobbiesContainerView) {
         let hobbiesRules: [Rule] = [RequiredRule(message: NSLocalizedString("The Hobbies field is required.",
                                                                             comment: "Hobbies validataion message"))]
 
@@ -298,7 +305,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
         }
     }
 
-    func registerHowHearField(_ howHearField: HowHearValidatableField) {
+    func registerHowHearField(_ howHearField: HowHearTextField) {
         let howHearRules: [Rule] = [RequiredRule(message: NSLocalizedString("The How Hear field is required.", comment: "How Hear validataion message"))]
 
         self.validator.registerField(howHearField, rules: howHearRules)

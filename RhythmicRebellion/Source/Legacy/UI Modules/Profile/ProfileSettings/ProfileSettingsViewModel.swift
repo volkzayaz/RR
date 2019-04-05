@@ -32,18 +32,18 @@ protocol ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Citie
 
     func registerFirstNameField(_ firstNameField: ValidatableField)
     func registerNicknameField(_ nicknameField: ValidatableField)
-    func registerGenderField(_ genderField: GenderValidatableField)
-    func registerBirhDateField(_ birthDateField: DateValidatableField)
+    func registerGenderField(_ genderField: GenderSegmentedControl)
+    func registerBirhDateField(_ birthDateField: DateTextField)
 
-    func registerCountryField(_ countryField: CountryValidatableField)
+    func registerCountryField(_ countryField: CountryTextField)
     func registerZipField(_ zipField: ValidatableField)
-    func registerRegionField(_ regionField: RegionValidatableField)
-    func registerCityField(_ cityField: CityValidatableField)
-    func registerPhoneField(_ phoneField: MaskedValidatebleField)
+    func registerRegionField(_ regionField: RegionTextField)
+    func registerCityField(_ cityField: CityTextField)
+    func registerPhoneField(_ phoneField: MaskedFieldWrapperWrapper)
 
-    func registerHobbiesField(_ hobbiesField: HobbiesValidatableField)
-    func registerGenresField(_ genresField: GenresValidatableField)
-    func registerLanguageField(_ languageField: LanguageValidatableField)
+    func registerHobbiesField(_ hobbiesField: HobbiesContainerView)
+    func registerGenresField(_ genresField: GenresContainerView)
+    func registerLanguageField(_ languageField: LanguageTextField)
 
     func checkIsDirty()
     func validateField(_ validateField: ValidatableField?)

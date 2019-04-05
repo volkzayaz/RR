@@ -139,7 +139,7 @@ final class ProfileSettingsViewController: UIViewController {
         self.viewModel.registerZipField(self.zipTextField)
         self.viewModel.registerRegionField(self.regionTextField)
         self.viewModel.registerCityField(self.cityTextField)
-        self.viewModel.registerPhoneField(MaskedValidatebleFieldWrapper(with: self.phoneTextField))
+        self.viewModel.registerPhoneField(MaskedFieldWrapperWrapper(with: self.phoneTextField))
         self.viewModel.registerHobbiesField(self.hobbiesContainerView)
         self.viewModel.registerGenresField(self.genresContainerView)
         self.viewModel.registerLanguageField(self.languageTextField)
