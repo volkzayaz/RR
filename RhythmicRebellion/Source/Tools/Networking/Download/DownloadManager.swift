@@ -62,7 +62,12 @@ struct DownloadManager {
         ///TODO: clear only folder beloning to this download manager
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         for path in try! FileManager.default.contentsOfDirectory(atPath: documentsURL.path) {
-            try? FileManager.default.removeItem(atPath: path)
+            do {
+                try FileManager.default.removeItem(at: documentsURL.appendingPathComponent(path) )
+            }
+            catch (let e) {
+                print(e)
+            }
         }
     }
     

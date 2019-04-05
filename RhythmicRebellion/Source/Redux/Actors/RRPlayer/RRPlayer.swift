@@ -13,7 +13,6 @@ import RxSwift
  *  All the rules about syncing player state between clients live in this actor
  */
 
-///TODO: drop NSObject conformance once Application is reactified
 class RRPlayer {
     
     let webSocket = WebSocketService(url: URI.webSocketService)
