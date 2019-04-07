@@ -68,7 +68,7 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     
     func provide() -> Observable<[TrackProvidable]> {
         return ArtistRequest.albumRecords(album: album)
-            .rx.response(type: ArtistResponse<Track>.self)
+            .rx.response(type: BaseReponse<[Track]>.self)
             .map { $0.data }
             .asObservable()
     }
@@ -108,7 +108,7 @@ struct ArtistPlaylistProvider: PlaylistProvider {
     
     func provide() -> Observable<[TrackProvidable]> {
         return ArtistRequest.playlistRecords(playlist: artistPlaylist)
-            .rx.response(type: ArtistResponse<Track>.self)
+            .rx.response(type: BaseReponse<[Track]>.self)
             .map { $0.data }
             .asObservable()
     }

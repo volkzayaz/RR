@@ -52,7 +52,7 @@ struct ArtistViewModel : MVVM_ViewModel {
                                              router: router.trackListRouter())
         
         let albums = ArtistRequest.albums(artist: artist)
-            .rx.response(type: ArtistResponse<Album>.self)
+            .rx.response(type: BaseReponse<[Album]>.self)
             .map { response in
                 return ( R.string.localizable.albums(),
                          response.data.map { Data.album(album: $0) } )
@@ -60,7 +60,7 @@ struct ArtistViewModel : MVVM_ViewModel {
             .trackView(viewIndicator: indicator)
         
         let playlists = ArtistRequest.playlists(artist: artist)
-            .rx.response(type: ArtistResponse<ArtistPlaylist>.self)
+            .rx.response(type: BaseReponse<[ArtistPlaylist]>.self)
             .map { response in
                 return ( R.string.localizable.playlist(),
                          response.data.map { Data.playlist(playlist: $0) } )
@@ -127,7 +127,7 @@ extension ArtistViewModel {
         func provide() -> Observable<[TrackProvidable]> {
             
             return ArtistRequest.records(artist: artist)
-                .rx.response(type: ArtistResponse<Track>.self)
+                .rx.response(type: BaseReponse<[Track]>.self)
                 .map { $0.data }
                 .asObservable()
             

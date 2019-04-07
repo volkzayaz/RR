@@ -289,10 +289,9 @@
 		73F138EF222C289200FB8EBC /* PagesLocalStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137B1222C289200FB8EBC /* PagesLocalStorageService.swift */; };
 		73F138F5222C289200FB8EBC /* WSCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137BB222C289200FB8EBC /* WSCommand.swift */; };
 		73F138F6222C289200FB8EBC /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137BC222C289200FB8EBC /* WebSocketService.swift */; };
-		73F138F7222C289200FB8EBC /* TrackResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137BF222C289200FB8EBC /* TrackResponses.swift */; };
+		73F138F7222C289200FB8EBC /* AddonsForTracksResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137BF222C289200FB8EBC /* AddonsForTracksResponse.swift */; };
 		73F138F8222C289200FB8EBC /* RxResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137C0222C289200FB8EBC /* RxResponse.swift */; };
 		73F138F9222C289200FB8EBC /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137C2222C289200FB8EBC /* BaseResponse.swift */; };
-		73F138FA222C289200FB8EBC /* ArtistResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137C4222C289200FB8EBC /* ArtistResponses.swift */; };
 		73F138FB222C289200FB8EBC /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137C6222C289200FB8EBC /* DownloadManager.swift */; };
 		73F138FC222C289200FB8EBC /* TrackRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137C9222C289200FB8EBC /* TrackRequests.swift */; };
 		73F138FD222C289200FB8EBC /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137CA222C289200FB8EBC /* BaseRouter.swift */; };
@@ -637,10 +636,9 @@
 		73F137B1222C289200FB8EBC /* PagesLocalStorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesLocalStorageService.swift; sourceTree = "<group>"; };
 		73F137BB222C289200FB8EBC /* WSCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSCommand.swift; sourceTree = "<group>"; };
 		73F137BC222C289200FB8EBC /* WebSocketService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
-		73F137BF222C289200FB8EBC /* TrackResponses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackResponses.swift; sourceTree = "<group>"; };
+		73F137BF222C289200FB8EBC /* AddonsForTracksResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddonsForTracksResponse.swift; sourceTree = "<group>"; };
 		73F137C0222C289200FB8EBC /* RxResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxResponse.swift; sourceTree = "<group>"; };
 		73F137C2222C289200FB8EBC /* BaseResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
-		73F137C4222C289200FB8EBC /* ArtistResponses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistResponses.swift; sourceTree = "<group>"; };
 		73F137C6222C289200FB8EBC /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		73F137C9222C289200FB8EBC /* TrackRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackRequests.swift; sourceTree = "<group>"; };
 		73F137CA222C289200FB8EBC /* BaseRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
@@ -1812,7 +1810,6 @@
 				73F137BE222C289200FB8EBC /* Track */,
 				73F137C0222C289200FB8EBC /* RxResponse.swift */,
 				73F137C1222C289200FB8EBC /* Data */,
-				73F137C3222C289200FB8EBC /* Artist */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -1820,7 +1817,7 @@
 		73F137BE222C289200FB8EBC /* Track */ = {
 			isa = PBXGroup;
 			children = (
-				73F137BF222C289200FB8EBC /* TrackResponses.swift */,
+				73F137BF222C289200FB8EBC /* AddonsForTracksResponse.swift */,
 			);
 			path = Track;
 			sourceTree = "<group>";
@@ -1831,14 +1828,6 @@
 				73F137C2222C289200FB8EBC /* BaseResponse.swift */,
 			);
 			path = Data;
-			sourceTree = "<group>";
-		};
-		73F137C3222C289200FB8EBC /* Artist */ = {
-			isa = PBXGroup;
-			children = (
-				73F137C4222C289200FB8EBC /* ArtistResponses.swift */,
-			);
-			path = Artist;
 			sourceTree = "<group>";
 		};
 		73F137C5222C289200FB8EBC /* Download */ = {
@@ -2399,7 +2388,7 @@
 				73F137F9222C289200FB8EBC /* TrackListViewModel.swift in Sources */,
 				73F13869222C289200FB8EBC /* ListeningSettingsControllerViewModel.swift in Sources */,
 				73F13876222C289200FB8EBC /* ContainerTransitionSegue.swift in Sources */,
-				73F138F7222C289200FB8EBC /* TrackResponses.swift in Sources */,
+				73F138F7222C289200FB8EBC /* AddonsForTracksResponse.swift in Sources */,
 				73F13904222C289200FB8EBC /* MoneyFormatter.swift in Sources */,
 				73F1386E222C289200FB8EBC /* ApplicationContentContainerRouter.swift in Sources */,
 				73F138FF222C289200FB8EBC /* AlbumRequest.swift in Sources */,
@@ -2424,7 +2413,6 @@
 				73F13907222C289200FB8EBC /* ViewIndicator.swift in Sources */,
 				73F13914222C289200FB8EBC /* UIColor+Extention.swift in Sources */,
 				73F13842222C289200FB8EBC /* SkipArtistAddonsState.swift in Sources */,
-				73F138FA222C289200FB8EBC /* ArtistResponses.swift in Sources */,
 				7361C006223684A2008EA36E /* ApplyReduxViewPatch.swift in Sources */,
 				73F1380D222C289200FB8EBC /* ErrorPresenting.swift in Sources */,
 				73F138B8222C289200FB8EBC /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */,

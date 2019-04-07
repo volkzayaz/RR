@@ -8,10 +8,6 @@
 
 import Foundation
 
-struct TrackResponse<T: Decodable>: Decodable {
-    let data: T
-}
-
 struct AddonsForTracksResponse: Codable {
     
     let trackAddons: [String : [Addon]]
