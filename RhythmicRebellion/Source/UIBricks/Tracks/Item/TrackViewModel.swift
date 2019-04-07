@@ -100,9 +100,16 @@ extension TrackViewModel {
         return user.isCensorshipTrack(track)
     }
     
-    var downloadDisabled: Bool {
-        let userHasPurchase = user.hasPurchase(for: track)
-        return !(track.isFollowAllowFreeDownload || userHasPurchase)
+    var downloadEnabled: Bool {
+        if user.hasPurchase(for: track) {
+            return true
+        }
+        
+        if user.isFollower(for: track.artist.id) && track.isFollowAllowFreeDownload {
+            return true
+        }
+        
+        return false
     }
     
 }
@@ -121,7 +128,7 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
-    let downloadViewModel: DownloadViewModel
+    let downloadViewModel: DownloadViewModel?
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     
     let actions: AlertActionsViewModel<ActionViewModel>
@@ -136,7 +143,12 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
         self.user = user
         self.actions = actions
         
-        downloadViewModel = DownloadViewModel(remoteURL: trackProvidable.track.audioFile!.urlString)
+        if let url = trackProvidable.track.audioFile?.urlString {
+            downloadViewModel = DownloadViewModel(remoteURL: url)
+        }
+        else {
+            downloadViewModel = nil
+        }
         
         indicator.asDriver()
             .drive(onNext: { [weak h = router.owner] (loading) in
@@ -156,7 +168,7 @@ extension TrackViewModel {
     
     func openIn(sourceRect: CGRect, sourceView: UIView) {
         
-        guard let data = downloadViewModel.dataState.value,
+        guard let data = downloadViewModel?.dataState.value,
               case .data(let url) = data else {
                return fatalErrorInDebug("Trying to `open in` track \(track.audioFile!.urlString) that hasn't been downloaded yet")
         }

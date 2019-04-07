@@ -107,17 +107,20 @@ class TrackView: UIView {
 
             self.stackView.addArrangedSubview(self.downloadButton)
 
-            self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
-            self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
-            self.downloadButton.downloadedButton.setImage(UIImage(named: "OpenIn")?.withRenderingMode(.alwaysTemplate), for: .normal)
-            
-            if viewModel.downloadDisabled {
+            if viewModel.downloadEnabled {
 
+                self.downloadButton.startDownloadButton.setImage(UIImage(named: "Download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                self.downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 1, green: 0.3639442921, blue: 0.7127844095, alpha: 1)
+                
+            }
+            else {
                 downloadButton.startDownloadButton.setImage(UIImage(named: "Follow")?.withRenderingMode(.alwaysTemplate), for: .normal)
                 downloadButton.startDownloadButton.tintColor = #colorLiteral(red: 0.7450980392, green: 0.7843137255, blue: 1, alpha: 0.95)
-
             }
         
+            self.downloadButton.downloadedButton.setImage(UIImage(named: "OpenIn")?.withRenderingMode(.alwaysTemplate), for: .normal)
+            
+            
             viewModel.previewOptionImage
                 .drive(previewOptionsButton.rx.image(for: .normal))
                 .disposed(by: disposeBag)
@@ -144,13 +147,13 @@ class TrackView: UIView {
             
         self.downloadButtonHintText = viewModel.downloadHintText
         
-        viewModel.downloadViewModel.downloadPercent
+        viewModel.downloadViewModel?.downloadPercent
             .drive(onNext: { [weak d = downloadButton] (x) in
                 d?.stopDownloadButton.progress = x
             })
             .disposed(by: disposeBag)
 
-        viewModel.downloadViewModel.state
+        viewModel.downloadViewModel?.state
             .drive(onNext: { [weak d = downloadButton] (x) in
                 d?.state = x
             })
@@ -218,7 +221,7 @@ extension TrackView: PKDownloadButtonDelegate {
 
     func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
 
-        guard !viewModel.downloadDisabled else {
+        guard viewModel.downloadEnabled else {
             guard let downloadButtonHintText = self.downloadButtonHintText, downloadButtonHintText.isEmpty == false else { return }
             
             viewModel.showTip(tip: downloadButtonHintText,
@@ -229,10 +232,10 @@ extension TrackView: PKDownloadButtonDelegate {
 
         switch state {
         case .startDownload:
-            viewModel.downloadViewModel.download()
+            viewModel.downloadViewModel?.download()
             
         case .pending, .downloading:
-            viewModel.downloadViewModel.cancelDownload()
+            viewModel.downloadViewModel?.cancelDownload()
             
         case .downloaded:
             viewModel.openIn(sourceRect: downloadButton.frame, sourceView: stackView)
