@@ -115,7 +115,7 @@ extension NowPlayingViewModel {
         }
         
         if appStateSlice.currentTrack != orderedTrack {
-            DataLayer.get.daPlayer.add(tracks: [orderedTrack.track], type: .now)
+            DataLayer.get.daPlayer.switch(to: orderedTrack)
             return
         }
         

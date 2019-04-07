@@ -190,12 +190,7 @@ final class SignUpControllerViewModel: SignUpViewModel {
     func registerGenderField(_ genderField: GenderSegmentedControl) {
         let genderRules: [Rule] = []
         
-        
-        let x: ValidatableField = genderField
-        
         validator.registerField(genderField, rules: [])
-        
-        
         
         self.validator.registerField(genderField, rules: genderRules)
 

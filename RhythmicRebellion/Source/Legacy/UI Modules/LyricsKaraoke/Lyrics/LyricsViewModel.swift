@@ -39,7 +39,7 @@ extension LyricsViewModel {
                 return "\n This is an instrumental song \n"
             }
             
-            if track.isCensorship {
+            if state.user.isCensorshipTrack(track) {
                 return "\n Contains explicit material \n"
             }
             
@@ -47,7 +47,7 @@ extension LyricsViewModel {
                 return "\n No preview \n"
             }
             
-            return ""
+            return "No Lyrics available"
         }
         
     }

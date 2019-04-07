@@ -29,6 +29,8 @@ enum Dispatcher {
     
     static func kickOff() {
         
+        initAppState()
+        
         ///Serial execution
         let _ =
         actions.notNil().concatMap { actionCreator -> Observable<AppState> in

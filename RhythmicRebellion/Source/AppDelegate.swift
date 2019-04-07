@@ -95,7 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.appRouter = defaultAppRouter
         
-        initAppState()
         Dispatcher.kickOff()
         
         return self.appRouter != nil

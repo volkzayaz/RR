@@ -99,15 +99,13 @@ struct ListeningSettings: Codable {
 
 extension ListeningSettings: Equatable {
     static func == (lhs: ListeningSettings, rhs: ListeningSettings) -> Bool {
-        guard lhs.isSongCommentary == rhs.isSongCommentary,
-                lhs.isSongCommentaryDate == rhs.isSongCommentaryDate,
-                lhs.isHearArtistsBio == rhs.isHearArtistsBio,
-                lhs.isHearArtistsBioDate == rhs.isHearArtistsBioDate,
-                lhs.isExplicitMaterialExcluded == rhs.isExplicitMaterialExcluded,
-                lhs.songCommentaryDate == rhs.songCommentaryDate,
-                lhs.artistsBioDate == rhs.artistsBioDate else { return false}
-
-        return true
+        return lhs.isSongCommentary == rhs.isSongCommentary &&
+                lhs.isSongCommentaryDate == rhs.isSongCommentaryDate &&
+                lhs.isHearArtistsBio == rhs.isHearArtistsBio &&
+                lhs.isHearArtistsBioDate == rhs.isHearArtistsBioDate &&
+                lhs.isExplicitMaterialExcluded == rhs.isExplicitMaterialExcluded &&
+                lhs.songCommentaryDate == rhs.songCommentaryDate &&
+                lhs.artistsBioDate == rhs.artistsBioDate 
     }
 }
 

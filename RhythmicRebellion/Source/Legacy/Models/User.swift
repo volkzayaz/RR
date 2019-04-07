@@ -265,6 +265,7 @@ extension UserProfile: Equatable {
                 lhs.genres == rhs.genres &&
                 lhs.language == rhs.language &&
                 lhs.followedArtistsIds == rhs.followedArtistsIds &&
-                lhs.tracksLikeStates == rhs.tracksLikeStates
+                lhs.tracksLikeStates == rhs.tracksLikeStates &&
+        lhs.listeningSettings == rhs.listeningSettings
     }
 }

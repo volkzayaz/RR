@@ -78,8 +78,12 @@ final class ListeningSettingsControllerViewModel: ListeningSettingsViewModel {
 
         let _ =
         UserRequest.updateListeningSettings(ListeningSettingsPayload(with: listeningSettings))
-            .rx.baseResponse(type: User.self)
-            .subscribe(onSuccess: { [weak self] user in
+            .rx.baseResponse(type: UserProfile.self)
+            .subscribe(onSuccess: { [weak self] profile in
+
+                Dispatcher.dispatch(action: UpdateUser(update: { (user) in
+                    user.profile = profile
+                }))
                 
                 self?.isSaving = false
                 
