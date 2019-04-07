@@ -58,7 +58,9 @@ platform :ios do
     ##cleaning up
     File.delete("../RhythmicRebellion.ipa")
     File.delete("../RhythmicRebellion.app.dSYM.zip")
-                    
+    
+   resolve_link = "https://rhythmicrebellion.atlassian.net/issues/?jql=project%20%3D%20IOS%20AND%20issuetype%20in%20standardIssueTypes()%20AND%20status%20%3D%20%22Test%20Ready%22%20AND%20%22Resolved%20in%20version%22%20~%20" + version_number.to_s
+   
     ##notifying testers
     slack( message: "New beta build is available. Check build details below or at your emails. \n\n*Please delete previous build from your device to avoid unexpected issues.*\n",
           
@@ -66,8 +68,8 @@ platform :ios do
           payload: {
           'Version number' => get_version_number,
           'Environment' => environmentName,
-          'Download Link' => "https://apps.crashlytics.com/projects"
-          #'Resolved Jira Issues' => "https://goo.gl/MvkR4m"
+          'Download Link' => "https://apps.crashlytics.com/projects",
+          'Resolved Jira Issues' => resolve_link
           },
           default_payloads: []
           )
