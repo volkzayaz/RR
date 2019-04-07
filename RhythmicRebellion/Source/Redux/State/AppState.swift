@@ -19,6 +19,7 @@ func initAppState() {
     
     let _ =
     Observable.combineLatest(u, c)
+        .retryOnConnect(timeout: 1)
         .take(1)
         .map { (arg) in
             
