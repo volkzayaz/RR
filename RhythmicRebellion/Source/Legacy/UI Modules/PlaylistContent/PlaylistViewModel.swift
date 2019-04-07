@@ -10,13 +10,14 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 protocol PlaylistProvider: TrackProvider {
     var playlist: Playlist { get }
 }
 
 protocol DeletablePlaylistProvider: PlaylistProvider {
-    func delete(track: Track, completion: @escaping (Box<Void>) -> Void)
+    func delete(track: Track) -> Maybe<Void>
 }
 
 protocol DownloadablePlaylistProvider: PlaylistProvider {
@@ -40,17 +41,9 @@ struct FanPlaylistProvider: DeletablePlaylistProvider {
             .asObservable()
     }
     
-    func delete(track: Track, completion: @escaping (Box<Void>) -> Void) {
-        
-        let _ =
-        PlaylistRequest.deleteTrack(track, from: fanPlaylist)
+    func delete(track: Track) -> Maybe<Void> {
+        return PlaylistRequest.deleteTrack(track, from: fanPlaylist)
             .rx.emptyResponse()
-            .subscribe(onSuccess: {
-                completion( .value(val: ()   ))
-            }, onError: { error in
-                completion( .error(er:  error))
-            })
-            
     }
     
 }
@@ -136,17 +129,15 @@ extension PlaylistViewModel {
         return downloadViewModel.asDriver().notNil()
     }
     
+    var dataSource: Driver<[AnimatableSectionModel<String, TrackViewModel>]> {
+        return tracksViewModel.trackViewModels.map { x in
+            return [AnimatableSectionModel(model: "", items: x)]
+        }
+    }
+    
 }
 
 final class PlaylistViewModel {
-    
-    private var errorPresenter: ErrorPresenting {
-        return tracksViewModel.delegate!
-    }
-    
-    private var confirmationPresenter: ConfirmationPresenting {
-        return tracksViewModel.delegate!
-    }
     
     let tracksViewModel: TrackListViewModel
     var playlist: Playlist {
@@ -155,7 +146,7 @@ final class PlaylistViewModel {
     
     private(set) weak var router: PlaylistContentRouter!
     
-    let playlistHeaderViewModel: PlaylistHeaderViewModel
+    let headerViewModel: PlaylistHeaderViewModel
     
     let downloadViewModel = BehaviorRelay<DownloadViewModel?>(value: nil)
     fileprivate let bag = DisposeBag()
@@ -167,8 +158,6 @@ final class PlaylistViewModel {
         
         self.router = router
         
-        
-        
         if let p = provider as? DownloadablePlaylistProvider {
             p.downloadURL
                 .silentCatch()
@@ -177,9 +166,7 @@ final class PlaylistViewModel {
                 .disposed(by: bag)
         }
         
-        let actions = { (list: TrackListViewModel,
-                         t: TrackProvidable,
-                         indexPath: IndexPath) -> [ActionViewModel] in
+        let actions = { (list: TrackListViewModel, t: TrackProvidable) -> [ActionViewModel] in
             
             var result: [ActionViewModel] = []
             
@@ -190,15 +177,15 @@ final class PlaylistViewModel {
             if t.track.isPlayable {
                 
                 let playNow = ActionViewModel(.playNow) {
-                    list.play(tracks: [t.track])
+                    DataLayer.get.daPlayer.add(tracks: [t.track], type: .now)
                 }
                 
                 let playNext = ActionViewModel(.playNext) {
-                    list.play(tracks: [t.track], at: .next)
+                    DataLayer.get.daPlayer.add(tracks: [t.track], type: .next)
                 }
                 
                 let playLast = ActionViewModel(.playLast) {
-                    list.play(tracks: [t.track], at: .last)
+                    DataLayer.get.daPlayer.add(tracks: [t.track], type: .last)
                 }
                 
                 result.append(playNow)
@@ -223,17 +210,11 @@ final class PlaylistViewModel {
                 
                 let delete = ActionViewModel(.delete) {
                     
-                    p.delete(track: t.track) { x in
-                        switch x {
-                        case .error(let error):
-                            list.delegate?.show(error: error)
-                            list.delegate?.reloadObjects(at: [indexPath])
-                            
-                        case .value(_):
-                            list.dropTrack(at: indexPath.row)
-                            
-                        }
-                    }
+                    p.delete(track: t.track)
+                        .silentCatch(handler: router.owner)
+                        .subscribe(onNext: {
+                            list.drop(track: t)
+                        })
                     
                 }
              
@@ -245,33 +226,12 @@ final class PlaylistViewModel {
             
         }
         
-        let select = { (list: TrackListViewModel,
-                        t: TrackProvidable,
-                        indexPath: IndexPath) in
-            
-            guard t.track.isPlayable else {
-                return
-            }
-            
-            if appStateSlice.currentTrack?.track != t.track {
-                list.play(tracks: [t.track])
-                return
-            }
-            DataLayer.get.daPlayer.flip()
-            
-        }
-        
         tracksViewModel = TrackListViewModel(dataProvider: provider,
                                              router: TrackListRouter(owner: router.owner),
-                                             actionsProvider: actions,
-                                             selectedProvider: select)
+                                             actionsProvider: actions)
         
-        playlistHeaderViewModel = PlaylistHeaderViewModel(playlist: provider.playlist,
+        headerViewModel = PlaylistHeaderViewModel(playlist: provider.playlist,
                                                           isEmpty: tracksViewModel.isPlaylistEmpty)
-    }
-
-    func load(with delegate: TrackListBindings) {
-        tracksViewModel.load(with: delegate)
     }
     
     func openIn(sourceRect: CGRect, sourceView: UIView) {
@@ -297,12 +257,24 @@ extension PlaylistViewModel {
 
         PlaylistRequest.clear(playlist: fanPlaylist)
             .rx.emptyResponse()
-            .subscribe(onSuccess: { [weak self] in
+            .silentCatch(handler: router.owner)
+            .subscribe(onNext: { [weak self] in
                 self?.tracksViewModel.dropAllTracks()
-            }, onError: { [weak self] error in
-                self?.errorPresenter.show(error: error)
             })
         
+    }
+    
+    func trackSelected(track: Track) {
+        guard track.isPlayable else {
+            return
+        }
+        
+        if appStateSlice.currentTrack?.track != track {
+            DataLayer.get.daPlayer.add(tracks: [track], type: .now)
+            return
+        }
+        
+        DataLayer.get.daPlayer.flip()
     }
     
 }
@@ -344,11 +316,21 @@ extension PlaylistViewModel {
 
     func performeAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, for playlist: Playlist) {
 
+        let tracks = tracksViewModel.tracks.value.map { $0.track }
+        
         switch actionType {
-        case .playNow: tracksViewModel.play(tracks: tracksViewModel.tracks.map { $0.track })
-        case .playNext: tracksViewModel.play(tracks: tracksViewModel.tracks.map { $0.track }, at: .next)
-        case .playLast: tracksViewModel.play(tracks: tracksViewModel.tracks.map { $0.track }, at: .last)
-        case .replaceCurrent: tracksViewModel.replacePlayerPlaylist(with: tracksViewModel.tracks.map { $0.track })
+        case .playNow:
+            DataLayer.get.daPlayer.add(tracks: tracks, type: .now)
+            
+        case .playNext:
+            DataLayer.get.daPlayer.add(tracks: tracks, type: .next)
+            
+        case .playLast:
+            DataLayer.get.daPlayer.add(tracks: tracks, type: .last)
+            
+        case .replaceCurrent:
+            Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
+            
         case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
         case .clear: self.clear(playlist: playlist)
 
@@ -356,9 +338,8 @@ extension PlaylistViewModel {
             guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.isDefault == false else { return }
 
             PlaylistManager.delete(playlist: fanPlaylist)
-                .subscribe(onError: { [weak self] (error) in
-                    self?.errorPresenter.show(error: error)
-                })
+                .silentCatch(handler: router.owner)
+                .subscribe()
             
         case .cancel: break
         }
@@ -391,7 +372,7 @@ extension PlaylistViewModel {
                 return
             }
 
-            self.confirmationPresenter.showConfirmation(confirmationViewModel: confirmationViewModel)
+            self.router.owner.showConfirmation(confirmationViewModel: confirmationViewModel)
         }
 
         let title = filteredPlaylistActionsTypes.isEmpty ? playlist.name : nil
@@ -408,7 +389,7 @@ extension PlaylistViewModel {
             return
         }
 
-        self.confirmationPresenter.showConfirmation(confirmationViewModel: confirmationViewModel)
+        router.owner.showConfirmation(confirmationViewModel: confirmationViewModel)
     }
     
 }

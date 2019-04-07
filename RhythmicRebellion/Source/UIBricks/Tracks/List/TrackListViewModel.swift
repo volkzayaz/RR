@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import RxSwift
+import RxCocoa
 
 struct ActionViewModel: AlertActionItemViewModel {
     
@@ -71,15 +73,6 @@ extension ActionViewModel {
     
 }
 
-
-protocol TrackListBindings: class, ErrorPresenting, AlertActionsViewModelPersenting, ConfirmationPresenting {
-    
-    func reloadUI()
-    func reloadPlaylistUI()
-    
-    func reloadObjects(at indexPath: [IndexPath])
-}
-
 protocol TrackProvider {
     
     ////provide list of tracks to play back
@@ -90,119 +83,75 @@ protocol TrackProvider {
 class TrackListViewModel {
 
     ////provide list of actions available for given track
-    typealias ActionsProvider = (TrackListViewModel, TrackProvidable, IndexPath) -> [ActionViewModel]
-    
-    ///handle track selection
-    typealias SelectedProvider = (TrackListViewModel, TrackProvidable, IndexPath) -> Void
+    typealias ActionsProvider = (TrackListViewModel, TrackProvidable) -> [ActionViewModel]
 
-    private(set) weak var delegate: TrackListBindings?
-    
-    private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
-    private let trackPriceFormatter = MoneyFormatter()
-    
     let trackProivder: TrackProvider
-    private let router: TrackListRouter
-    private let selectedProvider: SelectedProvider
     private let actionsProvider: ActionsProvider
     
     private let bag = DisposeBag()
     private let reloadTrigger = BehaviorSubject<Void>(value: () )
     
-    private(set) var tracks: [TrackProvidable] = [] {
-        didSet {
-            delegate?.reloadUI()
-            delegate?.reloadPlaylistUI()
+    let tracks = BehaviorRelay<[TrackProvidable]>(value: [])
+    
+    var trackViewModels: Driver<[TrackViewModel]> {
+        
+        let r = router
+        
+        let userChanges = appState
+            .map { $0.user }
+            .distinctUntilChanged()
+        
+        return Driver.combineLatest(tracks.asDriver(),
+                                    userChanges)
+            .map { [unowned self] arg in
+                
+                let (tracks, user) = arg
+                
+                return tracks.map { track in
+                    
+                    return TrackViewModel(router: r.trackRouter(for: track.track),
+                                          trackProvidable: track,
+                                          user: user,
+                                          actions: self.actions(of: track, for: user))
+                    
+                }
+                
         }
     }
     
     var isPlaylistEmpty: Bool {
-        return tracks.isEmpty
+        return tracks.value.isEmpty
     }
     
     init(dataProvider: TrackProvider,
          router: TrackListRouter,
-         actionsProvider: @escaping ActionsProvider = { _, _, _ in [] },
-         selectedProvider: @escaping SelectedProvider = { _, _, _ in }) {
-    
-        
+         actionsProvider: @escaping ActionsProvider = { _, _ in [] }) {
         
         self.trackProivder = dataProvider
         self.router = router
-        self.selectedProvider = selectedProvider
         self.actionsProvider = actionsProvider
 
-    }
-    
-}
-
-extension TrackListViewModel {
-    
-    func load(with delegate: TrackListBindings) {
-        self.delegate = delegate
-        
         reloadTrigger.flatMapLatest { [unowned self] _ in
-                return self.trackProivder.provide()
-            }
-            .subscribe(onNext: { [weak self] (tracks) in
-                self?.tracks = tracks
-            }, onError: { [weak self] (er) in
-                self?.delegate?.show(error: er, completion: { [weak self] in self?.delegate?.reloadUI() } )
-            })
+            return self.trackProivder.provide()
+        }
+            .silentCatch(handler: router.owner)
+            .bind(to: tracks)
             .disposed(by: bag)
         
     }
     
-}
-
-/////////////////
-/////////////////
-/////---------DataSource
-/////////////////
-/////////////////
-
-extension TrackListViewModel {
-    
-    func numberOfItems(in section: Int) -> Int {
-        return tracks.count
-    }
-    
-    func object(at indexPath: IndexPath) -> TrackViewModel {
-        
-        let track = tracks[indexPath.row]
-        
-        return trackViewModel(for: track)
-    }
-    
-    func trackViewModel(for track: TrackProvidable) -> TrackViewModel {
-        
-        return TrackViewModel(router: router.trackRouter(for: track.track),
-                              trackProvidable: track,
-                              user: appStateSlice.user,
-                              textImageGenerator: textImageGenerator)
-        
-    }
-    
-    func selectObject(at indexPath: IndexPath) {
-        
-        let viewModel = object(at: indexPath)
-        guard viewModel.isPlayable else {
-            return
-        }
-        
-        selectedProvider(self, tracks[indexPath.row], indexPath)
-        
-    }
+    private let router: TrackListRouter
     
 }
 
 extension TrackListViewModel {
     
-    func actions(forObjectAt indexPath: IndexPath) -> AlertActionsViewModel<ActionViewModel> {
+    private func actions(of track: TrackProvidable, for user: User) -> AlertActionsViewModel<ActionViewModel> {
         
-        let t = tracks[indexPath.row]
+        let t = track
         
         let cancel = [ActionViewModel(.cancel, actionCallback: {} )]
-        let actions = actionsProvider(self, t, indexPath)
+        let actions = actionsProvider(self, t)
         
         let ftp = ActionViewModel(.forceToPlay) { [weak self] in
             self?.forceToPlay(track: t.track)
@@ -211,8 +160,6 @@ extension TrackListViewModel {
         let dnp = ActionViewModel(.doNotPlay) { [weak self] in
             self?.doNotPlay(track: t.track)
         }
-        
-        let user = appStateSlice.user
         
         var result: [ActionViewModel] = []
         
@@ -253,9 +200,8 @@ extension TrackListViewModel {
         let _ =
         UserManager.allowPlayTrackWithExplicitMaterial(trackId: track.id,
                                                         shouldAllow: true)
-            .subscribe(onError: { [weak self] error in
-                self?.delegate?.show(error: error)
-            })
+            .silentCatch(handler: router.owner)
+            .subscribe()
 
     }
 
@@ -264,129 +210,27 @@ extension TrackListViewModel {
         let _ =
         UserManager.allowPlayTrackWithExplicitMaterial(trackId: track.id,
                                                         shouldAllow: false)
-            .subscribe(onError: { [weak self] error in
-                self?.delegate?.show(error: error)
-            })
+            .silentCatch(handler: router.owner)
+            .subscribe()
         
-    }
-    
-    func play(orderedTrack: OrderedTrack) {
-        DataLayer.get.daPlayer.switch(to: orderedTrack)
-    }
-    
-    func remove(orderedTrack: OrderedTrack) {
-        DataLayer.get.daPlayer.remove(track: orderedTrack)
-    }
-    
-    func play(tracks: [Track], at style: RRPlayer.AddStyle = .now) {
-        DataLayer.get.daPlayer.add(tracks: tracks, type: style)
-    }
-    
-    func replacePlayerPlaylist(with tracks: [Track]) {
-        Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
     }
     
     func reload() {
         reloadTrigger.onNext(())
     }
     
-    func dropTrack(at index: Int) {
-        var x = tracks
-        x.remove(at: index)
-        tracks = x
+    func drop(track: TrackProvidable) {
+        var x = tracks.value
+        x.removeAll { $0.identity == track.identity }
+        tracks.accept(x)
     }
     
     func dropAllTracks() {
-        tracks = []
+        tracks.accept([])
     }
     
 }
 
-
-/////////////////
-/////////////////
-/////---------User profile changed
-/////////////////
-/////////////////
-
-
-extension TrackListViewModel {
-    
-    func application( didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
-        
-        var indexPaths: [IndexPath] = []
-        
-        for (index, t) in tracks.enumerated() {
-            guard t.track.artist.id == artistFollowingState.artistId else { continue }
-            indexPaths.append(IndexPath(row: index, section: 0))
-        }
-        
-        if indexPaths.isEmpty == false {
-            self.delegate?.reloadObjects(at: indexPaths)
-        }
-    }
-    
-    func application( didChangeUserProfile listeningSettings: ListeningSettings) {
-        self.delegate?.reloadUI()
-    }
-    
-}
-
-import RxSwift
-
-extension TrackListViewModel {
-    
-    class Observer: TrackListBindings {
-        
-        typealias Handler = NSObjectProtocol & ErrorPresenting & AlertActionsViewModelPersenting & ConfirmationPresenting
-        
-        var trackViewModels: Observable<[TrackViewModel]> {
-            return subject.asObservable()
-        }
-        
-        let trackList: TrackListViewModel
-        weak var handler: Handler?
-        init(list: TrackListViewModel, handler: Handler) {
-            trackList = list
-            self.handler = handler
-            
-            list.load(with: self)
-        }
-        
-        fileprivate let subject = BehaviorSubject<[TrackViewModel]>(value: [])
-        
-        func reloadUI() {
-            subject.onNext( trackList.tracks.map { self.trackList.trackViewModel(for: $0) } )
-        }
-        
-        func reloadPlaylistUI() {
-            subject.onNext( trackList.tracks.map { self.trackList.trackViewModel(for: $0) } )
-        }
-        
-        func reloadObjects(at indexPath: [IndexPath]) {
-            subject.onNext( trackList.tracks.map { self.trackList.trackViewModel(for: $0) } )
-        }
-    
-        
-        
-        func show(error: Error) { handler?.show(error: error) }
-        func show(error: Error, completion: (() -> Void)?) { handler?.show(error: error, completion: completion) }
-        
-        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>) { handler?.show(alertActionsviewModel: alertActionsviewModel) }
-        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style) { handler?.show(alertActionsviewModel: alertActionsviewModel, style: style) }
-        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, style: UIAlertController.Style, completion: (() -> Void)?) { handler?.show(alertActionsviewModel: alertActionsviewModel, style: style, completion: completion) }
-        
-        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView) { handler?.show(alertActionsviewModel: alertActionsviewModel, sourceRect: sourceRect, sourceView: sourceView) }
-        func show<T>(alertActionsviewModel: AlertActionsViewModel<T>, sourceRect: CGRect, sourceView: UIView, completion: (() -> Void)?) { handler?.show(alertActionsviewModel: alertActionsviewModel, sourceRect: sourceRect, sourceView: sourceView, completion: completion) }
-        
-        func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>) { handler?.showConfirmation(confirmationViewModel: confirmationViewModel) }
-        func showConfirmation(confirmationViewModel: AlertActionsViewModel<ConfirmationAlertViewModel.ActionViewModel>, completion: (() -> Void)?) { handler?.showConfirmation(confirmationViewModel: confirmationViewModel, completion: completion) }
-        
-    }
-    
-    
-    
-}
 
 import RxDataSources
 

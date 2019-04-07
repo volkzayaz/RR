@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import EasyTipView
 
 struct TrackRouter : MVVM_Router {
     
@@ -29,5 +30,26 @@ struct TrackRouter : MVVM_Router {
         
         owner.present(activityViewController, animated: true, completion: nil)
     }
+    
+    func present(actions: AlertActionsViewModel<ActionViewModel>,
+                 sourceRect: CGRect, sourceView: UIView) {
+    
+        let actionSheet = UIAlertController.make(from: actions)
+        
+        actionSheet.popoverPresentationController?.sourceView = sourceView
+        actionSheet.popoverPresentationController?.sourceRect = sourceRect
+        
+        owner.present(actionSheet, animated: true, completion: nil)
+        
+    }
+    
+    func showTip(text: String, view: UIView, superView: UIView) {
+        
+        let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
+        tipView.showTouched(forView: view, in: superView)
+        
+    }
+    
+    
     
 }

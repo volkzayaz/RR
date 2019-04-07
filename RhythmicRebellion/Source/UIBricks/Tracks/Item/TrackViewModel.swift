@@ -113,22 +113,25 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     var track: Track {
         return trackProvidable.track
     }
-    fileprivate let trackProvidable: TrackProvidable
+    let trackProvidable: TrackProvidable
     let user: User
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
     let downloadViewModel: DownloadViewModel
-    let textImageGenerator: TextImageGenerator
+    private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     
-    init(router: TrackRouter, trackProvidable: TrackProvidable, user: User,
-         textImageGenerator: TextImageGenerator) {
+    let actions: AlertActionsViewModel<ActionViewModel>
+    
+    init(router: TrackRouter,
+         trackProvidable: TrackProvidable,
+         user: User,
+         actions: AlertActionsViewModel<ActionViewModel>) {
         
         self.router = router
         self.trackProvidable = trackProvidable
         self.user = user
-    
-        self.textImageGenerator = textImageGenerator
+        self.actions = actions
         
         downloadViewModel = DownloadViewModel(remoteURL: trackProvidable.track.audioFile!.urlString)
         
@@ -146,7 +149,7 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     
 }
 
-extension TrackViewModel: Equatable {
+extension TrackViewModel {
     
     func openIn(sourceRect: CGRect, sourceView: UIView) {
         
@@ -158,6 +161,23 @@ extension TrackViewModel: Equatable {
         router.showOpenIn(url: url, sourceRect: sourceRect, sourceView: sourceView)
         
     }
+    
+    func presentActions(sourceRect: CGRect,
+                        sourceView: UIView) {
+        
+        router.present(actions: actions,
+                       sourceRect: sourceRect,
+                       sourceView: sourceView)
+        
+    }
+    
+    func showTip(tip: String, view: UIView, superView: UIView) {
+        router.showTip(text: tip, view: view, superView: superView)
+    }
+    
+}
+
+extension TrackViewModel: Equatable {
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
         return lhs.track == rhs.track &&

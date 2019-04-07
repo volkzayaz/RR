@@ -42,7 +42,6 @@ struct ArtistViewModel : MVVM_ViewModel {
     
     fileprivate let artist: Artist
     fileprivate let data = BehaviorRelay<[(String, [Data])]>(value: [])
-    fileprivate let trackObserver: TrackListViewModel.Observer
     
     init(router: ArtistRouter, artist: Artist) {
         self.router = router
@@ -52,26 +51,26 @@ struct ArtistViewModel : MVVM_ViewModel {
                                              dataProvider: TracksProvider(artist: artist),
                                              router: router.trackListRouter())
         
-        trackObserver = TrackListViewModel.Observer(list: tracksViewModel,
-                                                    handler: router.owner)
-        
         let albums = ArtistRequest.albums(artist: artist)
             .rx.response(type: ArtistResponse<Album>.self)
             .map { response in
-                return ( R.string.localizable.albums(), response.data.map { Data.album(album: $0) } )
+                return ( R.string.localizable.albums(),
+                         response.data.map { Data.album(album: $0) } )
             }
             .trackView(viewIndicator: indicator)
         
         let playlists = ArtistRequest.playlists(artist: artist)
             .rx.response(type: ArtistResponse<ArtistPlaylist>.self)
             .map { response in
-                return ( R.string.localizable.playlist(), response.data.map { Data.playlist(playlist: $0) } )
+                return ( R.string.localizable.playlist(),
+                         response.data.map { Data.playlist(playlist: $0) } )
             }
             .trackView(viewIndicator: indicator)
 
-        let records = trackObserver.trackViewModels
+        let records = tracksViewModel.trackViewModels
             .map { x in
-                return ( R.string.localizable.songs(), x.map { Data.track(trackViewModel: $0) } )
+                return ( R.string.localizable.songs(),
+                         x.map { Data.track(trackViewModel: $0) } )
             }
         
         Observable.combineLatest([
@@ -108,25 +107,13 @@ extension ArtistViewModel {
             router.show(album: album)
             
         case .track(let trackViewModel):
-            tracksViewModel.play(tracks: [trackViewModel.track])
+            DataLayer.get.daPlayer.add(tracks: [trackViewModel.track], type: .now)
             
         case .playlist(let playlist):
             router.show(playlist: playlist)
             
         }
         
-    }
-    
-    func optionsSelected(for indexPath: IndexPath,
-                         sourceRect: CGRect, sourceView: UIView) {
-        
-        router.present(actions: tracksViewModel.actions(forObjectAt: indexPath),
-                       sourceRect: sourceRect, sourceView: sourceView)
-        
-    }
-    
-    func showTip(tip: String, view: UIView, superView: UIView) {
-        router.showTip(text: tip, view: view, superView: superView)
     }
     
 }

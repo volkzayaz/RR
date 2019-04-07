@@ -15,13 +15,6 @@ import RxCocoa
 
 class TrackView: UIView {
 
-    typealias ActionCallback = (Actions) -> Void
-
-    enum Actions {
-        case showActions
-        case showHint(UIView, String)
-    }
-
     @IBOutlet weak var equalizer: EqualizerView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -48,11 +41,6 @@ class TrackView: UIView {
     @IBOutlet weak var equalizerWidthConstraint: NSLayoutConstraint!
     
     var viewModel: TrackViewModel!
-
-    var backwardCompatibilityViewModel: ArtistViewModel?
-    var indexPath: IndexPath?
-    
-    var actionCallback: ActionCallback?
     
     var disposeBag = DisposeBag()
     
@@ -86,7 +74,7 @@ class TrackView: UIView {
     }
 
         
-    func setup(viewModel: TrackViewModel, actionCallback:  @escaping ActionCallback) {
+    func setup(viewModel: TrackViewModel) {
 
         self.viewModel = viewModel
         
@@ -155,8 +143,6 @@ class TrackView: UIView {
             .disposed(by: rx.disposeBag)
             
         self.downloadButtonHintText = viewModel.downloadHintText
-
-        self.actionCallback = actionCallback
         
         viewModel.downloadViewModel.downloadPercent
             .drive(onNext: { [weak d = downloadButton] (x) in
@@ -206,31 +192,24 @@ class TrackView: UIView {
     // MARK: - Actions -
 
     @IBAction func onActionButton(sender: UIButton) {
-        actionCallback?(.showActions)
         
-        if let x = indexPath {
-            backwardCompatibilityViewModel?.optionsSelected(for: x,
-                                                            sourceRect: sender.frame,
-                                                            sourceView: actionButtonContainerView)
-        }
+        viewModel.presentActions(sourceRect: sender.frame,
+                                 sourceView: actionButtonContainerView)
         
     }
 
     @IBAction func onCensorshipMarkButton(_ sender: UIButton) {
         guard let censorshipMarkButtonHintText = self.censorshipMarkButtonHintText, censorshipMarkButtonHintText.isEmpty == false else { return }
-        actionCallback?(.showHint(sender, censorshipMarkButtonHintText))
         
-        backwardCompatibilityViewModel?.showTip(tip: censorshipMarkButtonHintText,
-                                                view: sender, superView: self)
+        viewModel.showTip(tip: censorshipMarkButtonHintText,
+                          view: sender, superView: self)
     }
 
     @IBAction func onPreviewOptionButton(_ sender: UIButton) {
         guard let previewOptionsButtonHintText = self.previewOptionsButtonHintText, previewOptionsButtonHintText.isEmpty == false else { return }
 
-        actionCallback?(.showHint(sender, previewOptionsButtonHintText))
-        
-        backwardCompatibilityViewModel?.showTip(tip: previewOptionsButtonHintText,
-                                                view: sender, superView: self)
+        viewModel.showTip(tip: previewOptionsButtonHintText,
+                          view: sender, superView: self)
     }
 }
 
@@ -241,10 +220,9 @@ extension TrackView: PKDownloadButtonDelegate {
 
         guard !viewModel.downloadDisabled else {
             guard let downloadButtonHintText = self.downloadButtonHintText, downloadButtonHintText.isEmpty == false else { return }
-            actionCallback?(.showHint(downloadButton, downloadButtonHintText))
             
-            backwardCompatibilityViewModel?.showTip(tip: downloadButtonHintText,
-                                                    view: downloadButton, superView: self)
+            viewModel.showTip(tip: downloadButtonHintText,
+                              view: downloadButton, superView: self)
             
             return
         }

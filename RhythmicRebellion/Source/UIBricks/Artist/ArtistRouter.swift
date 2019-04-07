@@ -52,20 +52,6 @@ struct ArtistRouter : MVVM_Router {
         
     }
     
-    func present(actions: AlertActionsViewModel<ActionViewModel>, sourceRect: CGRect, sourceView: UIView) {
-        
-        owner.show(alertActionsviewModel: actions,
-                   sourceRect: sourceRect, sourceView: sourceView)
-        
-    }
-    
-    func showTip(text: String, view: UIView, superView: UIView) {
-        
-        let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
-        tipView.showTouched(forView: view, in: superView)
-        
-    }
-    
     func trackListRouter() -> TrackListRouter {
         return TrackListRouter(owner: owner)
     }

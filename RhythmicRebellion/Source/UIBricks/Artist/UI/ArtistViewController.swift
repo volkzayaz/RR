@@ -51,10 +51,7 @@ class ArtistViewController: UIViewController, MVVM_View {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.trackCell,
                                                           for: ip)!
             
-            cell.trackView.setup(viewModel: x) { _ in }
-            
-            cell.trackView.backwardCompatibilityViewModel = self.viewModel
-            cell.trackView.indexPath = ip
+            cell.trackView.setup(viewModel: x)
             
             return cell
             

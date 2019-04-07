@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import Fabric
 import Crashlytics
+import EasyTipView
 
 import AlamofireNetworkActivityLogger
 
@@ -56,6 +57,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UISegmentedControl.appearance(whenContainedInInstancesOf: [SignUpContentView.self])
             .setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.0431372549, green: 0.07450980392, blue: 0.2274509804, alpha: 1),
                                      NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0)] as [NSAttributedString.Key : Any], for: .selected)
+        
+        var tipViewPreferences = EasyTipView.Preferences()
+        tipViewPreferences.drawing.font = UIFont.systemFont(ofSize: 12.0)
+        tipViewPreferences.drawing.foregroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        tipViewPreferences.drawing.backgroundColor = #colorLiteral(red: 0.2089539468, green: 0.1869146228, blue: 0.349752754, alpha: 1)
+        tipViewPreferences.animating.showInitialAlpha = 0
+        tipViewPreferences.animating.showDuration = 1.5
+        tipViewPreferences.animating.dismissDuration = 1.5
+        tipViewPreferences.positioning.textHInset = 5.0
+        tipViewPreferences.positioning.textVInset = 5.0
+        EasyTipView.globalPreferences = tipViewPreferences
         
     }
 
