@@ -33,10 +33,13 @@ extension TrackViewModel {
     
     fileprivate var previewOption: Driver<TrackPreviewOptionViewModel?> {
         
-        guard case .full? = track.previewType else {
-            return .just(TrackPreviewOptionViewModel(previewOptionType: .init(with: track,
-                                                                              user: user, μSecondsPlayed: nil),
-                                                     textImageGenerator: textImageGenerator))
+        let option = TrackPreviewOptionViewModel(type: .init(with: track,
+                                                             user: user,
+                                                             μSecondsPlayed: nil),
+                                                 textImageGenerator: textImageGenerator)
+        
+        guard case .fullLimitTimes = option.type else {
+            return .just(option)
         }
         
         let u = user
@@ -47,9 +50,9 @@ extension TrackViewModel {
             .distinctUntilChanged()
             .map { time in
                 
-                return TrackPreviewOptionViewModel(previewOptionType: .init(with: t,
-                                                                            user: u,
-                                                                            μSecondsPlayed: time),
+                return TrackPreviewOptionViewModel(type: .init(with: t,
+                                                               user: u,
+                                                               μSecondsPlayed: time),
                                                    textImageGenerator: g)
                 
         }
@@ -181,7 +184,10 @@ extension TrackViewModel: Equatable {
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
         return lhs.track == rhs.track &&
-            lhs.isCensorship == rhs.isCensorship
+            lhs.isCensorship == rhs.isCensorship &&
+            ///TODO: compare only user items that are reflected in the UI (follow, listening progress)
+            ///for example we don't care if user changed email for displaying track
+            lhs.user == rhs.user
     }
     
 }

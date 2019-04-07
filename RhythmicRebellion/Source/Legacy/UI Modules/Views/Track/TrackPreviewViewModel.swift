@@ -49,11 +49,17 @@ struct TrackPreviewOptionViewModel {
         }
     }
     
-    let previewOptionType: PreviewOptionType
+    let type: PreviewOptionType
     let textImageGenerator: TextImageGenerator
     
+    init(type: PreviewOptionType,
+         textImageGenerator: TextImageGenerator = .init(font: .systemFont(ofSize: 8))) {
+        self.type = type
+        self.textImageGenerator = textImageGenerator
+    }
+    
     var image: UIImage? {
-        switch previewOptionType {
+        switch type {
         case .commigSoon: return nil
         case .noPreview: return UIImage(named: "DashMark")?.withRenderingMode(.alwaysTemplate)
         case .freeForPlaylist: return UIImage(named: "InfinityMark")?.withRenderingMode(.alwaysTemplate)
@@ -64,7 +70,7 @@ struct TrackPreviewOptionViewModel {
     }
 
     var hintText: String? {
-        switch previewOptionType {
+        switch type {
         case .commigSoon: return nil
         case .noPreview: return NSLocalizedString("No previews available", comment: "No previews hint text")
         case .freeForPlaylist: return NSLocalizedString("Free add to playlist", comment: "Free add to playlist hint text")

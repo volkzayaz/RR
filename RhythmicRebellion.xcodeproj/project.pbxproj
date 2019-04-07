@@ -229,7 +229,7 @@
 		73F138A7222C289200FB8EBC /* PageItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13753222C289200FB8EBC /* PageItemViewModel.swift */; };
 		73F138A8222C289200FB8EBC /* PagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13754222C289200FB8EBC /* PagesViewController.swift */; };
 		73F138A9222C289200FB8EBC /* PagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13755222C289200FB8EBC /* PagesViewModel.swift */; };
-		73F138AA222C289200FB8EBC /* PlayerControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13757222C289200FB8EBC /* PlayerControllerViewModel.swift */; };
+		73F138AA222C289200FB8EBC /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13757222C289200FB8EBC /* PlayerViewModel.swift */; };
 		73F138AB222C289200FB8EBC /* VideoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1375A222C289200FB8EBC /* VideoRouter.swift */; };
 		73F138AC222C289200FB8EBC /* VideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1375B222C289200FB8EBC /* VideoViewModel.swift */; };
 		73F138AD222C289200FB8EBC /* VideoControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1375C222C289200FB8EBC /* VideoControllerViewModel.swift */; };
@@ -278,7 +278,6 @@
 		73F138DC222C289200FB8EBC /* PromoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13799222C289200FB8EBC /* PromoRouter.swift */; };
 		73F138DD222C289200FB8EBC /* PromoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379A222C289200FB8EBC /* PromoViewController.swift */; };
 		73F138DE222C289200FB8EBC /* PromoControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379B222C289200FB8EBC /* PromoControllerViewModel.swift */; };
-		73F138DF222C289200FB8EBC /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379C222C289200FB8EBC /* PlayerViewModel.swift */; };
 		73F138E0222C289200FB8EBC /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379D222C289200FB8EBC /* PlayerViewController.swift */; };
 		73F138E1222C289200FB8EBC /* PlayerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379E222C289200FB8EBC /* PlayerRouter.swift */; };
 		73F138E4222C289200FB8EBC /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A2222C289200FB8EBC /* RestApiServiceError.swift */; };
@@ -575,7 +574,7 @@
 		73F13753222C289200FB8EBC /* PageItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageItemViewModel.swift; sourceTree = "<group>"; };
 		73F13754222C289200FB8EBC /* PagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesViewController.swift; sourceTree = "<group>"; };
 		73F13755222C289200FB8EBC /* PagesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesViewModel.swift; sourceTree = "<group>"; };
-		73F13757222C289200FB8EBC /* PlayerControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerControllerViewModel.swift; sourceTree = "<group>"; };
+		73F13757222C289200FB8EBC /* PlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		73F1375A222C289200FB8EBC /* VideoRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoRouter.swift; sourceTree = "<group>"; };
 		73F1375B222C289200FB8EBC /* VideoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewModel.swift; sourceTree = "<group>"; };
 		73F1375C222C289200FB8EBC /* VideoControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoControllerViewModel.swift; sourceTree = "<group>"; };
@@ -624,7 +623,6 @@
 		73F13799222C289200FB8EBC /* PromoRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoRouter.swift; sourceTree = "<group>"; };
 		73F1379A222C289200FB8EBC /* PromoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoViewController.swift; sourceTree = "<group>"; };
 		73F1379B222C289200FB8EBC /* PromoControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoControllerViewModel.swift; sourceTree = "<group>"; };
-		73F1379C222C289200FB8EBC /* PlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		73F1379D222C289200FB8EBC /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		73F1379E222C289200FB8EBC /* PlayerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerRouter.swift; sourceTree = "<group>"; };
 		73F137A2222C289200FB8EBC /* RestApiServiceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiServiceError.swift; sourceTree = "<group>"; };
@@ -1563,8 +1561,7 @@
 		73F13756222C289200FB8EBC /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				73F13757222C289200FB8EBC /* PlayerControllerViewModel.swift */,
-				73F1379C222C289200FB8EBC /* PlayerViewModel.swift */,
+				73F13757222C289200FB8EBC /* PlayerViewModel.swift */,
 				73F1379D222C289200FB8EBC /* PlayerViewController.swift */,
 				73F1379E222C289200FB8EBC /* PlayerRouter.swift */,
 			);
@@ -2619,7 +2616,7 @@
 				73F1388C222C289200FB8EBC /* RestorePasswordControllerViewModel.swift in Sources */,
 				73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */,
 				73F1387C222C289200FB8EBC /* ChangePasswordViewModel.swift in Sources */,
-				73F138AA222C289200FB8EBC /* PlayerControllerViewModel.swift in Sources */,
+				73F138AA222C289200FB8EBC /* PlayerViewModel.swift in Sources */,
 				7361C00222368375008EA36E /* Dispatcher.swift in Sources */,
 				73F1390C222C289200FB8EBC /* SpinnerView.swift in Sources */,
 				73F13854222C289200FB8EBC /* SelectableListItemViewModel.swift in Sources */,
@@ -2658,7 +2655,6 @@
 				73F13847222C289200FB8EBC /* HomeViewModel.swift in Sources */,
 				73F13870222C289200FB8EBC /* ApplicationContentContainerViewModel.swift in Sources */,
 				7361C01622368D84008EA36E /* AudioPlayerActions.swift in Sources */,
-				73F138DF222C289200FB8EBC /* PlayerViewModel.swift in Sources */,
 				73F138AE222C289200FB8EBC /* VideoViewController.swift in Sources */,
 				73F1389F222C289200FB8EBC /* PagesControllerViewModel.swift in Sources */,
 				73F1382E222C289200FB8EBC /* TrackWriter.swift in Sources */,
