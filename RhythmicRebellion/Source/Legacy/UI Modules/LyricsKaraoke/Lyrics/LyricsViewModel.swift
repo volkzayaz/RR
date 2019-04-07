@@ -43,7 +43,7 @@ extension LyricsViewModel {
                 return "\n Contains explicit material \n"
             }
             
-            if track.previewType == .noPreview {
+            if case .noPreview = TrackPreviewOptionViewModel(type: .init(with: track, user: state.user)).type {
                 return "\n No preview \n"
             }
             

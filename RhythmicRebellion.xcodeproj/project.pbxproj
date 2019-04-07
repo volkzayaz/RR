@@ -44,6 +44,7 @@
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
+		73C3B8C5225A2F92004F380C /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C3B8C4225A2F92004F380C /* R.generated.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
 		73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */; };
@@ -297,7 +298,6 @@
 		73F138FE222C289200FB8EBC /* FollowingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137CC222C289200FB8EBC /* FollowingRouter.swift */; };
 		73F138FF222C289200FB8EBC /* AlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137CE222C289200FB8EBC /* AlbumRequest.swift */; };
 		73F13900222C289200FB8EBC /* ArtistRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D0222C289200FB8EBC /* ArtistRequests.swift */; };
-		73F13901222C289200FB8EBC /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D3222C289200FB8EBC /* R.generated.swift */; };
 		73F13902222C289200FB8EBC /* TextImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D4222C289200FB8EBC /* TextImageGenerator.swift */; };
 		73F13903222C289200FB8EBC /* ImageRetreiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D5222C289200FB8EBC /* ImageRetreiver.swift */; };
 		73F13904222C289200FB8EBC /* MoneyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D6222C289200FB8EBC /* MoneyFormatter.swift */; };
@@ -389,6 +389,7 @@
 		73B97A6F2253995400B43D71 /* SetNewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUser.swift; sourceTree = "<group>"; };
 		73B97A7222539DC500B43D71 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		73B97A742253B20400B43D71 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
+		73C3B8C4225A2F92004F380C /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
 		73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCollectionCell.swift; sourceTree = "<group>"; };
@@ -643,7 +644,6 @@
 		73F137CC222C289200FB8EBC /* FollowingRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingRouter.swift; sourceTree = "<group>"; };
 		73F137CE222C289200FB8EBC /* AlbumRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumRequest.swift; sourceTree = "<group>"; };
 		73F137D0222C289200FB8EBC /* ArtistRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistRequests.swift; sourceTree = "<group>"; };
-		73F137D3222C289200FB8EBC /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		73F137D4222C289200FB8EBC /* TextImageGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextImageGenerator.swift; sourceTree = "<group>"; };
 		73F137D5222C289200FB8EBC /* ImageRetreiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRetreiver.swift; sourceTree = "<group>"; };
 		73F137D6222C289200FB8EBC /* MoneyFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoneyFormatter.swift; sourceTree = "<group>"; };
@@ -1896,7 +1896,7 @@
 		73F137D2222C289200FB8EBC /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				73F137D3222C289200FB8EBC /* R.generated.swift */,
+				73C3B8C4225A2F92004F380C /* R.generated.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -2303,11 +2303,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift,
+				$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/RhythmicRebellion/Source/Utils/UI/R.generated.swift\"\n";
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift\"\n";
 		};
 		76F0D960219B230400B0E86D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2448,6 +2448,7 @@
 				73F13865222C289200FB8EBC /* SwitchableTableViewCell.swift in Sources */,
 				73F138CB222C289200FB8EBC /* LyricsKaraokeViewModel.swift in Sources */,
 				73F13894222C289200FB8EBC /* SignInViewModel.swift in Sources */,
+				73C3B8C5225A2F92004F380C /* R.generated.swift in Sources */,
 				7361C012223687D6008EA36E /* OrderedTrack.swift in Sources */,
 				73F13913222C289200FB8EBC /* Double+Extension.swift in Sources */,
 				73F138CA222C289200FB8EBC /* LyricsRouter.swift in Sources */,
@@ -2661,7 +2662,6 @@
 				73F13905222C289200FB8EBC /* ValidatebleField+Extension.swift in Sources */,
 				73F138AB222C289200FB8EBC /* VideoRouter.swift in Sources */,
 				73F13809222C289200FB8EBC /* MaskedTextField.swift in Sources */,
-				73F13901222C289200FB8EBC /* R.generated.swift in Sources */,
 				73F138AF222C289200FB8EBC /* PlayerPlaylistRootControllerViewModel.swift in Sources */,
 				73F13829222C289200FB8EBC /* Addon.swift in Sources */,
 				73F13808222C289200FB8EBC /* HobbiesContainerView.swift in Sources */,

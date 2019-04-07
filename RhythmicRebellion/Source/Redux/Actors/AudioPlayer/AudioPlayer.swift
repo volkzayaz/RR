@@ -172,7 +172,7 @@ class AudioPlayer: NSObject {
                 case .addon(let x):         url = URL(string: x.audioFile.urlString)!
                 case .track(let x):         url = URL(string: x.audioFile!.urlString)!
                 case .minusOneTrack(let x): url = URL(string: x.backingAudioFile!.urlString)!
-                case .stub(let x):          url = URL(string: x.urlString)!
+                case .stub(let x, _):       url = URL(string: x.urlString)!
                 }
                 
                 if let x = p?.currentItem?.asset as? AVURLAsset,

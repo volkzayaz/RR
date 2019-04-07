@@ -156,7 +156,7 @@ extension AppState {
         case addon(Addon) /// small sounds prior to track such as announcements/intro/bio etc.
         case track(Track) /// audio track
         case minusOneTrack(Track) /// audio track without vocal for Karaoke
-        case stub(DefaultAudioFile) /// audio stub in case track playback is not possible (no preview/censorship etc.)
+        case stub(DefaultAudioFile, explanation: String) /// audio stub in case track playback is not possible (no preview/censorship etc.)
     };
     var activePlayable: MusicType? {
         
@@ -168,10 +168,12 @@ extension AppState {
         
         ///possible stubs
         if case .noPreview? = t.previewType, !user.isFollower(for: t.artist.id) {
-            return .stub(player.config.noPreviewAudioFile)
+            return .stub(player.config.noPreviewAudioFile,
+                         explanation: R.string.localizable.noPreviewMessage(t.artist.name))
         }
-        else if t.isCensorship, user.isCensorshipTrack(t) {
-            return .stub(player.config.explicitMaterialAudioFile)
+        else if user.isCensorshipTrack(t) {
+            return .stub(player.config.explicitMaterialAudioFile,
+                         explanation: R.string.localizable.recordingContainsExplicitMaterials(t.name))
         }
         
         ///addon might be in the stack

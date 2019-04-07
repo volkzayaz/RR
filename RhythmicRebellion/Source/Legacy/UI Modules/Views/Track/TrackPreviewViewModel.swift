@@ -18,7 +18,7 @@ struct TrackPreviewOptionViewModel {
         case limitSeconds(UInt)
         case authorizationNeeded
         
-        init(with track: Track, user: User?, μSecondsPlayed: UInt64?) {
+        init(with track: Track, user: User?, μSecondsPlayed: UInt64? = nil) {
             
             guard track.isPlayable, let trackAudioFile = track.audioFile else { self = .commigSoon; return }
             guard track.isFreeForPlaylist == false else { self = .freeForPlaylist; return }
