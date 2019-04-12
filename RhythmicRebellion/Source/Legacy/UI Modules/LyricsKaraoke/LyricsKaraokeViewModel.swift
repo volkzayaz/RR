@@ -42,12 +42,15 @@ final class LyricsKaraokeViewModel {
         
         ////Dispatch
         
-        ///TODO: take into account user changes in explicit materials and forceToPlay
-        appState.map { $0.currentTrack?.track }
-            .notNil()
-            .distinctUntilChanged()
-            .drive(onNext: { (track) in
-                Dispatcher.dispatch(action: PrepareLyrics(for: track))
+        appState
+            .distinctUntilChanged({ $0.currentTrack?.track == $1.currentTrack?.track &&
+                                    $0.player.currentItem?.lyrics == $1.player.currentItem?.lyrics
+            })
+            .drive(onNext: { (state) in
+                
+                guard let t = state.currentTrack else { return }
+                
+                Dispatcher.dispatch(action: PrepareLyrics(for: t.track))
             })
             .disposed(by: disposeBag)
         

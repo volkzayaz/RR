@@ -27,10 +27,6 @@ extension LyricsViewModel {
         
         return appState.map { state in
             
-            if let t = state.player.currentItem?.lyrics?.data.lyrics {
-                return t
-            }
-            
             guard let track = state.currentTrack?.track else {
                 return ""
             }
@@ -45,6 +41,10 @@ extension LyricsViewModel {
             
             if case .noPreview = TrackPreviewOptionViewModel(type: .init(with: track, user: state.user)).type {
                 return "\n No preview \n"
+            }
+           
+            if let t = state.player.currentItem?.lyrics?.data.lyrics {
+                return t
             }
             
             return "No Lyrics available"

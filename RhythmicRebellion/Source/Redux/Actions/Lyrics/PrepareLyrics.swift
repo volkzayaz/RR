@@ -17,7 +17,7 @@ struct PrepareLyrics: ActionCreator {
         
         let t = `for`
         
-        guard t.isPlayable, !t.isInstrumental, !t.isCensorship else {
+        guard t.isPlayable, !t.isInstrumental else {
             return .just(initialState)
         }
         
