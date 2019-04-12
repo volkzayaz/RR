@@ -2308,6 +2308,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift\"\n";
+			showEnvVarsInLog = 0;
 		};
 		76F0D960219B230400B0E86D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

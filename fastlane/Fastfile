@@ -30,7 +30,7 @@ platform :ios do
     
     if options[:adhoc]
         configuration = "AdHoc"
-        environmentName = "Production"
+        environmentName = "Dev"
     else
         configuration = "Release"
         environmentName = "Production"
@@ -114,7 +114,7 @@ platform :ios do
   after_all do
       
       ###notifying developer
-      notification(subtitle: "Finished lane", message: "Finished build lane succesfully")
+      #notification(subtitle: "Finished lane", message: "Finished build lane succesfully")
       
   end
   

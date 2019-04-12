@@ -66,7 +66,6 @@ class TrackView: UIView {
             self.downloadButton.pendingView.startSpin()
         }
 
-
     }
 
     func prepareToEndDisplay() {

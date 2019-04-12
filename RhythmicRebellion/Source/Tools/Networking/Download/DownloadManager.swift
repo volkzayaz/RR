@@ -115,6 +115,10 @@ class MulticastDownloadManager {
         res.0.map { (url, $0) }
             .do(onCompleted: { [unowned self] in
                 self.tasks.removeValue(forKey: url)
+                if let x = self.pipe.unsafeValue, x.0 == url, case .data(_) = x.1 {
+                    ///clean pipe afterwards if we are the last to download
+                    self.pipe.onNext(nil)
+                }
             })
             .flatMapLatest {
                 return Observable.just($0).concat(Observable.never())
