@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import RxDataSources
 
-struct DefaultKaraokeIntervalViewModel: KaraokeIntervalCellViewModel {
+struct KaraokeIntervalCellViewModel: IdentifiableType, Equatable {
 
     var text: String? { return karaokeInterval.content }
     let font: UIFont
 
     let karaokeInterval: KaraokeInterval
 
+    var identity: ClosedRange<TimeInterval> {
+        return karaokeInterval.range
+    }
+    
 }

@@ -33,7 +33,7 @@ final class DefaultKaraokeRouter:  KaraokeRouter, FlowRouterSegueCompatible {
 
     private(set) var dependencies: RouterDependencies
 
-    private(set) weak var viewModel: KaraokeViewModel?
+    private(set) var viewModel: KaraokeViewModel?
     private(set) weak var sourceController: UIViewController?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {

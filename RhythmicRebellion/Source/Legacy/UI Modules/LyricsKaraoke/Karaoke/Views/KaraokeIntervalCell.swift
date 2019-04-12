@@ -8,12 +8,6 @@
 
 import UIKit
 
-protocol KaraokeIntervalCellViewModel {
-
-    var text: String? { get }
-    var font: UIFont { get }
-}
-
 class KaraokeIntervalTableViewCell: UITableViewCell, CellIdentifiable {
 
     static let identifier = "KaraokeIntervalTableViewCellIdentifier"

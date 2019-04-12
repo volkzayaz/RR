@@ -9,6 +9,7 @@
 
 import UIKit
 import RxCocoa
+import RxDataSources
 
 final class KaraokeViewController: UIViewController {
 
@@ -38,6 +39,15 @@ final class KaraokeViewController: UIViewController {
         self.router    = router
     }
 
+    lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<String, KaraokeIntervalCellViewModel>>(configureCell: { [unowned self] (_, collectionView, ip, vm) in
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.karaokeIntervalCollectionViewCellIdentifier, for: ip)!
+        cell.setup(viewModel: vm)
+        
+        return cell
+        
+        })
+    
     // MARK: - Lifecycle -
 
     override func viewDidLoad() {
@@ -69,42 +79,29 @@ final class KaraokeViewController: UIViewController {
         self.footerView.vocaltrackButton.setBackgroundColor(#colorLiteral(red: 0.7294117647, green: 0.768627451, blue: 0.9803921569, alpha: 1), for: UIControl.State.selected)
 
         viewModel.mode
-            .drive(onNext: { [unowned self] (mode) in
-                
-                switch mode {
-                case .scroll:
-                    
-                    self.footerView.scrollViewModeButton.isSelected = true
-                    self.footerView.onePhraseViewModeButton.isSelected = false
-                    
-                    guard (self.collectionView.collectionViewLayout as? KaraokeScrollCollectionViewFlowLayout) == nil else { return }
-                    
-                    let karaokeScrollCollectionViewFlowLayout = KaraokeScrollCollectionViewFlowLayout()
-                    karaokeScrollCollectionViewFlowLayout.minimumLineSpacing = 10.0
-                    karaokeScrollCollectionViewFlowLayout.minimumInteritemSpacing = 0.0
-                    
-                    self.collectionView.setCollectionViewLayout(karaokeScrollCollectionViewFlowLayout, animated: false)
-                    
-                case .onePhrase:
-                    
-                    self.footerView.scrollViewModeButton.isSelected = false
-                    self.footerView.onePhraseViewModeButton.isSelected = true
-                    
-                    guard (self.collectionView.collectionViewLayout as? KaraokeOnePhraseCollectionViewFlowLayout) == nil else { return }
-                    
-                    let karaokeOnePhraseCollectionViewFlowLayout = KaraokeOnePhraseCollectionViewFlowLayout()
-                    
-                    self.collectionView.setCollectionViewLayout(karaokeOnePhraseCollectionViewFlowLayout, animated: false)
-                    
-                }
-                
-                self.collectionView.reloadData()
-                
-                if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
-                    self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
-                }
-                
+            .map { $0 == .scroll }
+            .drive(onNext: { [unowned self] x in
+                self.footerView.scrollViewModeButton.isSelected = x
             })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.mode
+            .map { $0 == .onePhrase }
+            .drive(onNext: { [unowned self] x in
+                self.footerView.onePhraseViewModeButton.isSelected = x
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.dataSource
+            .map { [unowned self] tuple in
+                
+                if type(of: self.collectionView.collectionViewLayout) != type(of: tuple.0) {
+                    self.collectionView.setCollectionViewLayout(tuple.0, animated: false)
+                }
+                
+                return tuple.1
+            }
+            .drive(collectionView.rx.items(dataSource: dataSource))
             .disposed(by: rx.disposeBag)
         
         viewModel.vocalButtonSelected
@@ -130,18 +127,21 @@ final class KaraokeViewController: UIViewController {
             .drive(imageView.rx.image)
             .disposed(by: rx.disposeBag)
         
-        viewModel.currentIndexPathChanges
-            .skip(1)
-            .drive(onNext: { [weak self] _ in
-                self?.refreshUI()
+        viewModel.currentIntervalIndexChanges
+            .drive(onNext: { [weak self] index in
+                
+                guard let i = index else {
+                    self?.collectionView.setContentOffset(CGPoint(x: 0.0, y: -self!.collectionView.contentInset.top), animated: true)
+                    return
+                }
+                
+                let ip = IndexPath(row: i, section: 0)
+                
+                self?.collectionView.scrollToItem(at: ip, at: .centeredVertically, animated: true)
+                
             })
             .disposed(by: rx.disposeBag)
-        
-        viewModel.karaokeChanges
-            .drive(onNext: { [weak self] _ in
-                self?.reloadUI()
-            })
-            .disposed(by: rx.disposeBag)
+
         
     }
 
@@ -161,6 +161,8 @@ final class KaraokeViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        //collectionView.collectionViewLayout.invalidateLayout()
 
 //        self.viewModel.isIdleTimerDisabled = false
     }
@@ -173,14 +175,14 @@ final class KaraokeViewController: UIViewController {
         contentInset.bottom = self.view.bounds.height / 2
         self.collectionView.contentInset = contentInset
 
-        UIView.performWithoutAnimation {
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.collectionView.reloadData()
-        }
-
-        if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
-            self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
-        }
+//        UIView.performWithoutAnimation {
+//            self.collectionView.collectionViewLayout.invalidateLayout()
+//            self.collectionView.reloadData()
+//        }
+//
+//        if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
+//            self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
+//        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -264,22 +266,7 @@ final class KaraokeViewController: UIViewController {
 }
 
 
-extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.numberOfItems(in: section)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let karaokeIntervalCollectionViewCell = KaraokeIntervalCollectionViewCell.reusableCell(in: collectionView, at: indexPath)
-        let karaokeIntervalCellViewModel = self.viewModel.item(at: indexPath)!
-
-        karaokeIntervalCollectionViewCell.setup(viewModel: karaokeIntervalCellViewModel)
-
-        return karaokeIntervalCollectionViewCell
-
-    }
+extension KaraokeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
@@ -306,24 +293,4 @@ extension KaraokeViewController {
         return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
     }
 
-}
-
-extension KaraokeViewController {
-
-    func reloadUI() {
-
-        self.collectionView.reloadData()
-
-        self.refreshUI()
-    }
-
-
-    func refreshUI() {
-
-        if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
-            self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: true)
-        } else {
-            self.collectionView.setContentOffset(CGPoint(x: 0.0, y: -self.collectionView.contentInset.top), animated: true)
-        }
-    }
 }

@@ -10,6 +10,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 extension KaraokeViewModel {
     
@@ -37,53 +38,58 @@ extension KaraokeViewModel {
     var canChangeAudioFileType: Driver<Bool> {
         return appState.map { state in
             return state.player.currentItem?.lyrics?.data.karaoke != nil
-//                && self.player.currentItem.state.blocked == false
-//                && self.player.currentItem.state.waitingAddons == false
-//                && self.player.currentQueueItem?.isTrack == true
-
         }
     }
     
-    var karaokeChanges: Driver<Karaoke?> {
+    var dataSource: Driver<(KaraokeCollectionViewFlowLayout, [AnimatableSectionModel<String, KaraokeIntervalCellViewModel>])> {
         
-        return appState.map { $0.player.currentItem?.lyrics?.data.karaoke }
-            .distinctUntilChanged()
-            .do(onNext: { [weak self] (k) in
-                self?.karaoke = k
-            })
+        return Driver.combineLatest(mode, karaoke.asDriver()) { ($0, $1) }
+            .map { (mode, maybeKaraoke) in
+                
+                guard let karaoke = maybeKaraoke else { return (mode.layout, []) }
+                
+                return (mode.layout, [AnimatableSectionModel(model: "", items: karaoke.intervals.map { i in
+                    return KaraokeIntervalCellViewModel(font: mode.font,
+                                                        karaokeInterval: i)
+                })])
+                
+            }
+        
         
     }
     
-    var currentIndexPathChanges: Driver<IndexPath?> {
+    
+    var currentIntervalIndexChanges: Driver<Int?> {
 
-        ///TODO: this reaction depended on isBlocked state. Find out why
+        let progressChanges = appState.map { $0.player.currentItem?.state.progress }
+            .notNil()
+            .distinctUntilChanged()
         
-        return appState.map { state in
-            
-            guard let intervals = state.player.currentItem?.lyrics?.data.karaoke?.intervals,
-                  let progress = state.player.currentItem?.state.progress else {
+        let modeChanges = mode
+        
+        let karaokeChanges = karaoke.asDriver()
+        
+        return Driver.combineLatest(progressChanges, modeChanges, karaokeChanges) { ($0, $1, $2) }
+            .map { (progress, mode, maybeKaraoke) in
+                
+                guard let intervals = maybeKaraoke?.intervals else {
+                    return nil
+                }
+                
+                for (index, interval) in intervals.enumerated() {
+                    
+                    if interval.range ~= progress {
+                        return index
+                    }
+                    
+                    if interval.range.lowerBound > progress {
+                        return max(0, index - 1)
+                    }
+                    
+                }
+                
                 return nil
             }
-         
-            ////WTF is going on here?
-            
-            if let intervalIndex = intervals.firstIndex(where: { $0.range.contains(progress) }) {
-                return IndexPath(item: intervalIndex, section: 0)
-            }
-            
-            if let previousIntervalIndex = intervals.firstIndex(where: { (interval) -> Bool in
-                return interval.range.lowerBound > progress
-            }) {
-                return IndexPath(item: max(0, previousIntervalIndex - 1), section: 0)
-            }
-            
-            return nil
-            
-        }
-            .do(onNext: { [weak self] (ip) in
-                self?.currentItemIndexPath = ip
-            })
-        
     }
     
     var thumbnailURL: Driver<URL?> {
@@ -91,32 +97,12 @@ extension KaraokeViewModel {
             .distinctUntilChanged()
             .map { $0?.thumbnailURL(with: [.medium, .original, .big, .large]) }
     }
- 
-    var contentFont: UIFont {
-        
-        guard case .karaoke(let config)? = appStateSlice.player.currentItem?.lyrics?.mode else {
-            return UIFont.systemFont(ofSize: 17)
-        }
-        
-        switch config.mode {
-        case .scroll:
-            return UIFont.systemFont(ofSize: 17.0)
-        case .onePhrase:
-            return UIFont.systemFont(ofSize: 32.0)
-        }
-        
-    }
     
 }
 
-final class KaraokeViewModel: KaraokeCollectionViewFlowLayoutViewModel {
+struct KaraokeViewModel {
 
-    // MARK: - Private properties -
-
-    private(set) weak var router: KaraokeRouter?
-
-    private var karaoke: Karaoke?
-    private(set) var currentItemIndexPath: IndexPath?
+    private let karaoke = BehaviorRelay<Karaoke?>(value: nil)
 
     let disposeBag = DisposeBag()
 
@@ -124,33 +110,24 @@ final class KaraokeViewModel: KaraokeCollectionViewFlowLayoutViewModel {
 
     init(router: KaraokeRouter) {
         self.router = router
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-
-
-    func numberOfItems(in section: Int) -> Int {
-        return self.karaoke?.intervals.count ?? 0
-    }
-
-    func item(at indexPath: IndexPath) -> DefaultKaraokeIntervalViewModel? {
-        guard let karaoke = self.karaoke, karaoke.intervals.count > indexPath.item else { return nil }
-
-        let karaokeInterval = karaoke.intervals[indexPath.item]
-        let font = self.contentFont
-
-        return DefaultKaraokeIntervalViewModel(font: font, karaokeInterval: karaokeInterval)
+        
+        appState.map { $0.player.currentItem?.lyrics?.data.karaoke }
+            .distinctUntilChanged()
+            .drive(karaoke)
+            .disposed(by: disposeBag)
+        
     }
 
     func itemSize(at indexPath: IndexPath, for width: CGFloat) -> CGSize {
-        guard let karaoke = self.karaoke, karaoke.intervals.count > indexPath.item else { return CGSize.zero }
-
+        guard let karaoke = self.karaoke.value,
+              karaoke.intervals.count > indexPath.item,
+              case .karaoke(let config)? = appStateSlice.player.currentItem?.lyrics?.mode else {
+                return CGSize.zero
+        }
+        
         let karaokeInterval = karaoke.intervals[indexPath.item]
-
-        let font = self.contentFont
+        
+        let font =  config.mode.font
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
         let boundingBox = karaokeInterval.content.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font], context: nil)
 
@@ -184,4 +161,31 @@ final class KaraokeViewModel: KaraokeCollectionViewFlowLayoutViewModel {
     func switchToLyrics() {
         Dispatcher.dispatch(action: ChangeLyricsMode(to: .plain))
     }
+    
+    private(set) weak var router: KaraokeRouter?
+
+    
+}
+
+
+extension PlayerState.Lyrics.Mode.KaraokeConfig.Mode {
+    
+    var font: UIFont {
+        
+        switch self {
+        case .scroll:     return .systemFont(ofSize: 17.0)
+        case .onePhrase:  return .systemFont(ofSize: 32.0)
+        
+        }
+        
+    }
+    
+    var layout: KaraokeCollectionViewFlowLayout {
+        switch self {
+        case .scroll:     return KaraokeScrollCollectionViewFlowLayout()
+        case .onePhrase:  return KaraokeOnePhraseCollectionViewFlowLayout()
+            
+        }
+    }
+    
 }

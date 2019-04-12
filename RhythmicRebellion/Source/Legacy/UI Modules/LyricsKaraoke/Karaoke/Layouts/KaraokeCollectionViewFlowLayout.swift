@@ -8,11 +8,6 @@
 
 import UIKit
 
-
-protocol KaraokeCollectionViewFlowLayoutViewModel {
-    func itemSize(at indexPath: IndexPath, for width: CGFloat) -> CGSize
-}
-
 class KaraokeCollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 
     var boundsCenterOffset = CGPoint(x: 0.0, y: 0.0)
@@ -148,7 +143,7 @@ class KaraokeCollectionViewFlowLayout: UICollectionViewFlowLayout {
         karaokeLayoutAttributes.activeDistance = karaokeLayoutAttributes.frame.height + self.minimumLineSpacing
     }
 
-    open func itemSize(at indexPath: IndexPath, with viewModel: KaraokeCollectionViewFlowLayoutViewModel) -> CGSize {
+    open func itemSize(at indexPath: IndexPath, with viewModel: KaraokeViewModel) -> CGSize {
 
         guard let collectionView = self.collectionView else { return CGSize.zero }
 
@@ -162,6 +157,18 @@ class KaraokeCollectionViewFlowLayout: UICollectionViewFlowLayout {
 }
 
 class KaraokeScrollCollectionViewFlowLayout: KaraokeCollectionViewFlowLayout {
+    
+    override init() {
+        super.init()
+        
+        minimumLineSpacing = 10.0
+        minimumInteritemSpacing = 0.0
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }
 
 class KaraokeOnePhraseCollectionViewFlowLayout: KaraokeCollectionViewFlowLayout {
@@ -182,7 +189,7 @@ class KaraokeOnePhraseCollectionViewFlowLayout: KaraokeCollectionViewFlowLayout 
 
     }
 
-    open override func itemSize(at indexPath: IndexPath, with viewModel: KaraokeCollectionViewFlowLayoutViewModel) -> CGSize {
+    open override func itemSize(at indexPath: IndexPath, with viewModel: KaraokeViewModel) -> CGSize {
 
         guard let collectionView = self.collectionView else { return CGSize.zero }
 
