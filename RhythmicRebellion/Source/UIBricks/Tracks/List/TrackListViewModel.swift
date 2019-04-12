@@ -163,14 +163,11 @@ extension TrackListViewModel {
         
         var result: [ActionViewModel] = []
         
-        if !user.isGuest,
-            user.isCensorshipTrack(t.track) &&
-            !(user.profile?.forceToPlay.contains(t.track.id) ?? false) {
+        if t.track.isCensorship, let p = user.profile, !p.forceToPlay.contains(t.track.id) {
             result.append(ftp)
         }
         
-        if  user.isCensorshipTrack(t.track) &&
-            user.profile?.forceToPlay.contains(t.track.id) ?? false {
+        if t.track.isCensorship, let p = user.profile, p.forceToPlay.contains(t.track.id) {
             result.append(dnp)
         }
         

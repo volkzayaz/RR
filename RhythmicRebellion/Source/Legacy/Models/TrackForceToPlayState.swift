@@ -13,7 +13,7 @@ struct TrackForceToPlayState: Codable {
     let isForcedToPlay: Bool
 
     enum CodingKeys: String, CodingKey {
-        case trackId = "id"
-        case isForcedToPlay = "state"
+        case trackId = "record_id"
+        case isForcedToPlay = "force_to_play"
     }
 }

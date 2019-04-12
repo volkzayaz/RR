@@ -39,7 +39,7 @@ extension LyricsViewModel {
                 return "\n This is an instrumental song \n"
             }
             
-            if state.user.isCensorshipTrack(track) {
+            if state.user.shouldCensorTrack(track) {
                 return "\n Contains explicit material \n"
             }
             

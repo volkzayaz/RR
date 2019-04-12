@@ -97,7 +97,7 @@ extension TrackViewModel {
     }
     
     var isCensorship: Bool {
-        return user.isCensorshipTrack(track)
+        return track.isCensorship
     }
     
     var downloadEnabled: Bool {

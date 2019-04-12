@@ -42,15 +42,26 @@ struct User: Codable, Equatable {
         
     }
     
-    func isCensorshipTrack(_ track: Track) -> Bool {
-        return track.isCensorship && self.profile?.listeningSettings.isExplicitMaterialExcluded ?? true
-    }
-    
-    
-    func stubTrackAudioFileReason(for track: Track) -> UserStubTrackAudioFileReason? {
+    func shouldCensorTrack(_ track: Track) -> Bool {
+
+        if !track.isCensorship {
+            ///track does not contain explicit materials
+            return false
+        }
+
+        guard let p = profile else {
+            ///user is guest
+            return true
+        }
         
-        guard self.isCensorshipTrack(track), !(self.profile?.forceToPlay.contains(track.id) ?? false) else { return nil }
-        return .censorship
+        if !p.listeningSettings.isExplicitMaterialExcluded {
+            ///user opted in to listen to all songs
+            return false
+        }
+        
+        ///user opted in to listen to this particular track
+        return !p.forceToPlay.contains(track.id)
+        
     }
     
     func isFollower(for artistId: String) -> Bool {
@@ -70,10 +81,6 @@ struct User: Codable, Equatable {
         return self.profile?.skipAddonsArtistsIds.contains(artist.id) ?? false
     }
     
-}
-
-public enum UserStubTrackAudioFileReason {
-    case censorship
 }
 
 struct UserProfile: Codable {
@@ -266,6 +273,7 @@ extension UserProfile: Equatable {
                 lhs.language == rhs.language &&
                 lhs.followedArtistsIds == rhs.followedArtistsIds &&
                 lhs.tracksLikeStates == rhs.tracksLikeStates &&
-        lhs.listeningSettings == rhs.listeningSettings
+                lhs.listeningSettings == rhs.listeningSettings &&
+                lhs.forceToPlay == rhs.forceToPlay
     }
 }

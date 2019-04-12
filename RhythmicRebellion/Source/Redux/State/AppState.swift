@@ -171,7 +171,7 @@ extension AppState {
             return .stub(player.config.noPreviewAudioFile,
                          explanation: R.string.localizable.noPreviewMessage(t.artist.name))
         }
-        else if user.isCensorshipTrack(t) {
+        else if user.shouldCensorTrack(t) {
             return .stub(player.config.explicitMaterialAudioFile,
                          explanation: R.string.localizable.recordingContainsExplicitMaterials(t.name))
         }
