@@ -41,6 +41,21 @@
 		737622F621CD28AF005B603E /* Artist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 737622F521CD28AF005B603E /* Artist.storyboard */; };
 		739FFA28224BA3FF007A88CA /* PrepareLyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */; };
 		739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */; };
+		73A56D1622663C5D00D2293B /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1022663C5D00D2293B /* Authenticator.swift */; };
+		73A56D1822663C5D00D2293B /* FacebookAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1422663C5D00D2293B /* FacebookAuthenticator.swift */; };
+		73A56D2422663CFE00D2293B /* OAuth2Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1A22663CFE00D2293B /* OAuth2Error.swift */; };
+		73A56D2522663CFE00D2293B /* LoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1B22663CFE00D2293B /* LoginError.swift */; };
+		73A56D2622663CFE00D2293B /* Simplicity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1C22663CFE00D2293B /* Simplicity.swift */; };
+		73A56D2722663CFE00D2293B /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1D22663CFE00D2293B /* OAuth2.swift */; };
+		73A56D2822663CFE00D2293B /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1E22663CFE00D2293B /* Helpers.swift */; };
+		73A56D2922663CFE00D2293B /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1F22663CFE00D2293B /* LoginProvider.swift */; };
+		73A56D2A22663CFE00D2293B /* Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D2122663CFE00D2293B /* Google.swift */; };
+		73A56D2B22663CFE00D2293B /* Facebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D2222663CFE00D2293B /* Facebook.swift */; };
+		73A56D2C22663CFE00D2293B /* VKontakte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D2322663CFE00D2293B /* VKontakte.swift */; };
+		73A56D3222663E8600D2293B /* ContinueFacebookRegistrationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D2F22663E8600D2293B /* ContinueFacebookRegistrationRouter.swift */; };
+		73A56D3322663E8600D2293B /* ContinueFacebookRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3022663E8600D2293B /* ContinueFacebookRegistrationViewController.swift */; };
+		73A56D3422663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3122663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift */; };
+		73A56D3622663ED700D2293B /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3522663ED700D2293B /* Checkbox.swift */; };
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
@@ -180,13 +195,11 @@
 		73F13875222C289200FB8EBC /* PlaylistTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1370D222C289200FB8EBC /* PlaylistTableHeaderView.swift */; };
 		73F13876222C289200FB8EBC /* ContainerTransitionSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1370F222C289200FB8EBC /* ContainerTransitionSegue.swift */; };
 		73F13877222C289200FB8EBC /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13711222C289200FB8EBC /* ProfileRouter.swift */; };
-		73F13878222C289200FB8EBC /* ProfileControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13712222C289200FB8EBC /* ProfileControllerViewModel.swift */; };
 		73F13879222C289200FB8EBC /* ChangePasswordControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13714222C289200FB8EBC /* ChangePasswordControllerViewModel.swift */; };
 		73F1387A222C289200FB8EBC /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13715222C289200FB8EBC /* ChangePasswordViewController.swift */; };
 		73F1387B222C289200FB8EBC /* ChangePasswordRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13716222C289200FB8EBC /* ChangePasswordRouter.swift */; };
 		73F1387C222C289200FB8EBC /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13717222C289200FB8EBC /* ChangePasswordViewModel.swift */; };
 		73F1387D222C289200FB8EBC /* ProfileSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13719222C289200FB8EBC /* ProfileSettingsViewModel.swift */; };
-		73F1387E222C289200FB8EBC /* ProfileSettingsControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1371A222C289200FB8EBC /* ProfileSettingsControllerViewModel.swift */; };
 		73F1387F222C289200FB8EBC /* ProfileSettingsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1371B222C289200FB8EBC /* ProfileSettingsRouter.swift */; };
 		73F13880222C289200FB8EBC /* ProfileSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1371C222C289200FB8EBC /* ProfileSettingsViewController.swift */; };
 		73F13881222C289200FB8EBC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1371D222C289200FB8EBC /* ProfileViewController.swift */; };
@@ -205,11 +218,9 @@
 		73F1388E222C289200FB8EBC /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13730222C289200FB8EBC /* SignUpViewController.swift */; };
 		73F1388F222C289200FB8EBC /* SignUpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13731222C289200FB8EBC /* SignUpRouter.swift */; };
 		73F13890222C289200FB8EBC /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13732222C289200FB8EBC /* SignUpViewModel.swift */; };
-		73F13891222C289200FB8EBC /* SignUpControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13733222C289200FB8EBC /* SignUpControllerViewModel.swift */; };
 		73F13892222C289200FB8EBC /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13734222C289200FB8EBC /* AuthorizationViewController.swift */; };
 		73F13893222C289200FB8EBC /* SignInRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13736222C289200FB8EBC /* SignInRouter.swift */; };
 		73F13894222C289200FB8EBC /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13737222C289200FB8EBC /* SignInViewModel.swift */; };
-		73F13895222C289200FB8EBC /* SignInControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13738222C289200FB8EBC /* SignInControllerViewModel.swift */; };
 		73F13896222C289200FB8EBC /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13739222C289200FB8EBC /* SignInViewController.swift */; };
 		73F13897222C289200FB8EBC /* AuthorizationControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1373A222C289200FB8EBC /* AuthorizationControllerViewModel.swift */; };
 		73F13898222C289200FB8EBC /* AuthorizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1373B222C289200FB8EBC /* AuthorizationViewModel.swift */; };
@@ -386,6 +397,21 @@
 		737622F521CD28AF005B603E /* Artist.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Artist.storyboard; sourceTree = "<group>"; };
 		739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareLyrics.swift; sourceTree = "<group>"; };
 		739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLyricsMode.swift; sourceTree = "<group>"; };
+		73A56D1022663C5D00D2293B /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
+		73A56D1422663C5D00D2293B /* FacebookAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookAuthenticator.swift; sourceTree = "<group>"; };
+		73A56D1A22663CFE00D2293B /* OAuth2Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2Error.swift; sourceTree = "<group>"; };
+		73A56D1B22663CFE00D2293B /* LoginError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
+		73A56D1C22663CFE00D2293B /* Simplicity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Simplicity.swift; sourceTree = "<group>"; };
+		73A56D1D22663CFE00D2293B /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
+		73A56D1E22663CFE00D2293B /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		73A56D1F22663CFE00D2293B /* LoginProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginProvider.swift; sourceTree = "<group>"; };
+		73A56D2122663CFE00D2293B /* Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
+		73A56D2222663CFE00D2293B /* Facebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Facebook.swift; sourceTree = "<group>"; };
+		73A56D2322663CFE00D2293B /* VKontakte.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VKontakte.swift; sourceTree = "<group>"; };
+		73A56D2F22663E8600D2293B /* ContinueFacebookRegistrationRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueFacebookRegistrationRouter.swift; sourceTree = "<group>"; };
+		73A56D3022663E8600D2293B /* ContinueFacebookRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueFacebookRegistrationViewController.swift; sourceTree = "<group>"; };
+		73A56D3122663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueFacebookRegistrationViewModel.swift; sourceTree = "<group>"; };
+		73A56D3522663ED700D2293B /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		73B97A6F2253995400B43D71 /* SetNewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUser.swift; sourceTree = "<group>"; };
 		73B97A7222539DC500B43D71 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		73B97A742253B20400B43D71 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
@@ -525,13 +551,11 @@
 		73F1370D222C289200FB8EBC /* PlaylistTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistTableHeaderView.swift; sourceTree = "<group>"; };
 		73F1370F222C289200FB8EBC /* ContainerTransitionSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerTransitionSegue.swift; sourceTree = "<group>"; };
 		73F13711222C289200FB8EBC /* ProfileRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
-		73F13712222C289200FB8EBC /* ProfileControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileControllerViewModel.swift; sourceTree = "<group>"; };
 		73F13714222C289200FB8EBC /* ChangePasswordControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordControllerViewModel.swift; sourceTree = "<group>"; };
 		73F13715222C289200FB8EBC /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		73F13716222C289200FB8EBC /* ChangePasswordRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordRouter.swift; sourceTree = "<group>"; };
 		73F13717222C289200FB8EBC /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
 		73F13719222C289200FB8EBC /* ProfileSettingsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsViewModel.swift; sourceTree = "<group>"; };
-		73F1371A222C289200FB8EBC /* ProfileSettingsControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsControllerViewModel.swift; sourceTree = "<group>"; };
 		73F1371B222C289200FB8EBC /* ProfileSettingsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsRouter.swift; sourceTree = "<group>"; };
 		73F1371C222C289200FB8EBC /* ProfileSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsViewController.swift; sourceTree = "<group>"; };
 		73F1371D222C289200FB8EBC /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -550,11 +574,9 @@
 		73F13730222C289200FB8EBC /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		73F13731222C289200FB8EBC /* SignUpRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpRouter.swift; sourceTree = "<group>"; };
 		73F13732222C289200FB8EBC /* SignUpViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
-		73F13733222C289200FB8EBC /* SignUpControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpControllerViewModel.swift; sourceTree = "<group>"; };
 		73F13734222C289200FB8EBC /* AuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		73F13736222C289200FB8EBC /* SignInRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInRouter.swift; sourceTree = "<group>"; };
 		73F13737222C289200FB8EBC /* SignInViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
-		73F13738222C289200FB8EBC /* SignInControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInControllerViewModel.swift; sourceTree = "<group>"; };
 		73F13739222C289200FB8EBC /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		73F1373A222C289200FB8EBC /* AuthorizationControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationControllerViewModel.swift; sourceTree = "<group>"; };
 		73F1373B222C289200FB8EBC /* AuthorizationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewModel.swift; sourceTree = "<group>"; };
@@ -941,6 +963,66 @@
 			path = Lyrics;
 			sourceTree = "<group>";
 		};
+		73A56D0D22663C5D00D2293B /* Authorization */ = {
+			isa = PBXGroup;
+			children = (
+				73A56D1922663CFE00D2293B /* Simplicity */,
+				73A56D1022663C5D00D2293B /* Authenticator.swift */,
+				73A56D1322663C5D00D2293B /* Facebook */,
+			);
+			path = Authorization;
+			sourceTree = "<group>";
+		};
+		73A56D1322663C5D00D2293B /* Facebook */ = {
+			isa = PBXGroup;
+			children = (
+				73A56D1422663C5D00D2293B /* FacebookAuthenticator.swift */,
+			);
+			path = Facebook;
+			sourceTree = "<group>";
+		};
+		73A56D1922663CFE00D2293B /* Simplicity */ = {
+			isa = PBXGroup;
+			children = (
+				73A56D1A22663CFE00D2293B /* OAuth2Error.swift */,
+				73A56D1B22663CFE00D2293B /* LoginError.swift */,
+				73A56D1C22663CFE00D2293B /* Simplicity.swift */,
+				73A56D1D22663CFE00D2293B /* OAuth2.swift */,
+				73A56D1E22663CFE00D2293B /* Helpers.swift */,
+				73A56D1F22663CFE00D2293B /* LoginProvider.swift */,
+				73A56D2022663CFE00D2293B /* LoginProviders */,
+			);
+			path = Simplicity;
+			sourceTree = "<group>";
+		};
+		73A56D2022663CFE00D2293B /* LoginProviders */ = {
+			isa = PBXGroup;
+			children = (
+				73A56D2122663CFE00D2293B /* Google.swift */,
+				73A56D2222663CFE00D2293B /* Facebook.swift */,
+				73A56D2322663CFE00D2293B /* VKontakte.swift */,
+			);
+			path = LoginProviders;
+			sourceTree = "<group>";
+		};
+		73A56D2D22663E8600D2293B /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				73A56D2E22663E8600D2293B /* Facebook */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		73A56D2E22663E8600D2293B /* Facebook */ = {
+			isa = PBXGroup;
+			children = (
+				73A56D2F22663E8600D2293B /* ContinueFacebookRegistrationRouter.swift */,
+				73A56D3022663E8600D2293B /* ContinueFacebookRegistrationViewController.swift */,
+				73A56D3122663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift */,
+			);
+			path = Facebook;
+			sourceTree = "<group>";
+		};
 		73B97A6E225398C100B43D71 /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -962,6 +1044,7 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
+				73A56D2D22663E8600D2293B /* Auth */,
 				73F13667222C289200FB8EBC /* ArtistsFollowed */,
 				73F1366D222C289200FB8EBC /* Tracks */,
 				73F13677222C289200FB8EBC /* Composite */,
@@ -1363,7 +1446,6 @@
 			isa = PBXGroup;
 			children = (
 				73F13711222C289200FB8EBC /* ProfileRouter.swift */,
-				73F13712222C289200FB8EBC /* ProfileControllerViewModel.swift */,
 				73F13713222C289200FB8EBC /* ChangePassword */,
 				73F13718222C289200FB8EBC /* ProfileSettings */,
 				73F1371D222C289200FB8EBC /* ProfileViewController.swift */,
@@ -1390,7 +1472,6 @@
 			isa = PBXGroup;
 			children = (
 				73F13719222C289200FB8EBC /* ProfileSettingsViewModel.swift */,
-				73F1371A222C289200FB8EBC /* ProfileSettingsControllerViewModel.swift */,
 				73F1371B222C289200FB8EBC /* ProfileSettingsRouter.swift */,
 				73F1371C222C289200FB8EBC /* ProfileSettingsViewController.swift */,
 			);
@@ -1455,7 +1536,6 @@
 				73F13730222C289200FB8EBC /* SignUpViewController.swift */,
 				73F13731222C289200FB8EBC /* SignUpRouter.swift */,
 				73F13732222C289200FB8EBC /* SignUpViewModel.swift */,
-				73F13733222C289200FB8EBC /* SignUpControllerViewModel.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -1465,7 +1545,6 @@
 			children = (
 				73F13736222C289200FB8EBC /* SignInRouter.swift */,
 				73F13737222C289200FB8EBC /* SignInViewModel.swift */,
-				73F13738222C289200FB8EBC /* SignInControllerViewModel.swift */,
 				73F13739222C289200FB8EBC /* SignInViewController.swift */,
 			);
 			path = SignIn;
@@ -1885,10 +1964,12 @@
 		73F137D1222C289200FB8EBC /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				73A56D0D22663C5D00D2293B /* Authorization */,
 				73F137D2222C289200FB8EBC /* UI */,
 				73F137D4222C289200FB8EBC /* TextImageGenerator.swift */,
 				73F137D5222C289200FB8EBC /* ImageRetreiver.swift */,
 				73F137D6222C289200FB8EBC /* MoneyFormatter.swift */,
+				73A56D3522663ED700D2293B /* Checkbox.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2374,8 +2455,11 @@
 				73732119225523E000606E09 /* PlaylistRequest.swift in Sources */,
 				73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */,
 				73F138FE222C289200FB8EBC /* FollowingRouter.swift in Sources */,
+				73A56D3422663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift in Sources */,
+				73A56D2622663CFE00D2293B /* Simplicity.swift in Sources */,
 				73F138C8222C289200FB8EBC /* LyricsViewModel.swift in Sources */,
 				73F138FD222C289200FB8EBC /* BaseRouter.swift in Sources */,
+				73A56D2822663CFE00D2293B /* Helpers.swift in Sources */,
 				73F13802222C289200FB8EBC /* ArtistViewModel.swift in Sources */,
 				73F138B1222C289200FB8EBC /* PlayerPlaylistRootViewController.swift in Sources */,
 				73F1384C222C289200FB8EBC /* AlertActionsViewModel.swift in Sources */,
@@ -2387,6 +2471,7 @@
 				73F13869222C289200FB8EBC /* ListeningSettingsControllerViewModel.swift in Sources */,
 				73F13876222C289200FB8EBC /* ContainerTransitionSegue.swift in Sources */,
 				73F138F7222C289200FB8EBC /* AddonsForTracksResponse.swift in Sources */,
+				73A56D2422663CFE00D2293B /* OAuth2Error.swift in Sources */,
 				73F13904222C289200FB8EBC /* MoneyFormatter.swift in Sources */,
 				73F1386E222C289200FB8EBC /* ApplicationContentContainerRouter.swift in Sources */,
 				73F138FF222C289200FB8EBC /* AlbumRequest.swift in Sources */,
@@ -2416,12 +2501,12 @@
 				73F138B8222C289200FB8EBC /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */,
 				73F13835222C289200FB8EBC /* PlayerConfig.swift in Sources */,
 				73F1384E222C289200FB8EBC /* ConfirmationAlertViewModel.swift in Sources */,
+				73A56D1822663C5D00D2293B /* FacebookAuthenticator.swift in Sources */,
 				73F1383A222C289200FB8EBC /* PlayerPlaylistItemPatch.swift in Sources */,
 				73F1390E222C289200FB8EBC /* AnimationStatus.swift in Sources */,
 				73F13848222C289200FB8EBC /* HomeViewController.swift in Sources */,
 				73F138E0222C289200FB8EBC /* PlayerViewController.swift in Sources */,
 				73F1381B222C289200FB8EBC /* RoundedButton.swift in Sources */,
-				73F13878222C289200FB8EBC /* ProfileControllerViewModel.swift in Sources */,
 				73F1390D222C289200FB8EBC /* UIView+ProgressIndicator.swift in Sources */,
 				73F138AC222C289200FB8EBC /* VideoViewModel.swift in Sources */,
 				73F1391E222C295000FB8EBC /* Setting.swift in Sources */,
@@ -2443,6 +2528,7 @@
 				73F13850222C289200FB8EBC /* AppRouter.swift in Sources */,
 				73F1389C222C289200FB8EBC /* TrackPreviewViewModel.swift in Sources */,
 				73F138BC222C289200FB8EBC /* NowPlayingViewModel.swift in Sources */,
+				73A56D2A22663CFE00D2293B /* Google.swift in Sources */,
 				73F138A5222C289200FB8EBC /* PageContentViewController.swift in Sources */,
 				73F138C2222C289200FB8EBC /* PlayerMyPlaylistsControllerViewModel.swift in Sources */,
 				73F1383F222C289200FB8EBC /* Region.swift in Sources */,
@@ -2453,6 +2539,8 @@
 				7361C012223687D6008EA36E /* OrderedTrack.swift in Sources */,
 				73F13913222C289200FB8EBC /* Double+Extension.swift in Sources */,
 				73F138CA222C289200FB8EBC /* LyricsRouter.swift in Sources */,
+				73A56D2922663CFE00D2293B /* LoginProvider.swift in Sources */,
+				73A56D2522663CFE00D2293B /* LoginError.swift in Sources */,
 				73F13827222C289200FB8EBC /* Track.swift in Sources */,
 				73F1381A222C289200FB8EBC /* RoundedLabel.swift in Sources */,
 				73F13800222C289200FB8EBC /* ArtistViewController.swift in Sources */,
@@ -2481,8 +2569,8 @@
 				73F1380C222C289200FB8EBC /* ProgressView.swift in Sources */,
 				7373211E22552A5B00606E09 /* PlaylistManager.swift in Sources */,
 				73F1384A222C289200FB8EBC /* PlaylistItemViewModel.swift in Sources */,
-				73F13891222C289200FB8EBC /* SignUpControllerViewModel.swift in Sources */,
 				73F138C4222C289200FB8EBC /* PlayerContentContainerViewModel.swift in Sources */,
+				73A56D3222663E8600D2293B /* ContinueFacebookRegistrationRouter.swift in Sources */,
 				73F1383D222C289200FB8EBC /* Artist.swift in Sources */,
 				73F1388F222C289200FB8EBC /* SignUpRouter.swift in Sources */,
 				73F138C5222C289200FB8EBC /* PlayerContentContainerViewController.swift in Sources */,
@@ -2511,6 +2599,7 @@
 				73F13841222C289200FB8EBC /* CheckAddons.swift in Sources */,
 				73F138D0222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift in Sources */,
 				73F13828222C289200FB8EBC /* Lyrics.swift in Sources */,
+				73A56D2B22663CFE00D2293B /* Facebook.swift in Sources */,
 				73F138EC222C289200FB8EBC /* LegacyResponses.swift in Sources */,
 				73F1384D222C289200FB8EBC /* PlaylistActions.swift in Sources */,
 				73F138DE222C289200FB8EBC /* PromoControllerViewModel.swift in Sources */,
@@ -2547,10 +2636,10 @@
 				73F138D8222C289200FB8EBC /* PlayerContentTransitioningDelegate.swift in Sources */,
 				73F138F9222C289200FB8EBC /* BaseResponse.swift in Sources */,
 				73F13858222C289200FB8EBC /* GenresSelectableListControllerViewModel.swift in Sources */,
+				73A56D3322663E8600D2293B /* ContinueFacebookRegistrationViewController.swift in Sources */,
 				73F1389B222C289200FB8EBC /* TrackCells.swift in Sources */,
 				73F13886222C289200FB8EBC /* ChangeEmailViewController.swift in Sources */,
 				73F1391A222C28A300FB8EBC /* AppDelegate.swift in Sources */,
-				73F13895222C289200FB8EBC /* SignInControllerViewModel.swift in Sources */,
 				7361C00C2236851E008EA36E /* ClearTracks.swift in Sources */,
 				73F13888222C289200FB8EBC /* ProfileViewModel.swift in Sources */,
 				73F1382B222C289200FB8EBC /* ArtistFollowingState.swift in Sources */,
@@ -2598,14 +2687,15 @@
 				73F13908222C289200FB8EBC /* Alamofire+Rx.swift in Sources */,
 				73F138DC222C289200FB8EBC /* PromoRouter.swift in Sources */,
 				73F13892222C289200FB8EBC /* AuthorizationViewController.swift in Sources */,
-				73F1387E222C289200FB8EBC /* ProfileSettingsControllerViewModel.swift in Sources */,
 				73F1382A222C289200FB8EBC /* TrackId.swift in Sources */,
 				73F1385F222C289200FB8EBC /* SelectableListItemTableViewCell.swift in Sources */,
 				73F13852222C289200FB8EBC /* AppControllerViewModel.swift in Sources */,
 				73F13831222C289200FB8EBC /* Hobby.swift in Sources */,
+				73A56D2722663CFE00D2293B /* OAuth2.swift in Sources */,
 				739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */,
 				73F13912222C289200FB8EBC /* CatchError.swift in Sources */,
 				7361C0262236909F008EA36E /* StoreTracks.swift in Sources */,
+				73A56D2C22663CFE00D2293B /* VKontakte.swift in Sources */,
 				73F138EA222C289200FB8EBC /* UserRequestPayload.swift in Sources */,
 				73F13881222C289200FB8EBC /* ProfileViewController.swift in Sources */,
 				73F1383E222C289200FB8EBC /* Country.swift in Sources */,
@@ -2614,6 +2704,7 @@
 				73F1382C222C289200FB8EBC /* Genre.swift in Sources */,
 				73F13830222C289200FB8EBC /* Price.swift in Sources */,
 				7327C9682252403800692810 /* ConfigRequest.swift in Sources */,
+				73A56D1622663C5D00D2293B /* Authenticator.swift in Sources */,
 				73F138F5222C289200FB8EBC /* WSCommand.swift in Sources */,
 				73F1388C222C289200FB8EBC /* RestorePasswordControllerViewModel.swift in Sources */,
 				73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */,
@@ -2644,6 +2735,7 @@
 				7361C01A22368E90008EA36E /* ProceedToNextItem.swift in Sources */,
 				73F1389D222C289200FB8EBC /* PagesRouter.swift in Sources */,
 				73F13804222C289200FB8EBC /* RRPlayer.swift in Sources */,
+				73A56D3622663ED700D2293B /* Checkbox.swift in Sources */,
 				73F138E1222C289200FB8EBC /* PlayerRouter.swift in Sources */,
 				73F13810222C289200FB8EBC /* DatePickerInputView.swift in Sources */,
 				73F138F6222C289200FB8EBC /* WebSocketService.swift in Sources */,

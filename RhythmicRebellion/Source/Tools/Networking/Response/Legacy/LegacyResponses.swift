@@ -11,12 +11,14 @@ import Alamofire
 
 struct ErrorResponse: Decodable {
 
+    let code: Int?
     let message: String
     let errors: [String: [String]]
 
     enum CodingKeys: String, CodingKey {
         case message
         case meta
+        case code = "errorCode"
     }
 
     enum MetaCodingKeys: String, CodingKey {
@@ -32,6 +34,8 @@ struct ErrorResponse: Decodable {
         } else {
             self.errors = [:]
         }
+        
+        self.code = try? container.decode(Int.self, forKey: .code) ?? -1
     }
 }
 

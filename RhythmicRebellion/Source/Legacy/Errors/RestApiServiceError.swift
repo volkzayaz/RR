@@ -42,3 +42,11 @@ extension AppError {
         )
     }
 }
+
+enum RRError: Error {
+    
+    case userCanceled
+    
+    case generic(message: String)
+    
+}

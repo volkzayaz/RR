@@ -40,6 +40,11 @@ extension CanPresentMessage {
     }
     
     func presentError(error: Error) {
+        
+        if let e = error as? RRError, case .userCanceled = e {
+            return
+        }
+        
         presentErrorMessage(error: error.localizedDescription)
     }
 }

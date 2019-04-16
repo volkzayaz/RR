@@ -39,7 +39,7 @@ extension ObservableConvertibleType {
                     h?.presentError(error: error)
                 }
                 
-                return Observable.never()
+                return Observable.just(.error(er: RRError.generic(message: "")))
             }
             .filter {
                 switch $0 {

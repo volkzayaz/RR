@@ -77,7 +77,7 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
 
         switch viewController {
         case let signInViewController as SignInViewController:
-            let signInRouter = DefaultSignInRouter(dependencies: self.dependencies)
+            let signInRouter = SignInRouter(dependencies: self.dependencies)
             signInRouter.start(controller: signInViewController)
 
         case let signUpViewController as SignUpViewController:

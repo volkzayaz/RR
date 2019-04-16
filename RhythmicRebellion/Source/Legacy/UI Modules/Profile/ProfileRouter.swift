@@ -75,7 +75,7 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
 
     func start(controller: ProfileViewController) {
         sourceController = controller
-        let vm = ProfileControllerViewModel(router: self)
+        let vm = ProfileViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
 
         for viewController in controller.navigationController?.viewControllers ?? [] {

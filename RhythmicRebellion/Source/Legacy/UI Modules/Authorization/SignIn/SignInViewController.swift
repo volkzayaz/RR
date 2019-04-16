@@ -135,7 +135,11 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
     @IBAction func onRestorePassword(sender: Any?) {
         self.viewModel.resorePassword()
     }
-
+    
+    @IBAction func joinWithFacebook(_ sender: Any) {
+        viewModel.joinWithFacebook()
+    }
+    
     // MARK: - UITextFieldDelegate
 
     func textFieldDidEndEditing(_ textField: UITextField) {

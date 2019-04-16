@@ -18,7 +18,7 @@ protocol CountryInfo {
     init(with country: CountryInfo)
 }
 
-struct Country: CountryInfo, Decodable {
+struct Country: CountryInfo, Codable {
 
     let id: Int
     let code: String

@@ -34,7 +34,7 @@ final class SelectableListViewController: UIViewController {
 
     deinit {
 
-        self.tableView.tableHeaderView = nil
+//        self.tableView.tableHeaderView = nil
 
         if let keyboardWillShowObserver = self.keyboardWillShowObserver {
             NotificationCenter.default.removeObserver(keyboardWillShowObserver)

@@ -66,4 +66,12 @@ class DatePickerInputView: UIView {
             self.dateTextField?.resignFirstResponder()
         }
     }
+    
+    @IBAction func done(sender: Any) {
+        guard let dateTextField = self.dateTextField else { return }
+        
+        dateTextField.date = self.datePicker.date
+        self.dateTextField?.resignFirstResponder()
+    }
+    
 }

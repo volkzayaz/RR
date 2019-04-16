@@ -10,6 +10,18 @@ import UIKit
 
 extension UIColor {
 
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(fromHex:Int) {
+        self.init(red:(fromHex >> 16) & 0xff, green:(fromHex >> 8) & 0xff, blue:fromHex & 0xff)
+    }
+    
     class func gradientColor(from fromColor: UIColor, to toColor: UIColor, percentage: CGFloat) -> UIColor {
         guard percentage > 0, percentage < 1 else {
             guard percentage >= 1 else { return fromColor }

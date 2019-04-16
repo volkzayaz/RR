@@ -17,6 +17,9 @@ enum UserRequest: BaseNetworkRouter {
     case signIn(login: String, password: String) ///returns FanLoginResponse
     case register(data: RegisterData) ////returns FanRegistrationResponse
     
+    case externalRegister(provider: AuthenticationData.ExternalProvider)
+    case externalLogin(provider: AuthenticationData.ExternalProvider)
+    
     case updateProfile(_ x: UserProfilePayload) ///return BaseResponse<User>
     case updateListeningSettings(_ x: ListeningSettingsPayload) ///return BaseResponse<User>
     
@@ -50,6 +53,59 @@ extension UserRequest {
                                     params: ["email" : login,
                                              "password" : password],
                                     encoding: JSONEncoding.default)
+            
+        case .externalRegister(let provider):
+            
+            switch provider.rout {
+                
+            case .facebook:
+                
+                struct Params: Encodable {
+                    
+                    let token: String
+                    var birth_date: String?
+                    var how_hear: Int?
+                    var country: Country?
+                    
+                }
+                
+                var params = Params(token: provider.accessToken, birth_date: nil, how_hear: nil, country: nil)
+                
+                if let x = provider.birthdate {
+                    
+                    let f = DateFormatter()
+                    f.dateFormat = "YYYY-MM-dd"
+                    
+                    params.birth_date = f.string(from: x)
+                }
+                
+                if let x = provider.howHear {
+                    params.how_hear = x
+                }
+                
+                if let x = provider.country {
+                    params.country = x
+                }
+                
+                return anonymousRequest(method: .post,
+                                        path: "fan/register/facebook",
+                                        encodableParam: params)
+                
+                
+            }
+            
+        case .externalLogin(let provider):
+            
+            switch provider.rout {
+                
+            case .facebook:
+                return anonymousRequest(method: .post,
+                                        path: "fan/login/facebook",
+                                        params: ["token" : provider.accessToken],
+                                        encoding: JSONEncoding.default)
+                
+                
+            }
             
         case .register(let data):
             

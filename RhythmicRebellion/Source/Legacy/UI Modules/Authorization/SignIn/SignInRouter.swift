@@ -9,13 +9,7 @@
 
 import UIKit
 
-protocol SignInRouter: FlowRouter {
-
-    func showRestorePassword(email: String?)
-    func restart()
-}
-
-final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
+final class SignInRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -45,7 +39,7 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
         return true
     }
 
-    func prepare(for destination: DefaultSignInRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: SignInRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
         case .showRestorePassword(let email):
             guard let restorePasswordViewController = segue.destination as? RestorePasswordViewController else { fatalError("Incorrect controller for restorePassword") }
@@ -60,7 +54,7 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
 
     func start(controller: SignInViewController) {
         signInViewController = controller
-        let vm = SignInControllerViewModel(router: self)
+        let vm = SignInViewModel(router: self)
         controller.configure(viewModel: vm, router: self)
     }
 
@@ -69,7 +63,7 @@ final class DefaultSignInRouter:  SignInRouter, FlowRouterSegueCompatible {
     }
 
     func restart() {
-        let vm = SignInControllerViewModel(router: self)
+        let vm = SignInViewModel(router: self)
         signInViewController?.configure(viewModel: vm, router: self)
     }
 
