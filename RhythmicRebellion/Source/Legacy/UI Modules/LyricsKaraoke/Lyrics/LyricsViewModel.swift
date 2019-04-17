@@ -35,14 +35,14 @@ extension LyricsViewModel {
                 return "\n This is an instrumental song \n"
             }
             
+            if case .noPreview = TrackPreviewOptionViewModel(type: .init(with: track, user: state.user)).type {
+                return "\n No preview \n"
+            }
+            
             if state.user.shouldCensorTrack(track) {
                 return "\n Contains explicit material \n"
             }
             
-            if case .noPreview = TrackPreviewOptionViewModel(type: .init(with: track, user: state.user)).type {
-                return "\n No preview \n"
-            }
-           
             if let t = state.player.currentItem?.lyrics?.data.lyrics {
                 return t
             }
