@@ -244,9 +244,6 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
 
-        
-        //            print("didReceive message name: \(message.name)")
-        
         let commandType = PageCommandType(rawValue: message.name) ?? .unknown
         
         switch commandType {
@@ -256,58 +253,46 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
             self.updateCurrentTrackStateOnPage()
             
         case .getSrtsPreviews:
-            //                print("getSrtsPreviews")
+            
             guard let jsonString = message.body as? String, let trackIds = self.getTrackIds(from: jsonString) else { return }
             self.requestedTimeTrackIds = trackIds
+
             
-            var trackIdsToRequest: [Int] = []
-            var tracksTotalPlayMSeconds: [Int : UInt64] = [:]
-            
-            for trackId in trackIds {
-                fatalError("Unimplemented preview logic")
-                //                    guard let trackTotalPlayMSeconds = self.player.totalPlayMSeconds(for: trackId) else { trackIdsToRequest.append(trackId); continue}
-                //                    tracksTotalPlayMSeconds[trackId] = trackTotalPlayMSeconds
-            }
-            
-            if tracksTotalPlayMSeconds.isEmpty == false {
-                self.updatePreviewOptOnPage(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
-            }
-            
-            if trackIdsToRequest.isEmpty == false {
-                //                    self.player.trackingTimeRequest(for: trackIdsToRequest)
-            }
             
         case .playNow:
-            //                print("playNow!!!!")
+            
             guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
             
-            //                print("playNow: \(tracks)")
+            if tracks.count == 1, appStateSlice.currentTrack?.track == tracks.first {
+                DataLayer.get.daPlayer.flip()
+                return
+            }
             
             self.play(tracks: tracks)
             
+            
         case .playNext:
-            //                print("playNext!!!!")
+            
             guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-            //                print("playNext: \(tracks)")
+            
             self.addToPlayerPlaylist(tracks: tracks, at: .next)
             
         case .playLast:
-            //                print("playLast!!!!")
             guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-            //                print("playLast: \(tracks)")
+            
             self.addToPlayerPlaylist(tracks: tracks, at: .last)
             
         case .replace:
-            //                print("replace!!!!")
+            
             guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
-            //                print("replace: \(tracks)")
+            
             self.replacePlayerPlaylist(with: tracks)
             
         case .setForceExplicit:
-            //                print("setForceExplicit!!!!")
+            
             guard let jsonString = message.body as? String, let trackForceToPlayState = self.getTrackForceToPlayState(from: jsonString) else { return }
             
-            //                print("setForceExplicit: \(trackForceToPlayState)")
+            
             
             UserManager.allowPlayTrackWithExplicitMaterial(trackId: trackForceToPlayState.trackId,
                                                            shouldAllow: trackForceToPlayState.isForcedToPlay).subscribe()
