@@ -92,20 +92,8 @@ struct FanForgotPasswordResponse: Decodable {
 
 struct FanRegistrationResponse: Decodable {
 
-    let userProfile: UserProfile
     let message: String
 
-    enum CodingKeys: String, CodingKey {
-        case userProfile = "user"
-        case message
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        self.message = try container.decode(String.self, forKey: .message)
-        self.userProfile = try container.decode(UserProfile.self, forKey: .userProfile)
-    }
 }
 
 

@@ -34,7 +34,7 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
 
     var errorColor: UIColor { return #colorLiteral(red: 0.9567829967, green: 0.2645464838, blue: 0.213359952, alpha: 1) }
 
-    var isSignUpSucced: Bool { return self.registeredUserProfile != nil }
+    var isSignUpSucced: Bool { return self.isUserRegisteredProfile }
     
     // MARK: - Private properties -
 
@@ -51,7 +51,7 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
 
     private(set) var signUpErrorDescription: String?
 
-    private var registeredUserProfile: UserProfile?
+    private var isUserRegisteredProfile = false
 
     private var emailField: ValidatableField?
     private var passwordField: ValidatableField?
@@ -536,10 +536,10 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
 
             let _ =
             UserRequest.register(data: registrationPayload)
-                .rx.baseResponse(type: FanRegistrationResponse.self)
+                .rx.response(type: FanRegistrationResponse.self)
                 .subscribe(onSuccess: { (resp) in
                     
-                    self.registeredUserProfile = resp.userProfile
+                    self.isUserRegisteredProfile = true
                     self.delegate?.refreshUI()
                     
                 }, onError: { error in
