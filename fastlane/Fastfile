@@ -69,7 +69,7 @@ platform :ios do
           'Version number' => get_version_number,
           'Environment' => environmentName,
           'Download Link' => "https://apps.crashlytics.com/projects",
-          'Resolved Jira Issues' => resolve_link
+          'Resolved Jira Issues' => "<" + resolve_link + "|click link>"
           },
           default_payloads: []
           )
