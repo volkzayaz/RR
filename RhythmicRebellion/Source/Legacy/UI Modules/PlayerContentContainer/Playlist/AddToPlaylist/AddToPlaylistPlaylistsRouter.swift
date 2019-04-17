@@ -9,11 +9,7 @@
 
 import UIKit
 
-protocol AddToPlaylistRouter: FlowRouter {
-    func dismiss()
-}
-
-final class DefaultAddToPlaylistRouter:  AddToPlaylistRouter, FlowRouterSegueCompatible {
+final class AddToPlaylistRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -41,7 +37,7 @@ final class DefaultAddToPlaylistRouter:  AddToPlaylistRouter, FlowRouterSegueCom
         return true
     }
 
-    func prepare(for destination: DefaultAddToPlaylistRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: AddToPlaylistRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         default: break

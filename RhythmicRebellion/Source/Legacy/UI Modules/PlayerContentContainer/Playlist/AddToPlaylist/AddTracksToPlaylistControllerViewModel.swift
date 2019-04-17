@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Alamofire
+import RxSwift
 
 final class AddTracksToPlaylistControllerViewModel: AddToPlaylistControllerViewModel {
 
@@ -22,7 +24,16 @@ final class AddTracksToPlaylistControllerViewModel: AddToPlaylistControllerViewM
         
         PlaylistRequest.attachTracks(tracks, to: playlist)
             .rx.emptyResponse()
-            .subscribe(onSuccess: {
+            .catchError({ (error) -> Maybe<Void> in
+                
+                if let e = error as? AFError, e.responseCode == 422 {
+                    throw RRError.generic(message: "This track is already added to thee playlist")
+                }
+                
+                throw error
+            })
+            .silentCatch(handler: router?.sourceController)
+            .subscribe(onNext: {
                 self.router?.dismiss()
             })
 //

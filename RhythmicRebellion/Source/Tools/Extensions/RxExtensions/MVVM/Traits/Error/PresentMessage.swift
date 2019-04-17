@@ -45,6 +45,11 @@ extension CanPresentMessage {
             return
         }
         
+        if let e = error as? RRError, case .generic(let message) = e {
+            presentErrorMessage(error: message)
+            return
+        }
+        
         presentErrorMessage(error: error.localizedDescription)
     }
 }

@@ -56,7 +56,7 @@ final class DefaultHomeRouter:  HomeRouter, FlowRouterSegueCompatible {
 
         case .showAddToPlaylist(let playlist):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
-            let addToPlaylistRouter = DefaultAddToPlaylistRouter(dependencies: dependencies)
+            let addToPlaylistRouter = AddToPlaylistRouter(dependencies: dependencies)
             addToPlaylistRouter.start(controller: addToPlaylistViewController, playlist: playlist)
         }
     }

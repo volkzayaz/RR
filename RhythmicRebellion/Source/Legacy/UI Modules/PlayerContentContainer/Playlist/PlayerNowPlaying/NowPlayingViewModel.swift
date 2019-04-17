@@ -61,17 +61,6 @@ final class NowPlayingViewModel {
             
             //////1
             
-            if user.isGuest == false {
-                
-                let toPlaylist = ActionViewModel(.toPlaylist) {
-                    router.showAddToPlaylist(for: [t.track])
-                }
-                
-                result.append(toPlaylist)
-            }
-            
-            //////2
-            
             if t.track.isPlayable {
                 
                 let playNow = ActionViewModel(.playNow) {
@@ -80,6 +69,17 @@ final class NowPlayingViewModel {
                 
                 result.append(playNow)
                 
+            }
+            
+            //////2
+            
+            if user.isGuest == false {
+                
+                let toPlaylist = ActionViewModel(.toPlaylist) {
+                    router.showAddToPlaylist(for: [t.track])
+                }
+                
+                result.append(toPlaylist)
             }
             
             /////3
