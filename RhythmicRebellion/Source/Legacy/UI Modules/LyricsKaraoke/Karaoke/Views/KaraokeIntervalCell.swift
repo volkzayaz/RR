@@ -36,7 +36,7 @@ class KaraokeIntervalCollectionViewCell: UICollectionViewCell, CellIdentifiable 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 
-        guard let karaokeLayoutAttributes = layoutAttributes as? KaraokeCollectionViewLayoutAttributes else { return }
+        guard let karaokeLayoutAttributes = layoutAttributes as? LayoutAttributes else { return }
         let boundsCenterOffset = karaokeLayoutAttributes.boundsCenterOffset
         let activeDistance = karaokeLayoutAttributes.activeDistance
 

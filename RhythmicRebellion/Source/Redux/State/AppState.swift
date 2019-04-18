@@ -145,11 +145,13 @@ extension AppState {
 
     var canSeek: Bool {
         
-        if case .track(_)? = activePlayable {
-            return true
+        guard let x = activePlayable else { return false }
+        
+        switch x {
+        case .track(_), .minusOneTrack(_): return true
+        case .addon(_), .stub(_, _): return false
         }
         
-        return false
     }
     
     enum MusicType: Equatable {

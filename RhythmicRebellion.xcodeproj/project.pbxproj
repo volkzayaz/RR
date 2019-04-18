@@ -275,7 +275,7 @@
 		73F138CC222C289200FB8EBC /* KaraokeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13784222C289200FB8EBC /* KaraokeRouter.swift */; };
 		73F138CD222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13786222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift */; };
 		73F138CF222C289200FB8EBC /* KaraokeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13788222C289200FB8EBC /* KaraokeViewModel.swift */; };
-		73F138D0222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378A222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift */; };
+		73F138D0222C289200FB8EBC /* KaraokeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378A222C289200FB8EBC /* KaraokeLayout.swift */; };
 		73F138D1222C289200FB8EBC /* KaraokeIntervalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378C222C289200FB8EBC /* KaraokeIntervalCell.swift */; };
 		73F138D2222C289200FB8EBC /* KaraokeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378D222C289200FB8EBC /* KaraokeFooterView.swift */; };
 		73F138D3222C289200FB8EBC /* KaraokeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378E222C289200FB8EBC /* KaraokeHeaderView.swift */; };
@@ -631,7 +631,7 @@
 		73F13784222C289200FB8EBC /* KaraokeRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeRouter.swift; sourceTree = "<group>"; };
 		73F13786222C289200FB8EBC /* DefaultKaraokeIntervalViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKaraokeIntervalViewModel.swift; sourceTree = "<group>"; };
 		73F13788222C289200FB8EBC /* KaraokeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeViewModel.swift; sourceTree = "<group>"; };
-		73F1378A222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		73F1378A222C289200FB8EBC /* KaraokeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeLayout.swift; sourceTree = "<group>"; };
 		73F1378C222C289200FB8EBC /* KaraokeIntervalCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeIntervalCell.swift; sourceTree = "<group>"; };
 		73F1378D222C289200FB8EBC /* KaraokeFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeFooterView.swift; sourceTree = "<group>"; };
 		73F1378E222C289200FB8EBC /* KaraokeHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeHeaderView.swift; sourceTree = "<group>"; };
@@ -1785,7 +1785,7 @@
 		73F13789222C289200FB8EBC /* Layouts */ = {
 			isa = PBXGroup;
 			children = (
-				73F1378A222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift */,
+				73F1378A222C289200FB8EBC /* KaraokeLayout.swift */,
 			);
 			path = Layouts;
 			sourceTree = "<group>";
@@ -2597,7 +2597,7 @@
 				73F138CC222C289200FB8EBC /* KaraokeRouter.swift in Sources */,
 				73F13805222C289200FB8EBC /* AudioPlayer.swift in Sources */,
 				73F13841222C289200FB8EBC /* CheckAddons.swift in Sources */,
-				73F138D0222C289200FB8EBC /* KaraokeCollectionViewFlowLayout.swift in Sources */,
+				73F138D0222C289200FB8EBC /* KaraokeLayout.swift in Sources */,
 				73F13828222C289200FB8EBC /* Lyrics.swift in Sources */,
 				73A56D2B22663CFE00D2293B /* Facebook.swift in Sources */,
 				73F138EC222C289200FB8EBC /* LegacyResponses.swift in Sources */,

@@ -14,6 +14,46 @@ import RxDataSources
 
 extension KaraokeViewModel {
     
+    struct Data {
+
+        let layout: KaraokeLayout
+        let viewModels: [KaraokeIntervalCellViewModel]
+        let activeIndex: Int?
+        
+        let change: ChangeType?
+        
+        init(layout: KaraokeLayout, viewModels: [KaraokeIntervalCellViewModel], activeIndex: Int?, compareTo: Data?) {
+            self.layout = layout
+            self.viewModels = viewModels
+            self.activeIndex = activeIndex
+            
+            guard let x = compareTo else {
+                change = .layout
+                return
+            }
+            
+            if type(of: layout) != type(of: x.layout) {
+                change = .layout
+            }
+            else if viewModels != compareTo?.viewModels {
+                change = .data
+            }
+            else if activeIndex != compareTo?.activeIndex {
+                change = .index
+            }
+            else {
+                change = nil
+            }
+        }
+        
+        enum ChangeType {
+            case layout
+            case data
+            case index
+        }
+        
+    }
+    
     var mode: Driver<PlayerState.Lyrics.Mode.KaraokeConfig.Mode> {
         return appState.map { state -> PlayerState.Lyrics.Mode.KaraokeConfig.Mode? in
             guard case .karaoke(let config)? = state.player.currentItem?.lyrics?.mode else {
@@ -41,57 +81,6 @@ extension KaraokeViewModel {
         }
     }
     
-    var dataSource: Driver<(KaraokeCollectionViewFlowLayout, [AnimatableSectionModel<String, KaraokeIntervalCellViewModel>])> {
-        
-        return Driver.combineLatest(mode, karaoke.asDriver()) { ($0, $1) }
-            .map { (mode, maybeKaraoke) in
-                
-                guard let karaoke = maybeKaraoke else { return (mode.layout, []) }
-                
-                return (mode.layout, [AnimatableSectionModel(model: "", items: karaoke.intervals.map { i in
-                    return KaraokeIntervalCellViewModel(font: mode.font,
-                                                        karaokeInterval: i)
-                })])
-                
-            }
-        
-        
-    }
-    
-    
-    var currentIntervalIndexChanges: Driver<Int?> {
-
-        let progressChanges = appState.map { $0.player.currentItem?.state.progress }
-            .notNil()
-            .distinctUntilChanged()
-        
-        let modeChanges = mode
-        
-        let karaokeChanges = karaoke.asDriver()
-        
-        return Driver.combineLatest(progressChanges, modeChanges, karaokeChanges) { ($0, $1, $2) }
-            .map { (progress, mode, maybeKaraoke) in
-                
-                guard let intervals = maybeKaraoke?.intervals else {
-                    return nil
-                }
-                
-                for (index, interval) in intervals.enumerated() {
-                    
-                    if interval.range ~= progress {
-                        return index
-                    }
-                    
-                    if interval.range.lowerBound > progress {
-                        return max(0, index - 1)
-                    }
-                    
-                }
-                
-                return nil
-            }
-    }
-    
     var thumbnailURL: Driver<URL?> {
         return appState.map { $0.currentTrack?.track }
             .distinctUntilChanged()
@@ -104,6 +93,8 @@ struct KaraokeViewModel {
 
     private let karaoke = BehaviorRelay<Karaoke?>(value: nil)
 
+    let data = BehaviorRelay<Data?>(value: nil)
+    
     let disposeBag = DisposeBag()
 
     // MARK: - Lifecycle -
@@ -114,6 +105,46 @@ struct KaraokeViewModel {
         appState.map { $0.player.currentItem?.lyrics?.data.karaoke }
             .distinctUntilChanged()
             .drive(karaoke)
+            .disposed(by: disposeBag)
+        
+        let progressChanges = appState.map { $0.player.currentItem?.state.progress }
+            .notNil()
+            .distinctUntilChanged()
+        
+        let dataChanges = Driver.combineLatest(mode, karaoke.asDriver()) { (mode, maybeKaraoke) -> (KaraokeLayout, [KaraokeIntervalCellViewModel]) in
+            
+            let data = (maybeKaraoke?.intervals ?? []).map { i in
+                return KaraokeIntervalCellViewModel(font: mode.font,
+                                                    karaokeInterval: i)
+            }
+            
+            return (mode.layout, data)
+        }
+        
+        Driver.combineLatest(progressChanges, dataChanges) { (progress, data) -> (KaraokeLayout, [KaraokeIntervalCellViewModel], Int?) in
+            
+                let calculateIndex = { () -> Int? in
+                    for (index, viewModel) in data.1.enumerated() {
+                    
+                        if viewModel.karaokeInterval.range ~= progress {
+                            return index
+                        }
+                    
+                        if viewModel.karaokeInterval.range.lowerBound > progress {
+                            return max(0, index - 1)
+                        }
+                    
+                    }
+                
+                    return nil
+                }
+            
+                return (data.0, data.1, calculateIndex())
+            }
+            .scan(nil) { (maybePreviousData, input) -> Data? in
+                return Data(layout: input.0, viewModels: input.1, activeIndex: input.2, compareTo: maybePreviousData)
+            }
+            .drive(data)
             .disposed(by: disposeBag)
         
     }
@@ -180,10 +211,10 @@ extension PlayerState.Lyrics.Mode.KaraokeConfig.Mode {
         
     }
     
-    var layout: KaraokeCollectionViewFlowLayout {
+    var layout: KaraokeLayout {
         switch self {
-        case .scroll:     return KaraokeScrollCollectionViewFlowLayout()
-        case .onePhrase:  return KaraokeOnePhraseCollectionViewFlowLayout()
+        case .scroll:     return KaraokeScrollLayout()
+        case .onePhrase:  return KaraokeOnePhraseLayout()
             
         }
     }

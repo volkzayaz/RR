@@ -9,7 +9,6 @@
 
 import UIKit
 import RxCocoa
-import RxDataSources
 
 final class KaraokeViewController: UIViewController {
 
@@ -39,15 +38,6 @@ final class KaraokeViewController: UIViewController {
         self.router    = router
     }
 
-    lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<String, KaraokeIntervalCellViewModel>>(configureCell: { [unowned self] (_, collectionView, ip, vm) in
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.karaokeIntervalCollectionViewCellIdentifier, for: ip)!
-        cell.setup(viewModel: vm)
-        
-        return cell
-        
-        })
-    
     // MARK: - Lifecycle -
 
     override func viewDidLoad() {
@@ -92,16 +82,53 @@ final class KaraokeViewController: UIViewController {
             })
             .disposed(by: rx.disposeBag)
         
-        viewModel.dataSource
-            .map { [unowned self] tuple in
+        viewModel.data.asDriver()
+            .notNil()
+            .drive(onNext: { [unowned self] tuple in
                 
-                if type(of: self.collectionView.collectionViewLayout) != type(of: tuple.0) {
-                    self.collectionView.setCollectionViewLayout(tuple.0, animated: false)
+                guard let x = tuple.change else { return }
+                
+                let reload    = { self.collectionView.reloadData(); }
+                let setLayout = { self.collectionView.collectionViewLayout = tuple.layout }
+                let scroll    = { (animated: Bool) in
+                    
+                    guard let i = tuple.activeIndex else {
+                        self.collectionView.contentOffset = CGPoint(x: 0, y: -self.collectionView.contentInset.top)
+                        return
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: {
+                        print("!!!!New index!!!! \(i)")
+                        self.collectionView.scrollToItem(at: IndexPath(row: i, section: 0),
+                                                         at: .centeredVertically, animated: animated)
+                    })
+                    
                 }
                 
-                return tuple.1
-            }
-            .drive(collectionView.rx.items(dataSource: dataSource))
+                
+                ///layout changes:
+                /// set layout -> reload data -> scroll to item
+                
+                ///data changes:
+                /// reloadData -> scrollToItem
+                
+                ///index changes:
+                /// scroll to item
+                
+                switch x {
+                    
+                case .layout:
+                    setLayout(); reload(); scroll(false)
+                    
+                case .data:
+                    setLayout(); reload(); scroll(false)
+                    
+                case .index:
+                    scroll(true)
+                    
+                }
+                
+            })
             .disposed(by: rx.disposeBag)
         
         viewModel.vocalButtonSelected
@@ -126,21 +153,7 @@ final class KaraokeViewController: UIViewController {
             .map { $0 ?? UIImage(named: "TrackImagePlaceholder") }
             .drive(imageView.rx.image)
             .disposed(by: rx.disposeBag)
-        
-        viewModel.currentIntervalIndexChanges
-            .drive(onNext: { [weak self] index in
-                
-                guard let i = index else {
-                    self?.collectionView.setContentOffset(CGPoint(x: 0.0, y: -self!.collectionView.contentInset.top), animated: true)
-                    return
-                }
-                
-                let ip = IndexPath(row: i, section: 0)
-                
-                self?.collectionView.scrollToItem(at: ip, at: .centeredVertically, animated: true)
-                
-            })
-            .disposed(by: rx.disposeBag)
+
 
         
     }
@@ -266,11 +279,25 @@ final class KaraokeViewController: UIViewController {
 }
 
 
-extension KaraokeViewController: UICollectionViewDelegateFlowLayout {
+extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.data.value?.viewModels.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.karaokeIntervalCollectionViewCellIdentifier, for: indexPath)!
+        
+        if let vm = viewModel.data.value?.viewModels[indexPath.row] {
+            cell.setup(viewModel: vm)
+        }
+        
+        return cell
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        guard let karaokeCollectionViewFlowLayout = collectionViewLayout as? KaraokeCollectionViewFlowLayout else {
+        guard let karaokeCollectionViewFlowLayout = collectionViewLayout as? KaraokeLayout else {
             fatalError("Incorrect KaraokeCollectionViewLayout")
         }
 
