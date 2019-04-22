@@ -37,8 +37,7 @@ class PlaylistTableHeaderView: UIView {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-
+    
     @IBOutlet var downloadButton: PKDownloadButton!
     
     @IBOutlet weak var clearPlaylistButtonTopConstraint: NSLayoutConstraint!
@@ -68,7 +67,6 @@ class PlaylistTableHeaderView: UIView {
         self.infoView.layoutIfNeeded()
 
         if let thumbnailURL = viewModel.thumbnailURL {
-            self.activityIndicatorView.startAnimating()
             self.imageView.af_setImage(withURL: thumbnailURL,
                                        filter: ScaledToSizeFilter(size: CGSize(width: 360, height: 360))) { [weak self, viewModel] (thumbnailImageResponse) in
 
@@ -82,11 +80,9 @@ class PlaylistTableHeaderView: UIView {
                                         default: break
                                         }
 
-                                        self.activityIndicatorView.stopAnimating()
             }
         } else {
             self.imageView.makePlaylistPlaceholder()
-            self.activityIndicatorView.stopAnimating()
         }
 
         self.actionCallback = actionCallback

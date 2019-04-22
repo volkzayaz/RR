@@ -102,7 +102,7 @@ final class PlayerViewModel: NSObject {
                 switch x {
                 case .addon(let a): return a.type.title
                 case .track(let t): return t.name
-                case .minusOneTrack(let t): return "Minus one song. \(t.name)"
+                case .minusOneTrack(let t): return "\(t.name)"
                 case .stub(_, let t): return t
                 }
                 

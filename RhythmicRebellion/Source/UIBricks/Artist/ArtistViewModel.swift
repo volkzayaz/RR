@@ -52,18 +52,18 @@ struct ArtistViewModel : MVVM_ViewModel {
                                              router: router.trackListRouter())
         
         let albums = ArtistRequest.albums(artist: artist)
-            .rx.response(type: BaseReponse<[Album]>.self)
+            .rx.baseResponse(type: [Album].self)
             .map { response in
                 return ( R.string.localizable.albums(),
-                         response.data.map { Data.album(album: $0) } )
+                         response.map { Data.album(album: $0) } )
             }
             .trackView(viewIndicator: indicator)
         
         let playlists = ArtistRequest.playlists(artist: artist)
-            .rx.response(type: BaseReponse<[ArtistPlaylist]>.self)
+            .rx.baseResponse(type: [ArtistPlaylist].self)
             .map { response in
                 return ( R.string.localizable.playlist(),
-                         response.data.map { Data.playlist(playlist: $0) } )
+                         response.map { Data.playlist(playlist: $0) } )
             }
             .trackView(viewIndicator: indicator)
 
@@ -74,9 +74,9 @@ struct ArtistViewModel : MVVM_ViewModel {
             }
         
         Observable.combineLatest([
-                                  albums.asObservable(),
+//                                  albums.asObservable(),
                                   playlists.asObservable(),
-                                  records.asObservable()
+//                                  records.asObservable()
             ])
             .retry(1)
             .silentCatch(handler: router.owner)

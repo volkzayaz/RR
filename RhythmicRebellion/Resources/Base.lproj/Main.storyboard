@@ -572,7 +572,6 @@
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="activityIndicatorView" destination="cn2-HQ-LXg" id="QCO-6y-AP3"/>
                         <outlet property="emptyPlaylistView" destination="0zP-GP-Icx" id="eg6-Xd-OXk"/>
                         <outlet property="imageView" destination="IvS-kj-LK1" id="Jj1-qJ-bP2"/>
                         <outlet property="refreshControl" destination="8Ek-gw-P99" id="SXK-IA-QZK"/>
@@ -630,9 +629,6 @@
                                 <constraint firstAttribute="height" constant="0.5" id="3MB-5O-nmL"/>
                             </constraints>
                         </view>
-                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="udV-La-GaU">
-                            <rect key="frame" x="160.66666666666666" y="138" width="20" height="20"/>
-                        </activityIndicatorView>
                         <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zfW-hP-KPC">
                             <rect key="frame" x="0.0" y="251.66666666666663" width="341" height="82"/>
                             <subviews>
@@ -713,9 +709,7 @@
                         <constraint firstItem="j5P-nR-Sfr" firstAttribute="top" secondItem="zfW-hP-KPC" secondAttribute="bottom" constant="14" id="HSB-8c-OFY"/>
                         <constraint firstItem="dNr-95-tqM" firstAttribute="centerX" secondItem="upv-Gx-oyy" secondAttribute="centerX" id="Mgj-oP-cIq"/>
                         <constraint firstItem="lmZ-Pv-1LC" firstAttribute="trailing" secondItem="j5P-nR-Sfr" secondAttribute="trailing" id="TD3-fL-rWA"/>
-                        <constraint firstItem="udV-La-GaU" firstAttribute="centerX" secondItem="upv-Gx-oyy" secondAttribute="centerX" id="U9K-1f-iL4"/>
                         <constraint firstAttribute="trailing" secondItem="zfW-hP-KPC" secondAttribute="trailing" id="VnG-Sv-pAg"/>
-                        <constraint firstItem="udV-La-GaU" firstAttribute="centerY" secondItem="upv-Gx-oyy" secondAttribute="centerY" multiplier="0.85" id="elE-bC-Erf"/>
                         <constraint firstItem="j5P-nR-Sfr" firstAttribute="bottom" secondItem="lmZ-Pv-1LC" secondAttribute="bottom" id="h3Y-Qb-o5v"/>
                         <constraint firstItem="j5P-nR-Sfr" firstAttribute="leading" secondItem="lmZ-Pv-1LC" secondAttribute="leading" id="rd2-WV-7Hf"/>
                         <constraint firstItem="L5R-rG-uQf" firstAttribute="leading" secondItem="PZk-HB-NGG" secondAttribute="trailing" constant="45" id="x55-Rg-5G4"/>
@@ -734,7 +728,6 @@
                     </variation>
                     <connections>
                         <outlet property="actionButton" destination="L5R-rG-uQf" id="rIi-Jq-YtU"/>
-                        <outlet property="activityIndicatorView" destination="udV-La-GaU" id="AhV-bq-a2H"/>
                         <outlet property="clearPlaylistButtonBottomConstraint" destination="YB1-Mb-An3" id="emJ-BF-8G6"/>
                         <outlet property="clearPlaylistButtonHeightConstraint" destination="1LY-JS-Y71" id="VXi-lm-lXE"/>
                         <outlet property="clearPlaylistButtonTopConstraint" destination="EOH-Q2-h9h" id="s6F-xX-0qi"/>

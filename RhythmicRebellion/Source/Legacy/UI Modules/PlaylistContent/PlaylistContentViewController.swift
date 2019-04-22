@@ -27,8 +27,7 @@ final class PlaylistContentViewController: UIViewController {
         return cell
         
     })
-    
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+        
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var refreshControl: UIRefreshControl!
@@ -64,7 +63,7 @@ final class PlaylistContentViewController: UIViewController {
             }
         }
         
-        ImageRetreiver.imageForURLWithoutProgress(url: viewModel.headerViewModel.thumbnailURL?.path ?? "")
+        ImageRetreiver.imageForURLWithoutProgress(url: viewModel.headerViewModel.thumbnailURL?.absoluteString ?? "")
             .map { $0 ?? UIImage(named: "playlistPlaceholder") }
             .drive(imageView.rx.image)
             .disposed(by: rx.disposeBag)
