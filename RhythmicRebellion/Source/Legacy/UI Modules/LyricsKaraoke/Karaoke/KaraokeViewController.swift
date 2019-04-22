@@ -89,7 +89,7 @@ final class KaraokeViewController: UIViewController {
                 guard let x = tuple.change else { return }
                 
                 let reload    = { self.collectionView.reloadData(); }
-                let setLayout = { self.collectionView.collectionViewLayout = tuple.layout }
+                let setLayout = { self.collectionView.collectionViewLayout = UICollectionViewFlowLayout() }
                 let scroll    = { (animated: Bool) in
                     
                     guard let i = tuple.activeIndex else {
@@ -298,7 +298,10 @@ extension KaraokeViewController: UICollectionViewDataSource, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         guard let karaokeCollectionViewFlowLayout = collectionViewLayout as? KaraokeLayout else {
-            fatalError("Incorrect KaraokeCollectionViewLayout")
+            
+            return viewModel.data.value!.layout.itemSize(at: indexPath, with: self.viewModel)
+            
+            //fatalError("Incorrect KaraokeCollectionViewLayout")
         }
 
         return karaokeCollectionViewFlowLayout.itemSize(at: indexPath, with: self.viewModel!)

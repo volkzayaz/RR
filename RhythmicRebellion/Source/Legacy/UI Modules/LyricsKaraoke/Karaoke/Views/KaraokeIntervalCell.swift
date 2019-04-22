@@ -8,20 +8,6 @@
 
 import UIKit
 
-class KaraokeIntervalTableViewCell: UITableViewCell, CellIdentifiable {
-
-    static let identifier = "KaraokeIntervalTableViewCellIdentifier"
-
-    @IBOutlet weak var intervalTextLabel: UILabel!
-
-
-    func setup(viewModel: KaraokeIntervalCellViewModel) {
-
-        self.intervalTextLabel.font = viewModel.font
-        self.intervalTextLabel.text = viewModel.text
-    }
-}
-
 class KaraokeIntervalCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
     static let identifier = "KaraokeIntervalCollectionViewCellIdentifier"
@@ -66,5 +52,7 @@ class KaraokeIntervalCollectionViewCell: UICollectionViewCell, CellIdentifiable 
 
         self.intervalTextLabel.font = viewModel.font
         self.intervalTextLabel.text = viewModel.text
+        
+        self.backgroundColor = .red
     }
 }

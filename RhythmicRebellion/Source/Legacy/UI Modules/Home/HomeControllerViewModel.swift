@@ -160,7 +160,7 @@ final class HomeControllerViewModel: HomeViewModel {
         self.delegate?.reloadItem(at: indexPath,completion: nil)
 
         TrackRequest.tracks(playlistId: playlist.id)
-            .rx.response(type: [Track].self)
+            .rx.baseResponse(type: [Track].self)
             .subscribe(onSuccess: { [weak self] (tracks) in
                 
                 guard let self = self else { return }

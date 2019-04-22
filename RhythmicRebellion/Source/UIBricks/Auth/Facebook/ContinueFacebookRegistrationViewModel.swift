@@ -43,6 +43,13 @@ struct ContinueFacebookRegistrationViewModel : MVVM_ViewModel {
         
         self.facebookToken = facebookToken
         
+        ConfigRequest.countries.rx.response(type: [Country].self)
+            .map { x in
+                return x.first(where: { $0.code == "US" })
+            }
+            .asObservable()
+            .bind(to: country)
+            .disposed(by: bag)
         /**
          
          Proceed with initialization here

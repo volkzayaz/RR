@@ -160,7 +160,9 @@ struct KaraokeViewModel {
         
         let font =  config.mode.font
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = karaokeInterval.content.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font], context: nil)
+        let boundingBox = karaokeInterval.content.boundingRect(with: constraintRect,
+                                                               options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                                               attributes: [NSAttributedString.Key.font: font], context: nil)
 
         return CGSize(width: width, height: round(boundingBox.height))
     }

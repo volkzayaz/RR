@@ -182,6 +182,10 @@ extension Track: Equatable {
     }
 }
 
-extension Track: Hashable {
+extension Track: Hashable, CustomStringConvertible {
     public var hashValue: Int { return self.id }
+    
+    public var description: String {
+        return name
+    }
 }

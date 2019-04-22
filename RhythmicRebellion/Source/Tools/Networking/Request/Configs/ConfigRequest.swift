@@ -48,7 +48,7 @@ extension ConfigRequest {
             return anonymousRequest(method: .get,
                                     path: "gis/country/" + country.code + "/state")
             
-        case . cities(let region):
+        case .cities(let region):
             return anonymousRequest(method: .get,
                                     path: "gis/country/" + region.countryCode + "/state/" + String(region.id))
             

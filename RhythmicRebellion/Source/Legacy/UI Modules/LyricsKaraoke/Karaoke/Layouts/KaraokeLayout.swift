@@ -98,7 +98,7 @@ class KaraokeLayout: UICollectionViewFlowLayout {
                 behaviour.damping = 0.0
                 behaviour.frequency = 0.0
                 
-                animator.addBehavior(behaviour)
+                //animator.addBehavior(behaviour)
             }
 
         
@@ -109,7 +109,7 @@ class KaraokeLayout: UICollectionViewFlowLayout {
 
     override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         
-        guard let attributes = animator.items(in: rect) as? [LayoutAttributes],
+        guard let attributes = super.layoutAttributesForElements(in: rect) as? [LayoutAttributes],
               attributes.isEmpty == false else {
             return super.layoutAttributesForElements(in: rect)
         }

@@ -162,8 +162,10 @@ class AudioPlayer: NSObject {
             })
             .disposed(by: bag)
         
-        appState.map { $0.activePlayable }
-            .distinctUntilChanged()
+        appState
+            .distinctUntilChanged { $0.activePlayable == $1.activePlayable &&
+                                    $0.currentTrack == $1.currentTrack }
+            .map { $0.activePlayable }
             .notNil()
             .drive(onNext: { [weak p = player] (item) in
                 
