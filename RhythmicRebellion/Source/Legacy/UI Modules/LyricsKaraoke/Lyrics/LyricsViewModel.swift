@@ -15,6 +15,12 @@ extension LyricsViewModel {
     
     var canSwitchToKaraoke: Driver<Bool> {
         return appState.map { state in
+            
+            if let track = state.currentTrack?.track,
+               case .noPreview = TrackPreviewOptionViewModel(type: .init(with: track, user: state.user)).type {
+                return false
+            }
+            
             return state.player.currentItem?.lyrics?.data.karaoke != nil
             //                && self.player.currentItem.state.blocked == false
             //                && self.player.currentItem.state.waitingAddons == false

@@ -39,9 +39,17 @@ final class LyricsViewController: UIViewController {
         viewModel.displayText
             .drive(textView.rx.text)
             .disposed(by: rx.disposeBag)
+        ///fix for long text jumping up
+        textView.isScrollEnabled = false
         
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        textView.isScrollEnabled = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 

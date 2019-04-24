@@ -15,13 +15,10 @@ import RxCocoa
 
 extension ContinueFacebookRegistrationViewModel {
     
-    /** Reference binding drivers that are going to be used in the corresponding view
-    
-    var text: Driver<String> {
-        return privateTextVar.asDriver().notNil()
+    var extraTicksHidden: Driver<Bool> {
+        return country.asDriver()
+            .map { $0?.code == "US" }
     }
- 
-     */
     
 }
 

@@ -488,10 +488,12 @@
                     <navigationItem key="navigationItem" id="U8c-Ye-ro9"/>
                     <connections>
                         <outlet property="advertisersCheckmark" destination="mRU-aZ-QBM" id="KGG-ZW-sPE"/>
+                        <outlet property="advertisersLabel" destination="wFR-YO-NAe" id="RGR-a0-ROj"/>
                         <outlet property="birthdayErrorLabel" destination="hdq-CT-OPi" id="Bfu-ff-om2"/>
                         <outlet property="birthdayField" destination="5Co-F0-bmr" id="KOe-Gc-arE"/>
                         <outlet property="birthdayPickerView" destination="Ogb-rt-pcV" id="F9E-XS-zl8"/>
                         <outlet property="dataStoredCheckmark" destination="Pcb-SK-LcR" id="gPT-Yh-E53"/>
+                        <outlet property="dataStoredLabel" destination="upw-oD-7H6" id="wqQ-kh-bjj"/>
                         <outlet property="errorCountryLabel" destination="ldT-01-hGF" id="YWO-93-dfW"/>
                         <outlet property="selectCountryField" destination="A2A-bk-vzM" id="tDc-TC-dXN"/>
                         <outlet property="termsAndConditionsCheckmark" destination="hXc-te-RC0" id="0Zs-gi-VMM"/>

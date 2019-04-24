@@ -26,7 +26,9 @@ class ContinueFacebookRegistrationViewController: UIViewController, MVVM_View {
     
     @IBOutlet weak var termsAndConditionsCheckmark: Checkbox!
     @IBOutlet weak var dataStoredCheckmark: Checkbox!
+    @IBOutlet weak var dataStoredLabel: UILabel!
     @IBOutlet weak var advertisersCheckmark: Checkbox!
+    @IBOutlet weak var advertisersLabel: UILabel!
     
     let validator = Validator()
     
@@ -67,6 +69,20 @@ class ContinueFacebookRegistrationViewController: UIViewController, MVVM_View {
         viewModel.country
             .subscribe(onNext: { [unowned self] (x) in
                 self.selectCountryField.country = x
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.extraTicksHidden
+            .drive(onNext: { [unowned self] (hidden) in
+                
+                self.dataStoredCheckmark.isChecked = hidden
+                self.dataStoredCheckmark.isHidden = hidden
+                self.dataStoredLabel.isHidden = hidden
+                
+                self.advertisersCheckmark.isChecked = hidden
+                self.advertisersCheckmark.isHidden = hidden
+                self.advertisersLabel.isHidden = hidden
+                
             })
             .disposed(by: rx.disposeBag)
         
