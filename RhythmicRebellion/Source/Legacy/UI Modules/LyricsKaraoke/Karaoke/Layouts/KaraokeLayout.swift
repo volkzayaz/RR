@@ -31,28 +31,7 @@ class LayoutAttributes: UICollectionViewLayoutAttributes {
 
 class KaraokeLayout: UICollectionViewFlowLayout {
 
-    private var animator: UIDynamicAnimator!
-    private var animatorIndexPaths = Set<IndexPath>()
-
     override class var layoutAttributesClass: AnyClass { return LayoutAttributes.self }
-
-    var lastContentSize = CGSize.zero
-
-    // MARK: - Initialization
-
-    override public init() {
-        super.init()
-        initialize()
-    }
-
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        initialize()
-    }
-
-    private func initialize() {
-        animator = UIDynamicAnimator(collectionViewLayout: self)
-    }
 
     // MARK: - Overrides
     override open func prepare() {
@@ -62,50 +41,7 @@ class KaraokeLayout: UICollectionViewFlowLayout {
         guard let collectionView = collectionView else { return }
         
         sectionInset = .init(top: collectionView.bounds.size.height / 2, left: 15.0, bottom: collectionView.bounds.size.height / 2, right: 15.0)
-        
-        guard let visibleAttributes = super.layoutAttributesForElements(in: collectionView.bounds) else {
-            animator.removeAllBehaviors()
-            animatorIndexPaths.removeAll()
-            return
-        }
 
-        if lastContentSize != collectionViewContentSize {
-            animator.removeAllBehaviors()
-            animatorIndexPaths.removeAll()
-        }
-
-        ////remove behaviours from no longer visible attributes
-        let visibleAttributesIndexPaths = Set(visibleAttributes.map { $0.indexPath } )
-
-        animator.behaviors.forEach { (behavior) in
-            
-            guard let behavior = behavior as? UIAttachmentBehavior,
-                let attributes = behavior.items.first as? UICollectionViewLayoutAttributes,
-                animatorIndexPaths.subtracting(visibleAttributesIndexPaths).contains(attributes.indexPath) else { return }
-
-            animator.removeBehavior(behavior)
-        }
-        
-        ////add behaviours to new visible attributes
-        visibleAttributes
-            .filter {
-                animatorIndexPaths.contains($0.indexPath) == false
-            }
-            .forEach { layoutAttributes in
-                
-                let behaviour = UIAttachmentBehavior(item: layoutAttributes, attachedToAnchor: layoutAttributes.center)
-                
-                behaviour.length = 0.0
-                behaviour.damping = 0.0
-                behaviour.frequency = 0.0
-                
-                animator.addBehavior(behaviour)
-            }
-
-        
-        
-        lastContentSize = collectionViewContentSize
-        animatorIndexPaths = visibleAttributesIndexPaths
     }
 
     override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
@@ -124,30 +60,11 @@ class KaraokeLayout: UICollectionViewFlowLayout {
         return attributes
     }
 
-    override open func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        
-        guard let attributes = animator.layoutAttributesForCell(at: indexPath) else {
-            return super.layoutAttributesForItem(at: indexPath)
-        }
-
-        return attributes
-    }
-
     override open func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
 
         guard collectionView != nil else { return false }
 
-        animator.behaviors
-            .compactMap { $0 as? UIAttachmentBehavior }
-            .forEach { behavior in
-                
-                guard let dynamicItem = behavior.items.first else { return }
-                
-                animator.updateItem(usingCurrentState: dynamicItem)
-                
-        }
-
-        return false
+        return true
     }
 
     open func update(attributes: LayoutAttributes, in collectionView: UICollectionView) {
