@@ -42,7 +42,14 @@ final class KaraokeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+//        self.navigationController?.automaticallyAdjustsScrollViewInsets = false
+//        if #available(iOS 11.0, *) {
+//            self.collectionView.contentInsetAdjustmentBehavior = .never
+//        } else {
+//            // Fallback on earlier versions
+//        }
+        
         self.footerView.scrollViewModeButton.setBorderWidth(1.0, for: [UIControl.State.selected, UIControl.State.highlighted])
         self.footerView.scrollViewModeButton.setBorderWidth(1.0, for: UIControl.State.selected)
 
@@ -89,22 +96,22 @@ final class KaraokeViewController: UIViewController {
                 guard let x = tuple.change else { return }
                 
                 let reload    = { self.collectionView.reloadData(); }
-                let setLayout = { self.collectionView.collectionViewLayout = UICollectionViewFlowLayout() }
+                let setLayout = { self.collectionView.collectionViewLayout = tuple.layout }
                 let scroll    = { (animated: Bool) in
                     
                     guard let i = tuple.activeIndex else {
-                        self.collectionView.contentOffset = CGPoint(x: 0, y: -self.collectionView.contentInset.top)
+                        self.collectionView.contentOffset = .zero
                         return
                     }
                     
+                    ////f-ing understand proper collection view layout cycle
+                    ////and get rid of dispatching after
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: {
-                        print("!!!!New index!!!! \(i)")
                         self.collectionView.scrollToItem(at: IndexPath(row: i, section: 0),
                                                          at: .centeredVertically, animated: animated)
                     })
                     
                 }
-                
                 
                 ///layout changes:
                 /// set layout -> reload data -> scroll to item
@@ -121,7 +128,7 @@ final class KaraokeViewController: UIViewController {
                     setLayout(); reload(); scroll(false)
                     
                 case .data:
-                    setLayout(); reload(); scroll(false)
+                    reload(); scroll(false)
                     
                 case .index:
                     scroll(true)
@@ -154,8 +161,6 @@ final class KaraokeViewController: UIViewController {
             .drive(imageView.rx.image)
             .disposed(by: rx.disposeBag)
 
-
-        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -169,33 +174,11 @@ final class KaraokeViewController: UIViewController {
         super.viewDidAppear(animated)
 
         self.scheduleHideControlsTimer()
-     //   self.viewModel.isIdleTimerDisabled = true
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        //collectionView.collectionViewLayout.invalidateLayout()
-
-//        self.viewModel.isIdleTimerDisabled = false
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        var contentInset = self.collectionView.contentInset
-        contentInset.top = self.view.bounds.height / 2
-        contentInset.bottom = self.view.bounds.height / 2
-        self.collectionView.contentInset = contentInset
-
-//        UIView.performWithoutAnimation {
-//            self.collectionView.collectionViewLayout.invalidateLayout()
-//            self.collectionView.reloadData()
-//        }
-//
-//        if let currentItemIndexPath = self.viewModel.currentItemIndexPath {
-//            self.collectionView.scrollToItem(at: currentItemIndexPath, at: UICollectionView.ScrollPosition.centeredVertically, animated: false)
-//        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

@@ -10,12 +10,12 @@ import UIKit
 
 class LayoutAttributes: UICollectionViewLayoutAttributes {
 
-    var boundsCenterOffset = CGPoint(x: 0.0, y: 0.0)
+    var verticalOffset: CGFloat = 0.0
     var activeDistance: CGFloat = 0.0
 
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! LayoutAttributes
-        copy.boundsCenterOffset = boundsCenterOffset
+        copy.verticalOffset = verticalOffset
         copy.activeDistance = activeDistance
         return copy
     }
@@ -25,7 +25,7 @@ class LayoutAttributes: UICollectionViewLayoutAttributes {
 
         guard let karaokeLayoutAttributes = object as? LayoutAttributes else { return true }
 
-        return karaokeLayoutAttributes.boundsCenterOffset == boundsCenterOffset && karaokeLayoutAttributes.activeDistance == activeDistance
+        return karaokeLayoutAttributes.verticalOffset == verticalOffset && karaokeLayoutAttributes.activeDistance == activeDistance
     }
 }
 
@@ -51,7 +51,6 @@ class KaraokeLayout: UICollectionViewFlowLayout {
     }
 
     private func initialize() {
-        sectionInset = .init(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
         animator = UIDynamicAnimator(collectionViewLayout: self)
     }
 
@@ -61,6 +60,8 @@ class KaraokeLayout: UICollectionViewFlowLayout {
         super.prepare()
 
         guard let collectionView = collectionView else { return }
+        
+        sectionInset = .init(top: collectionView.bounds.size.height / 2, left: 15.0, bottom: collectionView.bounds.size.height / 2, right: 15.0)
         
         guard let visibleAttributes = super.layoutAttributesForElements(in: collectionView.bounds) else {
             animator.removeAllBehaviors()
@@ -98,7 +99,7 @@ class KaraokeLayout: UICollectionViewFlowLayout {
                 behaviour.damping = 0.0
                 behaviour.frequency = 0.0
                 
-                //animator.addBehavior(behaviour)
+                animator.addBehavior(behaviour)
             }
 
         
@@ -153,9 +154,7 @@ class KaraokeLayout: UICollectionViewFlowLayout {
 
         attributes.zIndex = attributes.indexPath.item
 
-        let boundsCenterOffset = CGPoint(x: attributes.center.x - collectionView.bounds.midX - sectionInset.left,
-                                         y: attributes.center.y - collectionView.bounds.midY - sectionInset.top)
-        attributes.boundsCenterOffset = boundsCenterOffset
+        attributes.verticalOffset = attributes.center.y - collectionView.bounds.midY
         attributes.activeDistance = attributes.frame.height + minimumLineSpacing
     }
 
@@ -194,8 +193,8 @@ class KaraokeOnePhraseLayout: KaraokeLayout {
         super.update(attributes: attributes, in: collectionView)
 
 
-        if abs(attributes.boundsCenterOffset.y) <= attributes.frame.height + minimumLineSpacing {
-            let scale = 1.0 - (0.4 * abs(attributes.boundsCenterOffset.y) / (attributes.frame.height + minimumLineSpacing))
+        if abs(attributes.verticalOffset) <= attributes.frame.height + minimumLineSpacing {
+            let scale = 1.0 - (0.4 * abs(attributes.verticalOffset) / (attributes.frame.height + minimumLineSpacing))
 
             attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
 
