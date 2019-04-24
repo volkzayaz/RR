@@ -107,7 +107,16 @@ final class KaraokeViewController: UIViewController {
                     ////f-ing understand proper collection view layout cycle
                     ////and get rid of dispatching after
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: {
-                        self.collectionView.scrollToItem(at: IndexPath(row: i, section: 0),
+                        let x = IndexPath(row: i, section: 0)
+                        
+                        ////this if is the result of internal AppState inconsistency.
+                        ////AppState is initialised as a result of 4 different Socket Messages
+                        ////Before they all finished it is possible for AppState to contain "currentItem"
+                        ////That is not represented in LinkedPlaylist.
+                        ////TODO: remove this check as soon as this inconsistency is resolved
+                        guard self.collectionView.numberOfItems(inSection: 0) > i else { return }
+                        
+                        self.collectionView.scrollToItem(at: x,
                                                          at: .centeredVertically, animated: animated)
                     })
                     

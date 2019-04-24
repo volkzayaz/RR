@@ -58,6 +58,6 @@ class KaraokeIntervalCollectionViewCell: UICollectionViewCell, CellIdentifiable 
         self.intervalTextLabel.font = viewModel.font
         self.intervalTextLabel.text = viewModel.text
         
-        self.backgroundColor = .red
+        //self.backgroundColor = .red
     }
 }
