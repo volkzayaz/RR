@@ -89,7 +89,7 @@ extension KaraokeViewModel {
     
 }
 
-struct KaraokeViewModel {
+class KaraokeViewModel {
 
     private let karaoke = BehaviorRelay<Karaoke?>(value: nil)
 
@@ -97,6 +97,10 @@ struct KaraokeViewModel {
     
     let disposeBag = DisposeBag()
 
+    deinit {
+        Dispatcher.dispatch(action: ChangeLyricsMode(to: .plain))
+    }
+    
     // MARK: - Lifecycle -
 
     init(router: KaraokeRouter) {

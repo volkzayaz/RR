@@ -237,13 +237,16 @@ final class PlayerViewModel: NSObject {
     
     var karaokeIntervalsViewModel: Driver<KaraokeIntervalsProgressViewModel?> {
         
-        return appState.map { ($0.player.currentItem?.lyrics?.data.karaoke, $0.currentTrack?.track.audioFile?.duration) }
-            .distinctUntilChanged({ (lhs: (Karaoke?, Int?), rhs: (Karaoke?, Int?)) -> Bool in
+        return appState.map { ($0.player.currentItem?.lyrics, $0.currentTrack?.track.audioFile?.duration) }
+            .distinctUntilChanged({ (lhs: (PlayerState.Lyrics?, Int?), rhs: (PlayerState.Lyrics?, Int?)) -> Bool in
                 return lhs.0 == rhs.0 && lhs.1 == rhs.1
             })
-            .map { (maybeKaraoke, maybeDuration) in
+            .map { (maybeLyrics, maybeDuration) in
 
-                guard let karaoke = maybeKaraoke, let duration = maybeDuration else {
+                guard let lyrics = maybeLyrics,
+                      let karaoke = lyrics.data.karaoke,
+                      let duration = maybeDuration,
+                      case .karaoke(_) = lyrics.mode else {
                     return nil
                 }
 
