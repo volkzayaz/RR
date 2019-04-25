@@ -74,9 +74,10 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
             switch childViewControllerNavigationItemType {
             case .video:
                 guard let navigationController = childViewController as? UINavigationController,
-                    let videoViewController = navigationController.viewControllers.first as? VideoViewController else { continue }
-                let videoRouter = DefaultVideoRouter(dependencies: self.dependencies)
-                videoRouter.start(controller: videoViewController)
+                    let x = navigationController.viewControllers.first as? VideoViewController else { continue }
+                
+                x.viewModel = VideoViewModel(router: VideoRouter(owner: x))
+                
             case .lyrics:
                 guard let lyricsKaraokeViewController = childViewController as? LyricsKaraokeViewController else { continue }
                 let lyricsKaraokeRouter = DefaultLyricsKaraokeRouter(dependencies: self.dependencies, delegate: self.navigationDelegate)

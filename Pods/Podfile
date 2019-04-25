@@ -37,6 +37,7 @@ target 'RhythmicRebellion' do
     pod 'AlamofireNetworkActivityLogger'
     #ui
     pod 'SnapKit', '~> 4.2.0'
+    pod 'youtube-ios-player-helper', '~> 0.1.4'
     
 end
 

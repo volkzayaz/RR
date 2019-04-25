@@ -886,10 +886,9 @@
         <!--Video-->
         <scene sceneID="zsh-3h-aXs">
             <objects>
-                <navigationController id="uwJ-Dg-TZh" sceneMemberID="viewController">
+                <navigationController navigationBarHidden="YES" id="uwJ-Dg-TZh" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Video" image="Video" id="1sH-4S-iuD"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="c89-By-zdS">
-                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -908,25 +907,60 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="635"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VideoViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7IW-3P-vuK">
-                                <rect key="frame" x="54.666666666666657" y="296.66666666666669" width="305" height="42"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
-                                <nil key="textColor"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEz-UA-fHe" customClass="YTPlayerView">
+                                <rect key="frame" x="20" y="20" width="374" height="210.33333333333334"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n3P-ZP-Biq" customClass="YTPlayerView">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="210.33333333333334"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="n3P-ZP-Biq" secondAttribute="height" multiplier="16:9" id="ntn-aR-BZi"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="n3P-ZP-Biq" firstAttribute="leading" secondItem="WEz-UA-fHe" secondAttribute="leading" id="8Ph-rY-H9k"/>
+                                    <constraint firstAttribute="trailing" secondItem="n3P-ZP-Biq" secondAttribute="trailing" id="JQw-l0-ZdD"/>
+                                    <constraint firstItem="n3P-ZP-Biq" firstAttribute="top" secondItem="WEz-UA-fHe" secondAttribute="top" id="Mru-ZE-sRi"/>
+                                    <constraint firstAttribute="width" secondItem="WEz-UA-fHe" secondAttribute="height" multiplier="16:9" id="Pyo-C2-sef"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gUy-t0-lQj" customClass="YTPlayerView">
+                                <rect key="frame" x="20" y="251" width="374" height="210.33333333333337"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" misplaced="YES" text="This recording has no videos" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LqM-jH-hs6">
+                                <rect key="frame" x="87" y="479" width="163" height="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="7IW-3P-vuK" firstAttribute="centerX" secondItem="ef2-se-iys" secondAttribute="centerX" id="OOC-SZ-6ZS"/>
-                            <constraint firstItem="7IW-3P-vuK" firstAttribute="centerY" secondItem="ef2-se-iys" secondAttribute="centerY" id="T0Y-m7-fuW"/>
+                            <constraint firstItem="LqM-jH-hs6" firstAttribute="centerY" secondItem="SXe-yj-K3q" secondAttribute="centerY" id="1KN-5Q-liv"/>
+                            <constraint firstItem="WEz-UA-fHe" firstAttribute="top" secondItem="SXe-yj-K3q" secondAttribute="top" id="60x-Q3-3TJ"/>
+                            <constraint firstItem="gUy-t0-lQj" firstAttribute="height" secondItem="n3P-ZP-Biq" secondAttribute="height" id="A2K-ce-hLx"/>
+                            <constraint firstItem="gUy-t0-lQj" firstAttribute="top" secondItem="n3P-ZP-Biq" secondAttribute="bottom" constant="20.666666666666657" id="QAU-15-Qel"/>
+                            <constraint firstItem="LqM-jH-hs6" firstAttribute="centerX" secondItem="SXe-yj-K3q" secondAttribute="centerX" id="SzQ-gG-gBn"/>
+                            <constraint firstItem="gUy-t0-lQj" firstAttribute="trailing" secondItem="n3P-ZP-Biq" secondAttribute="trailing" id="f7e-A9-9ha"/>
+                            <constraint firstItem="gUy-t0-lQj" firstAttribute="leading" secondItem="n3P-ZP-Biq" secondAttribute="leading" id="hjH-SU-0wp"/>
+                            <constraint firstItem="WEz-UA-fHe" firstAttribute="leading" secondItem="SXe-yj-K3q" secondAttribute="leading" constant="20" id="ntS-Fj-iNv"/>
+                            <constraint firstItem="SXe-yj-K3q" firstAttribute="trailing" secondItem="WEz-UA-fHe" secondAttribute="trailing" constant="20" id="zfE-n1-aeO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SXe-yj-K3q"/>
                     </view>
                     <navigationItem key="navigationItem" id="h5d-4E-MOe"/>
+                    <connections>
+                        <outlet property="noVideosLabel" destination="LqM-jH-hs6" id="jlE-TU-KqU"/>
+                        <outlet property="videoView" destination="WEz-UA-fHe" id="QOT-ND-gFc"/>
+                        <outlet property="videoView2" destination="gUy-t0-lQj" id="URc-2C-oec"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="USM-9O-oV2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-650" y="-1494"/>
+            <point key="canvasLocation" x="-650.72463768115949" y="-1494.7010869565217"/>
         </scene>
         <!--LyricsKaraoke-->
         <scene sceneID="eSj-4E-yxN">
@@ -1025,7 +1059,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Rt-cB-ASp">
-                                        <rect key="frame" x="216" y="4.6666666666666643" width="95" height="22"/>
+                                        <rect key="frame" x="222" y="6.6666666666666643" width="89" height="18"/>
                                         <color key="tintColor" red="1" green="0.24313725490196078" blue="0.65490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>
@@ -1155,7 +1189,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="orJ-mH-cna">
-                                        <rect key="frame" x="267" y="19" width="132" height="22"/>
+                                        <rect key="frame" x="273" y="21" width="126" height="18"/>
                                         <color key="tintColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>

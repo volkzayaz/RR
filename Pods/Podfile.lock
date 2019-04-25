@@ -84,6 +84,7 @@ PODS:
   - SnapKit (4.2.0)
   - Starscream (3.0.5)
   - SwiftValidator (4.0.0)
+  - youtube-ios-player-helper (0.1.6)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
@@ -106,6 +107,7 @@ DEPENDENCIES:
   - SnapKit (~> 4.2.0)
   - Starscream (= 3.0.5)
   - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, tag `4.2.0`)
+  - youtube-ios-player-helper (~> 0.1.4)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -139,6 +141,7 @@ SPEC REPOS:
     - RxSwift
     - SnapKit
     - Starscream
+    - youtube-ios-player-helper
 
 EXTERNAL SOURCES:
   SwiftValidator:
@@ -182,7 +185,8 @@ SPEC CHECKSUMS:
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   SwiftValidator: 58c155c8ae8421ef716a96e52a49984dd54c700c
+  youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: bdc44c47b9d9acdb70df1276f443e0b0e4fad0d4
+PODFILE CHECKSUM: 60bbcc9e05dc1bec9bc4d4b0a1913f56d38eeee8
 
 COCOAPODS: 1.6.1
