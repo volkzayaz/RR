@@ -49,4 +49,6 @@ enum RRError: Error {
     
     case generic(message: String)
     
+    case server(error: ErrorResponse)
+    
 }

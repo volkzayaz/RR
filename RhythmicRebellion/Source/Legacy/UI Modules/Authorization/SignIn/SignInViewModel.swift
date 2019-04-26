@@ -138,19 +138,14 @@ final class SignInViewModel {
                     
                 }, onError: { error in
                     
-                    guard let appError = error as? AppError, let appErrorGroup = appError.source else {
+                    guard let appError = error as? RRError, case .server(let e) = appError, let email = e.errors["email"]?.first else {
                         self.delegate?.show(error: error)
                         return
                     }
                     
-                    switch appErrorGroup {
-                    case RestApiServiceError.serverError( _, let errors):
-                        self.signInErrorDescription = errors["email"]?.first
-                    default:
-                        self.delegate?.show(error: error)
-                    }
-                    
+                    self.signInErrorDescription = email
                     self.delegate?.refreshUI()
+                    
                 })
             
         }
