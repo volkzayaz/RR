@@ -31,7 +31,10 @@ class VideoViewController: UIViewController, MVVM_View {
             .drive(onNext: { [unowned self] (maybeURL) in
                 self.videoView.isHidden = maybeURL == nil
                 if let x = maybeURL {
-                    self.videoView.load(withVideoId: x)
+                    let playerVars = [
+                        "origin" : "http://www.youtube.com"
+                    ]
+                    self.videoView.load(withVideoId: x, playerVars: playerVars)
                 }
             })
             .disposed(by: rx.disposeBag)
@@ -44,7 +47,11 @@ class VideoViewController: UIViewController, MVVM_View {
             .drive(onNext: { [unowned self] (maybeURL) in
                 self.videoView2.isHidden = maybeURL == nil
                 if let x = maybeURL {
-                    self.videoView2.load(withVideoId: x)
+                    
+                    let playerVars = [
+                        "origin" : "http://www.youtube.com"
+                    ]
+                    self.videoView2.load(withVideoId: x, playerVars: playerVars)
                 }
             })
             .disposed(by: rx.disposeBag)
