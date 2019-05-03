@@ -46,7 +46,6 @@ extension URLRequestConvertible {
             let request = Alamofire.request(self)
             
             request
-                //.validate()
                 .responseData { (response: DataResponse< Data >) in
                 
                 if let c = response.response?.statusCode,

@@ -17,10 +17,6 @@ struct PrepareNewTrackByHash: ActionCreator {
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
-        guard initialState.currentTrack?.orderHash != orderHash else {
-            return .just(initialState)
-        }
-        
         guard let orderHash = orderHash else {
             
             ///----
@@ -39,6 +35,10 @@ struct PrepareNewTrackByHash: ActionCreator {
             var s = initialState
             s.player.currentItem = nil
             return .just(s)
+        }
+        
+        guard initialState.currentTrack?.orderHash != orderHash else {
+            return .just(initialState)
         }
         
         guard let x = initialState.player.tracks[orderHash] else {
