@@ -183,7 +183,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
         self.delegate?.reloadItem(at: indexPath,completion: nil)
 
         TrackRequest.fanTracks(playlistId: playlist.id)
-            .rx.response(type: [Track].self)
+            .rx.baseResponse(type: [Track].self)
             .subscribe(onSuccess: { [weak self] (tracks) in
             
                 guard let self = self else { return }
