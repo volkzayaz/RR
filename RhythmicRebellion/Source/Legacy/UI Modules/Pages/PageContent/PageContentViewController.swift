@@ -100,6 +100,10 @@ extension PageContentViewController: WKNavigationDelegate {
     }
 
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError error: Error) {
+        if (error as NSError).code == -999 {
+            return
+        }
+        
         self.viewModel.webViewFailed(with: error)
     }
 
