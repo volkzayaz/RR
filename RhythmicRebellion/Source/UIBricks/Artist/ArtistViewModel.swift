@@ -74,9 +74,9 @@ struct ArtistViewModel : MVVM_ViewModel {
             }
         
         Observable.combineLatest([
-//                                  albums.asObservable(),
+                                  albums.asObservable(),
                                   playlists.asObservable(),
-//                                  records.asObservable()
+                                  records.asObservable()
             ])
             .retry(1)
             .silentCatch(handler: router.owner)

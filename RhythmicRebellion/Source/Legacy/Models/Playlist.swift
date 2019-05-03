@@ -132,7 +132,7 @@ struct ArtistPlaylist: Playlist, Codable, Equatable {
     
     let id: Int
     let name: String
-    let coverImage: Image
+    let cover_image: Image
     
     
     var isDefault: Bool {
@@ -144,7 +144,7 @@ struct ArtistPlaylist: Playlist, Codable, Equatable {
     }
     
     var thumbnailURL: URL? {
-        guard let str = coverImage.simpleURL,
+        guard let str = cover_image.simpleURL,
               let url = URL(string: str) else {
             return nil
         }

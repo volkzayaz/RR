@@ -49,7 +49,9 @@ extension URLRequestConvertible {
                 //.validate()
                 .responseData { (response: DataResponse< Data >) in
                 
-                if let maybeData = response.data,
+                if let c = response.response?.statusCode,
+                   !(200..<299).contains(c),
+                   let maybeData = response.data,
                    let restApiResponse = try? JSONDecoder().decode(ErrorResponse.self,
                                                                         from: maybeData) {
                     

@@ -17,7 +17,7 @@ class PlaylistInsertTests: XCTestCase {
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        testObject = DaPlaylist()
+        testObject = LinkedPlaylist()
     }
 
     func testSingleInitialInsert() {
@@ -25,6 +25,12 @@ class PlaylistInsertTests: XCTestCase {
         let x = Track.fake()
         
         let res = testObject.insert(tracks: [x], after: nil)
+        
+        let action = ApplyReduxViewPatch(res)
+        
+        Dispacher.dispatch(action: action)
+        
+        appState.player.linked
         
         expect(res.keys.count) == 1
         expect(res.first?.value?[.id] as? Int) == x.id
