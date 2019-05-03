@@ -22,6 +22,12 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var signInErrorLabel: UILabel!
 
+    @IBOutlet weak var facebookButton: UIButton! {
+        didSet {
+            facebookButton.isHidden = true
+        }
+    }
+    
     // MARK: - Public properties -
     private(set) var viewModel: SignInViewModel!
     private(set) var router: FlowRouter!
