@@ -193,7 +193,7 @@
 		73F13870222C289200FB8EBC /* ApplicationContentContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13705222C289200FB8EBC /* ApplicationContentContainerViewModel.swift */; };
 		73F13871222C289200FB8EBC /* PlaylistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13707222C289200FB8EBC /* PlaylistRouter.swift */; };
 		73F13872222C289200FB8EBC /* PlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13708222C289200FB8EBC /* PlaylistViewModel.swift */; };
-		73F13873222C289200FB8EBC /* PlaylistContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13709222C289200FB8EBC /* PlaylistContentViewController.swift */; };
+		73F13873222C289200FB8EBC /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13709222C289200FB8EBC /* PlaylistViewController.swift */; };
 		73F13874222C289200FB8EBC /* PlaylistHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1370B222C289200FB8EBC /* PlaylistHeaderViewModel.swift */; };
 		73F13875222C289200FB8EBC /* PlaylistTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1370D222C289200FB8EBC /* PlaylistTableHeaderView.swift */; };
 		73F13876222C289200FB8EBC /* ContainerTransitionSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1370F222C289200FB8EBC /* ContainerTransitionSegue.swift */; };
@@ -547,7 +547,7 @@
 		73F13705222C289200FB8EBC /* ApplicationContentContainerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationContentContainerViewModel.swift; sourceTree = "<group>"; };
 		73F13707222C289200FB8EBC /* PlaylistRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistRouter.swift; sourceTree = "<group>"; };
 		73F13708222C289200FB8EBC /* PlaylistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistViewModel.swift; sourceTree = "<group>"; };
-		73F13709222C289200FB8EBC /* PlaylistContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistContentViewController.swift; sourceTree = "<group>"; };
+		73F13709222C289200FB8EBC /* PlaylistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
 		73F1370B222C289200FB8EBC /* PlaylistHeaderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderViewModel.swift; sourceTree = "<group>"; };
 		73F1370D222C289200FB8EBC /* PlaylistTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistTableHeaderView.swift; sourceTree = "<group>"; };
 		73F1370F222C289200FB8EBC /* ContainerTransitionSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerTransitionSegue.swift; sourceTree = "<group>"; };
@@ -1428,7 +1428,7 @@
 			children = (
 				73F13707222C289200FB8EBC /* PlaylistRouter.swift */,
 				73F13708222C289200FB8EBC /* PlaylistViewModel.swift */,
-				73F13709222C289200FB8EBC /* PlaylistContentViewController.swift */,
+				73F13709222C289200FB8EBC /* PlaylistViewController.swift */,
 				73F1370A222C289200FB8EBC /* ViewsModels */,
 				73F1370C222C289200FB8EBC /* Views */,
 			);
@@ -2587,7 +2587,7 @@
 				73F1381D222C289200FB8EBC /* VerticalButton.swift in Sources */,
 				73F1380F222C289200FB8EBC /* RoundedView.swift in Sources */,
 				7361C00E2236855E008EA36E /* ReplaceTracks.swift in Sources */,
-				73F13873222C289200FB8EBC /* PlaylistContentViewController.swift in Sources */,
+				73F13873222C289200FB8EBC /* PlaylistViewController.swift in Sources */,
 				73F13875222C289200FB8EBC /* PlaylistTableHeaderView.swift in Sources */,
 				73F138F8222C289200FB8EBC /* RxResponse.swift in Sources */,
 				73F13884222C289200FB8EBC /* ChangeEmailViewModel.swift in Sources */,

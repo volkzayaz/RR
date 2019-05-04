@@ -15,17 +15,14 @@ final class MyPlaylistsRouter: FlowRouterSegueCompatible {
     typealias Destinations = SegueActions
 
     enum SegueList: String, SegueDestinationList {
-        case playlistContent = "PlaylistContentSegueIdentifier"
         case addToPlaylist = "AddToPlaylistSegueIdentifier"
     }
 
     enum SegueActions: SegueDestinations {
-        case showPlaylistContent(playlist: FanPlaylist)
         case showAddToPlaylist(playlist: FanPlaylist)
 
         var identifier: SegueDestinationList {
             switch self {
-            case .showPlaylistContent: return SegueList.playlistContent
             case .showAddToPlaylist: return SegueList.addToPlaylist
             }
         }
@@ -42,14 +39,10 @@ final class MyPlaylistsRouter: FlowRouterSegueCompatible {
 
     func prepare(for destination: MyPlaylistsRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
-        case .showPlaylistContent(let playlist):
-            guard let playlistContentViewController = segue.destination as? PlaylistContentViewController else { fatalError("Incorrect controller for PlaylistContentSegueIdentifier") }
-            let playlistContentRouter = PlaylistRouter(dependencies: self.dependencies)
-            playlistContentRouter.start(controller: playlistContentViewController, playlist: playlist)
-
+        
         case .showAddToPlaylist(let playlist):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
-            let addToPlaylistRouter = AddToPlaylistRouter(dependencies: dependencies)
+            let addToPlaylistRouter = AddToPlaylistRouter()
             addToPlaylistRouter.start(controller: addToPlaylistViewController, playlist: playlist)
         }
     }
@@ -66,7 +59,13 @@ final class MyPlaylistsRouter: FlowRouterSegueCompatible {
     }
 
     func showContent(of playlist: FanPlaylist) {
-        self.perform(segue: .showPlaylistContent(playlist: playlist))
+        
+        let vc = R.storyboard.main.playlistViewController()!
+        vc.viewModel = PlaylistViewModel(router: PlaylistRouter(owner: vc),
+                                         provider: FanPlaylistProvider(fanPlaylist: playlist))
+        
+        sourceController?.navigationController?.pushViewController(vc, animated: true)
+        
     }
 
     func showAddToPlaylist(for playlist: FanPlaylist) {

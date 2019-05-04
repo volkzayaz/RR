@@ -15,7 +15,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
     // MARK: - Private properties -
 
     private(set) weak var delegate: AddToPlaylistViewModelDelegate?
-    private(set) weak var router: AddToPlaylistRouter?
+    var router: AddToPlaylistRouter?
     
     
     private(set) var playlists: [FanPlaylist] = [FanPlaylist]()

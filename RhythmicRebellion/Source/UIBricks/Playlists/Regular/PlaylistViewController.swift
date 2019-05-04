@@ -1,5 +1,5 @@
 //
-//  PlaylistContentViewController.swift
+//  PlaylistViewController.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 8/1/18.
@@ -12,7 +12,7 @@ import RxDataSources
 
 import DownloadButton
 
-final class PlaylistContentViewController: UIViewController {
+final class PlaylistViewController: UIViewController {
 
     lazy var dataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<String, TrackViewModel>>(configureCell: { [unowned self] (_, tableView, ip, data) in
         
@@ -34,17 +34,7 @@ final class PlaylistContentViewController: UIViewController {
     @IBOutlet weak var tableHeaderView: PlaylistTableHeaderView!
     @IBOutlet var emptyPlaylistView: UIView!
 
-    // MARK: - Public properties -
-
-    private(set) var viewModel: PlaylistViewModel!
-    private(set) var router: FlowRouter!
-
-    // MARK: - Configuration -
-
-    func configure(viewModel: PlaylistViewModel, router: FlowRouter) {
-        self.viewModel = viewModel
-        self.router    = router
-    }
+    var viewModel: PlaylistViewModel!
 
     // MARK: - Lifecycle -
 
@@ -149,7 +139,7 @@ final class PlaylistContentViewController: UIViewController {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate -
 
-extension PlaylistContentViewController: UITableViewDelegate {
+extension PlaylistViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView,
                           willDisplay cell: UITableViewCell,
@@ -182,15 +172,15 @@ extension PlaylistContentViewController: UITableViewDelegate {
 }
 
 // MARK: - Router -
-extension PlaylistContentViewController {
+extension PlaylistViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        router.prepare(for: segue, sender: sender)
+        viewModel.router.prepare(for: segue, sender: sender)
         return super.prepare(for: segue, sender: sender)
     }
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
+        if viewModel.router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
             return false
         }
         return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
@@ -198,7 +188,7 @@ extension PlaylistContentViewController {
 
 }
 
-extension PlaylistContentViewController: PKDownloadButtonDelegate {
+extension PlaylistViewController: PKDownloadButtonDelegate {
 
     func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
         switch state {

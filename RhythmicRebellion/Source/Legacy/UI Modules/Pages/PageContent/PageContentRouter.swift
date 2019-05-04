@@ -75,16 +75,11 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
     }
     
     func showDownloadAlbum(album: Album) {
-        let vc = R.storyboard.main.playlistContentViewController()!
-        
-        let router = PlaylistRouter(dependencies: DataLayer.get)
-        router.sourceController = vc
-        
-        let vm = PlaylistViewModel(router: router,
-                                   provider: AlbumPlaylistProvider(album: album,
-                                                                   instantDownload: true))
-        vc.configure(viewModel: vm, router: router)
-        
+        let vc = R.storyboard.main.playlistViewController()!
+        vc.viewModel = PlaylistViewModel(router: PlaylistRouter(owner: vc),
+                                         provider: AlbumPlaylistProvider(album: album,
+                                                                         instantDownload: true))
+
         sourceController?.navigationController?.pushViewController(vc, animated: true)
         
     }

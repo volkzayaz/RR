@@ -47,7 +47,7 @@ extension URLRequestConvertible {
             
             request
                 .responseData { (response: DataResponse< Data >) in
-                
+                    
                 if let c = response.response?.statusCode,
                    !(200..<299).contains(c),
                    let maybeData = response.data,
@@ -57,6 +57,11 @@ extension URLRequestConvertible {
                     print("Error performing request \(request). Error details: \(restApiResponse)")
                     
                     subscriber.onError( RRError.server(error: restApiResponse) )
+                    return
+                }
+                
+                if let e = response.result.error {
+                    subscriber.onError(e)
                     return
                 }
                     
