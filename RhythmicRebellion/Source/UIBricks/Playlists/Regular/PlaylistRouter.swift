@@ -1,5 +1,5 @@
 //
-//  PlaylistContentRouter.swift
+//  PlaylistRouter.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 8/1/18.
@@ -9,20 +9,7 @@
 
 import UIKit
 
-protocol PlaylistContentRouter: FlowRouter {
-    
-    var owner: UIViewController { get }
-    
-    func showAddToPlaylist(for tracks: [Track])
-    func showAddToPlaylist(for playlist: Playlist)
-
-    func dismiss()
-    
-    func showOpenIn(url: URL, sourceRect: CGRect, sourceView: UIView)
-    
-}
-
-final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegueCompatible {
+final class PlaylistRouter: FlowRouterSegueCompatible {
     
     var owner: UIViewController {
         return sourceController!
@@ -57,7 +44,7 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
         return true
     }
 
-    func prepare(for destination: DefaultPlaylistContentRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: PlaylistRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
         case .showAddTracksToPlaylist(let tracks):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
@@ -118,8 +105,3 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     }
     
 }
-
-extension DefaultPlaylistContentRouter {
-
-}
-

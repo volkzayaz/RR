@@ -1059,7 +1059,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Rt-cB-ASp">
-                                        <rect key="frame" x="222" y="6.6666666666666643" width="89" height="18"/>
+                                        <rect key="frame" x="216" y="4.6666666666666643" width="95" height="22"/>
                                         <color key="tintColor" red="1" green="0.24313725490196078" blue="0.65490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>
@@ -1189,7 +1189,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="orJ-mH-cna">
-                                        <rect key="frame" x="273" y="21" width="126" height="18"/>
+                                        <rect key="frame" x="267" y="19" width="132" height="22"/>
                                         <color key="tintColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>
@@ -1849,7 +1849,7 @@
         <image name="addPlaylist" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tg1-kY-VU3"/>
+        <segue reference="kAD-GO-v6x"/>
         <segue reference="pA5-CW-r5f"/>
     </inferredMetricsTieBreakers>
 </document>

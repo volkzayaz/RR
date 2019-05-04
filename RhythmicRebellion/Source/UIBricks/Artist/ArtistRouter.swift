@@ -24,11 +24,10 @@ struct ArtistRouter : MVVM_Router {
     
         let vc = R.storyboard.main.playlistContentViewController()!
         
-        let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
+        let router = PlaylistRouter(dependencies: DataLayer.get)
         router.sourceController = vc
         
         let vm = PlaylistViewModel(router: router,
-                                   
                                    provider: AlbumPlaylistProvider(album: album,
                                                                    instantDownload: false))
         vc.configure(viewModel: vm, router: router)
@@ -41,10 +40,9 @@ struct ArtistRouter : MVVM_Router {
         
         let vc = R.storyboard.main.playlistContentViewController()!
         
-        let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
+        let router = PlaylistRouter(dependencies: DataLayer.get)
         
         let vm = PlaylistViewModel(router: router,
-                                   
                                    provider: ArtistPlaylistProvider(artistPlaylist: playlist))
         vc.configure(viewModel: vm, router: router)
         

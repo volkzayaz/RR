@@ -77,11 +77,10 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
     func showDownloadAlbum(album: Album) {
         let vc = R.storyboard.main.playlistContentViewController()!
         
-        let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
+        let router = PlaylistRouter(dependencies: DataLayer.get)
         router.sourceController = vc
         
         let vm = PlaylistViewModel(router: router,
-                                   
                                    provider: AlbumPlaylistProvider(album: album,
                                                                    instantDownload: true))
         vc.configure(viewModel: vm, router: router)

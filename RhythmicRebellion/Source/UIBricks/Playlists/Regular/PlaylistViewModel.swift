@@ -144,7 +144,7 @@ final class PlaylistViewModel {
         return (tracksViewModel.trackProivder as! PlaylistProvider).playlist
     }
     
-    private(set) weak var router: PlaylistContentRouter!
+    private(set) weak var router: PlaylistRouter!
     
     let headerViewModel: PlaylistHeaderViewModel
     
@@ -153,7 +153,7 @@ final class PlaylistViewModel {
     
     // MARK: - Lifecycle -
 
-    init(router: PlaylistContentRouter,
+    init(router: PlaylistRouter,
          provider: PlaylistProvider) {
         
         self.router = router

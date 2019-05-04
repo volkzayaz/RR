@@ -1,5 +1,5 @@
 //
-//  PlayerMyPlaylistsViewController.swift
+//  MyPlaylistsViewController.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 8/6/18.
@@ -9,19 +9,19 @@
 
 import UIKit
 
-final class PlayerMyPlaylistsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+final class MyPlaylistsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var refreshControl: UIRefreshControl!
     @IBOutlet weak var collectionView: UICollectionView!
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: PlayerMyPlaylistsViewModel!
+    private(set) var viewModel: MyPlaylistsViewModel!
     private(set) var router: FlowRouter!
 
     // MARK: - Configuration -
 
-    func configure(viewModel: PlayerMyPlaylistsViewModel, router: FlowRouter) {
+    func configure(viewModel: MyPlaylistsViewModel, router: FlowRouter) {
         self.viewModel = viewModel
         self.router    = router
 
@@ -102,7 +102,7 @@ final class PlayerMyPlaylistsViewController: UIViewController, UICollectionViewD
 }
 
 // MARK: - Router -
-extension PlayerMyPlaylistsViewController {
+extension MyPlaylistsViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         router.prepare(for: segue, sender: sender)
@@ -118,7 +118,7 @@ extension PlayerMyPlaylistsViewController {
 
 }
 
-extension PlayerMyPlaylistsViewController: PlayerMyPlaylistsViewModelDelegate {
+extension MyPlaylistsViewController: PlayerMyPlaylistsViewModelDelegate {
 
     func refreshUI() {
 
