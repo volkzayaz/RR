@@ -46,11 +46,11 @@ extension URLRequestConvertible {
             let request = Alamofire.request(self)
             
             request
-                .responseData {
-                
-                if let c = $0.response?.statusCode,
+                .responseData { (response: DataResponse< Data >) in
+                    
+                if let c = response.response?.statusCode,
                    !(200..<299).contains(c),
-                   let maybeData = $0.data,
+                   let maybeData = response.data,
                    let restApiResponse = try? JSONDecoder().decode(ErrorResponse.self,
                                                                         from: maybeData) {
                     
@@ -59,8 +59,13 @@ extension URLRequestConvertible {
                     subscriber.onError( RRError.server(error: restApiResponse) )
                     return
                 }
+                
+                if let e = response.result.error {
+                    subscriber.onError(e)
+                    return
+                }
                     
-                guard let mappedResponse = $0.result.value else {
+                guard let mappedResponse = response.result.value else {
                     fatalError("Result is not success and not error")
                 }
                 

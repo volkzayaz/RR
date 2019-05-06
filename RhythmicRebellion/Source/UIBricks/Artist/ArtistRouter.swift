@@ -22,34 +22,22 @@ struct ArtistRouter : MVVM_Router {
     
     func show(album: Album) {
     
-        let vc = R.storyboard.main.playlistContentViewController()!
+        let vc = R.storyboard.main.playlistViewController()!
+        vc.viewModel = PlaylistViewModel(router: PlaylistRouter(owner: vc),
+                                         provider: AlbumPlaylistProvider(album: album,
+                                                                         instantDownload: false))
         
-        let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
-        router.sourceController = vc
-        
-        let vm = PlaylistViewModel(router: router,
-                                   
-                                   provider: AlbumPlaylistProvider(album: album,
-                                                                   instantDownload: false))
-        vc.configure(viewModel: vm, router: router)
-
         owner.navigationController?.pushViewController(vc, animated: true)
         
     }
     
     func show(playlist: ArtistPlaylist) {
         
-        let vc = R.storyboard.main.playlistContentViewController()!
-        
-        let router = DefaultPlaylistContentRouter(dependencies: DataLayer.get)
-        
-        let vm = PlaylistViewModel(router: router,
-                                   
-                                   provider: ArtistPlaylistProvider(artistPlaylist: playlist))
-        vc.configure(viewModel: vm, router: router)
+        let vc = R.storyboard.main.playlistViewController()!
+        vc.viewModel = PlaylistViewModel(router: PlaylistRouter(owner: vc),
+                                         provider: ArtistPlaylistProvider(artistPlaylist: playlist))
         
         owner.navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     func trackListRouter() -> TrackListRouter {

@@ -138,7 +138,8 @@ final class SignInViewModel {
                     
                 }, onError: { error in
                     
-                    guard let appError = error as? RRError, case .server(let e) = appError, let email = e.errors["email"]?.first else {
+                    guard let appError = error as? RRError,
+                        case .server(let e) = appError, let email = e.errors["email"]?.first else {
                         self.delegate?.show(error: error)
                         return
                     }

@@ -1,5 +1,5 @@
 //
-//  PlaylistContentRouter.swift
+//  PlaylistRouter.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 8/1/18.
@@ -9,24 +9,9 @@
 
 import UIKit
 
-protocol PlaylistContentRouter: FlowRouter {
+final class PlaylistRouter: FlowRouterSegueCompatible {
     
-    var owner: UIViewController { get }
-    
-    func showAddToPlaylist(for tracks: [Track])
-    func showAddToPlaylist(for playlist: Playlist)
-
-    func dismiss()
-    
-    func showOpenIn(url: URL, sourceRect: CGRect, sourceView: UIView)
-    
-}
-
-final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegueCompatible {
-    
-    var owner: UIViewController {
-        return sourceController!
-    }
+    var sourceController: UIViewController? { return owner }
     
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -48,51 +33,48 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
         }
     }
 
-    private(set) var dependencies: RouterDependencies
-
-    private(set) weak var viewModel: PlaylistViewModel?
-    weak var sourceController: UIViewController?
-
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         return true
     }
 
-    func prepare(for destination: DefaultPlaylistContentRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: PlaylistRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
         case .showAddTracksToPlaylist(let tracks):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
-            let addToPlaylistRouter = AddToPlaylistRouter(dependencies: dependencies)
+            let addToPlaylistRouter = AddToPlaylistRouter()
             addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
 
         case .showAddPlaylistToPlaylist(let playlist):
             guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
-            let addToPlaylistRouter = AddToPlaylistRouter(dependencies: dependencies)
+            let addToPlaylistRouter = AddToPlaylistRouter()
             addToPlaylistRouter.start(controller: addToPlaylistViewController, playlist: playlist)
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
+
+    weak var owner: UIViewController!
+    init(owner: UIViewController) {
+        self.owner = owner
     }
-
-    func start(controller: PlaylistContentViewController, playlist: Playlist) {
-        sourceController = controller
-
-        ////TODO: decouple the code further
-        let provider: PlaylistProvider
-        
-        if let x = playlist as? FanPlaylist {
-            provider = FanPlaylistProvider(fanPlaylist: x)
-        }
-        else {
-            provider = DefinedPlaylistProvider(playlist: playlist)
-        }
-        
-        let vm = PlaylistViewModel(router: self,
-                                   provider: provider)
-
-        controller.configure(viewModel: vm, router: self)
-    }
+//    
+//    func start(controller: PlaylistViewController, playlist: Playlist) {
+//        sourceController = controller
+//
+//        ////TODO: decouple the code further
+//        let provider: PlaylistProvider
+//        
+//        if let x = playlist as? FanPlaylist {
+//            provider = FanPlaylistProvider(fanPlaylist: x)
+//        }
+//        else {
+//            provider = DefinedPlaylistProvider(playlist: playlist)
+//        }
+//        
+//        let vm = PlaylistViewModel(router: self,
+//                                   provider: provider)
+//
+//        controller.configure(viewModel: vm, router: self)
+//    }
     
     func showAddToPlaylist(for tracks: [Track]) {
         self.perform(segue: .showAddTracksToPlaylist(tracks: tracks))
@@ -118,8 +100,3 @@ final class DefaultPlaylistContentRouter:  PlaylistContentRouter, FlowRouterSegu
     }
     
 }
-
-extension DefaultPlaylistContentRouter {
-
-}
-

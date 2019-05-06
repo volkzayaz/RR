@@ -104,7 +104,7 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
 
                 homeNavigationController.popToRootViewController(animated: false)
 
-                let homeRouter = DefaultHomeRouter(dependencies: self.dependencies)
+                let homeRouter = HomeRouter(dependencies: self.dependencies)
                 homeRouter.start(controller: homeViewController)
                 viewControllers.append(homeNavigationController)
 

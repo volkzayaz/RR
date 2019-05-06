@@ -9,19 +9,26 @@
 
 import Foundation
 
-final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
+protocol PlayerMyPlaylistsViewModelDelegate: class, ErrorPresenting, AlertActionsViewModelPersenting, ConfirmationPresenting {
+    
+    func refreshUI()
+    func reloadUI()
+    func reloadItem(at indexPath: IndexPath, completion: (() -> Void)?)
+}
+
+final class MyPlaylistsViewModel {
 
     // MARK: - Private properties -
 
     private(set) weak var delegate: PlayerMyPlaylistsViewModelDelegate?
-    private(set) weak var router: PlayerMyPlaylistsRouter?
+    private(set) weak var router: MyPlaylistsRouter?
 
     private(set) var playlists: [FanPlaylist] = [FanPlaylist]()
     private(set) var playlistsActivities: [Int : Int] = [Int : Int]()
 
     // MARK: - Lifecycle -
 
-    init(router: PlayerMyPlaylistsRouter) {
+    init(router: MyPlaylistsRouter) {
         self.router = router
         
         
@@ -229,7 +236,7 @@ final class PlayerMyPlaylistsControllerViewModel: PlayerMyPlaylistsViewModel {
     }
 }
 
-extension PlayerMyPlaylistsControllerViewModel {
+extension MyPlaylistsViewModel {
 
     func application( didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
 

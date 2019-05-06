@@ -13,16 +13,10 @@ final class AddToPlaylistViewController: UIViewController, UITableViewDataSource
     // MARK: - Public properties -
 
     @IBOutlet weak var tableView: UITableView!
-    private(set) var viewModel: AddToPlaylistViewModel!
-    private(set) var router: FlowRouter!
-
+    var viewModel: AddToPlaylistViewModel!
+    
     // MARK: - Configuration -
 
-    func configure(viewModel: AddToPlaylistViewModel, router: FlowRouter) {
-        self.viewModel = viewModel
-        self.router    = router
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -79,23 +73,6 @@ final class AddToPlaylistViewController: UIViewController, UITableViewDataSource
         tableView.contentInset = .zero
         tableView.scrollIndicatorInsets = .zero
     }
-}
-
-// MARK: - Router -
-extension AddToPlaylistViewController {
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        router.prepare(for: segue, sender: sender)
-        return super.prepare(for: segue, sender: sender)
-    }
-
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
-            return false
-        }
-        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
-    }
-
 }
 
 extension AddToPlaylistViewController: AddToPlaylistViewModelDelegate {
