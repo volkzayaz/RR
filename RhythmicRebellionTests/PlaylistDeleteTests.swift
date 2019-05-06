@@ -25,26 +25,15 @@ class PlaylistDeleteTests: XCTestCase {
         let data = try! JsonReader.readData(withName: "playlist")
         let patch = TrackReduxViewPatch(jsonData: data)
         
-        initAppState()
+        let playerState = PlayerState(tracks: LinkedPlaylist(),
+                                      lastPatch: nil,
+                                      currentItem: nil,
+                                      isBlocked: false,
+                                      lastChangeSignatureHash: WebSocketService.ownSignatureHash,
+                                      config: PlayerConfig.fake())
         
-//                ApplyReduxViewPatch
-//        
-//        var config = Config(hobbies: [], howHearList: [], languages: [])
-//        var user = User
-//        
-//        let state = AppState(player: PlayerState(tracks: LinkedPlaylist(),
-//                                                 lastPatch: nil,
-//                                                 currentItem: nil,
-//                                                 isBlocked: false,
-//                                                 lastChangeSignatureHash: WebSocketService.ownSignatureHash,
-//                                                 config: config),
-//                             user: user
-//        )
-//        
-//        
-//        
-//
-//                testObject.apply(patch: <#T##PlayerState.ReduxViewPatch#>)
+        let state = AppState(player: playerState, user: User.fake())
+    
         
         let x1 = Track.fake()
         

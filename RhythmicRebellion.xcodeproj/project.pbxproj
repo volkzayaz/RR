@@ -350,6 +350,8 @@
 		FB1B9A8D22806BCD00F1CDEC /* FakeArtist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A842280670000F1CDEC /* FakeArtist.swift */; };
 		FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */; };
 		FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */; };
+		FB1B9A9522808B0500F1CDEC /* FakeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */; };
+		FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */; };
 		FB257EB522803A39006D5006 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = FB257EB422803A39006D5006 /* playlist.json */; };
 		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
@@ -718,6 +720,8 @@
 		FB1B9A8A2280688C00F1CDEC /* FakeCountry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCountry.swift; sourceTree = "<group>"; };
 		FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTrackWriter.swift; sourceTree = "<group>"; };
 		FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfileLocation.swift; sourceTree = "<group>"; };
+		FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeConfig.swift; sourceTree = "<group>"; };
+		FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePlayerConfig.swift; sourceTree = "<group>"; };
 		FB257EB422803A39006D5006 /* playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = playlist.json; path = ../../../../../Downloads/playlist.json; sourceTree = "<group>"; };
 		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
@@ -2181,6 +2185,8 @@
 				FB1B9A882280682D00F1CDEC /* FakeTrack.swift */,
 				FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */,
 				FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */,
+				FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */,
+				FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */,
 			);
 			path = Fake;
 			sourceTree = "<group>";
@@ -2488,6 +2494,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB1B9A83228066DB00F1CDEC /* Fake.swift in Sources */,
+				FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */,
 				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
 				FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */,
 				736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */,
@@ -2499,6 +2506,7 @@
 				FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */,
 				FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */,
 				FB1B9A892280682D00F1CDEC /* FakeTrack.swift in Sources */,
+				FB1B9A9522808B0500F1CDEC /* FakeConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
