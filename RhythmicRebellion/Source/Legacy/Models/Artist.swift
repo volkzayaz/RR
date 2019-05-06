@@ -40,6 +40,25 @@ public struct Artist: Codable {
         case publishDate = "publish_date"
         case profileImage
     }
+    
+    init(withId id: String,
+         name: String,
+         subDomain: String? = nil,
+         likesCount: Int? = nil,
+         urlString: String? = nil,
+         addons: [Addon]? = nil,
+         publishDate: Date? = nil,
+         profileImage: Image? = nil) {
+        
+        self.id = id
+        self.name = name
+        self.subDomain = subDomain
+        self.likesCount = likesCount
+        self.urlString = urlString
+        self.addons = addons
+        self.publishDate = publishDate
+        self.profileImage = profileImage
+    }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

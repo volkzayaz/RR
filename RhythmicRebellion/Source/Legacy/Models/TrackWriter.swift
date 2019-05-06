@@ -30,7 +30,18 @@ struct TrackWriter: Codable {
         case urlString = "url"
         case publishDate = "publish_date"
     }
-
+    
+    init(withID id: String,
+         name: String,
+         urlString: String? = nil,
+         publishDate: Date? = nil) {
+        
+        self.id = id
+        self.name = name
+        self.urlString = urlString
+        self.publishDate = publishDate
+    }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre

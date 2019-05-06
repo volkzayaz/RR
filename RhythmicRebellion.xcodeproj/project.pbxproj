@@ -12,7 +12,6 @@
 		7327C9682252403800692810 /* ConfigRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327C9672252403800692810 /* ConfigRequest.swift */; };
 		734F827D2229965E0006E1DE /* Appfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82742229965E0006E1DE /* Appfile */; };
 		734F827F2229965E0006E1DE /* Fastfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82762229965E0006E1DE /* Fastfile */; };
-		734F828722299CD90006E1DE /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 734F828622299CD90006E1DE /* Info.plist */; };
 		7361C00222368375008EA36E /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C00122368375008EA36E /* Dispatcher.swift */; };
 		7361C006223684A2008EA36E /* ApplyReduxViewPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C005223684A2008EA36E /* ApplyReduxViewPatch.swift */; };
 		7361C008223684EE008EA36E /* InsertTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C007223684EE008EA36E /* InsertTracks.swift */; };
@@ -138,7 +137,6 @@
 		73F13838222C289200FB8EBC /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136BF222C289200FB8EBC /* Image.swift */; };
 		73F13839222C289200FB8EBC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136C0222C289200FB8EBC /* User.swift */; };
 		73F1383A222C289200FB8EBC /* PlayerPlaylistItemPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136C1222C289200FB8EBC /* PlayerPlaylistItemPatch.swift */; };
-		73F1383B222C289200FB8EBC /* Fake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136C2222C289200FB8EBC /* Fake.swift */; };
 		73F1383C222C289200FB8EBC /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136C3222C289200FB8EBC /* Purchase.swift */; };
 		73F1383D222C289200FB8EBC /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136C4222C289200FB8EBC /* Artist.swift */; };
 		73F1383E222C289200FB8EBC /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136C5222C289200FB8EBC /* Country.swift */; };
@@ -346,6 +344,17 @@
 		76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76F1FA4D20DBA92F00C9191F /* Assets.xcassets */; };
 		A7F42A6E16AAE7F75D33F1E5 /* Pods_RhythmicRebellionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B350D78B19F949C26942DB93 /* Pods_RhythmicRebellionTests.framework */; };
 		F36396C3EBC6647FA74987E9 /* Pods_RhythmicRebellion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */; };
+		FB1B9A83228066DB00F1CDEC /* Fake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136C2222C289200FB8EBC /* Fake.swift */; };
+		FB1B9A87228067E200F1CDEC /* FakeListeningSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A86228067E200F1CDEC /* FakeListeningSettings.swift */; };
+		FB1B9A892280682D00F1CDEC /* FakeTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A882280682D00F1CDEC /* FakeTrack.swift */; };
+		FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A8A2280688C00F1CDEC /* FakeCountry.swift */; };
+		FB1B9A8D22806BCD00F1CDEC /* FakeArtist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A842280670000F1CDEC /* FakeArtist.swift */; };
+		FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */; };
+		FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */; };
+		FB257EB522803A39006D5006 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = FB257EB422803A39006D5006 /* playlist.json */; };
+		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
+		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
+		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -705,6 +714,16 @@
 		B350D78B19F949C26942DB93 /* Pods_RhythmicRebellionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D77BE8BAE85CBA5F751BD2E5 /* Pods-RhythmicRebellion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.debug.xcconfig"; sourceTree = "<group>"; };
 		F05180DA2C91E533BD4FA6D5 /* Pods-RhythmicRebellionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.release.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.release.xcconfig"; sourceTree = "<group>"; };
+		FB1B9A842280670000F1CDEC /* FakeArtist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeArtist.swift; sourceTree = "<group>"; };
+		FB1B9A86228067E200F1CDEC /* FakeListeningSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeListeningSettings.swift; sourceTree = "<group>"; };
+		FB1B9A882280682D00F1CDEC /* FakeTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTrack.swift; sourceTree = "<group>"; };
+		FB1B9A8A2280688C00F1CDEC /* FakeCountry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCountry.swift; sourceTree = "<group>"; };
+		FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTrackWriter.swift; sourceTree = "<group>"; };
+		FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfileLocation.swift; sourceTree = "<group>"; };
+		FB257EB422803A39006D5006 /* playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = playlist.json; path = ../../../../../Downloads/playlist.json; sourceTree = "<group>"; };
+		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
+		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
+		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -912,6 +931,8 @@
 		736456A0220C7610005BE389 /* RhythmicRebellionTests */ = {
 			isa = PBXGroup;
 			children = (
+				FB257EBB22805044006D5006 /* Fake */,
+				FB257EB3228039BA006D5006 /* json */,
 				734F828522299CD90006E1DE /* support_files */,
 				736456A1220C7610005BE389 /* PlaylistDeleteTests.swift */,
 				736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */,
@@ -1239,7 +1260,6 @@
 				73F136BF222C289200FB8EBC /* Image.swift */,
 				73F136C0222C289200FB8EBC /* User.swift */,
 				73F136C1222C289200FB8EBC /* PlayerPlaylistItemPatch.swift */,
-				73F136C2222C289200FB8EBC /* Fake.swift */,
 				73F136C3222C289200FB8EBC /* Purchase.swift */,
 				73F136C4222C289200FB8EBC /* Artist.swift */,
 				73F136C5222C289200FB8EBC /* Country.swift */,
@@ -2135,6 +2155,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FB257EB3228039BA006D5006 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				FB257EB622803AC1006D5006 /* JsonReader.swift */,
+				FB257EB422803A39006D5006 /* playlist.json */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		FB257EBB22805044006D5006 /* Fake */ = {
+			isa = PBXGroup;
+			children = (
+				73F136C2222C289200FB8EBC /* Fake.swift */,
+				FB1B9A8A2280688C00F1CDEC /* FakeCountry.swift */,
+				FB257EBC228054A7006D5006 /* FakeUser.swift */,
+				FB257EBE228054B8006D5006 /* FakeUserProfile.swift */,
+				FB1B9A842280670000F1CDEC /* FakeArtist.swift */,
+				FB1B9A86228067E200F1CDEC /* FakeListeningSettings.swift */,
+				FB1B9A882280682D00F1CDEC /* FakeTrack.swift */,
+				FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */,
+				FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */,
+			);
+			path = Fake;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2230,7 +2275,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				734F828722299CD90006E1DE /* Info.plist in Resources */,
+				FB257EB522803A39006D5006 /* playlist.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2270,6 +2315,8 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityLogger/AlamofireNetworkActivityLogger.framework",
@@ -2277,7 +2324,6 @@
 				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/DownloadButton/DownloadButton.framework",
 				"${BUILT_PRODUCTS_DIR}/EasyTipView/EasyTipView.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MaterialTextField/MaterialTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/NSStringMask/NSStringMask.framework",
@@ -2291,11 +2337,12 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityLogger.framework",
@@ -2303,7 +2350,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DownloadButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyTipView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSStringMask.framework",
@@ -2317,7 +2363,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/youtube_ios_player_helper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2334,13 +2379,17 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2383,7 +2432,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift",
+				$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2433,8 +2482,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1B9A83228066DB00F1CDEC /* Fake.swift in Sources */,
+				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
+				FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */,
 				736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */,
+				FB1B9A8D22806BCD00F1CDEC /* FakeArtist.swift in Sources */,
+				FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */,
 				736456A2220C7610005BE389 /* PlaylistDeleteTests.swift in Sources */,
+				FB1B9A87228067E200F1CDEC /* FakeListeningSettings.swift in Sources */,
+				FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */,
+				FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */,
+				FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */,
+				FB1B9A892280682D00F1CDEC /* FakeTrack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2711,7 +2770,6 @@
 				7361C00222368375008EA36E /* Dispatcher.swift in Sources */,
 				73F1390C222C289200FB8EBC /* SpinnerView.swift in Sources */,
 				73F13854222C289200FB8EBC /* SelectableListItemViewModel.swift in Sources */,
-				73F1383B222C289200FB8EBC /* Fake.swift in Sources */,
 				73F138D1222C289200FB8EBC /* KaraokeIntervalCell.swift in Sources */,
 				7361C02C22369144008EA36E /* RemoveTrack.swift in Sources */,
 				73F13866222C289200FB8EBC /* ListeningSettingsViewModel.swift in Sources */,

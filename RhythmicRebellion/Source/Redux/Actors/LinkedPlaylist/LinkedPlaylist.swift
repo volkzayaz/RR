@@ -232,6 +232,7 @@ extension LinkedPlaylist: CustomStringConvertible {
 }
 
 extension LinkedPlaylist: Equatable {
+    
     static func == (lhs: LinkedPlaylist, rhs: LinkedPlaylist) -> Bool {
         
         guard lhs.previewTime == rhs.previewTime,

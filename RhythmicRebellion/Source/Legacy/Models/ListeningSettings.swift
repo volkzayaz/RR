@@ -36,16 +36,21 @@ struct ListeningSettings: Codable {
         return ListeningSettings(isSongCommentary: true, isSongCommentaryDate: false, isHearArtistsBio: true, isHearArtistsBioDate: false, isExplicitMaterialExcluded: false)
     }
 
-    init(isSongCommentary: Bool, isSongCommentaryDate: Bool, songCommentaryDate: Date? = Date(), isHearArtistsBio: Bool, isHearArtistsBioDate: Bool, artistsBioDate: Date? = Date(), isExplicitMaterialExcluded: Bool) {
+    init(isSongCommentary: Bool = false,
+         isSongCommentaryDate: Bool = false,
+         isHearArtistsBio: Bool = false,
+         isHearArtistsBioDate: Bool = false,
+         isExplicitMaterialExcluded: Bool = false,
+         songCommentaryDate: Date? = Date(),
+         artistsBioDate: Date? = Date()) {
+        
         self.isSongCommentary = isSongCommentary
         self.isSongCommentaryDate = isSongCommentaryDate
         self.songCommentaryDate = songCommentaryDate
-
         self.isHearArtistsBio = isHearArtistsBio
+        self.isExplicitMaterialExcluded = false
         self.isHearArtistsBioDate = isHearArtistsBioDate
         self.artistsBioDate = artistsBioDate
-
-        self.isExplicitMaterialExcluded = isExplicitMaterialExcluded
     }
 
     init(from decoder: Decoder) throws {

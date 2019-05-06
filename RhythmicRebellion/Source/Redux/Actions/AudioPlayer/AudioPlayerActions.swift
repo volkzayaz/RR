@@ -13,11 +13,11 @@ extension AudioPlayer {
     
     ///TODO: prepare proper naming and documentation on OrganicScrub and skipSeek stuff
     struct OrganicScrub: ActionCreator {
-    
+        
         let newValue: TimeInterval
         
         func perform(initialState: AppState) -> Observable<AppState> {
-        
+            
             guard initialState.player.lastChangeSignatureHash.isOwn else {
                 return .just(initialState)
             }
@@ -25,8 +25,8 @@ extension AudioPlayer {
             var state = initialState
             
             guard let currentTrackState = state.player.currentItem?.state,
-                  let currentTrack = state.currentTrack else {
-                return .just(state)
+                let currentTrack = state.currentTrack else {
+                    return .just(state)
             }
             
             ////Preview Rules
@@ -38,21 +38,21 @@ extension AudioPlayer {
                 return ProceedToNextItem().perform(initialState: initialState)
             }
             else if case .full? = currentTrack.track.previewType,
-                 let audioDuration = currentTrack.track.audioFile?.duration,
-                 let fullPreviewsAmount = currentTrack.track.previewLimitTimes,
-                 let μSecondsEllapsed = state.player.tracks.previewTime[currentTrack.track.id],
-                 (fullPreviewsAmount * audioDuration) - Int(μSecondsEllapsed / 1000) < 0,
-                 newValue > 45 {
+                let audioDuration = currentTrack.track.audioFile?.duration,
+                let fullPreviewsAmount = currentTrack.track.previewLimitTimes,
+                let μSecondsEllapsed = state.player.tracks.previewTime[currentTrack.track.id],
+                (fullPreviewsAmount * audioDuration) - Int(μSecondsEllapsed / 1000) < 0,
+                newValue > 45 {
                 return ProceedToNextItem().perform(initialState: initialState)
             }
-                
-                
+            
+            
             state.player.currentItem?.state = .init(progress: newValue,
                                                     isPlaying: currentTrackState.isPlaying,
                                                     skipSeek: ())
             
             return .just(state)
-        
+            
         }
         
     }

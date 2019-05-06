@@ -22,6 +22,11 @@ struct User: Codable, Equatable {
         case guest
     }
     
+    init(withUserProfile profile: UserProfile, wsToken: String) {
+        self.profile = profile
+        self.wsToken = wsToken
+    }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.wsToken = try container.decode(String.self, forKey: .wsToken)
@@ -33,6 +38,7 @@ struct User: Codable, Equatable {
     
     public func encode(to encoder: Encoder) throws {
         
+        //TODO: Need check
         //try self.profile.encode(to: encoder)
         
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -125,11 +131,50 @@ struct UserProfile: Codable {
         case tracksLikeStates = "likes"
         case skipAddonsArtistsIds = "skip_add_ons_for_artist_ids"
     }
+    
+    init(withID id: Int,
+         email: String,
+         nickname: String,
+         firstName: String,
+         location: ProfileLocation,
+         hobbies: [Hobby],
+         forceToPlay: Set<Int>,
+         followedArtistsIds: Set<String>,
+         purchasedAlbumsIds: Set<Int>,
+         purchasedTracksIds: Set<Int>,
+         tracksLikeStates:  [Int : Track.LikeStates],
+         skipAddonsArtistsIds: Set<String>,
+         listeningSettings: ListeningSettings,
+         genres: [Genre]? = nil,
+         gender: Gender? = nil,
+         birthDate: Date? = nil,
+         phone: String? = nil,
+         language: String? = nil) {
+        
+        self.id = id
+        self.email = email
+        self.nickname = nickname
+        self.firstName = firstName
+        self.location = location
+        self.hobbies = hobbies
+        self.genres = genres
+        self.gender = gender
+        self.birthDate = birthDate
+        self.phone = phone
+        self.language = language
+        self.forceToPlay = forceToPlay
+        self.followedArtistsIds = followedArtistsIds
+        self.purchasedAlbumsIds = purchasedAlbumsIds
+        self.purchasedTracksIds = purchasedTracksIds
+        self.tracksLikeStates = tracksLikeStates
+        self.skipAddonsArtistsIds = skipAddonsArtistsIds
+        self.listeningSettings = listeningSettings
+    }
 
     init(from decoder: Decoder) throws {
+        
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let dateFormatter = ModelSupport.sharedInstance.dateFormatter
-
 
         self.id = try container.decode(Int.self, forKey: .id)
         self.email = try container.decode(String.self, forKey: .email)

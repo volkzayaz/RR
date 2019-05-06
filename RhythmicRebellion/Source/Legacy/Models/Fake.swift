@@ -160,6 +160,24 @@ extension Artist: Fakeble {
     
 }
 
+extension User: Fakeble {
+    
+    
+//    var profile: UserProfile?
+//    let wsToken: String
+//    var isGuest: Bool {
+//        return profile == nil
+//    }
+//
+    static func fake() -> User {
+        return
+    }
+    
+    init() {
+        profile = UserProfile
+    }
+}
+
 extension TrackWriter: Fakeble {
     
     static func fake() -> TrackWriter {

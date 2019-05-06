@@ -93,8 +93,9 @@ extension RRPlayer {
     func connect() {
         
         appState.map { $0.user }
-            .map { Token(token: $0.wsToken,
-                         isGuest: $0.isGuest) }
+            .map {
+                Token(token: $0.wsToken, isGuest: $0.isGuest)
+            }
             .distinctUntilChanged()
             .drive(onNext: { [weak ws = webSocket] (token) in
                 ws?.connect(with: token)

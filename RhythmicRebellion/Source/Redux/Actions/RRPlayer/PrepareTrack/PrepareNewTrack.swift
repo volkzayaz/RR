@@ -83,7 +83,7 @@ struct PrepareNewTrack: ActionCreator {
                     DataLayer.get.webSocketService.markPlayed(addon: x,
                                                               for: self.orderedTrack.track)
                 }
-
+                
                 ///4
                 state.player.isBlocked = addons.count > 0
                 

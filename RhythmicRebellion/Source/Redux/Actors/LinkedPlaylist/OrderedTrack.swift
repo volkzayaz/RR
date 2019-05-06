@@ -15,9 +15,9 @@ struct OrderedTrack: Equatable {
     let track: Track
     let orderHash: TrackOrderHash
     
-    init(track: Track, hash: String? = nil) {
+    init(track: Track, hash: TrackOrderHash? = nil) {
         self.track = track
-        orderHash = hash ?? String(randomWithLength: 5, allowedCharacters: .alphaNumeric)
+        orderHash = hash ?? TrackOrderHash(randomWithLength: 5, allowedCharacters: .alphaNumeric)
     }
     
     func reduxView(previousTrack: OrderedTrack? = nil,

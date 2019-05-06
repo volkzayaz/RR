@@ -111,9 +111,7 @@ struct TrackReduxViewPatch: WSCommand {
             x.forEach { (key, value) in
                 
                 var v: Any? = value
-                if v is NSNull {
-                    v = nil
-                }
+                if v is NSNull { v = nil }
                 
                 p[ LinkedPlaylist.ViewKey(rawValue: key)! ] = v
             }

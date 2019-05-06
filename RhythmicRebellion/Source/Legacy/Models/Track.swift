@@ -85,6 +85,51 @@ public struct Track: Codable {
         case backingAudioFile = "backing_track"
         case price
     }
+    
+    init(id: Int,
+         songId: Int,
+         name: String,
+         radioInfo: String,
+         ownerId: String,
+         artist: Artist,
+         writer: TrackWriter,
+         images: [Image],
+         isCensorship: Bool = false,
+         isInstrumental: Bool = false,
+         isFreeForPlaylist: Bool = false,
+         isFollowAllowFreeDownload: Bool = false,
+         videoURLStrings: [String]? = nil,
+         previewType: TrackPreviewType? = nil,
+         previewLimitTimes: Int? = nil,
+         releaseDateFans: Date? = nil,
+         featuring: String? = nil,
+         audioFile: TrackAudioFile? = nil,
+         cleanAudioFile: DefaultAudioFile? = nil,
+         backingAudioFile: DefaultAudioFile? = nil,
+         price: Money? = nil) {
+        
+        self.id = id
+        self.songId = songId
+        self.name = name
+        self.radioInfo = radioInfo
+        self.ownerId = ownerId
+        self.isCensorship = isCensorship
+        self.isInstrumental = isInstrumental
+        self.isFreeForPlaylist = isFreeForPlaylist
+        self.isFollowAllowFreeDownload = isFollowAllowFreeDownload
+        self.artist = artist
+        self.writer = writer
+        self.images = images
+        self.videoURLStrings = videoURLStrings
+        self.previewType = previewType
+        self.previewLimitTimes = previewLimitTimes
+        self.releaseDateFans = releaseDateFans
+        self.featuring = featuring
+        self.audioFile = audioFile
+        self.cleanAudioFile = cleanAudioFile
+        self.backingAudioFile = backingAudioFile
+        self.price = price
+    }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
