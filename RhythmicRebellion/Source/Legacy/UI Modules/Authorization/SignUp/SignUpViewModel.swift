@@ -544,23 +544,24 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
                     
                 }, onError: { error in
                     
-                    guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                        self.delegate?.show(error: error)
-                        return
+                    guard let appError = error as? RRError,
+                        case .server(let e) = appError else {
+                            self.delegate?.show(error: error)
+                            return
                     }
                     
-                    switch appErrorGroup {
-                    case RestApiServiceError.serverError( let errorDescription, let errors):
-                        self.signUpErrorDescription = errorDescription
-                        for (key, errorStrings) in errors {
-                            guard let validatebleField = self.validatebleField(for: key), let validatebleFieldErrorString = errorStrings.first else { continue }
-                            
-                            let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
-                            self.delegate?.refreshField(field: validatebleField, didValidate: validationError)
-                        }
+                    self.signUpErrorDescription = e.message
+                    
+                    for (key, errorStrings) in e.errors {
+                        guard let x = self.validatebleField(for: key),
+                              let s = errorStrings.first else { continue }
                         
-                    default:
-                        self.delegate?.show(error: error)
+                        let validationError = ValidationError(field: x,
+                                                              errorLabel: nil,
+                                                              error: s)
+                        
+                        self.delegate?.refreshField(field: x,
+                                                    didValidate: validationError)
                     }
                     
                     self.delegate?.refreshUI()
