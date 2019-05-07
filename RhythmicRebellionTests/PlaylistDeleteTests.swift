@@ -18,6 +18,10 @@ class PlaylistDeleteTests: XCTestCase {
     let _appState = AppState.fake()
     
     override func setUp() {
+        
+        initActorStorage(x: ActorStorage(actors: [],
+                                         x: FakeWebSocketService()))
+        
         Dispatcher.state.accept(_appState)
         Dispatcher.beginSerialExecution()
     }

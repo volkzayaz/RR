@@ -37,7 +37,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     private(set) weak var authorizationNavigationDelgate: ForcedAuthorizationRouter?
     
     private(set) weak var viewModel: PagesViewModel?
@@ -52,19 +52,19 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         switch destination {
         case .showPageContent(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, delegate: self)
+            let pageContentRouter = DefaultPageContentRouter(delegate: self)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         case .showPageContentAnimated(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
-            let pageContentRouter = DefaultPageContentRouter(dependencies: self.dependencies, delegate: self)
+            let pageContentRouter = DefaultPageContentRouter(delegate: self)
             pageContentRouter.start(controller: pageContentViewController, page: page)
 
         }
     }
 
-    init(dependencies: RouterDependencies, authorizationNavigationDelgate: ForcedAuthorizationRouter?) {
-        self.dependencies = dependencies
+    init( authorizationNavigationDelgate: ForcedAuthorizationRouter?) {
+        
         self.authorizationNavigationDelgate = authorizationNavigationDelgate
 
         super.init()
@@ -73,7 +73,8 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     func start(controller: PagesViewController) {
         pagesViewController = controller
         controller.navigationController?.delegate = self
-        let vm = PagesControllerViewModel(router: self, pagesLocalStorage: self.dependencies.daPlayer.pagesLocalStorageService)
+        let vm = PagesControllerViewModel(router: self,
+                                          pagesLocalStorage: DataLayer.get.pagesLocalStorageService)
         controller.configure(viewModel: vm, router: self)
     }
 

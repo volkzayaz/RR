@@ -42,7 +42,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     
     private(set) weak var viewModel: ApplicationContentContainerViewModel?
     private(set) weak var applicationContentContainerViewController: ApplicationContentContainerViewController?
@@ -66,7 +66,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
         switch destination {
         case .tabBarController:
             guard let tabBarViewController = segue.destination as? TabBarViewController else { fatalError("Incorrect controller for TabBarSegueIdentifier") }
-            let tabBarRouter = DefaultTabBarRouter(dependencies: self.dependencies)
+            let tabBarRouter = DefaultTabBarRouter()
             tabBarRouter.start(controller: tabBarViewController)
             self.tabBarRouter = tabBarRouter
             self.applicationContentContainerViewController?.tabBarViewController = tabBarViewController
@@ -78,7 +78,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
             playerContentContainerViewController.transitioningDelegate = self.playerContentTransitioningDelegate
             playerContentContainerViewController.modalPresentationStyle = .overCurrentContext
 
-            let playerContentContainerRouter = DefaultPlayerContentContainerRouter(dependencies: self.dependencies, navigationDelegate: self)
+            let playerContentContainerRouter = DefaultPlayerContentContainerRouter(navigationDelegate: self)
             playerContentContainerRouter.start(controller: playerContentContainerViewController, navigationItem: playerNavigationItem)
 
             self.applicationContentContainerViewController?.playerContentContainerViewController = playerContentContainerViewController
@@ -86,9 +86,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: ApplicationContentContainerViewController) {
         applicationContentContainerViewController = controller

@@ -28,7 +28,7 @@ final class MyPlaylistsRouter: FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: MyPlaylistsViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -47,9 +47,7 @@ final class MyPlaylistsRouter: FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: MyPlaylistsViewController) {
         sourceController = controller

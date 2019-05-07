@@ -64,8 +64,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tipViewPreferences.animating.showInitialAlpha = 0
         tipViewPreferences.animating.showDuration = 1.5
         tipViewPreferences.animating.dismissDuration = 1.5
-//        tipViewPreferences.positioning.textHInset = 5.0
-//        tipViewPreferences.positioning.textVInset = 5.0
+        tipViewPreferences.positioning.textHInset = 5.0
+        tipViewPreferences.positioning.textVInset = 5.0
         EasyTipView.globalPreferences = tipViewPreferences
         
     }
@@ -87,7 +87,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NetworkActivityLogger.shared.level = .debug
         NetworkActivityLogger.shared.startLogging()
         
-        let defaultAppRouter = DefaultAppRouter(dependencies: RouterDependencies.get)
+        let x = ActorStorage(actors: [ RRPlayer(), AudioPlayer(), MediaWidget() ])
+        initActorStorage(x: x)
+        
+        let defaultAppRouter = AppRouter()
         defaultAppRouter.start(controller: appViewController)
         
         self.appRouter = defaultAppRouter

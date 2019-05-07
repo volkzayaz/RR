@@ -41,7 +41,7 @@ final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCom
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     private(set) weak var delegate: LyricsKaraokeRouterDelegate?
 
     private(set) weak var viewModel: LyricsKaraokeViewModel?
@@ -58,18 +58,18 @@ final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCom
         switch destination {
         case .showLyrics:
             guard let lyricsViewController = segue.destination as? LyricsViewController else { fatalError("Incorrect controller for LyricsSegueIdentifier") }
-            let lyricsRouter = DefaultLyricsRouter(dependencies: self.dependencies, delegate: self)
+            let lyricsRouter = DefaultLyricsRouter(delegate: self)
             lyricsRouter.start(controller: lyricsViewController)
 
         case .showKaraoke:
             guard let karaokeViewController = segue.destination as? KaraokeViewController else { fatalError("Incorrect controller for KaraokeSegueIdentifier") }
-            let karaokeRouter = DefaultKaraokeRouter(dependencies: self.dependencies)
+            let karaokeRouter = DefaultKaraokeRouter()
             karaokeRouter.start(controller: karaokeViewController)
         }
     }
 
-    init(dependencies: RouterDependencies, delegate: LyricsKaraokeRouterDelegate?) {
-        self.dependencies = dependencies
+    init( delegate: LyricsKaraokeRouterDelegate?) {
+        
         self.delegate = delegate
     }
 

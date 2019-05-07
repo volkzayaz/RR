@@ -32,7 +32,7 @@ final class DefaultChangeEmailRouter:  ChangeEmailRouter, FlowRouterSegueCompati
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: ChangeEmailViewModel?
     private(set) weak var changeEmailViewController: ChangeEmailViewController?
@@ -51,9 +51,7 @@ final class DefaultChangeEmailRouter:  ChangeEmailRouter, FlowRouterSegueCompati
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: ChangeEmailViewController) {
         changeEmailViewController = controller

@@ -92,7 +92,7 @@ final class HomeControllerViewModel: HomeViewModel {
         Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: .next))
     }
 
-    private func addToPlayerPlaylist(tracks: [Track], at position: RRPlayer.AddStyle) {
+    private func addToPlayerPlaylist(tracks: [Track], at position: AddTracksToLinkedPlaying.AddStyle) {
         Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: position))
     }
 

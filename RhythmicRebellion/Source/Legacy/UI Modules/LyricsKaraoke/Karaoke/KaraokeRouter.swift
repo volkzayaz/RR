@@ -31,7 +31,7 @@ final class DefaultKaraokeRouter:  KaraokeRouter, FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) var viewModel: KaraokeViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -47,9 +47,7 @@ final class DefaultKaraokeRouter:  KaraokeRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: KaraokeViewController) {
         sourceController = controller

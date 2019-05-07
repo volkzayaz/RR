@@ -65,7 +65,7 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
         }
     }
 
-    var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: PlayerViewModel?
     private(set) weak var playerViewController: PlayerViewController?
@@ -83,8 +83,8 @@ final class DefaultPlayerRouter:  PlayerRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies, navigationDelegate: PlayerNavigationDelgate) {
-        self.dependencies = dependencies
+    init( navigationDelegate: PlayerNavigationDelgate) {
+        
         self.navigationDelegate = navigationDelegate
     }
 

@@ -107,7 +107,8 @@ extension ArtistViewModel {
             router.show(album: album)
             
         case .track(let trackViewModel):
-            DataLayer.get.daPlayer.add(tracks: [trackViewModel.track], type: .now)
+            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [trackViewModel.track],
+                                                                 style: .now))
             
         case .playlist(let playlist):
             router.show(playlist: playlist)

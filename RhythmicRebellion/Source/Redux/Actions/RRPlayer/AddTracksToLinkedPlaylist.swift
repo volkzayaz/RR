@@ -11,8 +11,12 @@ import RxSwift
 
 struct AddTracksToLinkedPlaying: ActionCreator {
     
+    enum AddStyle {
+        case now, next, last
+    }
+    
     let tracks: [Track]
-    let style: RRPlayer.AddStyle
+    let style: AddStyle
     
     func perform(initialState: AppState) -> Observable<AppState> {
         

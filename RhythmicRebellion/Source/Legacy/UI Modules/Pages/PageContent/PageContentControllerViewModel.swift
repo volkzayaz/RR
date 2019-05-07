@@ -188,7 +188,7 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
         Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: .now))
     }
     
-    private func addToPlayerPlaylist(tracks: [Track], at position: RRPlayer.AddStyle) {
+    private func addToPlayerPlaylist(tracks: [Track], at position: AddTracksToLinkedPlaying.AddStyle) {
         Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: position))
     }
     
@@ -264,7 +264,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
             guard let jsonString = message.body as? String, let tracks = self.getTracks(from: jsonString) else { return }
             
             if tracks.count == 1, appStateSlice.currentTrack?.track == tracks.first {
-                DataLayer.get.daPlayer.flip()
+                Dispatcher.dispatch(action: AudioPlayer.Switch())
                 return
             }
             

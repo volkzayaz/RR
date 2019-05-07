@@ -61,7 +61,7 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: AuthorizationViewModel?
     private(set) weak var authorizationViewController: AuthorizationViewController?
@@ -77,11 +77,11 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
 
         switch viewController {
         case let signInViewController as SignInViewController:
-            let signInRouter = SignInRouter(dependencies: self.dependencies)
+            let signInRouter = SignInRouter()
             signInRouter.start(controller: signInViewController)
 
         case let signUpViewController as SignUpViewController:
-            let signUpRouter = DefaultSignUpRouter(dependencies: self.dependencies)
+            let signUpRouter = DefaultSignUpRouter()
             signUpRouter.start(controller: signUpViewController)
 
         default: break
@@ -103,9 +103,7 @@ final class DefaultAuthorizationRouter:  AuthorizationRouter, FlowRouterSegueCom
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: AuthorizationViewController) {
         authorizationViewController = controller

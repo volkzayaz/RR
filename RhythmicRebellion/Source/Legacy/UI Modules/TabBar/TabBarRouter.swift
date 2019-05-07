@@ -55,7 +55,7 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     weak var playerContentContainerRouter: PlayerContentContainerRouter?
     
@@ -77,9 +77,7 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: TabBarViewController) {
         tabBarViewController = controller
@@ -104,14 +102,14 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
 
                 homeNavigationController.popToRootViewController(animated: false)
 
-                let homeRouter = HomeRouter(dependencies: self.dependencies)
+                let homeRouter = HomeRouter()
                 homeRouter.start(controller: homeViewController)
                 viewControllers.append(homeNavigationController)
 
             case .settings:
                 guard let settingsNavigationController = viewController as? UINavigationController,
                     let listeningSettingsViewController = settingsNavigationController.viewControllers.first as? ListeningSettingsViewController else { break }
-                let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
+                let listeningSettingsRouter = DefaultListeningSettingsRouter()
                 listeningSettingsRouter.start(controller: listeningSettingsViewController)
                 viewControllers.append(settingsNavigationController)
 
@@ -121,27 +119,27 @@ final class DefaultTabBarRouter: NSObject, TabBarRouter, FlowRouterSegueCompatib
 
                 pagesNavigationController.popToRootViewController(animated: false)
 
-                let pagesRouter = DefaultPagesRouter(dependencies: self.dependencies, authorizationNavigationDelgate: self)
+                let pagesRouter = DefaultPagesRouter(authorizationNavigationDelgate: self)
                 pagesRouter.start(controller: pagesViwController)
                 viewControllers.append(pagesNavigationController)
 
             case .profile:
                 guard let profileNavigationController = viewController as? UINavigationController,
                     let profileViwController = profileNavigationController.viewControllers.first as? ProfileViewController else { break }
-                let profileRouter = DefaultProfileRouter(dependencies: self.dependencies)
+                let profileRouter = DefaultProfileRouter()
                 profileRouter.start(controller: profileViwController)
                 viewControllers.append(profileNavigationController)
 
             case .authorization:
                 guard let authorizationNavigationController = viewController as? UINavigationController,
                     let authorizationViewController = authorizationNavigationController.viewControllers.first as? AuthorizationViewController else { break }
-                let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
+                let authorizationRouter = DefaultAuthorizationRouter()
                 authorizationRouter.start(controller: authorizationViewController)
                 viewControllers.append(authorizationNavigationController)
 
 //            case .listeningSettings:
 //                guard let listeningSettingsViewController = viewController as? ListeningSettingsViewController else { break }
-//                let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
+//                let listeningSettingsRouter = DefaultListeningSettingsRouter
 //                listeningSettingsRouter.start(controller: listeningSettingsViewController)
 //                viewControllers.append(listeningSettingsViewController)
 
@@ -188,7 +186,7 @@ extension DefaultTabBarRouter: ForcedAuthorizationRouter {
             else { return }
 
         self.tabBarViewController?.selectedViewController = authorizationNavigationController
-        let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
+        let authorizationRouter = DefaultAuthorizationRouter()
         authorizationRouter.start(controller: authorizationViwController)
 
         authorizationRouter.change(authorizationType: authorizationType)
@@ -207,19 +205,19 @@ extension DefaultTabBarRouter: UITabBarControllerDelegate {
         case .authorization:
             guard let authorizationNavigationController = viewController as? UINavigationController,
                 let authorizationViwController = authorizationNavigationController.viewControllers.first as? AuthorizationViewController else { break }
-            let authorizationRouter = DefaultAuthorizationRouter(dependencies: self.dependencies)
+            let authorizationRouter = DefaultAuthorizationRouter()
             authorizationRouter.start(controller: authorizationViwController)
 
         case .settings:
             guard let settingsNavigationController = viewController as? UINavigationController,
                 let listeningSettingsViewController = settingsNavigationController.viewControllers.first as? ListeningSettingsViewController else { break }
-            let listeningSettingsRouter = DefaultListeningSettingsRouter(dependencies: self.dependencies)
+            let listeningSettingsRouter = DefaultListeningSettingsRouter()
             listeningSettingsRouter.start(controller: listeningSettingsViewController)
 
         case .profile:
             guard let profileNavigationController = viewController as? UINavigationController,
                 let profileViewController = profileNavigationController.viewControllers.first as? ProfileViewController else { break }
-            let profileRouter = DefaultProfileRouter(dependencies: self.dependencies)
+            let profileRouter = DefaultProfileRouter()
             profileRouter.start(controller: profileViewController)
 
 

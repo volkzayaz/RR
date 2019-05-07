@@ -38,7 +38,7 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: NowPlayingViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -58,9 +58,7 @@ final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSe
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: NowPlayingViewController) {
         sourceController = controller

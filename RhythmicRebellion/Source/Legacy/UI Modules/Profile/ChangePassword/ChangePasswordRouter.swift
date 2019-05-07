@@ -32,7 +32,7 @@ final class DefaultChangePasswordRouter:  ChangePasswordRouter, FlowRouterSegueC
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     
     private(set) weak var viewModel: ChangePasswordViewModel?
     private(set) weak var changePasswordViewController: ChangePasswordViewController?
@@ -50,9 +50,7 @@ final class DefaultChangePasswordRouter:  ChangePasswordRouter, FlowRouterSegueC
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
     
     func start(controller: ChangePasswordViewController) {
         changePasswordViewController = controller

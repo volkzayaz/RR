@@ -41,7 +41,7 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
     private(set) weak var viewModel: PageContentViewModel?
     private(set) weak var sourceController: UIViewController?
 
-    private(set) var dependencies: RouterDependencies
+    
     private(set) weak var delegate: PageContentRouterDelegate?
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -55,14 +55,15 @@ final class DefaultPageContentRouter:  PageContentRouter, FlowRouterSegueCompati
         }
     }
 
-    init(dependencies: RouterDependencies, delegate: PageContentRouterDelegate?) {
-        self.dependencies = dependencies
+    init( delegate: PageContentRouterDelegate?) {
+        
         self.delegate = delegate
     }
 
     func start(controller: PageContentViewController, page: Page) {
         sourceController = controller
-        let vm = PageContentControllerViewModel(router: self, page: page, pagesLocalStorage: self.dependencies.daPlayer.pagesLocalStorageService)
+        let vm = PageContentControllerViewModel(router: self, page: page,
+                                                pagesLocalStorage: DataLayer.get.pagesLocalStorageService)
         controller.configure(viewModel: vm, router: self)
     }
 

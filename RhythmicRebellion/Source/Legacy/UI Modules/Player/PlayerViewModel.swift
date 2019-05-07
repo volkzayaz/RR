@@ -325,21 +325,21 @@ final class PlayerViewModel: NSObject {
     // MARK: - Actions -
 
     func play() {
-        DataLayer.get.daPlayer.play()
+        Dispatcher.dispatch(action: AudioPlayer.Play())
         
     }
 
     func pause() {
-        DataLayer.get.daPlayer.pause()
+        Dispatcher.dispatch(action: AudioPlayer.Pause())
         
     }
 
     func forward() {
-        DataLayer.get.daPlayer.skipForward()
+        Dispatcher.dispatch(action: ProceedToNextItem())
     }
 
     func backward() {
-        DataLayer.get.daPlayer.skipBack()
+        Dispatcher.dispatch(action: GetBackToPreviousItem())
     }
 
     func toggleLike() {
@@ -359,7 +359,7 @@ final class PlayerViewModel: NSObject {
     }
 
     func setPlayerItemProgress(progress: Float) {
-        DataLayer.get.daPlayer.seek(to: progress)
+        Dispatcher.dispatch(action: ScrubToFraction(fraction: progress))
     }
 
     func toggleArtistFollowing() {

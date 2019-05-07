@@ -31,7 +31,7 @@ final class DefaultListeningSettingsRouter:  ListeningSettingsRouter, FlowRouter
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     
     private(set) weak var viewModel: ListeningSettingsViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -46,9 +46,7 @@ final class DefaultListeningSettingsRouter:  ListeningSettingsRouter, FlowRouter
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: ListeningSettingsViewController) {
         sourceController = controller

@@ -54,7 +54,7 @@ extension AudioPlayer {
     
 }
 
-class AudioPlayer: NSObject {
+class AudioPlayer: NSObject, Actor {
     
     fileprivate let player: AVQueuePlayer = AVQueuePlayer(items: [])
     

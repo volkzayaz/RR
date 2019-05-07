@@ -64,7 +64,8 @@ final class NowPlayingViewModel {
             if t.track.isPlayable {
                 
                 let playNow = ActionViewModel(.playNow) {
-                    DataLayer.get.daPlayer.switch(to: orderedTrack)
+                    Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack,
+                                                                shouldPlayImmidiatelly: true))
                 }
                 
                 result.append(playNow)
@@ -85,7 +86,7 @@ final class NowPlayingViewModel {
             /////3
             
             let delete = ActionViewModel(.delete) {
-                DataLayer.get.daPlayer.remove(track: orderedTrack)
+                Dispatcher.dispatch(action: RemoveTrack(orderedTrack: orderedTrack))
             }
             
             result.append(delete)
@@ -115,11 +116,12 @@ extension NowPlayingViewModel {
         }
         
         if appStateSlice.currentTrack != orderedTrack {
-            DataLayer.get.daPlayer.switch(to: orderedTrack)
+            Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack,
+                                                        shouldPlayImmidiatelly: true))
             return
         }
         
-        DataLayer.get.daPlayer.flip()
+        Dispatcher.dispatch(action: AudioPlayer.Switch())
     }
     
     func confirmation(for action : PlayerNowPlayingTableHeaderView.Actions) -> ConfirmationAlertViewModel.ViewModel? {
@@ -128,7 +130,7 @@ extension NowPlayingViewModel {
         case .clear:
             return ConfirmationAlertViewModel.Factory.makeClearPlaylistViewModel(actionCallback: { (actionType) in
                 switch actionType {
-                case .ok: DataLayer.get.daPlayer.clear()
+                case .ok: Dispatcher.dispatch(action: ClearTracks())
                 default: break
                 }
             })
@@ -139,7 +141,7 @@ extension NowPlayingViewModel {
     func perform(action : PlayerNowPlayingTableHeaderView.Actions) {
         switch action {
         case .clear:
-            DataLayer.get.daPlayer.clear()
+            Dispatcher.dispatch(action: ClearTracks())
             
         default:
             break

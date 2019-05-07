@@ -28,7 +28,7 @@ final class SignInRouter: FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: SignInViewModel?
     private(set) weak var signInViewController: SignInViewController?
@@ -43,14 +43,12 @@ final class SignInRouter: FlowRouterSegueCompatible {
         switch destination {
         case .showRestorePassword(let email):
             guard let restorePasswordViewController = segue.destination as? RestorePasswordViewController else { fatalError("Incorrect controller for restorePassword") }
-            let restorePasswordRouter = DefaultRestorePasswordRouter(dependencies: dependencies)
+            let restorePasswordRouter = DefaultRestorePasswordRouter()
             restorePasswordRouter.start(controller: restorePasswordViewController, email: email)
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: SignInViewController) {
         signInViewController = controller

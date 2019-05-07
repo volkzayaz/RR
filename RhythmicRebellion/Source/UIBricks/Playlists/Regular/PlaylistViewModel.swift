@@ -177,15 +177,18 @@ final class PlaylistViewModel {
             if t.track.isPlayable {
                 
                 let playNow = ActionViewModel(.playNow) {
-                    DataLayer.get.daPlayer.add(tracks: [t.track], type: .now)
+                    Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
+                                                                         style: .now))
                 }
                 
                 let playNext = ActionViewModel(.playNext) {
-                    DataLayer.get.daPlayer.add(tracks: [t.track], type: .next)
+                    Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
+                                                                         style: .next))
                 }
                 
                 let playLast = ActionViewModel(.playLast) {
-                    DataLayer.get.daPlayer.add(tracks: [t.track], type: .last)
+                    Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
+                                                                         style: .last))
                 }
                 
                 result.append(playNow)
@@ -270,11 +273,12 @@ extension PlaylistViewModel {
         }
         
         if appStateSlice.currentTrack?.track != track {
-            DataLayer.get.daPlayer.add(tracks: [track], type: .now)
+            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [track],
+                                                                 style: .now))
             return
         }
         
-        DataLayer.get.daPlayer.flip()
+        Dispatcher.dispatch(action: AudioPlayer.Switch())
     }
     
 }
@@ -320,13 +324,16 @@ extension PlaylistViewModel {
         
         switch actionType {
         case .playNow:
-            DataLayer.get.daPlayer.add(tracks: tracks, type: .now)
+            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
+                                                                 style: .now))
             
         case .playNext:
-            DataLayer.get.daPlayer.add(tracks: tracks, type: .next)
+            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
+                                                                 style: .next))
             
         case .playLast:
-            DataLayer.get.daPlayer.add(tracks: tracks, type: .last)
+            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
+                                                                 style: .last))
             
         case .replaceCurrent:
             Dispatcher.dispatch(action: ReplaceTracks(with: tracks))

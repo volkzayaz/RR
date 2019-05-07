@@ -34,7 +34,7 @@ final class DefaultLyricsRouter:  LyricsRouter, FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     private(set) weak var delegate: LyricsRouterDelegate?
 
     private(set) weak var viewModel: LyricsViewModel?
@@ -50,8 +50,8 @@ final class DefaultLyricsRouter:  LyricsRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies, delegate: LyricsRouterDelegate? = nil) {
-        self.dependencies = dependencies
+    init( delegate: LyricsRouterDelegate? = nil) {
+        
         self.delegate = delegate
     }
 

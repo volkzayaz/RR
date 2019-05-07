@@ -47,7 +47,7 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRout
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     
     private(set) var viewModel: PlayerPlaylistRootViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -61,12 +61,12 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRout
         switch destination {
         case .nowPlaying:
             guard let nowPlayingViewController = segue.destination as? NowPlayingViewController else { fatalError("Incorrect controller for PlayerNowPlayingViewControllerSegueIdentifier") }
-            let nowPlayingRouter = DefaultPlayerNowPlayingRouter(dependencies: self.dependencies)
+            let nowPlayingRouter = DefaultPlayerNowPlayingRouter()
             nowPlayingRouter.start(controller: nowPlayingViewController)
 
         case .myPlaylists:
             guard let myPlaylistsViewController = segue.destination as? MyPlaylistsViewController else { fatalError("Incorrect controller for PlayerMyPlaylistsViewControllerSegueIdentifier") }
-            let myPlaylistsRouter = MyPlaylistsRouter(dependencies: self.dependencies)
+            let myPlaylistsRouter = MyPlaylistsRouter()
             myPlaylistsRouter.start(controller: myPlaylistsViewController)
 
         case .following:
@@ -79,9 +79,7 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRout
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: PlayerPlaylistRootViewController) {
         sourceController = controller

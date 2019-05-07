@@ -49,7 +49,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     
     private(set) weak var viewModel: SignUpViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -64,7 +64,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
 
         case .showContriesSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for contriesSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
             let countriesSelectableListControllerViewModel = ContriesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                        dataSource: dataSource,
                                                                                                        selectedItem: selectedItem,
@@ -74,7 +74,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
 
         case .showRegionsSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
             let regionsSelectableListControllerViewModel = RegionsSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                     dataSource: dataSource,
                                                                                                     selectedItem: selectedItem,
@@ -84,7 +84,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
 
         case .showCitiesSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
             let citiesSelectableListControllerViewModel = CitiesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                   dataSource: dataSource,
                                                                                                   selectedItem: selectedItem,
@@ -94,7 +94,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
 
         case .showHobbiesSelectableList(let dataSource, let selectedItems, let additionalItems, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for hobbiesSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
 
             let hobbiesSelectableListControllerViewModel = HobbiesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                     dataSource: dataSource,
@@ -106,7 +106,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
 
         case .showHowHearSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
 
             let howHearSelectableListControllerViewModel = HowHearSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                     dataSource: dataSource,
@@ -117,9 +117,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: SignUpViewController) {
         sourceController = controller

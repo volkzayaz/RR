@@ -153,20 +153,34 @@ struct PresentationSource {
     let barButtonItem: UIBarButtonItem?
 }
 
-struct RouterDependencies {
-    
-    var webSocketService: WebSocketService {
-        return daPlayer.webSocket
-    }
-    
-    let daPlayer: RRPlayer!
-    
+protocol Actor {
 }
 
-typealias DataLayer = RouterDependencies
+struct ActorStorage {
+    
+    let actors: [Actor]
+    
+    let webSocketService: WebSocketService
+    
+    init(actors: [Actor], x: WebSocketService = WebSocketService(url: URI.webSocketService)) {
+        self.actors = actors
+        self.webSocketService = x
+    }
 
-extension RouterDependencies {
-    static var get: RouterDependencies {
-        return RouterDependencies(daPlayer: RRPlayer())
+    let pagesLocalStorageService = PagesLocalStorageService()
+}
+
+import RxSwift
+private var actorStorage: ActorStorage!
+func initActorStorage(x: ActorStorage) {
+    actorStorage = x
+}
+
+typealias DataLayer = ActorStorage
+
+extension ActorStorage {
+    static var get: ActorStorage {
+        return actorStorage!
     }
 }
+

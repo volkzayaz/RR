@@ -54,7 +54,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: ProfileSettingsViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -68,7 +68,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
         switch destination {
         case .showContriesSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for contriesSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
             let countriesSelectableListControllerViewModel = ContriesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                        dataSource: dataSource,
                                                                                                        selectedItem: selectedItem,
@@ -78,7 +78,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
         case .showRegionsSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
             let regionsSelectableListControllerViewModel = RegionsSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                     dataSource: dataSource,
                                                                                                     selectedItem: selectedItem,
@@ -88,7 +88,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
         case .showCitiesSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for regionsSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
             let citiesSelectableListControllerViewModel = CitiesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                   dataSource: dataSource,
                                                                                                   selectedItem: selectedItem,
@@ -98,7 +98,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
         case .showHobbiesSelectableList(let dataSource, let selectedItems, let additionalItems, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for hobbiesSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
 
             let hobbiesSelectableListControllerViewModel = HobbiesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                     dataSource: dataSource,
@@ -110,7 +110,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
         case .showGenresSelectableList(let dataSource, let selectedItems, let additionalItems, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for GenresSelectableListSegueIdentifier") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
 
             let genresSelectableListControllerViewModel = GenresSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                    dataSource: dataSource,
@@ -122,7 +122,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
 
         case .showLanguagesSelectableList(let dataSource, let selectedItem, let selectionCallback):
             guard let selectableListViewController = segue.destination as? SelectableListViewController else { fatalError("Incorrect controller for showLanguagesSelectableList") }
-            let selectableListRouter = DefaultSelectableListRouter(dependencies: self.dependencies)
+            let selectableListRouter = DefaultSelectableListRouter()
             let citiesSelectableListControllerViewModel = LanguagesSelectableListControllerViewModel(router: selectableListRouter,
                                                                                                   dataSource: dataSource,
                                                                                                   selectedItem: selectedItem,
@@ -133,9 +133,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: ProfileSettingsViewController) {
         sourceController = controller

@@ -41,7 +41,7 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: ProfileViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -54,24 +54,22 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
         switch destination {
         case .profileSettings:
             guard let profileSettingsViewController = segue.destination as? ProfileSettingsViewController else { fatalError("Incorrect controller for ProfileSettingsSegueIdentifier") }
-            let profileSettingsRouter = DefaultProfileSettingsRouter(dependencies: self.dependencies)
+            let profileSettingsRouter = DefaultProfileSettingsRouter()
             profileSettingsRouter.start(controller: profileSettingsViewController)
 
         case .changeEmail:
             guard let changeEmailViewController = segue.destination as? ChangeEmailViewController else { fatalError("Incorrect controller for ChangeEmailSegueIdentifier") }
-            let changeEmailRouter = DefaultChangeEmailRouter(dependencies: self.dependencies)
+            let changeEmailRouter = DefaultChangeEmailRouter()
             changeEmailRouter.start(controller: changeEmailViewController)
 
         case .changePassword:
             guard let changePasswordViewController = segue.destination as? ChangePasswordViewController else { fatalError("Incorrect controller for ChangePasswordSegueIdentifier") }
-            let changePasswordRouter = DefaultChangePasswordRouter(dependencies: self.dependencies)
+            let changePasswordRouter = DefaultChangePasswordRouter()
             changePasswordRouter.start(controller: changePasswordViewController)
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: ProfileViewController) {
         sourceController = controller
@@ -81,11 +79,11 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
         for viewController in controller.navigationController?.viewControllers ?? [] {
             switch viewController {
             case let changePasswordViewController as ChangePasswordViewController:
-                let changePasswordRouter = DefaultChangePasswordRouter(dependencies: self.dependencies)
+                let changePasswordRouter = DefaultChangePasswordRouter()
                 changePasswordRouter.start(controller: changePasswordViewController)
 
             case let changeEmailViewController as ChangeEmailViewController:
-                let changeEmailRouter = DefaultChangeEmailRouter(dependencies: self.dependencies)
+                let changeEmailRouter = DefaultChangeEmailRouter()
                 changeEmailRouter.start(controller: changeEmailViewController)
 
             default: break

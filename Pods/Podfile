@@ -31,7 +31,7 @@ target 'RhythmicRebellion' do
     pod 'CloudTagView', '~> 3.0.0'
     pod 'NSStringMask'
     pod 'DownloadButton'
-    pod 'EasyTipView', '~> 2.0.0'
+    pod 'EasyTipView', '= 2.0.1'
 
     #infrastructure
     pod 'RxDataSources', '~> 3.1.0'

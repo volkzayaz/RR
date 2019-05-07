@@ -28,7 +28,7 @@ final class HomeRouter: FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
     
     private(set) weak var viewModel: HomeViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -47,9 +47,7 @@ final class HomeRouter: FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: HomeViewController) {
         sourceController = controller

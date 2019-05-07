@@ -9,7 +9,7 @@ PODS:
     - Fabric (~> 1.9.0)
   - Differentiator (3.1.0)
   - DownloadButton (0.1.0)
-  - EasyTipView (2.0.4)
+  - EasyTipView (2.0.1)
   - Fabric (1.9.0)
   - Firebase/Core (5.20.2):
     - Firebase/CoreOnly
@@ -92,7 +92,7 @@ DEPENDENCIES:
   - CloudTagView (~> 3.0.0)
   - Crashlytics (~> 3.12.0)
   - DownloadButton
-  - EasyTipView (~> 2.0.0)
+  - EasyTipView (= 2.0.1)
   - Fabric (~> 1.9.0)
   - Firebase/Core
   - MaterialTextField (~> 1.0)
@@ -159,7 +159,7 @@ SPEC CHECKSUMS:
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
-  EasyTipView: 4f8beae0a82db2ca4a9b5fd658785fc5f61d296b
+  EasyTipView: 1515544456d6e943240012e9be5d25d1bb766603
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   Firebase: 0c8cf33f266410c61ab3e2265cfa412200351d9c
   FirebaseAnalytics: ece1aa57a4f43c64d53a648b5a5e05151aae947b
@@ -184,6 +184,6 @@ SPEC CHECKSUMS:
   SwiftValidator: 58c155c8ae8421ef716a96e52a49984dd54c700c
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: 1a6e8ffe68851f2847eade27ba64e832abeb926f
+PODFILE CHECKSUM: 797a91ca745e7356416e135f9b2669d3e3048124
 
 COCOAPODS: 1.6.1

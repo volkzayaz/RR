@@ -9,11 +9,7 @@
 
 import UIKit
 
-protocol AppRouter: FlowRouter {
-    var dependencies: RouterDependencies { get }
-}
-
-final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
+final class AppRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -43,7 +39,7 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
         }
     }
 
-    var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: AppViewModel?
     private(set) weak var appViewController: AppViewController?
@@ -57,26 +53,24 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
         return true
     }
 
-    func prepare(for destination: DefaultAppRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: AppRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .player:
             guard let playerViewController = segue.destination as? PlayerViewController else { fatalError("Incorrect controller for PlayerSegueIdentifier") }
-            let playerRouter = DefaultPlayerRouter(dependencies: self.dependencies, navigationDelegate: self)
+            let playerRouter = DefaultPlayerRouter(navigationDelegate: self)
             playerRouter.start(controller: playerViewController)
 
         case .contentContainer:
             guard let contentContainerViewController = segue.destination as? ApplicationContentContainerViewController else { fatalError("Incorrect controller for ContentContainerSegueIdentifier") }
-            let contentContainerRouter = DefaultApplicationContentContainerRouter(dependencies: self.dependencies)
+            let contentContainerRouter = DefaultApplicationContentContainerRouter()
             contentContainerRouter.start(controller: contentContainerViewController)
             self.appViewController?.contentContainerViewController = contentContainerViewController
             self.contentContainerRouter = contentContainerRouter
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
     func start(controller: AppViewController) {
         appViewController = controller
@@ -85,7 +79,7 @@ final class DefaultAppRouter:  AppRouter, FlowRouterSegueCompatible {
     }
 }
 
-extension DefaultAppRouter: PlayerNavigationDelgate {
+extension AppRouter: PlayerNavigationDelgate {
 
     func navigate(to playerNavigationItem: PlayerNavigationItem) {
         self.contentContainerRouter?.navigate(to: playerNavigationItem)

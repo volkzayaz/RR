@@ -94,7 +94,7 @@ extension ContinueFacebookRegistrationViewModel {
         let vc = R.storyboard.selectableList.selectableListViewControllerIdentifer()!
         
         ///TODO: drop stupid datasource here
-        let router = DefaultSelectableListRouter(dependencies: RouterDependencies.get)
+        let router = DefaultSelectableListRouter()
         
         class DataSource: CountriesDataSource {
             

@@ -32,7 +32,7 @@ final class DefaultSelectableListRouter:  SelectableListRouter, FlowRouterSegueC
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: SelectableListViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -48,9 +48,7 @@ final class DefaultSelectableListRouter:  SelectableListRouter, FlowRouterSegueC
         }
     }
 
-    init(dependencies: RouterDependencies) {
-        self.dependencies = dependencies
-    }
+    
 
 //    func start(controller: SelectableListViewController, selectionType: .single) {
 //        sourceController = controller

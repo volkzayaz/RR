@@ -37,7 +37,7 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
         }
     }
 
-    var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: PlayerContentContainerViewModel?
     private(set) weak var playerContentContainerViewController: PlayerContentContainerViewController?
@@ -61,8 +61,8 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
         return PlayerNavigationItem.NavigationType(rawValue: tabBarItem.tag)
     }
 
-    init(dependencies: RouterDependencies, navigationDelegate: PlayerContentNavigationDelgate?) {
-        self.dependencies = dependencies
+    init( navigationDelegate: PlayerContentNavigationDelgate?) {
+        
         self.navigationDelegate = navigationDelegate
     }
 
@@ -80,17 +80,17 @@ final class DefaultPlayerContentContainerRouter:  PlayerContentContainerRouter, 
                 
             case .lyrics:
                 guard let lyricsKaraokeViewController = childViewController as? LyricsKaraokeViewController else { continue }
-                let lyricsKaraokeRouter = DefaultLyricsKaraokeRouter(dependencies: self.dependencies, delegate: self.navigationDelegate)
+                let lyricsKaraokeRouter = DefaultLyricsKaraokeRouter(delegate: self.navigationDelegate)
                 lyricsKaraokeRouter.start(controller: lyricsKaraokeViewController)
             case .playlist:
                 guard let navigationController = childViewController as? UINavigationController,
                     let playerPlaylistRootViewController = navigationController.viewControllers.first as? PlayerPlaylistRootViewController else { continue }
-                let playerPlaylistRootRouter = DefaultPlayerPlaylistRootRouter(dependencies: self.dependencies)
+                let playerPlaylistRootRouter = DefaultPlayerPlaylistRootRouter()
                 playerPlaylistRootRouter.start(controller: playerPlaylistRootViewController)
             case .promo:
                 guard let navigationController = childViewController as? UINavigationController,
                     let promoViewController = navigationController.viewControllers.first as? PromoViewController else { continue }
-                let promoRouter = DefaultPromoRouter(dependencies: self.dependencies, delegate: self.navigationDelegate)
+                let promoRouter = DefaultPromoRouter(delegate: self.navigationDelegate)
                 promoRouter.start(controller: promoViewController)
             }
         }

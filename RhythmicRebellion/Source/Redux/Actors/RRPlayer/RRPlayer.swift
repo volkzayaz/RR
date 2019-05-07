@@ -13,22 +13,13 @@ import RxSwift
  *  All the rules about syncing player state between clients live in this actor
  */
 
-class RRPlayer {
+class RRPlayer: Actor {
     
-    let webSocket: WebSocketService
-    let audioPlayer: AudioPlayer
-    let mediaWidget: MediaWidget
+    var webSocket: WebSocketService {
+        return DataLayer.get.webSocketService
+    }
     
-    let pagesLocalStorageService = PagesLocalStorageService()
-    
-    init(webSocket: WebSocketService = WebSocketService(url: URI.webSocketService),
-         audioPlayer: AudioPlayer = AudioPlayer(),
-         mediaWidget: MediaWidget = MediaWidget()) {
-        
-        self.webSocket = webSocket
-        self.audioPlayer = audioPlayer
-        self.mediaWidget = mediaWidget
-        
+    init() {
         connect()
         bind()
         bindWebSocket()
@@ -46,48 +37,9 @@ class RRPlayer {
 
 ////UI initiated
 extension RRPlayer {
-
-    func play() {
-        Dispatcher.dispatch(action: AudioPlayer.Play())
-    }
     
-    func pause() {
-        Dispatcher.dispatch(action: AudioPlayer.Pause())
-    }
-    
-    func flip() {
-        Dispatcher.dispatch(action: AudioPlayer.Switch())
-    }
- 
-    func skipForward() {
-        Dispatcher.dispatch(action: ProceedToNextItem())
-    }
-    
-    func skipBack() {
-        Dispatcher.dispatch(action: GetBackToPreviousItem())
-    }
-    
-    func clear() {
-        Dispatcher.dispatch(action: ClearTracks())
-    }
-    
-    enum AddStyle {
-        case now, next, last
-    }
-    func add(tracks: [Track], type: AddStyle) {
+    func add(tracks: [Track], type: AddTracksToLinkedPlaying.AddStyle) {
         Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: type))
-    }
-    
-    func remove(track: OrderedTrack) {
-        Dispatcher.dispatch(action: RemoveTrack(orderedTrack: track))
-    }
-    
-    func seek(to fraction: Float) {
-        Dispatcher.dispatch(action: ScrubToFraction(fraction: fraction))
-    }
-    
-    func `switch`(to track: OrderedTrack) {
-        Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: track, shouldPlayImmidiatelly: true))
     }
     
 }

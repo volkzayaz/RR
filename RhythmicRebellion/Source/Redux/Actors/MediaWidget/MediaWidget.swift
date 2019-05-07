@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import MediaPlayer
 
-struct MediaWidget {
+struct MediaWidget: Actor {
     
     fileprivate let bag = DisposeBag()
     

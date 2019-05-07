@@ -36,7 +36,7 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
         }
     }
 
-    private(set) var dependencies: RouterDependencies
+    
 
     private(set) weak var viewModel: PromoViewModel?
     private(set) weak var sourceController: UIViewController?
@@ -53,8 +53,8 @@ final class DefaultPromoRouter:  PromoRouter, FlowRouterSegueCompatible {
         }
     }
 
-    init(dependencies: RouterDependencies, delegate: PromoRouterDelegate?) {
-        self.dependencies = dependencies
+    init( delegate: PromoRouterDelegate?) {
+        
         self.delegate = delegate
     }
 
