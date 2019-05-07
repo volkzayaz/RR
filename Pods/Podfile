@@ -4,17 +4,21 @@ project '../RhythmicRebellion.xcodeproj'
 platform :ios, '10.0'
 use_frameworks!
 
+def base
+  pod 'Firebase/Core'
+  pod 'RxCocoa', '~> 4.4'
+end
 
 target 'RhythmicRebellionTests' do
     
     pod 'Nimble', '~> 7.0'
-    pod 'Firebase/Core'
+    base
     
 end
     
 target 'RhythmicRebellion' do
 
-    pod 'Firebase/Core'
+    base
     pod 'Fabric', '~> 1.9.0'
     pod 'Crashlytics', '~> 3.12.0'
     
@@ -31,7 +35,6 @@ target 'RhythmicRebellion' do
 
     #infrastructure
     pod 'RxDataSources', '~> 3.1.0'
-    pod 'RxCocoa', '~> 4.4'
     pod 'R.swift', '5.0.3'
     pod 'RxReachability'
 

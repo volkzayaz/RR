@@ -9,31 +9,55 @@
 import XCTest
 import Nimble
 import RxCocoa
+import RxSwift
 
 @testable import RhythmicRebellion
 
 class PlaylistDeleteTests: XCTestCase {
     
-    var testObject = LinkedPlaylist()
+    let _appState = AppState.fake()
     
     override func setUp() {
-        testObject = LinkedPlaylist()
+        Dispatcher.state.accept(_appState)
+        Dispatcher.beginSerialExecution()
     }
     
     func testDeleteToEmpty() {
         
+        appState
+            .drive(onNext: { (appState) in
+                
+            })
+        
         let data = try! JsonReader.readData(withName: "playlist")
         let patch = TrackReduxViewPatch(jsonData: data)
         
-        let playerState = PlayerState(tracks: LinkedPlaylist(),
-                                      lastPatch: nil,
-                                      currentItem: nil,
-                                      isBlocked: false,
-                                      lastChangeSignatureHash: WebSocketService.ownSignatureHash,
-                                      config: PlayerConfig.fake())
+        let action = ApplyReduxViewPatch(viewPatch: .init(shouldFlush: patch.shouldFlush, patch: patch.data) )
+        print(_appState.player.tracks)
         
-        let state = AppState(player: playerState, user: User.fake())
+        Dispatcher.dispatch(action: AlienSignatureWrapper(action: action) )
     
+        Dispatcher.dispatch(action: AlienSignatureWrapper(action: StoreTracks(tracks:
+            [Track.fake(), Track.fake()]
+        )))
+
+        
+        
+        
+        print(_appState.player.tracks)
+        
+//        let data = try! JsonReader.readData(withName: "playlist")
+//        let patch = TrackReduxViewPatch(jsonData: data)
+//
+//        playerState = PlayerState(tracks: LinkedPlaylist(),
+//                                      lastPatch: nil,
+//                                      currentItem: nil,
+//                                      isBlocked: false,
+//                                      lastChangeSignatureHash: WebSocketService.ownSignatureHash,
+//                                      config: PlayerConfig.fake())
+        
+    
+//        _appState.asDriver().notNil()
         
         let x1 = Track.fake()
         

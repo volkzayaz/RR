@@ -23,13 +23,14 @@ enum Dispatcher {
         
     }
     
-    
     static let actions = BehaviorSubject<ActionCreator?>(value: nil)
     
     static func kickOff() {
-        
         initAppState()
-        
+        beginSerialExecution()
+    }
+    
+    static func beginSerialExecution() {
         ///Serial execution
         let _ =
         actions.notNil().concatMap { actionCreator -> Observable<AppState> in
@@ -39,17 +40,16 @@ enum Dispatcher {
                     fatalErrorInDebug("Action \(actionCreator) exceeded 10 seconds quota to update appState. State that was mutated: \(String(describing: state.value)) ")
                 })
             
-                return Observable.deferred { () -> Observable<AppState> in
-                    print("Dispatching \(actionCreator.description)")
-                    return actionCreator.perform(initialState: state.value!)
-                        .map { state in
-                            
-                            ////signing action with it's signature
-                            
-                            var x = state
-                            x.player.lastChangeSignatureHash = actionCreator.signature
-                            return x
-                        }
+            return Observable.deferred { () -> Observable<AppState> in
+                print("Dispatching \(actionCreator.description)")
+                return actionCreator.perform(initialState: state.value!)
+                    .map { state in
+                        
+                        ////signing action with it's signature
+                        var x = state
+                        x.player.lastChangeSignatureHash = actionCreator.signature
+                        return x
+                }
                 }
                 .takeUntil(forceCompleteTrigger)
                 .catchError({ (error) -> Observable<AppState> in
@@ -60,7 +60,5 @@ enum Dispatcher {
             }
             .filter { $0 != state.value }
             .bind(to: state)
-        
     }
-    
 }

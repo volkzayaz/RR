@@ -14,7 +14,6 @@ import EasyTipView
 
 import AlamofireNetworkActivityLogger
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
@@ -65,8 +64,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tipViewPreferences.animating.showInitialAlpha = 0
         tipViewPreferences.animating.showDuration = 1.5
         tipViewPreferences.animating.dismissDuration = 1.5
-        tipViewPreferences.positioning.textHInset = 5.0
-        tipViewPreferences.positioning.textVInset = 5.0
+//        tipViewPreferences.positioning.textHInset = 5.0
+//        tipViewPreferences.positioning.textVInset = 5.0
         EasyTipView.globalPreferences = tipViewPreferences
         
     }
@@ -88,9 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NetworkActivityLogger.shared.level = .debug
         NetworkActivityLogger.shared.startLogging()
         
-        let routerDependencies = RouterDependencies(daPlayer: RRPlayer())
-        
-        let defaultAppRouter = DefaultAppRouter(dependencies: routerDependencies)
+        let defaultAppRouter = DefaultAppRouter(dependencies: RouterDependencies.get)
         defaultAppRouter.start(controller: appViewController)
         
         self.appRouter = defaultAppRouter

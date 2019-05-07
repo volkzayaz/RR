@@ -73,7 +73,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     func start(controller: PagesViewController) {
         pagesViewController = controller
         controller.navigationController?.delegate = self
-        let vm = PagesControllerViewModel(router: self, pagesLocalStorage: self.dependencies.pagesLocalStorageService)
+        let vm = PagesControllerViewModel(router: self, pagesLocalStorage: self.dependencies.daPlayer.pagesLocalStorageService)
         controller.configure(viewModel: vm, router: self)
     }
 

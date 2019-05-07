@@ -352,6 +352,8 @@
 		FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */; };
 		FB1B9A9522808B0500F1CDEC /* FakeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */; };
 		FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */; };
+		FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A982281767200F1CDEC /* FakeAppState.swift */; };
+		FB1B9A9B2281834600F1CDEC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9A2281834600F1CDEC /* main.swift */; };
 		FB257EB522803A39006D5006 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = FB257EB422803A39006D5006 /* playlist.json */; };
 		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
@@ -722,6 +724,8 @@
 		FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfileLocation.swift; sourceTree = "<group>"; };
 		FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeConfig.swift; sourceTree = "<group>"; };
 		FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePlayerConfig.swift; sourceTree = "<group>"; };
+		FB1B9A982281767200F1CDEC /* FakeAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeAppState.swift; sourceTree = "<group>"; };
+		FB1B9A9A2281834600F1CDEC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		FB257EB422803A39006D5006 /* playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = playlist.json; path = ../../../../../Downloads/playlist.json; sourceTree = "<group>"; };
 		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
@@ -935,9 +939,9 @@
 			children = (
 				FB257EBB22805044006D5006 /* Fake */,
 				FB257EB3228039BA006D5006 /* json */,
-				734F828522299CD90006E1DE /* support_files */,
 				736456A1220C7610005BE389 /* PlaylistDeleteTests.swift */,
 				736456AE220C80CE005BE389 /* PlaylistInsertTests.swift */,
+				734F828522299CD90006E1DE /* support_files */,
 			);
 			path = RhythmicRebellionTests;
 			sourceTree = "<group>";
@@ -2151,6 +2155,7 @@
 				73F137B8222C289200FB8EBC /* Tools */,
 				73F13666222C289200FB8EBC /* UIBricks */,
 				73F13919222C28A300FB8EBC /* AppDelegate.swift */,
+				FB1B9A9A2281834600F1CDEC /* main.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -2177,6 +2182,7 @@
 			isa = PBXGroup;
 			children = (
 				73F136C2222C289200FB8EBC /* Fake.swift */,
+				FB1B9A982281767200F1CDEC /* FakeAppState.swift */,
 				FB1B9A8A2280688C00F1CDEC /* FakeCountry.swift */,
 				FB257EBC228054A7006D5006 /* FakeUser.swift */,
 				FB257EBE228054B8006D5006 /* FakeUserProfile.swift */,
@@ -2327,6 +2333,8 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
@@ -2340,11 +2348,8 @@
 				"${BUILT_PRODUCTS_DIR}/NSStringMask/NSStringMask.framework",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxReachability/RxReachability.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
@@ -2353,6 +2358,8 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
@@ -2366,11 +2373,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSStringMask.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxReachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
@@ -2392,6 +2396,8 @@
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -2400,6 +2406,8 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2443,7 +2451,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift,
+				"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2494,6 +2502,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB1B9A83228066DB00F1CDEC /* Fake.swift in Sources */,
+				FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */,
 				FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */,
 				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
 				FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */,
@@ -2778,6 +2787,7 @@
 				73F1388C222C289200FB8EBC /* RestorePasswordControllerViewModel.swift in Sources */,
 				73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */,
 				73F1387C222C289200FB8EBC /* ChangePasswordViewModel.swift in Sources */,
+				FB1B9A9B2281834600F1CDEC /* main.swift in Sources */,
 				73F138AA222C289200FB8EBC /* PlayerViewModel.swift in Sources */,
 				7361C00222368375008EA36E /* Dispatcher.swift in Sources */,
 				73F1390C222C289200FB8EBC /* SpinnerView.swift in Sources */,

@@ -19,7 +19,6 @@ class JsonReader {
     }
     
     static func readJson(withName name: String) throws -> Dictionary<String, AnyObject> {
-        
         let data = try self.readData(withName: name)
         let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
         return jsonResult as! Dictionary<String, AnyObject>

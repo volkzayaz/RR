@@ -21,38 +21,28 @@ extension Fakeble {
             .replacingOccurrences(of: ",", with: "")
             .components(separatedBy: " ")
         
-        var result: [String] = []
-        
-        for _ in 0 ..< components {
-            let dice1 = arc4random_uniform(UInt32(strings.count));
-            result.append(strings[Int(dice1)])
-        }
-        
-        return result.joined(separator: " ")
+        return (0..<components).map{ _ in strings.randomElement()! }.joined()
+    }
+    
+    static func fakeID(length: Int = 8) -> String {
+        return String(randomWithLength: 8, allowedCharacters: .alphaNumeric)
     }
     
     static func fakeNumber(bound: UInt32) -> Int {
         return Int(arc4random_uniform(bound))
-        
     }
     
     static func fakeDouble(min: Double, max: Double) -> Double {
-        
         let normilizer = Double(fakeNumber(bound: 100000)) / Double(100000)
         return (max - min) * normilizer
-        
     }
     
     static func fakeDate() -> Date {
-        
         return Date(timeIntervalSince1970: TimeInterval(fakeNumber(bound: UInt32(Date().timeIntervalSince1970))))
-        
     }
     
     static func fakeBool() -> Bool {
-        
         let x = arc4random_uniform(2)
-        
         return x == 0
     }
     

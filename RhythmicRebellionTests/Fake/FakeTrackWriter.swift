@@ -13,6 +13,6 @@ import Foundation
 extension TrackWriter: Fakeble {
     
     static func fake() -> TrackWriter {
-        return TrackWriter(withID: "10", name: "TrackWriter")
+        return TrackWriter(withID: fakeID(), name: "TrackWriter")
     }
 }

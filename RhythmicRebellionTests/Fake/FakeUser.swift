@@ -11,7 +11,6 @@
 extension User: Fakeble {
     
     static func fake() -> User {
-        return User(withUserProfile: UserProfile.fake(),
-                    wsToken: "cfb96a9ddcd69dbd658e6a418644621b70ec1f98535b5eba94a6842c010a1796")
+        return User(profile: UserProfile.fake(), wsToken: fakeID(length: 128))
     }
 }

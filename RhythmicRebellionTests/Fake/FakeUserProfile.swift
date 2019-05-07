@@ -16,13 +16,13 @@ extension UserProfile: Fakeble {
                            nickname: "nickname",
                            firstName: "firstName",
                            location: ProfileLocation.fake(),
-                            hobbies: [Hobby](),
-                            forceToPlay: Set<Int>(),
-                            followedArtistsIds: Set<String>(),
-                            purchasedAlbumsIds: Set<Int>(),
-                            purchasedTracksIds: Set<Int>(),
-                            tracksLikeStates: [:],
-                            skipAddonsArtistsIds: Set<String>(),
-                            listeningSettings: ListeningSettings.fake())
+                           hobbies: [Hobby](),
+                           forceToPlay: Set<Int>(),
+                           followedArtistsIds: Set<String>(),
+                           purchasedAlbumsIds: Set<Int>(),
+                           purchasedTracksIds: Set<Int>(),
+                           tracksLikeStates: [:],
+                           skipAddonsArtistsIds: Set<String>(),
+                           listeningSettings: ListeningSettings.fake())
     }
 }

@@ -25,7 +25,7 @@ struct SetNewUser: Action {
         
         if user.isGuest { ///logout
             DownloadManager.default.clearArtifacts()
-            DataLayer.get.pagesLocalStorageService.reset()
+            DataLayer.get.daPlayer.pagesLocalStorageService.reset()
         }
 
         return state

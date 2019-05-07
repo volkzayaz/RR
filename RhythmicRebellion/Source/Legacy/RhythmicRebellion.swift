@@ -154,8 +154,6 @@ struct PresentationSource {
 }
 
 struct RouterDependencies {
-
-    var pagesLocalStorageService: PagesLocalStorageService { return daPlayer.pagesLocalStorageService }
     
     var webSocketService: WebSocketService {
         return daPlayer.webSocket
@@ -169,6 +167,6 @@ typealias DataLayer = RouterDependencies
 
 extension RouterDependencies {
     static var get: RouterDependencies {
-        return (UIApplication.shared.delegate! as! AppDelegate).appRouter!.dependencies
+        return RouterDependencies(daPlayer: RRPlayer())
     }
 }

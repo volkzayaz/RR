@@ -11,7 +11,7 @@
 extension ProfileLocation: Fakeble {
     
     static func fake() -> ProfileLocation {
-        return ProfileLocation(country: Country(withID: 10, code: "60", name: "USA"))
+        return ProfileLocation(country: Country.fake())
     }
 }
 

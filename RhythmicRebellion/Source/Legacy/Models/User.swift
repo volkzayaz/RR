@@ -22,7 +22,7 @@ struct User: Codable, Equatable {
         case guest
     }
     
-    init(withUserProfile profile: UserProfile, wsToken: String) {
+    init(profile: UserProfile, wsToken: String) {
         self.profile = profile
         self.wsToken = wsToken
     }

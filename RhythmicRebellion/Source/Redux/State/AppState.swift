@@ -36,7 +36,6 @@ func initAppState() {
             
         }
         .bind(to: _appState)
-    
 }
 
 var appStateSlice: AppState {
@@ -53,7 +52,6 @@ struct AppState: Equatable {
     
     var player: PlayerState
     var user: User
-    
 }
 
 struct PlayerState: Equatable {
@@ -121,7 +119,6 @@ extension AppState {
     
     var nextTrack: OrderedTrack? {
         guard let c = currentTrack else { return nil }
-        
         return player.tracks.next(after: c.orderHash)
     }
     
@@ -160,6 +157,7 @@ extension AppState {
         case minusOneTrack(Track) /// audio track without vocal for Karaoke
         case stub(DefaultAudioFile, explanation: String) /// audio stub in case track playback is not possible (no preview/censorship etc.)
     };
+    
     var activePlayable: MusicType? {
         
         ///could be no track at all

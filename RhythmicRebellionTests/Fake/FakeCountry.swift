@@ -12,6 +12,8 @@
 extension Country: Fakeble {
     
     static func fake() -> Country {
-        return .init(withID: 10, code: "54", name: "USA")
+        return .init(withID: fakeNumber(bound: 1000),
+                     code: fakeString(components: 3),
+                     name: "USA")
     }
 }
