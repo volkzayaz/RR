@@ -48,11 +48,12 @@ struct ApplyReduxViewPatch: ActionCreator {
             return .just(state)
         }
         
-        return DataLayer.get.webSocketService
-            .fetchTracks(trackIds: Array(tracksDiff))
+//        return DataLayer.get.webSocketService
+//            .fetchTracks(trackIds: Array(tracksDiff)
+        return Observable.just([])
             .map { receivedTracks -> AppState in
                 
-                receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }
+//                receivedTracks.forEach { tracks.trackDump[$0.id] = $0 }
                 
                 state.player.tracks = tracks
                 

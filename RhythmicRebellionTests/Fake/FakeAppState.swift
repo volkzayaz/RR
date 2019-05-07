@@ -9,18 +9,6 @@
 
 @testable import RhythmicRebellion
 
-class TestRRPlayer: RRPlayer {
-    override init() {
-        super.init()
-    }
-}
-
-extension RouterDependencies: Fakeble {
-    static func fake() -> RouterDependencies {
-        return RouterDependencies(daPlayer: TestRRPlayer())
-    }
-}
-
 extension AppState: Fakeble {
 
     static func fake() -> AppState {

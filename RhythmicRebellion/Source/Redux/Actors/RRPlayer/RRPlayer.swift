@@ -15,18 +15,23 @@ import RxSwift
 
 class RRPlayer {
     
-    let webSocket = WebSocketService(url: URI.webSocketService)
-    let audioPlayer = AudioPlayer()
-    let mediaWidget = MediaWidget()
+    let webSocket: WebSocketService
+    let audioPlayer: AudioPlayer
+    let mediaWidget: MediaWidget
     
     let pagesLocalStorageService = PagesLocalStorageService()
     
-    init() {
+    init(webSocket: WebSocketService = WebSocketService(url: URI.webSocketService),
+         audioPlayer: AudioPlayer = AudioPlayer(),
+         mediaWidget: MediaWidget = MediaWidget()) {
+        
+        self.webSocket = webSocket
+        self.audioPlayer = audioPlayer
+        self.mediaWidget = mediaWidget
         
         connect()
         bind()
         bindWebSocket()
-        
     }
     
     ///Piece of data needed by WebSocket protocol

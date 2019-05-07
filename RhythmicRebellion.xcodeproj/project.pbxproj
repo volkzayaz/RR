@@ -354,6 +354,7 @@
 		FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */; };
 		FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A982281767200F1CDEC /* FakeAppState.swift */; };
 		FB1B9A9B2281834600F1CDEC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9A2281834600F1CDEC /* main.swift */; };
+		FB1B9A9D2281ABE100F1CDEC /* FakeWebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9C2281ABE100F1CDEC /* FakeWebSocketService.swift */; };
 		FB257EB522803A39006D5006 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = FB257EB422803A39006D5006 /* playlist.json */; };
 		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
@@ -726,6 +727,7 @@
 		FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePlayerConfig.swift; sourceTree = "<group>"; };
 		FB1B9A982281767200F1CDEC /* FakeAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeAppState.swift; sourceTree = "<group>"; };
 		FB1B9A9A2281834600F1CDEC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		FB1B9A9C2281ABE100F1CDEC /* FakeWebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeWebSocketService.swift; sourceTree = "<group>"; };
 		FB257EB422803A39006D5006 /* playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = playlist.json; path = ../../../../../Downloads/playlist.json; sourceTree = "<group>"; };
 		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
@@ -2193,6 +2195,7 @@
 				FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */,
 				FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */,
 				FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */,
+				FB1B9A9C2281ABE100F1CDEC /* FakeWebSocketService.swift */,
 			);
 			path = Fake;
 			sourceTree = "<group>";
@@ -2451,7 +2454,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift",
+				$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2505,6 +2508,7 @@
 				FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */,
 				FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */,
 				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
+				FB1B9A9D2281ABE100F1CDEC /* FakeWebSocketService.swift in Sources */,
 				FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */,
 				736456AF220C80CE005BE389 /* PlaylistInsertTests.swift in Sources */,
 				FB1B9A8D22806BCD00F1CDEC /* FakeArtist.swift in Sources */,

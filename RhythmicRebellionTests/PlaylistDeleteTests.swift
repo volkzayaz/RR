@@ -24,22 +24,26 @@ class PlaylistDeleteTests: XCTestCase {
     
     func testDeleteToEmpty() {
         
-        appState
-            .drive(onNext: { (appState) in
-                
-            })
-        
-        let data = try! JsonReader.readData(withName: "playlist")
-        let patch = TrackReduxViewPatch(jsonData: data)
-        
-        let action = ApplyReduxViewPatch(viewPatch: .init(shouldFlush: patch.shouldFlush, patch: patch.data) )
-        print(_appState.player.tracks)
-        
-        Dispatcher.dispatch(action: AlienSignatureWrapper(action: action) )
-    
-        Dispatcher.dispatch(action: AlienSignatureWrapper(action: StoreTracks(tracks:
-            [Track.fake(), Track.fake()]
-        )))
+        waitUntil { done in
+            
+            appState
+                .drive(onNext: { (appState) in
+                    
+                    expect(true).to(beTrue())
+                })
+            
+            let data = try! JsonReader.readData(withName: "playlist")
+            let patch = TrackReduxViewPatch(jsonData: data)
+            
+            let action = ApplyReduxViewPatch(viewPatch: .init(shouldFlush: patch.shouldFlush, patch: patch.data) )
+            
+//            Dispatcher.dispatch(action: AlienSignatureWrapper(action: action) )
+//            
+            Dispatcher.dispatch(action: AlienSignatureWrapper(action: StoreTracks(tracks:
+                [Track.fake(), Track.fake()]
+            )))
+            
+        }
 
         
         

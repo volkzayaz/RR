@@ -7,66 +7,10 @@
 //
 
 import Foundation
-
 import Starscream
 import Reachability
-
 import RxSwift
 
-extension WebSocketService {
-    
-    var didReceivePlaylistPatch: Observable<TrackReduxViewPatch> {
-        return customCommandObservable(ofType: TrackReduxViewPatch.self)
-    }
-    
-    var didReceiveTracks: Observable<[Track]> {
-        return commandObservable()
-    }
-    
-    var didReceiveTrackState: Observable<TrackState> {
-        return commandObservable()
-    }
-    
-    var didReceiveCurrentTrack: Observable<TrackId?> {
-        return commandObservable()
-    }
-    
-    var didReceiveTrackBlockState: Observable<TrackBlockState> {
-        return commandObservable()
-    }
-
-    var didReceivePreviewTimes: Observable<[Int: UInt64]> {
-        
-        let channel = "previewOpt"
-        let command = "srts_previews"
-        
-        return customCommandObservable(ofType: CodableWebSocketCommand<[Int: UInt64]>.self,
-                                       channel: channel, command: command)
-            .map { $0.data }
-    }
-    
-    ////User mutations
-    var didReceiveListeningSettings: Observable<ListeningSettings> {
-        return commandObservable()
-    }
-    
-    var didReceiveTrackForceToPlayState: Observable<TrackForceToPlayState> {
-        return commandObservable()
-    }
-    
-    var didReceiveArtistFollowingState: Observable<ArtistFollowingState> {
-        return commandObservable()
-    }
-    
-    var didReceiveSkipArtistAddonsState: Observable<SkipArtistAddonsState> {
-        return commandObservable()
-    }
-    
-    var didReceiveTrackLikeState: Observable<TrackLikeState> {
-        return commandObservable()
-    }
-    
-}
 
 typealias Signature = String
 
@@ -122,10 +66,15 @@ class WebSocketService {
                 
                 return t
             }
-        
+    }
+    
+    init() {
+        webSocket = WebSocket(url: URL(string: "https://google.com")!)
+        reachability = Reachability(hostname:"https://google.com")!
     }
     
     init(url: String) {
+        
         guard let webSocketURL = URL(string: url) else {
             fatalError("Can't create websocket. Unsupported URL \(url)")
         }
@@ -306,5 +255,58 @@ class WebSocketService {
         .share()
         
     }()
+    
+    //MARK: - Observable
+    
+    var didReceivePlaylistPatch: Observable<TrackReduxViewPatch> {
+        return customCommandObservable(ofType: TrackReduxViewPatch.self)
+    }
+    
+    var didReceiveTracks: Observable<[Track]> {
+        return commandObservable()
+    }
+    
+    var didReceiveTrackState: Observable<TrackState> {
+        return commandObservable()
+    }
+    
+    var didReceiveCurrentTrack: Observable<TrackId?> {
+        return commandObservable()
+    }
+    
+    var didReceiveTrackBlockState: Observable<TrackBlockState> {
+        return commandObservable()
+    }
+    
+    var didReceivePreviewTimes: Observable<[Int: UInt64]> {
+        
+        let channel = "previewOpt"
+        let command = "srts_previews"
+        
+        return customCommandObservable(ofType: CodableWebSocketCommand<[Int: UInt64]>.self,
+                                       channel: channel, command: command)
+            .map { $0.data }
+    }
+    
+    ////User mutations
+    var didReceiveListeningSettings: Observable<ListeningSettings> {
+        return commandObservable()
+    }
+    
+    var didReceiveTrackForceToPlayState: Observable<TrackForceToPlayState> {
+        return commandObservable()
+    }
+    
+    var didReceiveArtistFollowingState: Observable<ArtistFollowingState> {
+        return commandObservable()
+    }
+    
+    var didReceiveSkipArtistAddonsState: Observable<SkipArtistAddonsState> {
+        return commandObservable()
+    }
+    
+    var didReceiveTrackLikeState: Observable<TrackLikeState> {
+        return commandObservable()
+    }
     
 }
