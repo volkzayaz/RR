@@ -1,0 +1,31 @@
+{
+   "channel":"playlist",
+   "cmd":"update",
+   "flush":true,
+   "data":{
+      "87322":{
+         "id":376,
+         "trackKey":"87322",
+         "nextTrackKey":"c20f6",
+         "previousTrackKey":"8a7b9"
+      },
+      "8a7b9":{
+         "id":374,
+         "trackKey":"8a7b9",
+         "nextTrackKey":"87322",
+         "previousTrackKey":null
+      },
+      "c20f6":{
+         "id":375,
+         "trackKey":"c20f6",
+         "nextTrackKey":"a8c35",
+         "previousTrackKey":"87322"
+      },
+      "a8c35":{
+         "id":377,
+         "trackKey":"a8c35",
+         "nextTrackKey":null,
+         "previousTrackKey":"c20f6"
+      }
+   }
+}

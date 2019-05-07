@@ -355,7 +355,7 @@
 		FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A982281767200F1CDEC /* FakeAppState.swift */; };
 		FB1B9A9B2281834600F1CDEC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9A2281834600F1CDEC /* main.swift */; };
 		FB1B9A9D2281ABE100F1CDEC /* FakeWebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9C2281ABE100F1CDEC /* FakeWebSocketService.swift */; };
-		FB257EB522803A39006D5006 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = FB257EB422803A39006D5006 /* playlist.json */; };
+		FB1B9A9F2281C0BA00F1CDEC /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = FB1B9A9E2281C0BA00F1CDEC /* playlist.json */; };
 		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
 		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
@@ -728,7 +728,7 @@
 		FB1B9A982281767200F1CDEC /* FakeAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeAppState.swift; sourceTree = "<group>"; };
 		FB1B9A9A2281834600F1CDEC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		FB1B9A9C2281ABE100F1CDEC /* FakeWebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeWebSocketService.swift; sourceTree = "<group>"; };
-		FB257EB422803A39006D5006 /* playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = playlist.json; path = ../../../../../Downloads/playlist.json; sourceTree = "<group>"; };
+		FB1B9A9E2281C0BA00F1CDEC /* playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = playlist.json; sourceTree = "<group>"; };
 		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
 		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
@@ -2174,8 +2174,8 @@
 		FB257EB3228039BA006D5006 /* json */ = {
 			isa = PBXGroup;
 			children = (
+				FB1B9A9E2281C0BA00F1CDEC /* playlist.json */,
 				FB257EB622803AC1006D5006 /* JsonReader.swift */,
-				FB257EB422803A39006D5006 /* playlist.json */,
 			);
 			path = json;
 			sourceTree = "<group>";
@@ -2295,7 +2295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB257EB522803A39006D5006 /* playlist.json in Resources */,
+				FB1B9A9F2281C0BA00F1CDEC /* playlist.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
