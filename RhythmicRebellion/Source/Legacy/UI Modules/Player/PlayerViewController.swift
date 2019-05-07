@@ -75,8 +75,8 @@ final class PlayerViewController: UIViewController {
         tipViewPreferences.animating.showInitialAlpha = 0
         tipViewPreferences.animating.showDuration = 1.5
         tipViewPreferences.animating.dismissDuration = 1.5
-//        tipViewPreferences.positioning.textHInset = 5.0
-//        tipViewPreferences.positioning.textVInset = 5.0
+        tipViewPreferences.positioning.textHInset = 5.0
+        tipViewPreferences.positioning.textVInset = 5.0
         EasyTipView.globalPreferences = tipViewPreferences
 
         self.toolBar.setShadowImage(UIImage(), forToolbarPosition: .any)
