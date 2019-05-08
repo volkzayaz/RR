@@ -169,11 +169,11 @@ extension AppState {
         ///possible stubs
         if case .noPreview? = t.previewType, !user.isFollower(for: t.artist.id) {
             return .stub(player.config.noPreviewAudioFile,
-                         explanation: R.string.localizable.noPreviewMessage(t.artist.name))
+                         explanation: t.name /*R.string.localizable.noPreviewMessage(t.artist.name)*/)
         }
         else if user.shouldCensorTrack(t) {
             return .stub(player.config.explicitMaterialAudioFile,
-                         explanation: R.string.localizable.recordingContainsExplicitMaterials(t.name))
+                         explanation: t.name /*R.string.localizable.recordingContainsExplicitMaterials(t.name)*/)
         }
         
         ///addon might be in the stack
