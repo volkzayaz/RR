@@ -143,8 +143,8 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
         self.user = user
         self.actions = actions
         
-        if let url = trackProvidable.track.audioFile?.urlString {
-            downloadViewModel = DownloadViewModel(remoteURL: url)
+        if let _ = trackProvidable.track.audioFile?.urlString {
+            downloadViewModel = DownloadViewModel(downloadable: trackProvidable.track)
         }
         else {
             downloadViewModel = nil

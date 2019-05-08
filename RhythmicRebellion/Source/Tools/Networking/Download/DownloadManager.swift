@@ -11,6 +11,10 @@ import Foundation
 import Alamofire
 import RxSwift
 
+protocol Downloadable: URLConvertible {
+    var fileName: String { get }
+}
+
 protocol DownloadToken {
     func pause()
     func resume()
@@ -36,7 +40,7 @@ struct DownloadManager {
         return x
     }()
     
-    func download(x: URLConvertible) -> (Observable<DownloadStatus<URL>>, DownloadToken) {
+    func download(x: Downloadable) -> (Observable<DownloadStatus<URL>>, DownloadToken) {
         
         let fileURL = self.fileURL(for: x)
         
@@ -51,9 +55,9 @@ struct DownloadManager {
 
     }
     
-    func fileURL(for urlConvertible: URLConvertible) -> URL {
+    func fileURL(for x: Downloadable) -> URL {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        return documentsURL.appendingPathComponent(try! urlConvertible.asURL().lastPathComponent)
+        return documentsURL.appendingPathComponent(x.fileName)
     }
     
     ///clears download directory
@@ -85,37 +89,37 @@ class MulticastDownloadManager {
         self.manager = manager
     }
     
-    fileprivate let pipe: BehaviorSubject<(String, DownloadStatus<URL>)?> = BehaviorSubject(value: nil)
+    fileprivate let pipe: BehaviorSubject<(Downloadable, DownloadStatus<URL>)?> = BehaviorSubject(value: nil)
     
     ///TODO: wrap accesses into barier queue
     var tasks: [String: DownloadToken] = [:]
     
-    func downloadStatus(for url: String) -> Observable<DownloadStatus<URL>> {
+    func downloadStatus(for x: Downloadable) -> Observable<DownloadStatus<URL>> {
         
-        let maybeURL = manager.fileURL(for: url)
+        let maybeURL = manager.fileURL(for: x)
         let fileExist = FileManager.default.fileExists(atPath: maybeURL.path)
         
         return pipe.asObservable()
-            .startWith( fileExist ? (url, .data(maybeURL)) : nil )
+            .startWith( fileExist ? (x, .data(maybeURL)) : nil )
             .notNil()
-            .filter { url == $0.0 }
+            .filter { x.fileName == $0.0.fileName }
             .map { $0.1 }
     }
     
-    func start(for url: String) {
+    func start(for d: Downloadable) {
         
         ///quit if download is already in progress
-        guard tasks[url] == nil else { return }
+        guard tasks[d.fileName] == nil else { return }
         
-        let res = manager.download(x: url)
+        let res = manager.download(x: d)
         
-        tasks[url] = res.1
+        tasks[d.fileName] = res.1
         
         ///binding download task to global pipe to share with all subscribers
-        res.0.map { (url, $0) }
+        res.0.map { (d, $0) }
             .do(onCompleted: { [unowned self] in
-                self.tasks.removeValue(forKey: url)
-                if let x = self.pipe.unsafeValue, x.0 == url, case .data(_) = x.1 {
+                self.tasks.removeValue(forKey: d.fileName)
+                if let x = self.pipe.unsafeValue, x.0.fileName == d.fileName, case .data(_) = x.1 {
                     ///clean pipe afterwards if we are the last to download
                     self.pipe.onNext(nil)
                 }
@@ -128,28 +132,28 @@ class MulticastDownloadManager {
         
     }
     
-    func pause(for url: String) {
+    func pause(for d: Downloadable) {
         
-        guard let task = tasks[url] else {
-            return fatalErrorInDebug("Trying to pause download of \(url). But MulticastDownloadManager does not contain download task for this url.")
+        guard let task = tasks[d.fileName] else {
+            return fatalErrorInDebug("Trying to pause download of \(try? d.asURL()). But MulticastDownloadManager does not contain download task for this url.")
         }
         
         task.pause()
     }
     
-    func resume(for url: String) {
+    func resume(for d: Downloadable) {
         
-        guard let task = tasks[url] else {
-            return fatalErrorInDebug("Trying to resume download of \(url). But MulticastDownloadManager does not contain download task for this url.")
+        guard let task = tasks[d.fileName] else {
+            return fatalErrorInDebug("Trying to resume download of \(try? d.asURL()). But MulticastDownloadManager does not contain download task for this url.")
         }
         
         task.resume()
     }
     
-    func cancel(for url: String) {
+    func cancel(for d: Downloadable) {
         
-        guard let task = tasks[url] else {
-            return fatalErrorInDebug("Trying to cancel download of \(url). But MulticastDownloadManager does not contain download task for this url.")
+        guard let task = tasks[d.fileName] else {
+            return fatalErrorInDebug("Trying to cancel download of \(try? d.asURL()). But MulticastDownloadManager does not contain download task for this url.")
         }
         
         task.cancel()
