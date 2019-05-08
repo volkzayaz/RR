@@ -36,17 +36,25 @@ class PlaylistDeleteTests: XCTestCase {
                     expect(true).to(beTrue())
                 })
             
-            let data = try! JsonReader.readData(withName: "playlist")
-            let patch = TrackReduxViewPatch(jsonData: data)
+            let x = Track.fake()
             
-            let action = ApplyReduxViewPatch(viewPatch: .init(shouldFlush: patch.shouldFlush, patch: patch.data) )
+            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [x],
+                                                                 style: .now))
+
+            ////Proceeed verifing that AppState is correct
             
-//            Dispatcher.dispatch(action: AlienSignatureWrapper(action: action) )
-//            
-            Dispatcher.dispatch(action: AlienSignatureWrapper(action: StoreTracks(tracks:
-                [Track.fake(), Track.fake()]
-            )))
             
+//            let data = try! JsonReader.readData(withName: "playlist")
+//            let patch = TrackReduxViewPatch(jsonData: data)
+//
+//            let action = ApplyReduxViewPatch(viewPatch: .init(shouldFlush: patch.shouldFlush, patch: patch.data) )
+//
+////            Dispatcher.dispatch(action: AlienSignatureWrapper(action: action) )
+////
+//            Dispatcher.dispatch(action: AlienSignatureWrapper(action: StoreTracks(tracks:
+//                [Track.fake(), Track.fake()]
+//            )))
+//
         }
 
         

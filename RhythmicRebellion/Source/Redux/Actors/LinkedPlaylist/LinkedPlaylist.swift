@@ -196,9 +196,9 @@ struct LinkedPlaylist {
     
     func deletePatch(track: OrderedTrack) -> NullableReduxView {
         
-        guard let nodeToDelete = reduxView[track.orderHash],
-              let prevHash = nodeToDelete[.previous] as? String?,
-              let nextHash = nodeToDelete[.next]     as? String? else {
+        guard let nodeToDelete = reduxView   [track.orderHash],
+              let prevHash     = nodeToDelete[.previous] as? String?,
+              let nextHash     = nodeToDelete[.next]     as? String? else {
             fatalError("Internal inconsistency. Can not delete track \(track.track) since it is not present in reduxView \(reduxView)")
         }
         
