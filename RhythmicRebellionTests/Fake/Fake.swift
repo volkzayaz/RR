@@ -28,8 +28,8 @@ extension Fakeble {
         return String(randomWithLength: 8, allowedCharacters: .alphaNumeric)
     }
     
-    static func fakeNumber(bound: UInt32) -> Int {
-        return Int(arc4random_uniform(bound))
+    static func fakeNumber(bound: Int) -> Int {
+        return Int.random(in: 0 ... bound)
     }
     
     static func fakeDouble(min: Double, max: Double) -> Double {
@@ -38,7 +38,7 @@ extension Fakeble {
     }
     
     static func fakeDate() -> Date {
-        return Date(timeIntervalSince1970: TimeInterval(fakeNumber(bound: UInt32(Date().timeIntervalSince1970))))
+        return Date(timeIntervalSince1970: TimeInterval(fakeNumber(bound: Int(Date().timeIntervalSince1970))))
     }
     
     static func fakeBool() -> Bool {
@@ -54,7 +54,7 @@ extension Fakeble {
             fatalError("Can't pick item from empty array")
         }
         
-        return from [ fakeNumber(bound: UInt32(count)) ]
+        return from [ fakeNumber(bound: count) ]
     }
 
 }

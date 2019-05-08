@@ -11,7 +11,7 @@ import Nimble
 
 @testable import RhythmicRebellion
 
-class PlaylistInsertTests: XCTestCase {
+class PlaylistInsertTests2: XCTestCase {
 
     var testObject: LinkedPlaylist!
     
