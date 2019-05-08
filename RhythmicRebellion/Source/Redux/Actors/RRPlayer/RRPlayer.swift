@@ -15,11 +15,11 @@ import RxSwift
 
 class RRPlayer: Actor {
     
-    var webSocket: WebSocketService {
-        return DataLayer.get.webSocketService
-    }
+    let webSocket: WebSocketService
     
-    init() {
+    init(webSocket: WebSocketService) {
+        self.webSocket = webSocket
+        
         connect()
         bind()
         bindWebSocket()
