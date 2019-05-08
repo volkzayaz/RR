@@ -10,6 +10,7 @@
 import Foundation
 import SwiftValidator
 import Alamofire
+import RxCocoa
 
 protocol SignUpViewModelDelegate: class, ErrorPresenting {
     
@@ -24,9 +25,21 @@ protocol SignUpViewModelDelegate: class, ErrorPresenting {
     func refreshHowHearField(with howHear: HowHear?)
 }
 
+extension SignUpViewModel {
+    
+    var extraTicksHidden: Driver<Bool> {
+        return selectedCountry.asDriver()
+            .map {
+                $0?.code == "US"
+        }
+    }
+    
+}
 
 final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataSource, HobbiesDataSource, HowHearListDataSource {
 
+    let selectedCountry = BehaviorRelay<Country?>(value: nil)
+    
     // MARK: - Public properties
 
     var defaultTextColor: UIColor { return #colorLiteral(red: 0.1780987382, green: 0.2085041404, blue: 0.4644742608, alpha: 1) }
