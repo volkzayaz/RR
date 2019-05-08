@@ -744,7 +744,7 @@
         <!--Add to playlist-->
         <scene sceneID="nSC-e0-sZu">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" id="Zup-uM-O9o" customClass="AddToPlaylistViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddToPlaylistViewController" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zup-uM-O9o" customClass="AddToPlaylistViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HV7-OB-pTw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1044,7 +1044,7 @@
                                 <rect key="frame" x="35" y="54.666666666666657" width="20" height="20"/>
                             </activityIndicatorView>
                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="755" translatesAutoresizingMaskIntoConstraints="NO" id="ubf-MJ-3cW" userLabel="TitleInfoView">
-                                <rect key="frame" x="88" y="49.000000000000007" width="497" height="31.333333333333336"/>
+                                <rect key="frame" x="88" y="49.000000000000007" width="311" height="31.333333333333336"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="755" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ZL-WW-c77">
                                         <rect key="frame" x="0.0" y="0.0" width="36.666666666666664" height="17"/>
@@ -1059,7 +1059,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Rt-cB-ASp">
-                                        <rect key="frame" x="402" y="4.6666666666666643" width="95" height="22"/>
+                                        <rect key="frame" x="216" y="4.6666666666666643" width="95" height="22"/>
                                         <color key="tintColor" red="1" green="0.24313725490196078" blue="0.65490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>
@@ -1088,7 +1088,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jdp-2O-Hfv">
-                                <rect key="frame" x="15" y="114.33333333333331" width="570" height="31"/>
+                                <rect key="frame" x="15" y="114.33333333333331" width="384" height="31"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Silence BIO and Commentary for this artist" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jIa-uk-wHd">
                                         <rect key="frame" x="0.0" y="8.3333333333333428" width="241.33333333333334" height="14.333333333333336"/>
@@ -1097,7 +1097,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fSP-cg-x1c">
-                                        <rect key="frame" x="521" y="0.0" width="49" height="31"/>
+                                        <rect key="frame" x="335" y="0.0" width="49" height="31"/>
                                         <subviews>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="OJY-3a-zW6">
                                                 <rect key="frame" x="0.0" y="0.0" width="51" height="31"/>
@@ -1133,13 +1133,13 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hk-N8-PUC">
-                                <rect key="frame" x="15" y="165.33333333333334" width="570" height="30.666666666666657"/>
+                                <rect key="frame" x="15" y="165.33333333333334" width="384" height="30.666666666666657"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u6I-Ht-hcf">
-                                        <rect key="frame" x="0.0" y="0.0" width="570" height="30.666666666666668"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="384" height="30.666666666666668"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Hello!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="9Ol-vd-fKd">
-                                                <rect key="frame" x="0.0" y="0.0" width="570" height="30.666666666666668"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="384" height="30.666666666666668"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="textColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -1166,17 +1166,17 @@
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YrH-b9-Nqo">
-                                <rect key="frame" x="0.0" y="226" width="600" height="60"/>
+                                <rect key="frame" x="0.0" y="226" width="414" height="60"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fpg-Id-bBK">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="0.33333333333333331"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="0.66666666666666663"/>
                                         <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="0.30161065924657532" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="g6X-dQ-u6W"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5sm-PM-cZ3">
-                                        <rect key="frame" x="0.0" y="59" width="600" height="0.3333333333333357"/>
+                                        <rect key="frame" x="0.0" y="59" width="414" height="0.6666666666666643"/>
                                         <color key="backgroundColor" red="0.69411764705882351" green="0.72549019607843135" blue="1" alpha="0.2969017551369863" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="pE0-Sv-1No"/>
@@ -1189,7 +1189,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="orJ-mH-cna">
-                                        <rect key="frame" x="453" y="19" width="132" height="22"/>
+                                        <rect key="frame" x="267" y="19" width="132" height="22"/>
                                         <color key="tintColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>

@@ -1,12 +1,13 @@
 //
-//  AlbumCollectionCell.swift
+//  AlbumCellViewController.swift
 //  RhythmicRebellion
 //
-//  Created by Vlad Soroka on 12/28/18.
-//  Copyright © 2018 Patron Empowerment, LLC. All rights reserved.
+//  Created by Vlad Soroka on 5/8/19.
+//Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
 import UIKit
+
 import RxSwift
 
 class AlbumCollectionCell: UICollectionViewCell {
@@ -17,12 +18,16 @@ class AlbumCollectionCell: UICollectionViewCell {
     
     fileprivate var disposeBag = DisposeBag()
     
-    var album: Album! {
+    var viewModel: AlbumCellViewModel! {
         
         didSet {
-            guard let a = album else {
+            guard let vm = viewModel else {
                 return
             }
+            
+            let a = vm.data.album
+            
+            albumDescriptionLabel.text = "By \(vm.data.artistName)"
             
             albumNameLabel.text = a.name
             
@@ -43,22 +48,8 @@ class AlbumCollectionCell: UICollectionViewCell {
         
     }
     
-    var artist: String? {
-        didSet {
-            
-            guard let a = artist else {
-                albumDescriptionLabel.text = nil
-                return
-            }
-            
-            albumDescriptionLabel.text = "By \(a)"
-        }
-    }
-    
-    var action: ( () -> () )? = nil
-    
     @IBAction func action(_ sender: Any) {
-        action?()
+        viewModel.presentActions()
     }
     
     override func prepareForReuse() {

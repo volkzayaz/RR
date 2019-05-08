@@ -10,6 +10,9 @@
 		730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FE9223E5B1900571383 /* MediaWidget.swift */; };
 		730D1FEE223FD65A00571383 /* BaseActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FED223FD65A00571383 /* BaseActions.swift */; };
 		7327C9682252403800692810 /* ConfigRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327C9672252403800692810 /* ConfigRequest.swift */; };
+		7343FCA42282E06D00A3DA3D /* AlbumCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */; };
+		7343FCA52282E06D00A3DA3D /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* AlbumCell.swift */; };
+		7343FCA62282E06D00A3DA3D /* AlbumCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */; };
 		734F827D2229965E0006E1DE /* Appfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82742229965E0006E1DE /* Appfile */; };
 		734F827F2229965E0006E1DE /* Fastfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82762229965E0006E1DE /* Fastfile */; };
 		7361C00222368375008EA36E /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C00122368375008EA36E /* Dispatcher.swift */; };
@@ -76,7 +79,6 @@
 		73F137FB222C289200FB8EBC /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13678222C289200FB8EBC /* DownloadViewModel.swift */; };
 		73F137FC222C289200FB8EBC /* ArtistCoverHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73F1367C222C289200FB8EBC /* ArtistCoverHeader.xib */; };
 		73F137FD222C289200FB8EBC /* ArtistCellHedaers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1367D222C289200FB8EBC /* ArtistCellHedaers.swift */; };
-		73F137FE222C289200FB8EBC /* AlbumCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1367E222C289200FB8EBC /* AlbumCollectionCell.swift */; };
 		73F137FF222C289200FB8EBC /* ArtistSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73F1367F222C289200FB8EBC /* ArtistSectionHeader.xib */; };
 		73F13800222C289200FB8EBC /* ArtistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13680222C289200FB8EBC /* ArtistViewController.swift */; };
 		73F13801222C289200FB8EBC /* ArtistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13681222C289200FB8EBC /* ArtistRouter.swift */; };
@@ -377,6 +379,9 @@
 		730D1FE9223E5B1900571383 /* MediaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWidget.swift; sourceTree = "<group>"; };
 		730D1FED223FD65A00571383 /* BaseActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseActions.swift; sourceTree = "<group>"; };
 		7327C9672252403800692810 /* ConfigRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigRequest.swift; sourceTree = "<group>"; };
+		7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCellRouter.swift; sourceTree = "<group>"; };
+		7343FCA22282E06D00A3DA3D /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
+		7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCellViewModel.swift; sourceTree = "<group>"; };
 		734F82742229965E0006E1DE /* Appfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Appfile; sourceTree = "<group>"; };
 		734F82762229965E0006E1DE /* Fastfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Fastfile; sourceTree = "<group>"; };
 		734F828622299CD90006E1DE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -445,7 +450,6 @@
 		73F13678222C289200FB8EBC /* DownloadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		73F1367C222C289200FB8EBC /* ArtistCoverHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArtistCoverHeader.xib; sourceTree = "<group>"; };
 		73F1367D222C289200FB8EBC /* ArtistCellHedaers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistCellHedaers.swift; sourceTree = "<group>"; };
-		73F1367E222C289200FB8EBC /* AlbumCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCollectionCell.swift; sourceTree = "<group>"; };
 		73F1367F222C289200FB8EBC /* ArtistSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArtistSectionHeader.xib; sourceTree = "<group>"; };
 		73F13680222C289200FB8EBC /* ArtistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistViewController.swift; sourceTree = "<group>"; };
 		73F13681222C289200FB8EBC /* ArtistRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistRouter.swift; sourceTree = "<group>"; };
@@ -781,6 +785,24 @@
 			path = Configs;
 			sourceTree = "<group>";
 		};
+		7343FC9F2282E04300A3DA3D /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				7343FCA02282E04C00A3DA3D /* Cell */,
+			);
+			path = Album;
+			sourceTree = "<group>";
+		};
+		7343FCA02282E04C00A3DA3D /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */,
+				7343FCA22282E06D00A3DA3D /* AlbumCell.swift */,
+				7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		734F82722229965E0006E1DE /* fastlane */ = {
 			isa = PBXGroup;
 			children = (
@@ -1091,6 +1113,7 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
+				7343FC9F2282E04300A3DA3D /* Album */,
 				73F13773222C289200FB8EBC /* Playlists */,
 				73DB1FD02271AC1500E01622 /* Video */,
 				73A56D2D22663E8600D2293B /* Auth */,
@@ -1190,7 +1213,6 @@
 			children = (
 				73F1367C222C289200FB8EBC /* ArtistCoverHeader.xib */,
 				73F1367D222C289200FB8EBC /* ArtistCellHedaers.swift */,
-				73F1367E222C289200FB8EBC /* AlbumCollectionCell.swift */,
 				73F1367F222C289200FB8EBC /* ArtistSectionHeader.xib */,
 			);
 			path = Cells;
@@ -2600,7 +2622,6 @@
 				73F137F7222C289200FB8EBC /* TrackView.swift in Sources */,
 				73F138D9222C289200FB8EBC /* PlayerContentStoryboardSegue.swift in Sources */,
 				73F1380B222C289200FB8EBC /* TipView.swift in Sources */,
-				73F137FE222C289200FB8EBC /* AlbumCollectionCell.swift in Sources */,
 				73F138DB222C289200FB8EBC /* PromoViewModel.swift in Sources */,
 				73F13814222C289200FB8EBC /* ProgressPresenting.swift in Sources */,
 				73F138D6222C289200FB8EBC /* LyricsKaraokeViewController.swift in Sources */,
@@ -2662,6 +2683,7 @@
 				73F1388B222C289200FB8EBC /* RestorePasswordViewModel.swift in Sources */,
 				73F13902222C289200FB8EBC /* TextImageGenerator.swift in Sources */,
 				73F1384B222C289200FB8EBC /* HomeControllerViewModel.swift in Sources */,
+				7343FCA42282E06D00A3DA3D /* AlbumCellRouter.swift in Sources */,
 				73F138BA222C289200FB8EBC /* PlayerPlaylistRootRouter.swift in Sources */,
 				73F13883222C289200FB8EBC /* ChangeEmailControllerViewModel.swift in Sources */,
 				73F1381D222C289200FB8EBC /* VerticalButton.swift in Sources */,
@@ -2730,6 +2752,7 @@
 				73F1381F222C289200FB8EBC /* TagsView.swift in Sources */,
 				73F13839222C289200FB8EBC /* User.swift in Sources */,
 				73F13840222C289200FB8EBC /* Playlist.swift in Sources */,
+				7343FCA52282E06D00A3DA3D /* AlbumCell.swift in Sources */,
 				73F1385D222C289200FB8EBC /* SelectableListRouter.swift in Sources */,
 				7361C02422369018008EA36E /* ScrubToFractionAction.swift in Sources */,
 				73F138A4222C289200FB8EBC /* PageContentRouter.swift in Sources */,
@@ -2830,6 +2853,7 @@
 				7361C01C22368ED6008EA36E /* GetBackToPreviousItem.swift in Sources */,
 				73F138A9222C289200FB8EBC /* PagesViewModel.swift in Sources */,
 				73F13845222C289200FB8EBC /* Watchable.swift in Sources */,
+				7343FCA62282E06D00A3DA3D /* AlbumCellViewModel.swift in Sources */,
 				73F13847222C289200FB8EBC /* HomeViewModel.swift in Sources */,
 				73F13870222C289200FB8EBC /* ApplicationContentContainerViewModel.swift in Sources */,
 				7361C01622368D84008EA36E /* AudioPlayerActions.swift in Sources */,

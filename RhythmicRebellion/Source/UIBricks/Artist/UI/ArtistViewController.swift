@@ -28,8 +28,7 @@ class ArtistViewController: UIViewController, MVVM_View {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.albumCell,
                                                           for: ip)!
             
-            cell.album = x
-            cell.artist = self.viewModel.artistName
+            cell.viewModel = x
             
             return cell
             

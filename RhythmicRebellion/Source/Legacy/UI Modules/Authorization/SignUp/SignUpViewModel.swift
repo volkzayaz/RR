@@ -29,9 +29,7 @@ extension SignUpViewModel {
     
     var extraTicksHidden: Driver<Bool> {
         return selectedCountry.asDriver()
-            .map {
-                $0?.code == "US"
-        }
+            .map { $0?.code == "US"}
     }
     
 }
