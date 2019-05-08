@@ -19,7 +19,7 @@ class PlaylistDeleteTests: XCTestCase {
         
         initActorStorage(x: ActorStorage(actors: [], x: FakeWebSocketService()))
         Dispatcher.state.accept(AppState.fake())
-        Dispatcher.beginSerialExecution()
+        
     }
     
     func testInsertTrack() {
