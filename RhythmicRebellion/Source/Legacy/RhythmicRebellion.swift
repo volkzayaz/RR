@@ -162,9 +162,9 @@ struct ActorStorage {
     
     let webSocketService: WebSocketService
     
-    init(actors: [Actor], x: WebSocketService = WebSocketService(url: URI.webSocketService)) {
+    init(actors: [Actor], ws: WebSocketService = WebSocketService(url: URI.webSocketService)) {
         self.actors = actors
-        self.webSocketService = x
+        self.webSocketService = ws
     }
 
     let pagesLocalStorageService = PagesLocalStorageService()
@@ -172,7 +172,7 @@ struct ActorStorage {
 
 import RxSwift
 private var actorStorage: ActorStorage!
-func initActorStorage(x: ActorStorage) {
+func initActorStorage(_ x: ActorStorage) {
     actorStorage = x
 }
 

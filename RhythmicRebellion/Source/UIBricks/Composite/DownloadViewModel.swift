@@ -53,15 +53,15 @@ struct DownloadViewModel {
     
     fileprivate let bag = DisposeBag()
     
-    let remoteURL: String
+    let downloadable: Downloadable
     
     ///@param instantStart - viewModel attempts to instantly start downloading resource at |remoteURL|
     ///                      unless it is already been downloading or downloaded
-    init(remoteURL: String, instantStart: Bool = false) {
+    init(downloadable: Downloadable, instantStart: Bool = false) {
         
-        self.remoteURL = remoteURL
+        self.downloadable = downloadable
         
-        downloadManager.downloadStatus(for: remoteURL)
+        downloadManager.downloadStatus(for: downloadable)
             .bind(to: dataState)
             .disposed(by: bag)
         
@@ -76,11 +76,11 @@ struct DownloadViewModel {
     }
     
     func download() {
-        downloadManager.start(for: remoteURL)
+        downloadManager.start(for: downloadable)
     }
     
     func cancelDownload() {
-        downloadManager.cancel(for: remoteURL)
+        downloadManager.cancel(for: downloadable)
     }
     
 }

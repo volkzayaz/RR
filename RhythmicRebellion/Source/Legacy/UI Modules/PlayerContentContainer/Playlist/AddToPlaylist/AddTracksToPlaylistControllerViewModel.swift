@@ -27,7 +27,7 @@ final class AddTracksToPlaylistControllerViewModel: AddToPlaylistControllerViewM
             .catchError({ (error) -> Maybe<Void> in
                 
                 if let e = error as? AFError, e.responseCode == 422 {
-                    throw RRError.generic(message: "This track is already added to thee playlist")
+                    throw RRError.generic(message: "This track has been already added to this playlist")
                 }
                 
                 throw error
@@ -36,15 +36,5 @@ final class AddTracksToPlaylistControllerViewModel: AddToPlaylistControllerViewM
             .subscribe(onNext: {
                 self.router?.dismiss()
             })
-//
-//        restApiService.fanAttach(self.tracks, to: playlist) {[weak self] (result) in
-//            self?.delegate?.hideProgress()
-//            switch result {
-//            case .success(_):
-//                self?.router?.dismiss()
-//            case .failure(let error):
-//                self?.delegate?.show(error: error)
-//            }
-//        }
     }
 }

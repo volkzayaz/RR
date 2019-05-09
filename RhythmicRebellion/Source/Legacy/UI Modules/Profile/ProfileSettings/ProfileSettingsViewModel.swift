@@ -570,21 +570,25 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
                     
                     guard let s = self else { return }
                     
-                    guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                        s.delegate?.show(error: error)
-                        return
+                    guard let appError = error as? RRError,
+                        case .server(let e) = appError else {
+                            s.delegate?.show(error: error)
+                            return
                     }
                     
-                    switch appErrorGroup {
-                    case RestApiServiceError.serverError( let errorDescription, _ ):
+                    for (key, errorStrings) in e.errors {
+                        guard let x = s.validatebleField(for: key),
+                            let s = errorStrings.first else { continue }
                         
-                        let validationError = ValidationError(field: s.regionField!, errorLabel: nil, error: errorDescription)
-                        self?.delegate?.refreshField(field: s.regionField!, didValidate: validationError)
+                        let validationError = ValidationError(field: x,
+                                                              errorLabel: nil,
+                                                              error: s)
                         
-                    default:
-                        s.delegate?.show(error: error)
+                        self?.delegate?.refreshField(field: x,
+                                                     didValidate: validationError)
                     }
                     
+                    s.delegate?.refreshUI()
             })
         
     }
@@ -643,29 +647,30 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
                     self.checkIsDirty()
                     self.navigateBack()
                     
-                }, onError: { error in
-                    guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                        self.delegate?.show(error: error)
-                        return
+                }, onError: { [weak self] error in
+                    
+                    guard let s = self else { return }
+                    
+                    guard let appError = error as? RRError,
+                        case .server(let e) = appError else {
+                            s.delegate?.show(error: error)
+                            return
                     }
                     
-                    switch appErrorGroup {
-                    case RestApiServiceError.serverError( let errorDescription, let errors):
-                        self.profileSettingsErrorDescription = errorDescription
-                        for (key, errorStrings) in errors {
-                            
-                            guard let validatebleField = self.validatebleField(for: key),
-                                let validatebleFieldErrorString = errorStrings.first else { continue }
-                            
-                            let validationError = ValidationError(field: validatebleField, errorLabel: nil, error: validatebleFieldErrorString)
-                            self.delegate?.refreshField(field: validatebleField, didValidate: validationError)
-                        }
+                    for (key, errorStrings) in e.errors {
+                        guard let x = s.validatebleField(for: key),
+                            let s = errorStrings.first else { continue }
                         
-                    default:
-                        self.delegate?.show(error: error)
+                        let validationError = ValidationError(field: x,
+                                                              errorLabel: nil,
+                                                              error: s)
+                        
+                        self?.delegate?.refreshField(field: x,
+                                                     didValidate: validationError)
                     }
                     
-                    self.delegate?.refreshUI()
+                    s.delegate?.refreshUI()
+                    
                 })
             
         }

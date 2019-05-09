@@ -55,7 +55,11 @@ struct ArtistViewModel : MVVM_ViewModel {
             .rx.baseResponse(type: [Album].self)
             .map { response in
                 return ( R.string.localizable.albums(),
-                         response.map { Data.album(album: $0) } )
+                         response.map { album in
+                            Data.album(album: .init(router: .init(owner: router.owner),
+                                                    data:   .init(album: album,
+                                                                  artistName: artist.name)))
+                })
             }
             .trackView(viewIndicator: indicator)
         
@@ -104,7 +108,7 @@ extension ArtistViewModel {
         
         switch item {
         case .album(let album):
-            router.show(album: album)
+            router.show(album: album.data.album)
             
         case .track(let trackViewModel):
             Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [trackViewModel.track],
@@ -137,13 +141,13 @@ extension ArtistViewModel {
     }
     
     enum Data: IdentifiableType, Equatable {
-        case album(album: Album)
+        case album(album: AlbumCellViewModel)
         case playlist(playlist: ArtistPlaylist)
         case track(trackViewModel: TrackViewModel)
         
         var identity: String {
             switch self {
-            case .album(let album):       return "album \(album.id)"
+            case .album(let album):       return "album \(album.data.album.id)"
             case .playlist(let playlist): return "playlist \(playlist.id)"
             case .track(let t):       return "track \(t.track.id)"
             }
@@ -152,7 +156,7 @@ extension ArtistViewModel {
         static func ==(lhs: Data, rhs: Data) -> Bool {
             switch (lhs, rhs) {
             case (.album(let x), .album(let y)):
-                return x == y
+                return x.data == y.data
                 
             case (.playlist(let x), .playlist(let y)):
                 return x == y

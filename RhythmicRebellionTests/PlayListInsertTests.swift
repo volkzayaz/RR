@@ -16,7 +16,7 @@ class PlaylistInsertTests: XCTestCase {
     
     override func setUp() {
         
-        initActorStorage(x: ActorStorage(actors: [], x: FakeWebSocketService()))
+        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService()))
         Dispatcher.state.accept(AppState.fake())
         Dispatcher.dispatch(action: StoreTracks(tracks: Tracks.all))
     }

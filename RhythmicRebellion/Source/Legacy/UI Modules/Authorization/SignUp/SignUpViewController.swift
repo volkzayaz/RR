@@ -73,6 +73,12 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var howHearTextField: HowHearTextField!
     @IBOutlet weak var howHearErrorLabel: UILabel!
 
+    @IBOutlet weak var termsAndConditionsCheckmark: Checkbox!
+    @IBOutlet weak var dataStoredCheckmark: Checkbox!
+    @IBOutlet weak var dataStoredLabel: UILabel!
+    @IBOutlet weak var advertisersCheckmark: Checkbox!
+    @IBOutlet weak var advertisersLabel: UILabel!
+    
     // MARK: - Public properties -
 
     private(set) var viewModel: SignUpViewModel!
@@ -130,6 +136,22 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.viewModel.registerPhoneField(MaskedFieldWrapperWrapper(with: self.phoneTextField))
         self.viewModel.registerHobbiesField(self.hobbiesContainerView)
         self.viewModel.registerHowHearField(self.howHearTextField)
+        
+        viewModel.extraTicksHidden
+            .drive(onNext: { [unowned self] (hidden) in
+                
+                self.dataStoredCheckmark.isChecked = hidden
+                self.dataStoredCheckmark.isHidden = hidden
+                self.dataStoredLabel.isHidden = hidden
+                
+                self.advertisersCheckmark.isChecked = hidden
+                self.advertisersCheckmark.isHidden = hidden
+                self.advertisersLabel.isHidden = hidden
+                
+                }, onDisposed: {
+                    print("")
+            })
+            .disposed(by: rx.disposeBag)
     }
 
     // MARK: - Lifecycle -
@@ -149,6 +171,25 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        [termsAndConditionsCheckmark, dataStoredCheckmark, advertisersCheckmark].forEach { x in
+            x?.borderStyle = .square
+            
+            x?.layer.cornerRadius = 3
+            
+            x?.checkmarkStyle = .tick
+            x?.useHapticFeedback = true
+            
+            x?.checkedBackgroundColor = UIColor(fromHex: 0xFF3EA7)
+            x?.checkboxBackgroundColor = .init(fromHex: 0x0B133A)
+            
+            x?.uncheckedBorderColor = .init(fromHex: 0xB1B9FF)
+            x?.checkedBorderColor = .init(fromHex: 0x0B133A)
+            
+            x?.checkmarkColor = .init(fromHex: 0x0B133A)
+            
+            x?.increasedTouchRadius = 5
+        }
+        
         self.hobbiesContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSelectHobbies(sender:))))
 
         self.emailTextField.textColor = self.viewModel.defaultTextColor
@@ -259,6 +300,12 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func onSignUp(sender: Any?) {
 
+        guard termsAndConditionsCheckmark.isChecked,
+            dataStoredCheckmark.isChecked,
+            advertisersCheckmark.isChecked else {
+                return presentErrorMessage(error: "You should tick all checkmarks before completing registration")
+        }
+        
         self.view.endEditing(true)
         self.viewModel.signUp()
 
@@ -461,6 +508,7 @@ extension SignUpViewController: SignUpViewModelDelegate {
     }
 
     func refreshCountryField(with country: Country?) {
+        viewModel.selectedCountry.accept(country)
         self.countryTextField.country = country
     }
 

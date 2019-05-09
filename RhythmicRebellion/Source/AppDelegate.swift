@@ -74,28 +74,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        ////config services
         FirebaseApp.configure()
-
         Fabric.with([Crashlytics.self])
         
-        application.applicationSupportsShakeToEdit = true
-        
-        self.setupAppearance()
-
-        let appViewController = self.window?.rootViewController as! AppViewController
-
         NetworkActivityLogger.shared.level = .debug
         NetworkActivityLogger.shared.startLogging()
         
-        let x = ActorStorage(actors: [ RRPlayer(), AudioPlayer(), MediaWidget() ])
-        initActorStorage(x: x)
+        application.applicationSupportsShakeToEdit = true
+        
+        ////appearence
+        self.setupAppearance()
+
+        ////init app state
+        let ws = WebSocketService(url: URI.webSocketService)
+        let x = ActorStorage(actors: [ RRPlayer(webSocket: ws),
+                                       AudioPlayer(),
+                                       MediaWidget() ],
+                             ws: ws)
+        initActorStorage(x)
+
+        Dispatcher.kickOff()
+        
+        ///init UI
+        let appViewController = self.window?.rootViewController as! AppViewController
         
         let defaultAppRouter = AppRouter()
         defaultAppRouter.start(controller: appViewController)
         
         self.appRouter = defaultAppRouter
-        
-        Dispatcher.kickOff()
         
         return self.appRouter != nil
     }

@@ -234,3 +234,19 @@ extension Track: Hashable, CustomStringConvertible {
         return name
     }
 }
+
+extension Track: Downloadable {
+    
+    var fileName: String {
+        return "\(name).mp3"
+    }
+
+    public func asURL() throws -> URL {
+        guard let x = audioFile?.urlString else {
+            throw RRError.generic(message: "No URL")
+        }
+        
+        return URL(string: x)!
+    }
+    
+}

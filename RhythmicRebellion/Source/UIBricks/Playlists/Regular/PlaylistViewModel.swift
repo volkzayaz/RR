@@ -22,7 +22,7 @@ protocol DeletablePlaylistProvider: PlaylistProvider {
 
 protocol DownloadablePlaylistProvider: PlaylistProvider {
     
-    var downloadURL: Maybe<String> { get }
+    var downloadable: Maybe<Downloadable> { get }
     
     var instantDownload: Bool { get }
 }
@@ -91,13 +91,23 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     var title: String? { return nil }
     var isFanPlaylist: Bool { return false }
  
-    var downloadURL: Maybe<String> {
+    var downloadable: Maybe<Downloadable> {
         
+        struct DownloadableAlbum: Downloadable {
+            let fileName: String
+            let url: URL
+            func asURL() throws -> URL { return url }
+        }
+        
+        let x = album.name
         return AlbumRequest.downloadLink(album: album)
             .rx.response(type: BaseReponse<String>.self)
-            .map { $0.data }
-            
-            
+            .map {
+                DownloadableAlbum( fileName: "\(x).zip",
+                                   url: URL(string: $0.data)! )
+                
+            }
+        
     }
     
 }
@@ -159,9 +169,9 @@ final class PlaylistViewModel {
         self.router = router
         
         if let p = provider as? DownloadablePlaylistProvider {
-            p.downloadURL
+            p.downloadable
                 .silentCatch()
-                .map { DownloadViewModel(remoteURL: $0, instantStart: p.instantDownload) }
+                .map { DownloadViewModel(downloadable: $0, instantStart: p.instantDownload) }
                 .bind(to: downloadViewModel)
                 .disposed(by: bag)
         }
