@@ -11,7 +11,7 @@ import Nimble
 
 @testable import RhythmicRebellion
 
-class PlaylistInsertTests2: XCTestCase {
+class PlaylistDeleteTests: XCTestCase {
 
     override func setUp() {
         
