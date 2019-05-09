@@ -24,6 +24,9 @@ class PlaylistInsertTests: XCTestCase {
     let t7 = Track.fake(id: 2)
     let t8 = Track.fake(id: 6)
     
+    ///1. apply StoreTracks once in setUp
+    ///2. drop number of implicitelly unwrapped optionals
+    
     override func setUp() {
         
         initActorStorage(x: ActorStorage(actors: [], x: FakeWebSocketService()))
@@ -65,6 +68,9 @@ class PlaylistInsertTests: XCTestCase {
         expect(v2![.next]     as? String).to(equal(newOrderedTracks[1].orderHash))
         expect(v2![.previous] as? String).to(beNil())
         
+        ////we also need to make sure there is exactly ONE entry int the patch in this case
+        ////we need to make sure no "id", "hash" or "next" is present in the patch
+        ////expect(v3!.count) == 1
         let v3 = newPatch!.patch[newOrderedTracks[1].orderHash]!
         expect(v3![.id]       as? Int)   .to(beNil())
         expect(v3![.hash]     as? String).to(beNil())
@@ -137,6 +143,10 @@ class PlaylistInsertTests: XCTestCase {
         expect(v3![.hash]     as? String).to(equal(orderedTracks[2].orderHash))
         expect(v3![.next]     as? String).to(equal(orderedTracks[3].orderHash))
         expect(v3![.previous] as? String).to(equal(orderedTracks[1].orderHash))
+        
+        ////we also need to make sure there is exactly ONE entry int the patch in this case
+        ////we need to make sure no "id", "hash" or "next" is present in the patch
+        ////expect(v3!.count) == 1
         //Diff only previous
         expect(v4![.id]       as? Int)   .to(beNil())
         expect(v4![.hash]     as? String).to(beNil())
@@ -163,6 +173,9 @@ class PlaylistInsertTests: XCTestCase {
         let v1 = lastPatch!.patch[newOrderedTracks[1].orderHash]!
         let v2 = lastPatch!.patch[newOrderedTracks[2].orderHash]!
         
+        ////we also need to make sure there is exactly ONE entry int the patch in this case
+        ////we need to make sure no "id", "hash" or "next" is present in the patch
+        ////expect(v3!.count) == 1
         expect(v1![.id]       as? Int)   .to(beNil())
         expect(v1![.hash]     as? String).to(beNil())
         expect(v1![.next]     as? String).to(equal(newOrderedTracks[2].orderHash))
@@ -195,6 +208,9 @@ class PlaylistInsertTests: XCTestCase {
         let v2 = lastPatch!.patch[newOrderedTracks[2].orderHash]!
         let v3 = lastPatch!.patch[newOrderedTracks[3].orderHash]!
         
+        ////we also need to make sure there is exactly ONE entry int the patch in this case
+        ////we need to make sure no "id", "hash" or "next" is present in the patch
+        ////expect(v1!.count) == 1
         expect(v1![.id]       as? Int)   .to(beNil())
         expect(v1![.hash]     as? String).to(beNil())
         expect(v1![.next]     as? String).to(equal(newOrderedTracks[2].orderHash))
@@ -205,6 +221,9 @@ class PlaylistInsertTests: XCTestCase {
         expect(v2![.next]     as? String).to(equal(newOrderedTracks[3].orderHash))
         expect(v2![.previous] as? String).to(equal(newOrderedTracks[1].orderHash))
         
+        ////we also need to make sure there is exactly ONE entry int the patch in this case
+        ////we need to make sure no "id", "hash" or "next" is present in the patch
+        ////expect(v3!.count) == 1
         expect(v3![.id]       as? Int)   .to(beNil())
         expect(v3![.hash]     as? String).to(beNil())
         expect(v3![.next]     as? String).to(beNil())
