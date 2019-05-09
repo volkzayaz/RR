@@ -158,11 +158,20 @@ class PlaylistInsertTests: XCTestCase {
         Dispatcher.dispatch(action: InsertTracks(tracks: newTracks, afterTrack: orderedTracks.last!))
         expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(2))
         
+        let newOrderedTracks = appStateSlice.player.tracks.orderedTracks;
         let lastPatch = appStateSlice.player.lastPatch
-//        let v1 = lastPatch!.patch[orderedTracks[orderedTracks.count - 1].orderHash]!
-//        let v2 = lastPatch!.patch[orderedTracks[orderedTracks.count - 2].orderHash]!
+        let v1 = lastPatch!.patch[newOrderedTracks[1].orderHash]!
+        let v2 = lastPatch!.patch[newOrderedTracks[2].orderHash]!
         
-//        let v2 = lastPatch!.patch[newOrderedTracks[1].orderHash]!
+        expect(v1![.id]       as? Int)   .to(beNil())
+        expect(v1![.hash]     as? String).to(beNil())
+        expect(v1![.next]     as? String).to(equal(newOrderedTracks[2].orderHash))
+        expect(v1![.previous] as? String).to(beNil())
+        
+        expect(v2![.id]       as? Int)   .to(equal(newOrderedTracks[2].track.id))
+        expect(v2![.hash]     as? String).to(equal(newOrderedTracks[2].orderHash))
+        expect(v2![.next]     as? String).to(beNil())
+        expect(v2![.previous] as? String).to(equal(newOrderedTracks[1].orderHash))
     }
 //        let orrderedTrack = appStateSlice.player.tracks.orderedTracks.first!
 //        Dispatcher.dispatch(action: DeleteTrack(track: orrderedTrack))
