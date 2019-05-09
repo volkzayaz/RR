@@ -362,6 +362,7 @@
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
 		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
 		FB8B86A1228434BF00C0D31A /* Tracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* Tracks.swift */; };
+		FB8B86A522843F3600C0D31A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A422843F3600C0D31A /* Helper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -738,6 +739,7 @@
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
 		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
 		FB8B86A0228434BF00C0D31A /* Tracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracks.swift; sourceTree = "<group>"; };
+		FB8B86A422843F3600C0D31A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -963,11 +965,9 @@
 		736456A0220C7610005BE389 /* RhythmicRebellionTests */ = {
 			isa = PBXGroup;
 			children = (
-				FB8B86A0228434BF00C0D31A /* Tracks.swift */,
 				736456A1220C7610005BE389 /* PlayListInsertTests.swift */,
 				736456AE220C80CE005BE389 /* PlaylistDeleteTests.swift */,
-				FB257EBB22805044006D5006 /* Fake */,
-				FB257EB3228039BA006D5006 /* json */,
+				FB8B86A322843EF700C0D31A /* Internal */,
 				734F828522299CD90006E1DE /* support_files */,
 			);
 			path = RhythmicRebellionTests;
@@ -2225,6 +2225,17 @@
 			path = Fake;
 			sourceTree = "<group>";
 		};
+		FB8B86A322843EF700C0D31A /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				FB8B86A0228434BF00C0D31A /* Tracks.swift */,
+				FB8B86A422843F3600C0D31A /* Helper.swift */,
+				FB257EBB22805044006D5006 /* Fake */,
+				FB257EB3228039BA006D5006 /* json */,
+			);
+			path = Internal;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2534,6 +2545,7 @@
 				FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */,
 				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
 				FB1B9A9D2281ABE100F1CDEC /* FakeWebSocketService.swift in Sources */,
+				FB8B86A522843F3600C0D31A /* Helper.swift in Sources */,
 				FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */,
 				736456AF220C80CE005BE389 /* PlaylistDeleteTests.swift in Sources */,
 				FB1B9A8D22806BCD00F1CDEC /* FakeArtist.swift in Sources */,

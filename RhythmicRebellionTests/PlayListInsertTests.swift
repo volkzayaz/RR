@@ -22,18 +22,16 @@ class PlaylistInsertTests: XCTestCase {
     }
     
     func testNewState() {
-        expect(appStateSlice.player.lastPatch).to(beNil())
+        expect(lastPatch?.patch).to(beNil())
     }
     
     func testConsequtiveInsertTracks() {
         
         let tracks = [t1]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(1))
+        expect(lastPatch?.patch.count).toEventually(equal(1))
         
-        let lastPatch = appStateSlice.player.lastPatch
-        let orderedTracks = appStateSlice.player.tracks.orderedTracks
-        let v1 = lastPatch!.patch[orderedTracks[0].orderHash]!
+        let v1 = lastPatch?.patch[orderedTracks[0].orderHash]!
         
         expect(v1![.id]       as? Int)   .to(equal(orderedTracks[0].track.id))
         expect(v1![.hash]     as? String).to(equal(orderedTracks[0].orderHash))
@@ -42,21 +40,18 @@ class PlaylistInsertTests: XCTestCase {
         
         let newTracks = [t2]
         Dispatcher.dispatch(action: InsertTracks(tracks: newTracks, afterTrack: nil))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(2))
+        expect(lastPatch?.patch.count).toEventually(equal(2))
         
-        let newPatch = appStateSlice.player.lastPatch
-        let newOrderedTracks = appStateSlice.player.tracks.orderedTracks
+        let v2 = lastPatch?.patch[orderedTracks[0].orderHash]!
         
-        let v2 = newPatch!.patch[newOrderedTracks[0].orderHash]!
-        
-        expect(v2![.id]       as? Int)   .to(equal(newOrderedTracks[0].track.id))
-        expect(v2![.hash]     as? String).to(equal(newOrderedTracks[0].orderHash))
-        expect(v2![.next]     as? String).to(equal(newOrderedTracks[1].orderHash))
+        expect(v2![.id]       as? Int)    == orderedTracks[0].track.id
+        expect(v2![.hash]     as? String) == orderedTracks[0].orderHash
+        expect(v2![.next]     as? String) == orderedTracks[1].orderHash
         expect(v2![.previous] as? String).to(beNil())
         
-        let v3 = newPatch!.patch[newOrderedTracks[1].orderHash]!!
+        let v3 = lastPatch!.patch[orderedTracks[1].orderHash]!!
         expect(v3.count) == 1
-        expect(v3[.previous] as? String).to(equal(newOrderedTracks[0].orderHash))
+        expect(v3[.previous] as? String) == orderedTracks[0].orderHash
     }
     
     func testInitialInsertTracks() {
@@ -64,28 +59,26 @@ class PlaylistInsertTests: XCTestCase {
         let tracks = [t1, t2, t3]
         Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(tracks.count))
+        expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         
-        let lastPatch = appStateSlice.player.lastPatch
-        let orderedTracks = appStateSlice.player.tracks.orderedTracks;
         let v1 = lastPatch!.patch[orderedTracks[0].orderHash]!
         let v2 = lastPatch!.patch[orderedTracks[1].orderHash]!
         let v3 = lastPatch!.patch[orderedTracks[2].orderHash]!
         
-        expect(v1![.id]       as? Int)   .to(equal(orderedTracks[0].track.id))
-        expect(v1![.hash]     as? String).to(equal(orderedTracks[0].orderHash))
-        expect(v1![.next]     as? String).to(equal(orderedTracks[1].orderHash))
+        expect(v1![.id]       as? Int)    == orderedTracks[0].track.id
+        expect(v1![.hash]     as? String) == orderedTracks[0].orderHash
+        expect(v1![.next]     as? String) == orderedTracks[1].orderHash
         expect(v1![.previous] as? String).to(beNil())
         
-        expect(v2![.id]       as? Int)   .to(equal(orderedTracks[1].track.id))
-        expect(v2![.hash]     as? String).to(equal(orderedTracks[1].orderHash))
-        expect(v2![.next]     as? String).to(equal(orderedTracks[2].orderHash))
-        expect(v2![.previous] as? String).to(equal(orderedTracks[0].orderHash))
+        expect(v2![.id]       as? Int)    == orderedTracks[1].track.id
+        expect(v2![.hash]     as? String) == orderedTracks[1].orderHash
+        expect(v2![.next]     as? String) == orderedTracks[2].orderHash
+        expect(v2![.previous] as? String) == orderedTracks[0].orderHash
         
-        expect(v3![.id]       as? Int)   .to(equal(orderedTracks[2].track.id))
-        expect(v3![.hash]     as? String).to(equal(orderedTracks[2].orderHash))
+        expect(v3![.id]       as? Int)    == orderedTracks[2].track.id
+        expect(v3![.hash]     as? String) == orderedTracks[2].orderHash
         expect(v3![.next]     as? String).to(beNil())
-        expect(v3![.previous] as? String).to(equal(orderedTracks[1].orderHash))
+        expect(v3![.previous] as? String) == orderedTracks[1].orderHash
     }
     
     func testInsertTracksToHead() {
@@ -99,10 +92,7 @@ class PlaylistInsertTests: XCTestCase {
         let newTracks = [t5, t6, t7]
         
         Dispatcher.dispatch(action: InsertTracks(tracks: newTracks, afterTrack: nil))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(newTracks.count + 1))
-        
-        let lastPatch = appStateSlice.player.lastPatch
-        let orderedTracks = appStateSlice.player.tracks.orderedTracks;
+        expect(lastPatch!.patch.count).toEventually(equal(newTracks.count + 1))
         
         let v1 = lastPatch!.patch[orderedTracks[0].orderHash]!!
         let v2 = lastPatch!.patch[orderedTracks[1].orderHash]!!
@@ -133,28 +123,23 @@ class PlaylistInsertTests: XCTestCase {
         let tracks = [t1, t2]
         Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(tracks.count))
-        
-        let orderedTracks = appStateSlice.player.tracks.orderedTracks;
+        expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         
         let newTracks = [t5]
         Dispatcher.dispatch(action: InsertTracks(tracks: newTracks, afterTrack: orderedTracks.last!))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(2))
+        expect(lastPatch!.patch.count).toEventually(equal(2))
         
-        let newOrderedTracks = appStateSlice.player.tracks.orderedTracks;
-        let lastPatch = appStateSlice.player.lastPatch
-        let v1 = lastPatch!.patch[newOrderedTracks[1].orderHash]!!
-        let v2 = lastPatch!.patch[newOrderedTracks[2].orderHash]!!
-        
+        let v1 = lastPatch!.patch[orderedTracks[1].orderHash]!!
+        let v2 = lastPatch!.patch[orderedTracks[2].orderHash]!!
         
         expect(v1.count) == 1
-        expect(v1[.next]     as? String) == newOrderedTracks[2].orderHash
-        expect(v1[.next]     as? String) == newOrderedTracks[2].orderHash
+        expect(v1[.next]     as? String) == orderedTracks[2].orderHash
+        expect(v1[.next]     as? String) == orderedTracks[2].orderHash
         
-        expect(v2[.id]       as? Int)    == newOrderedTracks[2].track.id
-        expect(v2[.hash]     as? String) == newOrderedTracks[2].orderHash
+        expect(v2[.id]       as? Int)    == orderedTracks[2].track.id
+        expect(v2[.hash]     as? String) == orderedTracks[2].orderHash
         expect(v2[.next]     as? String) .to(beNil())
-        expect(v2[.previous] as? String) == newOrderedTracks[1].orderHash
+        expect(v2[.previous] as? String) == orderedTracks[1].orderHash
     }
     
     func testMiddleInsert() {
@@ -162,30 +147,26 @@ class PlaylistInsertTests: XCTestCase {
         let tracks = [t1, t2, t3, t4]
         Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(tracks.count))
+        expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         
         let newTracks = [t5]
-        let orderedTracks = appStateSlice.player.tracks.orderedTracks;
         
         Dispatcher.dispatch(action: InsertTracks(tracks: newTracks, afterTrack: orderedTracks[1]))
-        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(3))
+        expect(lastPatch!.patch.count).toEventually(equal(3))
         
-        let lastPatch = appStateSlice.player.lastPatch
-        let newOrderedTracks = appStateSlice.player.tracks.orderedTracks;
-        
-        let v1 = lastPatch!.patch[newOrderedTracks[1].orderHash]!!
-        let v2 = lastPatch!.patch[newOrderedTracks[2].orderHash]!!
-        let v3 = lastPatch!.patch[newOrderedTracks[3].orderHash]!!
+        let v1 = lastPatch!.patch[orderedTracks[1].orderHash]!!
+        let v2 = lastPatch!.patch[orderedTracks[2].orderHash]!!
+        let v3 = lastPatch!.patch[orderedTracks[3].orderHash]!!
         
         expect(v1.count) == 1
-        expect(v1[.next]     as? String) == newOrderedTracks[2].orderHash
+        expect(v1[.next]     as? String) == orderedTracks[2].orderHash
         
-        expect(v2[.id]       as? Int)    == newOrderedTracks[2].track.id
-        expect(v2[.hash]     as? String) == newOrderedTracks[2].orderHash
-        expect(v2[.next]     as? String) == newOrderedTracks[3].orderHash
-        expect(v2[.previous] as? String) == newOrderedTracks[1].orderHash
+        expect(v2[.id]       as? Int)    == orderedTracks[2].track.id
+        expect(v2[.hash]     as? String) == orderedTracks[2].orderHash
+        expect(v2[.next]     as? String) == orderedTracks[3].orderHash
+        expect(v2[.previous] as? String) == orderedTracks[1].orderHash
         
         expect(v3.count) == 1
-        expect(v3[.previous] as? String) == newOrderedTracks[2].orderHash
+        expect(v3[.previous] as? String) == orderedTracks[2].orderHash
     }
 }
