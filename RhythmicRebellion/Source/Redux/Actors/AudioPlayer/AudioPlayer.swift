@@ -56,7 +56,7 @@ extension AudioPlayer {
 
 class AudioPlayer: NSObject, Actor {
     
-    fileprivate let player: AVQueuePlayer = AVQueuePlayer(items: [])
+    fileprivate let player: AVPlayer = AVPlayer()
     
     fileprivate var isSeeking = false
     
@@ -110,7 +110,6 @@ class AudioPlayer: NSObject, Actor {
         ///////---------
         ///////REACTING
         ///////---------
-        
         
         let x = appState
             .map { $0.player.currentItem?.state }
@@ -181,13 +180,35 @@ class AudioPlayer: NSObject, Actor {
                     x.url == url {
                     return;
                 }
+              
+                let i = AVPlayerItem(url: url)
                 
-                p?.removeAllItems()
-                p?.insert(AVPlayerItem(url: url),
-                          after: nil)
+                p?.replaceCurrentItem(with: i)
                 
             })
             .disposed(by: rx.disposeBag)
+        
+        ///////---------
+        ///////Buffering and loading state
+        ///////---------
+        
+        ////TODO:
+        ///1. Add loading indicator for all times when we do not play media, but waiting for it
+        ///2. Add buffering progress UI (when media chunk has been loaded and is ready to be played back)
+        ///3. Handle cases when seek(for:) results in player bugs (continues old playback, does not dispatch |next| events via |reasonForWaitingToPlay|)
+        
+        player.rx.reasonForWaitingToPlay
+            .subscribe(onNext: { (x) in
+                print("New waiting resolve \(x)")
+            })
+            .disposed(by: bag)
+        
+        player.rx.timeControlStatus
+            .subscribe(onNext: { (x) in
+                print("New timecontrol status \(x)")
+            })
+            .disposed(by: bag)
+        
         
         ///////---------
         ///////Audio Session juggling

@@ -58,10 +58,23 @@ extension Reactive where Base == AVPlayer {
     
     var status: Observable<AVPlayer.Status> {
         
-        ///will probably need to manually unwrap NSNumber to AVPlayerStatus
         return base.rx.observeWeakly(AVPlayer.Status.self, "status")
             .startWith(base.status)
             .notNil()
+    }
+    
+    var reasonForWaitingToPlay: Observable<AVPlayer.WaitingReason?> {
+        
+        return base.rx.observe(AVPlayer.WaitingReason.self, "reasonForWaitingToPlay")
+            .startWith(base.reasonForWaitingToPlay)
+        
+    }
+    
+    var timeControlStatus: Observable<AVPlayer.TimeControlStatus?> {
+        
+        return base.rx.observe(AVPlayer.TimeControlStatus.self, "timeControlStatus")
+            .startWith(base.timeControlStatus)
+        
     }
     
     var error: Observable<Error?> {
