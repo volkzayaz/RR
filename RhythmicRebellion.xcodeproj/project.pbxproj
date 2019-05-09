@@ -32,7 +32,7 @@
 		7361C02E2236917C008EA36E /* ChangeBlockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C02D2236917C008EA36E /* ChangeBlockState.swift */; };
 		7361C03022369189008EA36E /* UpdatePreviewTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C02F22369189008EA36E /* UpdatePreviewTimes.swift */; };
 		736456A2220C7610005BE389 /* PlayListInsertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456A1220C7610005BE389 /* PlayListInsertTests.swift */; };
-		736456AF220C80CE005BE389 /* PlaylistInsertTests2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456AE220C80CE005BE389 /* PlaylistInsertTests2.swift */; };
+		736456AF220C80CE005BE389 /* PlaylistDeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456AE220C80CE005BE389 /* PlaylistDeleteTests.swift */; };
 		736598E621D66E6C0092E499 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 736598E821D66E6C0092E499 /* Localizable.strings */; };
 		73732119225523E000606E09 /* PlaylistRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73732118225523E000606E09 /* PlaylistRequest.swift */; };
 		7373211C22552A4500606E09 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7373211B22552A4500606E09 /* UserManager.swift */; };
@@ -359,6 +359,7 @@
 		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
 		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
+		FB8B86A1228434BF00C0D31A /* Tracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* Tracks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -401,7 +402,7 @@
 		7361C02F22369189008EA36E /* UpdatePreviewTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePreviewTimes.swift; sourceTree = "<group>"; };
 		7364569F220C760F005BE389 /* RhythmicRebellionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RhythmicRebellionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		736456A1220C7610005BE389 /* PlayListInsertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListInsertTests.swift; sourceTree = "<group>"; };
-		736456AE220C80CE005BE389 /* PlaylistInsertTests2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInsertTests2.swift; sourceTree = "<group>"; };
+		736456AE220C80CE005BE389 /* PlaylistDeleteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDeleteTests.swift; sourceTree = "<group>"; };
 		736598E721D66E6C0092E499 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		73732118225523E000606E09 /* PlaylistRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRequest.swift; sourceTree = "<group>"; };
 		7373211B22552A4500606E09 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
@@ -732,6 +733,7 @@
 		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
 		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
+		FB8B86A0228434BF00C0D31A /* Tracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracks.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -939,10 +941,11 @@
 		736456A0220C7610005BE389 /* RhythmicRebellionTests */ = {
 			isa = PBXGroup;
 			children = (
+				FB8B86A0228434BF00C0D31A /* Tracks.swift */,
+				736456A1220C7610005BE389 /* PlayListInsertTests.swift */,
+				736456AE220C80CE005BE389 /* PlaylistDeleteTests.swift */,
 				FB257EBB22805044006D5006 /* Fake */,
 				FB257EB3228039BA006D5006 /* json */,
-				736456A1220C7610005BE389 /* PlayListInsertTests.swift */,
-				736456AE220C80CE005BE389 /* PlaylistInsertTests2.swift */,
 				734F828522299CD90006E1DE /* support_files */,
 			);
 			path = RhythmicRebellionTests;
@@ -2510,7 +2513,7 @@
 				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
 				FB1B9A9D2281ABE100F1CDEC /* FakeWebSocketService.swift in Sources */,
 				FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */,
-				736456AF220C80CE005BE389 /* PlaylistInsertTests2.swift in Sources */,
+				736456AF220C80CE005BE389 /* PlaylistDeleteTests.swift in Sources */,
 				FB1B9A8D22806BCD00F1CDEC /* FakeArtist.swift in Sources */,
 				FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */,
 				736456A2220C7610005BE389 /* PlayListInsertTests.swift in Sources */,
@@ -2518,6 +2521,7 @@
 				FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */,
 				FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */,
 				FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */,
+				FB8B86A1228434BF00C0D31A /* Tracks.swift in Sources */,
 				FB1B9A892280682D00F1CDEC /* FakeTrack.swift in Sources */,
 				FB1B9A9522808B0500F1CDEC /* FakeConfig.swift in Sources */,
 			);

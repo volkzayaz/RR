@@ -9,26 +9,16 @@
 import XCTest
 import Nimble
 import RxCocoa
-import RxSwift
 
 @testable import RhythmicRebellion
 
 class PlaylistInsertTests: XCTestCase {
     
-    let t1 = Track.fake(id: 1)
-    let t2 = Track.fake(id: 2)
-    let t3 = Track.fake(id: 3)
-    let t4 = Track.fake(id: 3)
-    let t5 = Track.fake(id: 4)
-    let t6 = Track.fake(id: 5)
-    let t7 = Track.fake(id: 2)
-    let t8 = Track.fake(id: 6)
-    
     override func setUp() {
         
         initActorStorage(x: ActorStorage(actors: [], x: FakeWebSocketService()))
         Dispatcher.state.accept(AppState.fake())
-        Dispatcher.dispatch(action: StoreTracks(tracks: [t1, t2, t3, t4, t5, t6, t7, t8]))
+        Dispatcher.dispatch(action: StoreTracks(tracks: Tracks.all))
     }
     
     func testNewState() {
