@@ -173,97 +173,42 @@ class PlaylistInsertTests: XCTestCase {
         expect(v2![.next]     as? String).to(beNil())
         expect(v2![.previous] as? String).to(equal(newOrderedTracks[1].orderHash))
     }
-//        let orrderedTrack = appStateSlice.player.tracks.orderedTracks.first!
-//        Dispatcher.dispatch(action: DeleteTrack(track: orrderedTrack))
-//        expect(appStateSlice.player.tracks.orderedTracks.count).toEventually(equal(0))
-//        
-//        //        expect(res.keys.count) == 1
-//        //        expect(res.first?.value?[.id] as? Int) == x.id
-//        //        expect(res.first?.value?[.hash] as? String) == res.first?.key
-//        //        expect(res.first?.value?[.next]!).to(beNil())
-//        //        expect(res.first?.value?[.previous]!).to(beNil())
-//        
-//        
-//        
-//        //        _ = testObject.insert(tracks: [x1], after: nil)
-//        //        let tracks = testObject.orderedTracks
-//        //
-//        //        let res = testObject.delete(track: tracks[0])
-//        //
-//        //        expect(self.testObject.orderedTracks.count) == 0
-//        //
-//        //        expect(res.keys.count) == 1
-//        //        expect(res[tracks[0].orderHash]!).to(beNil())
-//        
-//    }
     
-//    func testDeleteFirst() {
-//        
-//        let data = try! JsonReader.readData(withName: "playlist")
-//        let patch = TrackReduxViewPatch(jsonData: data)
-//        let action = ApplyReduxViewPatch(viewPatch: .init(shouldFlush: patch.shouldFlush, patch: patch.data) )
-//        
-//        Dispatcher.dispatch(action: action)
-//        
-//        expect(appStateSlice.player.tracks.count).toEventually(equal(patch.data.count))
-//        
-//        let x1 = Track.fake()
-//        let x2 = Track.fake()
-//        let x3 = Track.fake()
-//        #warning("Uncoment")
-//        //        _ = testObject.insert(tracks: [x1, x2, x3], after: nil)
-//        //        let tracks = testObject.orderedTracks
-//        //
-//        //        let res = testObject.delete(track: tracks[0])
-//        //
-//        //        expect(self.testObject.orderedTracks.count) == 2
-//        //
-//        //        expect(res.keys.count) == 2
-//        //        expect(res[tracks[0].orderHash]!).to(beNil())
-//        //        expect(res[tracks[1].orderHash]??[.previous]!).to(beNil())
-//        
-//    }
-//    
-//    func testDeleteLast() {
-//        
-//        let x1 = Track.fake()
-//        let x2 = Track.fake()
-//        let x3 = Track.fake()
-//        #warning("Uncoment")
-//        //        _ = testObject.insert(tracks: [x1, x2, x3], after: nil)
-//        //        let tracks = testObject.orderedTracks
-//        //
-//        //        let res = testObject.delete(track: tracks[2])
-//        //
-//        //        expect(self.testObject.orderedTracks.count) == 2
-//        //
-//        //        expect(res.keys.count) == 2
-//        //        expect(res[tracks[2].orderHash]!)         .to(beNil())
-//        //        expect(res[tracks[1].orderHash]??[.next]!).to(beNil())
-//        
-//    }
-//    
-//    func testDeleteMiddle() {
-//        
-//        let x1 = Track.fake()
-//        let x2 = Track.fake()
-//        let x3 = Track.fake()
-//        #warning("Uncoment")
-//        //        _ = testObject.insert(tracks: [x1, x2, x3], after: nil)
-//        //        let tracks = testObject.orderedTracks
-//        //
-//        //        let res = testObject.delete(track: tracks[1])
-//        //
-//        //        expect(self.testObject.orderedTracks.count) == 2
-//        //
-//        //        expect(res.keys.count) == 3
-//        //
-//        //        expect(res[tracks[0].orderHash]??[.next]     as? String) == tracks[2].orderHash
-//        //        expect(res[tracks[2].orderHash]??[.previous] as? String) == tracks[0].orderHash
-//        //
-//        //        expect(res[tracks[1].orderHash]!).to(beNil())
-//        
-//    }
-//    
+    func testMiddleInsert() {
+        
+        let tracks = [t1, t2, t3, t4]
+        Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
+        Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
+        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(tracks.count))
+        
+        let newTracks = [t5]
+        let orderedTracks = appStateSlice.player.tracks.orderedTracks;
+        
+        Dispatcher.dispatch(action: StoreTracks(tracks: newTracks))
+        Dispatcher.dispatch(action: InsertTracks(tracks: newTracks, afterTrack: orderedTracks[1]))
+        expect(appStateSlice.player.lastPatch!.patch.count).toEventually(equal(3))
+        
+        let lastPatch = appStateSlice.player.lastPatch
+        let newOrderedTracks = appStateSlice.player.tracks.orderedTracks;
+        
+        let v1 = lastPatch!.patch[newOrderedTracks[1].orderHash]!
+        let v2 = lastPatch!.patch[newOrderedTracks[2].orderHash]!
+        let v3 = lastPatch!.patch[newOrderedTracks[3].orderHash]!
+        
+        expect(v1![.id]       as? Int)   .to(beNil())
+        expect(v1![.hash]     as? String).to(beNil())
+        expect(v1![.next]     as? String).to(equal(newOrderedTracks[2].orderHash))
+        expect(v1![.previous] as? String).to(beNil())
+        
+        expect(v2![.id]       as? Int)   .to(equal(newOrderedTracks[2].track.id))
+        expect(v2![.hash]     as? String).to(equal(newOrderedTracks[2].orderHash))
+        expect(v2![.next]     as? String).to(equal(newOrderedTracks[3].orderHash))
+        expect(v2![.previous] as? String).to(equal(newOrderedTracks[1].orderHash))
+        
+        expect(v3![.id]       as? Int)   .to(beNil())
+        expect(v3![.hash]     as? String).to(beNil())
+        expect(v3![.next]     as? String).to(beNil())
+        expect(v3![.previous] as? String).to(equal(newOrderedTracks[2].orderHash))
+    }
     
 }
