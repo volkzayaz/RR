@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 struct User: Codable, Equatable {
     
     var profile: UserProfile?

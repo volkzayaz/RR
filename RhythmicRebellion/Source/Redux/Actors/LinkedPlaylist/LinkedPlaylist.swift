@@ -105,6 +105,7 @@ struct LinkedPlaylist {
         case next = "nextTrackKey"
         case previous = "previousTrackKey"
     }
+    
     typealias ReduxView         = [ TrackOrderHash: [ViewKey: Any?]  ]
     typealias NullableReduxView = [ TrackOrderHash: [ViewKey: Any?]? ]
     
@@ -210,22 +211,6 @@ struct LinkedPlaylist {
             res[x] = [ .previous : prevHash ]
         }
         
-        return res
-    }
-    
-}
-
-extension LinkedPlaylist: CustomStringConvertible {
-    
-    var description: String {
-        var res = "Stored Tracks: \([trackDump.map { "{id = \($0.key), \($0.value.name)}; " }]) "
-        res.append("Tracks(ids) order:\n")
-        
-        orderedTracks.forEach {
-            res.append("\($0.track.id) -> ")
-        }
-        
-        res.append("end")
         return res
     }
     

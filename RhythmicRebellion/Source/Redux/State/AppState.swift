@@ -94,7 +94,6 @@ struct PlayerState: Equatable {
                 enum Mode { case scroll, onePhrase }
                 
             }
-            
         }
     }
     

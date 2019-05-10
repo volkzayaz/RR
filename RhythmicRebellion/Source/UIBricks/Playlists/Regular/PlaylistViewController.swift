@@ -19,6 +19,8 @@ final class PlaylistViewController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.trackTableViewCellIdentifier,
                                                  for: ip)!
         
+        let a = appStateSlice.player.tracks
+        
         let f = cell.trackView.actionButton.frame
         let v = cell.trackView.actionButtonContainerView
         

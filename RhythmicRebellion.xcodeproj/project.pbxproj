@@ -361,6 +361,7 @@
 		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
 		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
+		FB40EECF2284797F0030A229 /* Descriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB40EECE2284797F0030A229 /* Descriptions.swift */; };
 		FB8B86A1228434BF00C0D31A /* Tracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* Tracks.swift */; };
 		FB8B86A522843F3600C0D31A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A422843F3600C0D31A /* Helper.swift */; };
 /* End PBXBuildFile section */
@@ -738,6 +739,7 @@
 		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
 		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
+		FB40EECE2284797F0030A229 /* Descriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Descriptions.swift; sourceTree = "<group>"; };
 		FB8B86A0228434BF00C0D31A /* Tracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracks.swift; sourceTree = "<group>"; };
 		FB8B86A422843F3600C0D31A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2142,6 +2144,7 @@
 				76F1FA4320DBA8DE00C9191F /* Source */,
 				76F1FA3E20DBA8DE00C9191F /* Resources */,
 				76F1FA3C20DBA8DE00C9191F /* supporting_files */,
+				FB40EECE2284797F0030A229 /* Descriptions.swift */,
 			);
 			path = RhythmicRebellion;
 			sourceTree = "<group>";
@@ -2754,6 +2757,7 @@
 				73F138A2222C289200FB8EBC /* PageTrackState.swift in Sources */,
 				73F138E4222C289200FB8EBC /* RestApiServiceError.swift in Sources */,
 				73F138D8222C289200FB8EBC /* PlayerContentTransitioningDelegate.swift in Sources */,
+				FB40EECF2284797F0030A229 /* Descriptions.swift in Sources */,
 				73F138F9222C289200FB8EBC /* BaseResponse.swift in Sources */,
 				73F13858222C289200FB8EBC /* GenresSelectableListControllerViewModel.swift in Sources */,
 				73A56D3322663E8600D2293B /* ContinueFacebookRegistrationViewController.swift in Sources */,

@@ -19,6 +19,6 @@ extension PlayerConfig: Fakeble {
 
 extension DefaultAudioFile: Fakeble {
     static func fake() -> DefaultAudioFile {
-        return DefaultAudioFile(duration: 100, urlString: "url")
+        return DefaultAudioFile(duration: fakeNumber(bound: 120), urlString: "https://\(fakeString(components: 1)).com")
     }
 }

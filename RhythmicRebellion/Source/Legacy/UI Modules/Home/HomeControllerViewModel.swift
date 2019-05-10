@@ -102,7 +102,6 @@ final class HomeControllerViewModel: HomeViewModel {
 
     // MARK: - Playlist Actions -
 
-
     func actionTypes(for playlist: DefinedPlaylist) -> [PlaylistActionsViewModels.ActionViewModel.ActionType] {
         return [.playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent]
     }
