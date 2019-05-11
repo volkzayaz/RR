@@ -168,6 +168,5 @@ class PlaylistInsertTests: XCTestCase {
         
         expect(v3.count) == 1
         expect(v3[.previous] as? String) == orderedTracks[2].orderHash
-        print(appStateSlice.)
     }
 }
