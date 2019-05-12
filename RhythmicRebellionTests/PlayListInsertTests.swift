@@ -116,6 +116,8 @@ class PlaylistInsertTests: XCTestCase {
         
         expect(v4.count) == 1
         expect(v4[.previous] as? String) == orderedTracks[2].orderHash
+        
+        print(appStateSlice)
     }
     
     func testInsertToTail() {

@@ -55,7 +55,7 @@ public struct Track: Codable {
     let audioFile: TrackAudioFile?
     let cleanAudioFile: DefaultAudioFile?
     let artist: Artist
-//    let current_fan_listen: Any?
+    //    let current_fan_listen: Any? TODO: why this is comented?
     let writer: TrackWriter
     let backingAudioFile: DefaultAudioFile?
     let price: Money?

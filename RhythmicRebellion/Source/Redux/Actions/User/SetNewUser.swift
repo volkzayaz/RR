@@ -17,7 +17,6 @@ struct SetNewUser: Action {
         var state = initialState
         state.user = user
         
-        
         ///TODO: hide this global state change inside AppState
         if let email = user.profile?.email {
             SettingsStore.lastSignedUserEmail.value = email

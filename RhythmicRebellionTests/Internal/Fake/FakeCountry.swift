@@ -13,7 +13,7 @@ extension Country: Fakeble {
     
     static func fake() -> Country {
         return .init(withID: fakeNumber(bound: 1000),
-                     code: fakeString(components: 3),
+                     code: "\(fakeNumber(bound: 190))",
                      name: "USA")
     }
 }
