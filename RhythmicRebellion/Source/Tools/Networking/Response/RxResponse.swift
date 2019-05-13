@@ -34,7 +34,6 @@ extension Reactive where Base : BaseNetworkRouter {
                 return try JSONDecoder().decode(BaseReponse<T>.self, from: input).data
         }
     }
-    
 }
 
 extension URLRequestConvertible {
@@ -43,7 +42,7 @@ extension URLRequestConvertible {
         
         return Observable.create { (subscriber) -> Disposable in
             
-            let request = Alamofire.request(self)
+            let request = DataLayer.get.network.sessionManager.request(self)
             
             request
                 .validate()
@@ -70,15 +69,11 @@ extension URLRequestConvertible {
                 
                 subscriber.onNext( mappedResponse )
                 subscriber.onCompleted()
-                
-                
             }
             
             return Disposables.create { request.cancel() }
         }
-        .asMaybe()
-        
-        
+        .asMaybe()   
     }
     
     fileprivate func rxJSONResponse() -> Maybe<Any> {

@@ -1,8 +1,8 @@
 //
-//  SetNewUserTests.swift
+//  ChangePlayerBlockStateTests.swift
 //  RhythmicRebellionTests
 //
-//  Created by Andrey Ivanov on 5/12/19.
+//  Created by Andrey Ivanov on 5/13/19.
 //  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
@@ -12,7 +12,7 @@ import RxCocoa
 
 @testable import RhythmicRebellion
 
-class SetNewUserTests: XCTestCase {
+class ChangePlayerBlockStateTests: XCTestCase {
     
     override func setUp() {
         
@@ -20,9 +20,8 @@ class SetNewUserTests: XCTestCase {
         Dispatcher.state.accept(AppState.fake())
     }
     
-    func testNewUser() {
-        let newUser = User.fake()
-        Dispatcher.dispatch(action: SetNewUser(user: newUser))
-        expect(appStateSlice.user).toEventually(equal(newUser))
+    func testChangePlayerBlockState() {
+        Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked:true))
+        expect(appStateSlice.player.isBlocked) == true
     }
 }

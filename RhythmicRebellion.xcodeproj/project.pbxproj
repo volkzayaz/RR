@@ -365,6 +365,10 @@
 		FB8B86A1228434BF00C0D31A /* Tracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* Tracks.swift */; };
 		FB8B86A522843F3600C0D31A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A422843F3600C0D31A /* Helper.swift */; };
 		FBEC3B802288B72E001F200E /* SetNewUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */; };
+		FBEC3B8222895E08001F200E /* ChangePlayerBlockStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3B8122895E08001F200E /* ChangePlayerBlockStateTests.swift */; };
+		FBEC3B8422896266001F200E /* PrepareNewTrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3B8322896266001F200E /* PrepareNewTrackTests.swift */; };
+		FBEC3B8622899BF5001F200E /* audio-add-ons-for-tracks.json in Resources */ = {isa = PBXBuildFile; fileRef = FBEC3B8522899BF5001F200E /* audio-add-ons-for-tracks.json */; };
+		FBEC3B8A2289ABD7001F200E /* artist.json in Resources */ = {isa = PBXBuildFile; fileRef = FBEC3B892289ABD7001F200E /* artist.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -744,6 +748,10 @@
 		FB8B86A0228434BF00C0D31A /* Tracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracks.swift; sourceTree = "<group>"; };
 		FB8B86A422843F3600C0D31A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUserTests.swift; sourceTree = "<group>"; };
+		FBEC3B8122895E08001F200E /* ChangePlayerBlockStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePlayerBlockStateTests.swift; sourceTree = "<group>"; };
+		FBEC3B8322896266001F200E /* PrepareNewTrackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareNewTrackTests.swift; sourceTree = "<group>"; };
+		FBEC3B8522899BF5001F200E /* audio-add-ons-for-tracks.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "audio-add-ons-for-tracks.json"; sourceTree = "<group>"; };
+		FBEC3B892289ABD7001F200E /* artist.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = artist.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -972,6 +980,8 @@
 				736456A1220C7610005BE389 /* PlayListInsertTests.swift */,
 				736456AE220C80CE005BE389 /* PlaylistDeleteTests.swift */,
 				FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */,
+				FBEC3B8122895E08001F200E /* ChangePlayerBlockStateTests.swift */,
+				FBEC3B8322896266001F200E /* PrepareNewTrackTests.swift */,
 				FB8B86A322843EF700C0D31A /* Internal */,
 				734F828522299CD90006E1DE /* support_files */,
 			);
@@ -2207,6 +2217,8 @@
 			children = (
 				FB1B9A9E2281C0BA00F1CDEC /* playlist.json */,
 				FB257EB622803AC1006D5006 /* JsonReader.swift */,
+				FBEC3B8522899BF5001F200E /* audio-add-ons-for-tracks.json */,
+				FBEC3B892289ABD7001F200E /* artist.json */,
 			);
 			path = json;
 			sourceTree = "<group>";
@@ -2337,6 +2349,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBEC3B8622899BF5001F200E /* audio-add-ons-for-tracks.json in Resources */,
+				FBEC3B8A2289ABD7001F200E /* artist.json in Resources */,
 				FB1B9A9F2281C0BA00F1CDEC /* playlist.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2377,11 +2391,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Mocker/Mocker.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityLogger/AlamofireNetworkActivityLogger.framework",
 				"${BUILT_PRODUCTS_DIR}/CloudTagView/CloudTagView.framework",
@@ -2402,11 +2417,12 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mocker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityLogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CloudTagView.framework",
@@ -2439,7 +2455,9 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Mocker/Mocker.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
@@ -2449,7 +2467,9 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mocker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
@@ -2496,7 +2516,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift,
+				"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2551,11 +2571,13 @@
 				FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */,
 				FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */,
 				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
+				FBEC3B8422896266001F200E /* PrepareNewTrackTests.swift in Sources */,
 				FB1B9A9D2281ABE100F1CDEC /* FakeWebSocketService.swift in Sources */,
 				FB8B86A522843F3600C0D31A /* Helper.swift in Sources */,
 				FB1B9A9122806C1200F1CDEC /* FakeTrackWriter.swift in Sources */,
 				736456AF220C80CE005BE389 /* PlaylistDeleteTests.swift in Sources */,
 				FB1B9A8D22806BCD00F1CDEC /* FakeArtist.swift in Sources */,
+				FBEC3B8222895E08001F200E /* ChangePlayerBlockStateTests.swift in Sources */,
 				FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */,
 				736456A2220C7610005BE389 /* PlayListInsertTests.swift in Sources */,
 				FB1B9A87228067E200F1CDEC /* FakeListeningSettings.swift in Sources */,

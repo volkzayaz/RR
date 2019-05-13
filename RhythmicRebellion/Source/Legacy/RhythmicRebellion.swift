@@ -156,15 +156,30 @@ struct PresentationSource {
 protocol Actor {
 }
 
+import Alamofire
+
+class Network: NSObject {
+    let sessionManager: SessionManager
+    
+    init(sm: SessionManager = Alamofire.SessionManager.default) {
+        sessionManager = sm
+    }
+}
+
+
 struct ActorStorage {
     
     let actors: [Actor]
     
     let webSocketService: WebSocketService
+    let network: Network
     
-    init(actors: [Actor], ws: WebSocketService = WebSocketService(url: URI.webSocketService)) {
+    init(actors: [Actor],
+         ws: WebSocketService = WebSocketService(url: URI.webSocketService),
+         network: Network = Network()) {
         self.actors = actors
         self.webSocketService = ws
+        self.network = network
     }
 
     let pagesLocalStorageService = PagesLocalStorageService()

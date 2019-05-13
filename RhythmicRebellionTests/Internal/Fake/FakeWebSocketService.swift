@@ -17,4 +17,8 @@ class FakeWebSocketService: WebSocketService {
     override var didReceiveTracks: Observable<[Track]> {
         return .just([])
     }
+    
+    override func filter(addons: [Addon], for track: Track) -> Observable<[Addon]> {
+        return .just(addons)
+    }
 }

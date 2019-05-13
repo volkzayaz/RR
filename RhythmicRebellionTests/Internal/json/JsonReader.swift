@@ -15,7 +15,9 @@ class JsonReader {
             fatalError("UnitTestData.json not found")
         }
         
-        return try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
+        let result = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
+        
+        return result
     }
     
     static func readJson(withName name: String) throws -> Dictionary<String, AnyObject> {

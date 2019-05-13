@@ -21,6 +21,7 @@ struct AddonsForTracksResponse: Codable {
         
         do {
             self.trackAddons = try container.decode([String : [Addon]].self, forKey: .trackAddons)
+
         } catch (let error) {
             guard let emptyAddons = try? container.decodeIfPresent([Addon].self, forKey: .trackAddons),
                 emptyAddons?.isEmpty ?? false else { throw error }

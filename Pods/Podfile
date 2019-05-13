@@ -7,6 +7,8 @@ use_frameworks!
 def base
   pod 'Firebase/Core'
   pod 'RxCocoa', '~> 4.4'
+  pod 'Alamofire', '~> 4.7'
+  pod 'Mocker'
 end
 
 target 'RhythmicRebellionTests' do
@@ -23,7 +25,6 @@ target 'RhythmicRebellion' do
     pod 'Crashlytics', '~> 3.12.0'
     
     pod 'Starscream', '3.0.5'
-    pod 'Alamofire', '~> 4.7'
     pod 'AlamofireImage', '~> 3.3'
     pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', :tag => '4.2.0'
     pod 'MaterialTextField', '~> 1.0'
