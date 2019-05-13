@@ -82,6 +82,7 @@ PODS:
   - RxSwift (4.5.0)
   - SnapKit (4.2.0)
   - Starscream (3.0.5)
+  - SwiftGifOrigin (1.7.0)
   - SwiftValidator (4.0.0)
   - youtube-ios-player-helper (0.1.6)
 
@@ -105,6 +106,7 @@ DEPENDENCIES:
   - RxReachability
   - SnapKit (~> 4.2.0)
   - Starscream (= 3.0.5)
+  - SwiftGifOrigin (~> 1.7.0)
   - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, tag `4.2.0`)
   - youtube-ios-player-helper (~> 0.1.4)
 
@@ -139,6 +141,7 @@ SPEC REPOS:
     - RxSwift
     - SnapKit
     - Starscream
+    - SwiftGifOrigin
     - youtube-ios-player-helper
 
 EXTERNAL SOURCES:
@@ -181,9 +184,10 @@ SPEC CHECKSUMS:
   RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
+  SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
   SwiftValidator: 58c155c8ae8421ef716a96e52a49984dd54c700c
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: 797a91ca745e7356416e135f9b2669d3e3048124
+PODFILE CHECKSUM: c294e36de44635a4cd6120eafaa4733bc1a22759
 
 COCOAPODS: 1.6.1

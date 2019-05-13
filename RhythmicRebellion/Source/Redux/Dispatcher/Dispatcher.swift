@@ -25,9 +25,10 @@ enum Dispatcher {
     
     static let actions = BehaviorSubject<ActionCreator?>(value: nil)
     
-    static func kickOff() {
-        initAppState()
+    static func kickOff() -> Maybe<Void> {
         beginSerialExecution()
+        
+        return initAppState()
     }
     
     static func beginSerialExecution() {

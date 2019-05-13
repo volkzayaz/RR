@@ -8,34 +8,42 @@
 //
 
 import Foundation
+import RxCocoa
 
-struct TabBarViewModel {
-
-    private(set) weak var router: TabBarRouter?
-
-    init(router: TabBarRouter) {
-        self.router = router
+extension TabBarViewModel {
+    
+    var tabs: Driver<[TabType]> {
         
-
-        let _ =
-        appState.map { $0.user.isGuest }
+        return appState.map { $0.user.isGuest }
             .distinctUntilChanged()
-            .drive( onNext: { (isGuest) in
+            .map({ (isGuest) in
                 
                 let types: [TabType] = isGuest ?
                     [.home, .pages, .authorization] :
                     [.home, .settings, .pages, .profile, /*.myMusic, .search, .mixer*/]
                 
-                router.updateTabs(for: types)
+                return types
             })
         
-        let _ =
-        appState.map { !$0.user.isGuest }
+    }
+    
+    var openedTab: Driver<TabType> {
+        return  appState.map { !$0.user.isGuest }
             .distinctUntilChanged()
             .scan(nil, accumulator: { y, x in return y == nil ? true : x })
-            .drive( onNext: { (shouldOpenHome) in
-                router.selectTab(for: shouldOpenHome! ? .home : .authorization)
+            .map({ (shouldOpenHome) in
+                return shouldOpenHome! ? .home : .authorization
             })
+    }
+    
+}
+
+struct TabBarViewModel {
+
+    private(set) weak var router: TabBarRouter?
+    
+    init(router: TabBarRouter) {
+        self.router = router
         
     }
 
