@@ -35,8 +35,6 @@ struct PrepareLyrics: ActionCreator {
                                                          mode: .plain)
                 return state
             }
-        
-        
     }
     
 }

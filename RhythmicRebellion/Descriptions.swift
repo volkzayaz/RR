@@ -150,7 +150,6 @@ struct DeepDescription {
     }
 }
 
-
 extension AppState: CustomStringConvertible {
     public var description: String {
         return DeepDescription.description(any: self)
