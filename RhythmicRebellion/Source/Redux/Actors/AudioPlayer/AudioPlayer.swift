@@ -197,17 +197,17 @@ class AudioPlayer: NSObject, Actor {
         ///2. Add buffering progress UI (when media chunk has been loaded and is ready to be played back)
         ///3. Handle cases when seek(for:) results in player bugs (continues old playback, does not dispatch |next| events via |reasonForWaitingToPlay|)
         
-        player.rx.reasonForWaitingToPlay
-            .subscribe(onNext: { (x) in
-                print("New waiting resolve \(x)")
-            })
-            .disposed(by: bag)
-        
-        player.rx.timeControlStatus
-            .subscribe(onNext: { (x) in
-                print("New timecontrol status \(x)")
-            })
-            .disposed(by: bag)
+//        player.rx.reasonForWaitingToPlay
+//            .subscribe(onNext: { (x) in
+//                print("New waiting resolve \(x)")
+//            })
+//            .disposed(by: bag)
+//        
+//        player.rx.timeControlStatus
+//            .subscribe(onNext: { (x) in
+//                print("New timecontrol status \(x)")
+//            })
+//            .disposed(by: bag)
         
         
         ///////---------

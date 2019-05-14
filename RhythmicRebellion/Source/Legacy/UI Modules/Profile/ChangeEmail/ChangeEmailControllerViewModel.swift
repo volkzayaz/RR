@@ -108,7 +108,7 @@ final class ChangeEmailControllerViewModel: ChangeEmailViewModel {
 
             let _ =
             UserRequest.changeEmail(to: newEmail, currentPassword: currentPassword)
-                .rx.rawJSONResponse()
+                .rx.emptyResponse()
                 .subscribe(onSuccess: { (_) in
                     self.isChangeEmailSucced = true
                     self.delegate?.refreshUI()
@@ -120,6 +120,11 @@ final class ChangeEmailControllerViewModel: ChangeEmailViewModel {
                         case .server(let e) = appError else {
                             s.delegate?.show(error: error)
                             return
+                    }
+                    
+                    guard e.errors.count > 0 else {
+                        s.router?.sourceController?.presentErrorMessage(error: e.message)
+                        return
                     }
                     
                     for (key, errorStrings) in e.errors {

@@ -63,7 +63,7 @@ final class AppRouter: FlowRouterSegueCompatible {
 
         case .contentContainer:
             guard let contentContainerViewController = segue.destination as? ApplicationContentContainerViewController else { fatalError("Incorrect controller for ContentContainerSegueIdentifier") }
-            let contentContainerRouter = DefaultApplicationContentContainerRouter()
+            let contentContainerRouter = ApplicationContentContainerRouter()
             contentContainerRouter.start(controller: contentContainerViewController)
             self.appViewController?.contentContainerViewController = contentContainerViewController
             self.contentContainerRouter = contentContainerRouter

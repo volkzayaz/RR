@@ -9,11 +9,7 @@
 
 import UIKit
 
-protocol ApplicationContentContainerRouter: FlowRouter, PlayerNavigationDelgate {
-    
-}
-
-final class DefaultApplicationContentContainerRouter:  ApplicationContentContainerRouter, FlowRouterSegueCompatible {
+final class ApplicationContentContainerRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -55,7 +51,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
         return true
     }
 
-    func prepare(for destination: DefaultApplicationContentContainerRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: ApplicationContentContainerRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .tabBarController:
@@ -97,7 +93,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
     }
 }
 
-extension DefaultApplicationContentContainerRouter: PlayerNavigationDelgate {
+extension ApplicationContentContainerRouter: PlayerNavigationDelgate {
     func routeToAuthorization(with authorizationType: AuthorizationType) {
         self.tabBarRouter?.routeToAuthorization(with: authorizationType)
     }
@@ -115,7 +111,7 @@ extension DefaultApplicationContentContainerRouter: PlayerNavigationDelgate {
     }
 }
 
-extension DefaultApplicationContentContainerRouter: PlayerContentPresentingController {
+extension ApplicationContentContainerRouter: PlayerContentPresentingController {
 
     func frame(for containerView: UIView) -> CGRect {
         guard let destinationViewController = self.applicationContentContainerViewController?.tabBarViewController,
@@ -144,7 +140,7 @@ extension DefaultApplicationContentContainerRouter: PlayerContentPresentingContr
     }
 }
 
-extension DefaultApplicationContentContainerRouter: PlayerContentNavigationDelgate {
+extension ApplicationContentContainerRouter: PlayerContentNavigationDelgate {
 
 
     func navigateToPage(with url: URL) {
