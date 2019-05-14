@@ -190,7 +190,7 @@
         <!--Settings-->
         <scene sceneID="0VN-XO-u04">
             <objects>
-                <navigationController id="3l1-Uo-jsR" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SettingsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3l1-Uo-jsR" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="2" title="Settings" image="Settings" id="BuN-f8-SuP"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="2zp-53-XtO">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
@@ -935,7 +935,7 @@
             <objects>
                 <viewController id="LKx-fy-kqG" customClass="VideoViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ef2-se-iys">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="635"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEz-UA-fHe" customClass="YTPlayerView">
@@ -1038,7 +1038,7 @@
             <objects>
                 <viewController id="k5I-qk-V3W" customClass="PromoViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k3o-ux-bDP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="635"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W1F-NT-MBc">
@@ -1882,6 +1882,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="kAD-GO-v6x"/>
-        <segue reference="pA5-CW-r5f"/>
+        <segue reference="swz-5X-Nq6"/>
     </inferredMetricsTieBreakers>
 </document>

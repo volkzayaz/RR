@@ -24,8 +24,8 @@ final class TabBarViewController: UITabBarController {
                 var viewControllers = [UIViewController]()
                 
                 for type in x {
-                    guard let viewController = self.viewController(for: type,
-                                                                   from: self.viewControllers) else { continue }
+                    let viewController = self.viewController(for: type,
+                                                             from: self.viewControllers)
                     
                     switch type {
                     case .home:
@@ -39,11 +39,13 @@ final class TabBarViewController: UITabBarController {
                         viewControllers.append(homeNavigationController)
                         
                     case .settings:
-                        guard let settingsNavigationController = viewController as? UINavigationController,
-                            let listeningSettingsViewController = settingsNavigationController.viewControllers.first as? ListeningSettingsViewController else { break }
+                        
+                        let x = R.storyboard.main.settingsViewController()!
+                        
                         let listeningSettingsRouter = DefaultListeningSettingsRouter()
-                        listeningSettingsRouter.start(controller: listeningSettingsViewController)
-                        viewControllers.append(settingsNavigationController)
+                        listeningSettingsRouter.start(controller: x.viewControllers.first! as! ListeningSettingsViewController)
+                        
+                        viewControllers.append(x)
                         
                     case .pages:
                         guard let pagesNavigationController = viewController as? UINavigationController,
@@ -56,18 +58,21 @@ final class TabBarViewController: UITabBarController {
                         viewControllers.append(pagesNavigationController)
                         
                     case .profile:
-                        guard let profileNavigationController = viewController as? UINavigationController,
-                            let profileViwController = profileNavigationController.viewControllers.first as? ProfileViewController else { break }
+                        
+                        let x = R.storyboard.profile.profileNavigationController()!
+                        
                         let profileRouter = DefaultProfileRouter()
-                        profileRouter.start(controller: profileViwController)
-                        viewControllers.append(profileNavigationController)
+                        profileRouter.start(controller: x.viewControllers.first! as! ProfileViewController)
+                        viewControllers.append(x)
                         
                     case .authorization:
-                        guard let authorizationNavigationController = viewController as? UINavigationController,
-                            let authorizationViewController = authorizationNavigationController.viewControllers.first as? AuthorizationViewController else { break }
+                        
+                        let x = R.storyboard.authorization.authorizationViewController()!
+                        
                         let authorizationRouter = DefaultAuthorizationRouter()
-                        authorizationRouter.start(controller: authorizationViewController)
-                        viewControllers.append(authorizationNavigationController)
+                        authorizationRouter.start(controller: x.viewControllers.first! as! AuthorizationViewController)
+                        
+                        viewControllers.append(x)
                         
                     default: break
                     }
