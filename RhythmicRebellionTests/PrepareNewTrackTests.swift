@@ -42,8 +42,7 @@ class PrepareNewTrackTests: XCTestCase {
     
     func testPrepareLyrics() {
         
-        let track = Track.fake(id: 10)
-        let tracks = [track]
+        let tracks = [t1]
         
         Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
