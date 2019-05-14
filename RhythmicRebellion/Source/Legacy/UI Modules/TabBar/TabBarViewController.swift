@@ -104,7 +104,7 @@ final class TabBarViewController: UITabBarController {
         pagesViewController.viewModel.navigateToPage(with: url)
         
         self.selectedViewController = pagesNavigationController
-        self.viewModel.router?.playerContentContainerRouter?.stop(true)
+        self.viewModel.router.playerContentContainerRouter?.stop(true)
     }
     
 }

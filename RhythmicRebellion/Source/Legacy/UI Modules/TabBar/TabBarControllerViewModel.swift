@@ -40,7 +40,7 @@ extension TabBarViewModel {
 
 struct TabBarViewModel {
 
-    private(set) weak var router: TabBarRouter?
+    let router: TabBarRouter
     
     init(router: TabBarRouter) {
         self.router = router
