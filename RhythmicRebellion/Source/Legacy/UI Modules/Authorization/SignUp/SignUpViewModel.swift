@@ -494,20 +494,25 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
                 
                 guard let s = self else { return }
                 
-                guard let appError = error as? AppError, let appErrorGroup = appError.source else {
-                    s.delegate?.show(error: error)
-                    return
+                guard let appError = error as? RRError,
+                    case .server(let e) = appError else {
+                        s.delegate?.show(error: error)
+                        return
                 }
                 
-                switch appErrorGroup {
-                case RestApiServiceError.serverError( let errorDescription, _ ):
+                for (key, errorStrings) in e.errors {
+                    guard let x = s.validatebleField(for: key),
+                        let s = errorStrings.first else { continue }
                     
-                    let validationError = ValidationError(field: s.regionField!, errorLabel: nil, error: errorDescription)
-                    self?.delegate?.refreshField(field: s.regionField!, didValidate: validationError)
+                    let validationError = ValidationError(field: x,
+                                                          errorLabel: nil,
+                                                          error: s)
                     
-                default:
-                    s.delegate?.show(error: error)
+                    self?.delegate?.refreshField(field: x,
+                                                 didValidate: validationError)
                 }
+                
+                s.delegate?.refreshUI()
                 
             })
         
