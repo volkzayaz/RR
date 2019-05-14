@@ -1,5 +1,5 @@
 //
-//  PlaylistDeleteTests.swift
+//  DeleteTrackTests.swift
 //  RhythmicRebellionTests
 //
 //  Created by Vlad Soroka on 2/7/19.
@@ -11,16 +11,18 @@ import Nimble
 
 @testable import RhythmicRebellion
 
-class PlaylistDeleteTests: XCTestCase {
+class DeleteTrackTests: XCTestCase {
 
     override func setUp() {
         
-        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService()))
+        initActorStorage(ActorStorage(actors: [],
+                                      ws: FakeWebSocketService(),
+                                      network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
         Dispatcher.dispatch(action: StoreTracks(tracks: Tracks.all))
     }
     
-    func testDeleteToEmpty() {
+    func testDeleteTrackToEmpty() {
         
         let tracks = [t1]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
@@ -30,7 +32,7 @@ class PlaylistDeleteTests: XCTestCase {
         expect(orderedTracks.count) == 0
     }
     
-    func testDeleteFirst() {
+    func testDeleteFirstTrack() {
         
         let tracks = [t1, t2, t3]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
@@ -48,7 +50,7 @@ class PlaylistDeleteTests: XCTestCase {
         expect(v2).notTo(beNil())
     }
     
-    func testDeleteLast() {
+    func testDeleteLastTrack() {
         
         let tracks = [t1, t2, t3]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
@@ -66,7 +68,7 @@ class PlaylistDeleteTests: XCTestCase {
         expect(v2).notTo(beNil())
     }
     
-    func testDeleteMiddle() {
+    func testDeleteMiddleTrack() {
         
         let tracks = [t1, t2, t3]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))

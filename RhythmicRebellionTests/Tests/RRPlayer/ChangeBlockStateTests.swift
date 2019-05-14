@@ -1,5 +1,5 @@
 //
-//  ChangePlayerBlockStateTests.swift
+//  ChangeBlockStateTests.swift
 //  RhythmicRebellionTests
 //
 //  Created by Andrey Ivanov on 5/13/19.
@@ -12,15 +12,17 @@ import RxCocoa
 
 @testable import RhythmicRebellion
 
-class ChangePlayerBlockStateTests: XCTestCase {
+class ChangeBlockStateTests: XCTestCase {
     
     override func setUp() {
         
-        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService()))
+        initActorStorage(ActorStorage(actors: [],
+                                      ws: FakeWebSocketService(),
+                                      network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
     }
     
-    func testChangePlayerBlockState() {
+    func testChangeBlockState() {
         Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked:true))
         expect(appStateSlice.player.isBlocked) == true
     }
