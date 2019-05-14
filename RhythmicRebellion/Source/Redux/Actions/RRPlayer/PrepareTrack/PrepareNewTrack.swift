@@ -22,7 +22,6 @@ struct PrepareNewTrack: ActionCreator {
         self.orderedTrack = orderedTrack
         self.shouldPlayImmidiatelly = shouldPlayImmidiatelly
         self.canSkipAddons = canSkipAddons
-        
     }
     
     func perform(initialState: AppState) -> Observable<AppState> {

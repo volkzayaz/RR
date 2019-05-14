@@ -87,7 +87,6 @@ class PlaylistInsertTests: XCTestCase {
 
         let tracks = [t1, t2]
         
-        Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(appStateSlice.player.tracks.orderedTracks.count).toEventually(equal(tracks.count))
 
@@ -125,7 +124,6 @@ class PlaylistInsertTests: XCTestCase {
     func testInsertToTail() {
         
         let tracks = [t1, t2]
-        Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         
@@ -149,7 +147,6 @@ class PlaylistInsertTests: XCTestCase {
     func testMiddleInsert() {
         
         let tracks = [t1, t2, t3, t4]
-        Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         

@@ -389,8 +389,8 @@
 		FBEC3BA2228ACB4F001F200E /* ProceedToNextItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BA1228ACB4F001F200E /* ProceedToNextItemTests.swift */; };
 		FBEC3BA4228ACBE5001F200E /* ScrubToFractionActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BA3228ACBE5001F200E /* ScrubToFractionActionTests.swift */; };
 		FBEC3BA6228ACC39001F200E /* ChangeTrackStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BA5228ACC39001F200E /* ChangeTrackStateTests.swift */; };
-		FBEC3BA8228ACC6F001F200E /* AddTracksToLinkedPlaylistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BA7228ACC6F001F200E /* AddTracksToLinkedPlaylistTests.swift */; };
-		FBEC3BAA228ACD8A001F200E /* UpdatePreviewTimesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BA9228ACD8A001F200E /* UpdatePreviewTimesTests.swift */; };
+		FBEC3BA8228ACC6F001F200E /* AddTracksToLinkedPlayingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BA7228ACC6F001F200E /* AddTracksToLinkedPlayingTests.swift */; };
+		FBEC3BAA228ACD8A001F200E /* UpdateTrackPrviewTimesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BA9228ACD8A001F200E /* UpdateTrackPrviewTimesTests.swift */; };
 		FBEC3BAD228ACE12001F200E /* AudioPlayerActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BAC228ACE12001F200E /* AudioPlayerActionsTests.swift */; };
 		FBEC3BB1228ACE90001F200E /* ApplyReduxViewPatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BB0228ACE90001F200E /* ApplyReduxViewPatchTests.swift */; };
 		FBEC3BB3228ACEDC001F200E /* PrepareLyricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3BB2228ACEDC001F200E /* PrepareLyricsTests.swift */; };
@@ -798,8 +798,8 @@
 		FBEC3BA1228ACB4F001F200E /* ProceedToNextItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceedToNextItemTests.swift; sourceTree = "<group>"; };
 		FBEC3BA3228ACBE5001F200E /* ScrubToFractionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrubToFractionActionTests.swift; sourceTree = "<group>"; };
 		FBEC3BA5228ACC39001F200E /* ChangeTrackStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTrackStateTests.swift; sourceTree = "<group>"; };
-		FBEC3BA7228ACC6F001F200E /* AddTracksToLinkedPlaylistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTracksToLinkedPlaylistTests.swift; sourceTree = "<group>"; };
-		FBEC3BA9228ACD8A001F200E /* UpdatePreviewTimesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePreviewTimesTests.swift; sourceTree = "<group>"; };
+		FBEC3BA7228ACC6F001F200E /* AddTracksToLinkedPlayingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTracksToLinkedPlayingTests.swift; sourceTree = "<group>"; };
+		FBEC3BA9228ACD8A001F200E /* UpdateTrackPrviewTimesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTrackPrviewTimesTests.swift; sourceTree = "<group>"; };
 		FBEC3BAC228ACE12001F200E /* AudioPlayerActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerActionsTests.swift; sourceTree = "<group>"; };
 		FBEC3BB0228ACE90001F200E /* ApplyReduxViewPatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyReduxViewPatchTests.swift; sourceTree = "<group>"; };
 		FBEC3BB2228ACEDC001F200E /* PrepareLyricsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareLyricsTests.swift; sourceTree = "<group>"; };
@@ -2379,11 +2379,11 @@
 				FBEC3B9C228AC880001F200E /* Navigation */,
 				FBEC3B9B228AC842001F200E /* PrepareTrack */,
 				FBEC3BA5228ACC39001F200E /* ChangeTrackStateTests.swift */,
-				FBEC3BA7228ACC6F001F200E /* AddTracksToLinkedPlaylistTests.swift */,
+				FBEC3BA7228ACC6F001F200E /* AddTracksToLinkedPlayingTests.swift */,
 				736456A1220C7610005BE389 /* PlayListInsertTests.swift */,
 				736456AE220C80CE005BE389 /* DeleteTrackTests.swift */,
 				FBEC3B8122895E08001F200E /* ChangeBlockStateTests.swift */,
-				FBEC3BA9228ACD8A001F200E /* UpdatePreviewTimesTests.swift */,
+				FBEC3BA9228ACD8A001F200E /* UpdateTrackPrviewTimesTests.swift */,
 			);
 			path = RRPlayer;
 			sourceTree = "<group>";
@@ -2760,7 +2760,7 @@
 				FB1B9A83228066DB00F1CDEC /* Fake.swift in Sources */,
 				FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */,
 				FB1B9A9722808C2200F1CDEC /* FakePlayerConfig.swift in Sources */,
-				FBEC3BAA228ACD8A001F200E /* UpdatePreviewTimesTests.swift in Sources */,
+				FBEC3BAA228ACD8A001F200E /* UpdateTrackPrviewTimesTests.swift in Sources */,
 				FB1B9A8B2280688C00F1CDEC /* FakeCountry.swift in Sources */,
 				FBEC3B8C228ABA52001F200E /* FakeNetwork.swift in Sources */,
 				FBEC3B8422896266001F200E /* PrepareNewTrackTests.swift in Sources */,
@@ -2792,7 +2792,7 @@
 				FB1B9A892280682D00F1CDEC /* FakeTrack.swift in Sources */,
 				FBEC3BB5228ACEF3001F200E /* ChangeLyricsModeTests.swift in Sources */,
 				FB1B9A9522808B0500F1CDEC /* FakeConfig.swift in Sources */,
-				FBEC3BA8228ACC6F001F200E /* AddTracksToLinkedPlaylistTests.swift in Sources */,
+				FBEC3BA8228ACC6F001F200E /* AddTracksToLinkedPlayingTests.swift in Sources */,
 				FBEC3BB3228ACEDC001F200E /* PrepareLyricsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -31,12 +31,12 @@ class ApplyReduxViewPatchTests: XCTestCase {
         ///getting state transform
         let patch = tracks.insertPatch(tracks: tracksToInsert, after: nil)
         ///mapping state transform
-        let reduxPatch = PlayerState.ReduxViewPatch(shouldFlush: false, patch: patch)
+        let reduxPatch = PlayerState.ReduxViewPatch(shouldFlush: true, patch: patch)
         
         expect(lastPatch).to(beNil())
         Dispatcher.dispatch(action: ApplyReduxViewPatch(viewPatch: reduxPatch))
         expect(lastPatch).toEventually(equal(reduxPatch))
-        expect(player.tracks.count) == tracksToInsert.count
+        expect(orderedTracks.count) == tracksToInsert.count
     }
 }
 

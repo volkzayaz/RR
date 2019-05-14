@@ -1,5 +1,5 @@
 //
-//  UpdatePreviewTimesTests.swift
+//  UpdateTrackPrviewTimesTests.swift
 //  RhythmicRebellionTests
 //
 //  Created by Andrey Ivanov on 5/14/19.
@@ -12,7 +12,7 @@ import RxCocoa
 
 @testable import RhythmicRebellion
 
-class UpdatePreviewTimesTests: XCTestCase {
+class UpdateTrackPrviewTimesTests: XCTestCase {
     
     override func setUp() {
         
@@ -22,8 +22,10 @@ class UpdatePreviewTimesTests: XCTestCase {
         Dispatcher.state.accept(AppState.fake())
     }
     
-    func testUpdatePreviewTimes() {
+    func testUpdateTrackPrviewTimes() {
         
+        let tracks = [t1, t2, t3]
+        Dispatcher.dispatch(action: UpdateTrackPrviewTimes(newPreviewTimes: [t1.id: 100]))
     }
 }
 

@@ -28,7 +28,6 @@ class PrepareNewTrackTests: XCTestCase {
         
         let tracks = [t1]
         
-        Dispatcher.dispatch(action: StoreTracks(tracks: tracks))
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         

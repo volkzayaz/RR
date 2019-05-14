@@ -11,6 +11,6 @@
 extension Artist: Fakeble {
     
     static func fake() -> Artist {
-        return Artist(withId: fakeID(), name: "Artist")
+        return Artist(withId: "4104abcd-b6a8-421f-8b54-d09dcc53c16b", name: "Artist")
     }
 }
