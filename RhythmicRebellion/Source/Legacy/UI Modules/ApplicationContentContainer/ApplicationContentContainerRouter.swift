@@ -66,10 +66,13 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
         switch destination {
         case .tabBarController:
             guard let tabBarViewController = segue.destination as? TabBarViewController else { fatalError("Incorrect controller for TabBarSegueIdentifier") }
-            let tabBarRouter = DefaultTabBarRouter()
-            tabBarRouter.start(controller: tabBarViewController)
+            let tabBarRouter = TabBarRouter(owner: tabBarViewController)
+            
+            tabBarViewController.viewModel = TabBarViewModel(router: tabBarRouter)
+            
             self.tabBarRouter = tabBarRouter
             self.applicationContentContainerViewController?.tabBarViewController = tabBarViewController
+            
 
 
         case .showPlayerContentController(let playerNavigationItem):
@@ -151,6 +154,6 @@ extension DefaultApplicationContentContainerRouter: PlayerContentNavigationDelga
 
 
     func navigateToPage(with url: URL) {
-        self.tabBarRouter?.selectPage(with: url)
+        self.tabBarRouter?.tabBarViewController?.selectPage(with: url)
     }
 }

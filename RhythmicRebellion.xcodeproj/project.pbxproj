@@ -10,6 +10,10 @@
 		730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FE9223E5B1900571383 /* MediaWidget.swift */; };
 		730D1FEE223FD65A00571383 /* BaseActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FED223FD65A00571383 /* BaseActions.swift */; };
 		7327C9682252403800692810 /* ConfigRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327C9672252403800692810 /* ConfigRequest.swift */; };
+		733768E12289949000C922D9 /* splash.gif in Resources */ = {isa = PBXBuildFile; fileRef = 733768E02289949000C922D9 /* splash.gif */; };
+		733768E92289954100C922D9 /* SplashRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E62289954100C922D9 /* SplashRouter.swift */; };
+		733768EA2289954100C922D9 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E72289954100C922D9 /* SplashViewController.swift */; };
+		733768EB2289954100C922D9 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E82289954100C922D9 /* SplashViewModel.swift */; };
 		7343FCA42282E06D00A3DA3D /* AlbumCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* AlbumCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* AlbumCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */; };
@@ -387,6 +391,10 @@
 		730D1FE9223E5B1900571383 /* MediaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWidget.swift; sourceTree = "<group>"; };
 		730D1FED223FD65A00571383 /* BaseActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseActions.swift; sourceTree = "<group>"; };
 		7327C9672252403800692810 /* ConfigRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigRequest.swift; sourceTree = "<group>"; };
+		733768E02289949000C922D9 /* splash.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = splash.gif; sourceTree = "<group>"; };
+		733768E62289954100C922D9 /* SplashRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashRouter.swift; sourceTree = "<group>"; };
+		733768E72289954100C922D9 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		733768E82289954100C922D9 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCellRouter.swift; sourceTree = "<group>"; };
 		7343FCA22282E06D00A3DA3D /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
 		7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCellViewModel.swift; sourceTree = "<group>"; };
@@ -801,6 +809,16 @@
 			path = Configs;
 			sourceTree = "<group>";
 		};
+		733768D92289918800C922D9 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				733768E62289954100C922D9 /* SplashRouter.swift */,
+				733768E72289954100C922D9 /* SplashViewController.swift */,
+				733768E82289954100C922D9 /* SplashViewModel.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
 		7343FC9F2282E04300A3DA3D /* Album */ = {
 			isa = PBXGroup;
 			children = (
@@ -1131,6 +1149,7 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
+				733768D92289918800C922D9 /* Splash */,
 				7343FC9F2282E04300A3DA3D /* Album */,
 				73F13773222C289200FB8EBC /* Playlists */,
 				73DB1FD02271AC1500E01622 /* Video */,
@@ -2174,6 +2193,7 @@
 		76F1FA3E20DBA8DE00C9191F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				733768E02289949000C922D9 /* splash.gif */,
 				736598E321D66E480092E499 /* Strings */,
 				76F1FA4D20DBA92F00C9191F /* Assets.xcassets */,
 				76F1FA3F20DBA8DE00C9191F /* LaunchScreen.storyboard */,
@@ -2374,6 +2394,7 @@
 				73F13899222C289200FB8EBC /* PlaylistCollectionCell.xib in Resources */,
 				763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */,
 				73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */,
+				733768E12289949000C922D9 /* splash.gif in Resources */,
 				73F137FF222C289200FB8EBC /* ArtistSectionHeader.xib in Resources */,
 				737622F621CD28AF005B603E /* Artist.storyboard in Resources */,
 				7641B2E321CA4E5C005535E6 /* LyricsKaraoke.storyboard in Resources */,
@@ -2412,6 +2433,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxReachability/RxReachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftGifOrigin/SwiftGifOrigin.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
 				"${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework",
 			);
@@ -2438,6 +2460,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxReachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftGifOrigin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/youtube_ios_player_helper.framework",
 			);
@@ -2687,6 +2710,7 @@
 				73C3B8C5225A2F92004F380C /* R.generated.swift in Sources */,
 				7361C012223687D6008EA36E /* OrderedTrack.swift in Sources */,
 				73F13913222C289200FB8EBC /* Double+Extension.swift in Sources */,
+				733768EA2289954100C922D9 /* SplashViewController.swift in Sources */,
 				73F138CA222C289200FB8EBC /* LyricsRouter.swift in Sources */,
 				73A56D2922663CFE00D2293B /* LoginProvider.swift in Sources */,
 				73A56D2522663CFE00D2293B /* LoginError.swift in Sources */,
@@ -2729,6 +2753,7 @@
 				73F13902222C289200FB8EBC /* TextImageGenerator.swift in Sources */,
 				73F1384B222C289200FB8EBC /* HomeControllerViewModel.swift in Sources */,
 				7343FCA42282E06D00A3DA3D /* AlbumCellRouter.swift in Sources */,
+				733768EB2289954100C922D9 /* SplashViewModel.swift in Sources */,
 				73F138BA222C289200FB8EBC /* PlayerPlaylistRootRouter.swift in Sources */,
 				73F13883222C289200FB8EBC /* ChangeEmailControllerViewModel.swift in Sources */,
 				73F1381D222C289200FB8EBC /* VerticalButton.swift in Sources */,
@@ -2738,6 +2763,7 @@
 				73F13875222C289200FB8EBC /* PlaylistTableHeaderView.swift in Sources */,
 				73F138F8222C289200FB8EBC /* RxResponse.swift in Sources */,
 				73F13884222C289200FB8EBC /* ChangeEmailViewModel.swift in Sources */,
+				733768E92289954100C922D9 /* SplashRouter.swift in Sources */,
 				73F138E8222C289200FB8EBC /* GenericError.swift in Sources */,
 				73F138C0222C289200FB8EBC /* MyPlaylistsViewController.swift in Sources */,
 				73F1384F222C289200FB8EBC /* AppViewController.swift in Sources */,

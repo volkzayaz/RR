@@ -12,18 +12,16 @@ import RxCocoa
 
 fileprivate let _appState = BehaviorRelay<AppState?>(value: nil)
 
-func initAppState() {
+func initAppState() -> Maybe<Void> {
     
-    let u = UserRequest.login.rx.baseResponse(type: User.self).asObservable()
-    let c = ConfigRequest.player.rx.baseResponse(type: PlayerConfig.self).asObservable()
+    let u = UserRequest.login.rx.baseResponse(type: User.self)
+    let c = ConfigRequest.player.rx.baseResponse(type: PlayerConfig.self)
     
-    let _ =
-    Observable.combineLatest(u, c)
+    return Maybe.zip(u, c) { ($0, $1) }
+        .asObservable()
         .retryOnConnect(timeout: 1)
-        .take(1)
-        .map { (arg) in
-            
-            let (user, config) = arg
+        .asMaybe()
+        .map { (user, config) in
             
             return AppState(player: PlayerState(tracks: LinkedPlaylist(),
                                                 lastPatch: nil,
@@ -35,7 +33,11 @@ func initAppState() {
             )
             
         }
-        .bind(to: _appState)
+        .map({ (x) in
+            _appState.accept(x)
+            return ()
+        })
+    
 }
 
 var appStateSlice: AppState {

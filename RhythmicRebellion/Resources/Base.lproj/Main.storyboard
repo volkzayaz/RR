@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9iA-vX-ejr">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -42,12 +42,43 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5F7-I8-RRD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="12" y="691"/>
+            <point key="canvasLocation" x="-497" y="666"/>
+        </scene>
+        <!--Splash View Controller-->
+        <scene sceneID="Ezi-vH-Ot9">
+            <objects>
+                <viewController id="9iA-vX-ejr" customClass="SplashViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UIx-c8-t6U">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.gif" translatesAutoresizingMaskIntoConstraints="NO" id="VaI-du-A2I">
+                                <rect key="frame" x="147" y="288" width="120" height="180"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="7M4-tb-GKI"/>
+                                    <constraint firstAttribute="width" constant="120" id="f7X-Rn-lLG"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="VaI-du-A2I" firstAttribute="centerY" secondItem="zOm-eg-xWJ" secondAttribute="centerY" id="1LK-DB-Cm5"/>
+                            <constraint firstItem="VaI-du-A2I" firstAttribute="centerX" secondItem="zOm-eg-xWJ" secondAttribute="centerX" id="7Sa-fu-KRh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="zOm-eg-xWJ"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="VaI-du-A2I" id="o9C-LE-sj9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bxz-9b-ifL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1327" y="-35"/>
         </scene>
         <!--App View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="AppViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AppViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="AppViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -144,7 +175,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="29" y="-31"/>
+            <point key="canvasLocation" x="-599" y="-35"/>
         </scene>
         <!--Pages-->
         <scene sceneID="LzV-fB-sRK">
@@ -1787,7 +1818,7 @@
                     <nil key="highlightedColor"/>
                 </label>
             </objects>
-            <point key="canvasLocation" x="29.6875" y="-427.44140625"/>
+            <point key="canvasLocation" x="-599" y="-441"/>
         </scene>
         <!--Authorization-->
         <scene sceneID="mH9-Je-3p1">
@@ -1847,6 +1878,7 @@
         <image name="Settings" width="22" height="20"/>
         <image name="Video" width="18" height="13"/>
         <image name="addPlaylist" width="27" height="27"/>
+        <image name="splash.gif" width="361" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="kAD-GO-v6x"/>

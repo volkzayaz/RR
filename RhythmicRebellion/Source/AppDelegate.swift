@@ -17,8 +17,7 @@ import AlamofireNetworkActivityLogger
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var appRouter: AppRouter?
-
+    
     func setupAppearance() {
 
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .top, barMetrics: .default)
@@ -86,25 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ////appearence
         self.setupAppearance()
 
-        ////init app state
-        let ws = WebSocketService(url: URI.webSocketService)
-        let x = ActorStorage(actors: [ RRPlayer(webSocket: ws),
-                                       AudioPlayer(),
-                                       MediaWidget() ],
-                             ws: ws)
-        initActorStorage(x)
-
-        Dispatcher.kickOff()
-        
-        ///init UI
-        let appViewController = self.window?.rootViewController as! AppViewController
-        
-        let defaultAppRouter = AppRouter()
-        defaultAppRouter.start(controller: appViewController)
-        
-        self.appRouter = defaultAppRouter
-        
-        return self.appRouter != nil
+        return true
     }
 
     func application(_ app: UIApplication,
