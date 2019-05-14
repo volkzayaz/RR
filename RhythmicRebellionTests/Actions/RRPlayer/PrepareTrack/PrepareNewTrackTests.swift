@@ -35,7 +35,7 @@ class PrepareNewTrackTests: XCTestCase {
         let orderedTrack = orderedTracks[0]
         
         let addonUrl = try! TrackRequest.addons(trackIds: [orderedTrack.track.id]).asURLRequest().url!
-        FakeRequests.registerMockRequestAddons(with: addonUrl)
+        FakeRequests.Addons.registerAdvertisementAddon(with: addonUrl)
         
         let artistUrl = try! TrackRequest.artist(artistId: orderedTrack.track.artist.id).asURLRequest().url!
         FakeRequests.registerMockRequestArtist(with: artistUrl)

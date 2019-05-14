@@ -27,11 +27,12 @@ class AudioPlayerActionsTests: XCTestCase {
         let tracks = [t1, t2, t2]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(player.tracks.count).toEventually(equal(tracks.count))
-
+        
         let firstOrderedTrack = orderedTracks[0]
         //Mock Requests
         let addonUrl = try! TrackRequest.addons(trackIds: [firstOrderedTrack.track.id]).asURLRequest().url!
-        FakeRequests.registerMockRequestAddons(with: addonUrl)
+        FakeRequests.Addons.registerAdvertisementAddon(with: addonUrl)
+        
         let artistUrl = try! TrackRequest.artist(artistId: firstOrderedTrack.track.artist.id).asURLRequest().url!
         FakeRequests.registerMockRequestArtist(with: artistUrl)
         //Prepare new track
@@ -40,15 +41,13 @@ class AudioPlayerActionsTests: XCTestCase {
         //Play Action
         Dispatcher.dispatch(action: AudioPlayer.Play())
         
-        expect(player.currentItem!.activeTrackHash).to(equal(firstOrderedTrack.orderHash))
-        expect(player.currentItem!.state.isPlaying) == true
+        expect(player.currentItem!.state.isPlaying).toEventually(equal(true))
+        expect(player.currentItem!.activeTrackHash).toEventually(equal(firstOrderedTrack.orderHash))
         
         expect(appStateSlice.firstTrack) == firstOrderedTrack
         
         let nextOrderedTrack = orderedTracks[1]
         expect(appStateSlice.nextTrack) == nextOrderedTrack
-        expect(appStateSlice.canForward) == false
-        
     }
 }
 

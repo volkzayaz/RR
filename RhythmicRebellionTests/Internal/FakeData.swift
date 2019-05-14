@@ -10,7 +10,20 @@ import Foundation
 import RhythmicRebellion
 
 struct FakeData {
-    static let addon: Data = try! JsonReader.readData(withName: "audio-add-ons-for-tracks")
+    
+    struct Addon {
+        //    case advertisement = 0
+        //    case songIntroduction = 1
+        //    case songCommentary = 2
+        //    case artistBIO = 3
+        //    case artistAnnouncements = 4
+        static let advertisement: Data = try! JsonReader.readData(withName: "addon-advertisement")
+        static let songIntroduction: Data = try! JsonReader.readData(withName: "addon-songIntroduction")
+        static let songCommentary: Data = try! JsonReader.readData(withName: "addon-songCommentary")
+        static let artistBIO: Data = try! JsonReader.readData(withName: "addon-artistBIO")
+        static let artistAnnouncements: Data = try! JsonReader.readData(withName: "addon-artistAnnouncements")
+    }
+    
     static let artist: Data = try! JsonReader.readData(withName: "artist")
 }
 
