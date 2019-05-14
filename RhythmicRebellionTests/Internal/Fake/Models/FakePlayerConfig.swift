@@ -6,7 +6,6 @@
 //  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
-import Foundation
 @testable import RhythmicRebellion
 
 extension PlayerConfig: Fakeble {
@@ -17,8 +16,4 @@ extension PlayerConfig: Fakeble {
     }
 }
 
-extension DefaultAudioFile: Fakeble {
-    static func fake() -> DefaultAudioFile {
-        return DefaultAudioFile(duration: fakeNumber(bound: 120), urlString: "https://\(fakeString(components: 1)).com")
-    }
-}
+

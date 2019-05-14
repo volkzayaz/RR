@@ -6,7 +6,6 @@
 //  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
-
 @testable import RhythmicRebellion
 
 extension Country: Fakeble {

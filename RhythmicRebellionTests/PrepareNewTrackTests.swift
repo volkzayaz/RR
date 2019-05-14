@@ -11,22 +11,6 @@ import Nimble
 import RxCocoa
 import Mocker
 
-class FakeNetwork: Network {
-    
-    init() {
-        
-        let configuration = URLSessionConfiguration.default
-        configuration.protocolClasses = [MockingURLProtocol.self]
-        super.init(sm: SessionManager(configuration: configuration))
-        
-    }
-}
-
-public struct FakeData {
-    static let addon: Data = try! JsonReader.readData(withName: "audio-add-ons-for-tracks")
-    static let artist: Data = try! JsonReader.readData(withName: "artist")
-}
-
 @testable import Alamofire
 @testable import RhythmicRebellion
 

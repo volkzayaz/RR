@@ -6,8 +6,6 @@
 //  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
-import Foundation
-import RxCocoa
 import RxSwift
 
 @testable import RhythmicRebellion

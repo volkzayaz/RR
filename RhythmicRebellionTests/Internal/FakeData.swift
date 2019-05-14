@@ -7,7 +7,12 @@
 //
 
 import Foundation
-@testable import RhythmicRebellion
+import RhythmicRebellion
+
+public struct FakeData {
+    static let addon: Data = try! JsonReader.readData(withName: "audio-add-ons-for-tracks")
+    static let artist: Data = try! JsonReader.readData(withName: "artist")
+}
 
 let t1 = Track.fake(id: 1)
 let t2 = Track.fake(id: 2)
@@ -20,8 +25,7 @@ let t8 = Track.fake(id: 8)
 let t9 = Track.fake(id: 9)
 let t10 = Track.fake(id: 10)
 
-struct Tracks {
-    
+struct Tracks {    
     static var all: [Track] {
         return [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10]
     }

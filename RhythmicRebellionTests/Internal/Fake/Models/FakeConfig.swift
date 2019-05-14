@@ -1,5 +1,5 @@
 //
-//  FakeListeningSettings.swift
+//  FakeConfig.swift
 //  RhythmicRebellionTests
 //
 //  Created by Andrey Ivanov on 5/6/19.
@@ -8,8 +8,9 @@
 
 @testable import RhythmicRebellion
 
-extension ListeningSettings: Fakeble {
-    static func fake() -> ListeningSettings {
-        return ListeningSettings()
+extension Config: Fakeble {
+    
+    static func fake() -> Config {
+        return Config(hobbies: [], howHearList: [], languages: [])
     }
 }
