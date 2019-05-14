@@ -22,9 +22,9 @@ class AudioPlayerActionsTests: XCTestCase {
         Dispatcher.state.accept(AppState.fake())
     }
     
-    func testPlayFirstTrack() {
+    func prepareTrack() {
         
-        let tracks = [t1, t2, t2]
+        let tracks = Tracks.all
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(player.tracks.count).toEventually(equal(tracks.count))
         
@@ -38,16 +38,56 @@ class AudioPlayerActionsTests: XCTestCase {
         //Prepare new track
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: false))
         expect(player.currentItem).toNotEventually(beNil())
-        //Play Action
+    }
+    
+    func testPlay() {
+        
+        prepareTrack()
+        
         Dispatcher.dispatch(action: AudioPlayer.Play())
-        
         expect(player.currentItem!.state.isPlaying).toEventually(equal(true))
-        expect(player.currentItem!.activeTrackHash).toEventually(equal(firstOrderedTrack.orderHash))
         
+        let firstOrderedTrack = orderedTracks[0]
+        expect(player.currentItem!.activeTrackHash) == firstOrderedTrack.orderHash
         expect(appStateSlice.firstTrack) == firstOrderedTrack
         
         let nextOrderedTrack = orderedTracks[1]
         expect(appStateSlice.nextTrack) == nextOrderedTrack
+    }
+    
+    func testSwitch() {
+        
+        prepareTrack()
+        
+        Dispatcher.dispatch(action: AudioPlayer.Play())
+        expect(player.currentItem!.state.isPlaying).toEventually(equal(true))
+        
+        Dispatcher.dispatch(action: AudioPlayer.Switch())
+        expect(player.currentItem!.state.isPlaying).toEventually(equal(false))
+        
+        Dispatcher.dispatch(action: AudioPlayer.Switch())
+        expect(player.currentItem!.state.isPlaying).toEventually(equal(true))
+    }
+    
+    func testPause() {
+        prepareTrack()
+        
+        Dispatcher.dispatch(action: AudioPlayer.Play())
+        expect(player.currentItem!.state.isPlaying).toEventually(equal(true))
+        
+        Dispatcher.dispatch(action: AudioPlayer.Pause())
+        expect(player.currentItem!.state.isPlaying).toEventually(equal(false))
+    }
+    
+    func testScrub() {
+        
+       prepareTrack()
+        
+        Dispatcher.dispatch(action: AudioPlayer.Scrub(newValue: 3))
+        expect(player.currentItem!.state.progress).toEventually(equal(3))
+        
+        Dispatcher.dispatch(action: AudioPlayer.Scrub(newValue: 5))
+        expect(player.currentItem!.state.progress).toEventually(equal(5))
     }
 }
 
