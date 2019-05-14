@@ -32,17 +32,14 @@ class PrepareNewTrackTests: XCTestCase {
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         
-        let addon = URL(string: "http://dev.api.rebellionretailsite.com/api/player/audio-add-ons-for-tracks")!
-        Mock(url: addon, ignoreQuery: true, dataType: .json, statusCode: 200, data: [
-            Mock.HTTPMethod.get : FakeData.addon
-            ]).register()
-        
-        let artist = URL(string: "http://dev.api.rebellionretailsite.com/api/player/artist")!
-        Mock(url: artist, ignoreQuery: true, dataType: .json, statusCode: 200, data: [
-            Mock.HTTPMethod.get : FakeData.artist
-            ]).register()
-        
         let orderedTrack = orderedTracks[0]
+        
+        let addonUrl = try! TrackRequest.addons(trackIds: [orderedTrack.track.id]).asURLRequest().url!
+        FakeRequests.registerMockRequestAddons(with: addonUrl)
+        
+        let artistUrl = try! TrackRequest.artist(artistId: orderedTrack.track.artist.id).asURLRequest().url!
+        FakeRequests.registerMockRequestArtist(with: artistUrl)
+        
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack, shouldPlayImmidiatelly: false))
         expect(appStateSlice.player.currentItem?.activeTrackHash).toEventually(equal(orderedTrack.orderHash))
     }

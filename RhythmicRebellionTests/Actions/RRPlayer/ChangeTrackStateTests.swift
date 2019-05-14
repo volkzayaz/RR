@@ -1,5 +1,5 @@
 //
-//  AddTracksToLinkedPlaylistTests.swift
+//  ChangeTrackStateTests.swift
 //  RhythmicRebellionTests
 //
 //  Created by Andrey Ivanov on 5/14/19.
@@ -12,7 +12,7 @@ import RxCocoa
 
 @testable import RhythmicRebellion
 
-class AddTracksToLinkedPlaylistTests: XCTestCase {
+class ChangeTrackStateTests: XCTestCase {
     
     override func setUp() {
         
@@ -22,8 +22,8 @@ class AddTracksToLinkedPlaylistTests: XCTestCase {
         Dispatcher.state.accept(AppState.fake())
     }
     
-    func testAddTracksToLinkedPlaylist() {
-        
+    func testChangeTrackState() {
+//        Dispatcher.dispatch(action: ChangeTrackState())
     }
 }
 

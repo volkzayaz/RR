@@ -9,7 +9,7 @@
 import Foundation
 import RhythmicRebellion
 
-public struct FakeData {
+struct FakeData {
     static let addon: Data = try! JsonReader.readData(withName: "audio-add-ons-for-tracks")
     static let artist: Data = try! JsonReader.readData(withName: "artist")
 }

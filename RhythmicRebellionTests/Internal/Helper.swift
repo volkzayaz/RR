@@ -12,6 +12,10 @@ var lastPatch: PlayerState.ReduxViewPatch? {
     return appStateSlice.player.lastPatch
 }
 
+var player: PlayerState {
+    return appStateSlice.player
+}
+
 var orderedTracks: [OrderedTrack] {
     return appStateSlice.player.tracks.orderedTracks
 }

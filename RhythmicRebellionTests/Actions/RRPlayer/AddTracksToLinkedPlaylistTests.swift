@@ -1,5 +1,5 @@
 //
-//  ApplyReduxViewPatchTests.swift
+//  AddTracksToLinkedPlaylistTests.swift
 //  RhythmicRebellionTests
 //
 //  Created by Andrey Ivanov on 5/14/19.
@@ -12,7 +12,7 @@ import RxCocoa
 
 @testable import RhythmicRebellion
 
-class ApplyReduxViewPatchTests: XCTestCase {
+class AddTracksToLinkedPlaylistTests: XCTestCase {
     
     override func setUp() {
         
@@ -22,7 +22,9 @@ class ApplyReduxViewPatchTests: XCTestCase {
         Dispatcher.state.accept(AppState.fake())
     }
     
-    func testApplyReduxViewPatch() {
+    
+    
+    func testAddTracksToLinkedPlaylist() {
         
     }
 }

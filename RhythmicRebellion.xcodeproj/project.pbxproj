@@ -366,6 +366,7 @@
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
 		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
 		FB40EECF2284797F0030A229 /* Descriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB40EECE2284797F0030A229 /* Descriptions.swift */; };
+		FB634A4C228AEBF000C581B4 /* FakeRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A4B228AEBF000C581B4 /* FakeRequests.swift */; };
 		FB8B86A1228434BF00C0D31A /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* FakeData.swift */; };
 		FB8B86A522843F3600C0D31A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A422843F3600C0D31A /* Helper.swift */; };
 		FBEC3B802288B72E001F200E /* SetNewUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */; };
@@ -769,6 +770,7 @@
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
 		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
 		FB40EECE2284797F0030A229 /* Descriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Descriptions.swift; sourceTree = "<group>"; };
+		FB634A4B228AEBF000C581B4 /* FakeRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeRequests.swift; sourceTree = "<group>"; };
 		FB8B86A0228434BF00C0D31A /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		FB8B86A422843F3600C0D31A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUserTests.swift; sourceTree = "<group>"; };
@@ -1027,7 +1029,7 @@
 		736456A0220C7610005BE389 /* RhythmicRebellionTests */ = {
 			isa = PBXGroup;
 			children = (
-				FBEC3BAF228ACE66001F200E /* Tests */,
+				FBEC3BAF228ACE66001F200E /* Actions */,
 				FB8B86A322843EF700C0D31A /* Internal */,
 				734F828522299CD90006E1DE /* support_files */,
 			);
@@ -2275,6 +2277,7 @@
 				73F136C2222C289200FB8EBC /* Fake.swift */,
 				FBEC3B8E228ABB27001F200E /* Models */,
 				FBEC3B8D228ABAB3001F200E /* ActorStorage */,
+				FB634A4B228AEBF000C581B4 /* FakeRequests.swift */,
 			);
 			path = Fake;
 			sourceTree = "<group>";
@@ -2398,7 +2401,7 @@
 			path = LinkedPlaylist;
 			sourceTree = "<group>";
 		};
-		FBEC3BAF228ACE66001F200E /* Tests */ = {
+		FBEC3BAF228ACE66001F200E /* Actions */ = {
 			isa = PBXGroup;
 			children = (
 				FBEC3BAE228ACE5D001F200E /* LinkedPlaylist */,
@@ -2407,7 +2410,7 @@
 				FBEC3B99228AC2F6001F200E /* Lyrics */,
 				FBEC3B96228AC16B001F200E /* User */,
 			);
-			path = Tests;
+			path = Actions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2753,6 +2756,7 @@
 				FBEC3BA0228ACA6B001F200E /* GetBackToPreviousItemTests.swift in Sources */,
 				FB1B9A87228067E200F1CDEC /* FakeListeningSettings.swift in Sources */,
 				FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */,
+				FB634A4C228AEBF000C581B4 /* FakeRequests.swift in Sources */,
 				FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */,
 				FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */,
 				FB8B86A1228434BF00C0D31A /* FakeData.swift in Sources */,

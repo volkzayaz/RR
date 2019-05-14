@@ -26,8 +26,9 @@ class DeleteTrackTests: XCTestCase {
         
         let tracks = [t1]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
+        expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         Dispatcher.dispatch(action: DeleteTrack(track: orderedTracks[0]))
-        expect(lastPatch!.patch.count) == 0
+        expect(lastPatch!.patch.count).toEventually(equal(0))
         expect(lastPatch!.shouldFlush) == true
         expect(orderedTracks.count) == 0
     }
@@ -36,7 +37,8 @@ class DeleteTrackTests: XCTestCase {
         
         let tracks = [t1, t2, t3]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
-
+        expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
+        
         let orderedTrackToRemove = orderedTracks[0]
         Dispatcher.dispatch(action: DeleteTrack(track: orderedTrackToRemove))
         expect(lastPatch!.patch.count) == 2
