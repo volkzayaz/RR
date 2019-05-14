@@ -93,7 +93,7 @@ class ContinueFacebookRegistrationViewController: UIViewController, MVVM_View {
         guard termsAndConditionsCheckmark.isChecked,
             dataStoredCheckmark.isChecked,
             advertisersCheckmark.isChecked else {
-                return presentErrorMessage(error: "You should tick all checkmarks before completing registration")
+                return presentErrorMessage(error: R.string.localizable.tickCheckboxes())
             }
         
         var res = false

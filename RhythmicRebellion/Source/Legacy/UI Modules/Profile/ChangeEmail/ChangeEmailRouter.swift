@@ -9,11 +9,7 @@
 
 import UIKit
 
-protocol ChangeEmailRouter: FlowRouter {
-    func restart()
-}
-
-final class DefaultChangeEmailRouter:  ChangeEmailRouter, FlowRouterSegueCompatible {
+final class ChangeEmailRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -44,7 +40,7 @@ final class DefaultChangeEmailRouter:  ChangeEmailRouter, FlowRouterSegueCompati
         return true
     }
 
-    func prepare(for destination: DefaultChangeEmailRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: ChangeEmailRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .placeholder: break

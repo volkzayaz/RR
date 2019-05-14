@@ -133,7 +133,7 @@ extension UserRequest {
             
         case .changeEmail(let to, let pwd):
             
-            return anonymousRequest(method: .post,
+            return anonymousRequest(method: .put,
                                     path: "fan/profile/change-email",
                                     params: ["email": to,
                                              "current_password": pwd])

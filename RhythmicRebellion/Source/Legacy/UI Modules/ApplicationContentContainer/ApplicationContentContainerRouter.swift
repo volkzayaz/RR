@@ -9,11 +9,7 @@
 
 import UIKit
 
-protocol ApplicationContentContainerRouter: FlowRouter, PlayerNavigationDelgate {
-    
-}
-
-final class DefaultApplicationContentContainerRouter:  ApplicationContentContainerRouter, FlowRouterSegueCompatible {
+final class ApplicationContentContainerRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -42,18 +38,12 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
         }
     }
 
-    
-    
-    private(set) weak var viewModel: ApplicationContentContainerViewModel?
     private(set) weak var applicationContentContainerViewController: ApplicationContentContainerViewController?
     var sourceController: UIViewController? { return applicationContentContainerViewController }
 
-    private(set) weak var tabBarViewController: TabBarViewController?
     private(set) weak var tabBarRouter: TabBarRouter?
 
-    lazy var playerContentTransitioningDelegate: PlayerContentTransitioningDelegate = {
-        return PlayerContentTransitioningDelegate(with: self)
-    }()
+    lazy var playerContentTransitioningDelegate = PlayerContentTransitioningDelegate(with: self)
 
     var playerContentContainerRouter: PlayerContentContainerRouter? { return self.tabBarRouter?.playerContentContainerRouter}
 
@@ -61,7 +51,7 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
         return true
     }
 
-    func prepare(for destination: DefaultApplicationContentContainerRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: ApplicationContentContainerRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .tabBarController:
@@ -98,12 +88,12 @@ final class DefaultApplicationContentContainerRouter:  ApplicationContentContain
     }
 
     func showPlayerContentContainer(playerNavigationItem: PlayerNavigationItem) {
-        self.tabBarViewController?.selectedViewController?.view.endEditing(true)
+        self.tabBarRouter?.tabBarViewController?.selectedViewController?.view.endEditing(true)
         self.perform(segue: .showPlayerContentController(playerNavigationItem: playerNavigationItem))
     }
 }
 
-extension DefaultApplicationContentContainerRouter: PlayerNavigationDelgate {
+extension ApplicationContentContainerRouter: PlayerNavigationDelgate {
     func routeToAuthorization(with authorizationType: AuthorizationType) {
         self.tabBarRouter?.routeToAuthorization(with: authorizationType)
     }
@@ -112,7 +102,7 @@ extension DefaultApplicationContentContainerRouter: PlayerNavigationDelgate {
     func navigate(to playerNavigationItem: PlayerNavigationItem) {
 
         guard let playerContentContainerRouter = self.tabBarRouter?.playerContentContainerRouter else {
-            self.tabBarViewController?.selectedViewController?.view.endEditing(true)
+            self.tabBarRouter?.tabBarViewController?.selectedViewController?.view.endEditing(true)
             self.perform(segue: .showPlayerContentController(playerNavigationItem: playerNavigationItem))
             return
         }
@@ -121,7 +111,7 @@ extension DefaultApplicationContentContainerRouter: PlayerNavigationDelgate {
     }
 }
 
-extension DefaultApplicationContentContainerRouter: PlayerContentPresentingController {
+extension ApplicationContentContainerRouter: PlayerContentPresentingController {
 
     func frame(for containerView: UIView) -> CGRect {
         guard let destinationViewController = self.applicationContentContainerViewController?.tabBarViewController,
@@ -150,7 +140,7 @@ extension DefaultApplicationContentContainerRouter: PlayerContentPresentingContr
     }
 }
 
-extension DefaultApplicationContentContainerRouter: PlayerContentNavigationDelgate {
+extension ApplicationContentContainerRouter: PlayerContentNavigationDelgate {
 
 
     func navigateToPage(with url: URL) {
