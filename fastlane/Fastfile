@@ -4,6 +4,12 @@ default_platform :ios
 
 platform :ios do
     
+  lane :tests do
+    run_tests(workspace: "RhythmicRebellion.xcworkspace",
+                devices: ["iPhone Xr"],
+                scheme: "RhythmicRebellionTests")
+  end
+    
   before_all do
     ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
 
