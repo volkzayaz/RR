@@ -17,9 +17,7 @@ class PrepareNewTrackByHashTests: XCTestCase {
     
     override func setUp() {
         
-        initActorStorage(ActorStorage(actors: [],
-                                      ws: FakeWebSocketService(),
-                                      network: FakeNetwork()))
+        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService(), network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
     }
     

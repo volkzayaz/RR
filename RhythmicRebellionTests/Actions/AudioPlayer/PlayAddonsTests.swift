@@ -16,9 +16,7 @@ class PlayAddonsTests: XCTestCase {
     
     override func setUp() {
         
-        initActorStorage(ActorStorage(actors: [],
-                                      ws: FakeWebSocketService(),
-                                      network: FakeNetwork()))
+        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService(), network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
         
         let tracks = [t1]

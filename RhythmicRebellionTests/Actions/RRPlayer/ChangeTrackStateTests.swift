@@ -16,9 +16,7 @@ class ChangeTrackStateTests: XCTestCase {
     
     override func setUp() {
         
-        initActorStorage(ActorStorage(actors: [],
-                                      ws: FakeWebSocketService(),
-                                      network: FakeNetwork()))
+        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService(), network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
     }
     
@@ -37,7 +35,7 @@ class ChangeTrackStateTests: XCTestCase {
         FakeRequests.registerMockRequestArtist(with: artistUrl)
         
         expect(player.currentItem).to(beNil())
-        //Prepare new track
+        
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: true))
         expect(player.currentItem).toNotEventually(beNil())
         

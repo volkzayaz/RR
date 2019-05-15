@@ -16,57 +16,57 @@ class AddTracksToLinkedPlayingTests: XCTestCase {
     
     override func setUp() {
         
-        initActorStorage(ActorStorage(actors: [],
-                                      ws: FakeWebSocketService(),
-                                      network: FakeNetwork()))
+        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService(), network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
-    }
-    
-    func testAddTracksToLinkedPlayingNow() {
         
         let tracks = Tracks.all
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(player.tracks.count).toEventually(equal(tracks.count))
+    }
+    
+    func prepareForAddTracksToLinkedPlayin(trackToAdd track: Track, style: AddTracksToLinkedPlaying.AddStyle) {
         
         let firstOrderedTrack = orderedTracks[0]
-        //Mock Requests
+        //Mocks Requests
         let addonUrl = try! TrackRequest.addons(trackIds: [firstOrderedTrack.track.id]).asURLRequest().url!
         FakeRequests.Addons.registerAdvertisementAddon(with: addonUrl)
         
         let artistUrl = try! TrackRequest.artist(artistId: firstOrderedTrack.track.artist.id).asURLRequest().url!
         FakeRequests.registerMockRequestArtist(with: artistUrl)
+        
         //Prepare new track
-        Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: false))
+        Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: true))
         expect(player.currentItem).toNotEventually(beNil())
         
-        let trackToPlayingNow = t5
-        let addonUrlToActive = try! TrackRequest.addons(trackIds: [trackToPlayingNow.id]).asURLRequest().url!
+        let addonUrlToActive = try! TrackRequest.addons(trackIds: [track.id]).asURLRequest().url!
         FakeRequests.Addons.registerAdvertisementAddon(with: addonUrlToActive)
-
-        let artistUrlToActive = try! TrackRequest.artist(artistId: trackToPlayingNow.artist.id).asURLRequest().url!
+        
+        let artistUrlToActive = try! TrackRequest.artist(artistId: track.artist.id).asURLRequest().url!
         FakeRequests.registerMockRequestArtist(with: artistUrlToActive)
         
+        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [track], style: style))
         expect(player.currentItem).toNotEventually(beNil())
+    }
+    
+    func testAddTracksToLinkedPlayingNow() {
         
-        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [trackToPlayingNow], style: .now))
-        expect(player.currentItem).toNotEventually(beNil())
-        
-        let activeOrderedTrack = orderedTracks[0]
-        expect(player.currentItem?.activeTrackHash) == activeOrderedTrack.orderHash
-        expect(activeOrderedTrack.track.id) == trackToPlayingNow.id
-        
+        prepareForAddTracksToLinkedPlayin(trackToAdd: t5, style: .next)
+        expect(player.currentItem?.activeTrackHash) == orderedTracks[0].orderHash
+        expect(orderedTracks[1].track.id) == t5.id
     }
     
     func testAddTracksToLinkedPlayingNext() {
         
-        let tracks = [t1, t2, t3]
-        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: .next))
+        prepareForAddTracksToLinkedPlayin(trackToAdd: t2, style: .next)
+        expect(player.currentItem?.activeTrackHash) == orderedTracks[0].orderHash
+        expect(orderedTracks[1].track.id) == t2.id
     }
     
     func testAddTracksToLinkedPlayingLast() {
         
-        let tracks = [t1, t2, t3]
-        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: .last))
+        prepareForAddTracksToLinkedPlayin(trackToAdd: t3, style: .last)
+        expect(player.currentItem?.activeTrackHash) == orderedTracks[0].orderHash
+        expect(orderedTracks[orderedTracks.count - 1].track.id) == t3.id
     }
 }
 

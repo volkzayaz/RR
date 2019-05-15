@@ -13,6 +13,7 @@ struct FakeRequests {
     struct Addons {
         
         static func registerAdvertisementAddon(with url: URL) {
+            
             Mock(url: url, dataType: .json, statusCode: 200, data: [
                 Mock.HTTPMethod.get : FakeData.Addon.advertisement
                 ]).register()

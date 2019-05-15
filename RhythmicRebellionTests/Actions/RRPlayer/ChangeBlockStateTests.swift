@@ -16,14 +16,16 @@ class ChangeBlockStateTests: XCTestCase {
     
     override func setUp() {
         
-        initActorStorage(ActorStorage(actors: [],
-                                      ws: FakeWebSocketService(),
-                                      network: FakeNetwork()))
+        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService(), network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
     }
     
     func testChangeBlockState() {
+        
         Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked:true))
-        expect(appStateSlice.player.isBlocked) == true
+        expect(appStateSlice.player.isBlocked).toEventually(equal(true))
+        
+        Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked:false))
+        expect(appStateSlice.player.isBlocked).toEventually(equal(false))
     }
 }
