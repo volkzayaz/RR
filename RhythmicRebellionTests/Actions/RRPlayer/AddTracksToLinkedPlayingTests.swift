@@ -28,21 +28,15 @@ class AddTracksToLinkedPlayingTests: XCTestCase {
         
         let firstOrderedTrack = orderedTracks[0]
         //Mocks Requests
-        let addonUrl = try! TrackRequest.addons(trackIds: [firstOrderedTrack.track.id]).asURLRequest().url!
-        FakeRequests.Addons.registerAdvertisementAddon(with: addonUrl)
-        
-        let artistUrl = try! TrackRequest.artist(artistId: firstOrderedTrack.track.artist.id).asURLRequest().url!
-        FakeRequests.registerMockRequestArtist(with: artistUrl)
+        FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [firstOrderedTrack.track.id])
+        FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
         
         //Prepare new track
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: true))
         expect(player.currentItem).toNotEventually(beNil())
-        
-        let addonUrlToActive = try! TrackRequest.addons(trackIds: [track.id]).asURLRequest().url!
-        FakeRequests.Addons.registerAdvertisementAddon(with: addonUrlToActive)
-        
-        let artistUrlToActive = try! TrackRequest.artist(artistId: track.artist.id).asURLRequest().url!
-        FakeRequests.registerMockRequestArtist(with: artistUrlToActive)
+
+        FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [track.id])
+        FakeRequest.Artist.registerMockRequestArtist(artistId: track.artist.id)
         
         Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [track], style: style))
         expect(player.currentItem).toNotEventually(beNil())

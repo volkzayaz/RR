@@ -25,16 +25,14 @@ class PlayAddonsTests: XCTestCase {
         
         let firstOrderedTrack = orderedTracks[0]
         //Mock Requests
-        let artistUrl = try! TrackRequest.artist(artistId: firstOrderedTrack.track.artist.id).asURLRequest().url!
-        FakeRequests.registerMockRequestArtist(with: artistUrl)
+        FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
     }
     
-    func prepareNewTrack(_ register: (URL) -> Void) {
+    func prepareNewTrack(_ register: ([Int]) -> Void) {
         //Prepare new track
         let orderedTrack = orderedTracks[0]
         //Mock Requests
-        let addonUrl = try! TrackRequest.addons(trackIds: [orderedTrack.track.id]).asURLRequest().url!
-        register(addonUrl)
+        register([orderedTrack.track.id])
         
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack, shouldPlayImmidiatelly: false))
         expect(player.currentItem).toNotEventually(beNil())
@@ -44,36 +42,36 @@ class PlayAddonsTests: XCTestCase {
     }
     
     func testPlayAdvertisementAddon() {
-        prepareNewTrack { addonUrl in
-            FakeRequests.Addons.registerAdvertisementAddon(with: addonUrl)
+        prepareNewTrack { IDs in
+            FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: IDs)
         }
         expect(appStateSlice.canForward) == false
     }
     
     func testPlaySongIntroductionAddon() {
-        prepareNewTrack { addonUrl in
-            FakeRequests.Addons.registerSongIntroductionAddon(with:  addonUrl)
+        prepareNewTrack { IDs in
+            FakeRequest.Addons.registerSongIntroductionAddon(withTrackIDs: IDs)
         }
         expect(appStateSlice.canForward) == false
     }
     
     func testPlaySongCommentaryAddon() {
-        prepareNewTrack { addonUrl in
-            FakeRequests.Addons.registerSongCommentaryAddon(with: addonUrl)
+        prepareNewTrack { IDs in
+            FakeRequest.Addons.registerSongCommentaryAddon(withTrackIDs: IDs)
         }
         expect(appStateSlice.canForward) == true
     }
     
     func testPlayArtistBIOAddon() {
-        prepareNewTrack { addonUrl in
-            FakeRequests.Addons.registerArtistBIOAddon(with: addonUrl)
+        prepareNewTrack { IDs in
+            FakeRequest.Addons.registerArtistBIOAddon(withTrackIDs: IDs)
         }
         expect(appStateSlice.canForward) == true
     }
     
     func testPlayArtistAnnouncementsAddon() {
-        prepareNewTrack { addonUrl in
-            FakeRequests.Addons.registerArtistAnnouncementsAddon(with: addonUrl)
+        prepareNewTrack { IDs in
+            FakeRequest.Addons.registerArtistAnnouncementsAddon(withTrackIDs: IDs)
         }
         expect(appStateSlice.canForward) == false
     }

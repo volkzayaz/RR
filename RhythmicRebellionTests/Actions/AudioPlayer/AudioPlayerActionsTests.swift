@@ -28,11 +28,8 @@ class AudioPlayerActionsTests: XCTestCase {
         
         let firstOrderedTrack = orderedTracks[0]
         //Mock Requests
-        let addonUrl = try! TrackRequest.addons(trackIds: [firstOrderedTrack.track.id]).asURLRequest().url!
-        FakeRequests.Addons.registerAdvertisementAddon(with: addonUrl)
-        
-        let artistUrl = try! TrackRequest.artist(artistId: firstOrderedTrack.track.artist.id).asURLRequest().url!
-        FakeRequests.registerMockRequestArtist(with: artistUrl)
+        FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [firstOrderedTrack.track.id])
+        FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
         //Prepare new track
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: false))
         expect(player.currentItem).toNotEventually(beNil())

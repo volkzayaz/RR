@@ -30,12 +30,8 @@ class PrepareNewTrackTests: XCTestCase {
         expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         
         let orderedTrack = orderedTracks[0]
-        
-        let addonUrl = try! TrackRequest.addons(trackIds: [orderedTrack.track.id]).asURLRequest().url!
-        FakeRequests.Addons.registerAdvertisementAddon(with: addonUrl)
-        
-        let artistUrl = try! TrackRequest.artist(artistId: orderedTrack.track.artist.id).asURLRequest().url!
-        FakeRequests.registerMockRequestArtist(with: artistUrl)
+        FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [orderedTrack.track.id])
+        FakeRequest.Artist.registerMockRequestArtist(artistId: orderedTrack.track.artist.id)
         
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack, shouldPlayImmidiatelly: false))
         expect(appStateSlice.player.currentItem?.activeTrackHash).toEventually(equal(orderedTrack.orderHash))

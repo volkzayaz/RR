@@ -24,7 +24,9 @@ struct FakeData {
         static let artistAnnouncements: Data = try! JsonReader.readData(withName: "addon-artistAnnouncements")
     }
     
-    static let artist: Data = try! JsonReader.readData(withName: "artist")
+    struct Artist {
+        static let `default`: Data = try! JsonReader.readData(withName: "artist")        
+    }
 }
 
 let t1 = Track.fake(id: 1)

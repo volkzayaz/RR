@@ -366,7 +366,7 @@
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
 		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
 		FB40EECF2284797F0030A229 /* Descriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB40EECE2284797F0030A229 /* Descriptions.swift */; };
-		FB634A4C228AEBF000C581B4 /* FakeRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A4B228AEBF000C581B4 /* FakeRequests.swift */; };
+		FB634A4C228AEBF000C581B4 /* FakeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A4B228AEBF000C581B4 /* FakeRequest.swift */; };
 		FB634A4E228AF97000C581B4 /* addon-artistAnnouncements.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A4D228AF97000C581B4 /* addon-artistAnnouncements.json */; };
 		FB634A53228AFACB00C581B4 /* addon-songCommentary.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A50228AFACB00C581B4 /* addon-songCommentary.json */; };
 		FB634A54228AFACB00C581B4 /* addon-advertisement.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A51228AFACB00C581B4 /* addon-advertisement.json */; };
@@ -777,7 +777,7 @@
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
 		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
 		FB40EECE2284797F0030A229 /* Descriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Descriptions.swift; sourceTree = "<group>"; };
-		FB634A4B228AEBF000C581B4 /* FakeRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeRequests.swift; sourceTree = "<group>"; };
+		FB634A4B228AEBF000C581B4 /* FakeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeRequest.swift; sourceTree = "<group>"; };
 		FB634A4D228AF97000C581B4 /* addon-artistAnnouncements.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "addon-artistAnnouncements.json"; sourceTree = "<group>"; };
 		FB634A50228AFACB00C581B4 /* addon-songCommentary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "addon-songCommentary.json"; sourceTree = "<group>"; };
 		FB634A51228AFACB00C581B4 /* addon-advertisement.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "addon-advertisement.json"; sourceTree = "<group>"; };
@@ -2289,9 +2289,9 @@
 			isa = PBXGroup;
 			children = (
 				73F136C2222C289200FB8EBC /* Fake.swift */,
+				FB634A4B228AEBF000C581B4 /* FakeRequest.swift */,
 				FBEC3B8E228ABB27001F200E /* Models */,
 				FBEC3B8D228ABAB3001F200E /* ActorStorage */,
-				FB634A4B228AEBF000C581B4 /* FakeRequests.swift */,
 			);
 			path = Fake;
 			sourceTree = "<group>";
@@ -2800,7 +2800,7 @@
 				FB1B9A87228067E200F1CDEC /* FakeListeningSettings.swift in Sources */,
 				FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */,
 				FB634A57228AFBCD00C581B4 /* PlayAddonsTests.swift in Sources */,
-				FB634A4C228AEBF000C581B4 /* FakeRequests.swift in Sources */,
+				FB634A4C228AEBF000C581B4 /* FakeRequest.swift in Sources */,
 				FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */,
 				FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */,
 				FB8B86A1228434BF00C0D31A /* FakeData.swift in Sources */,
