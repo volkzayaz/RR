@@ -12,7 +12,7 @@ class JsonReader {
     
     static func readData(withName name: String) throws -> Data {
         guard let path = Bundle(for: self).path(forResource: name, ofType: "json") else {
-            fatalError("UnitTestData.json not found")
+            fatalError("\(name).json not found")
         }
         
         let result = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)

@@ -64,7 +64,7 @@ struct FakeRequest {
         static func registerMockRequestLyrics(track: Track) {
             let url = try! TrackRequest.lyrics(track: track).asURLRequest().url!
             Mock(url: url, dataType: .json, statusCode: 200, data: [
-                Mock.HTTPMethod.get : FakeData.Artist.default
+                Mock.HTTPMethod.get : FakeData.Lyrics.default
                 ]).register()
         }
     }

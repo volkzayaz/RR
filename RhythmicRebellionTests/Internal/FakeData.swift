@@ -12,11 +12,6 @@ import RhythmicRebellion
 struct FakeData {
     
     struct Addon {
-        //    case advertisement = 0
-        //    case songIntroduction = 1
-        //    case songCommentary = 2
-        //    case artistBIO = 3
-        //    case artistAnnouncements = 4
         static let advertisement: Data = try! JsonReader.readData(withName: "addon-advertisement")
         static let songIntroduction: Data = try! JsonReader.readData(withName: "addon-songIntroduction")
         static let songCommentary: Data = try! JsonReader.readData(withName: "addon-songCommentary")
@@ -26,6 +21,10 @@ struct FakeData {
     
     struct Artist {
         static let `default`: Data = try! JsonReader.readData(withName: "artist")        
+    }
+    
+    struct Lyrics {
+        static let `default`: Data = try! JsonReader.readData(withName: "lyrics")
     }
 }
 

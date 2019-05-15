@@ -246,6 +246,18 @@ extension PlayerState.ReduxViewPatch: CustomStringConvertible {
     }
 }
 
+extension Lyrics: CustomStringConvertible {
+    public var description: String {
+        return DeepDescription.description(any: self)
+    }
+}
+
+extension Karaoke: CustomStringConvertible {
+    public var description: String {
+        return DeepDescription.description(any: self)
+    }
+}
+
 extension LinkedPlaylist.ViewKey: CustomStringConvertible{
     var description: String {
         switch self {

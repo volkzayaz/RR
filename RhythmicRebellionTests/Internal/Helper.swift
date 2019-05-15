@@ -16,6 +16,10 @@ var player: PlayerState {
     return appStateSlice.player
 }
 
+var currentItem: PlayerState.CurrentItem? {
+    return appStateSlice.player.currentItem
+}
+
 var orderedTracks: [OrderedTrack] {
     return appStateSlice.player.tracks.orderedTracks
 }

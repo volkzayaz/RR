@@ -22,7 +22,7 @@ class PrepareNewTrackTests: XCTestCase {
         Dispatcher.state.accept(AppState.fake())
     }
     
-    func testPrepareLyrics() {
+    func testPrepareNewTrack() {
         
         let tracks = [t1]
         
@@ -34,7 +34,7 @@ class PrepareNewTrackTests: XCTestCase {
         FakeRequest.Artist.registerMockRequestArtist(artistId: orderedTrack.track.artist.id)
         
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack, shouldPlayImmidiatelly: false))
-        expect(appStateSlice.player.currentItem?.activeTrackHash).toEventually(equal(orderedTrack.orderHash))
+        expect(currentItem?.activeTrackHash).toEventually(equal(orderedTrack.orderHash))
     }
 }
 
