@@ -33,33 +33,33 @@ class AddTracksToLinkedPlayingTests: XCTestCase {
         
         //Prepare new track
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: true))
-        expect(player.currentItem).toNotEventually(beNil())
+        expect(currentItem).toNotEventually(beNil())
 
         FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [track.id])
         FakeRequest.Artist.registerMockRequestArtist(artistId: track.artist.id)
         
         Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [track], style: style))
-        expect(player.currentItem).toNotEventually(beNil())
+        expect(currentItem).toNotEventually(beNil())
     }
     
     func testAddTracksToLinkedPlayingNow() {
         
         prepareForAddTracksToLinkedPlayin(trackToAdd: t5, style: .next)
-        expect(player.currentItem?.activeTrackHash) == orderedTracks[0].orderHash
+        expect(currentItem?.activeTrackHash) == orderedTracks[0].orderHash
         expect(orderedTracks[1].track.id) == t5.id
     }
     
     func testAddTracksToLinkedPlayingNext() {
         
         prepareForAddTracksToLinkedPlayin(trackToAdd: t2, style: .next)
-        expect(player.currentItem?.activeTrackHash) == orderedTracks[0].orderHash
+        expect(currentItem?.activeTrackHash) == orderedTracks[0].orderHash
         expect(orderedTracks[1].track.id) == t2.id
     }
     
     func testAddTracksToLinkedPlayingLast() {
         
         prepareForAddTracksToLinkedPlayin(trackToAdd: t3, style: .last)
-        expect(player.currentItem?.activeTrackHash) == orderedTracks[0].orderHash
+        expect(currentItem?.activeTrackHash) == orderedTracks[0].orderHash
         expect(orderedTracks[orderedTracks.count - 1].track.id) == t3.id
     }
 }

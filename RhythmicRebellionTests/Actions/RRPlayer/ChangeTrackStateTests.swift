@@ -31,19 +31,19 @@ class ChangeTrackStateTests: XCTestCase {
         FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [firstOrderedTrack.track.id])
         FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
         
-        expect(player.currentItem).to(beNil())
+        expect(currentItem).to(beNil())
         
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: true))
-        expect(player.currentItem).toNotEventually(beNil())
+        expect(currentItem).toNotEventually(beNil())
         
-        expect(player.currentItem?.state.progress) == 0
-        expect(player.currentItem?.state.isPlaying) == true
+        expect(currentItem?.state.progress) == 0
+        expect(currentItem?.state.isPlaying) == true
         
         let newState = TrackState(progress: 5, isPlaying: false, skipSeek: ())
         Dispatcher.dispatch(action: ChangeTrackState(trackState: newState))
 
-        expect(player.currentItem?.state.progress) == 5
-        expect(player.currentItem?.state.isPlaying) == false
+        expect(currentItem?.state.progress) == 5
+        expect(currentItem?.state.isPlaying) == false
     }
 }
 

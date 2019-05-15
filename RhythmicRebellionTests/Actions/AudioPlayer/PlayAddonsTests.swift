@@ -35,10 +35,10 @@ class PlayAddonsTests: XCTestCase {
         register([orderedTrack.track.id])
         
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack, shouldPlayImmidiatelly: false))
-        expect(player.currentItem).toNotEventually(beNil())
+        expect(currentItem).toNotEventually(beNil())
         //Play Action
         Dispatcher.dispatch(action: AudioPlayer.Play())
-        expect(player.currentItem!.activeTrackHash).toEventually(equal(orderedTrack.orderHash))
+        expect(currentItem!.activeTrackHash).toEventually(equal(orderedTrack.orderHash))
     }
     
     func testPlayAdvertisementAddon() {
