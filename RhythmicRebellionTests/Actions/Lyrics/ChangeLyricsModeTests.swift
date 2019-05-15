@@ -46,7 +46,7 @@ class ChangeLyricsModeTests: XCTestCase {
         
         Dispatcher.dispatch(action: ChangeLyricsMode(to: .plain))
         expect(currentItem?.lyrics?.mode).toEventually(equal(.plain))
-        expect(currentItem?.state.progress) == 0
+        expect(currentItem?.state.progress) == 5
     }
     
     func testChangeLyricsModeToKaraokeVocalOnePhrase() {
@@ -54,14 +54,14 @@ class ChangeLyricsModeTests: XCTestCase {
         let config = PlayerState.Lyrics.Mode.KaraokeConfig(track: .vocal, mode: .onePhrase)
         Dispatcher.dispatch(action: ChangeLyricsMode(to: .karaoke(config: config)))
         expect(currentItem?.lyrics?.mode).toEventually(equal(.karaoke(config: config)))
-        expect(currentItem?.state.progress) == 0
+        expect(currentItem?.state.progress) == 5
     }
     
     func testChangeLyricsModeToKaraokeVocalScroll() {
         let config = PlayerState.Lyrics.Mode.KaraokeConfig(track: .vocal, mode: .scroll)
         Dispatcher.dispatch(action: ChangeLyricsMode(to: .karaoke(config: config)))
         expect(currentItem?.lyrics?.mode).toEventually(equal(.karaoke(config: config)))
-        expect(currentItem?.state.progress) == 0
+        expect(currentItem?.state.progress) == 5
     }
     
     func testChangeLyricsModeToKaraokeBackingPhrase() {
@@ -69,13 +69,25 @@ class ChangeLyricsModeTests: XCTestCase {
         Dispatcher.dispatch(action: ChangeLyricsMode(to: .karaoke(config: config)))
         expect(currentItem?.lyrics?.mode).toEventually(equal(.karaoke(config: config)))
         expect(currentTrack?.track.backingAudioFile).toNot(beNil())
-        expect(currentItem?.state.progress) == 0
+        expect(currentItem?.state.progress) == 5
     }
     
     func testChangeLyricsModeToKaraokeBackingScroll() {
         let config = PlayerState.Lyrics.Mode.KaraokeConfig(track: .backing, mode: .scroll)
         Dispatcher.dispatch(action: ChangeLyricsMode(to: .karaoke(config: config)))
         expect(currentItem?.lyrics?.mode).toEventually(equal(.karaoke(config: config)))
+        expect(currentItem?.state.progress) == 5
+    }
+    
+    func testChangeLyricsModeToKaraokeResetProgress() {
+        let config = PlayerState.Lyrics.Mode.KaraokeConfig(track: .backing, mode: .scroll)
+        Dispatcher.dispatch(action: ChangeLyricsMode(to: .karaoke(config: config)))
+        expect(currentItem?.lyrics?.mode).toEventually(equal(.karaoke(config: config)))
+        expect(currentItem?.state.progress) == 5
+        
+        let vocalConfig = PlayerState.Lyrics.Mode.KaraokeConfig(track: .vocal, mode: .scroll)
+        Dispatcher.dispatch(action: ChangeLyricsMode(to: .karaoke(config: vocalConfig)))
+        expect(currentItem?.lyrics?.mode).toEventually(equal(.karaoke(config: vocalConfig)))
         expect(currentItem?.state.progress) == 0
     }
 }
