@@ -22,6 +22,7 @@ class PrepareLyricsTests: XCTestCase {
     
     func testPrepareLyrics() {
         
+        Dispatcher.dispatch(action: PrepareLyrics(for: t1))
     }
 }
 

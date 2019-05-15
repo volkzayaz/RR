@@ -372,6 +372,8 @@
 		FB634A54228AFACB00C581B4 /* addon-advertisement.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A51228AFACB00C581B4 /* addon-advertisement.json */; };
 		FB634A55228AFACB00C581B4 /* addon-artistBIO.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A52228AFACB00C581B4 /* addon-artistBIO.json */; };
 		FB634A57228AFBCD00C581B4 /* PlayAddonsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A56228AFBCD00C581B4 /* PlayAddonsTests.swift */; };
+		FB634A59228C202900C581B4 /* FakeTrackAudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A58228C202900C581B4 /* FakeTrackAudioFile.swift */; };
+		FB634A5E228C228000C581B4 /* lyrics.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A5D228C228000C581B4 /* lyrics.json */; };
 		FB8B86A1228434BF00C0D31A /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* FakeData.swift */; };
 		FB8B86A522843F3600C0D31A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A422843F3600C0D31A /* Helper.swift */; };
 		FBEC3B802288B72E001F200E /* SetNewUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */; };
@@ -781,6 +783,8 @@
 		FB634A51228AFACB00C581B4 /* addon-advertisement.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "addon-advertisement.json"; sourceTree = "<group>"; };
 		FB634A52228AFACB00C581B4 /* addon-artistBIO.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "addon-artistBIO.json"; sourceTree = "<group>"; };
 		FB634A56228AFBCD00C581B4 /* PlayAddonsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayAddonsTests.swift; sourceTree = "<group>"; };
+		FB634A58228C202900C581B4 /* FakeTrackAudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTrackAudioFile.swift; sourceTree = "<group>"; };
+		FB634A5D228C228000C581B4 /* lyrics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lyrics.json; sourceTree = "<group>"; };
 		FB8B86A0228434BF00C0D31A /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		FB8B86A422843F3600C0D31A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUserTests.swift; sourceTree = "<group>"; };
@@ -2304,6 +2308,14 @@
 			path = Addons;
 			sourceTree = "<group>";
 		};
+		FB634A5C228C228000C581B4 /* Lyrics */ = {
+			isa = PBXGroup;
+			children = (
+				FB634A5D228C228000C581B4 /* lyrics.json */,
+			);
+			path = Lyrics;
+			sourceTree = "<group>";
+		};
 		FB8B86A322843EF700C0D31A /* Internal */ = {
 			isa = PBXGroup;
 			children = (
@@ -2328,19 +2340,20 @@
 			isa = PBXGroup;
 			children = (
 				FB1B9A982281767200F1CDEC /* FakeAppState.swift */,
-				FBEC3B8F228ABB41001F200E /* FakeLinkedPlaylist.swift */,
-				FBEC3B91228ABBD9001F200E /* FakePlayerState.swift */,
+				FB1B9A842280670000F1CDEC /* FakeArtist.swift */,
+				FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */,
 				FB1B9A8A2280688C00F1CDEC /* FakeCountry.swift */,
+				FBEC3B93228ABCA8001F200E /* FakeDefaultAudioFile.swift */,
+				FBEC3B8F228ABB41001F200E /* FakeLinkedPlaylist.swift */,
+				FB1B9A86228067E200F1CDEC /* FakeListeningSettings.swift */,
+				FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */,
+				FBEC3B91228ABBD9001F200E /* FakePlayerState.swift */,
+				FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */,
+				FB1B9A882280682D00F1CDEC /* FakeTrack.swift */,
+				FB634A58228C202900C581B4 /* FakeTrackAudioFile.swift */,
+				FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */,
 				FB257EBC228054A7006D5006 /* FakeUser.swift */,
 				FB257EBE228054B8006D5006 /* FakeUserProfile.swift */,
-				FB1B9A842280670000F1CDEC /* FakeArtist.swift */,
-				FB1B9A86228067E200F1CDEC /* FakeListeningSettings.swift */,
-				FB1B9A882280682D00F1CDEC /* FakeTrack.swift */,
-				FB1B9A9022806C1200F1CDEC /* FakeTrackWriter.swift */,
-				FB1B9A922280793C00F1CDEC /* FakeProfileLocation.swift */,
-				FB1B9A9422808B0500F1CDEC /* FakeConfig.swift */,
-				FB1B9A9622808C2200F1CDEC /* FakePlayerConfig.swift */,
-				FBEC3B93228ABCA8001F200E /* FakeDefaultAudioFile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2348,6 +2361,7 @@
 		FBEC3B95228ABCFE001F200E /* jsons */ = {
 			isa = PBXGroup;
 			children = (
+				FB634A5C228C228000C581B4 /* Lyrics */,
 				FB634A4F228AFA9900C581B4 /* Addons */,
 				FB1B9A9E2281C0BA00F1CDEC /* playlist.json */,
 				FBEC3B892289ABD7001F200E /* artist.json */,
@@ -2532,6 +2546,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBEC3B8622899BF5001F200E /* addon-songIntroduction.json in Resources */,
+				FB634A5E228C228000C581B4 /* lyrics.json in Resources */,
 				FBEC3B8A2289ABD7001F200E /* artist.json in Resources */,
 				FB1B9A9F2281C0BA00F1CDEC /* playlist.json in Resources */,
 				FB634A54228AFACB00C581B4 /* addon-advertisement.json in Resources */,
@@ -2778,6 +2793,7 @@
 				FBEC3B92228ABBD9001F200E /* FakePlayerState.swift in Sources */,
 				FBEC3B8222895E08001F200E /* ChangeBlockStateTests.swift in Sources */,
 				FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */,
+				FB634A59228C202900C581B4 /* FakeTrackAudioFile.swift in Sources */,
 				FBEC3BAD228ACE12001F200E /* AudioPlayerActionsTests.swift in Sources */,
 				736456A2220C7610005BE389 /* PlayListInsertTests.swift in Sources */,
 				FBEC3BA0228ACA6B001F200E /* GetBackToPreviousItemTests.swift in Sources */,

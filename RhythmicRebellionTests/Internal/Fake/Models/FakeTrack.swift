@@ -22,7 +22,8 @@ extension Track: Fakeble {
                      ownerId: fakeID(),
                      artist: Artist.fake(),
                      writer: TrackWriter.fake(),
-                     images: [Image]())
+                     images: [Image](),
+                     audioFile: TrackAudioFile.fake())
         
     }
 }
