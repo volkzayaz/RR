@@ -35,8 +35,8 @@ class PrepareLyricsTests: XCTestCase {
         
         FakeRequest.Lyrics.registerMockRequestLyrics(track: t1)
         Dispatcher.dispatch(action: PrepareLyrics(for: t1))
-        
         expect(currentItem?.lyrics).toNotEventually(beNil())
+        
         expect(currentItem?.lyrics?.data.karaoke?.trackId) == t1.id
     }
 }

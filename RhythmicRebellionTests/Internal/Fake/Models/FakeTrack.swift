@@ -23,7 +23,8 @@ extension Track: Fakeble {
                      artist: Artist.fake(),
                      writer: TrackWriter.fake(),
                      images: [Image](),
-                     audioFile: TrackAudioFile.fake())
+                     audioFile: TrackAudioFile.fake(),
+                     backingAudioFile: DefaultAudioFile.fake())
         
     }
 }
