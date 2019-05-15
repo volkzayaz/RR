@@ -6,8 +6,7 @@ platform :ios do
     
   lane :tests do
     run_tests(workspace: "RhythmicRebellion.xcworkspace",
-                devices: ["iPhone Xr"],
-                scheme: "RhythmicRebellionTests")
+                 scheme: "RhythmicRebellion")
   end
     
   before_all do
