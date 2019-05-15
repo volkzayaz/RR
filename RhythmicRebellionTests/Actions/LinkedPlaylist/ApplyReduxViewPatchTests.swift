@@ -24,7 +24,7 @@ class ApplyReduxViewPatchTests: XCTestCase {
         
         let tracksToInsert = [t1, t2]
         ///initial state
-        let tracks = appStateSlice.player.tracks
+        let tracks = player.tracks
         expect(tracks.count) == 0
         ///getting state transform
         let patch = tracks.insertPatch(tracks: tracksToInsert, after: nil)

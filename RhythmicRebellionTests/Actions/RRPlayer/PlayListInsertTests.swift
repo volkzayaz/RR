@@ -86,7 +86,7 @@ class PlaylistInsertTests: XCTestCase {
         let tracks = [t1, t2]
         
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
-        expect(appStateSlice.player.tracks.orderedTracks.count).toEventually(equal(tracks.count))
+        expect(player.tracks.orderedTracks.count).toEventually(equal(tracks.count))
 
         let newTracks = [t5, t6, t7]
         

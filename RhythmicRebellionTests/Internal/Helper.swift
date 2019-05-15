@@ -1,5 +1,5 @@
 //
-//  Helper.swift
+//  Helpers.swift
 //  RhythmicRebellionTests
 //
 //  Created by Andrey Ivanov on 5/9/19.
@@ -9,7 +9,7 @@
 @testable import RhythmicRebellion
 
 var lastPatch: PlayerState.ReduxViewPatch? {
-    return appStateSlice.player.lastPatch
+    return player.lastPatch
 }
 
 var player: PlayerState {
@@ -17,9 +17,9 @@ var player: PlayerState {
 }
 
 var currentItem: PlayerState.CurrentItem? {
-    return appStateSlice.currentItem
+    return player.currentItem
 }
 
 var orderedTracks: [OrderedTrack] {
-    return appStateSlice.player.tracks.orderedTracks
+    return player.tracks.orderedTracks
 }

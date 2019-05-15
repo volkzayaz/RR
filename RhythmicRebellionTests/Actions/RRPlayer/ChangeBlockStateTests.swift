@@ -23,9 +23,9 @@ class ChangeBlockStateTests: XCTestCase {
     func testChangeBlockState() {
         
         Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked:true))
-        expect(appStateSlice.player.isBlocked).toEventually(equal(true))
+        expect(player.isBlocked).toEventually(equal(true))
         
         Dispatcher.dispatch(action: ChangePlayerBlockState(isBlocked:false))
-        expect(appStateSlice.player.isBlocked).toEventually(equal(false))
+        expect(player.isBlocked).toEventually(equal(false))
     }
 }
