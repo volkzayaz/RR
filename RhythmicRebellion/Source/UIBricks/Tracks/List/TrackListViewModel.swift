@@ -91,7 +91,10 @@ class TrackListViewModel {
     private let bag = DisposeBag()
     private let reloadTrigger = BehaviorSubject<Void>(value: () )
     
+    //private
     let tracks = BehaviorRelay<[TrackProvidable]>(value: [])
+    //Need check
+    //Должны соответсвовать что вернул датапровайдер
     
     var trackViewModels: Driver<[TrackViewModel]> {
         

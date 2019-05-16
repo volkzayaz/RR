@@ -19,12 +19,17 @@ struct FakeData {
         static let artistAnnouncements: Data = try! JsonReader.readData(withName: "addon-artistAnnouncements")
     }
     
-    struct Artist {
-        static let `default`: Data = try! JsonReader.readData(withName: "artist")        
+    struct Artists {
+        static let artist: Data = try! JsonReader.readData(withName: "artist")
+        static let following: Data = try! JsonReader.readData(withName: "artists-following")
     }
     
     struct Lyrics {
         static let `default`: Data = try! JsonReader.readData(withName: "lyrics")
+    }
+    
+    struct PlayLists {
+        static let all: Data = try! JsonReader.readData(withName: "playlists")
     }
 }
 

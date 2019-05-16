@@ -11,6 +11,14 @@
 extension UserProfile: Fakeble {
     
     static func fake() -> UserProfile {
+        
+        let followingArtistsIds = Set<String>([
+            "4102abcd-b6a8-421f-8b54-d09dcc53c161",
+            "4102abcd-b6a8-421f-8b54-d09dcc53c162",
+            "4102abcd-b6a8-421f-8b54-d09dcc53c163",
+            "4102abcd-b6a8-421f-8b54-d09dcc53c164",
+            "4102abcd-b6a8-421f-8b54-d09dcc53c165"])
+        
         return UserProfile(withID: 10,
                            email: "fake@mail.com",
                            nickname: "nickname",
@@ -18,7 +26,7 @@ extension UserProfile: Fakeble {
                            location: ProfileLocation.fake(),
                            hobbies: [Hobby](),
                            forceToPlay: Set<Int>(),
-                           followedArtistsIds: Set<String>(),
+                           followedArtistsIds: followingArtistsIds,
                            purchasedAlbumsIds: Set<Int>(),
                            purchasedTracksIds: Set<Int>(),
                            tracksLikeStates: [:],

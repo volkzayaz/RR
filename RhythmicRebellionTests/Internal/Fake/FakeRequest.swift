@@ -54,7 +54,14 @@ struct FakeRequest {
         static func registerMockRequestArtist(artistId id: String) {
             let url = try! TrackRequest.artist(artistId: id).asURLRequest().url!
             Mock(url: url, dataType: .json, statusCode: 200, data: [
-                Mock.HTTPMethod.get : FakeData.Artist.default
+                Mock.HTTPMethod.get : FakeData.Artists.artist
+                ]).register()
+        }
+        
+        static func registerMockRequestArtistFollowing() {
+            let url = try! ArtistsFollowingRequest.list.asURLRequest().url!
+            Mock(url: url, dataType: .json, statusCode: 200, data: [
+                Mock.HTTPMethod.get : FakeData.Artists.following
                 ]).register()
         }
     }
@@ -65,6 +72,16 @@ struct FakeRequest {
             let url = try! TrackRequest.lyrics(track: track).asURLRequest().url!
             Mock(url: url, dataType: .json, statusCode: 200, data: [
                 Mock.HTTPMethod.get : FakeData.Lyrics.default
+                ]).register()
+        }
+    }
+    
+    struct PlayList {
+        
+        static func registerMockRequestDefinedPlaylist() {
+            let url = try! PlaylistRequest.rrList.asURLRequest().url!
+            Mock(url: url, dataType: .json, statusCode: 200, data: [
+                Mock.HTTPMethod.get : FakeData.PlayLists.all
                 ]).register()
         }
     }

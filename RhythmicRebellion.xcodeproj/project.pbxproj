@@ -359,7 +359,7 @@
 		FB1B9A992281767200F1CDEC /* FakeAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A982281767200F1CDEC /* FakeAppState.swift */; };
 		FB1B9A9B2281834600F1CDEC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9A2281834600F1CDEC /* main.swift */; };
 		FB1B9A9D2281ABE100F1CDEC /* FakeWebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1B9A9C2281ABE100F1CDEC /* FakeWebSocketService.swift */; };
-		FB1B9A9F2281C0BA00F1CDEC /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = FB1B9A9E2281C0BA00F1CDEC /* playlist.json */; };
+		FB1B9A9F2281C0BA00F1CDEC /* playlists.json in Resources */ = {isa = PBXBuildFile; fileRef = FB1B9A9E2281C0BA00F1CDEC /* playlists.json */; };
 		FB257EB722803AC1006D5006 /* JsonReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EB622803AC1006D5006 /* JsonReader.swift */; };
 		FB257EBD228054A7006D5006 /* FakeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBC228054A7006D5006 /* FakeUser.swift */; };
 		FB257EBF228054B8006D5006 /* FakeUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB257EBE228054B8006D5006 /* FakeUserProfile.swift */; };
@@ -373,6 +373,8 @@
 		FB634A59228C202900C581B4 /* FakeTrackAudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A58228C202900C581B4 /* FakeTrackAudioFile.swift */; };
 		FB634A5E228C228000C581B4 /* lyrics.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A5D228C228000C581B4 /* lyrics.json */; };
 		FB634A60228D636000C581B4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = FB634A5F228D636000C581B4 /* README.md */; };
+		FB634A63228D7F8200C581B4 /* ArtistsFollowedViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A62228D7F8200C581B4 /* ArtistsFollowedViewModelTests.swift */; };
+		FB634A65228DABA200C581B4 /* artists-following.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A64228DABA200C581B4 /* artists-following.json */; };
 		FB8B86A1228434BF00C0D31A /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* FakeData.swift */; };
 		FB8B86A522843F3600C0D31A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A422843F3600C0D31A /* Helper.swift */; };
 		FBEC3B802288B72E001F200E /* SetNewUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */; };
@@ -771,7 +773,7 @@
 		FB1B9A982281767200F1CDEC /* FakeAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeAppState.swift; sourceTree = "<group>"; };
 		FB1B9A9A2281834600F1CDEC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		FB1B9A9C2281ABE100F1CDEC /* FakeWebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeWebSocketService.swift; sourceTree = "<group>"; };
-		FB1B9A9E2281C0BA00F1CDEC /* playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = playlist.json; sourceTree = "<group>"; };
+		FB1B9A9E2281C0BA00F1CDEC /* playlists.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = playlists.json; sourceTree = "<group>"; };
 		FB257EB622803AC1006D5006 /* JsonReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonReader.swift; sourceTree = "<group>"; };
 		FB257EBC228054A7006D5006 /* FakeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUser.swift; sourceTree = "<group>"; };
 		FB257EBE228054B8006D5006 /* FakeUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserProfile.swift; sourceTree = "<group>"; };
@@ -785,6 +787,8 @@
 		FB634A58228C202900C581B4 /* FakeTrackAudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTrackAudioFile.swift; sourceTree = "<group>"; };
 		FB634A5D228C228000C581B4 /* lyrics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lyrics.json; sourceTree = "<group>"; };
 		FB634A5F228D636000C581B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FB634A62228D7F8200C581B4 /* ArtistsFollowedViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedViewModelTests.swift; sourceTree = "<group>"; };
+		FB634A64228DABA200C581B4 /* artists-following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "artists-following.json"; sourceTree = "<group>"; };
 		FB8B86A0228434BF00C0D31A /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		FB8B86A422843F3600C0D31A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUserTests.swift; sourceTree = "<group>"; };
@@ -1044,6 +1048,7 @@
 		736456A0220C7610005BE389 /* RhythmicRebellionTests */ = {
 			isa = PBXGroup;
 			children = (
+				FB634A61228D7E8200C581B4 /* ViewModels */,
 				FBEC3BAF228ACE66001F200E /* Actions */,
 				FB8B86A322843EF700C0D31A /* Internal */,
 				734F828522299CD90006E1DE /* support_files */,
@@ -2317,6 +2322,31 @@
 			path = Lyrics;
 			sourceTree = "<group>";
 		};
+		FB634A61228D7E8200C581B4 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				FB634A62228D7F8200C581B4 /* ArtistsFollowedViewModelTests.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		FB634A66228DAC4500C581B4 /* Playlists */ = {
+			isa = PBXGroup;
+			children = (
+				FB1B9A9E2281C0BA00F1CDEC /* playlists.json */,
+			);
+			path = Playlists;
+			sourceTree = "<group>";
+		};
+		FB634A67228DAC5300C581B4 /* Artist */ = {
+			isa = PBXGroup;
+			children = (
+				FB634A64228DABA200C581B4 /* artists-following.json */,
+				FBEC3B892289ABD7001F200E /* artist.json */,
+			);
+			path = Artist;
+			sourceTree = "<group>";
+		};
 		FB8B86A322843EF700C0D31A /* Internal */ = {
 			isa = PBXGroup;
 			children = (
@@ -2362,10 +2392,10 @@
 		FBEC3B95228ABCFE001F200E /* jsons */ = {
 			isa = PBXGroup;
 			children = (
+				FB634A67228DAC5300C581B4 /* Artist */,
+				FB634A66228DAC4500C581B4 /* Playlists */,
 				FB634A5C228C228000C581B4 /* Lyrics */,
 				FB634A4F228AFA9900C581B4 /* Addons */,
-				FB1B9A9E2281C0BA00F1CDEC /* playlist.json */,
-				FBEC3B892289ABD7001F200E /* artist.json */,
 			);
 			path = jsons;
 			sourceTree = "<group>";
@@ -2546,10 +2576,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB634A65228DABA200C581B4 /* artists-following.json in Resources */,
 				FBEC3B8622899BF5001F200E /* addon-songIntroduction.json in Resources */,
 				FB634A5E228C228000C581B4 /* lyrics.json in Resources */,
 				FBEC3B8A2289ABD7001F200E /* artist.json in Resources */,
-				FB1B9A9F2281C0BA00F1CDEC /* playlist.json in Resources */,
+				FB1B9A9F2281C0BA00F1CDEC /* playlists.json in Resources */,
 				FB634A54228AFACB00C581B4 /* addon-advertisement.json in Resources */,
 				FB634A53228AFACB00C581B4 /* addon-songCommentary.json in Resources */,
 				FB634A55228AFACB00C581B4 /* addon-artistBIO.json in Resources */,
@@ -2594,15 +2625,16 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Mocker/Mocker.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityLogger/AlamofireNetworkActivityLogger.framework",
 				"${BUILT_PRODUCTS_DIR}/CloudTagView/CloudTagView.framework",
-				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/DownloadButton/DownloadButton.framework",
 				"${BUILT_PRODUCTS_DIR}/EasyTipView/EasyTipView.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
@@ -2610,7 +2642,6 @@
 				"${BUILT_PRODUCTS_DIR}/NSStringMask/NSStringMask.framework",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxReachability/RxReachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
@@ -2621,15 +2652,16 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mocker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityLogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CloudTagView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DownloadButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyTipView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
@@ -2637,7 +2669,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSStringMask.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxReachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
@@ -2660,10 +2691,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Mocker/Mocker.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -2672,10 +2705,12 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mocker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -2795,6 +2830,7 @@
 				FB1B9A932280793C00F1CDEC /* FakeProfileLocation.swift in Sources */,
 				FB634A59228C202900C581B4 /* FakeTrackAudioFile.swift in Sources */,
 				FBEC3BAD228ACE12001F200E /* AudioPlayerActionsTests.swift in Sources */,
+				FB634A63228D7F8200C581B4 /* ArtistsFollowedViewModelTests.swift in Sources */,
 				736456A2220C7610005BE389 /* PlayListInsertTests.swift in Sources */,
 				FBEC3BA0228ACA6B001F200E /* GetBackToPreviousItemTests.swift in Sources */,
 				FB1B9A87228067E200F1CDEC /* FakeListeningSettings.swift in Sources */,
