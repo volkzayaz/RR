@@ -4,34 +4,36 @@ default_platform :ios
 
 platform :ios do
     
-  lane :tests do
-    run_tests(workspace: "RhythmicRebellion.xcworkspace",
-                 scheme: "RhythmicRebellion")
-  end
-    
-  before_all do
-    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+    before_all do
+        ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+        ensure_git_status_clean
+        
+    end
 
-    ensure_git_status_clean
-    
-  end
+    desc "Run Tests"
+    lane :tests do
+        run_tests(workspace: "RhythmicRebellion.xcworkspace",
+                  scheme: "RhythmicRebellion",
+                  skip_slack: true)
+                  
+    end
 
-  lane :beta do |options|
-
-      ensure_git_branch(
-                        branch: 'develop|hotfix'
-                        )
-      
-    version_number = 0
-    configuration = ""
-    environmentName = ""
-    
-    ##parsing options
-	if options[:patch]
-        version_number = increment_version_number(bump_type: "patch")
-    else
-        version_number = increment_version_number(bump_type: "minor")
-	end
+    lane :beta do |options|
+        
+        tests
+        
+        ensure_git_branch( branch: 'develop|hotfix' )
+        
+        version_number = 0
+        configuration = ""
+        environmentName = ""
+        
+        ##parsing options
+        if options[:patch]
+            version_number = increment_version_number(bump_type: "patch")
+            else
+            version_number = increment_version_number(bump_type: "minor")
+        end
     
     if options[:adhoc]
         configuration = "AdHoc"
@@ -64,7 +66,7 @@ platform :ios do
     File.delete("../RhythmicRebellion.ipa")
     File.delete("../RhythmicRebellion.app.dSYM.zip")
     
-   resolve_link = "https://rhythmicrebellion.atlassian.net/browse/IOS-540?jql=project%20%3D%20IOS%20AND%20status%20%3D%20%22Test%20Ready%22%20AND%20%22Resolved%20in%20version%22%20%3D%20%22Build%20" + version_number.to_s + "%22"
+    resolve_link = "https://rhythmicrebellion.atlassian.net/browse/IOS-540?jql=project%20%3D%20IOS%20AND%20status%20%3D%20%22Test%20Ready%22%20AND%20%22Resolved%20in%20version%22%20%3D%20%22Build%20" + version_number.to_s + "%22"
    
     ##notifying testers
     slack( message: "New beta build is available. Check build details below or at your emails. \n\n*Please delete previous build from your device to avoid unexpected issues.*\n",
@@ -89,10 +91,7 @@ platform :ios do
 
   lane :release do |options|
       
-      ensure_git_branch(
-                        branch: 'master'
-                        )
-                        
+      ensure_git_branch( branch: 'master' )
       ##building ipa
       gym(scheme: "RhythmicRebellion",
           configuration: "Release",
@@ -102,7 +101,6 @@ platform :ios do
       upload_to_app_store(skip_screenshots: true,
                           skip_app_version_update: true,
                           skip_metadata: true)
-                              
       ##cleaning up
       clean_build_artifacts
       
@@ -114,13 +112,6 @@ platform :ios do
     upload_symbols_to_crashlytics(api_token: "a300d57f1f210d6200c91280eb4fe528696acb4d")
     clean_build_artifacts
      
-  end
-
-  after_all do
-      
-      ###notifying developer
-      #notification(subtitle: "Finished lane", message: "Finished build lane succesfully")
-      
   end
   
 end

@@ -24,5 +24,6 @@ class SetNewUserTests: XCTestCase {
         let newUser = User.fake()
         Dispatcher.dispatch(action: SetNewUser(user: newUser))
         expect(appStateSlice.user).toEventually(equal(newUser))
+        expect(SettingsStore.lastSignedUserEmail.value) == newUser.profile?.email
     }
 }

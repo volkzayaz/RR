@@ -17,8 +17,6 @@
 		7343FCA42282E06D00A3DA3D /* AlbumCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* AlbumCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* AlbumCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */; };
-		734F827D2229965E0006E1DE /* Appfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82742229965E0006E1DE /* Appfile */; };
-		734F827F2229965E0006E1DE /* Fastfile in Resources */ = {isa = PBXBuildFile; fileRef = 734F82762229965E0006E1DE /* Fastfile */; };
 		7361C00222368375008EA36E /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C00122368375008EA36E /* Dispatcher.swift */; };
 		7361C006223684A2008EA36E /* ApplyReduxViewPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C005223684A2008EA36E /* ApplyReduxViewPatch.swift */; };
 		7361C008223684EE008EA36E /* InsertTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C007223684EE008EA36E /* InsertTracks.swift */; };
@@ -374,6 +372,7 @@
 		FB634A57228AFBCD00C581B4 /* PlayAddonsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A56228AFBCD00C581B4 /* PlayAddonsTests.swift */; };
 		FB634A59228C202900C581B4 /* FakeTrackAudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB634A58228C202900C581B4 /* FakeTrackAudioFile.swift */; };
 		FB634A5E228C228000C581B4 /* lyrics.json in Resources */ = {isa = PBXBuildFile; fileRef = FB634A5D228C228000C581B4 /* lyrics.json */; };
+		FB634A60228D636000C581B4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = FB634A5F228D636000C581B4 /* README.md */; };
 		FB8B86A1228434BF00C0D31A /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A0228434BF00C0D31A /* FakeData.swift */; };
 		FB8B86A522843F3600C0D31A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8B86A422843F3600C0D31A /* Helper.swift */; };
 		FBEC3B802288B72E001F200E /* SetNewUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */; };
@@ -785,6 +784,7 @@
 		FB634A56228AFBCD00C581B4 /* PlayAddonsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayAddonsTests.swift; sourceTree = "<group>"; };
 		FB634A58228C202900C581B4 /* FakeTrackAudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTrackAudioFile.swift; sourceTree = "<group>"; };
 		FB634A5D228C228000C581B4 /* lyrics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lyrics.json; sourceTree = "<group>"; };
+		FB634A5F228D636000C581B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FB8B86A0228434BF00C0D31A /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		FB8B86A422843F3600C0D31A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		FBEC3B7F2288B72E001F200E /* SetNewUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUserTests.swift; sourceTree = "<group>"; };
@@ -888,6 +888,7 @@
 		734F82722229965E0006E1DE /* fastlane */ = {
 			isa = PBXGroup;
 			children = (
+				FB634A5F228D636000C581B4 /* README.md */,
 				734F82732229965E0006E1DE /* screenshots */,
 				734F82742229965E0006E1DE /* Appfile */,
 				734F82762229965E0006E1DE /* Fastfile */,
@@ -2563,14 +2564,13 @@
 				76F1FA4920DBA8DE00C9191F /* Main.storyboard in Resources */,
 				76F1FA4E20DBA92F00C9191F /* Assets.xcassets in Resources */,
 				76F1FA4820DBA8DE00C9191F /* LaunchScreen.storyboard in Resources */,
+				FB634A60228D636000C581B4 /* README.md in Resources */,
 				763157FB219D794500E1D7F5 /* Pages.storyboard in Resources */,
 				76C821AF2142675F00A6F5AE /* Authorization.storyboard in Resources */,
 				73F137FC222C289200FB8EBC /* ArtistCoverHeader.xib in Resources */,
-				734F827F2229965E0006E1DE /* Fastfile in Resources */,
 				73F1389A222C289200FB8EBC /* TrackTableViewCell.xib in Resources */,
 				763157FE219D798700E1D7F5 /* Profile.storyboard in Resources */,
 				736598E621D66E6C0092E499 /* Localizable.strings in Resources */,
-				734F827D2229965E0006E1DE /* Appfile in Resources */,
 				76A45B46213927470080885D /* SelectableList.storyboard in Resources */,
 				73F13899222C289200FB8EBC /* PlaylistCollectionCell.xib in Resources */,
 				763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */,
