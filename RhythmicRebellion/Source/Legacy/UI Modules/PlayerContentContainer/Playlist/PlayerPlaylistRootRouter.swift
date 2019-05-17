@@ -65,10 +65,10 @@ final class DefaultPlayerPlaylistRootRouter:  PlayerPlaylistRootRouter, FlowRout
             nowPlayingRouter.start(controller: nowPlayingViewController)
 
         case .myPlaylists:
-            guard let myPlaylistsViewController = segue.destination as? MyPlaylistsViewController else { fatalError("Incorrect controller for PlayerMyPlaylistsViewControllerSegueIdentifier") }
-            let myPlaylistsRouter = MyPlaylistsRouter()
-            myPlaylistsRouter.start(controller: myPlaylistsViewController)
-
+            guard let x = segue.destination as? MyPlaylistsViewController else { fatalError("Incorrect controller for PlayerMyPlaylistsViewControllerSegueIdentifier") }
+            
+            x.viewModel = MyPlaylistsViewModel(router: MyPlaylistsRouter(owner: x))
+            
         case .following:
             guard let x = segue.destination as? ArtistsFollowedViewController else {
                 fatalError("Incorrect controller for PlayerFollowingViewControllerSegueIdentifier")

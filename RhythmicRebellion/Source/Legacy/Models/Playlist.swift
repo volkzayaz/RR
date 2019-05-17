@@ -106,7 +106,12 @@ extension DefinedPlaylist: Hashable {
     public var hashValue: Int { return self.id }
 }
 
-struct FanPlaylist: Playlist, Codable {
+struct FanPlaylist: Playlist, Codable, TrackGroupPresentable {
+    
+    var identity: String {
+        return "\(id)"
+    }
+    
     let id: Int
     let name: String
     let isDefault: Bool
@@ -138,6 +143,19 @@ struct FanPlaylist: Playlist, Codable {
         try container.encode(self.id, forKey: .id)
         try container.encode(self.name, forKey: .name)
         try container.encode(self.isDefault, forKey: .isDefault)
+    }
+    
+    var subtitle: String {
+        return description ?? ""
+    }
+    var imageURL: String {
+        return thumbnailURL?.absoluteString ?? ""
+    }
+    
+    
+    var underlineTracks: Maybe<[Track]> {
+        return TrackRequest.fanTracks(playlistId: id)
+            .rx.baseResponse(type: [Track].self)
     }
 }
 

@@ -24,15 +24,15 @@ extension HomeViewModel {
 }
 
 final class HomeViewModel {
-
+    
     // MARK: - Private properties -
-
+    
     private let router: HomeRouter
-
+    
     fileprivate let data = BehaviorRelay<[TrackGroupViewModel<DefinedPlaylist>]>(value: [])
-
+    
     // MARK: - Lifecycle -
-
+    
     init(router: HomeRouter) {
         self.router = router
         
