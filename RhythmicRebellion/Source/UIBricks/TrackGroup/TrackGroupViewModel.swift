@@ -10,6 +10,7 @@ import Foundation
 
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 extension TrackGroupViewModel {
     
@@ -27,8 +28,20 @@ extension TrackGroupViewModel {
 ///for example album or playlist
 protocol TrackGroupPresentable {
     
+    ///what identifies your entityt among others
+    ///for example for Album it might be AlbumID
+    ///or combination of Artist name and Album name
+    var identity: String { get }
+    
+    ///Name of your entity
+    ///Will be used to display in the first row of corresponding cell
     var name: String { get }
+    
+    ///Additional description of your entity
+    ///Will be used to display in the secod row of corresponding cell
     var subtitle: String { get }
+    
+    ///Image used as cover of your entity
     var imageURL: String { get }
     
     ///Upon user perfoming actions like "playNext" or "to custom playlist"
@@ -121,4 +134,15 @@ extension TrackGroupViewModel {
                                                                        actions: x + cancel))
     }
     
+}
+
+extension TrackGroupViewModel: Equatable, IdentifiableType {
+    
+    static func ==(lhs: TrackGroupViewModel<T>, rhs: TrackGroupViewModel<T>) -> Bool {
+        return lhs.data.identity == rhs.data.identity
+    }
+    
+    var identity: String {
+        return data.identity
+    }
 }

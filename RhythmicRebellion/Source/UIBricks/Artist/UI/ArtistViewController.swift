@@ -82,7 +82,7 @@ class ArtistViewController: UIViewController, MVVM_View {
         
         flowLayout.configureFor(bounds: view.bounds)
         
-        collectionView.register(R.nib.playlistCollectionCell)
+        collectionView.register(R.nib.albumCell)
         collectionView.register(R.nib.artistSectionHeader,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         collectionView.register(R.nib.artistCoverHeader,

@@ -49,6 +49,10 @@ extension Album {
                 .rx.baseResponse(type: [Track].self)
         }
         
+        var identity: String {
+            return "\(album.id)"
+        }
+        
     };
     
 }

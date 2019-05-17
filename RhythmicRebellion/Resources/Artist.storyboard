@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GJF-65-Qpk">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,11 +15,11 @@
             <objects>
                 <viewController id="GJF-65-Qpk" customClass="ArtistViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jWq-5C-885">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="498-lm-2La">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.086274509803921567" green="0.054901960784313725" blue="0.19607843137254902" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4dc-Nk-GzG" customClass="BaseFlowLayout" customModule="RhythmicRebellion" customModuleProvider="target">
                                     <size key="itemSize" width="50" height="50"/>
@@ -24,105 +28,8 @@
                                     <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="album cell" id="JUC-qs-q3Q" customClass="TrackGroupCollectionCell" customModule="RhythmicRebellion" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="10" width="177" height="160"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="177" height="160"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0iL-lt-Pyd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="177" height="160"/>
-                                                    <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </view>
-                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hhM-GL-rrb">
-                                                    <rect key="frame" x="0.0" y="0.0" width="177" height="160"/>
-                                                    <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZEr-zU-SM5">
-                                                            <rect key="frame" x="0.0" y="0.0" width="177" height="160"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </imageView>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7rX-K3-Dlr" customClass="GradientView" customModule="RhythmicRebellion" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="95.5" width="177" height="64.5"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="coo-oW-FTQ">
-                                                                    <rect key="frame" x="133" y="20.5" width="44" height="44"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="width" constant="44" id="4ID-Qx-TrZ"/>
-                                                                        <constraint firstAttribute="height" constant="44" id="lqg-KU-zpr"/>
-                                                                    </constraints>
-                                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <connections>
-                                                                        <action selector="action:" destination="JUC-qs-q3Q" eventType="touchUpInside" id="jnF-Fy-I2b"/>
-                                                                    </connections>
-                                                                </button>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fra-6r-41M">
-                                                                    <rect key="frame" x="10" y="24.5" width="33" height="16"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQ9-bp-pVJ">
-                                                                    <rect key="frame" x="10" y="40" width="28.5" height="13.5"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstItem="coo-oW-FTQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fra-6r-41M" secondAttribute="trailing" constant="10" id="1Ty-JH-QIp"/>
-                                                                <constraint firstItem="coo-oW-FTQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DQ9-bp-pVJ" secondAttribute="trailing" constant="4" id="C7b-n5-hQ9"/>
-                                                                <constraint firstItem="fra-6r-41M" firstAttribute="centerY" secondItem="coo-oW-FTQ" secondAttribute="centerY" constant="-10" id="Duf-KL-AbN"/>
-                                                                <constraint firstAttribute="trailing" secondItem="coo-oW-FTQ" secondAttribute="trailing" id="LdH-Pn-kzf"/>
-                                                                <constraint firstAttribute="bottom" secondItem="coo-oW-FTQ" secondAttribute="bottom" id="NAF-qA-vCA"/>
-                                                                <constraint firstItem="DQ9-bp-pVJ" firstAttribute="leading" secondItem="fra-6r-41M" secondAttribute="leading" id="Nki-YU-Cpq"/>
-                                                                <constraint firstItem="DQ9-bp-pVJ" firstAttribute="top" secondItem="fra-6r-41M" secondAttribute="bottom" constant="-0.5" id="TQK-lg-ZSE"/>
-                                                                <constraint firstAttribute="height" constant="64.5" id="WId-uc-7ba"/>
-                                                                <constraint firstItem="fra-6r-41M" firstAttribute="leading" secondItem="7rX-K3-Dlr" secondAttribute="leading" constant="10" id="jLh-x6-fzH"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="startColor">
-                                                                    <color key="value" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="endColor">
-                                                                    <color key="value" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="0.74836793660000001" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                        </view>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstItem="7rX-K3-Dlr" firstAttribute="leading" secondItem="hhM-GL-rrb" secondAttribute="leading" id="Aba-aU-jyv"/>
-                                                        <constraint firstAttribute="bottom" secondItem="7rX-K3-Dlr" secondAttribute="bottom" id="E1I-OS-hhb"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ZEr-zU-SM5" secondAttribute="trailing" id="FG9-qe-MfM"/>
-                                                        <constraint firstAttribute="bottom" secondItem="ZEr-zU-SM5" secondAttribute="bottom" id="Omo-NS-nUT"/>
-                                                        <constraint firstItem="ZEr-zU-SM5" firstAttribute="leading" secondItem="hhM-GL-rrb" secondAttribute="leading" id="XKI-qm-HMk"/>
-                                                        <constraint firstItem="ZEr-zU-SM5" firstAttribute="top" secondItem="hhM-GL-rrb" secondAttribute="top" id="fjp-Z8-XSL"/>
-                                                        <constraint firstAttribute="trailing" secondItem="7rX-K3-Dlr" secondAttribute="trailing" id="lgd-wk-K6g"/>
-                                                    </constraints>
-                                                </view>
-                                            </subviews>
-                                        </view>
-                                        <constraints>
-                                            <constraint firstItem="0iL-lt-Pyd" firstAttribute="top" secondItem="JUC-qs-q3Q" secondAttribute="top" id="4l9-ei-Y80"/>
-                                            <constraint firstItem="hhM-GL-rrb" firstAttribute="top" secondItem="JUC-qs-q3Q" secondAttribute="top" id="EFy-xj-VzK"/>
-                                            <constraint firstAttribute="trailing" secondItem="hhM-GL-rrb" secondAttribute="trailing" id="P6l-kh-dPh"/>
-                                            <constraint firstAttribute="bottom" secondItem="hhM-GL-rrb" secondAttribute="bottom" id="Qru-be-yWy"/>
-                                            <constraint firstAttribute="bottom" secondItem="0iL-lt-Pyd" secondAttribute="bottom" id="XnU-OL-dqF"/>
-                                            <constraint firstItem="0iL-lt-Pyd" firstAttribute="leading" secondItem="JUC-qs-q3Q" secondAttribute="leading" id="bjR-2d-yNM"/>
-                                            <constraint firstAttribute="trailing" secondItem="0iL-lt-Pyd" secondAttribute="trailing" id="cSu-xj-K3l"/>
-                                            <constraint firstItem="hhM-GL-rrb" firstAttribute="leading" secondItem="JUC-qs-q3Q" secondAttribute="leading" id="uNw-dx-Q24"/>
-                                        </constraints>
-                                        <size key="customSize" width="177" height="160"/>
-                                        <connections>
-                                            <outlet property="albumDescriptionLabel" destination="DQ9-bp-pVJ" id="jRC-8g-Eia"/>
-                                            <outlet property="albumNameLabel" destination="fra-6r-41M" id="7bi-TH-JJD"/>
-                                            <outlet property="coverImageView" destination="ZEr-zU-SM5" id="hVq-FI-NB0"/>
-                                        </connections>
-                                    </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="track cell" id="gJY-M4-YXV" customClass="TrackCollectionViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
-                                        <rect key="frame" x="197" y="71" width="355" height="38"/>
+                                        <rect key="frame" x="10" y="10" width="355" height="38"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="355" height="38"/>

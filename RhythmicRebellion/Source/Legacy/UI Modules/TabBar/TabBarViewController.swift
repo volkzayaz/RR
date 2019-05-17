@@ -34,8 +34,8 @@ final class TabBarViewController: UITabBarController {
                         
                         homeNavigationController.popToRootViewController(animated: false)
                         
-                        let homeRouter = HomeRouter()
-                        homeRouter.start(controller: homeViewController)
+                        homeViewController.viewModel = HomeViewModel(router: .init(owner: homeViewController))
+                        
                         viewControllers.append(homeNavigationController)
                         
                     case .settings:

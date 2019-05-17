@@ -27,7 +27,8 @@ extension Playlist where Self: Equatable {
     }
 }
 
-struct DefinedPlaylist: Playlist, Codable {
+struct DefinedPlaylist: Playlist, Codable, TrackGroupPresentable {
+    
     let id: Int
     let name: String
     let isDefault: Bool
@@ -77,6 +78,25 @@ struct DefinedPlaylist: Playlist, Codable {
         try container.encode(self.title, forKey: .title)
         try container.encode(self.isLocked, forKey: .isLocked)
     }
+    
+    
+    var subtitle: String {
+        return description ?? ""
+    }
+    var imageURL: String {
+        return thumbnailURLString ?? ""
+    }
+    
+    var underlineTracks: Maybe<[Track]> {
+        return TrackRequest.tracks(playlistId: id)
+            .rx.response(type: PlaylistTracksResponse.self)
+            .map { $0.tracks }
+    }
+    
+    var identity: String {
+        return "\(id)"
+    }
+    
 }
 
 extension DefinedPlaylist: Equatable {
@@ -157,5 +177,7 @@ struct ArtistPlaylist: Codable, Equatable, TrackGroupPresentable, Playlist {
     
     var isFanPlaylist: Bool { return false }
     
-    
+    var identity: String {
+        return "\(id)"
+    }
 }
