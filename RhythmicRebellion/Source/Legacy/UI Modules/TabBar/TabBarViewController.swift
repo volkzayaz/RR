@@ -18,6 +18,8 @@ final class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //tabBar.delegate = self
+        
         viewModel.tabs
             .drive(onNext: { [unowned self] (x) in
                 
@@ -109,6 +111,16 @@ final class TabBarViewController: UITabBarController {
         pagesViewController.viewModel.navigateToPage(with: url)
         
         self.selectedViewController = pagesNavigationController
+        self.viewModel.router.playerContentContainerRouter?.stop(true)
+    }
+    
+}
+
+extension TabBarViewController {
+    
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        //super.tabBar(tabBar, didSelect: item)
+        
         self.viewModel.router.playerContentContainerRouter?.stop(true)
     }
     
