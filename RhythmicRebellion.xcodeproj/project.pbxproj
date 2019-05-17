@@ -153,10 +153,8 @@
 		73F13843222C289200FB8EBC /* ListeningSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136CA222C289200FB8EBC /* ListeningSettings.swift */; };
 		73F13844222C289200FB8EBC /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136CB222C289200FB8EBC /* Token.swift */; };
 		73F13845222C289200FB8EBC /* Watchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136CC222C289200FB8EBC /* Watchable.swift */; };
-		73F13846222C289200FB8EBC /* PlaylistItemCollectionVIewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D0222C289200FB8EBC /* PlaylistItemCollectionVIewCell.swift */; };
 		73F13848222C289200FB8EBC /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D2222C289200FB8EBC /* HomeViewController.swift */; };
 		73F13849222C289200FB8EBC /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D3222C289200FB8EBC /* HomeRouter.swift */; };
-		73F1384A222C289200FB8EBC /* PlaylistItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D5222C289200FB8EBC /* PlaylistItemViewModel.swift */; };
 		73F1384B222C289200FB8EBC /* HomeControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D6222C289200FB8EBC /* HomeControllerViewModel.swift */; };
 		73F1384C222C289200FB8EBC /* AlertActionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D8222C289200FB8EBC /* AlertActionsViewModel.swift */; };
 		73F1384D222C289200FB8EBC /* PlaylistActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D9222C289200FB8EBC /* PlaylistActions.swift */; };
@@ -230,7 +228,6 @@
 		73F13896222C289200FB8EBC /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13739222C289200FB8EBC /* SignInViewController.swift */; };
 		73F13897222C289200FB8EBC /* AuthorizationControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1373A222C289200FB8EBC /* AuthorizationControllerViewModel.swift */; };
 		73F13898222C289200FB8EBC /* AuthorizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1373B222C289200FB8EBC /* AuthorizationViewModel.swift */; };
-		73F13899222C289200FB8EBC /* PlaylistCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73F1373E222C289200FB8EBC /* PlaylistCollectionCell.xib */; };
 		73F1389A222C289200FB8EBC /* TrackTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73F13740222C289200FB8EBC /* TrackTableViewCell.xib */; };
 		73F1389B222C289200FB8EBC /* TrackCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13741222C289200FB8EBC /* TrackCells.swift */; };
 		73F1389C222C289200FB8EBC /* TrackPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13742222C289200FB8EBC /* TrackPreviewViewModel.swift */; };
@@ -565,10 +562,8 @@
 		73F136CA222C289200FB8EBC /* ListeningSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListeningSettings.swift; sourceTree = "<group>"; };
 		73F136CB222C289200FB8EBC /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		73F136CC222C289200FB8EBC /* Watchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Watchable.swift; sourceTree = "<group>"; };
-		73F136D0222C289200FB8EBC /* PlaylistItemCollectionVIewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistItemCollectionVIewCell.swift; sourceTree = "<group>"; };
 		73F136D2222C289200FB8EBC /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		73F136D3222C289200FB8EBC /* HomeRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
-		73F136D5222C289200FB8EBC /* PlaylistItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistItemViewModel.swift; sourceTree = "<group>"; };
 		73F136D6222C289200FB8EBC /* HomeControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeControllerViewModel.swift; sourceTree = "<group>"; };
 		73F136D8222C289200FB8EBC /* AlertActionsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertActionsViewModel.swift; sourceTree = "<group>"; };
 		73F136D9222C289200FB8EBC /* PlaylistActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistActions.swift; sourceTree = "<group>"; };
@@ -642,7 +637,6 @@
 		73F13739222C289200FB8EBC /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		73F1373A222C289200FB8EBC /* AuthorizationControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationControllerViewModel.swift; sourceTree = "<group>"; };
 		73F1373B222C289200FB8EBC /* AuthorizationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewModel.swift; sourceTree = "<group>"; };
-		73F1373E222C289200FB8EBC /* PlaylistCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCollectionCell.xib; sourceTree = "<group>"; };
 		73F13740222C289200FB8EBC /* TrackTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrackTableViewCell.xib; sourceTree = "<group>"; };
 		73F13741222C289200FB8EBC /* TrackCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCells.swift; sourceTree = "<group>"; };
 		73F13742222C289200FB8EBC /* TrackPreviewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackPreviewViewModel.swift; sourceTree = "<group>"; };
@@ -1408,8 +1402,6 @@
 		73F136CD222C289200FB8EBC /* UI Modules */ = {
 			isa = PBXGroup;
 			children = (
-				73F136D4222C289200FB8EBC /* CellsViewModels */,
-				73F136CF222C289200FB8EBC /* Cells */,
 				73F136D7222C289200FB8EBC /* ActionsViewModels */,
 				73F136DB222C289200FB8EBC /* App */,
 				73F136E0222C289200FB8EBC /* SelectableList */,
@@ -1435,22 +1427,6 @@
 				73F136D6222C289200FB8EBC /* HomeControllerViewModel.swift */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		73F136CF222C289200FB8EBC /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				73F136D0222C289200FB8EBC /* PlaylistItemCollectionVIewCell.swift */,
-			);
-			path = Cells;
-			sourceTree = "<group>";
-		};
-		73F136D4222C289200FB8EBC /* CellsViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				73F136D5222C289200FB8EBC /* PlaylistItemViewModel.swift */,
-			);
-			path = CellsViewModels;
 			sourceTree = "<group>";
 		};
 		73F136D7222C289200FB8EBC /* ActionsViewModels */ = {
@@ -1720,7 +1696,6 @@
 		73F1373D222C289200FB8EBC /* Playlist */ = {
 			isa = PBXGroup;
 			children = (
-				73F1373E222C289200FB8EBC /* PlaylistCollectionCell.xib */,
 			);
 			path = Playlist;
 			sourceTree = "<group>";
@@ -2607,7 +2582,6 @@
 				763157FE219D798700E1D7F5 /* Profile.storyboard in Resources */,
 				736598E621D66E6C0092E499 /* Localizable.strings in Resources */,
 				76A45B46213927470080885D /* SelectableList.storyboard in Resources */,
-				73F13899222C289200FB8EBC /* PlaylistCollectionCell.xib in Resources */,
 				763931E421185F3C00A65257 /* PlayerPlaylist.storyboard in Resources */,
 				73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */,
 				733768E12289949000C922D9 /* splash.gif in Resources */,
@@ -2980,7 +2954,6 @@
 				73F13911222C289200FB8EBC /* MVVM.swift in Sources */,
 				73F1380C222C289200FB8EBC /* ProgressView.swift in Sources */,
 				7373211E22552A5B00606E09 /* PlaylistManager.swift in Sources */,
-				73F1384A222C289200FB8EBC /* PlaylistItemViewModel.swift in Sources */,
 				73F138C4222C289200FB8EBC /* PlayerContentContainerViewModel.swift in Sources */,
 				73DB1FD42271AC2300E01622 /* VideoRouter.swift in Sources */,
 				73A56D3222663E8600D2293B /* ContinueFacebookRegistrationRouter.swift in Sources */,
@@ -3033,7 +3006,6 @@
 				73F138B5222C289200FB8EBC /* AddToPlaylistPlaylistsRouter.swift in Sources */,
 				73C02ACB228EAE6F00A16B6E /* DisclaimerLabel.swift in Sources */,
 				73F13843222C289200FB8EBC /* ListeningSettings.swift in Sources */,
-				73F13846222C289200FB8EBC /* PlaylistItemCollectionVIewCell.swift in Sources */,
 				73F138B7222C289200FB8EBC /* AddTracksToPlaylistControllerViewModel.swift in Sources */,
 				73F1388A222C289200FB8EBC /* RestorePasswordRouter.swift in Sources */,
 				73F13887222C289200FB8EBC /* ProfileItemTableViewCell.swift in Sources */,
