@@ -30,6 +30,8 @@ class ContinueFacebookRegistrationViewController: UIViewController, MVVM_View {
     @IBOutlet weak var advertisersCheckmark: Checkbox!
     @IBOutlet weak var advertisersLabel: UILabel!
     
+    @IBOutlet weak var privacyLabel: DisclaimerLabel!
+    
     let validator = Validator()
     
     /**
@@ -58,6 +60,15 @@ class ContinueFacebookRegistrationViewController: UIViewController, MVVM_View {
             
             x?.increasedTouchRadius = 5
         }
+        
+        let terms: NSString = "I have read and agree to the Standard Terms of User, Privacy Policy and Creative Supplemental Terms & Conditions for Content Creators"
+        let links = [
+            terms.range(of: "Privacy Policy") : URL(string: "https://rhythmic-creators.com/policies/privacy-policy")!,
+            terms.range(of: "Terms & Conditions") : URL(string: "https://rhythmic-creators.com/policies/terms-of-use")!
+        ]
+        
+        privacyLabel.prepare(content: terms as String,
+                             links: links)
         
         validator.registerField(birthdayField, errorLabel: birthdayErrorLabel, rules: [RequiredRule()])
         validator.registerField(selectCountryField, errorLabel: errorCountryLabel, rules: [RequiredRule()])

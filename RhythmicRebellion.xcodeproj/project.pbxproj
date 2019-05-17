@@ -63,6 +63,7 @@
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
+		73C02ACB228EAE6F00A16B6E /* DisclaimerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */; };
 		73C3B8C5225A2F92004F380C /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C3B8C4225A2F92004F380C /* R.generated.swift */; };
 		73DB1FD42271AC2300E01622 /* VideoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DB1FD12271AC2300E01622 /* VideoRouter.swift */; };
 		73DB1FD52271AC2300E01622 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DB1FD22271AC2300E01622 /* VideoViewController.swift */; };
@@ -473,6 +474,7 @@
 		73B97A6F2253995400B43D71 /* SetNewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUser.swift; sourceTree = "<group>"; };
 		73B97A7222539DC500B43D71 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		73B97A742253B20400B43D71 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
+		73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerLabel.swift; sourceTree = "<group>"; };
 		73C3B8C4225A2F92004F380C /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		73DB1FD12271AC2300E01622 /* VideoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRouter.swift; sourceTree = "<group>"; };
 		73DB1FD22271AC2300E01622 /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
@@ -1184,6 +1186,14 @@
 				73B97A7222539DC500B43D71 /* UserRequest.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		73C02AC9228EAE5E00A16B6E /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		73DB1FD02271AC1500E01622 /* Video */ = {
@@ -1992,6 +2002,7 @@
 		73F137B8222C289200FB8EBC /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				73C02AC9228EAE5E00A16B6E /* UI */,
 				73F1391B222C295000FB8EBC /* Settings */,
 				73F137B9222C289200FB8EBC /* Networking */,
 				73F137D1222C289200FB8EBC /* Utils */,
@@ -3027,6 +3038,7 @@
 				73F13893222C289200FB8EBC /* SignInRouter.swift in Sources */,
 				73F13834222C289200FB8EBC /* Album.swift in Sources */,
 				73F138B5222C289200FB8EBC /* AddToPlaylistPlaylistsRouter.swift in Sources */,
+				73C02ACB228EAE6F00A16B6E /* DisclaimerLabel.swift in Sources */,
 				73F13843222C289200FB8EBC /* ListeningSettings.swift in Sources */,
 				73F13846222C289200FB8EBC /* PlaylistItemCollectionVIewCell.swift in Sources */,
 				73F138B7222C289200FB8EBC /* AddTracksToPlaylistControllerViewModel.swift in Sources */,

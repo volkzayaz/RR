@@ -79,6 +79,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var advertisersCheckmark: Checkbox!
     @IBOutlet weak var advertisersLabel: UILabel!
     
+    @IBOutlet weak var privacyLabel: DisclaimerLabel!
     // MARK: - Public properties -
 
     private(set) var viewModel: SignUpViewModel!
@@ -189,6 +190,15 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
             
             x?.increasedTouchRadius = 5
         }
+        
+        let terms: NSString = "I have read and agree to the Standard Terms of User, Privacy Policy and Creative Supplemental Terms & Conditions for Content Creators"
+        let links = [
+            terms.range(of: "Privacy Policy") : URL(string: "https://rhythmic-creators.com/policies/privacy-policy")!,
+            terms.range(of: "Terms & Conditions") : URL(string: "https://rhythmic-creators.com/policies/terms-of-use")!
+        ]
+        
+        privacyLabel.prepare(content: terms as String,
+                             links: links)
         
         self.hobbiesContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSelectHobbies(sender:))))
 
