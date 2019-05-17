@@ -34,14 +34,10 @@ class ArtistViewController: UIViewController, MVVM_View {
             
         case .playlist(let x):
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.playlistItemCollectionViewCellIdentifier,
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.albumCell,
                                                           for: ip)!
             
-            let input = PlaylistItemViewModel(playlist: x, showActivity: true)
-            
-            cell.setup(viewModel: input) { action in
-                print(action)
-            }
+            cell.viewModel = x
             
             return cell
             

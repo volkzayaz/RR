@@ -67,7 +67,7 @@ final class MyPlaylistsViewModel {
         return self.playlists.count
     }
 
-    func object(at indexPath: IndexPath) -> PlaylistItemCollectionViewCellViewModel? {
+    func object(at indexPath: IndexPath) -> PlaylistItemViewModel? {
         guard indexPath.item < self.playlists.count else { return nil }
 
         let playlist = self.playlists[indexPath.item]

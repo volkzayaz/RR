@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol Playlist {
     var id: Int {get}
@@ -128,36 +129,33 @@ extension FanPlaylist: Hashable {
 }
 
 
-struct ArtistPlaylist: Playlist, Codable, Equatable {
+struct ArtistPlaylist: Codable, Equatable, TrackGroupPresentable, Playlist {
     
     let id: Int
     let name: String
     let cover_image: Image
     
-    
-    var isDefault: Bool {
-        return false
+    var subtitle: String { return "" }
+    var imageURL: String {
+        return cover_image.simpleURL ?? ""
     }
     
-    var isFanPlaylist: Bool {
-        return false
+    ///Upon user perfoming actions like "playNext" or "to custom playlist"
+    ///provide the list of tracks that represent your entity
+    ///for exaplme an Album would return a list of [Track] in this Album
+    var underlineTracks: Maybe<[Track]> {
+        return TrackRequest.tracks(playlistId: id)
+            .rx.baseResponse(type: [Track].self)
     }
     
-    var thumbnailURL: URL? {
-        guard let str = cover_image.simpleURL,
-              let url = URL(string: str) else {
-            return nil
-        }
-        
-        return url
-    }
     
-    var description: String? {
-        return nil
-    }
+    var isDefault: Bool { return false }
+    var thumbnailURL: URL? { return nil }
     
-    var title: String? {
-        return nil
-    }
+    var description: String? { return nil }
+    var title: String? { return nil }
+    
+    var isFanPlaylist: Bool { return false }
+    
     
 }

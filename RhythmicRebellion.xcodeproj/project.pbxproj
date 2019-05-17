@@ -14,9 +14,9 @@
 		733768E92289954100C922D9 /* SplashRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E62289954100C922D9 /* SplashRouter.swift */; };
 		733768EA2289954100C922D9 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E72289954100C922D9 /* SplashViewController.swift */; };
 		733768EB2289954100C922D9 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E82289954100C922D9 /* SplashViewModel.swift */; };
-		7343FCA42282E06D00A3DA3D /* AlbumCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */; };
-		7343FCA52282E06D00A3DA3D /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* AlbumCell.swift */; };
-		7343FCA62282E06D00A3DA3D /* AlbumCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */; };
+		7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */; };
+		7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */; };
+		7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */; };
 		7361C00222368375008EA36E /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C00122368375008EA36E /* Dispatcher.swift */; };
 		7361C006223684A2008EA36E /* ApplyReduxViewPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C005223684A2008EA36E /* ApplyReduxViewPatch.swift */; };
 		7361C008223684EE008EA36E /* InsertTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C007223684EE008EA36E /* InsertTracks.swift */; };
@@ -421,9 +421,9 @@
 		733768E62289954100C922D9 /* SplashRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashRouter.swift; sourceTree = "<group>"; };
 		733768E72289954100C922D9 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		733768E82289954100C922D9 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
-		7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCellRouter.swift; sourceTree = "<group>"; };
-		7343FCA22282E06D00A3DA3D /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
-		7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCellViewModel.swift; sourceTree = "<group>"; };
+		7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCellRouter.swift; sourceTree = "<group>"; };
+		7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCollectionCell.swift; sourceTree = "<group>"; };
+		7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupViewModel.swift; sourceTree = "<group>"; };
 		734F82742229965E0006E1DE /* Appfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Appfile; sourceTree = "<group>"; };
 		734F82762229965E0006E1DE /* Fastfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Fastfile; sourceTree = "<group>"; };
 		734F828622299CD90006E1DE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -873,22 +873,14 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
-		7343FC9F2282E04300A3DA3D /* Album */ = {
+		7343FC9F2282E04300A3DA3D /* TrackGroup */ = {
 			isa = PBXGroup;
 			children = (
-				7343FCA02282E04C00A3DA3D /* Cell */,
+				7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */,
+				7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */,
+				7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */,
 			);
-			path = Album;
-			sourceTree = "<group>";
-		};
-		7343FCA02282E04C00A3DA3D /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				7343FCA12282E06D00A3DA3D /* AlbumCellRouter.swift */,
-				7343FCA22282E06D00A3DA3D /* AlbumCell.swift */,
-				7343FCA32282E06D00A3DA3D /* AlbumCellViewModel.swift */,
-			);
-			path = Cell;
+			path = TrackGroup;
 			sourceTree = "<group>";
 		};
 		734F82722229965E0006E1DE /* fastlane */ = {
@@ -1210,7 +1202,7 @@
 			isa = PBXGroup;
 			children = (
 				733768D92289918800C922D9 /* Splash */,
-				7343FC9F2282E04300A3DA3D /* Album */,
+				7343FC9F2282E04300A3DA3D /* TrackGroup */,
 				73F13773222C289200FB8EBC /* Playlists */,
 				73DB1FD02271AC1500E01622 /* Video */,
 				73A56D2D22663E8600D2293B /* Auth */,
@@ -2999,7 +2991,7 @@
 				73F1388B222C289200FB8EBC /* RestorePasswordViewModel.swift in Sources */,
 				73F13902222C289200FB8EBC /* TextImageGenerator.swift in Sources */,
 				73F1384B222C289200FB8EBC /* HomeControllerViewModel.swift in Sources */,
-				7343FCA42282E06D00A3DA3D /* AlbumCellRouter.swift in Sources */,
+				7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */,
 				733768EB2289954100C922D9 /* SplashViewModel.swift in Sources */,
 				73F138BA222C289200FB8EBC /* PlayerPlaylistRootRouter.swift in Sources */,
 				73F13883222C289200FB8EBC /* ChangeEmailControllerViewModel.swift in Sources */,
@@ -3072,7 +3064,7 @@
 				73F1381F222C289200FB8EBC /* TagsView.swift in Sources */,
 				73F13839222C289200FB8EBC /* User.swift in Sources */,
 				73F13840222C289200FB8EBC /* Playlist.swift in Sources */,
-				7343FCA52282E06D00A3DA3D /* AlbumCell.swift in Sources */,
+				7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */,
 				73F1385D222C289200FB8EBC /* SelectableListRouter.swift in Sources */,
 				7361C02422369018008EA36E /* ScrubToFractionAction.swift in Sources */,
 				73F138A4222C289200FB8EBC /* PageContentRouter.swift in Sources */,
@@ -3173,7 +3165,7 @@
 				7361C01C22368ED6008EA36E /* GetBackToPreviousItem.swift in Sources */,
 				73F138A9222C289200FB8EBC /* PagesViewModel.swift in Sources */,
 				73F13845222C289200FB8EBC /* Watchable.swift in Sources */,
-				7343FCA62282E06D00A3DA3D /* AlbumCellViewModel.swift in Sources */,
+				7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */,
 				73F13847222C289200FB8EBC /* HomeViewModel.swift in Sources */,
 				73F13870222C289200FB8EBC /* ApplicationContentContainerViewModel.swift in Sources */,
 				7361C01622368D84008EA36E /* AudioPlayerActions.swift in Sources */,

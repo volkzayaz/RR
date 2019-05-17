@@ -56,9 +56,9 @@ struct ArtistViewModel : MVVM_ViewModel {
             .map { response in
                 return ( R.string.localizable.albums(),
                          response.map { album in
-                            Data.album(album: .init(router: .init(owner: router.owner),
-                                                    data:   .init(album: album,
-                                                                  artistName: artist.name)))
+                            Data.album(.init(router: .init(owner: router.owner),
+                                             data:   Album.TrackGroup(album: album,
+                                                                      artistName: artist.name)))
                 })
             }
             .trackView(viewIndicator: indicator)
@@ -67,7 +67,10 @@ struct ArtistViewModel : MVVM_ViewModel {
             .rx.baseResponse(type: [ArtistPlaylist].self)
             .map { response in
                 return ( R.string.localizable.playlist(),
-                         response.map { Data.playlist(playlist: $0) } )
+                         response.map { playlist in
+                            Data.playlist(.init(router: .init(owner: router.owner),
+                                                data:   playlist))
+                        })
             }
             .trackView(viewIndicator: indicator)
 
@@ -115,7 +118,7 @@ extension ArtistViewModel {
                                                                  style: .now))
             
         case .playlist(let playlist):
-            router.show(playlist: playlist)
+            router.show(playlist: playlist.data)
             
         }
         
@@ -141,14 +144,14 @@ extension ArtistViewModel {
     }
     
     enum Data: IdentifiableType, Equatable {
-        case album(album: AlbumCellViewModel)
-        case playlist(playlist: ArtistPlaylist)
+        case album(TrackGroupViewModel<Album.TrackGroup>)
+        case playlist(TrackGroupViewModel<ArtistPlaylist>)
         case track(trackViewModel: TrackViewModel)
         
         var identity: String {
             switch self {
             case .album(let album):       return "album \(album.data.album.id)"
-            case .playlist(let playlist): return "playlist \(playlist.id)"
+            case .playlist(let playlist): return "playlist \(playlist.data.id)"
             case .track(let t):       return "track \(t.track.id)"
             }
         }
@@ -159,7 +162,7 @@ extension ArtistViewModel {
                 return x.data == y.data
                 
             case (.playlist(let x), .playlist(let y)):
-                return x == y
+                return x.data == y.data
                 
             case (.track(let x), .track(let y)):
                 return x == y

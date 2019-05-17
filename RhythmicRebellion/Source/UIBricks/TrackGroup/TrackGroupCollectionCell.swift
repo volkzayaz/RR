@@ -1,5 +1,5 @@
 //
-//  AlbumCellViewController.swift
+//  TrackGroupCollectionCell.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 5/8/19.
@@ -10,7 +10,15 @@ import UIKit
 
 import RxSwift
 
-class AlbumCollectionCell: UICollectionViewCell {
+protocol TrackGroupViewModelProtocol {
+    
+    var present: TrackGroupPresentable { get }
+    
+    func presentActions()
+    
+}
+
+class TrackGroupCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var albumNameLabel: UILabel!
     @IBOutlet weak var albumDescriptionLabel: UILabel!
@@ -18,20 +26,17 @@ class AlbumCollectionCell: UICollectionViewCell {
     
     fileprivate var disposeBag = DisposeBag()
     
-    var viewModel: AlbumCellViewModel! {
+    var viewModel: TrackGroupViewModelProtocol! {
         
         didSet {
             guard let vm = viewModel else {
                 return
             }
             
-            let a = vm.data.album
+            albumNameLabel.text = vm.present.name
+            albumDescriptionLabel.text = vm.present.subtitle
             
-            albumDescriptionLabel.text = "By \(vm.data.artistName)"
-            
-            albumNameLabel.text = a.name
-            
-            ImageRetreiver.imageForURLWithoutProgress(url: a.image.simpleURL ?? "")
+            ImageRetreiver.imageForURLWithoutProgress(url: vm.present.imageURL)
                 .map { [weak v = coverImageView] x -> UIImage? in
                     if let x = x {
                         v?.contentMode = .scaleAspectFill

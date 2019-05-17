@@ -9,17 +9,6 @@
 import UIKit
 import AlamofireImage
 
-protocol PlaylistItemCollectionViewCellViewModel {
-
-    var id: String { get }
-
-    var title: String { get }
-    var description: String? { get }
-
-    var thumbnailURL: URL? { get }
-    var showActivity: Bool { get }
-}
-
 class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
 
     static let identifier = "PlaylistItemCollectionViewCellIdentifier"
@@ -70,7 +59,7 @@ class PlaylistItemCollectionViewCell: UICollectionViewCell, CellIdentifiable {
                                                                  cornerRadius: self.containerView.layer.cornerRadius).cgPath
     }
 
-    func setup(viewModel: PlaylistItemCollectionViewCellViewModel, actionCallback:  @escaping ActionCallback) {
+    func setup(viewModel: PlaylistItemViewModel, actionCallback:  @escaping ActionCallback) {
 
         self.viewModelId = viewModel.id
 

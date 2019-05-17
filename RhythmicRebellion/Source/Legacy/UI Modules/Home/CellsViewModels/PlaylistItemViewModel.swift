@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PlaylistItemViewModel: PlaylistItemCollectionViewCellViewModel {
+struct PlaylistItemViewModel {
 
     var id: String { return String(playlist.id) }
 

@@ -1,5 +1,5 @@
 //
-//  AlbumCellRouter.swift
+//  TrackGroupCellRouter.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 5/8/19.
@@ -8,14 +8,14 @@
 
 import UIKit
 
-struct AlbumCellRouter : MVVM_Router {
+struct TrackGroupCellRouter : MVVM_Router {
     
     var owner: UIViewController {
         return _owner!
     }
     
-    weak private var _owner: AlbumCellRouter.T?
-    init(owner: AlbumCellRouter.T) {
+    weak private var _owner: TrackGroupCellRouter.T?
+    init(owner: TrackGroupCellRouter.T) {
         self._owner = owner
     }
     

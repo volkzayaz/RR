@@ -1,5 +1,5 @@
 //
-//  AlbumCellViewModel.swift
+//  TrackGroupViewModel.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 5/8/19.
@@ -11,7 +11,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-extension AlbumCellViewModel {
+extension TrackGroupViewModel {
     
     /** Reference binding drivers that are going to be used in the corresponding view
     
@@ -23,15 +23,25 @@ extension AlbumCellViewModel {
     
 }
 
-struct AlbumCellViewModel : MVVM_ViewModel {
+///entity that can represent group of tracks
+///for example album or playlist
+protocol TrackGroupPresentable {
     
-    struct Data: Equatable {
-        let album: Album
-        let artistName: String
-    }; let data: Data
+    var name: String { get }
+    var subtitle: String { get }
+    var imageURL: String { get }
     
+    ///Upon user perfoming actions like "playNext" or "to custom playlist"
+    ///provide the list of tracks that represent your entity
+    ///for exaplme an Album would return a list of [Track] in this Album
+    var underlineTracks: Maybe<[Track]> { get }
+}
+
+struct TrackGroupViewModel<T: TrackGroupPresentable> : MVVM_ViewModel, TrackGroupViewModelProtocol {
     
-    init(router: AlbumCellRouter, data: Data) {
+    let data: T
+    
+    init(router: TrackGroupCellRouter, data: T) {
         self.router = router
         self.data = data
         
@@ -50,27 +60,30 @@ struct AlbumCellViewModel : MVVM_ViewModel {
             .disposed(by: bag)
     }
     
-    let router: AlbumCellRouter
+    let router: TrackGroupCellRouter
     fileprivate let indicator: ViewIndicator = ViewIndicator()
     fileprivate let bag = DisposeBag()
+ 
+    var present: TrackGroupPresentable {
+        return data
+    }
     
 }
 
-extension AlbumCellViewModel {
+extension TrackGroupViewModel {
 
     func presentActions() {
         
         let cancel = [ActionViewModel(.cancel, actionCallback: {} )]
         
-        let a = data.album
+        let data = self.data
         let bag = self.bag
         
         ///1. Load tracks for album
         let loader = { [unowned i = indicator,
                         weak r = router.owner] (x: @escaping ([Track]) -> Void) -> () -> Void in
             return {
-                ArtistRequest.albumRecords(album: a)
-                    .rx.baseResponse(type: [Track].self)
+                data.underlineTracks
                     .silentCatch(handler: r)
                     .trackView(viewIndicator: i)
                     .subscribe(onNext: x)

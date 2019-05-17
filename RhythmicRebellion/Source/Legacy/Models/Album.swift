@@ -31,3 +31,24 @@ extension Album: Equatable {
     }
     
 }
+
+import RxSwift
+extension Album {
+    
+    struct TrackGroup : Equatable, TrackGroupPresentable {
+        
+        let album: Album
+        let artistName: String
+        
+        var name: String { return album.name }
+        var subtitle: String { return "By \(artistName)" }
+        var imageURL: String { return album.image.simpleURL ?? "" }
+        
+        var underlineTracks: Maybe<[Track]> {
+            return ArtistRequest.albumRecords(album: album)
+                .rx.baseResponse(type: [Track].self)
+        }
+        
+    };
+    
+}
