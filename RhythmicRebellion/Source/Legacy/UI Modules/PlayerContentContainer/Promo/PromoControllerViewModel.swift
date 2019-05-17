@@ -59,7 +59,7 @@ final class PromoViewModel {
             
                 guard state.currentTrack?.track != nil else { return nil }
                 
-                return state.user.isGuest
+                return !state.user.isGuest
             }
             .notNil()
     }
