@@ -24,6 +24,7 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
             searchBar.backgroundImage = UIImage()
         }
     }
+
     lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<String, Artist>>(configureCell: { [unowned self] (_, collectionView, ip, x) in
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.artistCell,

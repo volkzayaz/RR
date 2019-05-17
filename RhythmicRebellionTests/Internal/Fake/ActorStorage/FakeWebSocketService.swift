@@ -20,6 +20,10 @@ class FakeWebSocketService: WebSocketService {
         return .just(addons)
     }
     
+    override func markPlayed(addon: Addon, for track: Track) {
+        
+    }
+    
     override func fetchTracks(trackIds: [Int]) -> Observable<[Track]> {
         return .just(Tracks.all.filter { trackIds.contains($0.id) })
     }
