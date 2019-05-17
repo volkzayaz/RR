@@ -140,28 +140,6 @@ class AudioPlayer: NSObject, Actor {
             .disposed(by: bag)
         
         appState
-            .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
-            .drive(onNext: { [weak p = player] (state) in
-            
-                guard let s = state.player.currentItem?.state,
-                    s.isPlaying,
-                    state.player.lastChangeSignatureHash.isOwn else {
-                    
-                    p?.pause()
-                        
-                    return
-                }
-                
-                ////subscequent calls to |play| make AVAudioSession.interruptionNotification act weird
-                ////and sometimes make it not deliver .ended notification
-                if p?.rate == 0 {
-                    p?.play()
-                }
-                
-            })
-            .disposed(by: bag)
-        
-        appState
             .distinctUntilChanged { $0.activePlayable == $1.activePlayable &&
                                     $0.currentTrack == $1.currentTrack }
             .map { $0.activePlayable }
@@ -187,7 +165,29 @@ class AudioPlayer: NSObject, Actor {
                 
             })
             .disposed(by: rx.disposeBag)
-        
+
+        appState
+            .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
+            .drive(onNext: { [weak p = player] (state) in
+                
+                guard let s = state.player.currentItem?.state,
+                    s.isPlaying,
+                    state.player.lastChangeSignatureHash.isOwn else {
+                
+                        p?.pause()
+                        
+                        return
+                }
+                
+                ////subscequent calls to |play| make AVAudioSession.interruptionNotification act weird
+                ////and sometimes make it not deliver .ended notification
+                if p?.rate == 0 {
+                    p?.play()
+                }
+                
+            })
+            .disposed(by: bag)
+
         ///////---------
         ///////Buffering and loading state
         ///////---------

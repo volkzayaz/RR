@@ -29,6 +29,8 @@ struct ProceedToNextItem: ActionCreator {
             let next = addons.removeFirst()
             
             currentItem.addons = addons
+            currentItem.state = .init(progress: 0,
+                                      isPlaying: true, skipSeek: ())
             
             state.player.currentItem = currentItem
             

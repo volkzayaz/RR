@@ -74,7 +74,7 @@ extension RRPlayer {
             .drive(onNext: { [weak w = webSocket] (x) in
                 
                 w?.sendCommand(command: CodableWebSocketCommand(data: x))
-                print("Sending out trackState for syncing with webSocket: \(x)")
+                //print("Sending out trackState for syncing with webSocket: \(x)")
                 
             })
             .disposed(by: bag)
@@ -89,7 +89,7 @@ extension RRPlayer {
                 let command = CodableWebSocketCommand(data: t)
                 
                 w?.sendCommand(command: command)
-                print("Sending out currentTrackID for syncing with webSocket: \(String(describing: t))")
+                //print("Sending out currentTrackID for syncing with webSocket: \(String(describing: t))")
             })
             .disposed(by: bag)
         

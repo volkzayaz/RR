@@ -17,8 +17,6 @@ enum Dispatcher {
     
     static func dispatch(action: ActionCreator) {
         
-        print("Enqueing \(action.description)")
-        
         actions.onNext(action)
         
     }

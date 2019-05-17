@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics.self])
         
         NetworkActivityLogger.shared.level = .debug
-        NetworkActivityLogger.shared.startLogging()
+        //NetworkActivityLogger.shared.startLogging()
         
         application.applicationSupportsShakeToEdit = true
         
