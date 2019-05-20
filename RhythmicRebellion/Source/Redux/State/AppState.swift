@@ -19,7 +19,7 @@ func initAppState() -> Maybe<Void> {
     
     return Maybe.zip(u, c) { ($0, $1) }
         .asObservable()
-        .retryOnConnect(timeout: 1)
+        .retryOnConnect(timeout: 100)
         .asMaybe()
         .map { (user, config) in
             
