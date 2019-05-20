@@ -42,7 +42,7 @@ struct MediaWidget: Actor {
                 }
                 
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-                    MPMediaItemPropertyTitle: currentTrack.track.name,
+                    MPMediaItemPropertyTitle: state.currendPlayableTitle,
                     MPMediaItemPropertyArtist: currentTrack.track.artist.name,
                     MPMediaItemPropertyPlaybackDuration: NSNumber(value: trackDuration),
                     MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber(value: currentItem.state.progress)

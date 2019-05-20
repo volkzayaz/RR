@@ -192,6 +192,19 @@ extension AppState {
         return .track(t)
     }
     
+    var currendPlayableTitle: String {
+        
+        guard let x = activePlayable else { return "" }
+        
+        switch x {
+        case .addon(let a): return a.type.title
+        case .track(let t): return t.name
+        case .minusOneTrack(let t): return "\(t.name)"
+        case .stub(_, let t): return t
+        }
+        
+    }
+    
 }
 
 extension PlayerState.Lyrics.Mode.KaraokeConfig {
