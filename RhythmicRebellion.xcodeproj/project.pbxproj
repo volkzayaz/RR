@@ -17,6 +17,8 @@
 		7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */; };
+		735D78092292EE15000E43E1 /* ReplacePlaylists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735D78082292EE15000E43E1 /* ReplacePlaylists.swift */; };
+		735D780B2292EE48000E43E1 /* AppendPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735D780A2292EE48000E43E1 /* AppendPlaylist.swift */; };
 		7361C00222368375008EA36E /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C00122368375008EA36E /* Dispatcher.swift */; };
 		7361C006223684A2008EA36E /* ApplyReduxViewPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C005223684A2008EA36E /* ApplyReduxViewPatch.swift */; };
 		7361C008223684EE008EA36E /* InsertTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7361C007223684EE008EA36E /* InsertTracks.swift */; };
@@ -424,6 +426,8 @@
 		734F82742229965E0006E1DE /* Appfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Appfile; sourceTree = "<group>"; };
 		734F82762229965E0006E1DE /* Fastfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Fastfile; sourceTree = "<group>"; };
 		734F828622299CD90006E1DE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		735D78082292EE15000E43E1 /* ReplacePlaylists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplacePlaylists.swift; sourceTree = "<group>"; };
+		735D780A2292EE48000E43E1 /* AppendPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppendPlaylist.swift; sourceTree = "<group>"; };
 		7361C00122368375008EA36E /* Dispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 		7361C005223684A2008EA36E /* ApplyReduxViewPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyReduxViewPatch.swift; sourceTree = "<group>"; };
 		7361C007223684EE008EA36E /* InsertTracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertTracks.swift; sourceTree = "<group>"; };
@@ -903,6 +907,15 @@
 			path = support_files;
 			sourceTree = "<group>";
 		};
+		735D78072292EDFE000E43E1 /* Playlists */ = {
+			isa = PBXGroup;
+			children = (
+				735D78082292EE15000E43E1 /* ReplacePlaylists.swift */,
+				735D780A2292EE48000E43E1 /* AppendPlaylist.swift */,
+			);
+			path = Playlists;
+			sourceTree = "<group>";
+		};
 		7361BFFC223681DD008EA36E /* Redux */ = {
 			isa = PBXGroup;
 			children = (
@@ -933,6 +946,7 @@
 		7361C00322368475008EA36E /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				735D78072292EDFE000E43E1 /* Playlists */,
 				73B97A6E225398C100B43D71 /* User */,
 				739FFA26224B6E05007A88CA /* Lyrics */,
 				7361C01822368E79008EA36E /* RRPlayer */,
@@ -2948,6 +2962,7 @@
 				73F13801222C289200FB8EBC /* ArtistRouter.swift in Sources */,
 				73F13918222C289200FB8EBC /* View+Extension.swift in Sources */,
 				73F13863222C289200FB8EBC /* ListeningSettingsViewController.swift in Sources */,
+				735D78092292EE15000E43E1 /* ReplacePlaylists.swift in Sources */,
 				7373211C22552A4500606E09 /* UserManager.swift in Sources */,
 				73F13874222C289200FB8EBC /* PlaylistHeaderViewModel.swift in Sources */,
 				73F1390A222C289200FB8EBC /* NWise.swift in Sources */,
@@ -2983,6 +2998,7 @@
 				73F13860222C289200FB8EBC /* AddNewSelectableListItemTableViewCell.swift in Sources */,
 				73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */,
 				73F138B3222C289200FB8EBC /* CreatePlaylistTableViewCell.swift in Sources */,
+				735D780B2292EE48000E43E1 /* AppendPlaylist.swift in Sources */,
 				73F138CC222C289200FB8EBC /* KaraokeRouter.swift in Sources */,
 				73F13805222C289200FB8EBC /* AudioPlayer.swift in Sources */,
 				73F13841222C289200FB8EBC /* CheckAddons.swift in Sources */,

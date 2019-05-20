@@ -27,6 +27,7 @@ func initAppState() -> Maybe<Void> {
                                                 lastPatch: nil,
                                                 currentItem: nil,
                                                 isBlocked: false,
+                                                myPlaylists: [],
                                                 lastChangeSignatureHash: WebSocketService.ownSignatureHash,
                                                 config: config),
                             user: user
@@ -63,6 +64,8 @@ struct PlayerState: Equatable {
     
     var currentItem: CurrentItem?
     var isBlocked: Bool
+    
+    var myPlaylists: [FanPlaylist]
     
     ///represents whether last action was initiated by current client or some other client
     ///use `isOwn` to distinguish between two

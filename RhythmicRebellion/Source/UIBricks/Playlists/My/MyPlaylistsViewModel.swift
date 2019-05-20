@@ -16,8 +16,16 @@ import RxDataSources
 extension MyPlaylistsViewModel {
     
     var dataSource: Driver<[AnimatableSectionModel<String, TrackGroupViewModel<FanPlaylist>>]> {
-        return data.asDriver().map { x in
-            return [AnimatableSectionModel(model: "", items: x)]
+        
+        let r = router
+        return appState.map { $0.player.myPlaylists }
+            .distinctUntilChanged()
+            .map { x in
+                
+                let y = x.map {  TrackGroupViewModel(router: .init(owner: r.owner!),
+                                                     data: $0) }
+                
+            return [AnimatableSectionModel(model: "", items: y)]
         }
     }
     
@@ -29,8 +37,6 @@ final class MyPlaylistsViewModel {
     
     private let router: MyPlaylistsRouter
     
-    fileprivate let data = BehaviorRelay<[TrackGroupViewModel<FanPlaylist>]>(value: [])
-    
     // MARK: - Lifecycle -
     
     init(router: MyPlaylistsRouter) {
@@ -40,9 +46,9 @@ final class MyPlaylistsViewModel {
             .rx.response(type: [FanPlaylist].self)
             .asObservable()
             .silentCatch(handler: router.owner)
-            .map { $0.map { TrackGroupViewModel(router: .init(owner: router.owner!),
-                                                data: $0) } }
-            .bind(to: data)
+            .subscribe(onNext: { (x) in
+                Dispatcher.dispatch(action: ReplacePlaylists(playlists: x))
+            })
             .disposed(by: bag)
         
     }

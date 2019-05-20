@@ -20,7 +20,7 @@ platform :ios do
 
     lane :beta do |options|
         
-        tests
+        #tests
         
         ensure_git_branch( branch: 'develop|hotfix' )
         

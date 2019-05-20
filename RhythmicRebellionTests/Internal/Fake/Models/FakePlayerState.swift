@@ -16,6 +16,7 @@ extension PlayerState: Fakeble {
                                       lastPatch: nil,
                                       currentItem: nil,
                                       isBlocked: false,
+                                      myPlaylists: [],
                                       lastChangeSignatureHash: WebSocketService.ownSignatureHash,
                                       config: PlayerConfig.fake())
         

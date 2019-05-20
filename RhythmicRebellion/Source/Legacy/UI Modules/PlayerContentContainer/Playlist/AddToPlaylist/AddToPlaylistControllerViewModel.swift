@@ -91,8 +91,11 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
     func createPlaylist(with name: String) {
         self.delegate?.showProgress()
+        
         PlaylistManager.createPlaylist(with: name)
             .subscribe(onSuccess: { [weak self] playlist in
+        
+                Dispatcher.dispatch(action: AppendPlaylists(playlists: [playlist]))
                 
                 self?.delegate?.hideProgress()
                 
