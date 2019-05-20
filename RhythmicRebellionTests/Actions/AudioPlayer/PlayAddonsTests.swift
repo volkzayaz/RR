@@ -24,19 +24,16 @@ class PlayAddonsTests: XCTestCase {
         expect(player.tracks.count).toEventually(equal(tracks.count))
         
         let firstOrderedTrack = orderedTracks[0]
-        //Mock Requests
         FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
     }
     
     func prepareNewTrack(_ register: ([Int]) -> Void) {
-        //Prepare new track
+    
         let orderedTrack = orderedTracks[0]
-        //Mock Requests
         register([orderedTrack.track.id])
-        
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack, shouldPlayImmidiatelly: false))
         expect(currentItem).toNotEventually(beNil())
-        //Play Action
+        
         Dispatcher.dispatch(action: AudioPlayer.Play())
         expect(currentItem!.activeTrackHash).toEventually(equal(orderedTrack.orderHash))
     }
