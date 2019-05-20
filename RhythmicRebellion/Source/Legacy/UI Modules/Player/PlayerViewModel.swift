@@ -128,6 +128,12 @@ final class PlayerViewModel: NSObject {
                 return newState.user.likeState(for: currentTrack.track)
             }
     }
+    
+    var separatorHidden: Driver<Bool> {
+        return Driver.combineLatest(playerItemArtistNameString, playerItemNameString) {
+            $0.isEmpty || $1.isEmpty
+        }
+    }
 
     var canChangePlayerItemTrackLikeState: Driver<Bool> {
         return appState.map { $0.activePlayable != nil }

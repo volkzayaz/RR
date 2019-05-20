@@ -282,8 +282,10 @@ extension PlayerViewController {
             .drive(playerItemArtistNameLabel.rx.text)
             .disposed(by: rx.disposeBag)
 
-        self.playerItemNameSeparatorLabel.isHidden = self.playerItemNameLabel.text?.isEmpty ?? true || self.playerItemArtistNameLabel.text?.isEmpty ?? true
-
+        viewModel.separatorHidden
+            .drive(playerItemNameSeparatorLabel.rx.isHidden)
+            .disposed(by: rx.disposeBag)
+        
         viewModel.playerItemDurationString
             .drive(playerItemDurationLabel.rx.text)
             .disposed(by: rx.disposeBag)
