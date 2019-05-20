@@ -22,8 +22,8 @@ class PrepareNewTrackByHashTests: XCTestCase {
     }
     
     func testPrepareNewTrackByHash() {
-        let tracks = [t1]
         
+        let tracks = [t1]
         Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
         expect(lastPatch!.patch.count).toEventually(equal(tracks.count))
         

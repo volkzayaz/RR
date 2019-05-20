@@ -6,4 +6,22 @@
 //  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
-import Foundation
+import XCTest
+import Nimble
+import RxCocoa
+
+@testable import RhythmicRebellion
+
+class UpdateUserTests: XCTestCase {
+    
+    override func setUp() {
+        
+        initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService(), network: FakeNetwork()))
+        Dispatcher.state.accept(AppState.fake())
+    }
+    
+    func testUpdateUser() {
+        
+    }
+}
+

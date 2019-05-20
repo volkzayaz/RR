@@ -19,16 +19,13 @@ class GetBackToPreviousItemTests: XCTestCase {
         initActorStorage(ActorStorage(actors: [], ws: FakeWebSocketService(), network: FakeNetwork()))
         Dispatcher.state.accept(AppState.fake())
         
-        let tracks = Tracks.all
-        Dispatcher.dispatch(action: InsertTracks(tracks: tracks, afterTrack: nil))
-        expect(player.tracks.count).toEventually(equal(tracks.count))
+        Dispatcher.dispatch(action: InsertTracks(tracks: Tracks.all, afterTrack: nil))
+        expect(player.tracks.count).toEventually(equal(Tracks.all.count))
         
         let firstOrderedTrack = orderedTracks[0]
-        //Mocks Requests
         FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [firstOrderedTrack.track.id])
         FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
         
-        //Prepare new track
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: true))
         expect(currentItem).toNotEventually(beNil())
     }
@@ -64,7 +61,7 @@ class GetBackToPreviousItemTests: XCTestCase {
         expect(currentItem!.state.progress).toEventually(equal(2))
         
         Dispatcher.dispatch(action: GetBackToPreviousItem())
-        expect(currentItem?.activeTrackHash).toEventually(equal(previousOrderedTrack.orderHash))
+        expect(currentItem!.activeTrackHash).toEventually(equal(previousOrderedTrack.orderHash))
         expect(currentItem!.state.progress).toEventually(equal(0))
     }
 }

@@ -27,10 +27,9 @@ class AudioPlayerActionsTests: XCTestCase {
         expect(player.tracks.count).toEventually(equal(tracks.count))
         
         let firstOrderedTrack = orderedTracks[0]
-        //Mock Requests
         FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [firstOrderedTrack.track.id])
         FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
-        //Prepare new track
+        
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: false))
         expect(currentItem).toNotEventually(beNil())
     }

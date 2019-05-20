@@ -27,11 +27,9 @@ class AddTracksToLinkedPlayingTests: XCTestCase {
     func prepareForAddTracksToLinkedPlayin(trackToAdd track: Track, style: AddTracksToLinkedPlaying.AddStyle) {
         
         let firstOrderedTrack = orderedTracks[0]
-        //Mocks Requests
         FakeRequest.Addons.registerAdvertisementAddon(withTrackIDs: [firstOrderedTrack.track.id])
         FakeRequest.Artist.registerMockRequestArtist(artistId: firstOrderedTrack.track.artist.id)
         
-        //Prepare new track
         Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: firstOrderedTrack, shouldPlayImmidiatelly: true))
         expect(currentItem).toNotEventually(beNil())
 
