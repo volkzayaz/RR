@@ -128,7 +128,7 @@ class TrackListViewModel {
     
     init(dataProvider: TrackProvider,
          router: TrackListRouter,
-         actionsProvider: @escaping ActionsProvider = { _, _ in [] }) {
+         actionsProvider: @escaping ActionsProvider) {
         
         self.trackProivder = dataProvider
         self.router = router

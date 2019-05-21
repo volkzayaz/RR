@@ -40,6 +40,15 @@ struct ArtistRouter : MVVM_Router {
         owner.navigationController?.pushViewController(vc, animated: true)
     }
     
+    func showAddToPlaylist(for tracks: [Track]) {
+        
+        let x = R.storyboard.main.addToPlaylistViewController()!
+        let r = AddToPlaylistRouter()
+        r.start(controller: x, tracks: tracks)
+        
+        owner.present(UINavigationController(rootViewController: x), animated: true, completion: nil)
+    }
+    
     func trackListRouter() -> TrackListRouter {
         return TrackListRouter(owner: owner)
     }

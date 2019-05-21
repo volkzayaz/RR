@@ -47,9 +47,54 @@ struct ArtistViewModel : MVVM_ViewModel {
         self.router = router
         self.artist = artist
 
+        let actions: TrackListViewModel.ActionsProvider = { _, t in
+            
+            var result: [ActionViewModel] = []
+            
+            let user = appStateSlice.user
+            
+            //////1
+            
+            if t.track.isPlayable {
+                
+                result.append(ActionViewModel(.playNow) {
+                    Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
+                                                                         style: .now))
+                })
+                
+                result.append(ActionViewModel(.playNext) {
+                    Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
+                                                                         style: .next))
+                })
+                
+                result.append(ActionViewModel(.playNext) {
+                    Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
+                                                                         style: .last))
+                })
+                
+            }
+            
+            //////2
+            
+            if user.isGuest == false {
+                
+                result.append(ActionViewModel(.toPlaylist) {
+                    router.showAddToPlaylist(for: [t.track])
+                })
+                
+            }
+            
+            /////3
+            
+            
+            return result
+            
+        }
+        
         tracksViewModel = TrackListViewModel(
                                              dataProvider: TracksProvider(artist: artist),
-                                             router: router.trackListRouter())
+                                             router: router.trackListRouter(),
+                                             actionsProvider: actions)
         
         let albums = ArtistRequest.albums(artist: artist)
             .rx.baseResponse(type: [Album].self)

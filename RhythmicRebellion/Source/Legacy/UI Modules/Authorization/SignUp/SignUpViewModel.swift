@@ -255,8 +255,9 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
     }
 
     func registerZipField(_ zipField: ValidatableField) {
-        let zipRules: [Rule] = []
-
+        let zipRules: [Rule] = [MaxLengthRule(length: 15,
+                                              message: "Max length is 15")]
+        
         self.validator.registerField(zipField, rules: zipRules)
 
         self.zipField = zipField

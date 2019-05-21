@@ -297,16 +297,6 @@ extension PlaylistViewModel {
 
     // MARK: - Playlist Actions -
     
-    func actionTypes(for playlist: Playlist) -> [PlaylistActionsViewModels.ActionViewModel.ActionType] {
-        switch playlist {
-        case _ as FanPlaylist:
-            return [.playNow, .playNext, .playLast, .replaceCurrent, .toPlaylist, .delete]
-        case _ as DefinedPlaylist:
-            return [.playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent]
-        default: return []
-        }
-    }
-
     func confirmation(for actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, with playlist: Playlist) -> ConfirmationAlertViewModel.ViewModel? {
 
         switch actionType {
@@ -362,27 +352,33 @@ extension PlaylistViewModel {
         }
     }
 
-    func isAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, availableFor playlist: Playlist) -> Bool {
-        switch actionType {
-        case .playNow, .playNext, .playLast, .replaceCurrent: return self.tracksViewModel.isPlaylistEmpty == false
-        case .toPlaylist: return appStateSlice.user.isGuest == false && self.tracksViewModel.isPlaylistEmpty == false
-        case .delete: return playlist.isFanPlaylist && playlist.isDefault == false
-        case .clear: return false
-        default: return true
+    func actionTypes(for playlist: Playlist) -> [PlaylistActionsViewModels.ActionViewModel.ActionType] {
+        switch playlist {
+        case _ as FanPlaylist:
+            return [.playNow, .playNext, .playLast, .replaceCurrent, .toPlaylist, .delete]
+        case _ as DefinedPlaylist: fallthrough
+        case _ as AlbumPlaylistProvider: fallthrough
+        case _ as ArtistPlaylist:
+            return [.playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent]
+        default: return []
         }
     }
-
-    func filteredActionsTypes(for playlist: Playlist) -> [PlaylistActionsViewModels.ActionViewModel.ActionType] {
-        return self.actionTypes(for: playlist).filter {
-            self.isAction(with: $0, availableFor: self.playlist)
-        }
-    }
-
+    
     func playlistActions() -> PlaylistActionsViewModels.ViewModel? {
 
-        let filteredPlaylistActionsTypes = self.filteredActionsTypes(for: playlist)
+        let x = self.actionTypes(for: playlist).filter { actionType in
+            
+            switch actionType {
+            case .playNow, .playNext, .playLast, .replaceCurrent: return self.tracksViewModel.isPlaylistEmpty == false
+            case .toPlaylist: return appStateSlice.user.isGuest == false && self.tracksViewModel.isPlaylistEmpty == false
+            case .delete: return playlist.isFanPlaylist && playlist.isDefault == false
+            case .clear: return false
+            default: return true
+            }
+            
+        }
 
-        let playlistActions = PlaylistActionsViewModels.Factory().makeActionsViewModels(actionTypes: filteredPlaylistActionsTypes) { [weak self] (actionType) in
+        let playlistActions = PlaylistActionsViewModels.Factory().makeActionsViewModels(actionTypes: x) { [weak self] (actionType) in
             guard let `self` = self else { return }
             guard let confirmationViewModel = self.confirmation(for: actionType, with: self.playlist) else {
                 self.performeAction(with: actionType, for: self.playlist)
@@ -392,11 +388,8 @@ extension PlaylistViewModel {
             self.router.owner.showConfirmation(confirmationViewModel: confirmationViewModel)
         }
 
-        let title = filteredPlaylistActionsTypes.isEmpty ? playlist.name : nil
-        let message = filteredPlaylistActionsTypes.isEmpty ? NSLocalizedString("No actions available", comment: "Empty playlist actions message") : nil
-
-        return PlaylistActionsViewModels.ViewModel(title: title,
-                                                   message: message,
+        return PlaylistActionsViewModels.ViewModel(title: x.isEmpty ? playlist.name : nil,
+                                                   message: x.isEmpty ? "No actions available" : nil,
                                                    actions: playlistActions)
     }
 

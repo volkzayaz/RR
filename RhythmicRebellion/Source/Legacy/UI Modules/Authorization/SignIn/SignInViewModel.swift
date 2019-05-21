@@ -180,7 +180,7 @@ final class SignInViewModel {
                     .asObservable()
                     .catchError { (error) -> Observable<FanLoginResponse> in
                         
-                        if let e = error as? AFError, e.responseCode == 403 {
+                        if case .server(let e)? = error as? RRError, e.code == 403 {
                             return UserRequest.externalRegister(provider: provider)
                                 .rx.response(type: FanLoginResponse.self)
                                 .asObservable()
@@ -191,7 +191,7 @@ final class SignInViewModel {
                     }
                     .catchError { (error) -> Observable<FanLoginResponse> in
                         
-                        if let e = error as? AFError, e.responseCode == 422 {
+                        if case .server(let e)? = error as? RRError, e.errors.count > 1 {
                             
                             let vc = R.storyboard.authorization.continueFacebookRegistrationViewController()!
                             let vm = ContinueFacebookRegistrationViewModel(router: .init(owner: vc), facebookToken: provider.accessToken)

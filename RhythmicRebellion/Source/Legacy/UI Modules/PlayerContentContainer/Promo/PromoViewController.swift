@@ -137,8 +137,13 @@ extension PromoViewController: PromoViewModelDelegate {
             .drive(silenceBIOandCommentarySwitch.rx.isEnabled)
             .disposed(by: rx.disposeBag)
         
+        viewModel.canToggleSkipAddons
+            .map { !$0 }
+            .drive(onNext: { [unowned self] (x) in
+                self.silenceBIOandCommentarySwitchTapGestureRecognizer.isEnabled = x
+            })
+            .disposed(by: rx.disposeBag)
         
-        self.silenceBIOandCommentarySwitchTapGestureRecognizer.isEnabled = self.silenceBIOandCommentarySwitch.isEnabled == false
     }
 
     func refreshUI() {

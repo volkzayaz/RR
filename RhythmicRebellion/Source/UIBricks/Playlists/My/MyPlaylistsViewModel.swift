@@ -45,7 +45,7 @@ final class MyPlaylistsViewModel {
         PlaylistRequest.fanList
             .rx.response(type: [FanPlaylist].self)
             .asObservable()
-            .silentCatch(handler: router.owner)
+//            .silentCatch(handler: router.owner)
             .subscribe(onNext: { (x) in
                 Dispatcher.dispatch(action: ReplacePlaylists(playlists: x))
             })
