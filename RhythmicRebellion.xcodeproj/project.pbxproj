@@ -110,7 +110,6 @@
 		73F13811222C289200FB8EBC /* BaseFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13697222C289200FB8EBC /* BaseFlowLayout.swift */; };
 		73F13812222C289200FB8EBC /* ScrollableContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13698222C289200FB8EBC /* ScrollableContentViewController.swift */; };
 		73F13813222C289200FB8EBC /* RoundedImageVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13699222C289200FB8EBC /* RoundedImageVIew.swift */; };
-		73F13814222C289200FB8EBC /* ProgressPresenting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1369A222C289200FB8EBC /* ProgressPresenting.swift */; };
 		73F13815222C289200FB8EBC /* TabBarRegular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1369B222C289200FB8EBC /* TabBarRegular.swift */; };
 		73F13816222C289200FB8EBC /* CellIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1369C222C289200FB8EBC /* CellIdentifiable.swift */; };
 		73F13817222C289200FB8EBC /* UIImageView+Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1369D222C289200FB8EBC /* UIImageView+Placeholder.swift */; };
@@ -506,7 +505,6 @@
 		73F13697222C289200FB8EBC /* BaseFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseFlowLayout.swift; sourceTree = "<group>"; };
 		73F13698222C289200FB8EBC /* ScrollableContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableContentViewController.swift; sourceTree = "<group>"; };
 		73F13699222C289200FB8EBC /* RoundedImageVIew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedImageVIew.swift; sourceTree = "<group>"; };
-		73F1369A222C289200FB8EBC /* ProgressPresenting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressPresenting.swift; sourceTree = "<group>"; };
 		73F1369B222C289200FB8EBC /* TabBarRegular.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarRegular.swift; sourceTree = "<group>"; };
 		73F1369C222C289200FB8EBC /* CellIdentifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellIdentifiable.swift; sourceTree = "<group>"; };
 		73F1369D222C289200FB8EBC /* UIImageView+Placeholder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Placeholder.swift"; sourceTree = "<group>"; };
@@ -1330,7 +1328,6 @@
 				73F13696222C289200FB8EBC /* BaseFlowLayout */,
 				73F13698222C289200FB8EBC /* ScrollableContentViewController.swift */,
 				73F13699222C289200FB8EBC /* RoundedImageVIew.swift */,
-				73F1369A222C289200FB8EBC /* ProgressPresenting.swift */,
 				73F1369B222C289200FB8EBC /* TabBarRegular.swift */,
 				73F1369C222C289200FB8EBC /* CellIdentifiable.swift */,
 				73F1369D222C289200FB8EBC /* UIImageView+Placeholder.swift */,
@@ -2850,7 +2847,6 @@
 				73F137F7222C289200FB8EBC /* TrackView.swift in Sources */,
 				73F1380B222C289200FB8EBC /* TipView.swift in Sources */,
 				73F138DB222C289200FB8EBC /* PromoViewModel.swift in Sources */,
-				73F13814222C289200FB8EBC /* ProgressPresenting.swift in Sources */,
 				73F138D6222C289200FB8EBC /* LyricsKaraokeViewController.swift in Sources */,
 				73F13838222C289200FB8EBC /* Image.swift in Sources */,
 				7361C008223684EE008EA36E /* InsertTracks.swift in Sources */,

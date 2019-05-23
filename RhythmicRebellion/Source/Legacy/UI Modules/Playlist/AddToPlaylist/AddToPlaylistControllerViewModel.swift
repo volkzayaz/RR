@@ -90,14 +90,14 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
 
 
     func createPlaylist(with name: String) {
-        self.delegate?.showProgress()
+        //self.delegate?.showProgress()
         
         PlaylistManager.createPlaylist(with: name)
             .subscribe(onSuccess: { [weak self] playlist in
         
                 Dispatcher.dispatch(action: AppendPlaylists(playlists: [playlist]))
                 
-                self?.delegate?.hideProgress()
+               // self?.delegate?.hideProgress()
                 
                 self?.playlists.insert(playlist, at: 0)
                 self?.delegate?.reloadUI()
@@ -106,7 +106,7 @@ class AddToPlaylistControllerViewModel: AddToPlaylistViewModel {
                 
             }, onError: { [weak self] (error) in
                 
-                self?.delegate?.hideProgress()
+               // self?.delegate?.hideProgress()
                 
                 self?.delegate?.show(error: error)
             })
