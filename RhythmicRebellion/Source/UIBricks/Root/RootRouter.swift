@@ -14,6 +14,8 @@ class RootRouter : MVVM_Router {
         return _owner!
     }
     
+    private let interactor = PanDismissInteractor()
+    
     weak private var _owner: RootRouter.T?
     init(owner: RootRouter.T) {
         self._owner = owner
@@ -40,7 +42,8 @@ class RootRouter : MVVM_Router {
     }
     
     func presentPlayer() {
-        
+        let x = R.storyboard.main.brandNewPlayer()!
+        interactor.present(vc: x, on: owner)
     }
     
     private func presentEmbededIntoNavigation(_ x: UIViewController) {

@@ -65,6 +65,7 @@
 		73A56D3322663E8600D2293B /* ContinueFacebookRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3022663E8600D2293B /* ContinueFacebookRegistrationViewController.swift */; };
 		73A56D3422663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3122663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift */; };
 		73A56D3622663ED700D2293B /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3522663ED700D2293B /* Checkbox.swift */; };
+		73A9BA672296E42900C7D6F2 /* PanDismissInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9BA662296E42900C7D6F2 /* PanDismissInteractor.swift */; };
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
@@ -460,6 +461,7 @@
 		73A56D3022663E8600D2293B /* ContinueFacebookRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueFacebookRegistrationViewController.swift; sourceTree = "<group>"; };
 		73A56D3122663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueFacebookRegistrationViewModel.swift; sourceTree = "<group>"; };
 		73A56D3522663ED700D2293B /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		73A9BA662296E42900C7D6F2 /* PanDismissInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanDismissInteractor.swift; sourceTree = "<group>"; };
 		73B97A6F2253995400B43D71 /* SetNewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUser.swift; sourceTree = "<group>"; };
 		73B97A7222539DC500B43D71 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		73B97A742253B20400B43D71 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
@@ -1171,6 +1173,7 @@
 		73C02AC9228EAE5E00A16B6E /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				73A9BA662296E42900C7D6F2 /* PanDismissInteractor.swift */,
 				73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */,
 				73C02ACC228EE8D900A16B6E /* AlbumCell.xib */,
 			);
@@ -2943,6 +2946,7 @@
 				73F13893222C289200FB8EBC /* SignInRouter.swift in Sources */,
 				73F13834222C289200FB8EBC /* Album.swift in Sources */,
 				73F138B5222C289200FB8EBC /* AddToPlaylistPlaylistsRouter.swift in Sources */,
+				73A9BA672296E42900C7D6F2 /* PanDismissInteractor.swift in Sources */,
 				73C02ACB228EAE6F00A16B6E /* DisclaimerLabel.swift in Sources */,
 				73F13843222C289200FB8EBC /* ListeningSettings.swift in Sources */,
 				73F138B7222C289200FB8EBC /* AddTracksToPlaylistControllerViewModel.swift in Sources */,

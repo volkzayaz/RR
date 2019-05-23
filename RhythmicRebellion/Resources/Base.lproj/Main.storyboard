@@ -249,7 +249,6 @@
                 <tapGestureRecognizer id="OJT-wg-MXl">
                     <connections>
                         <action selector="presentPlayer:" destination="awC-uW-mWG" id="17q-0Q-gZf"/>
-                        <segue destination="oo8-4e-lgz" kind="presentation" id="AYj-U8-Puu"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -899,7 +898,7 @@
         <!--View Controller-->
         <scene sceneID="6LK-Fv-CoC">
             <objects>
-                <viewController id="oo8-4e-lgz" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BrandNewPlayer" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oo8-4e-lgz" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0WI-L6-Ig6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
