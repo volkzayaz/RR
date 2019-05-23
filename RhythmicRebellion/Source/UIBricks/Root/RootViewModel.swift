@@ -59,14 +59,24 @@ struct RootViewModel : MVVM_ViewModel {
 
 extension RootViewModel {
     
-    /** Reference any actions ViewModel can handle
-     ** Actions should always be void funcs
-     ** any result should be reflected via corresponding drivers
-     
-     func buttonPressed(labelValue: String) {
-     
-     }
-     
-     */
+    func presentVideo() {
+        router.presentVideo()
+    }
+    
+    func presentLyrics() {
+        router.presentLyrics()
+    }
+    
+    func presentPromo() {
+        router.presentPromo()
+    }
+    
+    func presentPlaying() {
+        router.presentPlaying()
+    }
+    
+    func presentPlayer() {
+        router.presentPlayer()
+    }
     
 }

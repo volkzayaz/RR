@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct RootRouter : MVVM_Router {
+class RootRouter : MVVM_Router {
     
     var owner: UIViewController {
         return _owner!
@@ -18,6 +18,51 @@ struct RootRouter : MVVM_Router {
     init(owner: RootRouter.T) {
         self._owner = owner
     }
+    
+    func presentVideo() {
+        let x = R.storyboard.main.videoViewController()!
+        x.viewModel = VideoViewModel(router: .init(owner: x))
+        presentEmbededIntoNavigation(x)
+    }
+    
+    func presentLyrics() {
+        let x = R.storyboard.lyricsKaraoke.lyricsKaraokeViewController()!
+        x.viewModel = .init(router: .init(owner: x))
+        presentEmbededIntoNavigation(x)
+    }
+    
+    func presentPromo() {
+        
+    }
+    
+    func presentPlaying() {
+        
+    }
+    
+    func presentPlayer() {
+        
+    }
+    
+    private func presentEmbededIntoNavigation(_ x: UIViewController) {
+        
+        let nav = R.storyboard.main.eyeBrowNavigation()!
+        nav.viewControllers = [x]
+
+        let closeButton = UIBarButtonItem(title: "Close",
+                                          style: .done,
+                                          target: self, action: #selector(RootRouter.dismissController))
+        closeButton.tintColor = UIColor(fromHex: 0xBFC7FF)
+        
+        x.navigationItem.leftBarButtonItem = closeButton
+        
+        owner.present(nav, animated: true, completion: nil)
+    }
+    
+    @objc func dismissController() {
+        owner.dismiss(animated: true, completion: {
+        })
+    }
+    
     
     /**
      

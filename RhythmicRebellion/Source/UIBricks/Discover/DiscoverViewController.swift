@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  DiscoverViewController.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 7/17/18.
@@ -11,7 +11,7 @@ import UIKit
 
 import RxDataSources
 
-final class HomeViewController: UIViewController {
+final class DiscoverViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
@@ -26,7 +26,7 @@ final class HomeViewController: UIViewController {
         
     })
     
-    lazy var viewModel: HomeViewModel! = HomeViewModel(router: .init(owner: self))
+    lazy var viewModel: DiscoverViewModel! = DiscoverViewModel(router: .init(owner: self))
 
     // MARK: - Lifecycle -
 

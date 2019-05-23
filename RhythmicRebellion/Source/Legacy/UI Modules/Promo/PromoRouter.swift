@@ -9,6 +9,10 @@
 
 import UIKit
 
+protocol ForcedAuthorizationRouter: class {
+    func routeToAuthorization(with authorizationType: AuthorizationType)
+}
+
 protocol PromoRouterDelegate: ForcedAuthorizationRouter {
     func navigateToPage(with url: URL)
 }

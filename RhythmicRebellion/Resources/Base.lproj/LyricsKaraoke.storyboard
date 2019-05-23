@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Lyrics-->
+        <!--Lyrics Karaoke View Controller-->
         <scene sceneID="zQt-mm-d2a">
             <objects>
-                <viewController id="zPB-jR-wl7" customClass="LyricsKaraokeViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LyricsKaraokeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="zPB-jR-wl7" customClass="LyricsKaraokeViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pbI-DY-rh6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -32,7 +32,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="vf4-fC-lpW"/>
                     </view>
-                    <tabBarItem key="tabBarItem" tag="1" title="Lyrics" image="Lyrics" id="5aN-gH-TcC"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="containerView" destination="1dn-MG-Q5p" id="ful-hP-wjs"/>
@@ -343,6 +342,5 @@
     </scenes>
     <resources>
         <image name="KaraokeMicrophoneButton" width="18" height="27"/>
-        <image name="Lyrics" width="14" height="14"/>
     </resources>
 </document>

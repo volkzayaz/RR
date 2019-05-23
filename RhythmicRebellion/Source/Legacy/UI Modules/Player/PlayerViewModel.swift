@@ -297,17 +297,6 @@ final class PlayerViewModel: NSObject {
             .disposed(by: disposeBag)
     }
 
-    deinit {
-        
-    }
-
-    func load() {
-        
-    }
-
-    func routeToAuthorization() {
-        self.router?.routeToAuthorization(with: .signIn)
-    }
 
     func playerItemDescriptionAttributedText(for traitCollection: UITraitCollection) -> NSAttributedString {
         guard let currentTrack = appStateSlice.currentTrack?.track else {
@@ -350,7 +339,10 @@ final class PlayerViewModel: NSObject {
 
     func toggleLike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
+        guard appStateSlice.user.isGuest else {
+//            self.routeToAuthorization();
+            return
+        }
 
         UserManager.update(track: track, likeState: .liked).subscribe()
         
@@ -358,7 +350,10 @@ final class PlayerViewModel: NSObject {
 
     func toggleDislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
+        guard appStateSlice.user.isGuest else {
+//            self.routeToAuthorization();
+            return
+        }
 
         UserManager.update(track: track, likeState: .liked).subscribe()
         
@@ -371,16 +366,16 @@ final class PlayerViewModel: NSObject {
     func toggleArtistFollowing() {
 
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard !appStateSlice.user.isGuest else { self.routeToAuthorization(); return }
+        guard !appStateSlice.user.isGuest else {
+//            self.routeToAuthorization();
+            return
+        }
         
         UserManager.follow(shouldFollow: !appStateSlice.user.isFollower(for: track.artist.id),
                                 artistId: track.artist.id)
             .subscribe()
     }
 
-    func navigate(to playerNavigationItemType: PlayerNavigationItem.NavigationType) {
-        self.router?.navigate(to: playerNavigationItemType)
-    }
 }
 
 extension PlayerViewModel {

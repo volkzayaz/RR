@@ -13,7 +13,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-extension HomeViewModel {
+extension DiscoverViewModel {
     
     var dataSource: Driver<[AnimatableSectionModel<String, TrackGroupViewModel<DefinedPlaylist>>]> {
         return data.asDriver().map { x in
@@ -23,17 +23,17 @@ extension HomeViewModel {
     
 }
 
-final class HomeViewModel {
+struct DiscoverViewModel {
     
     // MARK: - Private properties -
     
-    private let router: HomeRouter
+    private let router: DiscoverRouter
     
     fileprivate let data = BehaviorRelay<[TrackGroupViewModel<DefinedPlaylist>]>(value: [])
     
     // MARK: - Lifecycle -
     
-    init(router: HomeRouter) {
+    init(router: DiscoverRouter) {
         self.router = router
         
         PlaylistRequest.rrList
@@ -51,7 +51,7 @@ final class HomeViewModel {
     
 }
 
-extension HomeViewModel {
+extension DiscoverViewModel {
     
     func select(viewModel: TrackGroupViewModel<DefinedPlaylist>) {
         router.showContent(of: viewModel.data)

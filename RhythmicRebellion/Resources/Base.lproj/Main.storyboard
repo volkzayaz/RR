@@ -90,7 +90,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xAm-S4-Vcb" userLabel="touchView">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="82"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
                                 <connections>
@@ -98,13 +98,13 @@
                                 </connections>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g5w-Gt-tMj">
-                                <rect key="frame" x="0.0" y="122" width="375" height="690"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="698"/>
                                 <connections>
                                     <segue destination="9H2-K3-ahk" kind="embed" id="n88-Py-bVo"/>
                                 </connections>
                             </containerView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="small-play" translatesAutoresizingMaskIntoConstraints="NO" id="euV-QT-nPB">
-                                <rect key="frame" x="17" y="52" width="24" height="24"/>
+                                <rect key="frame" x="17" y="52" width="24" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="fx6-HU-wyc"/>
                                 </constraints>
@@ -122,21 +122,21 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X7Y-pl-ACh">
-                                <rect key="frame" x="331" y="52" width="24" height="24"/>
+                                <rect key="frame" x="331" y="49" width="24" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="GKf-9W-tZa"/>
                                 </constraints>
                                 <state key="normal" image="options-horizontal"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pdm-jJ-tNe">
-                                <rect key="frame" x="289" y="53" width="24" height="22"/>
+                                <rect key="frame" x="289" y="49" width="24" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="znK-sh-p5L"/>
                                 </constraints>
                                 <state key="normal" image="follow"/>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="67a-Ls-N97">
-                                <rect key="frame" x="0.0" y="88" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="2"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9vu-tz-B4f">
                                         <rect key="frame" x="0.0" y="0.0" width="187.66666666666666" height="2"/>
@@ -153,7 +153,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="g4i-lK-wzM">
-                                <rect key="frame" x="0.0" y="90" width="375" height="32"/>
+                                <rect key="frame" x="0.0" y="82" width="375" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Juh-13-4xz">
                                         <rect key="frame" x="0.0" y="0.0" width="93.666666666666671" height="32"/>
@@ -163,7 +163,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="LKx-fy-kqG" kind="presentation" id="jTf-QD-tCe"/>
+                                            <action selector="presentVideo:" destination="awC-uW-mWG" eventType="touchUpInside" id="PVH-p1-UBK"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VD9-Bu-Odg">
@@ -174,7 +174,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="npL-dH-l8P" kind="presentation" id="8ZT-6t-cL0"/>
+                                            <action selector="presentLyrics:" destination="awC-uW-mWG" eventType="touchUpInside" id="4Fc-ex-6jT"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cw9-fZ-oT0">
@@ -185,7 +185,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="k5I-qk-V3W" kind="presentation" id="RQ1-km-u4e"/>
+                                            <action selector="presentPromo:" destination="awC-uW-mWG" eventType="touchUpInside" id="uU2-aA-vWj"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Df8-Hb-cvV">
@@ -196,7 +196,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="rW2-iH-dg4" kind="presentation" id="1o8-hP-M2Y"/>
+                                            <action selector="presentPlaying:" destination="awC-uW-mWG" eventType="touchUpInside" id="17h-3Y-2o5"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -248,6 +248,7 @@
                 </label>
                 <tapGestureRecognizer id="OJT-wg-MXl">
                     <connections>
+                        <action selector="presentPlayer:" destination="awC-uW-mWG" id="17q-0Q-gZf"/>
                         <segue destination="oo8-4e-lgz" kind="presentation" id="AYj-U8-Puu"/>
                     </connections>
                 </tapGestureRecognizer>
@@ -491,16 +492,16 @@
             </objects>
             <point key="canvasLocation" x="119" y="2118"/>
         </scene>
-        <!--Home View Controller-->
+        <!--Discover View Controller-->
         <scene sceneID="Fyl-E4-0Ha">
             <objects>
-                <viewController id="EE0-GH-JrR" customClass="HomeViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="EE0-GH-JrR" customClass="DiscoverViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m0q-K7-erT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="698"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4G1-Bx-ATf">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="607"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="615"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gZk-kI-oO1" customClass="BaseFlowLayout" customModule="RhythmicRebellion" customModuleProvider="target">
                                     <size key="itemSize" width="177.5" height="160.5"/>
@@ -536,7 +537,7 @@
             <objects>
                 <viewController storyboardIdentifier="PlaylistViewController" id="QTJ-hD-c31" customClass="PlaylistViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jQD-NQ-HLl">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="698"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ctl-dI-oob">
@@ -781,11 +782,11 @@
             <objects>
                 <viewController storyboardIdentifier="AddToPlaylistViewController" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zup-uM-O9o" customClass="AddToPlaylistViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HV7-OB-pTw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="698"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="54" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2Gp-Ld-g8C">
-                                <rect key="frame" x="0.0" y="140" width="375" height="516"/>
+                                <rect key="frame" x="0.0" y="140" width="375" height="524"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.68999999999999995" green="0.72999999999999998" blue="1" alpha="0.30419234154929575" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -925,7 +926,7 @@
         <!--Video View Controller-->
         <scene sceneID="CgE-OQ-OTl">
             <objects>
-                <viewController id="LKx-fy-kqG" customClass="VideoViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VideoViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LKx-fy-kqG" customClass="VideoViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ef2-se-iys">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -984,16 +985,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="USM-9O-oV2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2916" y="-1012"/>
-        </scene>
-        <!--LyricsKaraoke-->
-        <scene sceneID="eSj-4E-yxN">
-            <objects>
-                <viewControllerPlaceholder storyboardName="LyricsKaraoke" id="npL-dH-l8P" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="1" title="Lyrics" image="Lyrics" id="O8u-O5-Hgs"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4VX-3M-myK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2156" y="-1012"/>
         </scene>
         <!--PlayerPlaylist-->
         <scene sceneID="CBE-nI-TsG">
@@ -1304,6 +1295,20 @@
             <point key="canvasLocation" x="-1185" y="-1012"/>
         </scene>
         <!--Navigation Controller-->
+        <scene sceneID="SFS-vX-RdE">
+            <objects>
+                <navigationController storyboardIdentifier="EyeBrowNavigation" id="xeK-29-7uA" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Lsk-TD-SO5">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.16862745098039217" green="0.1764705882352941" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ReK-eK-lIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4847" y="-1012"/>
+        </scene>
+        <!--Navigation Controller-->
         <scene sceneID="Bnz-OQ-pHB">
             <objects>
                 <navigationController storyboardIdentifier="AddToPlaylistContainer" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BLg-mo-FYo" sceneMemberID="viewController">
@@ -1334,7 +1339,7 @@
             <objects>
                 <viewController id="eiF-Si-idd" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ekF-kn-oTu">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="607"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="615"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="ZFd-LJ-FBX"/>
@@ -1350,7 +1355,7 @@
             <objects>
                 <viewController id="cdn-in-5wx" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pL6-tT-NP3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="607"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="615"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="aj6-uO-nBe"/>
@@ -1381,7 +1386,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Lyrics" width="14" height="14"/>
         <image name="PageNavigationArrow" width="22" height="22"/>
         <image name="Pages" width="20" height="20"/>
         <image name="Playlist" width="17" height="17"/>

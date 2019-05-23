@@ -1,5 +1,5 @@
 //
-//  HomeRouter.swift
+//  DiscoverRouter.swift
 //  RhythmicRebellion
 //
 //  Created by Vlad Soroka on 7/17/18.
@@ -9,7 +9,7 @@
 
 import UIKit
 
-struct HomeRouter {
+struct DiscoverRouter {
 
     weak var owner: UIViewController?
 
