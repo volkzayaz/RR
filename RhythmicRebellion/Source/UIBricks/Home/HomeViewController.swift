@@ -26,7 +26,7 @@ final class HomeViewController: UIViewController {
         
     })
     
-    var viewModel: HomeViewModel!
+    lazy var viewModel: HomeViewModel! = HomeViewModel(router: .init(owner: self))
 
     // MARK: - Lifecycle -
 

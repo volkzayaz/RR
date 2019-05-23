@@ -9,13 +9,7 @@
 
 import UIKit
 
-protocol PagesRouter: FlowRouter, PageContentRouterDelegate {
-
-    func navigate(to page: Page, animated: Bool)
-    func navigateToPagesList(animated: Bool)
-}
-
-final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible {
+final class PagesRouter: NSObject, FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -48,7 +42,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         return true
     }
 
-    func prepare(for destination: DefaultPagesRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: PagesRouter.SegueActions, segue: UIStoryboardSegue) {
         switch destination {
         case .showPageContent(let page):
             guard let pageContentViewController = segue.destination as? PageContentViewController else { fatalError("Incorrect controller for PageContentSegueIdentifier") }
@@ -70,14 +64,6 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
         super.init()
     }
 
-    func start(controller: PagesViewController) {
-        pagesViewController = controller
-        controller.navigationController?.delegate = self
-        let vm = PagesControllerViewModel(router: self,
-                                          pagesLocalStorage: DataLayer.get.pagesLocalStorageService)
-        controller.configure(viewModel: vm, router: self)
-    }
-
     func navigate(to page: Page, animated: Bool) {
 
         self.sourceController?.navigationController?.popToRootViewController(animated: false)
@@ -90,7 +76,7 @@ final class DefaultPagesRouter: NSObject, PagesRouter, FlowRouterSegueCompatible
     }
 }
 
-extension DefaultPagesRouter: PageContentRouterDelegate {
+extension PagesRouter: PageContentRouterDelegate {
     func routeToAuthorization(with authorizationType: AuthorizationType) {
         self.authorizationNavigationDelgate?.routeToAuthorization(with: authorizationType)
     }
@@ -103,7 +89,7 @@ extension DefaultPagesRouter: PageContentRouterDelegate {
     }
 }
 
-extension DefaultPagesRouter : UINavigationControllerDelegate {
+extension PagesRouter : UINavigationControllerDelegate {
 
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
     }

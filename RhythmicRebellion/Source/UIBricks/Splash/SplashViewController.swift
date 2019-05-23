@@ -26,13 +26,13 @@ class SplashViewController: UIViewController, MVVM_View {
         viewModel.finishedLoading
             .drive(onNext: { [unowned self] (_) in
                 
-                let appViewController = R.storyboard.main.appViewController()!
+                let x = R.storyboard.main.rootViewController()!
                 
-                let defaultAppRouter = AppRouter()
-                defaultAppRouter.start(controller: appViewController)
-                appViewController.transitioningDelegate = self
+                x.viewModel = .init(router: .init(owner: x))
+                x.transitioningDelegate = self
+                
                 //UIApplication.shared.keyWindow!.rootViewController = appViewController
-                self.present(appViewController, animated: true, completion: nil)
+                self.present(x, animated: true, completion: nil)
                 
             })
             .disposed(by: rx.disposeBag)

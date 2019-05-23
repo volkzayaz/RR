@@ -20,69 +20,69 @@ final class TabBarViewController: UITabBarController {
 
         //tabBar.delegate = self
         
-        viewModel.tabs
-            .drive(onNext: { [unowned self] (x) in
-                
-                var viewControllers = [UIViewController]()
-                
-                for type in x {
-                    let viewController = self.viewController(for: type,
-                                                             from: self.viewControllers)
-                    
-                    switch type {
-                    case .home:
-                        guard let homeNavigationController = viewController as? UINavigationController,
-                            let homeViewController = homeNavigationController.viewControllers.first as? HomeViewController else { break }
-                        
-                        homeNavigationController.popToRootViewController(animated: false)
-                        
-                        homeViewController.viewModel = HomeViewModel(router: .init(owner: homeViewController))
-                        
-                        viewControllers.append(homeNavigationController)
-                        
-                    case .settings:
-                        
-                        let x = R.storyboard.main.settingsViewController()!
-                        
-                        let listeningSettingsRouter = DefaultListeningSettingsRouter()
-                        listeningSettingsRouter.start(controller: x.viewControllers.first! as! ListeningSettingsViewController)
-                        
-                        viewControllers.append(x)
-                        
-                    case .pages:
-                        guard let pagesNavigationController = viewController as? UINavigationController,
-                            let pagesViwController = pagesNavigationController.viewControllers.first as? PagesViewController else { break }
-                        
-                        pagesNavigationController.popToRootViewController(animated: false)
-                        
-                        let pagesRouter = DefaultPagesRouter(authorizationNavigationDelgate: self.viewModel.router)
-                        pagesRouter.start(controller: pagesViwController)
-                        viewControllers.append(pagesNavigationController)
-                        
-                    case .profile:
-                        
-                        let x = R.storyboard.profile.profileNavigationController()!
-                        
-                        let profileRouter = DefaultProfileRouter()
-                        profileRouter.start(controller: x.viewControllers.first! as! ProfileViewController)
-                        viewControllers.append(x)
-                        
-                    case .authorization:
-                        
-                        let x = R.storyboard.authorization.authorizationViewController()!
-                        
-                        let authorizationRouter = DefaultAuthorizationRouter()
-                        authorizationRouter.start(controller: x.viewControllers.first! as! AuthorizationViewController)
-                        
-                        viewControllers.append(x)
-                        
-                    default: break
-                    }
-                }
-                
-                self.viewControllers = viewControllers
-            })
-            .disposed(by: rx.disposeBag)
+//        viewModel.tabs
+//            .drive(onNext: { [unowned self] (x) in
+//                
+//                var viewControllers = [UIViewController]()
+//                
+//                for type in x {
+//                    let viewController = self.viewController(for: type,
+//                                                             from: self.viewControllers)
+//                    
+//                    switch type {
+//                    case .home:
+//                        guard let homeNavigationController = viewController as? UINavigationController,
+//                            let homeViewController = homeNavigationController.viewControllers.first as? HomeViewController else { break }
+//                        
+//                        homeNavigationController.popToRootViewController(animated: false)
+//                        
+//                        homeViewController.viewModel = HomeViewModel(router: .init(owner: homeViewController))
+//                        
+//                        viewControllers.append(homeNavigationController)
+//                        
+//                    case .settings:
+//                        
+//                        let x = R.storyboard.main.settingsViewController()!
+//                        
+//                        let listeningSettingsRouter = DefaultListeningSettingsRouter()
+//                        listeningSettingsRouter.start(controller: x.viewControllers.first! as! ListeningSettingsViewController)
+//                        
+//                        viewControllers.append(x)
+//                        
+//                    case .pages:
+//                        guard let pagesNavigationController = viewController as? UINavigationController,
+//                            let pagesViwController = pagesNavigationController.viewControllers.first as? PagesViewController else { break }
+//                        
+//                        pagesNavigationController.popToRootViewController(animated: false)
+//                        
+//                        let pagesRouter = DefaultPagesRouter(authorizationNavigationDelgate: self.viewModel.router)
+//                        pagesRouter.start(controller: pagesViwController)
+//                        viewControllers.append(pagesNavigationController)
+//                        
+//                    case .profile:
+//                        
+//                        let x = R.storyboard.profile.profileNavigationController()!
+//                        
+//                        let profileRouter = DefaultProfileRouter()
+//                        profileRouter.start(controller: x.viewControllers.first! as! ProfileViewController)
+//                        viewControllers.append(x)
+//                        
+//                    case .authorization:
+//                        
+//                        let x = R.storyboard.authorization.authorizationViewController()!
+//                        
+//                        let authorizationRouter = DefaultAuthorizationRouter()
+//                        authorizationRouter.start(controller: x.viewControllers.first! as! AuthorizationViewController)
+//                        
+//                        viewControllers.append(x)
+//                        
+//                    default: break
+//                    }
+//                }
+//                
+//                self.viewControllers = viewControllers
+//            })
+//            .disposed(by: rx.disposeBag)
 
         viewModel.openedTab
             .drive(onNext: { [unowned self] (x) in

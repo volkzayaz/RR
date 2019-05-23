@@ -180,8 +180,6 @@ final class PlaylistViewModel {
             
             var result: [ActionViewModel] = []
             
-            let user = appStateSlice.user
-            
             //////1
 
             if t.track.isPlayable {
@@ -208,7 +206,7 @@ final class PlaylistViewModel {
             
             //////2
             
-            if user.isGuest == false {
+            if appStateSlice.user.isGuest == false {
                 
                 let toPlaylist = ActionViewModel(.toPlaylist) {
                     router.showAddToPlaylist(for: [t.track])

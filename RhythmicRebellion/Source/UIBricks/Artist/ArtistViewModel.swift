@@ -51,8 +51,6 @@ struct ArtistViewModel : MVVM_ViewModel {
             
             var result: [ActionViewModel] = []
             
-            let user = appStateSlice.user
-            
             //////1
             
             if t.track.isPlayable {
@@ -76,7 +74,7 @@ struct ArtistViewModel : MVVM_ViewModel {
             
             //////2
             
-            if user.isGuest == false {
+            if appStateSlice.user.isGuest == false {
                 
                 result.append(ActionViewModel(.toPlaylist) {
                     router.showAddToPlaylist(for: [t.track])
