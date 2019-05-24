@@ -60,5 +60,13 @@ class AddTracksToLinkedPlayingTests: XCTestCase {
         expect(currentItem?.activeTrackHash) == orderedTracks[0].orderHash
         expect(orderedTracks[orderedTracks.count - 1].track.id) == t3.id
     }
+    
+    func testAddCommingSoon() {
+        
+        let count = orderedTracks.count
+        prepareForAddTracksToLinkedPlayin(trackToAdd: trackCommingSoon, style: .last)
+        expect(orderedTracks.count).to(equal(count), description: "Comming soon tracks should not be added to playingNowPlaylist")
+        
+    }
 }
 
