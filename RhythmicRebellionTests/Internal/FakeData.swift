@@ -43,9 +43,10 @@ let t7 = Track.fake(id: 7)
 let t8 = Track.fake(id: 8)
 let t9 = Track.fake(id: 9)
 let t10 = Track.fake(id: 10)
+let trackCommingSoon = Track.fake(id: 10, audioFile: nil)
 
 struct Tracks {    
     static var all: [Track] {
-        return [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10]
+        return [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, trackCommingSoon]
     }
 }

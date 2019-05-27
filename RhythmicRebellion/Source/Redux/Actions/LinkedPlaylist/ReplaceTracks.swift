@@ -16,29 +16,15 @@ struct ReplaceTracks: ActionCreator {
     func perform(initialState: AppState) -> Observable<AppState> {
         
         ///initial state
+        var state = initialState
         var tracks = initialState.player.tracks
         
         ///getting state transform
         tracks.clear() ///otherwise patch will try to insert tracks in the beggining
-        let patch = tracks.insertPatch(tracks: with, after: nil)
+        state.player.tracks = tracks
         
-        ///mapping state transform
-        let reduxPatch = PlayerState.ReduxViewPatch(shouldFlush: true, patch: patch)
-        
-        ///applying state transform
-        return ApplyReduxViewPatch(viewPatch: reduxPatch,
-                                   assosiatedTracks: with)
-            .perform(initialState: initialState)
-            .flatMap { newState -> Observable<AppState> in
-           
-                ///starting new track playback
-                guard let newCurrentTrack = newState.firstTrack else {
-                    return .just(newState)
-                }
-                
-                return PrepareNewTrack(orderedTrack: newCurrentTrack,
-                                       shouldPlayImmidiatelly: true).perform(initialState: newState)
-            }
+        return AddTracksToLinkedPlaying(tracks: with, style: .now)
+            .perform(initialState: state)
         
     }
     

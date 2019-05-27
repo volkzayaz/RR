@@ -49,7 +49,8 @@ extension UserManager {
     static func update(track: Track, likeState: Track.LikeStates) -> Maybe<Void> {
         
         return UserRequest.like(track: track, state: likeState)
-            .rx.response(type: TrackLikeState.self)
+            .rx.emptyResponse()
+            .map { _ in TrackLikeState(id: track.id, state: likeState) }
             .do(onNext: { (state) in
                 
                 Dispatcher.dispatch(action: UpdateUser { user in

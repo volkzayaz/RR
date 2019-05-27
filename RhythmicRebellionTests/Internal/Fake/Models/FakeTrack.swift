@@ -14,7 +14,7 @@ extension Track: Fakeble {
         return Track.fake(id: fakeNumber(bound: 1000))
     }
     
-    static func fake(id: Int) -> Track {
+    static func fake(id: Int, audioFile: TrackAudioFile? = TrackAudioFile.fake()) -> Track {
         return Track(id: id,
                      songId: fakeNumber(bound: 1000),
                      name: fakeString(),
@@ -23,7 +23,7 @@ extension Track: Fakeble {
                      artist: Artist.fake(),
                      writer: TrackWriter.fake(),
                      images: [Image](),
-                     audioFile: TrackAudioFile.fake(),
+                     audioFile: audioFile,
                      backingAudioFile: DefaultAudioFile.fake())
         
     }

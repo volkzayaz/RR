@@ -20,14 +20,16 @@ struct AddTracksToLinkedPlaying: ActionCreator {
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
+        let playableTracks = tracks.filter { $0.isPlayable }
+        
         switch style {
         case .next:
-            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack)
+            return InsertTracks(tracks: playableTracks, afterTrack: initialState.currentTrack)
                 .perform(initialState: initialState)
             
         case .now:
             
-            return InsertTracks(tracks: tracks, afterTrack: initialState.currentTrack)
+            return InsertTracks(tracks: playableTracks, afterTrack: initialState.currentTrack)
                 .perform(initialState: initialState)
                 .flatMap { newState -> Observable<AppState> in
                     
@@ -41,7 +43,7 @@ struct AddTracksToLinkedPlaying: ActionCreator {
             
         case .last:
             
-            return InsertTracks(tracks: tracks, afterTrack: initialState.player.tracks.orderedTracks.last)
+            return InsertTracks(tracks: playableTracks, afterTrack: initialState.player.tracks.orderedTracks.last)
                 .perform(initialState: initialState)
             
         }

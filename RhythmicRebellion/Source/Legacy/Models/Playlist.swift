@@ -171,11 +171,11 @@ struct ArtistPlaylist: Codable, Equatable, TrackGroupPresentable, Playlist {
     
     let id: Int
     let name: String
-    let cover_image: Image
+    let cover_image: Image?
     
     var subtitle: String { return "" }
     var imageURL: String {
-        return cover_image.simpleURL ?? ""
+        return cover_image?.simpleURL ?? ""
     }
     
     ///Upon user perfoming actions like "playNext" or "to custom playlist"
@@ -185,7 +185,6 @@ struct ArtistPlaylist: Codable, Equatable, TrackGroupPresentable, Playlist {
         return TrackRequest.tracks(playlistId: id)
             .rx.baseResponse(type: [Track].self)
     }
-    
     
     var isDefault: Bool { return false }
     var thumbnailURL: URL? { return nil }

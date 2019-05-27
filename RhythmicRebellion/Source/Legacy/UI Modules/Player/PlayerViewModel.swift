@@ -120,7 +120,6 @@ final class PlayerViewModel: NSObject {
 
     var playerItemTrackLikeState: Driver<Track.LikeStates> {
         return appState
-            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { newState in
                 
                 guard let currentTrack = newState.currentTrack else { return .none }
@@ -339,8 +338,8 @@ final class PlayerViewModel: NSObject {
 
     func toggleLike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user.isGuest else {
-//            self.routeToAuthorization();
+        guard !appStateSlice.user.isGuest else { 
+            //self.routeToAuthorization();
             return
         }
 
@@ -350,12 +349,12 @@ final class PlayerViewModel: NSObject {
 
     func toggleDislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
-        guard appStateSlice.user.isGuest else {
-//            self.routeToAuthorization();
+        guard !appStateSlice.user.isGuest else {
+            //self.routeToAuthorization();
             return
         }
 
-        UserManager.update(track: track, likeState: .liked).subscribe()
+        UserManager.update(track: track, likeState: .disliked).subscribe()
         
     }
 
