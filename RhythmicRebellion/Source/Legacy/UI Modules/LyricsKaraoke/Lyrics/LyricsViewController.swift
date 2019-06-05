@@ -42,12 +42,6 @@ final class LyricsViewController: UIViewController {
         textView.isScrollEnabled = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-
     // MARK: - Actions -
     @IBAction func onKaraokeMode(sender: Any) {
         self.viewModel.switchToKaraoke()

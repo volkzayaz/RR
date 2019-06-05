@@ -22,6 +22,7 @@ class RootRouter : MVVM_Router {
     }
     
     func presentVideo() {
+        
         let x = R.storyboard.main.videoViewController()!
         x.viewModel = VideoViewModel(router: .init(owner: x))
         presentEmbededIntoNavigation(x)
