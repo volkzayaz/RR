@@ -81,6 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //NetworkActivityLogger.shared.startLogging()
         
         application.applicationSupportsShakeToEdit = true
+        application.statusBarStyle = .lightContent
         
         return true
     }

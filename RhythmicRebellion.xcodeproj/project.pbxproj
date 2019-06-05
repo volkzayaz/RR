@@ -17,6 +17,9 @@
 		734200D022A7F2FF00EE2CCC /* CurrentTrackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CD22A7F2FF00EE2CCC /* CurrentTrackRouter.swift */; };
 		734200D122A7F2FF00EE2CCC /* CurrentTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CE22A7F2FF00EE2CCC /* CurrentTrackViewController.swift */; };
 		734200D222A7F2FF00EE2CCC /* CurrentTrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CF22A7F2FF00EE2CCC /* CurrentTrackViewModel.swift */; };
+		734200D722A813AE00EE2CCC /* SettingsNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200D422A813AE00EE2CCC /* SettingsNavigationRouter.swift */; };
+		734200D822A813AE00EE2CCC /* SettingsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200D522A813AE00EE2CCC /* SettingsNavigationViewController.swift */; };
+		734200D922A813AE00EE2CCC /* SettingsNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200D622A813AE00EE2CCC /* SettingsNavigationViewModel.swift */; };
 		7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */; };
@@ -411,6 +414,9 @@
 		734200CD22A7F2FF00EE2CCC /* CurrentTrackRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackRouter.swift; sourceTree = "<group>"; };
 		734200CE22A7F2FF00EE2CCC /* CurrentTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackViewController.swift; sourceTree = "<group>"; };
 		734200CF22A7F2FF00EE2CCC /* CurrentTrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackViewModel.swift; sourceTree = "<group>"; };
+		734200D422A813AE00EE2CCC /* SettingsNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationRouter.swift; sourceTree = "<group>"; };
+		734200D522A813AE00EE2CCC /* SettingsNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewController.swift; sourceTree = "<group>"; };
+		734200D622A813AE00EE2CCC /* SettingsNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewModel.swift; sourceTree = "<group>"; };
 		7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCellRouter.swift; sourceTree = "<group>"; };
 		7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCollectionCell.swift; sourceTree = "<group>"; };
 		7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupViewModel.swift; sourceTree = "<group>"; };
@@ -857,6 +863,16 @@
 			path = CurrentTrack;
 			sourceTree = "<group>";
 		};
+		734200D322A8139600EE2CCC /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				734200D422A813AE00EE2CCC /* SettingsNavigationRouter.swift */,
+				734200D522A813AE00EE2CCC /* SettingsNavigationViewController.swift */,
+				734200D622A813AE00EE2CCC /* SettingsNavigationViewModel.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		7343FC9F2282E04300A3DA3D /* TrackGroup */ = {
 			isa = PBXGroup;
 			children = (
@@ -1207,6 +1223,7 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
+				734200D322A8139600EE2CCC /* Settings */,
 				734200CC22A7F2EB00EE2CCC /* CurrentTrack */,
 				735D780C22969A01000E43E1 /* Root */,
 				73F136CE222C289200FB8EBC /* Discover */,
@@ -2796,9 +2813,11 @@
 				7361C02A223690C6008EA36E /* AddTracksToLinkedPlaylist.swift in Sources */,
 				73F13819222C289200FB8EBC /* GradientView.swift in Sources */,
 				73F13906222C289200FB8EBC /* NotNilObservable.swift in Sources */,
+				734200D822A813AE00EE2CCC /* SettingsNavigationViewController.swift in Sources */,
 				73F13813222C289200FB8EBC /* RoundedImageVIew.swift in Sources */,
 				73F13890222C289200FB8EBC /* SignUpViewModel.swift in Sources */,
 				7361C01E22368EF3008EA36E /* PrepareNewTrackByHash.swift in Sources */,
+				734200D922A813AE00EE2CCC /* SettingsNavigationViewModel.swift in Sources */,
 				73F13853222C289200FB8EBC /* SelectableListControllerViewModel.swift in Sources */,
 				73F1388D222C289200FB8EBC /* RestorePasswordViewController.swift in Sources */,
 				73732119225523E000606E09 /* PlaylistRequest.swift in Sources */,
@@ -2974,6 +2993,7 @@
 				73F1382D222C289200FB8EBC /* FanPlaylistState.swift in Sources */,
 				73F138A1222C289200FB8EBC /* PageContentControllerViewModel.swift in Sources */,
 				73F13820222C289200FB8EBC /* AddonState.swift in Sources */,
+				734200D722A813AE00EE2CCC /* SettingsNavigationRouter.swift in Sources */,
 				73B97A702253995400B43D71 /* SetNewUser.swift in Sources */,
 				73F13864222C289200FB8EBC /* DatePickerTableViewCell.swift in Sources */,
 				73F138A2222C289200FB8EBC /* PageTrackState.swift in Sources */,
