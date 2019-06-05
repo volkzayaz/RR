@@ -14,7 +14,10 @@ class BaseFlowLayout: UICollectionViewFlowLayout {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        itemSize = CGSize(width: 177.5, height: 160.5)
+        itemSize = CGSize(width: 177.5, height: 190.5)
+        minimumInteritemSpacing = 17
+        sectionInset.left = 17
+        sectionInset.right = 17
     }
     
     func configureFor(bounds: CGRect) {
@@ -22,10 +25,11 @@ class BaseFlowLayout: UICollectionViewFlowLayout {
         let offset = minimumInteritemSpacing + sectionInset.left + sectionInset.right
         let viewWidth = min(bounds.width, bounds.height)
         let lineWidth = offset + 2 * itemSize.width
+        
         if lineWidth > viewWidth {
             let itemWidth = (viewWidth - offset) / 2
             itemSize = CGSize(width: floor(itemWidth),
-                              height: (itemWidth / 1.10625).rounded())
+                              height: (itemWidth / 1.10625).rounded() + 80)
         }
         
     }

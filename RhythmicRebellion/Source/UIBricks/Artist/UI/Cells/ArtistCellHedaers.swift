@@ -25,7 +25,7 @@ class ArtistCoverHeader: UICollectionReusableView {
                     }
                     
                     v?.contentMode = .center
-                    return R.image.playlistPlaceholder()
+                    return R.image.cover_placeholder()
                 }
                 .drive(coverImageView.rx.image(transitionType: CATransitionType.fade.rawValue))
                 .disposed(by: rx.disposeBag)

@@ -34,7 +34,7 @@ class ArtistsFollowedCollectionCell: UICollectionViewCell {
                     }
                     
                     v?.contentMode = .center
-                    return R.image.playlistPlaceholder()
+                    return R.image.cover_placeholder()
                 }
                 .drive(artistImageView.rx.image(transitionType: CATransitionType.fade.rawValue))
                 .disposed(by: disposeBag)
