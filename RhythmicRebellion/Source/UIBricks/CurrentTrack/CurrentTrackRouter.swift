@@ -1,23 +1,21 @@
 //
-//  RootRouter.swift
+//  CurrentTrackRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Vlad Soroka on 5/23/19.
+//  Created by Vlad Soroka on 6/5/19.
 //Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
 import UIKit
 
-class RootRouter : MVVM_Router {
+class CurrentTrackRouter : MVVM_Router {
     
     var owner: UIViewController {
         return _owner!
     }
     
-    private let interactor = PanDismissInteractor()
-    
-    weak private var _owner: RootRouter.T?
-    init(owner: RootRouter.T) {
+    weak private var _owner: CurrentTrackRouter.T?
+    init(owner: CurrentTrackRouter.T) {
         self._owner = owner
     }
     
@@ -40,18 +38,12 @@ class RootRouter : MVVM_Router {
     func presentPlaying() {
         
     }
-    
-    func presentPlayer() {
-        let x = R.storyboard.main.currentTrackViewController()!
-        x.viewModel = .init(router: .init(owner: x))
-        interactor.present(vc: x, on: owner)
-    }
-    
+
     private func presentEmbededIntoNavigation(_ x: UIViewController) {
         
         let nav = R.storyboard.main.eyeBrowNavigation()!
         nav.viewControllers = [x]
-
+        
         let closeButton = UIBarButtonItem(title: "Close",
                                           style: .done,
                                           target: self, action: #selector(RootRouter.dismissController))
@@ -66,20 +58,5 @@ class RootRouter : MVVM_Router {
         owner.dismiss(animated: true, completion: {
         })
     }
-    
-    
-    /**
-     
-     func showNextModule(with data: String) {
-     
-        let nextViewController = owner.storyboard.instantiate()
-        let nextRouter = NextRouter(owner: nextViewController)
-        let nextViewModel = NextViewModel(router: nextRuter, data: data)
-        
-        nextViewController.viewModel = nextViewModel
-        owner.present(nextViewController)
-     }
-     
-     */
     
 }

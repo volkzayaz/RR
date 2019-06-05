@@ -14,6 +14,9 @@
 		733768E92289954100C922D9 /* SplashRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E62289954100C922D9 /* SplashRouter.swift */; };
 		733768EA2289954100C922D9 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E72289954100C922D9 /* SplashViewController.swift */; };
 		733768EB2289954100C922D9 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E82289954100C922D9 /* SplashViewModel.swift */; };
+		734200D022A7F2FF00EE2CCC /* CurrentTrackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CD22A7F2FF00EE2CCC /* CurrentTrackRouter.swift */; };
+		734200D122A7F2FF00EE2CCC /* CurrentTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CE22A7F2FF00EE2CCC /* CurrentTrackViewController.swift */; };
+		734200D222A7F2FF00EE2CCC /* CurrentTrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CF22A7F2FF00EE2CCC /* CurrentTrackViewModel.swift */; };
 		7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */; };
@@ -405,6 +408,9 @@
 		733768E62289954100C922D9 /* SplashRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashRouter.swift; sourceTree = "<group>"; };
 		733768E72289954100C922D9 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		733768E82289954100C922D9 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
+		734200CD22A7F2FF00EE2CCC /* CurrentTrackRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackRouter.swift; sourceTree = "<group>"; };
+		734200CE22A7F2FF00EE2CCC /* CurrentTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackViewController.swift; sourceTree = "<group>"; };
+		734200CF22A7F2FF00EE2CCC /* CurrentTrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackViewModel.swift; sourceTree = "<group>"; };
 		7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCellRouter.swift; sourceTree = "<group>"; };
 		7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCollectionCell.swift; sourceTree = "<group>"; };
 		7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupViewModel.swift; sourceTree = "<group>"; };
@@ -841,6 +847,16 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
+		734200CC22A7F2EB00EE2CCC /* CurrentTrack */ = {
+			isa = PBXGroup;
+			children = (
+				734200CD22A7F2FF00EE2CCC /* CurrentTrackRouter.swift */,
+				734200CE22A7F2FF00EE2CCC /* CurrentTrackViewController.swift */,
+				734200CF22A7F2FF00EE2CCC /* CurrentTrackViewModel.swift */,
+			);
+			path = CurrentTrack;
+			sourceTree = "<group>";
+		};
 		7343FC9F2282E04300A3DA3D /* TrackGroup */ = {
 			isa = PBXGroup;
 			children = (
@@ -1191,6 +1207,7 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
+				734200CC22A7F2EB00EE2CCC /* CurrentTrack */,
 				735D780C22969A01000E43E1 /* Root */,
 				73F136CE222C289200FB8EBC /* Discover */,
 				733768D92289918800C922D9 /* Splash */,
@@ -2809,6 +2826,7 @@
 				73F1385C222C289200FB8EBC /* CitiesSelectableListControllerViewModel.swift in Sources */,
 				73F13832222C289200FB8EBC /* OptionalValue.swift in Sources */,
 				73F13903222C289200FB8EBC /* ImageRetreiver.swift in Sources */,
+				734200D122A7F2FF00EE2CCC /* CurrentTrackViewController.swift in Sources */,
 				73F1381E222C289200FB8EBC /* GenderSegmentedControl.swift in Sources */,
 				73F13844222C289200FB8EBC /* Token.swift in Sources */,
 				73F13917222C289200FB8EBC /* Dictionary+Extension.swift in Sources */,
@@ -2886,6 +2904,7 @@
 				73F138BD222C289200FB8EBC /* NowPlayingViewController.swift in Sources */,
 				73F13801222C289200FB8EBC /* ArtistRouter.swift in Sources */,
 				73F13918222C289200FB8EBC /* View+Extension.swift in Sources */,
+				734200D022A7F2FF00EE2CCC /* CurrentTrackRouter.swift in Sources */,
 				73F13863222C289200FB8EBC /* ListeningSettingsViewController.swift in Sources */,
 				735D78092292EE15000E43E1 /* ReplacePlaylists.swift in Sources */,
 				7373211C22552A4500606E09 /* UserManager.swift in Sources */,
@@ -3036,6 +3055,7 @@
 				73F138AA222C289200FB8EBC /* PlayerViewModel.swift in Sources */,
 				7361C00222368375008EA36E /* Dispatcher.swift in Sources */,
 				73F1390C222C289200FB8EBC /* SpinnerView.swift in Sources */,
+				734200D222A7F2FF00EE2CCC /* CurrentTrackViewModel.swift in Sources */,
 				73F13854222C289200FB8EBC /* SelectableListItemViewModel.swift in Sources */,
 				73F138D1222C289200FB8EBC /* KaraokeIntervalCell.swift in Sources */,
 				7361C02C22369144008EA36E /* RemoveTrack.swift in Sources */,
