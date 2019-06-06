@@ -25,13 +25,13 @@ class RootRouter : MVVM_Router {
         
         let x = R.storyboard.main.videoViewController()!
         x.viewModel = VideoViewModel(router: .init(owner: x))
-        presentEmbededIntoNavigation(x)
+        owner.present(x.embededIntoNavigation(), animated: true, completion: nil)
     }
     
     func presentLyrics() {
         let x = R.storyboard.lyricsKaraoke.lyricsKaraokeViewController()!
         x.viewModel = .init(router: .init(owner: x))
-        presentEmbededIntoNavigation(x)
+        owner.present(x.embededIntoNavigation(), animated: true, completion: nil)
     }
     
     func presentPromo() {
@@ -48,39 +48,6 @@ class RootRouter : MVVM_Router {
         interactor.present(vc: x, on: owner)
     }
     
-    private func presentEmbededIntoNavigation(_ x: UIViewController) {
-        
-        let nav = R.storyboard.main.eyeBrowNavigation()!
-        nav.viewControllers = [x]
-
-        let closeButton = UIBarButtonItem(title: "Close",
-                                          style: .done,
-                                          target: self, action: #selector(RootRouter.dismissController))
-        closeButton.tintColor = UIColor(fromHex: 0xBFC7FF)
-        
-        x.navigationItem.leftBarButtonItem = closeButton
-        
-        owner.present(nav, animated: true, completion: nil)
-    }
-    
-    @objc func dismissController() {
-        owner.dismiss(animated: true, completion: {
-        })
-    }
-    
-    
-    /**
-     
-     func showNextModule(with data: String) {
-     
-        let nextViewController = owner.storyboard.instantiate()
-        let nextRouter = NextRouter(owner: nextViewController)
-        let nextViewModel = NextViewModel(router: nextRuter, data: data)
-        
-        nextViewController.viewModel = nextViewModel
-        owner.present(nextViewController)
-     }
-     
-     */
-    
 }
+
+

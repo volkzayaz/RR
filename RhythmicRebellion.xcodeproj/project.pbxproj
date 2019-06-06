@@ -22,6 +22,7 @@
 		734200D922A813AE00EE2CCC /* SettingsNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200D622A813AE00EE2CCC /* SettingsNavigationViewModel.swift */; };
 		734200FE22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 734200FC22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m */; };
 		7342010022A8FA4800EE2CCC /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */; };
+		7342010222A909AA00EE2CCC /* UIViewController+Embeded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */; };
 		7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */; };
@@ -85,7 +86,7 @@
 		73DB1FD62271AC2300E01622 /* VideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DB1FD32271AC2300E01622 /* VideoViewModel.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
-		73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */; };
+		73F137F2222C289200FB8EBC /* ArtistsFollowedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCell.swift */; };
 		73F137F3222C289200FB8EBC /* ArtistsFollowedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366B222C289200FB8EBC /* ArtistsFollowedViewController.swift */; };
 		73F137F4222C289200FB8EBC /* ArtistsFollowedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366C222C289200FB8EBC /* ArtistsFollowedViewModel.swift */; };
 		73F137F5222C289200FB8EBC /* TrackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366F222C289200FB8EBC /* TrackRouter.swift */; };
@@ -423,6 +424,7 @@
 		734200FC22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKSwipeBetweenViewControllers.m; sourceTree = "<group>"; };
 		734200FD22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKSwipeBetweenViewControllers.h; sourceTree = "<group>"; };
 		734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Embeded.swift"; sourceTree = "<group>"; };
 		7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCellRouter.swift; sourceTree = "<group>"; };
 		7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCollectionCell.swift; sourceTree = "<group>"; };
 		7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupViewModel.swift; sourceTree = "<group>"; };
@@ -490,7 +492,7 @@
 		73DB1FD32271AC2300E01622 /* VideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewModel.swift; sourceTree = "<group>"; };
 		73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
-		73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCollectionCell.swift; sourceTree = "<group>"; };
+		73F1366A222C289200FB8EBC /* ArtistsFollowedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCell.swift; sourceTree = "<group>"; };
 		73F1366B222C289200FB8EBC /* ArtistsFollowedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedViewController.swift; sourceTree = "<group>"; };
 		73F1366C222C289200FB8EBC /* ArtistsFollowedViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedViewModel.swift; sourceTree = "<group>"; };
 		73F1366F222C289200FB8EBC /* TrackRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackRouter.swift; sourceTree = "<group>"; };
@@ -1230,6 +1232,7 @@
 				73A9BA662296E42900C7D6F2 /* PanDismissInteractor.swift */,
 				73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */,
 				73C02ACC228EE8D900A16B6E /* AlbumCell.xib */,
+				7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1247,19 +1250,19 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
-				734200D322A8139600EE2CCC /* Settings */,
+				73F13679222C289200FB8EBC /* Artist */,
+				73F13667222C289200FB8EBC /* ArtistsFollowed */,
+				73A56D2D22663E8600D2293B /* Auth */,
+				73F13677222C289200FB8EBC /* Composite */,
 				734200CC22A7F2EB00EE2CCC /* CurrentTrack */,
-				735D780C22969A01000E43E1 /* Root */,
 				73F136CE222C289200FB8EBC /* Discover */,
+				73F13773222C289200FB8EBC /* Playlists */,
+				735D780C22969A01000E43E1 /* Root */,
+				734200D322A8139600EE2CCC /* Settings */,
 				733768D92289918800C922D9 /* Splash */,
 				7343FC9F2282E04300A3DA3D /* TrackGroup */,
-				73F13773222C289200FB8EBC /* Playlists */,
-				73DB1FD02271AC1500E01622 /* Video */,
-				73A56D2D22663E8600D2293B /* Auth */,
-				73F13667222C289200FB8EBC /* ArtistsFollowed */,
 				73F1366D222C289200FB8EBC /* Tracks */,
-				73F13677222C289200FB8EBC /* Composite */,
-				73F13679222C289200FB8EBC /* Artist */,
+				73DB1FD02271AC1500E01622 /* Video */,
 			);
 			path = UIBricks;
 			sourceTree = "<group>";
@@ -1277,7 +1280,7 @@
 		73F13669222C289200FB8EBC /* View */ = {
 			isa = PBXGroup;
 			children = (
-				73F1366A222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift */,
+				73F1366A222C289200FB8EBC /* ArtistsFollowedCell.swift */,
 				73F1366B222C289200FB8EBC /* ArtistsFollowedViewController.swift */,
 			);
 			path = View;
@@ -2985,7 +2988,7 @@
 				73F138C0222C289200FB8EBC /* MyPlaylistsViewController.swift in Sources */,
 				735D78112296CB89000E43E1 /* RootViewController.swift in Sources */,
 				73F13860222C289200FB8EBC /* AddNewSelectableListItemTableViewCell.swift in Sources */,
-				73F137F2222C289200FB8EBC /* ArtistsFollowedCollectionCell.swift in Sources */,
+				73F137F2222C289200FB8EBC /* ArtistsFollowedCell.swift in Sources */,
 				73F138B3222C289200FB8EBC /* CreatePlaylistTableViewCell.swift in Sources */,
 				735D780B2292EE48000E43E1 /* AppendPlaylist.swift in Sources */,
 				73F138CC222C289200FB8EBC /* KaraokeRouter.swift in Sources */,
@@ -3147,6 +3150,7 @@
 				73F13809222C289200FB8EBC /* MaskedTextField.swift in Sources */,
 				73F138AF222C289200FB8EBC /* PlayerPlaylistRootControllerViewModel.swift in Sources */,
 				73F13829222C289200FB8EBC /* Addon.swift in Sources */,
+				7342010222A909AA00EE2CCC /* UIViewController+Embeded.swift in Sources */,
 				73F13808222C289200FB8EBC /* HobbiesContainerView.swift in Sources */,
 				73F138EE222C289200FB8EBC /* Page.swift in Sources */,
 			);

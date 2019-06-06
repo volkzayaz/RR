@@ -22,13 +22,13 @@ class CurrentTrackRouter : MVVM_Router {
     func presentVideo() {
         let x = R.storyboard.main.videoViewController()!
         x.viewModel = VideoViewModel(router: .init(owner: x))
-        presentEmbededIntoNavigation(x)
+        owner.present(x.embededIntoNavigation(), animated: true, completion: nil)
     }
     
     func presentLyrics() {
         let x = R.storyboard.lyricsKaraoke.lyricsKaraokeViewController()!
         x.viewModel = .init(router: .init(owner: x))
-        presentEmbededIntoNavigation(x)
+        owner.present(x.embededIntoNavigation(), animated: true, completion: nil)
     }
     
     func presentPromo() {
@@ -39,24 +39,4 @@ class CurrentTrackRouter : MVVM_Router {
         
     }
 
-    private func presentEmbededIntoNavigation(_ x: UIViewController) {
-        
-        let nav = R.storyboard.main.eyeBrowNavigation()!
-        nav.viewControllers = [x]
-        
-        let closeButton = UIBarButtonItem(title: "Close",
-                                          style: .done,
-                                          target: self, action: #selector(RootRouter.dismissController))
-        closeButton.tintColor = UIColor(fromHex: 0xBFC7FF)
-        
-        x.navigationItem.leftBarButtonItem = closeButton
-        
-        owner.present(nav, animated: true, completion: nil)
-    }
-    
-    @objc func dismissController() {
-        owner.dismiss(animated: true, completion: {
-        })
-    }
-    
 }

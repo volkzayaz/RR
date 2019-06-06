@@ -23,7 +23,7 @@ struct ArtistsFollowedRouter : MVVM_Router {
         
         let vc = R.storyboard.artist.instantiateInitialViewController()!
         vc.viewModel = ArtistViewModel(router: ArtistRouter(owner: vc), artist: artist)
-        owner.navigationController?.pushViewController(vc, animated: true)
+        owner.present(vc.embededIntoNavigation(), animated: true, completion: nil)
         
     }
     

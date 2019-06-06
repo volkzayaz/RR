@@ -61,5 +61,77 @@
             </objects>
             <point key="canvasLocation" x="164" y="135.38230884557723"/>
         </scene>
+        <!--Artists Followed View Controller-->
+        <scene sceneID="EDt-rf-gEa">
+            <objects>
+                <tableViewController storyboardIdentifier="ArtistsFollowedViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Ka-ot-SDX" customClass="ArtistsFollowedViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="58" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mhJ-FU-aHT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.086274509803921567" green="0.054901960784313725" blue="0.19607843137254902" alpha="1" colorSpace="calibratedRGB"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" translucent="NO" id="9yg-X3-FX1">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="color" keyPath="searchField.textColor">
+                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="searchField.backgroundColor">
+                                    <color key="value" red="0.15304270389999999" green="0.1260358989" blue="0.25044286249999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </searchBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="artist followed cell" rowHeight="58" id="bnc-tU-QFO" customClass="ArtistsFollowedCell" customModule="RhythmicRebellion" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="84" width="375" height="58"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bnc-tU-QFO" id="JLm-u2-13r">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="58"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="Metallica" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v9j-nO-D7w">
+                                            <rect key="frame" x="16" y="19" width="275" height="20"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DY3-dB-iXd">
+                                            <rect key="frame" x="299" y="14" width="60" height="30"/>
+                                            <state key="normal" title="Unfollow">
+                                                <color key="titleColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="unfollowAction:" destination="bnc-tU-QFO" eventType="touchUpInside" id="db2-cw-pXp"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="v9j-nO-D7w" firstAttribute="leading" secondItem="JLm-u2-13r" secondAttribute="leading" constant="16" id="0B8-ce-2gZ"/>
+                                        <constraint firstItem="DY3-dB-iXd" firstAttribute="centerY" secondItem="v9j-nO-D7w" secondAttribute="centerY" id="51R-3o-exF"/>
+                                        <constraint firstItem="DY3-dB-iXd" firstAttribute="leading" secondItem="v9j-nO-D7w" secondAttribute="trailing" constant="8" id="5sT-l9-Lao"/>
+                                        <constraint firstItem="v9j-nO-D7w" firstAttribute="centerY" secondItem="JLm-u2-13r" secondAttribute="centerY" id="Usj-Fw-7I2"/>
+                                        <constraint firstAttribute="trailing" secondItem="DY3-dB-iXd" secondAttribute="trailing" constant="16" id="YDW-Gf-4pm"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="followButton" destination="DY3-dB-iXd" id="UUT-C3-RLY"/>
+                                    <outlet property="nameLabel" destination="v9j-nO-D7w" id="etX-6A-c5A"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="8Ka-ot-SDX" id="DcC-qp-lSI"/>
+                            <outlet property="delegate" destination="8Ka-ot-SDX" id="4e6-6d-ajD"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NVp-CH-WWt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="164" y="838.83058470764627"/>
+        </scene>
     </scenes>
 </document>

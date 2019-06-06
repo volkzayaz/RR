@@ -14,9 +14,12 @@ class LibraryViewController: RKSwipeBetweenViewControllers {
         super.viewDidLoad()
         
         let x = R.storyboard.main.vc1()
-        let y = R.storyboard.main.vc2()
         
-        viewControllerArray.addObjects(from: [x,y])
+        
+        let y = R.storyboard.artist.artistsFollowedViewController()!
+        y.viewModel = ArtistsFollowedViewModel(router: ArtistsFollowedRouter(owner: y))
+        
+        viewControllerArray.addObjects(from: [x, y])
         
         buttonText = ["My playlists", "Following"]
         
