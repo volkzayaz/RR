@@ -13,8 +13,8 @@ class LibraryViewController: RKSwipeBetweenViewControllers {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let x = R.storyboard.main.vc1()
-        
+        let x = R.storyboard.playerPlaylist.ownPlaylist()!
+        x.viewModel = MyPlaylistsViewModel(router: MyPlaylistsRouter(owner: x))
         
         let y = R.storyboard.artist.artistsFollowedViewController()!
         y.viewModel = ArtistsFollowedViewModel(router: ArtistsFollowedRouter(owner: y))
@@ -24,7 +24,5 @@ class LibraryViewController: RKSwipeBetweenViewControllers {
         buttonText = ["My playlists", "Following"]
         
     }
-    
-    
     
 }

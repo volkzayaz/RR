@@ -195,7 +195,7 @@
         <!--My Playlists View Controller-->
         <scene sceneID="sJG-JO-kh9">
             <objects>
-                <viewController storyboardIdentifier="PlaylistsCollectionViewController" id="Z1l-HC-Ilt" customClass="MyPlaylistsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OwnPlaylist" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Z1l-HC-Ilt" customClass="MyPlaylistsViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kUU-Hu-QPo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -224,21 +224,12 @@
                     <navigationItem key="navigationItem" id="5oU-oj-dgf"/>
                     <connections>
                         <outlet property="collectionView" destination="UoS-GF-A2Z" id="akM-Js-w32"/>
-                        <segue destination="HsM-5U-XZs" kind="show" identifier="PlaylistContentSegueIdentifier" id="ib8-GL-IGH"/>
                         <segue destination="ueP-ye-VOQ" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="uXx-bE-cQT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zDn-ST-XYS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1891" y="-1504"/>
-        </scene>
-        <!--PlaylistViewController-->
-        <scene sceneID="4Is-Th-Ali">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="PlaylistViewController" id="HsM-5U-XZs" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IEr-pa-iUB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2486" y="-1504"/>
         </scene>
         <!--AddToPlaylistContainer-->
         <scene sceneID="atH-2w-tie">
