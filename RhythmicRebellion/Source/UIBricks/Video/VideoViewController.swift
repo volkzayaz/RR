@@ -27,6 +27,8 @@ class VideoViewController: UIViewController, MVVM_View {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Video"
+        
         viewModel.video1
             .drive(onNext: { [unowned self] (maybeURL) in
                 self.videoView.isHidden = maybeURL == nil

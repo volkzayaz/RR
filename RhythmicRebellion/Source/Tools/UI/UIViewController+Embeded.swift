@@ -16,9 +16,12 @@ extension UIViewController {
         nav.viewControllers = [self]
         
         let closeButton = UIBarButtonItem(title: "Close",
-                                          style: .done,
+                                          style: .plain,
                                           target: self, action: "dismissController")
         closeButton.tintColor = UIColor(fromHex: 0xBFC7FF)
+        
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        nav.navigationBar.titleTextAttributes = textAttributes
         
         self.navigationItem.leftBarButtonItem = closeButton
         
