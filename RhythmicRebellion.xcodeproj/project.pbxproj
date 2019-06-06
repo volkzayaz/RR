@@ -126,7 +126,6 @@
 		73F13819222C289200FB8EBC /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1369F222C289200FB8EBC /* GradientView.swift */; };
 		73F1381A222C289200FB8EBC /* RoundedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136A0222C289200FB8EBC /* RoundedLabel.swift */; };
 		73F1381B222C289200FB8EBC /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136A1222C289200FB8EBC /* RoundedButton.swift */; };
-		73F1381C222C289200FB8EBC /* EqualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136A2222C289200FB8EBC /* EqualizerView.swift */; };
 		73F1381D222C289200FB8EBC /* VerticalButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136A3222C289200FB8EBC /* VerticalButton.swift */; };
 		73F1381E222C289200FB8EBC /* GenderSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136A4222C289200FB8EBC /* GenderSegmentedControl.swift */; };
 		73F1381F222C289200FB8EBC /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136A5222C289200FB8EBC /* TagsView.swift */; };
@@ -532,7 +531,6 @@
 		73F1369F222C289200FB8EBC /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		73F136A0222C289200FB8EBC /* RoundedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedLabel.swift; sourceTree = "<group>"; };
 		73F136A1222C289200FB8EBC /* RoundedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
-		73F136A2222C289200FB8EBC /* EqualizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EqualizerView.swift; sourceTree = "<group>"; };
 		73F136A3222C289200FB8EBC /* VerticalButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerticalButton.swift; sourceTree = "<group>"; };
 		73F136A4222C289200FB8EBC /* GenderSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenderSegmentedControl.swift; sourceTree = "<group>"; };
 		73F136A5222C289200FB8EBC /* TagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = "<group>"; };
@@ -1396,7 +1394,6 @@
 				73F1369F222C289200FB8EBC /* GradientView.swift */,
 				73F136A0222C289200FB8EBC /* RoundedLabel.swift */,
 				73F136A1222C289200FB8EBC /* RoundedButton.swift */,
-				73F136A2222C289200FB8EBC /* EqualizerView.swift */,
 				73F136A3222C289200FB8EBC /* VerticalButton.swift */,
 				73F136A4222C289200FB8EBC /* GenderSegmentedControl.swift */,
 				73F136A5222C289200FB8EBC /* TagsView.swift */,
@@ -3019,7 +3016,6 @@
 				73F13887222C289200FB8EBC /* ProfileItemTableViewCell.swift in Sources */,
 				73F1387B222C289200FB8EBC /* ChangePasswordRouter.swift in Sources */,
 				73F13861222C289200FB8EBC /* LanguagesSelectableListControllerViewModel.swift in Sources */,
-				73F1381C222C289200FB8EBC /* EqualizerView.swift in Sources */,
 				73F13856222C289200FB8EBC /* HowHearSelectableListControllerViewModel.swift in Sources */,
 				73F1382D222C289200FB8EBC /* FanPlaylistState.swift in Sources */,
 				73F138A1222C289200FB8EBC /* PageContentControllerViewModel.swift in Sources */,

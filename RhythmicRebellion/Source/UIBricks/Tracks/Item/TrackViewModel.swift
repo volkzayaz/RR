@@ -23,14 +23,6 @@ extension TrackViewModel {
     
     var isPlayable: Bool { return track.isPlayable }
     
-    var previewOptionImage: Driver<UIImage?> {
-        return previewOption.map { $0?.image }
-    }
-    
-    var previewOptionHintText: Driver<String?> {
-        return previewOption.map { $0?.hintText }
-    }
-    
     fileprivate var previewOption: Driver<TrackPreviewOptionViewModel?> {
         
         let option = TrackPreviewOptionViewModel(type: .init(with: track,
@@ -56,25 +48,6 @@ extension TrackViewModel {
                                                    textImageGenerator: g)
                 
         }
-        
-    }
-    
-    var censorshipHintText: String? {
-        guard self.isCensorship == true else { return nil }
-        return NSLocalizedString("Contains explisit material", comment: "Contains explisit material hint text")
-    }
-    
-    var downloadHintText: String? {
-        
-        let userHasPurchase = user.hasPurchase(for: track)
-        
-        guard track.isFollowAllowFreeDownload || userHasPurchase else {
-            return nil
-        }
-        
-        if user.isGuest { return R.string.localizable.freeDownloadForFans() }
-        
-        return R.string.localizable.freeDownloadForFollowers()
         
     }
     
@@ -184,10 +157,6 @@ extension TrackViewModel {
                        sourceRect: sourceRect,
                        sourceView: sourceView)
         
-    }
-    
-    func showTip(tip: String, view: UIView, superView: UIView) {
-        router.showTip(text: tip, view: view, superView: superView)
     }
     
 }

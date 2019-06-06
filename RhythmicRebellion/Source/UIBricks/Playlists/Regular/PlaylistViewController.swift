@@ -19,11 +19,6 @@ final class PlaylistViewController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.trackTableViewCellIdentifier,
                                                  for: ip)!
         
-        let a = appStateSlice.player.tracks
-        
-        let f = cell.trackView.actionButton.frame
-        let v = cell.trackView.actionButtonContainerView
-        
         cell.trackView.setup(viewModel: data)
         
         return cell
@@ -156,7 +151,7 @@ extension PlaylistViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 58.0
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
