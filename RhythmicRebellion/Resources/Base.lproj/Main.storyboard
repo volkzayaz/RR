@@ -108,14 +108,14 @@
                                     <constraint firstAttribute="width" constant="24" id="fx6-HU-wyc"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzq-BX-RN5">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Invisible Kid" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzq-BX-RN5">
                                 <rect key="frame" x="58" y="44" width="262" height="18"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3K8-EY-miu">
-                                <rect key="frame" x="58" y="64" width="33" height="16"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Metallica" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3K8-EY-miu">
+                                <rect key="frame" x="58" y="64" width="54.5" height="16"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <color key="textColor" red="0.72999999999999998" green="0.77000000000000002" blue="0.97999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -127,7 +127,7 @@
                                 </constraints>
                                 <state key="normal" image="options-horizontal"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pdm-jJ-tNe">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pdm-jJ-tNe">
                                 <rect key="frame" x="328" y="53" width="24" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="znK-sh-p5L"/>
@@ -235,6 +235,12 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mDk-8s-JPz"/>
                     </view>
+                    <connections>
+                        <outlet property="artistLabel" destination="3K8-EY-miu" id="OmH-dQ-NS7"/>
+                        <outlet property="followButton" destination="Pdm-jJ-tNe" id="7bt-cV-cpH"/>
+                        <outlet property="nameLabel" destination="mzq-BX-RN5" id="EPg-oa-bet"/>
+                        <outlet property="progressConstraint" destination="3UJ-Jz-crD" id="tZz-oE-C09"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vyA-Ea-dwe" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please use your original music player or wait for the artist to end his talk" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zpU-Lw-fct">

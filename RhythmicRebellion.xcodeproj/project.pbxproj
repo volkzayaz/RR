@@ -23,6 +23,7 @@
 		734200FE22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 734200FC22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m */; };
 		7342010022A8FA4800EE2CCC /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */; };
 		7342010222A909AA00EE2CCC /* UIViewController+Embeded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */; };
+		7342010422AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7342010322AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift */; };
 		7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */; };
@@ -424,6 +425,7 @@
 		734200FD22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKSwipeBetweenViewControllers.h; sourceTree = "<group>"; };
 		734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Embeded.swift"; sourceTree = "<group>"; };
+		7342010322AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LayoutConstraint+Multipler.swift"; sourceTree = "<group>"; };
 		7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCellRouter.swift; sourceTree = "<group>"; };
 		7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupCollectionCell.swift; sourceTree = "<group>"; };
 		7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGroupViewModel.swift; sourceTree = "<group>"; };
@@ -1231,6 +1233,7 @@
 				73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */,
 				73C02ACC228EE8D900A16B6E /* AlbumCell.xib */,
 				7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */,
+				7342010322AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -3080,6 +3083,7 @@
 				73F1385F222C289200FB8EBC /* SelectableListItemTableViewCell.swift in Sources */,
 				73F13831222C289200FB8EBC /* Hobby.swift in Sources */,
 				73A56D2722663CFE00D2293B /* OAuth2.swift in Sources */,
+				7342010422AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift in Sources */,
 				739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */,
 				73F13912222C289200FB8EBC /* CatchError.swift in Sources */,
 				7361C0262236909F008EA36E /* StoreTracks.swift in Sources */,

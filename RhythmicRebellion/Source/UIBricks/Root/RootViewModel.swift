@@ -13,13 +13,48 @@ import RxCocoa
 
 extension RootViewModel {
     
-    /** Reference binding drivers that are going to be used in the corresponding view
-    
-    var text: Driver<String> {
-        return privateTextVar.asDriver().notNil()
+    var progressFraction: Driver<CGFloat> {
+        
+        return appState
+            .distinctUntilChanged { $0.player.currentItem == $1.player.currentItem }
+            .map { newState in
+                
+                guard let totalTime = newState.currentTrack?.track.audioFile?.duration,
+                    let currentTime = newState.player.currentItem?.state.progress else {
+                        return 0
+                }
+                
+                return CGFloat(currentTime / TimeInterval(totalTime))
+        }
+        .map { $0 == 0 ? 0.01 : $0 }
+        
     }
- 
-     */
+    
+    var title: Driver<String> {
+        
+        return appState
+            .distinctUntilChanged { $0.activePlayable == $1.activePlayable }
+            .map { $0.currendPlayableTitle }
+        
+    }
+    
+    var artist: Driver<String> {
+        
+        return appState
+            .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
+            .map { $0.currentTrack?.track.artist.name ?? "" }
+        
+    }
+    
+    var isArtistFollowed: Driver<Bool> {
+        
+        return appState.map { newState in
+            
+            guard let artist = newState.currentTrack?.track.artist else { return false }
+            
+            return newState.user.isFollower(for: artist.id)
+        }
+    }
     
 }
 

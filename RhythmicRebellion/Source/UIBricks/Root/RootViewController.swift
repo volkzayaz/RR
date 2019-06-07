@@ -15,20 +15,31 @@ class RootViewController: UIViewController, MVVM_View {
     
     var viewModel: RootViewModel!
     
-    /**
-     *  Connect any IBOutlets here
-     *  @IBOutlet weak var label: UILabel!
-     */
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var artistLabel: UILabel!
     
+    @IBOutlet weak var progressConstraint: NSLayoutConstraint!
+    @IBOutlet weak var followButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /**
-         *  Set up any bindings here
-         *  viewModel.labelText
-         *     .drive(label.rx.text)
-         *     .addDisposableTo(rx_disposeBag)
-         */
+        viewModel.progressFraction
+            .drive(onNext: { [unowned self] (x) in
+                self.progressConstraint = self.progressConstraint.setMultiplier(multiplier: x)
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.title.drive(nameLabel.rx.text)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.artist.drive(artistLabel.rx.text)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.isArtistFollowed
+            .map { $0 ? R.image.follow() : R.image.follow_inactive() }
+            .drive(followButton.rx.image(for: .normal))
+            .disposed(by: rx.disposeBag)
         
     }
     
