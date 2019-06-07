@@ -9,6 +9,10 @@
 
 import UIKit
 
+protocol ForcedAuthorizationRouter: class {
+    func routeToAuthorization(with authorizationType: AuthorizationType)
+}
+
 final class PagesRouter: NSObject, FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList

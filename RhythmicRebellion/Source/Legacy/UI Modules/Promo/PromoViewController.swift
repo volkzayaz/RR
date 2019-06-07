@@ -31,15 +31,7 @@ final class PromoViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: PromoViewModel!
-    private(set) var router: FlowRouter!
-
-    // MARK: - Configuration -
-
-    func configure(viewModel: PromoViewModel, router: FlowRouter) {
-        self.viewModel = viewModel
-        self.router    = router
-    }
+    var viewModel: PromoViewModel!
 
     // MARK: - Lifecycle -
 
@@ -52,7 +44,7 @@ final class PromoViewController: UIViewController {
         self.infoTextView.textContainer.lineFragmentPadding = 0
         self.infoTextView.textContainerInset = .zero
 
-        viewModel.load(with: self)
+        self.refreshUI()
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -83,22 +75,6 @@ final class PromoViewController: UIViewController {
 
     @IBAction func onToggleSilenceBIOandCommentary(sender: UISwitch) {
         self.viewModel.setSkipAddons(skip: sender.isOn)
-    }
-}
-
-// MARK: - Router -
-extension PromoViewController {
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        router.prepare(for: segue, sender: sender)
-        return super.prepare(for: segue, sender: sender)
-    }
-
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
-            return false
-        }
-        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
     }
 }
 

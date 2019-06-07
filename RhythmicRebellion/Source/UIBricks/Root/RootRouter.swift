@@ -35,7 +35,9 @@ class RootRouter : MVVM_Router {
     }
     
     func presentPromo() {
-        
+        let x = R.storyboard.main.promoViewController()!
+        x.viewModel = .init(router: .init(owner: x), delegate: x)
+        owner.present(x.embededIntoNavigation(), animated: true, completion: nil)
     }
     
     func presentPlaying() {

@@ -277,10 +277,9 @@
 		73F138D4222C289200FB8EBC /* KaraokeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1378F222C289200FB8EBC /* KaraokeViewController.swift */; };
 		73F138D5222C289200FB8EBC /* LyricsKaraokeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13790222C289200FB8EBC /* LyricsKaraokeRouter.swift */; };
 		73F138D6222C289200FB8EBC /* LyricsKaraokeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13791222C289200FB8EBC /* LyricsKaraokeViewController.swift */; };
-		73F138DB222C289200FB8EBC /* PromoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13798222C289200FB8EBC /* PromoViewModel.swift */; };
 		73F138DC222C289200FB8EBC /* PromoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13799222C289200FB8EBC /* PromoRouter.swift */; };
 		73F138DD222C289200FB8EBC /* PromoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379A222C289200FB8EBC /* PromoViewController.swift */; };
-		73F138DE222C289200FB8EBC /* PromoControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379B222C289200FB8EBC /* PromoControllerViewModel.swift */; };
+		73F138DE222C289200FB8EBC /* PromoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379B222C289200FB8EBC /* PromoViewModel.swift */; };
 		73F138E0222C289200FB8EBC /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379D222C289200FB8EBC /* PlayerViewController.swift */; };
 		73F138E1222C289200FB8EBC /* PlayerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1379E222C289200FB8EBC /* PlayerRouter.swift */; };
 		73F138E4222C289200FB8EBC /* RestApiServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137A2222C289200FB8EBC /* RestApiServiceError.swift */; };
@@ -680,10 +679,9 @@
 		73F1378F222C289200FB8EBC /* KaraokeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaraokeViewController.swift; sourceTree = "<group>"; };
 		73F13790222C289200FB8EBC /* LyricsKaraokeRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsKaraokeRouter.swift; sourceTree = "<group>"; };
 		73F13791222C289200FB8EBC /* LyricsKaraokeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsKaraokeViewController.swift; sourceTree = "<group>"; };
-		73F13798222C289200FB8EBC /* PromoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoViewModel.swift; sourceTree = "<group>"; };
 		73F13799222C289200FB8EBC /* PromoRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoRouter.swift; sourceTree = "<group>"; };
 		73F1379A222C289200FB8EBC /* PromoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoViewController.swift; sourceTree = "<group>"; };
-		73F1379B222C289200FB8EBC /* PromoControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoControllerViewModel.swift; sourceTree = "<group>"; };
+		73F1379B222C289200FB8EBC /* PromoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoViewModel.swift; sourceTree = "<group>"; };
 		73F1379D222C289200FB8EBC /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		73F1379E222C289200FB8EBC /* PlayerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerRouter.swift; sourceTree = "<group>"; };
 		73F137A2222C289200FB8EBC /* RestApiServiceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiServiceError.swift; sourceTree = "<group>"; };
@@ -1934,10 +1932,9 @@
 		73F13797222C289200FB8EBC /* Promo */ = {
 			isa = PBXGroup;
 			children = (
-				73F13798222C289200FB8EBC /* PromoViewModel.swift */,
 				73F13799222C289200FB8EBC /* PromoRouter.swift */,
 				73F1379A222C289200FB8EBC /* PromoViewController.swift */,
-				73F1379B222C289200FB8EBC /* PromoControllerViewModel.swift */,
+				73F1379B222C289200FB8EBC /* PromoViewModel.swift */,
 			);
 			path = Promo;
 			sourceTree = "<group>";
@@ -2908,7 +2905,6 @@
 				73F1380E222C289200FB8EBC /* DesignableButton.swift in Sources */,
 				73F137F7222C289200FB8EBC /* TrackView.swift in Sources */,
 				73F1380B222C289200FB8EBC /* TipView.swift in Sources */,
-				73F138DB222C289200FB8EBC /* PromoViewModel.swift in Sources */,
 				73F138D6222C289200FB8EBC /* LyricsKaraokeViewController.swift in Sources */,
 				73F13838222C289200FB8EBC /* Image.swift in Sources */,
 				7361C008223684EE008EA36E /* InsertTracks.swift in Sources */,
@@ -2992,7 +2988,7 @@
 				73A56D2B22663CFE00D2293B /* Facebook.swift in Sources */,
 				73F138EC222C289200FB8EBC /* LegacyResponses.swift in Sources */,
 				73F1384D222C289200FB8EBC /* PlaylistActions.swift in Sources */,
-				73F138DE222C289200FB8EBC /* PromoControllerViewModel.swift in Sources */,
+				73F138DE222C289200FB8EBC /* PromoViewModel.swift in Sources */,
 				73F13812222C289200FB8EBC /* ScrollableContentViewController.swift in Sources */,
 				73F13836222C289200FB8EBC /* Config.swift in Sources */,
 				73F1390B222C289200FB8EBC /* AVPlayer+rx.swift in Sources */,
