@@ -300,7 +300,6 @@
 		73F138FE222C289200FB8EBC /* FollowingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137CC222C289200FB8EBC /* FollowingRouter.swift */; };
 		73F138FF222C289200FB8EBC /* AlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137CE222C289200FB8EBC /* AlbumRequest.swift */; };
 		73F13900222C289200FB8EBC /* ArtistRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D0222C289200FB8EBC /* ArtistRequests.swift */; };
-		73F13902222C289200FB8EBC /* TextImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D4222C289200FB8EBC /* TextImageGenerator.swift */; };
 		73F13903222C289200FB8EBC /* ImageRetreiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D5222C289200FB8EBC /* ImageRetreiver.swift */; };
 		73F13904222C289200FB8EBC /* MoneyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D6222C289200FB8EBC /* MoneyFormatter.swift */; };
 		73F13905222C289200FB8EBC /* ValidatebleField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F137D8222C289200FB8EBC /* ValidatebleField+Extension.swift */; };
@@ -705,7 +704,6 @@
 		73F137CC222C289200FB8EBC /* FollowingRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingRouter.swift; sourceTree = "<group>"; };
 		73F137CE222C289200FB8EBC /* AlbumRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumRequest.swift; sourceTree = "<group>"; };
 		73F137D0222C289200FB8EBC /* ArtistRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistRequests.swift; sourceTree = "<group>"; };
-		73F137D4222C289200FB8EBC /* TextImageGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextImageGenerator.swift; sourceTree = "<group>"; };
 		73F137D5222C289200FB8EBC /* ImageRetreiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRetreiver.swift; sourceTree = "<group>"; };
 		73F137D6222C289200FB8EBC /* MoneyFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoneyFormatter.swift; sourceTree = "<group>"; };
 		73F137D8222C289200FB8EBC /* ValidatebleField+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ValidatebleField+Extension.swift"; sourceTree = "<group>"; };
@@ -2090,7 +2088,6 @@
 			children = (
 				73A56D0D22663C5D00D2293B /* Authorization */,
 				73F137D2222C289200FB8EBC /* UI */,
-				73F137D4222C289200FB8EBC /* TextImageGenerator.swift */,
 				73F137D5222C289200FB8EBC /* ImageRetreiver.swift */,
 				73F137D6222C289200FB8EBC /* MoneyFormatter.swift */,
 				73A56D3522663ED700D2293B /* Checkbox.swift */,
@@ -2968,7 +2965,6 @@
 				73F13807222C289200FB8EBC /* RhythmicRebellion.swift in Sources */,
 				73F138B4222C289200FB8EBC /* AddToPlaylistTableViewCell.swift in Sources */,
 				73F1388B222C289200FB8EBC /* RestorePasswordViewModel.swift in Sources */,
-				73F13902222C289200FB8EBC /* TextImageGenerator.swift in Sources */,
 				73F1384B222C289200FB8EBC /* DiscoverViewModel.swift in Sources */,
 				7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */,
 				733768EB2289954100C922D9 /* SplashViewModel.swift in Sources */,

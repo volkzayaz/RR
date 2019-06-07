@@ -16,9 +16,13 @@ class TrackView: UIView {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var equlizerView: UIView!
     @IBOutlet weak var indexLabel: UILabel!
     @IBOutlet weak var artworkImageView: UIImageView!
+    
+    @IBOutlet weak var equlizerView: UIView!
+    
+    @IBOutlet weak var attributesStackView: UIStackView!
+    @IBOutlet var previewLabel: UILabel!
     
     var viewModel: TrackViewModel!
     
@@ -49,6 +53,32 @@ class TrackView: UIView {
         indexLabel.text = viewModel.index
         ImageRetreiver.imageForURLWithoutProgress(url: viewModel.artwork)
             .drive(artworkImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        viewModel.attributes
+            .drive(onNext: { [unowned self] x in
+                
+                self.attributesStackView.subviews.forEach { $0.removeFromSuperview() }
+                
+                x.forEach { x in
+                    
+                    switch x {
+                        
+                    case .downloadEnabled:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.download_icon()))
+                        
+                    case .explicitMaterial:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.explicit()))
+                        
+                    case .raw(let str):
+                        self.previewLabel.text = str
+                        self.attributesStackView.addArrangedSubview(self.previewLabel)
+                        
+                    }
+                    
+                }
+                
+            })
             .disposed(by: disposeBag)
         
 //        viewModel.previewOptionHintText

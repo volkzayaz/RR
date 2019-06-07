@@ -306,9 +306,9 @@ extension PlayerViewController {
         
         self.playlistButton.isEnabled = true
         
-        viewModel.previewOptionImage
-            .drive(playerItemPreviewOptionButton.rx.image(for: .normal))
-            .disposed(by: rx.disposeBag)
+//        viewModel.previewOptionImage
+//            .drive(playerItemPreviewOptionButton.rx.image(for: .normal))
+//            .disposed(by: rx.disposeBag)
 
         viewModel.karaokeEnabled
             .drive(playerItemProgressView.rx.isSelected)

@@ -56,6 +56,54 @@ extension RootViewModel {
         }
     }
     
+    var attributes: Driver<[TrackViewModel.Attribute]> {
+        
+        return appState.distinctUntilChanged { $0.currentTrack == $1.currentTrack &&
+                                               $0.player.tracks.previewTime == $1.player.tracks.previewTime }
+            .map { state in
+                
+                guard let track = state.currentTrack?.track else {
+                    return []
+                }
+                
+                let user = state.user
+                var x: [TrackViewModel.Attribute] = []
+                
+                if track.isCensorship {
+                    x.append(.explicitMaterial)
+                }
+                
+                if user.hasPurchase(for: track) ||
+                    (user.isFollower(for: track.artist.id) && track.isFollowAllowFreeDownload) {
+                    x.append(.downloadEnabled)
+                }
+                
+                if case .limit45? = track.previewType {
+                    x.append( .raw(" 45 SEC ") )
+                    return x
+                }
+                else if case .limit45? = track.previewType {
+                    x.append( .raw(" 90 SEC ") )
+                    return x
+                }
+                else if case .full? = track.previewType {
+                    
+                    let z = TrackPreviewOptionViewModel(type: .init(with: track,
+                                                                    user: user,
+                                                                    μSecondsPlayed: state.player.tracks.previewTime[track.id]))
+                    
+                    if case .fullLimitTimes(let previewTimes) = z.type {
+                        x.append(.raw("   X\(previewTimes)   "))
+                    }
+                    
+                    return x
+                }
+                
+                return x
+                
+        }
+    }
+    
 }
 
 struct RootViewModel : MVVM_ViewModel {

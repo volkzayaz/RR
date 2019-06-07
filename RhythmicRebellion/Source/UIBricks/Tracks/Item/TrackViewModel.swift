@@ -34,34 +34,6 @@ extension TrackViewModel {
         return mode == .index
     }
     
-    fileprivate var previewOption: Driver<TrackPreviewOptionViewModel?> {
-        
-        let option = TrackPreviewOptionViewModel(type: .init(with: track,
-                                                             user: user,
-                                                             μSecondsPlayed: nil),
-                                                 textImageGenerator: textImageGenerator)
-        
-        guard case .fullLimitTimes = option.type else {
-            return .just(option)
-        }
-        
-        let u = user
-        let t = track
-        let g = textImageGenerator
-        
-        return appState.map { $0.player.tracks.previewTime[t.id] }
-            .distinctUntilChanged()
-            .map { time in
-                
-                return TrackPreviewOptionViewModel(type: .init(with: t,
-                                                               user: u,
-                                                               μSecondsPlayed: time),
-                                                   textImageGenerator: g)
-                
-        }
-        
-    }
-    
     var isPlaying: Driver<Bool> {
         return appState.map { $0.player.currentItem?.state.isPlaying ?? false }
                        .distinctUntilChanged()
@@ -80,20 +52,55 @@ extension TrackViewModel {
         
     }
     
-    var isCensorship: Bool {
-        return track.isCensorship
+    enum Attribute {
+        case explicitMaterial
+        case downloadEnabled
+        case raw(String)
     }
     
-    var downloadEnabled: Bool {
-        if user.hasPurchase(for: track) {
-            return true
+    var attributes: Driver<[Attribute]> {
+        
+        var x: [Attribute] = []
+        
+        if track.isCensorship {
+            x.append(.explicitMaterial)
         }
         
-        if user.isFollower(for: track.artist.id) && track.isFollowAllowFreeDownload {
-            return true
+        if user.hasPurchase(for: track) ||
+           (user.isFollower(for: track.artist.id) && track.isFollowAllowFreeDownload) {
+            x.append(.downloadEnabled)
         }
         
-        return false
+        if case .limit45? = track.previewType {
+            x.append( .raw(" 45 SEC ") )
+            return .just(x)
+        }
+        else if case .limit45? = track.previewType {
+            x.append( .raw(" 90 SEC ") )
+            return .just(x)
+        }
+        else if case .full? = track.previewType {
+            
+            let u = user
+            let t = track
+            
+            return appState.map { $0.player.tracks.previewTime[t.id] }
+                .distinctUntilChanged()
+                .map { time in
+                    
+                    let z = TrackPreviewOptionViewModel(type: .init(with: t,
+                                                                    user: u,
+                                                                    μSecondsPlayed: time))
+                    
+                    if case .fullLimitTimes(let previewTimes) = z.type {
+                        x.append(.raw("   X\(previewTimes)   "))
+                    }
+                    
+                    return x
+                }
+        }
+        
+        return .just(x)
     }
     
     var track: Track {
@@ -112,9 +119,6 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     let downloadViewModel: DownloadViewModel?
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
-    
-    
-    private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     
     init(router: TrackRouter,
          trackRepresentation: TrackRepresentation,
@@ -186,7 +190,6 @@ extension TrackViewModel: Equatable {
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
         return lhs.track == rhs.track &&
-            lhs.isCensorship == rhs.isCensorship &&
             ///TODO: compare only user items that are reflected in the UI (follow, listening progress)
             ///for example we don't care if user changed email for displaying track
             lhs.user == rhs.user

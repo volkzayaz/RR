@@ -21,6 +21,9 @@ class RootViewController: UIViewController, MVVM_View {
     @IBOutlet weak var progressConstraint: NSLayoutConstraint!
     @IBOutlet weak var followButton: UIButton!
 
+    @IBOutlet var attributesStackView: UIStackView!
+    @IBOutlet var previewTimesLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,6 +42,32 @@ class RootViewController: UIViewController, MVVM_View {
         viewModel.isArtistFollowed
             .map { $0 ? R.image.follow() : R.image.follow_inactive() }
             .drive(followButton.rx.image(for: .normal))
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.attributes
+            .drive(onNext: { [unowned self] x in
+                
+                self.attributesStackView.subviews.forEach { $0.removeFromSuperview() }
+                
+                x.forEach { x in
+                    
+                    switch x {
+                        
+                    case .downloadEnabled:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.download_icon()))
+                        
+                    case .explicitMaterial:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.explicit()))
+                        
+                    case .raw(let str):
+                        self.previewTimesLabel.text = str
+                        self.attributesStackView.addArrangedSubview(self.previewTimesLabel)
+                        
+                    }
+                    
+                }
+                
+            })
             .disposed(by: rx.disposeBag)
         
     }

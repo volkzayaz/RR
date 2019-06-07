@@ -39,6 +39,9 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
     
     @IBOutlet weak var nextUpLabel: UILabel!
     
+    @IBOutlet var attributesStackView: UIStackView!
+    @IBOutlet var previewTimesLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -101,6 +104,32 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
             .disposed(by: rx.disposeBag)
         
         viewModel.nextUpString.drive(nextUpLabel.rx.text)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.attributes
+            .drive(onNext: { [unowned self] x in
+                
+                self.attributesStackView.subviews.forEach { $0.removeFromSuperview() }
+                
+                x.forEach { x in
+                    
+                    switch x {
+                        
+                    case .downloadEnabled:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.download_icon()))
+                        
+                    case .explicitMaterial:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.explicit()))
+                        
+                    case .raw(let str):
+                        self.previewTimesLabel.text = str
+                        self.attributesStackView.addArrangedSubview(self.previewTimesLabel)
+                        
+                    }
+                    
+                }
+                
+            })
             .disposed(by: rx.disposeBag)
     }
     

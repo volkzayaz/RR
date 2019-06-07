@@ -71,43 +71,52 @@ extension CurrentTrackViewModel {
             .distinctUntilChanged()
     }
     
-    var preview: Driver<TrackPreviewOptionViewModel?> {
+    var attributes: Driver<[TrackViewModel.Attribute]> {
         
-        let g = TextImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
-        
-        return appState
-            .distinctUntilChanged { $0.currentTrack == $1.currentTrack &&
-                                    $0.user.profile == $1.user.profile }
-            .flatMapLatest { (newState) in
+        return appState.distinctUntilChanged { $0.currentTrack == $1.currentTrack &&
+            $0.player.tracks.previewTime == $1.player.tracks.previewTime }
+            .map { state in
                 
-                guard let track = newState.currentTrack?.track else { return .just(nil) }
-                
-                let option = TrackPreviewOptionViewModel(type: .init(with: track,
-                                                                     user: newState.user,
-                                                                     μSecondsPlayed: nil),
-                                                         textImageGenerator: g)
-                
-                guard case .fullLimitTimes = option.type else {
-                    return .just(option)
+                guard let track = state.currentTrack?.track else {
+                    return []
                 }
                 
-                return appState.map { $0.player.tracks.previewTime[track.id] }
-                    .distinctUntilChanged()
-                    .map { time in
-                        
-                        return TrackPreviewOptionViewModel(type: .init(with: track,
-                                                                       user: newState.user,
-                                                                       μSecondsPlayed: time),
-                                                           textImageGenerator: g)
-                        
+                let user = state.user
+                var x: [TrackViewModel.Attribute] = []
+                
+                if track.isCensorship {
+                    x.append(.explicitMaterial)
                 }
+                
+                if user.hasPurchase(for: track) ||
+                    (user.isFollower(for: track.artist.id) && track.isFollowAllowFreeDownload) {
+                    x.append(.downloadEnabled)
+                }
+                
+                if case .limit45? = track.previewType {
+                    x.append( .raw(" 45 SEC ") )
+                    return x
+                }
+                else if case .limit45? = track.previewType {
+                    x.append( .raw(" 90 SEC ") )
+                    return x
+                }
+                else if case .full? = track.previewType {
+                    
+                    let z = TrackPreviewOptionViewModel(type: .init(with: track,
+                                                                    user: user,
+                                                                    μSecondsPlayed: state.player.tracks.previewTime[track.id]))
+                    
+                    if case .fullLimitTimes(let previewTimes) = z.type {
+                        x.append(.raw("   X\(previewTimes)   "))
+                    }
+                    
+                    return x
+                }
+                
+                return x
                 
         }
-        
-    }
-    
-    var previewOptionImage: Driver<UIImage?> {
-        return preview.map { $0?.image }
     }
     
     ///binary state

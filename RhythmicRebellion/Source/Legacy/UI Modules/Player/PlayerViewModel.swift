@@ -143,8 +143,7 @@ final class PlayerViewModel: NSObject {
     
     var preview: Driver<TrackPreviewOptionViewModel?> {
         
-        let g = textImageGenerator
-        
+
         return appState
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack &&
                                     $0.user.profile == $1.user.profile }
@@ -154,8 +153,7 @@ final class PlayerViewModel: NSObject {
                 
                 let option = TrackPreviewOptionViewModel(type: .init(with: track,
                                                                      user: newState.user,
-                                                                     μSecondsPlayed: nil),
-                                                         textImageGenerator: g)
+                                                                     μSecondsPlayed: nil))
                 
                 guard case .fullLimitTimes = option.type else {
                     return .just(option)
@@ -167,17 +165,12 @@ final class PlayerViewModel: NSObject {
                         
                         return TrackPreviewOptionViewModel(type: .init(with: track,
                                                                        user: newState.user,
-                                                                       μSecondsPlayed: time),
-                                                           textImageGenerator: g)
+                                                                       μSecondsPlayed: time))
                         
                 }
                 
         }
         
-    }
-
-    var previewOptionImage: Driver<UIImage?> {
-        return preview.map { $0?.image }
     }
 
     let previewOptionHintText = BehaviorRelay<String?>(value: nil)
@@ -276,18 +269,12 @@ final class PlayerViewModel: NSObject {
 
     private(set) weak var router: PlayerRouter?
     
-    
-    private(set) var textImageGenerator: TextImageGenerator
-
     let disposeBag = DisposeBag()
 
     // MARK: - Lifecycle -
 
     init(router: PlayerRouter) {
         self.router = router
-        
-        
-        self.textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 14.0))
 
         super.init()
         

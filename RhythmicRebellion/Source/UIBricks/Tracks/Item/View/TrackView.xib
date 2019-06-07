@@ -27,7 +27,7 @@
                     </userDefinedRuntimeAttributes>
                 </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="R5g-z0-lRx">
-                    <rect key="frame" x="85" y="12" width="89" height="41"/>
+                    <rect key="frame" x="85" y="12" width="283" height="41"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invisible kid" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-y9-D3z">
                             <rect key="frame" x="0.0" y="0.0" width="89" height="20.5"/>
@@ -35,8 +35,8 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Metallica" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACO-cQ-wwM">
-                            <rect key="frame" x="0.0" y="20.5" width="51" height="20.5"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Metallica very long name for this band even longer name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACO-cQ-wwM">
+                            <rect key="frame" x="0.0" y="20.5" width="283" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.74901960784313726" green="0.7803921568627451" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -64,9 +64,39 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="wpZ-HZ-Jgb">
+                    <rect key="frame" x="372" y="36" width="101" height="14"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 45 SEC " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1N-ce-dRn">
+                            <rect key="frame" x="0.0" y="0.0" width="35" height="14"/>
+                            <color key="backgroundColor" red="0.50701785087585449" green="0.5403289794921875" blue="0.78656071424484253" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="14" id="RkN-u6-aFT"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
+                            <color key="textColor" red="0.10588235294117647" green="0.054901960784313725" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="2"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="download_icon" translatesAutoresizingMaskIntoConstraints="NO" id="la0-Ve-RtS">
+                            <rect key="frame" x="39" y="0.0" width="14" height="14"/>
+                        </imageView>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="explicit" translatesAutoresizingMaskIntoConstraints="NO" id="VEL-qJ-kcV">
+                            <rect key="frame" x="57" y="0.0" width="44" height="14"/>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="pb0-px-j5Z"/>
+                    </constraints>
+                </stackView>
             </subviews>
             <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="zeg-CD-osw" firstAttribute="leading" secondItem="wpZ-HZ-Jgb" secondAttribute="trailing" constant="20" id="2eK-Ib-1Xf"/>
                 <constraint firstItem="AW7-vZ-kaO" firstAttribute="top" secondItem="B4i-8W-bmq" secondAttribute="top" id="33l-Lb-mbD"/>
                 <constraint firstItem="B4i-8W-bmq" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="7w0-ox-uX9"/>
                 <constraint firstAttribute="bottom" secondItem="B4i-8W-bmq" secondAttribute="bottom" constant="8" id="AOo-0l-tph"/>
@@ -78,23 +108,29 @@
                 <constraint firstAttribute="trailing" secondItem="zeg-CD-osw" secondAttribute="trailing" constant="22" id="byF-UO-ljg"/>
                 <constraint firstItem="F7c-d1-XaN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="dyR-iv-cu5"/>
                 <constraint firstItem="R5g-z0-lRx" firstAttribute="bottom" secondItem="B4i-8W-bmq" secondAttribute="bottom" constant="-4" id="hGL-sY-eL0"/>
+                <constraint firstItem="wpZ-HZ-Jgb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ACO-cQ-wwM" secondAttribute="trailing" constant="4" id="ic6-fK-tXb"/>
                 <constraint firstItem="B4i-8W-bmq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="qFr-Lv-TaH"/>
                 <constraint firstItem="AW7-vZ-kaO" firstAttribute="trailing" secondItem="B4i-8W-bmq" secondAttribute="trailing" id="skt-xg-PtW"/>
+                <constraint firstItem="wpZ-HZ-Jgb" firstAttribute="centerY" secondItem="ACO-cQ-wwM" secondAttribute="centerY" id="v0l-9H-zBW"/>
                 <constraint firstItem="R5g-z0-lRx" firstAttribute="top" secondItem="B4i-8W-bmq" secondAttribute="top" constant="4" id="yoA-xw-Gkn"/>
                 <constraint firstItem="B4i-8W-bmq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="21" id="yp4-DO-o0Y"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="artworkImageView" destination="B4i-8W-bmq" id="IoG-7D-zeg"/>
+                <outlet property="attributesStackView" destination="wpZ-HZ-Jgb" id="9be-dl-L1T"/>
                 <outlet property="descriptionLabel" destination="ACO-cQ-wwM" id="FJ3-WZ-9TN"/>
                 <outlet property="equlizerView" destination="F7c-d1-XaN" id="Q0g-o5-lUG"/>
                 <outlet property="indexLabel" destination="AW7-vZ-kaO" id="EgS-DV-7IQ"/>
+                <outlet property="previewLabel" destination="A1N-ce-dRn" id="R5N-BZ-AwN"/>
                 <outlet property="titleLabel" destination="Yu7-y9-D3z" id="AqD-py-Hzr"/>
             </connections>
             <point key="canvasLocation" x="-114.40000000000001" y="-193.85307346326837"/>
         </view>
     </objects>
     <resources>
+        <image name="download_icon" width="14" height="14"/>
+        <image name="explicit" width="44" height="14"/>
         <image name="options-horizontal" width="24" height="24"/>
     </resources>
 </document>
