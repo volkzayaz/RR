@@ -33,19 +33,13 @@ extension NowPlayingViewModel {
     
 }
 
-final class NowPlayingViewModel {
+struct NowPlayingViewModel {
 
-    // MARK: - Private properties -
-
-    private(set) weak var router: PlayerNowPlayingRouter!
-    
     fileprivate let data = BehaviorRelay<[TrackViewModel]>(value: [])
-    
-    fileprivate let bag = DisposeBag()
     
     let tracksViewModel: TrackListViewModel
     
-    init(router: PlayerNowPlayingRouter) {
+    init(router: NowPlayingRouter) {
         self.router = router
         
         
@@ -101,6 +95,9 @@ final class NowPlayingViewModel {
         
     }
 
+    private let router: NowPlayingRouter
+    fileprivate let bag = DisposeBag()
+    
 }
 
 extension NowPlayingViewModel {

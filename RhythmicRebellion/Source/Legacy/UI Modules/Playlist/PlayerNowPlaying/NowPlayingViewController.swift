@@ -13,9 +13,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-import Rswift
-
-final class NowPlayingViewController: UIViewController {
+class NowPlayingViewController: UIViewController {
 
     lazy var dataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<String, TrackViewModel>>(configureCell: { [unowned self] (_, tableView, ip, data) in
         
@@ -36,19 +34,8 @@ final class NowPlayingViewController: UIViewController {
 
     private(set) weak var tipView: TipView?
 
-    private(set) var viewModel: NowPlayingViewModel!
-    private(set) var router: FlowRouter!
-
-    // MARK: - Configuration -
-
-    func configure(viewModel: NowPlayingViewModel, router: FlowRouter) {
-        self.viewModel = viewModel
-        self.router    = router
-        
-    }
-
-    // MARK: - Lifecycle -
-
+    var viewModel: NowPlayingViewModel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -72,28 +59,6 @@ final class NowPlayingViewController: UIViewController {
             .disposed(by: rx.disposeBag)
     }
 
-    override func viewWillTransition(to size: CGSize,
-                                     with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-
-        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
-            self.tipView?.updateFrame()
-        }) { (transitionCoordinatorContext) in
-            self.tipView?.dismissTouched()
-        }
-    }
-
-    override func willTransition(to newCollection: UITraitCollection,
-                                 with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
-
-        coordinator.animate(alongsideTransition: { (transitionCoordinatorContext) in
-            self.tipView?.updateFrame()
-        }) { (transitionCoordinatorContext) in
-            self.tipView?.dismissTouched()
-        }
-    }
-
     // MARK: - Actions -
     @IBAction func onRefresh(sender: UIRefreshControl) {
         self.viewModel.tracksViewModel.reload()
@@ -108,8 +73,6 @@ final class NowPlayingViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate -
-
 extension NowPlayingViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -122,24 +85,6 @@ extension NowPlayingViewController: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 58.0
-    }
-
-
-}
-
-// MARK: - Router -
-extension NowPlayingViewController {
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        router.prepare(for: segue, sender: sender)
-        return super.prepare(for: segue, sender: sender)
-    }
-
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
-            return false
-        }
-        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
     }
 
 }

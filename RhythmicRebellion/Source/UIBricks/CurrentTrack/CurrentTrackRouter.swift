@@ -36,7 +36,9 @@ class CurrentTrackRouter : MVVM_Router {
     }
     
     func presentPlaying() {
-        
+        let x = R.storyboard.playerPlaylist.nowPlayingViewController()!
+        x.viewModel = .init(router: .init(owner: x))
+        owner.present(x.embededIntoNavigation(), animated: true, completion: nil)
     }
 
 }

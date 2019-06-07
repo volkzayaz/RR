@@ -9,65 +9,24 @@
 
 import UIKit
 
-protocol PlayerNowPlayingRouter: FlowRouter {
-    var owner: UIViewController { get }
-    func showAddToPlaylist(for tracks: [Track])
-}
-
-final class DefaultPlayerNowPlayingRouter:  PlayerNowPlayingRouter, FlowRouterSegueCompatible {
+struct NowPlayingRouter: MVVM_Router {
     
     var owner: UIViewController {
-        return sourceController!
+        return _owner!
     }
     
-
-    typealias DestinationsList = SegueList
-    typealias Destinations = SegueActions
-
-    enum SegueList: String, SegueDestinationList {
-        case showAddToPlaylist = "AddToPlaylistSegueIdentifier"
-    }
-
-    enum SegueActions: SegueDestinations {
-        case showAddToPlaylist(tracks: [Track])
-
-        var identifier: SegueDestinationList {
-            switch self {
-            case .showAddToPlaylist: return SegueList.showAddToPlaylist
-            }
-        }
-    }
-
-    
-
-    private(set) weak var viewModel: NowPlayingViewModel?
-    private(set) weak var sourceController: UIViewController?
-
-    func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return true
-    }
-
-    func prepare(for destination: DefaultPlayerNowPlayingRouter.SegueActions, segue: UIStoryboardSegue) {
-
-        switch destination {
-        case .showAddToPlaylist(let tracks):
-            guard let addToPlaylistViewController = (segue.destination as? UINavigationController)?.topViewController as? AddToPlaylistViewController else { fatalError("Incorrect controller for embedPlaylists") }
-            let addToPlaylistRouter = AddToPlaylistRouter()
-            addToPlaylistRouter.start(controller: addToPlaylistViewController, tracks: tracks)
-            break
-        }
-    }
-
-    
-
-    func start(controller: NowPlayingViewController) {
-        sourceController = controller
-        let vm = NowPlayingViewModel(router: self)
-                                     
-        controller.configure(viewModel: vm, router: self)
+    weak private var _owner: NowPlayingRouter.T?
+    init(owner: NowPlayingRouter.T) {
+        self._owner = owner
     }
     
     func showAddToPlaylist(for tracks: [Track]) {
-        self.perform(segue: .showAddToPlaylist(tracks: tracks))
+        
+        let x = R.storyboard.main.addToPlaylistViewController()!
+        let r = AddToPlaylistRouter()
+        r.start(controller: x, tracks: tracks)
+        
+        owner.present(UINavigationController(rootViewController: x), animated: true, completion: nil)
+        
     }
 }
