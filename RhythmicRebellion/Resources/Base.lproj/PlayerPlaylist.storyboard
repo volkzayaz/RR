@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nCw-tO-NCr">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nCw-tO-NCr">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="0.30248679577464788" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -37,63 +37,20 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="eNi-kC-FRd"/>
                     </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="emptyPlaylistView" destination="E3b-YQ-Wn9" id="fI4-qq-Nbc"/>
-                        <outlet property="tableHeaderView" destination="y3W-SX-n73" id="4hd-sa-geM"/>
+                        <outlet property="clearBarButton" destination="F1J-vc-pZE" id="Zfu-yS-5qo"/>
                         <outlet property="tableView" destination="nCw-tO-NCr" id="vY7-L2-kse"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0uq-Zw-YB3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="E3b-YQ-Wn9">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty Playlist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d5f-xQ-yRH">
-                            <rect key="frame" x="15" y="11.5" width="107" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d5f-xQ-yRH" secondAttribute="trailing" id="1cU-yl-Pvw"/>
-                        <constraint firstItem="d5f-xQ-yRH" firstAttribute="centerY" secondItem="E3b-YQ-Wn9" secondAttribute="centerY" id="6qf-V5-w6r"/>
-                        <constraint firstItem="d5f-xQ-yRH" firstAttribute="leading" secondItem="E3b-YQ-Wn9" secondAttribute="leading" constant="15" id="VD1-Vm-Lm5"/>
-                    </constraints>
-                    <viewLayoutGuide key="safeArea" id="Yha-qf-mYY"/>
-                </view>
-                <view contentMode="scaleToFill" id="y3W-SX-n73" customClass="PlayerNowPlayingTableHeaderView" customModule="RhythmicRebellion" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="60"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuA-vY-e3g">
-                            <rect key="frame" x="107" y="15" width="118" height="30"/>
-                            <state key="normal" title="CLEAR PLAYLIST">
-                                <color key="titleColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="onClear" destination="y3W-SX-n73" eventType="touchUpInside" id="7hc-kl-HO7"/>
-                            </connections>
-                        </button>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vxF-ty-Ham">
-                            <rect key="frame" x="0.0" y="25.5" width="240" height="0.5"/>
-                            <color key="backgroundColor" red="0.69411764710000001" green="0.72549019609999998" blue="1" alpha="0.29976342429577463" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="0.5" id="2NX-TA-r1i"/>
-                            </constraints>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstItem="vxF-ty-Ham" firstAttribute="bottom" secondItem="Gvh-qm-TEW" secondAttribute="bottom" id="GZD-00-dMg"/>
-                        <constraint firstItem="cuA-vY-e3g" firstAttribute="centerY" secondItem="y3W-SX-n73" secondAttribute="centerY" id="dkR-Rd-RgN"/>
-                        <constraint firstItem="Gvh-qm-TEW" firstAttribute="trailing" secondItem="cuA-vY-e3g" secondAttribute="trailing" constant="15" id="m0L-O1-li8"/>
-                        <constraint firstAttribute="trailing" secondItem="vxF-ty-Ham" secondAttribute="trailing" id="p0r-r9-DED"/>
-                        <constraint firstItem="vxF-ty-Ham" firstAttribute="leading" secondItem="Gvh-qm-TEW" secondAttribute="leading" id="znu-Tf-lcX"/>
-                    </constraints>
-                    <viewLayoutGuide key="safeArea" id="Gvh-qm-TEW"/>
-                </view>
+                <barButtonItem image="ic-clear" id="F1J-vc-pZE">
+                    <color key="tintColor" red="0.74901960784313726" green="0.7803921568627451" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <action selector="clear:" destination="KaH-BI-4u4" id="q4P-qT-tUT"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1891" y="-2176"/>
         </scene>
@@ -136,4 +93,7 @@
             <point key="canvasLocation" x="1891" y="-1504"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic-clear" width="24" height="24"/>
+    </resources>
 </document>

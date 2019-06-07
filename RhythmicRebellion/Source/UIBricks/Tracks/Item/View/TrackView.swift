@@ -16,18 +16,16 @@ class TrackView: UIView {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-
+    @IBOutlet weak var equlizerView: UIView!
+    @IBOutlet weak var indexLabel: UILabel!
+    @IBOutlet weak var artworkImageView: UIImageView!
+    
     var viewModel: TrackViewModel!
     
     var disposeBag = DisposeBag()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    
-    }
-
     func prepareToDisplay() {
-        
+        artworkImageView.image = nil
     }
 
     func prepareToEndDisplay() {
@@ -41,6 +39,17 @@ class TrackView: UIView {
         self.titleLabel.text = viewModel.title
         self.descriptionLabel.text = viewModel.description
 
+        viewModel.equalizerHidden
+            .drive(equlizerView.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        indexLabel.isHidden = viewModel.indexHidden
+        artworkImageView.isHidden = viewModel.artworkHidden
+        
+        indexLabel.text = viewModel.index
+        ImageRetreiver.imageForURLWithoutProgress(url: viewModel.artwork)
+            .drive(artworkImageView.rx.image)
+            .disposed(by: disposeBag)
         
 //        viewModel.previewOptionHintText
 //            .drive(onNext: { [weak self] (t) in

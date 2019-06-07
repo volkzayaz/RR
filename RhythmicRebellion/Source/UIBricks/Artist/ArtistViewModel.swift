@@ -187,12 +187,13 @@ extension ArtistViewModel {
     struct TracksProvider: TrackProvider {
         
         let artist: Artist
+        var mode: TrackViewModel.ThumbMode { return .artwork }
         
-        func provide() -> Observable<[TrackProvidable]> {
+        func provide() -> Observable<[TrackRepresentation]> {
             
             return ArtistRequest.records(artist: artist)
                 .rx.response(type: BaseReponse<[Track]>.self)
-                .map { $0.data }
+                .map { $0.data.enumerated().map(TrackRepresentation.init) }
                 .asObservable()
             
         }

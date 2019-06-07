@@ -23,6 +23,17 @@ extension TrackViewModel {
     
     var isPlayable: Bool { return track.isPlayable }
     
+    var index: String { return "\(trackRepresentation.index + 1)" }
+    var artwork: String { return track.images.first?.simpleURL ?? "" }
+
+    var indexHidden: Bool {
+        return mode == .artwork
+    }
+    
+    var artworkHidden: Bool {
+        return mode == .index
+    }
+    
     fileprivate var previewOption: Driver<TrackPreviewOptionViewModel?> {
         
         let option = TrackPreviewOptionViewModel(type: .init(with: track,
@@ -58,13 +69,13 @@ extension TrackViewModel {
     
     var equalizerHidden: Driver<Bool> {
         
-        let t = trackProvidable
+        let t = trackRepresentation
         return appState.map { $0.currentTrack }
             .distinctUntilChanged()
             .map { x in
                 guard let x = x else { return true }
             
-                return !t.isEqualTo(orderedTrack: x)
+                return !t.providable.isSame(with: x)
             }
         
     }
@@ -85,39 +96,40 @@ extension TrackViewModel {
         return false
     }
     
+    var track: Track {
+        return trackRepresentation.track
+    }
+    
 }
 
 struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     
-    var identity: String {
-        return trackProvidable.identity
-    }
-    
-    var track: Track {
-        return trackProvidable.track
-    }
-    let trackProvidable: TrackProvidable
+    let trackRepresentation: TrackRepresentation
     let user: User
+    let actions: AlertActionsViewModel<ActionViewModel>
+    let mode: ThumbMode
+    
+    let downloadViewModel: DownloadViewModel?
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
-    let downloadViewModel: DownloadViewModel?
+    
     private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
     
-    let actions: AlertActionsViewModel<ActionViewModel>
-    
     init(router: TrackRouter,
-         trackProvidable: TrackProvidable,
+         trackRepresentation: TrackRepresentation,
+         mode: ThumbMode,
          user: User,
          actions: AlertActionsViewModel<ActionViewModel>) {
         
         self.router = router
-        self.trackProvidable = trackProvidable
+        self.trackRepresentation = trackRepresentation
+        self.mode = mode
         self.user = user
         self.actions = actions
         
-        if let _ = trackProvidable.track.audioFile?.urlString {
-            downloadViewModel = DownloadViewModel(downloadable: trackProvidable.track)
+        if let _ = trackRepresentation.track.audioFile?.urlString {
+            downloadViewModel = DownloadViewModel(downloadable: trackRepresentation.track)
         }
         else {
             downloadViewModel = nil
@@ -134,6 +146,15 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     let router: TrackRouter
     fileprivate let indicator: ViewIndicator = ViewIndicator()
     fileprivate let bag = DisposeBag()
+ 
+    var identity: String {
+        return trackRepresentation.identity
+    }
+    
+    enum ThumbMode {
+        case index
+        case artwork
+    }
     
 }
 

@@ -14,10 +14,12 @@ import RxDataSources
 
 struct NowPlayingProvider : TrackProvider {
     
-    func provide() -> Observable<[TrackProvidable]> {
+    var mode: TrackViewModel.ThumbMode { return .artwork }
+    
+    func provide() -> Observable<[TrackRepresentation]> {
         return appState.map { $0.player.tracks }
                        .distinctUntilChanged()
-                       .map { $0.orderedTracks }
+                       .map { $0.orderedTracks.map(TrackRepresentation.init) }
                        .asObservable()
     }
     
@@ -116,29 +118,5 @@ extension NowPlayingViewModel {
         
         Dispatcher.dispatch(action: AudioPlayer.Switch())
     }
-    
-    func confirmation(for action : PlayerNowPlayingTableHeaderView.Actions) -> ConfirmationAlertViewModel.ViewModel? {
 
-        switch action {
-        case .clear:
-            return ConfirmationAlertViewModel.Factory.makeClearPlaylistViewModel(actionCallback: { (actionType) in
-                switch actionType {
-                case .ok: Dispatcher.dispatch(action: ClearTracks())
-                default: break
-                }
-            })
-        default: return nil
-        }
-    }
-
-    func perform(action : PlayerNowPlayingTableHeaderView.Actions) {
-        switch action {
-        case .clear:
-            Dispatcher.dispatch(action: ClearTracks())
-            
-        default:
-            break
-        }
-    }
-    
 }

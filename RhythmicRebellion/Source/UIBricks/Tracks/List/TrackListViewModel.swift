@@ -75,15 +75,17 @@ extension ActionViewModel {
 
 protocol TrackProvider {
     
+    var mode: TrackViewModel.ThumbMode { get }
+    
     ////provide list of tracks to play back
-    func provide() -> Observable<[TrackProvidable]>
+    func provide() -> Observable<[TrackRepresentation]>
     
 }
 
 class TrackListViewModel {
 
     ////provide list of actions available for given track
-    typealias ActionsProvider = (TrackListViewModel, TrackProvidable) -> [ActionViewModel]
+    typealias ActionsProvider = (TrackListViewModel, TrackRepresentation) -> [ActionViewModel]
 
     let trackProivder: TrackProvider
     private let actionsProvider: ActionsProvider
@@ -92,13 +94,12 @@ class TrackListViewModel {
     private let reloadTrigger = BehaviorSubject<Void>(value: () )
     
     //private
-    let tracks = BehaviorRelay<[TrackProvidable]>(value: [])
-    //Need check
-    //Должны соответсвовать что вернул датапровайдер
+    let tracks = BehaviorRelay<[TrackRepresentation]>(value: [])
     
     var trackViewModels: Driver<[TrackViewModel]> {
         
         let r = router
+        let m = trackProivder.mode
         
         let userChanges = appState
             .map { $0.user }
@@ -113,7 +114,8 @@ class TrackListViewModel {
                 return tracks.map { track in
                     
                     return TrackViewModel(router: r.trackRouter(for: track.track),
-                                          trackProvidable: track,
+                                          trackRepresentation: track,
+                                          mode: m,
                                           user: user,
                                           actions: self.actions(of: track, for: user))
                     
@@ -149,7 +151,7 @@ class TrackListViewModel {
 
 extension TrackListViewModel {
     
-    private func actions(of track: TrackProvidable, for user: User) -> AlertActionsViewModel<ActionViewModel> {
+    private func actions(of track: TrackRepresentation, for user: User) -> AlertActionsViewModel<ActionViewModel> {
         
         let t = track
         
@@ -219,7 +221,7 @@ extension TrackListViewModel {
         reloadTrigger.onNext(())
     }
     
-    func drop(track: TrackProvidable) {
+    func drop(track: TrackRepresentation) {
         var x = tracks.value
         x.removeAll { $0.identity == track.identity }
         tracks.accept(x)
@@ -231,29 +233,51 @@ extension TrackListViewModel {
     
 }
 
-
 import RxDataSources
 
 protocol TrackProvidable {
-    var identity: String { get }
     var track: Track { get }
     
-    func isEqualTo(orderedTrack: OrderedTrack) -> Bool
+    func isSame(with orderedTrack: OrderedTrack) -> Bool
+}
+
+struct TrackRepresentation: Equatable, IdentifiableType {
+    
+    let identity: String
+    let index: Int
+    let providable: TrackProvidable
+    
+    init(index: Int, track: Track) {
+        self.providable = track
+        self.index = index
+        
+        self.identity = "\(track.id)"
+    }
+    
+    init(orderedTrack: OrderedTrack) {
+        self.providable = orderedTrack
+        self.index = 0
+        
+        self.identity = orderedTrack.orderHash
+    }
+    
+    var track: Track { return providable.track }
+    
+    static func ==(lhs: TrackRepresentation, rhs: TrackRepresentation) -> Bool {
+        return lhs.index == rhs.index && lhs.track == rhs.track
+    }
 }
 
 extension Track: TrackProvidable {
-    public var identity: String { return "\(id)" }
     var track: Track { return self }
     
-    func isEqualTo(orderedTrack: OrderedTrack) -> Bool {
-        return orderedTrack.track == self
+    func isSame(with orderedTrack: OrderedTrack) -> Bool {
+        return self == orderedTrack.track
     }
 }
 
 extension OrderedTrack: TrackProvidable {
-    var identity: String { return orderHash }
-    
-    func isEqualTo(orderedTrack: OrderedTrack) -> Bool {
-        return orderedTrack == self
+    func isSame(with orderedTrack: OrderedTrack) -> Bool {
+        return self.orderHash == orderedTrack.orderHash
     }
 }

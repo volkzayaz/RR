@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7300FACB22AA694D005BAB1B /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7300FACA22AA694D005BAB1B /* RootTabBarController.swift */; };
 		730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FE9223E5B1900571383 /* MediaWidget.swift */; };
 		730D1FEE223FD65A00571383 /* BaseActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FED223FD65A00571383 /* BaseActions.swift */; };
 		7327C9682252403800692810 /* ConfigRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327C9672252403800692810 /* ConfigRequest.swift */; };
@@ -259,7 +260,6 @@
 		73F138BB222C289200FB8EBC /* PlayerNowPlayingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1376E222C289200FB8EBC /* PlayerNowPlayingRouter.swift */; };
 		73F138BC222C289200FB8EBC /* NowPlayingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1376F222C289200FB8EBC /* NowPlayingViewModel.swift */; };
 		73F138BD222C289200FB8EBC /* NowPlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13770222C289200FB8EBC /* NowPlayingViewController.swift */; };
-		73F138BE222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13772222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift */; };
 		73F138BF222C289200FB8EBC /* MyPlaylistsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13774222C289200FB8EBC /* MyPlaylistsRouter.swift */; };
 		73F138C0222C289200FB8EBC /* MyPlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13775222C289200FB8EBC /* MyPlaylistsViewController.swift */; };
 		73F138C2222C289200FB8EBC /* MyPlaylistsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13777222C289200FB8EBC /* MyPlaylistsViewModel.swift */; };
@@ -404,6 +404,7 @@
 /* Begin PBXFileReference section */
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7300FACA22AA694D005BAB1B /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
 		730D1FE9223E5B1900571383 /* MediaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWidget.swift; sourceTree = "<group>"; };
 		730D1FED223FD65A00571383 /* BaseActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseActions.swift; sourceTree = "<group>"; };
 		7327C9672252403800692810 /* ConfigRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigRequest.swift; sourceTree = "<group>"; };
@@ -663,7 +664,6 @@
 		73F1376E222C289200FB8EBC /* PlayerNowPlayingRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingRouter.swift; sourceTree = "<group>"; };
 		73F1376F222C289200FB8EBC /* NowPlayingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingViewModel.swift; sourceTree = "<group>"; };
 		73F13770222C289200FB8EBC /* NowPlayingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingViewController.swift; sourceTree = "<group>"; };
-		73F13772222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerNowPlayingTableHeaderView.swift; sourceTree = "<group>"; };
 		73F13774222C289200FB8EBC /* MyPlaylistsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlaylistsRouter.swift; sourceTree = "<group>"; };
 		73F13775222C289200FB8EBC /* MyPlaylistsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlaylistsViewController.swift; sourceTree = "<group>"; };
 		73F13777222C289200FB8EBC /* MyPlaylistsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPlaylistsViewModel.swift; sourceTree = "<group>"; };
@@ -829,6 +829,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		7300FAC922AA693F005BAB1B /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				7300FACA22AA694D005BAB1B /* RootTabBarController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
 		730D1FE8223E5AD200571383 /* MediaWidget */ = {
 			isa = PBXGroup;
 			children = (
@@ -941,6 +949,7 @@
 		735D780C22969A01000E43E1 /* Root */ = {
 			isa = PBXGroup;
 			children = (
+				7300FAC922AA693F005BAB1B /* TabBar */,
 				735D780D2296CB89000E43E1 /* RootRouter.swift */,
 				735D780E2296CB89000E43E1 /* RootViewController.swift */,
 				735D780F2296CB89000E43E1 /* RootViewModel.swift */,
@@ -1850,7 +1859,6 @@
 		73F13771222C289200FB8EBC /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				73F13772222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3049,7 +3057,6 @@
 				73F138B2222C289200FB8EBC /* AddToPlaylistViewModel.swift in Sources */,
 				73F13837222C289200FB8EBC /* ModelSupport.swift in Sources */,
 				73F1388E222C289200FB8EBC /* SignUpViewController.swift in Sources */,
-				73F138BE222C289200FB8EBC /* PlayerNowPlayingTableHeaderView.swift in Sources */,
 				73F138B9222C289200FB8EBC /* AddToPlaylistControllerViewModel.swift in Sources */,
 				73F138C9222C289200FB8EBC /* LyricsViewController.swift in Sources */,
 				730D1FEE223FD65A00571383 /* BaseActions.swift in Sources */,
@@ -3138,6 +3145,7 @@
 				73F13905222C289200FB8EBC /* ValidatebleField+Extension.swift in Sources */,
 				73F13809222C289200FB8EBC /* MaskedTextField.swift in Sources */,
 				73F13829222C289200FB8EBC /* Addon.swift in Sources */,
+				7300FACB22AA694D005BAB1B /* RootTabBarController.swift in Sources */,
 				7342010222A909AA00EE2CCC /* UIViewController+Embeded.swift in Sources */,
 				73F13808222C289200FB8EBC /* HobbiesContainerView.swift in Sources */,
 				73F138EE222C289200FB8EBC /* Page.swift in Sources */,
