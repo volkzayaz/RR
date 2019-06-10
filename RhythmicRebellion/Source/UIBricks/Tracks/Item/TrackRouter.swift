@@ -31,15 +31,10 @@ struct TrackRouter : MVVM_Router {
         owner.present(activityViewController, animated: true, completion: nil)
     }
     
-    func present(actions: AlertActionsViewModel<ActionViewModel>,
+    func present(actions: [RRSheet.Action],
                  sourceRect: CGRect, sourceView: UIView) {
     
-        let actionSheet = UIAlertController.make(from: actions)
-        
-        actionSheet.popoverPresentationController?.sourceView = sourceView
-        actionSheet.popoverPresentationController?.sourceRect = sourceRect
-        
-        owner.present(actionSheet, animated: true, completion: nil)
+        owner.show(viewModels: actions, sourceRect: sourceRect, sourceView: sourceView)
         
     }
     

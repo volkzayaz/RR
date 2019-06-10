@@ -11,68 +11,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-struct ActionViewModel: AlertActionItemViewModel {
-    
-    let type: ActionType
-    let actionCallback: () -> Void
-    
-    init(_ type: ActionType, actionCallback: @escaping () -> Void) {
-        self.type = type
-        self.actionCallback = actionCallback
-    }
-    
-    var title: String {
-        return type.description
-    }
-    
-    var actionStyle: UIAlertAction.Style {
-        return type.actionStyle
-    }
-    
-}
-
-extension ActionViewModel {
-    
-    enum ActionType: CustomStringConvertible {
-        case forceToPlay
-        case doNotPlay
-        case playNow
-        case playNext
-        case playLast
-        case replaceCurrent
-        case toPlaylist
-        case delete
-        case cancel
-        case addToCart(String)
-        
-        var actionStyle: UIAlertAction.Style {
-            switch self {
-            case .delete: return .destructive
-            case .cancel: return .cancel
-            default: return .default
-            }
-        }
-        
-        var description: String {
-            switch self {
-            case .forceToPlay: return NSLocalizedString("Force To Play", comment: "Force To Play track action title")
-            case .doNotPlay: return NSLocalizedString("Do Not Play", comment: "Do Not Play track action title")
-            case .playNow:  return NSLocalizedString("Play Now", comment: "Play Now track action title")
-            case .playNext: return NSLocalizedString("Play Next", comment: "Play Next track action title")
-            case .playLast: return NSLocalizedString("Play Last", comment: "playLast track action title")
-            case .replaceCurrent: return NSLocalizedString("Replace current", comment: "Replace current track action title")
-            case .toPlaylist: return NSLocalizedString("To Playlist", comment: "To Playlist track action title")
-            case .addToCart(let priceStringValue):
-                let titleFormat = NSLocalizedString("Add To Cart %@", comment: "Add To Cart track action title format")
-                return String(format: titleFormat, priceStringValue)
-            case .delete: return NSLocalizedString("Delete", comment: "Delete track action title")
-            case .cancel: return NSLocalizedString("Cancel", comment: "Cancel action title")
-            }
-        }
-    }
-    
-}
-
 protocol TrackProvider {
     
     var mode: TrackViewModel.ThumbMode { get }
@@ -85,7 +23,7 @@ protocol TrackProvider {
 class TrackListViewModel {
 
     ////provide list of actions available for given track
-    typealias ActionsProvider = (TrackListViewModel, TrackRepresentation) -> [ActionViewModel]
+    typealias ActionsProvider = (TrackListViewModel, TrackRepresentation) -> [RRSheet.Action]
 
     let trackProivder: TrackProvider
     private let actionsProvider: ActionsProvider
@@ -151,29 +89,28 @@ class TrackListViewModel {
 
 extension TrackListViewModel {
     
-    private func actions(of track: TrackRepresentation, for user: User) -> AlertActionsViewModel<ActionViewModel> {
+    private func actions(of track: TrackRepresentation, for user: User) -> [RRSheet.Action] {
         
         let t = track
         
-        let cancel = [ActionViewModel(.cancel, actionCallback: {} )]
         let actions = actionsProvider(self, t)
         
-        let ftp = ActionViewModel(.forceToPlay) { [weak self] in
+        let ftp = RRSheet.Action(option: .forceToPlay) { [weak self] in
             self?.forceToPlay(track: t.track)
         }
         
-        let dnp = ActionViewModel(.doNotPlay) { [weak self] in
-            self?.doNotPlay(track: t.track)
-        }
+//        let dnp = RRSheet.Action(option: .doNotPlay) { [weak self] in
+//            self?.doNotPlay(track: t.track)
+//        }
         
-        var result: [ActionViewModel] = []
+        var result: [RRSheet.Action] = []
         
         if t.track.isCensorship, let p = user.profile, !p.forceToPlay.contains(t.track.id) {
             result.append(ftp)
         }
         
         if t.track.isCensorship, let p = user.profile, p.forceToPlay.contains(t.track.id) {
-            result.append(dnp)
+            //result.append(dnp)
         }
         
         if user.hasPurchase(for: t.track) {
@@ -181,9 +118,7 @@ extension TrackListViewModel {
             //result.append(add)
         }
         
-        return AlertActionsViewModel<ActionViewModel>(title: nil,
-                                                      message: nil,
-                                                      actions: result + actions + cancel)
+        return result + actions
         
     }
     

@@ -83,9 +83,11 @@
 		73C02ACB228EAE6F00A16B6E /* DisclaimerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */; };
 		73C02ACD228EE8D900A16B6E /* AlbumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73C02ACC228EE8D900A16B6E /* AlbumCell.xib */; };
 		73C3B8C5225A2F92004F380C /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C3B8C4225A2F92004F380C /* R.generated.swift */; };
+		73D3AD7622AE963A008DD933 /* RRSheetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73D3AD7522AE963A008DD933 /* RRSheetCell.xib */; };
 		73DB1FD42271AC2300E01622 /* VideoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DB1FD12271AC2300E01622 /* VideoRouter.swift */; };
 		73DB1FD52271AC2300E01622 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DB1FD22271AC2300E01622 /* VideoViewController.swift */; };
 		73DB1FD62271AC2300E01622 /* VideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DB1FD32271AC2300E01622 /* VideoViewModel.swift */; };
+		73E0A36022AE929100ED0209 /* SheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E0A35F22AE929100ED0209 /* SheetController.swift */; };
 		73F13661222AE5C900FB8EBC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */; };
 		73F137F1222C289200FB8EBC /* ArtistsFollowedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */; };
 		73F137F2222C289200FB8EBC /* ArtistsFollowedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1366A222C289200FB8EBC /* ArtistsFollowedCell.swift */; };
@@ -171,9 +173,7 @@
 		73F13848222C289200FB8EBC /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D2222C289200FB8EBC /* DiscoverViewController.swift */; };
 		73F13849222C289200FB8EBC /* DiscoverRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D3222C289200FB8EBC /* DiscoverRouter.swift */; };
 		73F1384B222C289200FB8EBC /* DiscoverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D6222C289200FB8EBC /* DiscoverViewModel.swift */; };
-		73F1384C222C289200FB8EBC /* AlertActionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D8222C289200FB8EBC /* AlertActionsViewModel.swift */; };
-		73F1384D222C289200FB8EBC /* PlaylistActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D9222C289200FB8EBC /* PlaylistActions.swift */; };
-		73F1384E222C289200FB8EBC /* ConfirmationAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136DA222C289200FB8EBC /* ConfirmationAlertViewModel.swift */; };
+		73F1384C222C289200FB8EBC /* SheetOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136D8222C289200FB8EBC /* SheetOptions.swift */; };
 		73F13853222C289200FB8EBC /* SelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136E1222C289200FB8EBC /* SelectableListControllerViewModel.swift */; };
 		73F13854222C289200FB8EBC /* SelectableListItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136E3222C289200FB8EBC /* SelectableListItemViewModel.swift */; };
 		73F13855222C289200FB8EBC /* AddNewSelectableListItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136E4222C289200FB8EBC /* AddNewSelectableListItemViewModel.swift */; };
@@ -483,9 +483,11 @@
 		73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerLabel.swift; sourceTree = "<group>"; };
 		73C02ACC228EE8D900A16B6E /* AlbumCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumCell.xib; sourceTree = "<group>"; };
 		73C3B8C4225A2F92004F380C /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
+		73D3AD7522AE963A008DD933 /* RRSheetCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RRSheetCell.xib; sourceTree = "<group>"; };
 		73DB1FD12271AC2300E01622 /* VideoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRouter.swift; sourceTree = "<group>"; };
 		73DB1FD22271AC2300E01622 /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		73DB1FD32271AC2300E01622 /* VideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewModel.swift; sourceTree = "<group>"; };
+		73E0A35F22AE929100ED0209 /* SheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetController.swift; sourceTree = "<group>"; };
 		73F13660222AE5C900FB8EBC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73F13668222C289200FB8EBC /* ArtistsFollowedRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedRouter.swift; sourceTree = "<group>"; };
 		73F1366A222C289200FB8EBC /* ArtistsFollowedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistsFollowedCell.swift; sourceTree = "<group>"; };
@@ -572,9 +574,7 @@
 		73F136D2222C289200FB8EBC /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		73F136D3222C289200FB8EBC /* DiscoverRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverRouter.swift; sourceTree = "<group>"; };
 		73F136D6222C289200FB8EBC /* DiscoverViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewModel.swift; sourceTree = "<group>"; };
-		73F136D8222C289200FB8EBC /* AlertActionsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertActionsViewModel.swift; sourceTree = "<group>"; };
-		73F136D9222C289200FB8EBC /* PlaylistActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistActions.swift; sourceTree = "<group>"; };
-		73F136DA222C289200FB8EBC /* ConfirmationAlertViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationAlertViewModel.swift; sourceTree = "<group>"; };
+		73F136D8222C289200FB8EBC /* SheetOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetOptions.swift; sourceTree = "<group>"; };
 		73F136E1222C289200FB8EBC /* SelectableListControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectableListControllerViewModel.swift; sourceTree = "<group>"; };
 		73F136E3222C289200FB8EBC /* SelectableListItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectableListItemViewModel.swift; sourceTree = "<group>"; };
 		73F136E4222C289200FB8EBC /* AddNewSelectableListItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewSelectableListItemViewModel.swift; sourceTree = "<group>"; };
@@ -1227,12 +1227,23 @@
 		73C02AC9228EAE5E00A16B6E /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				73D3AD7722AE9D5E008DD933 /* AlertSheet */,
 				73A9BA662296E42900C7D6F2 /* PanDismissInteractor.swift */,
 				73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */,
 				7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */,
 				7342010322AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		73D3AD7722AE9D5E008DD933 /* AlertSheet */ = {
+			isa = PBXGroup;
+			children = (
+				73D3AD7522AE963A008DD933 /* RRSheetCell.xib */,
+				73F136D8222C289200FB8EBC /* SheetOptions.swift */,
+				73E0A35F22AE929100ED0209 /* SheetController.swift */,
+			);
+			path = AlertSheet;
 			sourceTree = "<group>";
 		};
 		73DB1FD02271AC1500E01622 /* Video */ = {
@@ -1455,7 +1466,6 @@
 		73F136CD222C289200FB8EBC /* UI Modules */ = {
 			isa = PBXGroup;
 			children = (
-				73F136D7222C289200FB8EBC /* ActionsViewModels */,
 				73F136E0222C289200FB8EBC /* SelectableList */,
 				73F136F4222C289200FB8EBC /* ListeningSettings */,
 				73F1370E222C289200FB8EBC /* Segues */,
@@ -1479,16 +1489,6 @@
 				73F136D6222C289200FB8EBC /* DiscoverViewModel.swift */,
 			);
 			path = Discover;
-			sourceTree = "<group>";
-		};
-		73F136D7222C289200FB8EBC /* ActionsViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				73F136D8222C289200FB8EBC /* AlertActionsViewModel.swift */,
-				73F136D9222C289200FB8EBC /* PlaylistActions.swift */,
-				73F136DA222C289200FB8EBC /* ConfirmationAlertViewModel.swift */,
-			);
-			path = ActionsViewModels;
 			sourceTree = "<group>";
 		};
 		73F136E0222C289200FB8EBC /* SelectableList */ = {
@@ -2577,6 +2577,7 @@
 				733768E12289949000C922D9 /* splash.gif in Resources */,
 				73F137FF222C289200FB8EBC /* ArtistSectionHeader.xib in Resources */,
 				737622F621CD28AF005B603E /* Artist.storyboard in Resources */,
+				73D3AD7622AE963A008DD933 /* RRSheetCell.xib in Resources */,
 				7641B2E321CA4E5C005535E6 /* LyricsKaraoke.storyboard in Resources */,
 				73F137F8222C289200FB8EBC /* TrackView.xib in Resources */,
 			);
@@ -2840,7 +2841,7 @@
 				73F138FD222C289200FB8EBC /* BaseRouter.swift in Sources */,
 				73A56D2822663CFE00D2293B /* Helpers.swift in Sources */,
 				73F13802222C289200FB8EBC /* ArtistViewModel.swift in Sources */,
-				73F1384C222C289200FB8EBC /* AlertActionsViewModel.swift in Sources */,
+				73F1384C222C289200FB8EBC /* SheetOptions.swift in Sources */,
 				73F13803222C289200FB8EBC /* AppState.swift in Sources */,
 				73F1380A222C289200FB8EBC /* TextFields.swift in Sources */,
 				73F13822222C289200FB8EBC /* TrackForceToPlayState.swift in Sources */,
@@ -2879,7 +2880,6 @@
 				73F1380D222C289200FB8EBC /* ErrorPresenting.swift in Sources */,
 				73F138B8222C289200FB8EBC /* AddPlaylistToPlaylistControllerViewModel.swift in Sources */,
 				73F13835222C289200FB8EBC /* PlayerConfig.swift in Sources */,
-				73F1384E222C289200FB8EBC /* ConfirmationAlertViewModel.swift in Sources */,
 				73A56D1822663C5D00D2293B /* FacebookAuthenticator.swift in Sources */,
 				73F1383A222C289200FB8EBC /* PlayerPlaylistItemPatch.swift in Sources */,
 				73F1390E222C289200FB8EBC /* AnimationStatus.swift in Sources */,
@@ -2976,7 +2976,6 @@
 				73F13828222C289200FB8EBC /* Lyrics.swift in Sources */,
 				73A56D2B22663CFE00D2293B /* Facebook.swift in Sources */,
 				73F138EC222C289200FB8EBC /* LegacyResponses.swift in Sources */,
-				73F1384D222C289200FB8EBC /* PlaylistActions.swift in Sources */,
 				73F138DE222C289200FB8EBC /* PromoViewModel.swift in Sources */,
 				73F13812222C289200FB8EBC /* ScrollableContentViewController.swift in Sources */,
 				73F13836222C289200FB8EBC /* Config.swift in Sources */,
@@ -3067,6 +3066,7 @@
 				73F138EA222C289200FB8EBC /* UserRequestPayload.swift in Sources */,
 				73F13881222C289200FB8EBC /* ProfileViewController.swift in Sources */,
 				73F1383E222C289200FB8EBC /* Country.swift in Sources */,
+				73E0A36022AE929100ED0209 /* SheetController.swift in Sources */,
 				73F13817222C289200FB8EBC /* UIImageView+Placeholder.swift in Sources */,
 				73F13857222C289200FB8EBC /* SelectableListViewController.swift in Sources */,
 				73F1382C222C289200FB8EBC /* Genre.swift in Sources */,

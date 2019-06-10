@@ -74,13 +74,8 @@ final class PlaylistViewController: UIViewController {
     }
 
     @IBAction func moreActions(_ sender: Any) {
-        
-        guard let actionsModel = viewModel.playlistActions() else {  return }
-        
-        self.show(alertActionsviewModel: actionsModel,
-                  sourceRect: self.tableHeaderView.actionButton.bounds,
-                  sourceView: self.tableHeaderView.actionButton)
-        
+        viewModel.showActions(sourceView: tableHeaderView.actionButton,
+                              sourceRect: tableHeaderView.actionButton!.bounds)
     }
     
     @IBAction func playNow(_ sender: Any) {

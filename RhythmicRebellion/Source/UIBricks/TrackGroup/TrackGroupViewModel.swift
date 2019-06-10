@@ -87,8 +87,6 @@ extension TrackGroupViewModel {
 
     func presentActions() {
         
-        let cancel = [ActionViewModel(.cancel, actionCallback: {} )]
-        
         let data = self.data
         let bag = self.bag
         
@@ -113,29 +111,28 @@ extension TrackGroupViewModel {
         
         let r = router
         var x =
-            [ActionViewModel(.playNow, actionCallback: dispatcher {
+            [
+             RRSheet.Action(option: .playNow, action: dispatcher {
                 return AddTracksToLinkedPlaying(tracks: $0, style: .now)
-            }),
-             ActionViewModel(.playNext, actionCallback: dispatcher {
+             }),
+             RRSheet.Action(option: .playNext, action: dispatcher {
                 return AddTracksToLinkedPlaying(tracks: $0, style: .next)
              }),
-             ActionViewModel(.playLast, actionCallback: dispatcher {
+             RRSheet.Action(option: .playLater, action: dispatcher {
                 return AddTracksToLinkedPlaying(tracks: $0, style: .last)
              }),
-             ActionViewModel(.replaceCurrent, actionCallback: dispatcher {
+             RRSheet.Action(option: .replace, action: dispatcher {
                 return ReplaceTracks(with: $0)
              })
              ]
         
         if !appStateSlice.user.isGuest {
-            x.append(ActionViewModel(.toPlaylist, actionCallback: loader {
+            x.append(RRSheet.Action(option: .addToLibrary, action: loader {
                 r.presentPlaylistCreation(for: $0)
             }))
         }
         
-        router.present(actions: AlertActionsViewModel<ActionViewModel>(title: nil,
-                                                                       message: nil,
-                                                                       actions: x + cancel))
+        router.present(actions: x)
     }
     
 }

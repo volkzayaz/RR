@@ -222,10 +222,8 @@ final class ProfileSettingsViewController: UIViewController {
 
         guard self.viewModel.isDirty == true else { self.viewModel.navigateBack(); return }
 
-        let confirmationViewModel = self.viewModel.unsavedChangesConfirmationViewModel()
-        let confirmationAlertViewController = UIAlertController.make(from: confirmationViewModel, style: .alert)
-
-        self.present(confirmationAlertViewController, animated: true, completion: nil)
+        self.viewModel.unsavedChangesConfirmationViewModel()
+        
     }
 
     // MARK: - Notifications -

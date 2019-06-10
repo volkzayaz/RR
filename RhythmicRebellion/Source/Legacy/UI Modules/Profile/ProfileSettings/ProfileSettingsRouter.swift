@@ -9,18 +9,7 @@
 
 import UIKit
 
-protocol ProfileSettingsRouter: FlowRouter {
-    func showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: @escaping (Country) -> Void)
-    func showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: @escaping (Region) -> Void)
-    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: @escaping (City) -> Void)
-    func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void)
-    func showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, additionalItems: [Genre]?, selectionCallback: @escaping ([Genre]) -> Void)
-    func showLanguagesSelectableList(dataSource: LanguagesDataSource, selectedItems: Language?, selectionCallback: @escaping (Language) -> Void)
-
-    func navigateBack()
-}
-
-final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegueCompatible {
+final class ProfileSettingsRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -63,7 +52,7 @@ final class DefaultProfileSettingsRouter:  ProfileSettingsRouter, FlowRouterSegu
         return true
     }
 
-    func prepare(for destination: DefaultProfileSettingsRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: ProfileSettingsRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .showContriesSelectableList(let dataSource, let selectedItem, let selectionCallback):

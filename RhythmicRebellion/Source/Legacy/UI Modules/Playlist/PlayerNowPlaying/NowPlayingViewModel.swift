@@ -51,11 +51,11 @@ struct NowPlayingViewModel {
                 return []
             }
             
-            var result: [ActionViewModel] = []
+            var result: [RRSheet.Action] = []
             
             if t.track.isPlayable {
                 
-                let playNow = ActionViewModel(.playNow) {
+                let playNow = RRSheet.Action(option: .playNow) {
                     Dispatcher.dispatch(action: PrepareNewTrack(orderedTrack: orderedTrack,
                                                                 shouldPlayImmidiatelly: true))
                 }
@@ -68,7 +68,7 @@ struct NowPlayingViewModel {
             
             if appStateSlice.user.isGuest == false {
                 
-                let toPlaylist = ActionViewModel(.toPlaylist) {
+                let toPlaylist = RRSheet.Action(option: .addToLibrary) {
                     router.showAddToPlaylist(for: [t.track])
                 }
                 
@@ -77,7 +77,7 @@ struct NowPlayingViewModel {
             
             /////3
             
-            let delete = ActionViewModel(.delete) {
+            let delete = RRSheet.Action(option: .delete) {
                 Dispatcher.dispatch(action: RemoveTrack(orderedTrack: orderedTrack))
             }
             

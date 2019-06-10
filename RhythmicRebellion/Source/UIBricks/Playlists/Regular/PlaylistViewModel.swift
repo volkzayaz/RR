@@ -17,11 +17,16 @@ protocol PlaylistProvider: TrackProvider {
 }
 
 extension PlaylistProvider {
-    var mode: TrackViewModel.ThumbMode { return .index }
+    var mode   : TrackViewModel.ThumbMode { return .index }
 }
 
 protocol DeletablePlaylistProvider: PlaylistProvider {
     func delete(track: Track) -> Maybe<Void>
+    func drop() -> Maybe<Void> ///deletes whole playlist
+}
+
+protocol ClearablePlaylistProvider: PlaylistProvider {
+    func clear() -> Maybe<Void>
 }
 
 protocol DownloadablePlaylistProvider: PlaylistProvider {
@@ -31,7 +36,7 @@ protocol DownloadablePlaylistProvider: PlaylistProvider {
     var instantDownload: Bool { get }
 }
 
-struct FanPlaylistProvider: DeletablePlaylistProvider {
+struct FanPlaylistProvider: DeletablePlaylistProvider, ClearablePlaylistProvider {
     
     let fanPlaylist: FanPlaylist
     var playlist: Playlist {
@@ -49,6 +54,16 @@ struct FanPlaylistProvider: DeletablePlaylistProvider {
         return PlaylistRequest.deleteTrack(track, from: fanPlaylist)
             .rx.emptyResponse()
     }
+    
+    func drop() -> Maybe<Void> {
+        return PlaylistManager.delete(playlist: fanPlaylist)
+    }
+    
+    func clear() -> Maybe<Void> {
+        return PlaylistRequest.clear(playlist: fanPlaylist)
+            .rx.emptyResponse()
+    }
+    
     
 }
 
@@ -180,25 +195,25 @@ final class PlaylistViewModel {
                 .disposed(by: bag)
         }
         
-        let actions = { (list: TrackListViewModel, t: TrackRepresentation) -> [ActionViewModel] in
+        let actions = { (list: TrackListViewModel, t: TrackRepresentation) -> [RRSheet.Action] in
             
-            var result: [ActionViewModel] = []
+            var result: [RRSheet.Action] = []
             
             //////1
 
             if t.track.isPlayable {
                 
-                let playNow = ActionViewModel(.playNow) {
+                let playNow = RRSheet.Action(option: .playNow) {
                     Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
                                                                          style: .now))
                 }
                 
-                let playNext = ActionViewModel(.playNext) {
+                let playNext = RRSheet.Action(option: .playNext) {
                     Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
                                                                          style: .next))
                 }
                 
-                let playLast = ActionViewModel(.playLast) {
+                let playLast = RRSheet.Action(option: .playLater) {
                     Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
                                                                          style: .last))
                 }
@@ -212,7 +227,7 @@ final class PlaylistViewModel {
             
             if appStateSlice.user.isGuest == false {
                 
-                let toPlaylist = ActionViewModel(.toPlaylist) {
+                let toPlaylist = RRSheet.Action(option: .addToLibrary) {
                     router.showAddToPlaylist(for: [t.track])
                 }
                 
@@ -223,9 +238,9 @@ final class PlaylistViewModel {
             
             if let p = provider as? DeletablePlaylistProvider {
                 
-                let delete = ActionViewModel(.delete) {
+                let delete = RRSheet.Action(option: .delete) {
                     
-                    p.delete(track: t.track)
+                    let _ = p.delete(track: t.track)
                         .silentCatch(handler: router.owner)
                         .subscribe(onNext: {
                             list.drop(track: t)
@@ -263,21 +278,6 @@ final class PlaylistViewModel {
 }
 
 extension PlaylistViewModel {
-
-    // MARK: Action support
-
-    private func clear(playlist: Playlist) {
-        
-        guard let fanPlaylist = playlist as? FanPlaylist else { return }
-
-        PlaylistRequest.clear(playlist: fanPlaylist)
-            .rx.emptyResponse()
-            .silentCatch(handler: router.owner)
-            .subscribe(onNext: { [weak self] in
-                self?.tracksViewModel.dropAllTracks()
-            })
-        
-    }
     
     func trackSelected(track: Track) {
         guard track.isPlayable else {
@@ -299,128 +299,49 @@ extension PlaylistViewModel {
         
     }
     
-}
-
-extension PlaylistViewModel {
-
-    // MARK: - Playlist Actions -
-    
-    func confirmation(for actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, with playlist: Playlist) -> ConfirmationAlertViewModel.ViewModel? {
-
-        switch actionType {
-        case .clear: return ConfirmationAlertViewModel.Factory.makeClearPlaylistViewModel(actionCallback: { [weak self] (actionConfirmationType) in
-                                        switch actionConfirmationType {
-                                        case .ok: self?.performeAction(with: actionType, for: playlist)
-                                        default: break
-                                        }
-                            })
-
-        case .delete: return ConfirmationAlertViewModel.Factory.makeDeletePlaylistViewModel(actionCallback: { [weak self] (actionConfirmationType) in
-                                        switch actionConfirmationType {
-                                        case .ok: self?.performeAction(with: actionType, for: playlist)
-                                        default: break
-                                        }
-                            })
-
-        default: return nil
-        }
-    }
-
-    func performeAction(with actionType: PlaylistActionsViewModels.ActionViewModel.ActionType, for playlist: Playlist) {
-
+    func showActions(sourceView: UIView, sourceRect: CGRect) {
+        
         let tracks = tracksViewModel.tracks.value.map { $0.track }
         
-        switch actionType {
-        case .playNow:
-            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
-                                                                 style: .now))
-            
-        case .playNext:
-            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
-                                                                 style: .next))
-            
-        case .playLast:
-            Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
-                                                                 style: .last))
-            
-        case .replaceCurrent:
-            Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
-            
-        case .toPlaylist: self.router?.showAddToPlaylist(for: playlist)
-        case .clear: self.clear(playlist: playlist)
-
-        case .delete:
-            guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.isDefault == false else { return }
-
-            PlaylistManager.delete(playlist: fanPlaylist)
-                .silentCatch(handler: router.owner)
-                .subscribe()
-            
-        case .cancel: break
-        }
-    }
-
-    func actionTypes(for playlist: Playlist) -> [PlaylistActionsViewModels.ActionViewModel.ActionType] {
-        switch playlist {
-        case _ as FanPlaylist:
-            return [.playNow, .playNext, .playLast, .replaceCurrent, .toPlaylist, .delete]
-        case _ as DefinedPlaylist: fallthrough
-        case _ as AlbumPlaylistProvider: fallthrough
-        case _ as ArtistPlaylist:
-            return [.playNow, .playNext, .playLast, .toPlaylist, .replaceCurrent]
-        default: return []
-        }
-    }
-    
-    func playlistActions() -> PlaylistActionsViewModels.ViewModel? {
-
-        let x = self.actionTypes(for: playlist).filter { actionType in
-            
-            switch actionType {
-            case .playNow, .playNext, .playLast, .replaceCurrent: return self.tracksViewModel.isPlaylistEmpty == false
-            case .toPlaylist: return appStateSlice.user.isGuest == false && self.tracksViewModel.isPlaylistEmpty == false
-            case .delete: return playlist.isFanPlaylist && playlist.isDefault == false
-            case .clear: return false
-            default: return true
-            }
-            
-        }
-
-        let playlistActions = PlaylistActionsViewModels.Factory().makeActionsViewModels(actionTypes: x) { [weak self] (actionType) in
-            guard let `self` = self else { return }
-            guard let confirmationViewModel = self.confirmation(for: actionType, with: self.playlist) else {
-                self.performeAction(with: actionType, for: self.playlist)
-                return
-            }
-
-            self.router.owner.showConfirmation(confirmationViewModel: confirmationViewModel)
-        }
-
-        return PlaylistActionsViewModels.ViewModel(title: x.isEmpty ? playlist.name : nil,
-                                                   message: x.isEmpty ? "No actions available" : nil,
-                                                   actions: playlistActions)
-    }
-
-    func clearPlaylist() {
-        guard let confirmationViewModel = self.confirmation(for: .clear, with: self.playlist) else {
-            self.performeAction(with: .clear, for: self.playlist)
-            return
-        }
-
-        router.owner.showConfirmation(confirmationViewModel: confirmationViewModel)
-    }
-    
-}
-
-
-extension PlaylistViewModel {
-
-    func application( didChangeFanPlaylist fanPlaylistState: FanPlaylistState) {
-        guard let fanPlaylist = self.playlist as? FanPlaylist, fanPlaylist.id == fanPlaylistState.id else { return }
-        guard let _ = fanPlaylistState.playlist else { self.router?.dismiss(); return }
+        var actions = [
+            RRSheet.Action(option: .playNext, action: {
+                Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
+                                                                     style: .next))
+            }),
+            RRSheet.Action(option: .playLater, action: {
+                Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
+                                                                     style: .last))
+            }),
+            RRSheet.Action(option: .replace, action: {
+                Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
+            }),
+            RRSheet.Action(option: .addToLibrary, action: {
+                self.router?.showAddToPlaylist(for: self.playlist)
+            }),
+        ]
         
-        tracksViewModel.dropAllTracks()
+        let provider = (tracksViewModel.trackProivder as! PlaylistProvider)
+        
+        if let x = provider as? DeletablePlaylistProvider {
+            actions.append(RRSheet.Action(option: .delete) { [unowned self] in
+                let _ = x.drop()
+                    .silentCatch(handler: self.router.owner)
+                    .subscribe()
+            })
+        }
+        
+        if let x = provider as? ClearablePlaylistProvider {
+            actions.append(RRSheet.Action(option: .clear) { [unowned self] in
+                let _ = x.clear()
+                    .silentCatch(handler: self.router.owner)
+                    .subscribe(onNext: { [weak self] in
+                        self?.tracksViewModel.dropAllTracks()
+                    })
+            })
+        }
+
+        router.showActions(actions: actions, sourceRect: sourceRect, sourceView: sourceView)
         
     }
-
+    
 }

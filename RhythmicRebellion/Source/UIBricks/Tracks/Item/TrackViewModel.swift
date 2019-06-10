@@ -113,7 +113,7 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     
     let trackRepresentation: TrackRepresentation
     let user: User
-    let actions: AlertActionsViewModel<ActionViewModel>
+    let actions: [RRSheet.Action]
     let mode: ThumbMode
     
     let downloadViewModel: DownloadViewModel?
@@ -124,7 +124,7 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
          trackRepresentation: TrackRepresentation,
          mode: ThumbMode,
          user: User,
-         actions: AlertActionsViewModel<ActionViewModel>) {
+         actions: [RRSheet.Action]) {
         
         self.router = router
         self.trackRepresentation = trackRepresentation

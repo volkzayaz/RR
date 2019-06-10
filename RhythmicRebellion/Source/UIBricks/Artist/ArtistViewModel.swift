@@ -53,23 +53,23 @@ struct ArtistViewModel : MVVM_ViewModel {
 
         let actions: TrackListViewModel.ActionsProvider = { _, t in
             
-            var result: [ActionViewModel] = []
+            var result: [RRSheet.Action] = []
             
             //////1
             
             if t.track.isPlayable {
                 
-                result.append(ActionViewModel(.playNow) {
+                result.append(RRSheet.Action(option: .playNow) {
                     Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
                                                                          style: .now))
                 })
                 
-                result.append(ActionViewModel(.playNext) {
+                result.append(RRSheet.Action(option: .playNext) {
                     Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
                                                                          style: .next))
                 })
                 
-                result.append(ActionViewModel(.playNext) {
+                result.append(RRSheet.Action(option: .playNext) {
                     Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: [t.track],
                                                                          style: .last))
                 })
@@ -80,7 +80,7 @@ struct ArtistViewModel : MVVM_ViewModel {
             
             if appStateSlice.user.isGuest == false {
                 
-                result.append(ActionViewModel(.toPlaylist) {
+                result.append(RRSheet.Action(option: .addToLibrary) {
                     router.showAddToPlaylist(for: [t.track])
                 })
                 

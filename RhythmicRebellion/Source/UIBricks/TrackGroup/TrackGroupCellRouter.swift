@@ -19,15 +19,8 @@ struct TrackGroupCellRouter : MVVM_Router {
         self._owner = owner
     }
     
-    func present(actions: AlertActionsViewModel<ActionViewModel>) {
-        
-        let actionSheet = UIAlertController.make(from: actions)
-        
-//        actionSheet.popoverPresentationController?.sourceView = sourceView
-//        actionSheet.popoverPresentationController?.sourceRect = sourceRect
-        
-        owner.present(actionSheet, animated: true, completion: nil)
-        
+    func present(actions: [RRSheet.Action]) {
+        owner.show(viewModels: actions)
     }
     
     func presentPlaylistCreation(for tracks: [Track]) {

@@ -80,4 +80,8 @@ final class PlaylistRouter: FlowRouterSegueCompatible {
         owner.present(activityViewController, animated: true, completion: nil)
     }
     
+    func showActions(actions: [RRSheet.Action], sourceRect: CGRect, sourceView: UIView) {
+        owner.show(viewModels: actions, sourceRect: sourceRect, sourceView: sourceView)       
+    }
+    
 }

@@ -176,14 +176,14 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
         
     }
 
-    func unsavedChangesConfirmationViewModel() -> ConfirmationAlertViewModel.ViewModel {
+    func unsavedChangesConfirmationViewModel() {
 
-        return ConfirmationAlertViewModel.Factory.makeSkipProfileChangesViewModel(actionCallback: { [weak self] (actionType) in
-            switch actionType {
-            case .ok: self?.router?.navigateBack()
-            default: break
-            }
-        })
+        router?.sourceController?.presentConfirmQuestion(question: DisplayMessage(title: "Warning", description: "You have unsaved changes. Press Cancel to go back and save these changes,or OK to lose these changes"))
+            .filter { $0 }
+            .subscribe(onNext: { [weak self] (_) in
+                self?.router?.navigateBack()
+            })
+        
     }
 
     func registerFirstNameField(_ firstNameField: ValidatableField) {

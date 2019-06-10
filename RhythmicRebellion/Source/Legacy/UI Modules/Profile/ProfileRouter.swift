@@ -58,7 +58,7 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
         switch destination {
         case .profileSettings:
             guard let profileSettingsViewController = segue.destination as? ProfileSettingsViewController else { fatalError("Incorrect controller for ProfileSettingsSegueIdentifier") }
-            let profileSettingsRouter = DefaultProfileSettingsRouter()
+            let profileSettingsRouter = ProfileSettingsRouter()
             profileSettingsRouter.start(controller: profileSettingsViewController)
 
         case .changeEmail:
