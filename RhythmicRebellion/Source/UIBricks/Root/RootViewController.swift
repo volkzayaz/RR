@@ -20,7 +20,8 @@ class RootViewController: UIViewController, MVVM_View {
     
     @IBOutlet weak var progressConstraint: NSLayoutConstraint!
     @IBOutlet weak var followButton: UIButton!
-
+    @IBOutlet var progressView: UIView!
+    
     @IBOutlet var attributesStackView: UIStackView!
     @IBOutlet var previewTimesLabel: UILabel!
     
@@ -68,6 +69,9 @@ class RootViewController: UIViewController, MVVM_View {
                 }
                 
             })
+            .disposed(by: rx.disposeBag)
+     
+        viewModel.sliderColor.drive(progressView.rx.backgroundColor)
             .disposed(by: rx.disposeBag)
         
     }

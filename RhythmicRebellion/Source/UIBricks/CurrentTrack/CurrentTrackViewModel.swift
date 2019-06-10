@@ -193,6 +193,18 @@ extension CurrentTrackViewModel {
             .map { "Next up: \($0)" }
     }
     
+    var sliderColor: Driver<UIColor> {
+        return appState.map { $0.player.isBlocked }
+            .distinctUntilChanged()
+            .map { $0 ? UIColor.blockedYellow : UIColor.primaryPink }
+    }
+    
+    var sliderThumb: Driver<UIImage> {
+        return appState.map { $0.player.isBlocked }
+            .distinctUntilChanged()
+            .map { $0 ? UIImage() : R.image.thumb()! }
+    }
+    
 }
 
 struct CurrentTrackViewModel : MVVM_ViewModel {
@@ -295,6 +307,17 @@ extension CurrentTrackViewModel {
     
     func presentPlaying() {
         router.presentPlaying()
+    }
+    
+}
+
+
+class RRSlider : UISlider {
+    
+    override func trackRect(forBounds bounds: CGRect) -> CGRect {
+        var newBounds = super.trackRect(forBounds: bounds)
+        newBounds.size.height = 3
+        return newBounds
     }
     
 }

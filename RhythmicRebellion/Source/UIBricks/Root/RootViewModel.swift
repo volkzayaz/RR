@@ -104,6 +104,12 @@ extension RootViewModel {
         }
     }
     
+    var sliderColor: Driver<UIColor> {
+        return appState.map { $0.player.isBlocked }
+            .distinctUntilChanged()
+            .map { $0 ? UIColor.blockedYellow : UIColor.primaryPink }
+    }
+    
 }
 
 struct RootViewModel : MVVM_ViewModel {

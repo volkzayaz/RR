@@ -59,3 +59,11 @@ extension UIColor {
         }
     }
 }
+
+
+extension UIColor {
+    
+    static let primaryPink = UIColor(fromHex: 0xFF3EA7)
+    static let blockedYellow = UIColor(fromHex: 0xF8E71C)
+    
+}

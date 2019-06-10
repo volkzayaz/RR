@@ -22,12 +22,7 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
     @IBOutlet weak var starButton: UIButton!
     @IBOutlet weak var moreButton: UIButton!
     
-    @IBOutlet weak var progressSlider: UISlider! {
-        didSet {
-            progressSlider.setThumbImage(R.image.thumb(), for: .normal)
-            progressSlider.setThumbImage(R.image.thumb(), for: .highlighted)
-        }
-    }
+    @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var leftProgress: UILabel!
     @IBOutlet weak var rightProgress: UILabel!
     
@@ -58,6 +53,19 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
             .disposed(by: rx.disposeBag)
         
         viewModel.artist.drive(trackArtistLabel.rx.text)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.sliderColor
+            .drive(onNext: { [unowned self] (x) in
+                self.progressSlider.minimumTrackTintColor = x
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.sliderThumb
+            .drive(onNext: { [unowned self] (x) in
+                self.progressSlider.setThumbImage(x, for: .normal)
+                self.progressSlider.setThumbImage(x, for: .highlighted)
+            })
             .disposed(by: rx.disposeBag)
         
         viewModel.imageURL
