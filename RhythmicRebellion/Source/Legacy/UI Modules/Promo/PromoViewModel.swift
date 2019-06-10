@@ -8,13 +8,8 @@
 //
 
 import Foundation
+import RxSwift
 import RxCocoa
-
-protocol PromoViewModelDelegate: class, ErrorPresenting {
-    
-    func refreshSkipAddonsUI()
-    func refreshUI()
-}
 
 final class PromoViewModel {
 
@@ -72,7 +67,6 @@ final class PromoViewModel {
     
     // MARK: - Private properties -
 
-    private(set) weak var delegate: PromoViewModelDelegate?
     private let router: PromoRouter?
 
     
@@ -86,25 +80,25 @@ final class PromoViewModel {
 
     // MARK: - Lifecycle -
 
-    init(router: PromoRouter, delegate: PromoViewModelDelegate) {
+    init(router: PromoRouter) {
         self.router = router
-        
-        self.delegate = delegate
         
     }
 
+    private let bag = DisposeBag()
+    
     func thumbnailURL() -> URL? {
         guard let track = appStateSlice.currentTrack?.track else { return nil }
         return track.thumbnailURL(with: [.thumb, .small, .medium, .xsmall, .original, .big, .large, .xlarge, .preload])
     }
 
     func setSkipAddons(skip: Bool) {
-        guard let artist = appStateSlice.currentTrack?.track.artist else { self.delegate?.refreshUI(); return }
+        guard let artist = appStateSlice.currentTrack?.track.artist else { return }
 
         UserManager.updateSkipAddons(for: artist, skip: skip)
-            .subscribe(onError: { [weak self] (error) in
-                self?.delegate?.show(error: error)
-            })
+            .silentCatch(handler: router?.owner)
+            .subscribe()
+            .disposed(by: bag)
         
     }
 
@@ -112,7 +106,6 @@ final class PromoViewModel {
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToPage"), object: nil, userInfo: ["url": url])
         
-        //self.router?.navigateToPage(with: url)
     }
 
     func visitArtistSite() {
@@ -127,14 +120,4 @@ final class PromoViewModel {
         self.navigateToPage(with: writerURL)
     }
 
-    func routeToAuthorization() {
-        
-    }
-}
-
-extension PromoViewModel {
-
-    func player(didChangePlayerItem playerItem: Void /*PlayerItem?*/) {
-        self.delegate?.refreshUI()
-    }
 }
