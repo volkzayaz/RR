@@ -17,6 +17,7 @@ final class PagesViewController: UIViewController {
 
     lazy var viewModel: PagesViewModel! = {
         let router = PagesRouter(authorizationNavigationDelgate: nil)
+        router.pagesViewController = self
         self.navigationController?.delegate = router
         
         let vm = PagesViewModel(router: router, pagesLocalStorage: DataLayer.get.pagesLocalStorageService)

@@ -39,7 +39,7 @@ final class PagesRouter: NSObject, FlowRouterSegueCompatible {
     private(set) weak var authorizationNavigationDelgate: ForcedAuthorizationRouter?
     
     private(set) weak var viewModel: PagesViewModel?
-    private(set) weak var pagesViewController: PagesViewController?
+    weak var pagesViewController: PagesViewController?
     var sourceController: UIViewController? { return self.pagesViewController }
 
     func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {

@@ -36,6 +36,7 @@ final class PagesViewModel {
 
     init(router: PagesRouter, pagesLocalStorage: PagesLocalStorageService) {
         self.router = router
+        
         self.pagesLocalStorage = pagesLocalStorage
 
         self.pages = []

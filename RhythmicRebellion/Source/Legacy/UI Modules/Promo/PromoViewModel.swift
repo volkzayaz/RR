@@ -109,7 +109,10 @@ final class PromoViewModel {
     }
 
     func navigateToPage(with url: URL) {
-        self.router?.navigateToPage(with: url)
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToPage"), object: nil, userInfo: ["url": url])
+        
+        //self.router?.navigateToPage(with: url)
     }
 
     func visitArtistSite() {

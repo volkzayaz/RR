@@ -189,7 +189,6 @@
 		73F1385F222C289200FB8EBC /* SelectableListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136EF222C289200FB8EBC /* SelectableListItemTableViewCell.swift */; };
 		73F13860222C289200FB8EBC /* AddNewSelectableListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136F0222C289200FB8EBC /* AddNewSelectableListItemTableViewCell.swift */; };
 		73F13861222C289200FB8EBC /* LanguagesSelectableListControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136F1222C289200FB8EBC /* LanguagesSelectableListControllerViewModel.swift */; };
-		73F13862222C289200FB8EBC /* TabBarControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136F3222C289200FB8EBC /* TabBarControllerViewModel.swift */; };
 		73F13863222C289200FB8EBC /* ListeningSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136F5222C289200FB8EBC /* ListeningSettingsViewController.swift */; };
 		73F13864222C289200FB8EBC /* DatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136F7222C289200FB8EBC /* DatePickerTableViewCell.swift */; };
 		73F13865222C289200FB8EBC /* SwitchableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F136F8222C289200FB8EBC /* SwitchableTableViewCell.swift */; };
@@ -591,7 +590,6 @@
 		73F136EF222C289200FB8EBC /* SelectableListItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectableListItemTableViewCell.swift; sourceTree = "<group>"; };
 		73F136F0222C289200FB8EBC /* AddNewSelectableListItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewSelectableListItemTableViewCell.swift; sourceTree = "<group>"; };
 		73F136F1222C289200FB8EBC /* LanguagesSelectableListControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguagesSelectableListControllerViewModel.swift; sourceTree = "<group>"; };
-		73F136F3222C289200FB8EBC /* TabBarControllerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarControllerViewModel.swift; sourceTree = "<group>"; };
 		73F136F5222C289200FB8EBC /* ListeningSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListeningSettingsViewController.swift; sourceTree = "<group>"; };
 		73F136F7222C289200FB8EBC /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		73F136F8222C289200FB8EBC /* SwitchableTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchableTableViewCell.swift; sourceTree = "<group>"; };
@@ -1460,7 +1458,6 @@
 				73F136D7222C289200FB8EBC /* ActionsViewModels */,
 				73F136E0222C289200FB8EBC /* SelectableList */,
 				73F136F4222C289200FB8EBC /* ListeningSettings */,
-				73F136F2222C289200FB8EBC /* TabBar */,
 				73F1370E222C289200FB8EBC /* Segues */,
 				73F13710222C289200FB8EBC /* Profile */,
 				73F13728222C289200FB8EBC /* Authorization */,
@@ -1530,14 +1527,6 @@
 				73F136F0222C289200FB8EBC /* AddNewSelectableListItemTableViewCell.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		73F136F2222C289200FB8EBC /* TabBar */ = {
-			isa = PBXGroup;
-			children = (
-				73F136F3222C289200FB8EBC /* TabBarControllerViewModel.swift */,
-			);
-			path = TabBar;
 			sourceTree = "<group>";
 		};
 		73F136F4222C289200FB8EBC /* ListeningSettings */ = {
@@ -3060,7 +3049,6 @@
 				73F13867222C289200FB8EBC /* ListeningSettingsRouter.swift in Sources */,
 				73F13882222C289200FB8EBC /* ProfileItemViewModel.swift in Sources */,
 				73F13806222C289200FB8EBC /* LinkedPlaylist.swift in Sources */,
-				73F13862222C289200FB8EBC /* TabBarControllerViewModel.swift in Sources */,
 				73F138EF222C289200FB8EBC /* PagesLocalStorageService.swift in Sources */,
 				73F1383C222C289200FB8EBC /* Purchase.swift in Sources */,
 				73F13826222C289200FB8EBC /* HowHear.swift in Sources */,
