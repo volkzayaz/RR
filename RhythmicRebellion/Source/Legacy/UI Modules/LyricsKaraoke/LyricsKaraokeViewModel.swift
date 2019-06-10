@@ -15,7 +15,7 @@ import RxReachability
 
 final class LyricsKaraokeViewModel {
 
-    private(set) weak var router: LyricsKaraokeRouter?
+    let router: LyricsKaraokeRouter
 
     let disposeBag = DisposeBag()
 

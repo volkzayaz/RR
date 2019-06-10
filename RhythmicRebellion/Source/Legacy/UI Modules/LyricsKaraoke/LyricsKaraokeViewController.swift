@@ -21,14 +21,8 @@ final class LyricsKaraokeViewController: UIViewController, ContainerViewControll
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: LyricsKaraokeViewModel!
-    private(set) var router: FlowRouter!
-
-    func configure(viewModel: LyricsKaraokeViewModel, router: FlowRouter) {
-        self.viewModel = viewModel
-        self.router    = router
-    }
-
+    var viewModel: LyricsKaraokeViewModel!
+    
     // MARK: - Lifecycle -
 
     override func viewDidLoad() {
@@ -43,12 +37,12 @@ final class LyricsKaraokeViewController: UIViewController, ContainerViewControll
 extension LyricsKaraokeViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        router.prepare(for: segue, sender: sender)
+        viewModel.router.prepare(for: segue, sender: sender)
         return super.prepare(for: segue, sender: sender)
     }
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
+        if viewModel.router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
             return false
         }
         return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)

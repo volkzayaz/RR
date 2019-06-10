@@ -15,10 +15,13 @@ import RxDataSources
 extension ArtistViewModel {
     
     var dataSource: Driver<[AnimatableSectionModel<String, Data>]> {
-        return data.asDriver().map { x in
-            return x.map { section, items in
-                return AnimatableSectionModel(model: section, items: items)
-            }
+        
+        return Driver.combineLatest(data.asDriver(), source.asDriver()) { (x, source) in
+            guard x.count > 0 else { return [] }
+            
+            let subset = x[source.rawValue]
+            
+            return [AnimatableSectionModel(model: subset.0, items: subset.1)]
         }
     }
  
@@ -42,6 +45,7 @@ struct ArtistViewModel : MVVM_ViewModel {
     
     fileprivate let artist: Artist
     fileprivate let data = BehaviorRelay<[(String, [Data])]>(value: [])
+    let source = BehaviorRelay<Source>(value: .albums)
     
     init(router: ArtistRouter, artist: Artist) {
         self.router = router
@@ -50,8 +54,6 @@ struct ArtistViewModel : MVVM_ViewModel {
         let actions: TrackListViewModel.ActionsProvider = { _, t in
             
             var result: [ActionViewModel] = []
-            
-            let user = appStateSlice.user
             
             //////1
             
@@ -76,7 +78,7 @@ struct ArtistViewModel : MVVM_ViewModel {
             
             //////2
             
-            if user.isGuest == false {
+            if appStateSlice.user.isGuest == false {
                 
                 result.append(ActionViewModel(.toPlaylist) {
                     router.showAddToPlaylist(for: [t.track])
@@ -169,6 +171,15 @@ extension ArtistViewModel {
         
     }
     
+    func change(sourceTag: Int) {
+        guard let x = Source(rawValue: sourceTag) else {
+            fatalErrorInDebug("No source for tag \(sourceTag), please check your view tags")
+            return
+        }
+        
+        source.accept(x)
+    }
+    
 }
 
 extension ArtistViewModel {
@@ -176,12 +187,13 @@ extension ArtistViewModel {
     struct TracksProvider: TrackProvider {
         
         let artist: Artist
+        var mode: TrackViewModel.ThumbMode { return .artwork }
         
-        func provide() -> Observable<[TrackProvidable]> {
+        func provide() -> Observable<[TrackRepresentation]> {
             
             return ArtistRequest.records(artist: artist)
                 .rx.response(type: BaseReponse<[Track]>.self)
-                .map { $0.data }
+                .map { $0.data.enumerated().map(TrackRepresentation.init) }
                 .asObservable()
             
         }
@@ -218,6 +230,12 @@ extension ArtistViewModel {
             
         }
         
+    }
+    
+    enum Source: Int {
+        case albums = 0
+        case playlists
+        case songs
     }
     
 }

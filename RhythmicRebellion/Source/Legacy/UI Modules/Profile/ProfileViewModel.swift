@@ -20,12 +20,14 @@ enum ProfileItem: Int {
     case profileSettings = 0
     case changeEmail
     case changePassword
+    case listeningSettings
 
     var name: String {
         switch self {
         case .profileSettings: return NSLocalizedString("Profile Settings", comment: "Profile Settings title")
         case .changeEmail: return NSLocalizedString("Change Email", comment: "Change Email title")
         case .changePassword: return NSLocalizedString("Change Password", comment: "Change Password title")
+        case .listeningSettings: return "Listening Settings"
         }
     }
 }
@@ -66,7 +68,7 @@ final class ProfileViewModel {
 
         self.delegate = delegate
         
-        self.profileItems = [.profileSettings, .changeEmail, .changePassword]
+        self.profileItems = [.profileSettings, .changeEmail, .changePassword, .listeningSettings]
 
         self.delegate?.reloadUI()
 
@@ -104,6 +106,7 @@ final class ProfileViewModel {
         case .profileSettings: self.router?.navigateToProfileSettings()
         case .changeEmail: self.router?.navigateToChangeEmail()
         case .changePassword: self.router?.navigateToChangePassword()
+        case .listeningSettings: self.router?.navigateToListeningSettings()
         }
     }
 

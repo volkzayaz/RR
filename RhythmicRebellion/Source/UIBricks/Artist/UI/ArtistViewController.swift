@@ -19,6 +19,17 @@ class ArtistViewController: UIViewController, MVVM_View {
     @IBOutlet weak var flowLayout: BaseFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var selectorView: UIView! {
+        didSet {
+            selectorView.isHidden = false
+        }
+    }
+    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var buttonsStack: UIStackView!
+    
+    @IBOutlet var sourceButtons: [UIButton]!
+    
     lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<String, ArtistViewModel.Data>>(configureCell: { [unowned self] (_, collectionView, ip, data) in
         
         switch data {
@@ -52,27 +63,6 @@ class ArtistViewController: UIViewController, MVVM_View {
             
         }
         
-    }, configureSupplementaryView: { [weak self] (_, cv, kind, ip) -> UICollectionReusableView in
-        
-        guard ip.section == 0 else {
-            
-            let view = cv.dequeueReusableSupplementaryView(ofKind: kind,
-                                                           withReuseIdentifier: R.reuseIdentifier.artistSectionHeader, for: ip)!
-            
-            view.label.text = self?.viewModel.title(for: ip.section)
-            
-            return view
-        }
-        
-        let view = cv.dequeueReusableSupplementaryView(ofKind: kind,
-                                                       withReuseIdentifier: R.reuseIdentifier.artistCoverHeader, for: ip)!
-        
-        view.coverURL = self?.viewModel.artistCoverURL
-        view.artistNameLabel.text = self?.viewModel.artistName
-        view.sectionNameLabel.text = self?.viewModel.title(for: 0)
-        
-        return view
-        
     })
     
     override func viewDidLoad() {
@@ -83,10 +73,6 @@ class ArtistViewController: UIViewController, MVVM_View {
         flowLayout.configureFor(bounds: view.bounds)
         
         collectionView.register(R.nib.albumCell)
-        collectionView.register(R.nib.artistSectionHeader,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
-        collectionView.register(R.nib.artistCoverHeader,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         
         viewModel.dataSource
             .drive(collectionView.rx.items(dataSource: dataSource))
@@ -110,6 +96,24 @@ class ArtistViewController: UIViewController, MVVM_View {
             })
             .disposed(by: rx.disposeBag)
         
+        let rect = view.bounds
+        viewModel.source.asDriver()
+            .drive(onNext: { [weak self] (source) in
+                
+                self?.sourceButtons.forEach { x in
+                    let isSelected = x.tag == source.rawValue
+                    
+                    x.setTitleColor(isSelected ? UIColor(fromHex: 0xFF3EA7) : .white, for: .normal)
+                }
+        
+                UIView.animate(withDuration: 0.3, animations: {
+                    self?.leadingConstraint.constant = CGFloat(source.rawValue) * rect.size.width / 3
+                    self?.view.layoutIfNeeded()
+                })
+                
+            })
+            .disposed(by: rx.disposeBag)
+        
     }
     
 }
@@ -120,18 +124,18 @@ extension ArtistViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        guard indexPath.section == 2 else {
+        guard viewModel.source.value == .songs else {
             return flowLayout.itemSize
         }
 
         return CGSize(width: collectionView.bounds.size.width,
-                      height: 44)
+                      height: 62)
 
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
-        guard section == 2 else {
+        guard viewModel.source.value == .songs else {
             return 10
         }
         
@@ -141,25 +145,15 @@ extension ArtistViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        guard section == 2 else {
+        guard viewModel.source.value == .songs else {
             return flowLayout.sectionInset
         }
         
         return .zero
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
-        guard section == 0 else {
-            return CGSize(width: collectionView.bounds.size.width, height: 39)
-        }
-        
-        return CGSize(width: collectionView.bounds.size.width, height: 270)
-        
+    @IBAction func changeSource(_ sender: UIButton) {
+        viewModel.change(sourceTag: sender.tag)
     }
     
 }

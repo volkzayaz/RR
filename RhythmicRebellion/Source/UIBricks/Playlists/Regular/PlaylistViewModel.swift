@@ -16,6 +16,10 @@ protocol PlaylistProvider: TrackProvider {
     var playlist: Playlist { get }
 }
 
+extension PlaylistProvider {
+    var mode: TrackViewModel.ThumbMode { return .index }
+}
+
 protocol DeletablePlaylistProvider: PlaylistProvider {
     func delete(track: Track) -> Maybe<Void>
 }
@@ -34,10 +38,10 @@ struct FanPlaylistProvider: DeletablePlaylistProvider {
         return fanPlaylist
     }
     
-    func provide() -> Observable<[TrackProvidable]> {
+    func provide() -> Observable<[TrackRepresentation]> {
         return TrackRequest.fanTracks(playlistId: playlist.id)
             .rx.response(type: PlaylistTracksResponse.self)
-            .map { $0.tracks }
+            .map { $0.tracks.enumerated().map(TrackRepresentation.init) }
             .asObservable()
     }
     
@@ -52,10 +56,10 @@ struct DefinedPlaylistProvider: PlaylistProvider {
     
     let playlist: Playlist
     
-    func provide() -> Observable<[TrackProvidable]> {
+    func provide() -> Observable<[TrackRepresentation]> {
         return TrackRequest.tracks(playlistId: playlist.id)
             .rx.response(type: PlaylistTracksResponse.self)
-            .map { $0.tracks }
+            .map { $0.tracks.enumerated().map(TrackRepresentation.init) }
             .asObservable()
     }
     
@@ -66,10 +70,10 @@ struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistPr
     let album: Album
     let instantDownload: Bool
     
-    func provide() -> Observable<[TrackProvidable]> {
+    func provide() -> Observable<[TrackRepresentation]> {
         return ArtistRequest.albumRecords(album: album)
             .rx.response(type: BaseReponse<[Track]>.self)
-            .map { $0.data }
+            .map { $0.data.enumerated().map(TrackRepresentation.init) }
             .asObservable()
     }
     
@@ -116,10 +120,10 @@ struct ArtistPlaylistProvider: PlaylistProvider {
     
     let artistPlaylist: ArtistPlaylist
     
-    func provide() -> Observable<[TrackProvidable]> {
+    func provide() -> Observable<[TrackRepresentation]> {
         return ArtistRequest.playlistRecords(playlist: artistPlaylist)
             .rx.response(type: BaseReponse<[Track]>.self)
-            .map { $0.data }
+            .map { $0.data.enumerated().map(TrackRepresentation.init) }
             .asObservable()
     }
     
@@ -176,11 +180,9 @@ final class PlaylistViewModel {
                 .disposed(by: bag)
         }
         
-        let actions = { (list: TrackListViewModel, t: TrackProvidable) -> [ActionViewModel] in
+        let actions = { (list: TrackListViewModel, t: TrackRepresentation) -> [ActionViewModel] in
             
             var result: [ActionViewModel] = []
-            
-            let user = appStateSlice.user
             
             //////1
 
@@ -208,7 +210,7 @@ final class PlaylistViewModel {
             
             //////2
             
-            if user.isGuest == false {
+            if appStateSlice.user.isGuest == false {
                 
                 let toPlaylist = ActionViewModel(.toPlaylist) {
                     router.showAddToPlaylist(for: [t.track])
@@ -289,6 +291,12 @@ extension PlaylistViewModel {
         }
         
         Dispatcher.dispatch(action: AudioPlayer.Switch())
+    }
+    
+    func playNow() {
+        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracksViewModel.tracks.value.map { $0.track },
+                                                             style: .now))
+        
     }
     
 }

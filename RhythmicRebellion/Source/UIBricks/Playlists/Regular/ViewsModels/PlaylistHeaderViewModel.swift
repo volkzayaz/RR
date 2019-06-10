@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PlaylistHeaderViewModel: PlaylistTableHeaderViewModel {
+struct PlaylistHeaderViewModel {
 
     var id: String { return String(playlist.id) }
 

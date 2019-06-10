@@ -54,14 +54,6 @@ final class PlayerViewController: UIViewController {
             refreshUI()
         }
     }
-    private(set) var router: FlowRouter!
-
-    // MARK: - Configuration -
-
-    func configure(viewModel: PlayerViewModel, router: FlowRouter) {
-        self.viewModel = viewModel
-        self.router    = router
-    }
 
     // MARK: - Lifecycle -
 
@@ -98,7 +90,6 @@ final class PlayerViewController: UIViewController {
 
         self.playerItemProgressViewTapGestureRecognizer.delegate = self
 
-        viewModel.load()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -112,10 +103,6 @@ final class PlayerViewController: UIViewController {
         coordinator.animate(alongsideTransition: nil) { (context) in
             self.refreshUI()
         }
-    }
-
-    func tabBarItem(with playerNavigationItemType: PlayerNavigationItem.NavigationType, on tabBar: UITabBar) -> UITabBarItem? {
-        return tabBar.items?.filter({ $0.tag == playerNavigationItemType.rawValue }).first
     }
 
     // MARK: - Actions -
@@ -147,20 +134,6 @@ final class PlayerViewController: UIViewController {
         viewModel.toggleArtistFollowing()
     }
 
-    @IBAction func onPlayerContentButton(sender: UIButton) {
-
-        sender.isSelected = true
-
-
-        switch sender {
-        case self.videoButton: self.viewModel.navigate(to: .video)
-        case self.lyricsButton: self.viewModel.navigate(to: .lyrics)
-        case self.playlistButton: self.viewModel.navigate(to: .playlist)
-        case self.promoButton: self.viewModel.navigate(to: .promo)
-
-        default: break
-        }
-    }
 
     @IBAction func playerItemProgressViewValueChanged(sender: UISlider) {
         self.viewModel.setPlayerItemProgress(progress: sender.value)
@@ -196,24 +169,6 @@ extension PlayerViewController: UIGestureRecognizerDelegate {
         default: return true
         }
     }
-}
-
-// MARK: - Router -
-
-extension PlayerViewController {
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        router.prepare(for: segue, sender: sender)
-        return super.prepare(for: segue, sender: sender)
-    }
-
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
-            return false
-        }
-        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
-    }
-
 }
 
 // MARK: - ViewModel -
@@ -351,9 +306,9 @@ extension PlayerViewController {
         
         self.playlistButton.isEnabled = true
         
-        viewModel.previewOptionImage
-            .drive(playerItemPreviewOptionButton.rx.image(for: .normal))
-            .disposed(by: rx.disposeBag)
+//        viewModel.previewOptionImage
+//            .drive(playerItemPreviewOptionButton.rx.image(for: .normal))
+//            .disposed(by: rx.disposeBag)
 
         viewModel.karaokeEnabled
             .drive(playerItemProgressView.rx.isSelected)
@@ -392,36 +347,4 @@ extension PlayerViewController {
         self.updatePlayPauseState()
     }
 
-}
-
-// MARK: - UITabBarDelegate
-
-extension PlayerViewController: UITabBarDelegate {
-
-    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        guard let navigationType = PlayerNavigationItem.NavigationType.init(rawValue: item.tag) else { return }
-
-        self.viewModel.navigate(to: navigationType)
-    }
-}
-
-extension PlayerViewController: PlayerNavigationItemDelegate {
-    func refreshUI(for navigationItem: PlayerNavigationItem, isSelected: Bool) {
-
-        if isSelected, let compactTabBarItem = self.tabBarItem(with: navigationItem.type, on: self.compactTabBar) {
-            self.compactTabBar.selectedItem = compactTabBarItem
-        } else {
-            self.compactTabBar.selectedItem = nil
-        }
-
-        switch navigationItem.type {
-        case .video:
-            self.videoButton.isSelected = isSelected
-
-        case .lyrics: self.lyricsButton.isSelected = isSelected
-        case .playlist: self.playlistButton.isSelected = isSelected
-        case .promo: self.promoButton.isSelected = isSelected
-        }
-
-    }
 }

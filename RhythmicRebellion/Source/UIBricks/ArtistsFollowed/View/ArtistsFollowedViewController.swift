@@ -12,12 +12,9 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class ArtistsFollowedViewController: UIViewController, MVVM_View {
+class ArtistsFollowedViewController: UITableViewController, MVVM_View {
     
     var viewModel: ArtistsFollowedViewModel!
-    
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var baseLayout: BaseFlowLayout!
     
     @IBOutlet weak var searchBar: UISearchBar! {
         didSet {
@@ -25,10 +22,10 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
         }
     }
 
-    lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<String, Artist>>(configureCell: { [unowned self] (_, collectionView, ip, x) in
+    lazy var rxDataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<String, Artist>>(configureCell: { [unowned self] (_, tv: UITableView, ip, x) in
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.artistCell,
-                                                      for: ip)!
+        let cell = tv.dequeueReusableCell(withIdentifier: R.reuseIdentifier.artistFollowedCell,
+                                          for: ip)!
         
         cell.artist = x
         cell.unfollow = { [weak self] in
@@ -42,22 +39,21 @@ class ArtistsFollowedViewController: UIViewController, MVVM_View {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        baseLayout.configureFor(bounds: view.bounds)
+        tableView.dataSource = nil
+        
         view.backgroundColor = UIColor(red: 0.04,
                                        green: 0.07,
                                        blue: 0.23, alpha: 1)
         
         viewModel.dataSource
-            .drive(collectionView.rx.items(dataSource: dataSource))
+            .drive(tableView.rx.items(dataSource: rxDataSource))
             .disposed(by: rx.disposeBag)
         
-        collectionView.rx.modelSelected(Artist.self)
+        tableView.rx.modelSelected(Artist.self)
             .subscribe(onNext: { [weak self] artist in
                 self?.viewModel.select(artist: artist)
             })
             .disposed(by: rx.disposeBag)
-        
-        
         
     }
     

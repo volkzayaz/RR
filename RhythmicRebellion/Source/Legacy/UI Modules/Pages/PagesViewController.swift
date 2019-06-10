@@ -15,19 +15,15 @@ final class PagesViewController: UIViewController {
 
     // MARK: - Public properties -
 
-    private(set) var viewModel: PagesViewModel!
-    private(set) var router: FlowRouter!
-
-    // MARK: - Configuration -
-
-    func configure(viewModel: PagesViewModel, router: FlowRouter) {
-        self.viewModel = viewModel
-        self.router    = router
-        if self.isViewLoaded == true {
-            self.viewModel.load(with: self)
-        }
-    }
-
+    lazy var viewModel: PagesViewModel! = {
+        let router = PagesRouter(authorizationNavigationDelgate: nil)
+        self.navigationController?.delegate = router
+        
+        let vm = PagesViewModel(router: router, pagesLocalStorage: DataLayer.get.pagesLocalStorageService)
+        vm.load(with: self)
+        return vm
+    }()
+    
     func setupCollectionViewLayout(for size: CGSize) {
         guard self.isViewLoaded, let collectionViewFlowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
 
@@ -62,9 +58,10 @@ final class PagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        _ = viewModel
+        
         self.setupCollectionViewLayout(for: self.view.bounds.size)
 
-        viewModel.load(with: self)
     }
 
     override func viewDidLayoutSubviews() {
@@ -135,12 +132,12 @@ extension PagesViewController: UICollectionViewDataSource, UICollectionViewDeleg
 extension PagesViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        router.prepare(for: segue, sender: sender)
+        viewModel.router.prepare(for: segue, sender: sender)
         return super.prepare(for: segue, sender: sender)
     }
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
+        if viewModel.router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
             return false
         }
         return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)

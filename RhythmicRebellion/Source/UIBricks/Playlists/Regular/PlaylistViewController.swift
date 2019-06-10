@@ -19,20 +19,14 @@ final class PlaylistViewController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.trackTableViewCellIdentifier,
                                                  for: ip)!
         
-        let a = appStateSlice.player.tracks
-        
-        let f = cell.trackView.actionButton.frame
-        let v = cell.trackView.actionButtonContainerView
-        
         cell.trackView.setup(viewModel: data)
         
         return cell
         
     })
-        
-    @IBOutlet weak var imageView: UIImageView!
+    
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var refreshControl: UIRefreshControl!
+    
     @IBOutlet weak var tableHeaderView: PlaylistTableHeaderView!
     @IBOutlet var emptyPlaylistView: UIView!
 
@@ -43,31 +37,11 @@ final class PlaylistViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.addSubview(self.refreshControl)
-        self.setupTableHeaderView()
-        self.tableView.tableFooterView = UIView()
-
-        tableHeaderView.setup(viewModel: viewModel.headerViewModel) { [unowned self] (action) in
-            
-            switch action {
-            case .showActions: self.showPlaylistActions(sourceRect: self.tableHeaderView.actionButton.bounds, sourceView: self.tableHeaderView.actionButton)
-            case .clear: self.viewModel.clearPlaylist()
-            }
-        }
+        navigationItem.title = viewModel.headerViewModel.title
         
-        ImageRetreiver.imageForURLWithoutProgress(url: viewModel.headerViewModel.thumbnailURL?.absoluteString ?? "")
-            .map { $0 ?? UIImage(named: "playlistPlaceholder") }
-            .drive(imageView.rx.image)
-            .disposed(by: rx.disposeBag)
-        
-        self.navigationItem.title = viewModel.headerViewModel.title
-        
-        self.imageView.layer.cornerRadius = 6
-        self.imageView.layer.masksToBounds = true
-
         tableView.register(R.nib.trackTableViewCell)
-
-        tableView.dataSource = nil
+        
+        tableHeaderView.setup(viewModel: viewModel.headerViewModel)
         
         viewModel.dataSource
             .drive(tableView.rx.items(dataSource: dataSource))
@@ -99,43 +73,26 @@ final class PlaylistViewController: UIViewController {
         
     }
 
+    @IBAction func moreActions(_ sender: Any) {
+        
+        guard let actionsModel = viewModel.playlistActions() else {  return }
+        
+        self.show(alertActionsviewModel: actionsModel,
+                  sourceRect: self.tableHeaderView.actionButton.bounds,
+                  sourceView: self.tableHeaderView.actionButton)
+        
+    }
+    
+    @IBAction func playNow(_ sender: Any) {
+        viewModel.playNow()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
-        self.tableView.tableHeaderView = self.tableHeaderView
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
-        self.tableView.tableHeaderView = self.tableHeaderView
-    }
-
-    func setupTableHeaderView() {
-
-        self.tableHeaderView.updateFrame(in: self.tableView, for: self.traitCollection)
-        self.tableView.tableHeaderView = self.tableHeaderView
-    }
-
-    // MARK: - Actions -
-
-    @IBAction func onRefresh(sender: UIRefreshControl) {
-        self.viewModel.tracksViewModel.reload()
-    }
-
-    func showPlaylistActions(sourceRect: CGRect, sourceView: UIView) {
-        guard let actionsModel = viewModel.playlistActions() else {  return }
-
-        self.show(alertActionsviewModel: actionsModel, sourceRect: sourceRect, sourceView: sourceView)
-    }
-
+    
 }
 
 
@@ -156,7 +113,7 @@ extension PlaylistViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 58.0
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

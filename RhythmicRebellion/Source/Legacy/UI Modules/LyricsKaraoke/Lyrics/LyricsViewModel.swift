@@ -75,7 +75,7 @@ final class LyricsViewModel {
 
     func switchToKaraoke() {
         guard !appStateSlice.user.isGuest else {
-            router?.routeToAuthorization(with: .signIn)
+            //router?.routeToAuthorization(with: .signIn)
             return
         }
 

@@ -14,6 +14,7 @@ protocol ProfileRouter: FlowRouter {
     func navigateToProfileSettings()
     func navigateToChangeEmail()
     func navigateToChangePassword()
+    func navigateToListeningSettings()
 }
 
 final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
@@ -25,18 +26,21 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
         case profileSettings = "ProfileSettingsSegueIdentifier"
         case changeEmail = "ChangeEmailSegueIdentifier"
         case changePassword = "ChangePasswordSegueIdentifier"
+        case listeningSettings = "listeningSettings"
     }
 
     enum SegueActions: SegueDestinations {
         case profileSettings
         case changeEmail
         case changePassword
-
+        case listeningSettings
+        
         var identifier: SegueDestinationList {
             switch self {
             case .profileSettings: return SegueList.profileSettings
             case .changeEmail: return SegueList.changeEmail
             case .changePassword: return SegueList.changePassword
+            case .listeningSettings: return SegueList.listeningSettings
             }
         }
     }
@@ -66,6 +70,12 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
             guard let changePasswordViewController = segue.destination as? ChangePasswordViewController else { fatalError("Incorrect controller for ChangePasswordSegueIdentifier") }
             let changePasswordRouter = DefaultChangePasswordRouter()
             changePasswordRouter.start(controller: changePasswordViewController)
+            
+        case .listeningSettings:
+            guard let x = segue.destination as? ListeningSettingsViewController else { fatalError("Incorrect controller for ChangePasswordSegueIdentifier") }
+            let router = DefaultListeningSettingsRouter()
+            router.start(controller: x)
+            
         }
     }
 
@@ -102,5 +112,11 @@ final class DefaultProfileRouter:  ProfileRouter, FlowRouterSegueCompatible {
     func navigateToChangePassword() {
         self.perform(segue: .changePassword)
     }
+    
+    func navigateToListeningSettings() {
+        self.perform(segue: .listeningSettings)
+    }
+    
+    
 }
 

@@ -12,6 +12,10 @@ import RxCocoa
 
 extension TabBarViewModel {
     
+    enum TabType {
+        case home, pages, authorization, settings, profile
+    }
+    
     var tabs: Driver<[TabType]> {
         
         return appState.map { $0.user.isGuest }
@@ -40,11 +44,11 @@ extension TabBarViewModel {
 
 struct TabBarViewModel {
 
-    let router: TabBarRouter
-    
-    init(router: TabBarRouter) {
-        self.router = router
-        
-    }
+//    let router: TabBarRouter
+//    
+//    init(router: TabBarRouter) {
+//        self.router = router
+//        
+//    }
 
 }

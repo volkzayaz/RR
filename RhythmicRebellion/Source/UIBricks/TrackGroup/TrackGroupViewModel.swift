@@ -112,22 +112,26 @@ extension TrackGroupViewModel {
         }
         
         let r = router
-        let x =
-            [ActionViewModel(.playNow, actionCallback: dispatcher({
+        var x =
+            [ActionViewModel(.playNow, actionCallback: dispatcher {
                 return AddTracksToLinkedPlaying(tracks: $0, style: .now)
-            })),
-             ActionViewModel(.playNext, actionCallback: dispatcher({
+            }),
+             ActionViewModel(.playNext, actionCallback: dispatcher {
                 return AddTracksToLinkedPlaying(tracks: $0, style: .next)
-             })),
-             ActionViewModel(.playLast, actionCallback: dispatcher({
+             }),
+             ActionViewModel(.playLast, actionCallback: dispatcher {
                 return AddTracksToLinkedPlaying(tracks: $0, style: .last)
-             })),
-             ActionViewModel(.replaceCurrent, actionCallback: dispatcher({
+             }),
+             ActionViewModel(.replaceCurrent, actionCallback: dispatcher {
                 return ReplaceTracks(with: $0)
-             })),
-             ActionViewModel(.toPlaylist, actionCallback: loader ({
+             })
+             ]
+        
+        if !appStateSlice.user.isGuest {
+            x.append(ActionViewModel(.toPlaylist, actionCallback: loader {
                 r.presentPlaylistCreation(for: $0)
-             }))]
+            }))
+        }
         
         router.present(actions: AlertActionsViewModel<ActionViewModel>(title: nil,
                                                                        message: nil,

@@ -50,24 +50,11 @@ struct TrackPreviewOptionViewModel {
     }
     
     let type: PreviewOptionType
-    let textImageGenerator: TextImageGenerator
     
-    init(type: PreviewOptionType,
-         textImageGenerator: TextImageGenerator = .init(font: .systemFont(ofSize: 8))) {
+    init(type: PreviewOptionType) {
         self.type = type
-        self.textImageGenerator = textImageGenerator
     }
-    
-    var image: UIImage? {
-        switch type {
-        case .commigSoon: return nil
-        case .noPreview: return UIImage(named: "DashMark")?.withRenderingMode(.alwaysTemplate)
-        case .freeForPlaylist: return UIImage(named: "InfinityMark")?.withRenderingMode(.alwaysTemplate)
-        case .fullLimitTimes(let limitTimes): return textImageGenerator.image(for: String(limitTimes >= 0 ? limitTimes : 0))
-        case .limitSeconds(let seconds): return textImageGenerator.image(for: String(seconds) + "s")
-        case .authorizationNeeded: return textImageGenerator.image(for: "!")
-        }
-    }
+
 
     var hintText: String? {
         switch type {

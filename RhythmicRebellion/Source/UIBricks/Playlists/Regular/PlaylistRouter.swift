@@ -56,25 +56,6 @@ final class PlaylistRouter: FlowRouterSegueCompatible {
     init(owner: UIViewController) {
         self.owner = owner
     }
-//    
-//    func start(controller: PlaylistViewController, playlist: Playlist) {
-//        sourceController = controller
-//
-//        ////TODO: decouple the code further
-//        let provider: PlaylistProvider
-//        
-//        if let x = playlist as? FanPlaylist {
-//            provider = FanPlaylistProvider(fanPlaylist: x)
-//        }
-//        else {
-//            provider = DefinedPlaylistProvider(playlist: playlist)
-//        }
-//        
-//        let vm = PlaylistViewModel(router: self,
-//                                   provider: provider)
-//
-//        controller.configure(viewModel: vm, router: self)
-//    }
     
     func showAddToPlaylist(for tracks: [Track]) {
         self.perform(segue: .showAddTracksToPlaylist(tracks: tracks))

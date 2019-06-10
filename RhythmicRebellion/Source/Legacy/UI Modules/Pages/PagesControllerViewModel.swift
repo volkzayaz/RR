@@ -9,17 +9,25 @@
 
 import Foundation
 
-final class PagesControllerViewModel: PagesViewModel {
+protocol PagesViewModelDelegate: class, ErrorPresenting {
+    
+    func refreshUI()
+    func reloadUI()
+}
+
+final class PagesViewModel {
 
     // MARK: - Private properties -
 
     private(set) weak var delegate: PagesViewModelDelegate?
-    private(set) weak var router: PagesRouter?
+    let router: PagesRouter
 
     private(set) var pagesLocalStorage: PagesLocalStorageService
 
     private var pages: [Page]
 
+    
+    
     // MARK: - Lifecycle -
 
     deinit {
@@ -59,7 +67,7 @@ final class PagesControllerViewModel: PagesViewModel {
 
         let page = self.pages[indexPath.item]
 
-        self.router?.navigate(to: page, animated: true)
+        self.router.navigate(to: page, animated: true)
     }
 
     func deleteItem(at indexPath: IndexPath) {
@@ -81,11 +89,11 @@ final class PagesControllerViewModel: PagesViewModel {
         guard let page = self.pagesLocalStorage.page(for: url) else {
             let page = Page(url: url)
             self.pagesLocalStorage.add(page: page)
-            self.router?.navigate(to: page, animated: false)
+            self.router.navigate(to: page, animated: false)
             return
         }
 
-        self.router?.navigate(to: page, animated: false)
+        self.router.navigate(to: page, animated: false)
     }
 
     func show(error: Error) {
@@ -93,7 +101,7 @@ final class PagesControllerViewModel: PagesViewModel {
     }
 }
 
-extension PagesControllerViewModel : PagesLocalStorageServiceWatcher {
+extension PagesViewModel : PagesLocalStorageServiceWatcher {
 
     func pagesLocalStorageService(_ pagesLocalStorageService: PagesLocalStorageService, didAdd page: Page) {
         self.pages.append(page)
@@ -116,7 +124,7 @@ extension PagesControllerViewModel : PagesLocalStorageServiceWatcher {
 
     func pagesLocalStorageServiceDidReset(_ pagesLocalStorageService: PagesLocalStorageService) {
         self.pages.removeAll()
-        self.router?.navigateToPagesList(animated: false)
+        self.router.navigateToPagesList(animated: false)
         self.delegate?.reloadUI()
     }
 

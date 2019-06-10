@@ -9,17 +9,7 @@
 
 import UIKit
 
-protocol LyricsKaraokeRouterDelegate: ForcedAuthorizationRouter {
-
-}
-
-protocol LyricsKaraokeRouter: FlowRouter {
-    func routeToLyrics()
-    func routeToKaraoke()
-}
-
-final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCompatible {
-
+final class LyricsKaraokeRouter: FlowRouterSegueCompatible {
 
     typealias DestinationsList = SegueList
     typealias Destinations = SegueActions
@@ -40,11 +30,7 @@ final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCom
             }
         }
     }
-
     
-    private(set) weak var delegate: LyricsKaraokeRouterDelegate?
-
-    private(set) weak var viewModel: LyricsKaraokeViewModel?
     private(set) weak var viewController: LyricsKaraokeViewController?
 
     var sourceController: UIViewController? { return viewController }
@@ -53,14 +39,13 @@ final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCom
         return true
     }
 
-    func prepare(for destination: DefaultLyricsKaraokeRouter.SegueActions, segue: UIStoryboardSegue) {
+    func prepare(for destination: LyricsKaraokeRouter.SegueActions, segue: UIStoryboardSegue) {
 
         switch destination {
         case .showLyrics:
             guard let lyricsViewController = segue.destination as? LyricsViewController else { fatalError("Incorrect controller for LyricsSegueIdentifier") }
-            let lyricsRouter = DefaultLyricsRouter(delegate: self)
-            lyricsRouter.start(controller: lyricsViewController)
-
+            lyricsViewController.viewModel = .init(router: LyricsRouter(owner: lyricsViewController))
+            
         case .showKaraoke:
             guard let karaokeViewController = segue.destination as? KaraokeViewController else { fatalError("Incorrect controller for KaraokeSegueIdentifier") }
             let karaokeRouter = DefaultKaraokeRouter()
@@ -68,15 +53,9 @@ final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCom
         }
     }
 
-    init( delegate: LyricsKaraokeRouterDelegate?) {
+    init(owner: LyricsKaraokeViewController?) {
         
-        self.delegate = delegate
-    }
-
-    func start(controller: LyricsKaraokeViewController) {
-        viewController = controller
-        let vm = LyricsKaraokeViewModel(router: self)
-        controller.configure(viewModel: vm, router: self)
+        self.viewController = owner
     }
 
     func routeToLyrics() {
@@ -93,11 +72,5 @@ final class DefaultLyricsKaraokeRouter:  LyricsKaraokeRouter, FlowRouterSegueCom
         guard viewController.currentViewController as? KaraokeViewController == nil else { return }
 
         self.perform(segue: .showKaraoke)
-    }
-}
-
-extension DefaultLyricsKaraokeRouter: LyricsRouterDelegate {
-    func routeToAuthorization(with authorizationType: AuthorizationType) {
-        self.delegate?.routeToAuthorization(with: authorizationType)
     }
 }

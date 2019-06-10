@@ -23,59 +23,15 @@ extension TrackViewModel {
     
     var isPlayable: Bool { return track.isPlayable }
     
-    var previewOptionImage: Driver<UIImage?> {
-        return previewOption.map { $0?.image }
+    var index: String { return "\(trackRepresentation.index + 1)" }
+    var artwork: String { return track.images.first?.simpleURL ?? "" }
+
+    var indexHidden: Bool {
+        return mode == .artwork
     }
     
-    var previewOptionHintText: Driver<String?> {
-        return previewOption.map { $0?.hintText }
-    }
-    
-    fileprivate var previewOption: Driver<TrackPreviewOptionViewModel?> {
-        
-        let option = TrackPreviewOptionViewModel(type: .init(with: track,
-                                                             user: user,
-                                                             μSecondsPlayed: nil),
-                                                 textImageGenerator: textImageGenerator)
-        
-        guard case .fullLimitTimes = option.type else {
-            return .just(option)
-        }
-        
-        let u = user
-        let t = track
-        let g = textImageGenerator
-        
-        return appState.map { $0.player.tracks.previewTime[t.id] }
-            .distinctUntilChanged()
-            .map { time in
-                
-                return TrackPreviewOptionViewModel(type: .init(with: t,
-                                                               user: u,
-                                                               μSecondsPlayed: time),
-                                                   textImageGenerator: g)
-                
-        }
-        
-    }
-    
-    var censorshipHintText: String? {
-        guard self.isCensorship == true else { return nil }
-        return NSLocalizedString("Contains explisit material", comment: "Contains explisit material hint text")
-    }
-    
-    var downloadHintText: String? {
-        
-        let userHasPurchase = user.hasPurchase(for: track)
-        
-        guard track.isFollowAllowFreeDownload || userHasPurchase else {
-            return nil
-        }
-        
-        if user.isGuest { return R.string.localizable.freeDownloadForFans() }
-        
-        return R.string.localizable.freeDownloadForFollowers()
-        
+    var artworkHidden: Bool {
+        return mode == .index
     }
     
     var isPlaying: Driver<Bool> {
@@ -85,66 +41,99 @@ extension TrackViewModel {
     
     var equalizerHidden: Driver<Bool> {
         
-        let t = trackProvidable
+        let t = trackRepresentation
         return appState.map { $0.currentTrack }
             .distinctUntilChanged()
             .map { x in
                 guard let x = x else { return true }
             
-                return !t.isEqualTo(orderedTrack: x)
+                return !t.providable.isSame(with: x)
             }
         
     }
     
-    var isCensorship: Bool {
-        return track.isCensorship
+    enum Attribute {
+        case explicitMaterial
+        case downloadEnabled
+        case raw(String)
     }
     
-    var downloadEnabled: Bool {
-        if user.hasPurchase(for: track) {
-            return true
+    var attributes: Driver<[Attribute]> {
+        
+        var x: [Attribute] = []
+        
+        if track.isCensorship {
+            x.append(.explicitMaterial)
         }
         
-        if user.isFollower(for: track.artist.id) && track.isFollowAllowFreeDownload {
-            return true
+        if user.hasPurchase(for: track) ||
+           (user.isFollower(for: track.artist.id) && track.isFollowAllowFreeDownload) {
+            x.append(.downloadEnabled)
         }
         
-        return false
+        if case .limit45? = track.previewType {
+            x.append( .raw(" 45 SEC ") )
+            return .just(x)
+        }
+        else if case .limit45? = track.previewType {
+            x.append( .raw(" 90 SEC ") )
+            return .just(x)
+        }
+        else if case .full? = track.previewType {
+            
+            let u = user
+            let t = track
+            
+            return appState.map { $0.player.tracks.previewTime[t.id] }
+                .distinctUntilChanged()
+                .map { time in
+                    
+                    let z = TrackPreviewOptionViewModel(type: .init(with: t,
+                                                                    user: u,
+                                                                    μSecondsPlayed: time))
+                    
+                    if case .fullLimitTimes(let previewTimes) = z.type {
+                        x.append(.raw("   X\(previewTimes)   "))
+                    }
+                    
+                    return x
+                }
+        }
+        
+        return .just(x)
+    }
+    
+    var track: Track {
+        return trackRepresentation.track
     }
     
 }
 
 struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     
-    var identity: String {
-        return trackProvidable.identity
-    }
-    
-    var track: Track {
-        return trackProvidable.track
-    }
-    let trackProvidable: TrackProvidable
+    let trackRepresentation: TrackRepresentation
     let user: User
+    let actions: AlertActionsViewModel<ActionViewModel>
+    let mode: ThumbMode
+    
+    let downloadViewModel: DownloadViewModel?
     
     fileprivate let downloadTrigger: BehaviorSubject<Void?> = BehaviorSubject(value: nil)
     
-    let downloadViewModel: DownloadViewModel?
-    private let textImageGenerator = TextImageGenerator(font: UIFont.systemFont(ofSize: 8.0))
-    
-    let actions: AlertActionsViewModel<ActionViewModel>
-    
     init(router: TrackRouter,
-         trackProvidable: TrackProvidable,
+         trackRepresentation: TrackRepresentation,
+         mode: ThumbMode,
          user: User,
          actions: AlertActionsViewModel<ActionViewModel>) {
         
         self.router = router
-        self.trackProvidable = trackProvidable
+        self.trackRepresentation = trackRepresentation
+        self.mode = mode
         self.user = user
         self.actions = actions
         
-        if let _ = trackProvidable.track.audioFile?.urlString {
-            downloadViewModel = DownloadViewModel(downloadable: trackProvidable.track)
+        if let _ = trackRepresentation.track.audioFile?.urlString {
+            downloadViewModel = DownloadViewModel(downloadable: trackRepresentation.track)
         }
         else {
             downloadViewModel = nil
@@ -161,6 +150,15 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
     let router: TrackRouter
     fileprivate let indicator: ViewIndicator = ViewIndicator()
     fileprivate let bag = DisposeBag()
+ 
+    var identity: String {
+        return trackRepresentation.identity
+    }
+    
+    enum ThumbMode {
+        case index
+        case artwork
+    }
     
 }
 
@@ -186,17 +184,12 @@ extension TrackViewModel {
         
     }
     
-    func showTip(tip: String, view: UIView, superView: UIView) {
-        router.showTip(text: tip, view: view, superView: superView)
-    }
-    
 }
 
 extension TrackViewModel: Equatable {
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
         return lhs.track == rhs.track &&
-            lhs.isCensorship == rhs.isCensorship &&
             ///TODO: compare only user items that are reflected in the UI (follow, listening progress)
             ///for example we don't care if user changed email for displaying track
             lhs.user == rhs.user
