@@ -32,8 +32,8 @@ class RootTabBarController: UITabBarController {
         
         appState.map { $0.user.isGuest }
             .distinctUntilChanged()
-            .filter { !$0 }
             .skip(1)
+            .filter { !$0 }
             .drive(onNext: { [unowned self] (isGuest) in
                 
                 guard self.viewControllers!.count == 3 else {
@@ -51,8 +51,6 @@ class RootTabBarController: UITabBarController {
                 
             })
             .disposed(by: rx.disposeBag)
-        
-
         
     }
     
