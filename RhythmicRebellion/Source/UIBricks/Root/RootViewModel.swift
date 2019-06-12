@@ -110,6 +110,13 @@ extension RootViewModel {
             .map { $0 ? UIColor.blockedYellow : UIColor.primaryPink }
     }
     
+    var playIcon: Driver<UIImage> {
+        return appState.map { $0.player.currentItem?.state.isPlaying }
+            .notNil()
+            .distinctUntilChanged()
+            .map { $0 ? R.image.smallPause()! : R.image.smallPlay()! }
+    }
+    
 }
 
 struct RootViewModel : MVVM_ViewModel {
@@ -143,6 +150,35 @@ struct RootViewModel : MVVM_ViewModel {
     let router: RootRouter
     fileprivate let indicator: ViewIndicator = ViewIndicator()
     fileprivate let bag = DisposeBag()
+    
+}
+
+extension RootViewModel {
+    
+    func flip() {
+        Dispatcher.dispatch(action: AudioPlayer.Switch())
+    }
+    
+    func follow() {
+        guard let track = appStateSlice.currentTrack?.track else { return }
+        guard !appStateSlice.user.isGuest else {
+            //            self.routeToAuthorization();
+            return
+        }
+        
+        UserManager.follow(shouldFollow: !appStateSlice.user.isFollower(for: track.artist.id),
+                           artistId: track.artist.id)
+            .subscribe()
+            .disposed(by: bag)
+    }
+    
+    func next() {
+        Dispatcher.dispatch(action: ProceedToNextItem())
+    }
+    
+    func previous() {
+        Dispatcher.dispatch(action: GetBackToPreviousItem())
+    }
     
 }
 

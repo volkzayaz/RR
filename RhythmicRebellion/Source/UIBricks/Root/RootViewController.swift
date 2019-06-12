@@ -25,6 +25,8 @@ class RootViewController: UIViewController, MVVM_View {
     @IBOutlet var attributesStackView: UIStackView!
     @IBOutlet var previewTimesLabel: UILabel!
     
+    @IBOutlet weak var playButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,6 +74,9 @@ class RootViewController: UIViewController, MVVM_View {
             .disposed(by: rx.disposeBag)
      
         viewModel.sliderColor.drive(progressView.rx.backgroundColor)
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.playIcon.drive(playButton.rx.image(for: .normal))
             .disposed(by: rx.disposeBag)
         
     }
@@ -123,5 +128,21 @@ extension RootViewController {
     @IBAction func presentPlayer(_ sender: Any) {
         viewModel.presentPlayer()
     }
-       
+    
+    @IBAction func play(_ sender: Any) {
+        viewModel.flip()
+    }
+    
+    @IBAction func follow(_ sender: Any) {
+        viewModel.follow()
+    }
+    
+    @IBAction func swipedNext(_ sender: Any) {
+        viewModel.next()
+    }
+    
+    @IBAction func swipedPrevious(_ sender: Any) {
+        viewModel.previous()
+    }
+    
 }
