@@ -31,6 +31,8 @@ extension PlaylistManager {
                 let fanPlaylistState = FanPlaylistState(id: playlist.id, playlist: nil)
                 DataLayer.get.webSocketService.sendCommand(command: CodableWebSocketCommand(data: fanPlaylistState))
                 
+                Dispatcher.dispatch(action: RemovePlaylist(playlist: playlist)) 
+                
             })
     }
     

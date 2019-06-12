@@ -21,6 +21,7 @@ extension PlaylistProvider {
 }
 
 protocol DeletablePlaylistProvider: PlaylistProvider {
+    var canDelete: Bool { get }
     func delete(track: Track) -> Maybe<Void>
     func drop() -> Maybe<Void> ///deletes whole playlist
 }
@@ -42,6 +43,8 @@ struct FanPlaylistProvider: DeletablePlaylistProvider, ClearablePlaylistProvider
     var playlist: Playlist {
         return fanPlaylist
     }
+    
+    var canDelete: Bool { return !fanPlaylist.isDefault }
     
     func provide() -> Observable<[TrackRepresentation]> {
         return TrackRequest.fanTracks(playlistId: playlist.id)
@@ -328,11 +331,14 @@ extension PlaylistViewModel {
         
         let provider = (tracksViewModel.trackProivder as! PlaylistProvider)
         
-        if let x = provider as? DeletablePlaylistProvider {
-            actions.append(RRSheet.Action(option: .delete) { [unowned self] in
+        if let x = provider as? DeletablePlaylistProvider, x.canDelete {
+            
+            actions.append(RRSheet.Action(option: .delete) { [unowned self, weak o = router.owner] in
                 let _ = x.drop()
                     .silentCatch(handler: self.router.owner)
-                    .subscribe()
+                    .subscribe(onNext: {
+                        o?.navigationController?.popViewController(animated: true)
+                    })
             })
         }
         
