@@ -47,7 +47,7 @@ struct NowPlayingViewModel {
         
         let actions: TrackListViewModel.ActionsProvider = { _, t in
             
-            guard let orderedTrack = t as? OrderedTrack else {
+            guard let orderedTrack = t.providable as? OrderedTrack else {
                 return []
             }
             

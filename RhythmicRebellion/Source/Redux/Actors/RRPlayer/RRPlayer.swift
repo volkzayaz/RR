@@ -35,15 +35,6 @@ class RRPlayer: Actor {
     fileprivate let bag = DisposeBag()
 }
 
-////UI initiated
-extension RRPlayer {
-    
-    func add(tracks: [Track], type: AddTracksToLinkedPlaying.AddStyle) {
-        Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks, style: type))
-    }
-    
-}
-
 ///Push state into webSocket
 extension RRPlayer {
     
@@ -168,6 +159,7 @@ extension RRPlayer {
         
         webSocket.didReceivePreviewTimes
             .subscribe(onNext: { (times) in
+                
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: UpdateTrackPrviewTimes(newPreviewTimes: times)))
             })
             .disposed(by: bag)
