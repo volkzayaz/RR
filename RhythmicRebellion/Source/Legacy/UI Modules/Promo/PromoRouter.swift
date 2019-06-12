@@ -20,8 +20,4 @@ class PromoRouter : MVVM_Router {
         self._owner = owner
     }
     
-    func navigateToPage(with url: URL) {
-        
-    }
-
 }

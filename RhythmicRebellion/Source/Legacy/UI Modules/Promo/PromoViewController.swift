@@ -67,11 +67,19 @@ final class PromoViewController: UIViewController {
             .disposed(by: rx.disposeBag)
         
         viewModel.canVisitArtistSite
-            .drive(artistSiteButton.rx.isEnabled)
+            .drive(onNext: { [unowned self] (x) in
+                self.artistSiteButton.isEnabled = x
+                self.artistSiteButton.backgroundColor = x ? UIColor(fromHex: 0x007AFF) : UIColor(fromHex: 0x8E888B)
+                self.artistSiteButton.alpha = x ? 1 : 0.7
+            })
             .disposed(by: rx.disposeBag)
         
         viewModel.canVisitWriterSite
-            .drive(writerSiteButton.rx.isEnabled)
+            .drive(onNext: { [unowned self] (x) in
+                self.writerSiteButton.isEnabled = x
+                self.writerSiteButton.backgroundColor = x ? UIColor(fromHex: 0x007AFF) : UIColor(fromHex: 0x8E888B)
+                self.writerSiteButton.alpha = x ? 1 : 0.7
+            })
             .disposed(by: rx.disposeBag)
         
         ImageRetreiver.imageForURLWithoutProgress(url: viewModel.thumbnailURL()?.absoluteString ?? "")
