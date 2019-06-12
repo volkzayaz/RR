@@ -315,10 +315,16 @@ extension PlaylistViewModel {
             RRSheet.Action(option: .replace, action: {
                 Dispatcher.dispatch(action: ReplaceTracks(with: tracks))
             }),
-            RRSheet.Action(option: .addToLibrary, action: {
-                self.router?.showAddToPlaylist(for: self.playlist)
-            }),
         ]
+        
+        if appStateSlice.user.isGuest == false {
+
+            let toPlaylist = RRSheet.Action(option: .addToLibrary) {
+                self.router?.showAddToPlaylist(for: self.playlist)
+            }
+            
+            actions.append(toPlaylist)
+        }
         
         let provider = (tracksViewModel.trackProivder as! PlaylistProvider)
         

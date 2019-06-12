@@ -67,7 +67,7 @@
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="wpZ-HZ-Jgb">
                     <rect key="frame" x="372" y="36" width="101" height="14"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 45 SEC " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1N-ce-dRn">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 45 SEC " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1N-ce-dRn">
                             <rect key="frame" x="0.0" y="0.0" width="35" height="14"/>
                             <color key="backgroundColor" red="0.50701785087585449" green="0.5403289794921875" blue="0.78656071424484253" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>

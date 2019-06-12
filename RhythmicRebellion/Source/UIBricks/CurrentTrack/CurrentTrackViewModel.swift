@@ -262,7 +262,9 @@ extension CurrentTrackViewModel {
             return
         }
         
-        UserManager.update(track: track, likeState: .liked).subscribe()
+        let newState: Track.LikeStates = appStateSlice.user.likeState(for: track) == .liked ? .none : .liked
+        
+        UserManager.update(track: track, likeState: newState).subscribe()
         
     }
     
@@ -273,7 +275,9 @@ extension CurrentTrackViewModel {
             return
         }
         
-        UserManager.update(track: track, likeState: .disliked).subscribe()
+        let newState: Track.LikeStates = appStateSlice.user.likeState(for: track) == .disliked ? .none : .disliked
+        
+        UserManager.update(track: track, likeState: newState).subscribe()
     }
     
     func scrub(to progress: Float) {

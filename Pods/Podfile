@@ -26,16 +26,15 @@ target 'RhythmicRebellion' do
     pod 'Fabric', '~> 1.9.0'
     pod 'Crashlytics', '~> 3.12.0'
     
-    pod 'Starscream', '3.0.5'
     pod 'AlamofireImage', '~> 3.3'
     pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', :tag => '4.2.0'
     pod 'MaterialTextField', '~> 1.0'
     pod 'CloudTagView', '~> 3.0.0'
     pod 'NSStringMask'
     pod 'DownloadButton'
-    pod 'EasyTipView', '= 2.0.1'
 
     #infrastructure
+    pod 'Starscream', '3.0.5'
     pod 'R.swift', '5.0.3'
     pod 'RxReachability'
     pod 'AlamofireNetworkActivityLogger'

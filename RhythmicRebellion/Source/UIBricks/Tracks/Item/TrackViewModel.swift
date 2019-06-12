@@ -21,8 +21,6 @@ extension TrackViewModel {
     var title: String { return track.name }
     var description: String { return track.artist.name }
     
-    var isPlayable: Bool { return track.isPlayable }
-    
     var index: String { return "\(trackRepresentation.index + 1)" }
     var artwork: String { return track.images.first?.simpleURL ?? "" }
 
@@ -61,6 +59,10 @@ extension TrackViewModel {
     var attributes: Driver<[Attribute]> {
         
         var x: [Attribute] = []
+        
+        if !track.isPlayable {
+            return .just([ .raw("  SOON  ") ])
+        }
         
         if track.isCensorship {
             x.append(.explicitMaterial)
