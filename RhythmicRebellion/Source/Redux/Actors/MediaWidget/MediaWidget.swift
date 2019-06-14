@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import MediaPlayer
+import AlamofireImage
 
 struct MediaWidget: Actor {
     
@@ -41,12 +42,34 @@ struct MediaWidget: Actor {
                         return
                 }
                 
-                MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-                    MPMediaItemPropertyTitle: state.currendPlayableTitle,
-                    MPMediaItemPropertyArtist: currentTrack.track.artist.name,
-                    MPMediaItemPropertyPlaybackDuration: NSNumber(value: trackDuration),
-                    MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber(value: currentItem.state.progress)
-                ]
+                let x = MPNowPlayingInfoCenter.default()
+                
+                x.nowPlayingInfo?[MPMediaItemPropertyTitle] = state.currendPlayableTitle
+                x.nowPlayingInfo?[MPMediaItemPropertyArtist] = currentTrack.track.artist.name
+                x.nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = NSNumber(value: trackDuration)
+                x.nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: currentItem.state.progress)
+                
+            })
+            .disposed(by: bag)
+        
+        appState.distinctUntilChanged { $0.currentTrack == $1.currentTrack }
+            .map { $0.currentTrack?.track.images.first?.simpleURL ?? "" }
+            .flatMapLatest { ImageRetreiver.imageForURLWithoutProgress(url: $0) }
+            .drive(onNext: { (maybeImage) in
+                
+                var artwork: MPMediaItemArtwork? = nil
+                if let i = maybeImage {
+                    
+                    let m = min(i.size.width, i.size.height)
+                    let size = CGSize(width: m, height: m)
+                    
+                    artwork = MPMediaItemArtwork(boundsSize: size) { size in
+                        return AspectScaledToFillSizeFilter(size: size).filter(i)
+                    }
+                }
+                
+                MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyArtwork] = artwork
+                
             })
             .disposed(by: bag)
         
