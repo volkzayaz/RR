@@ -9,7 +9,6 @@ PODS:
     - Fabric (~> 1.9.0)
   - Differentiator (3.1.0)
   - DownloadButton (0.1.0)
-  - EasyTipView (2.0.1)
   - Fabric (1.9.0)
   - Firebase/Core (6.0.0):
     - Firebase/CoreOnly
@@ -32,6 +31,7 @@ PODS:
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
     - GoogleUtilities/UserDefaults (~> 6.0)
+  - FXBlurView (1.6.4)
   - GoogleAppMeasurement (6.0.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -96,9 +96,9 @@ DEPENDENCIES:
   - CloudTagView (~> 3.0.0)
   - Crashlytics (~> 3.12.0)
   - DownloadButton
-  - EasyTipView (= 2.0.1)
   - Fabric (~> 1.9.0)
   - Firebase/Core
+  - FXBlurView
   - MaterialTextField (~> 1.0)
   - Mocker
   - Nimble (~> 7.0)
@@ -123,12 +123,12 @@ SPEC REPOS:
     - Crashlytics
     - Differentiator
     - DownloadButton
-    - EasyTipView
     - Fabric
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
     - FirebaseInstanceID
+    - FXBlurView
     - GoogleAppMeasurement
     - GoogleUtilities
     - MaterialTextField
@@ -167,12 +167,12 @@ SPEC CHECKSUMS:
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
-  EasyTipView: 1515544456d6e943240012e9be5d25d1bb766603
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   Firebase: fa80b9d987ca014a1ba9357496ef2a0178b28b12
   FirebaseAnalytics: 1743c5f4de3687d0745709dfdc4b1dea1484f44c
   FirebaseCore: e38f025287b413255a53acc1945d048a112047f7
   FirebaseInstanceID: 0e0348a3c00a734fa376a070f5ad4533ad975cb5
+  FXBlurView: db786c2561cb49a09ae98407f52460096ab8a44f
   GoogleAppMeasurement: 7f028ea162b72c8f326daec74afc95d94f7a47d6
   GoogleUtilities: 84df567c76ca84f67b7bb40e769fdd4acc746a10
   MaterialTextField: f1a0786588e4d3610cb9bb62d2adbe9777cebbf9
@@ -194,6 +194,6 @@ SPEC CHECKSUMS:
   XLActionController: d7dea0b162bd3977311bcba7d377b88d6b87a7b4
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: 37a775c98ac5075c6673f94d546bc504b72d7b0b
+PODFILE CHECKSUM: 6be68eda9da4edd94e40d3b51365ddcbddd6ae7d
 
 COCOAPODS: 1.6.1

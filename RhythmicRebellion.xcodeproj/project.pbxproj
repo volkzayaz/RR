@@ -60,6 +60,7 @@
 		7373211E22552A5B00606E09 /* PlaylistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7373211D22552A5B00606E09 /* PlaylistManager.swift */; };
 		737622F621CD28AF005B603E /* Artist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 737622F521CD28AF005B603E /* Artist.storyboard */; };
 		738DE89D22B1036E00BB52BF /* RemovePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738DE89C22B1036E00BB52BF /* RemovePlaylist.swift */; };
+		738DE8AB22B3D93B00BB52BF /* BestForYouHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738DE8AA22B3D93B00BB52BF /* BestForYouHeader.swift */; };
 		739FFA28224BA3FF007A88CA /* PrepareLyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */; };
 		739FFA2A224BA5CB007A88CA /* ChangeLyricsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */; };
 		73A56D1622663C5D00D2293B /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D1022663C5D00D2293B /* Authenticator.swift */; };
@@ -115,7 +116,6 @@
 		73F13808222C289200FB8EBC /* HobbiesContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1368D222C289200FB8EBC /* HobbiesContainerView.swift */; };
 		73F13809222C289200FB8EBC /* MaskedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1368E222C289200FB8EBC /* MaskedTextField.swift */; };
 		73F1380A222C289200FB8EBC /* TextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1368F222C289200FB8EBC /* TextFields.swift */; };
-		73F1380B222C289200FB8EBC /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13690222C289200FB8EBC /* TipView.swift */; };
 		73F1380C222C289200FB8EBC /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13691222C289200FB8EBC /* ProgressView.swift */; };
 		73F1380D222C289200FB8EBC /* ErrorPresenting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13692222C289200FB8EBC /* ErrorPresenting.swift */; };
 		73F1380E222C289200FB8EBC /* DesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F13693222C289200FB8EBC /* DesignableButton.swift */; };
@@ -461,6 +461,7 @@
 		7373211D22552A5B00606E09 /* PlaylistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistManager.swift; sourceTree = "<group>"; };
 		737622F521CD28AF005B603E /* Artist.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Artist.storyboard; sourceTree = "<group>"; };
 		738DE89C22B1036E00BB52BF /* RemovePlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovePlaylist.swift; sourceTree = "<group>"; };
+		738DE8AA22B3D93B00BB52BF /* BestForYouHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestForYouHeader.swift; sourceTree = "<group>"; };
 		739FFA27224BA3FF007A88CA /* PrepareLyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareLyrics.swift; sourceTree = "<group>"; };
 		739FFA29224BA5CA007A88CA /* ChangeLyricsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLyricsMode.swift; sourceTree = "<group>"; };
 		73A56D1022663C5D00D2293B /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
@@ -516,7 +517,6 @@
 		73F1368D222C289200FB8EBC /* HobbiesContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HobbiesContainerView.swift; sourceTree = "<group>"; };
 		73F1368E222C289200FB8EBC /* MaskedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaskedTextField.swift; sourceTree = "<group>"; };
 		73F1368F222C289200FB8EBC /* TextFields.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFields.swift; sourceTree = "<group>"; };
-		73F13690222C289200FB8EBC /* TipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipView.swift; sourceTree = "<group>"; };
 		73F13691222C289200FB8EBC /* ProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		73F13692222C289200FB8EBC /* ErrorPresenting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPresenting.swift; sourceTree = "<group>"; };
 		73F13693222C289200FB8EBC /* DesignableButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignableButton.swift; sourceTree = "<group>"; };
@@ -1392,7 +1392,6 @@
 				73F1368D222C289200FB8EBC /* HobbiesContainerView.swift */,
 				73F1368E222C289200FB8EBC /* MaskedTextField.swift */,
 				73F1368F222C289200FB8EBC /* TextFields.swift */,
-				73F13690222C289200FB8EBC /* TipView.swift */,
 				73F13691222C289200FB8EBC /* ProgressView.swift */,
 				73F13692222C289200FB8EBC /* ErrorPresenting.swift */,
 				73F13693222C289200FB8EBC /* DesignableButton.swift */,
@@ -1490,6 +1489,7 @@
 				73F136D2222C289200FB8EBC /* DiscoverViewController.swift */,
 				73F136D3222C289200FB8EBC /* DiscoverRouter.swift */,
 				73F136D6222C289200FB8EBC /* DiscoverViewModel.swift */,
+				738DE8AA22B3D93B00BB52BF /* BestForYouHeader.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -2608,7 +2608,7 @@
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityLogger/AlamofireNetworkActivityLogger.framework",
 				"${BUILT_PRODUCTS_DIR}/CloudTagView/CloudTagView.framework",
 				"${BUILT_PRODUCTS_DIR}/DownloadButton/DownloadButton.framework",
-				"${BUILT_PRODUCTS_DIR}/EasyTipView/EasyTipView.framework",
+				"${BUILT_PRODUCTS_DIR}/FXBlurView/FXBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/MaterialTextField/MaterialTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/NSStringMask/NSStringMask.framework",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library/Rswift.framework",
@@ -2635,7 +2635,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityLogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CloudTagView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DownloadButton.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EasyTipView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FXBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSStringMask.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
@@ -2897,7 +2897,6 @@
 				73F13821222C289200FB8EBC /* Location.swift in Sources */,
 				73F1380E222C289200FB8EBC /* DesignableButton.swift in Sources */,
 				73F137F7222C289200FB8EBC /* TrackView.swift in Sources */,
-				73F1380B222C289200FB8EBC /* TipView.swift in Sources */,
 				73F138D6222C289200FB8EBC /* LyricsKaraokeViewController.swift in Sources */,
 				73F13838222C289200FB8EBC /* Image.swift in Sources */,
 				7361C008223684EE008EA36E /* InsertTracks.swift in Sources */,
@@ -3018,6 +3017,7 @@
 				73F1391A222C28A300FB8EBC /* AppDelegate.swift in Sources */,
 				7361C00C2236851E008EA36E /* ClearTracks.swift in Sources */,
 				73F13888222C289200FB8EBC /* ProfileViewModel.swift in Sources */,
+				738DE8AB22B3D93B00BB52BF /* BestForYouHeader.swift in Sources */,
 				73F1382B222C289200FB8EBC /* ArtistFollowingState.swift in Sources */,
 				73F138D4222C289200FB8EBC /* KaraokeViewController.swift in Sources */,
 				73F138A8222C289200FB8EBC /* PagesViewController.swift in Sources */,

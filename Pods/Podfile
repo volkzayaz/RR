@@ -44,6 +44,7 @@ target 'RhythmicRebellion' do
     pod 'youtube-ios-player-helper', '~> 0.1.4'
     pod 'SwiftGifOrigin', '~> 1.7.0'
     pod 'XLActionController'
+    pod 'FXBlurView'
     
 end
 

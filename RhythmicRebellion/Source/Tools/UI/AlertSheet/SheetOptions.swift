@@ -28,7 +28,7 @@ enum RRSheet {
             case .share:            return "Share"
             case .delete:           return "Delete"
             case .forceToPlay:      return "Force to Play"
-            case .replace:          return "Replace"
+            case .replace:          return "Replace Playing"
             case .clear:            return "Clear"
             }
         }

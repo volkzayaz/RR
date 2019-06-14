@@ -10,11 +10,13 @@ import UIKit
 
 import RxSwift
 import RxCocoa
+import FXBlurView
 
 class CurrentTrackViewController: UIViewController, MVVM_View {
     
     var viewModel: CurrentTrackViewModel!
     
+    @IBOutlet weak var blurryImageView: UIImageView!
     @IBOutlet weak var trackImageView: UIImageView!
     @IBOutlet weak var trackNameLabel: UILabel!
     @IBOutlet weak var trackArtistLabel: UILabel!
@@ -68,10 +70,16 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
             })
             .disposed(by: rx.disposeBag)
         
-        viewModel.imageURL
+        let image = viewModel.imageURL
             .flatMapLatest { ImageRetreiver.imageForURLWithoutProgress(url: $0) }
+        
+        image
             .map { $0 ?? R.image.cover_placeholder() }
             .drive(trackImageView.rx.image)
+            .disposed(by: rx.disposeBag)
+        
+        image.map { $0?.blurredImage(withRadius: 1, iterations: 10, tintColor: nil) }
+            .drive(blurryImageView.rx.image)
             .disposed(by: rx.disposeBag)
         
         viewModel.isPlaying
@@ -141,9 +149,19 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
             .disposed(by: rx.disposeBag)
     }
 
+    var shouldHideStatusBar = false
+    override var prefersStatusBarHidden: Bool {
+        return shouldHideStatusBar
+    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        shouldHideStatusBar = true
+        setNeedsStatusBarAppearanceUpdate()
     }
     
 }

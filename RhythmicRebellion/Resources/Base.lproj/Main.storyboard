@@ -14,7 +14,9 @@
         <scene sceneID="tfv-et-ERG">
             <objects>
                 <navigationController navigationBarHidden="YES" id="rFv-qb-7Tz" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Pages" image="pages" id="ydj-oU-PIG"/>
+                    <tabBarItem key="tabBarItem" title="Pages" image="pages" id="ydj-oU-PIG">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="fis-Ef-Ilg">
                         <autoresizingMask key="autoresizingMask"/>
@@ -37,6 +39,11 @@
                         <color key="backgroundColor" red="0.12941176470588234" green="0.16470588235294117" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.12941176470588234" green="0.16470588235294117" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="selectedImageTintColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="unselectedItemTintColor">
+                                <color key="value" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
                         <segue destination="b3x-q0-liu" kind="relationship" relationship="viewControllers" id="H3u-ok-aQj"/>
@@ -338,11 +345,28 @@
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gZk-kI-oO1" customClass="BaseFlowLayout" customModule="RhythmicRebellion" customModuleProvider="target">
                                     <size key="itemSize" width="177.5" height="160.5"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="bestForYou" id="n8M-HV-hc1" customClass="BestForYouHeader">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Best for you" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHX-d7-mSt">
+                                            <rect key="frame" x="16" y="23" width="113" height="24"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="dHX-d7-mSt" firstAttribute="leading" secondItem="n8M-HV-hc1" secondAttribute="leading" constant="16" id="Lbd-Bw-KfR"/>
+                                        <constraint firstItem="dHX-d7-mSt" firstAttribute="centerY" secondItem="n8M-HV-hc1" secondAttribute="centerY" constant="10" id="moZ-Yd-hmj"/>
+                                    </constraints>
+                                </collectionReusableView>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -675,6 +699,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rue-vr-dH5">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
+                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kiG-Zi-GeJ">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <color key="backgroundColor" red="0.10588235294117647" green="0.054901960784313725" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dlK-xl-bFu">
                                 <rect key="frame" x="0.0" y="96" width="375" height="32"/>
                                 <subviews>
@@ -909,9 +940,12 @@
                         <constraints>
                             <constraint firstItem="TaF-CI-K11" firstAttribute="bottom" secondItem="2Ix-KN-7vO" secondAttribute="bottom" constant="9" id="2Z3-p6-45n"/>
                             <constraint firstItem="8tV-nQ-92F" firstAttribute="top" secondItem="dlK-xl-bFu" secondAttribute="bottom" constant="38" id="2fw-7d-IUx"/>
+                            <constraint firstItem="kiG-Zi-GeJ" firstAttribute="bottom" secondItem="rue-vr-dH5" secondAttribute="bottom" id="3Fn-Sh-rE0"/>
                             <constraint firstItem="TaF-CI-K11" firstAttribute="trailing" secondItem="dlK-xl-bFu" secondAttribute="trailing" id="4G3-Ix-epg"/>
+                            <constraint firstAttribute="trailing" secondItem="rue-vr-dH5" secondAttribute="trailing" id="4Q0-3j-Zl0"/>
                             <constraint firstItem="NVL-zP-T2b" firstAttribute="centerY" secondItem="dvW-rI-kie" secondAttribute="centerY" id="5dv-RH-UwV"/>
                             <constraint firstItem="dp5-p9-ldq" firstAttribute="top" secondItem="ceM-Ix-jOE" secondAttribute="bottom" constant="30" id="5fU-0q-MB5"/>
+                            <constraint firstItem="kiG-Zi-GeJ" firstAttribute="top" secondItem="rue-vr-dH5" secondAttribute="top" id="6dg-X4-s5l"/>
                             <constraint firstItem="ZLh-LZ-rII" firstAttribute="top" secondItem="dp5-p9-ldq" secondAttribute="bottom" constant="42" id="7H5-1h-Ws8"/>
                             <constraint firstItem="dp5-p9-ldq" firstAttribute="leading" secondItem="ceM-Ix-jOE" secondAttribute="leading" id="7yb-Mq-aQ1"/>
                             <constraint firstItem="X51-cS-DpI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ceM-Ix-jOE" secondAttribute="trailing" constant="4" id="8Cb-mg-s3n"/>
@@ -922,16 +956,21 @@
                             <constraint firstItem="uc1-px-CWi" firstAttribute="centerY" secondItem="pc4-F6-fMP" secondAttribute="centerY" id="Dgm-MM-HvH"/>
                             <constraint firstItem="dp5-p9-ldq" firstAttribute="trailing" secondItem="dvW-rI-kie" secondAttribute="trailing" id="EdG-tf-Fp9"/>
                             <constraint firstItem="TaF-CI-K11" firstAttribute="bottom" secondItem="PoW-w5-jBs" secondAttribute="top" constant="44" id="L2o-oq-T4u"/>
+                            <constraint firstAttribute="bottom" secondItem="rue-vr-dH5" secondAttribute="bottom" id="L68-Rh-QSx"/>
                             <constraint firstAttribute="bottom" secondItem="PoW-w5-jBs" secondAttribute="bottom" id="NpN-Sb-yfR"/>
+                            <constraint firstItem="rue-vr-dH5" firstAttribute="leading" secondItem="0WI-L6-Ig6" secondAttribute="leading" id="Pyq-tn-TbD"/>
                             <constraint firstItem="uc1-px-CWi" firstAttribute="top" secondItem="dp5-p9-ldq" secondAttribute="bottom" constant="4" id="Q37-At-7A9"/>
                             <constraint firstItem="sFP-5W-8KF" firstAttribute="centerX" secondItem="TaF-CI-K11" secondAttribute="centerX" id="QdW-NN-AER"/>
                             <constraint firstItem="pc4-F6-fMP" firstAttribute="trailing" secondItem="dp5-p9-ldq" secondAttribute="trailing" id="R5x-5Z-rLe"/>
+                            <constraint firstItem="rue-vr-dH5" firstAttribute="top" secondItem="0WI-L6-Ig6" secondAttribute="top" id="Rpz-mJ-s36"/>
                             <constraint firstItem="NVL-zP-T2b" firstAttribute="centerY" secondItem="ENs-UL-HmV" secondAttribute="bottom" id="SfW-cx-o9D"/>
                             <constraint firstItem="PoW-w5-jBs" firstAttribute="leading" secondItem="TaF-CI-K11" secondAttribute="leading" id="VJr-xH-Jo9"/>
                             <constraint firstItem="PoW-w5-jBs" firstAttribute="trailing" secondItem="TaF-CI-K11" secondAttribute="trailing" id="Xrq-0j-6Ld"/>
+                            <constraint firstItem="sFP-5W-8KF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="0WI-L6-Ig6" secondAttribute="top" constant="20" id="aRJ-Bf-Cn3"/>
                             <constraint firstItem="ENs-UL-HmV" firstAttribute="top" secondItem="8tV-nQ-92F" secondAttribute="bottom" constant="28.333333333333371" id="aZX-Pz-mUp"/>
                             <constraint firstItem="ceM-Ix-jOE" firstAttribute="leading" secondItem="ENs-UL-HmV" secondAttribute="leading" id="aoe-FE-VM2"/>
-                            <constraint firstItem="sFP-5W-8KF" firstAttribute="top" secondItem="TaF-CI-K11" secondAttribute="top" id="d2Z-hO-vdH"/>
+                            <constraint firstItem="kiG-Zi-GeJ" firstAttribute="trailing" secondItem="rue-vr-dH5" secondAttribute="trailing" id="bd5-RD-oXZ"/>
+                            <constraint firstItem="sFP-5W-8KF" firstAttribute="top" secondItem="TaF-CI-K11" secondAttribute="top" priority="800" id="d2Z-hO-vdH"/>
                             <constraint firstItem="NVL-zP-T2b" firstAttribute="leading" secondItem="X51-cS-DpI" secondAttribute="trailing" constant="8" id="fSr-sk-eKR"/>
                             <constraint firstItem="ceM-Ix-jOE" firstAttribute="top" secondItem="ENs-UL-HmV" secondAttribute="bottom" constant="2" id="ghh-5z-79v"/>
                             <constraint firstAttribute="trailing" secondItem="ZLh-LZ-rII" secondAttribute="trailing" id="iVQ-Wd-fhl"/>
@@ -941,12 +980,14 @@
                             <constraint firstItem="dvW-rI-kie" firstAttribute="leading" secondItem="NVL-zP-T2b" secondAttribute="trailing" constant="18" id="ppw-m8-7x7"/>
                             <constraint firstItem="X51-cS-DpI" firstAttribute="centerY" secondItem="ceM-Ix-jOE" secondAttribute="centerY" id="ram-VN-H1b"/>
                             <constraint firstItem="NVL-zP-T2b" firstAttribute="leading" secondItem="ENs-UL-HmV" secondAttribute="trailing" constant="8" id="riZ-DX-A9Z"/>
+                            <constraint firstItem="kiG-Zi-GeJ" firstAttribute="leading" secondItem="rue-vr-dH5" secondAttribute="leading" id="tyZ-7V-ShX"/>
                             <constraint firstItem="8tV-nQ-92F" firstAttribute="centerX" secondItem="dlK-xl-bFu" secondAttribute="centerX" id="ypN-Rc-JQV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TaF-CI-K11"/>
                     </view>
                     <connections>
                         <outlet property="attributesStackView" destination="X51-cS-DpI" id="YdJ-g2-fes"/>
+                        <outlet property="blurryImageView" destination="rue-vr-dH5" id="EdZ-4M-vDm"/>
                         <outlet property="dislikeButton" destination="zgy-aX-lzn" id="pa2-rY-UiF"/>
                         <outlet property="leftProgress" destination="uc1-px-CWi" id="uQ4-Fe-ouu"/>
                         <outlet property="likeButton" destination="667-Je-EVI" id="vnk-9x-Cyi"/>
@@ -1272,7 +1313,9 @@ for this Artist</string>
         <scene sceneID="5C5-mU-wdm">
             <objects>
                 <navigationController storyboardIdentifier="LibraryViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H74-0G-LXl" customClass="LibraryViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Library" image="library" id="aOZ-0g-c1b"/>
+                    <tabBarItem key="tabBarItem" title="Library" image="library" id="aOZ-0g-c1b">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" shadowImage="bg-shadow" id="tZx-Os-44P">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -1304,9 +1347,10 @@ for this Artist</string>
         <!--Discover-->
         <scene sceneID="cYs-Qc-Bep">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MVD-pq-rv2" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="b3x-q0-liu" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Discover" image="discover" id="j44-Vk-Iya"/>
+                    <tabBarItem key="tabBarItem" title="Discover" image="discover" id="j44-Vk-Iya">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" shadowImage="bg-shadow" backIndicatorImage="BackButton" id="NMA-p4-slW">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -1322,6 +1366,7 @@ for this Artist</string>
                         <segue destination="EE0-GH-JrR" kind="relationship" relationship="rootViewController" id="LWc-mp-tVa"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MVD-pq-rv2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1233" y="315"/>
         </scene>
@@ -1329,7 +1374,9 @@ for this Artist</string>
         <scene sceneID="srN-g8-ptO">
             <objects>
                 <navigationController storyboardIdentifier="SettingsNavigationViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ZFZ-6G-ojm" customClass="SettingsNavigationViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" image="settings" id="YXh-44-FIE"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="settings" id="YXh-44-FIE">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="raF-VK-SD4">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>

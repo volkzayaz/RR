@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EasyTipView
 
 struct ArtistRouter : MVVM_Router {
     

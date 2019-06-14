@@ -24,6 +24,12 @@ final class DiscoverViewController: UIViewController {
         
         return cell
         
+    }, configureSupplementaryView: { (_, cv, kind, ip) in
+        
+        let view = cv.dequeueReusableSupplementaryView(ofKind: kind,
+                                                       withReuseIdentifier: R.reuseIdentifier.bestForYou.identifier,
+                                                       for: ip)
+        return view
     })
     
     lazy var viewModel: DiscoverViewModel! = DiscoverViewModel(router: .init(owner: self))
@@ -32,8 +38,11 @@ final class DiscoverViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.setupCollectionViewLayout()
+        
+        (collectionView.collectionViewLayout as? BaseFlowLayout)?
+            .configureFor(bounds: view.bounds)
+        
+        (collectionView.collectionViewLayout as? BaseFlowLayout)?.headerReferenceSize = CGSize(width: 0, height: 45)
 
         collectionView.register(R.nib.albumCell)
         
@@ -52,13 +61,6 @@ final class DiscoverViewController: UIViewController {
         super.viewWillAppear(animated)
 
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-
-    func setupCollectionViewLayout() {
-        
-        (collectionView.collectionViewLayout as? BaseFlowLayout)?
-            .configureFor(bounds: view.bounds)
-        
     }
 
 }

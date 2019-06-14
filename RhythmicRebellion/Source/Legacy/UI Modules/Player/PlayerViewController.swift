@@ -8,7 +8,6 @@
 //
 
 import UIKit
-import EasyTipView
 
 final class PlayerViewController: UIViewController {
 
@@ -59,17 +58,6 @@ final class PlayerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        var tipViewPreferences = EasyTipView.Preferences()
-        tipViewPreferences.drawing.font = UIFont.systemFont(ofSize: 12.0)
-        tipViewPreferences.drawing.foregroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        tipViewPreferences.drawing.backgroundColor = #colorLiteral(red: 0.2089539468, green: 0.1869146228, blue: 0.349752754, alpha: 1)
-        tipViewPreferences.animating.showInitialAlpha = 0
-        tipViewPreferences.animating.showDuration = 1.5
-        tipViewPreferences.animating.dismissDuration = 1.5
-        tipViewPreferences.positioning.textHInset = 5.0
-        tipViewPreferences.positioning.textVInset = 5.0
-        EasyTipView.globalPreferences = tipViewPreferences
 
         self.toolBar.setShadowImage(UIImage(), forToolbarPosition: .any)
         self.toolBar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
@@ -150,12 +138,6 @@ final class PlayerViewController: UIViewController {
         self.viewModel.setPlayerItemProgress(progress: value)
     }
 
-    @IBAction func onPlayerItemPreviewOptionButton(sender: UIButton) {
-        guard let parentView = self.parent?.view, let previewOptionHintText = self.viewModel.previewOptionHintText.value, previewOptionHintText.isEmpty == false else { return }
-
-        let tipView = TipView(text: previewOptionHintText, preferences: EasyTipView.globalPreferences)
-        tipView.showTouched(forView: sender, in: parentView)
-    }
 }
 
 // MARK: - UIGestureRecognizerDelegate -

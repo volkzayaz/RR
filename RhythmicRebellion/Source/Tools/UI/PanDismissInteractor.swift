@@ -12,6 +12,8 @@ class PanDismissInteractor: UIPercentDrivenInteractiveTransition, UIViewControll
     
     func present(vc: UIViewController, on presenter: UIViewController) {
         vc.transitioningDelegate = self
+        vc.modalPresentationCapturesStatusBarAppearance = true
+        
         owner = vc
         
         let x = UIPanGestureRecognizer(target: self, action: "didPan:")

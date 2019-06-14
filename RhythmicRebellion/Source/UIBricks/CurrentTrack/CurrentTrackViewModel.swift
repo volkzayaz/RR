@@ -190,7 +190,6 @@ extension CurrentTrackViewModel {
         return appState
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack }
             .map { $0.nextTrack?.track.name ?? "" }
-            .map { "Next up: \($0)" }
     }
     
     var sliderColor: Driver<UIColor> {

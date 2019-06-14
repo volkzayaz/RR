@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EasyTipView
 
 struct TrackRouter : MVVM_Router {
     
@@ -37,14 +36,5 @@ struct TrackRouter : MVVM_Router {
         owner.show(viewModels: actions, sourceRect: sourceRect, sourceView: sourceView)
         
     }
-    
-    func showTip(text: String, view: UIView, superView: UIView) {
-        
-        let tipView = TipView(text: text, preferences: EasyTipView.globalPreferences)
-        tipView.showTouched(forView: view, in: superView)
-        
-    }
-    
-    
     
 }

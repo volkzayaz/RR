@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<true/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>CFBundleDevelopmentRegion</key>

@@ -104,6 +104,10 @@ class RootViewController: UIViewController, MVVM_View {
         }
         
     }
+ 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
 }
 
