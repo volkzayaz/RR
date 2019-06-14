@@ -42,6 +42,8 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(moreButton.adjustsImageWhenHighlighted)
+        
         viewModel.rightProgress.drive(rightProgress.rx.text)
             .disposed(by: rx.disposeBag)
         

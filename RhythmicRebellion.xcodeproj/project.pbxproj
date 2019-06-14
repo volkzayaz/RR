@@ -79,6 +79,8 @@
 		73A56D3422663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3122663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift */; };
 		73A56D3622663ED700D2293B /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A56D3522663ED700D2293B /* Checkbox.swift */; };
 		73A9BA672296E42900C7D6F2 /* PanDismissInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9BA662296E42900C7D6F2 /* PanDismissInteractor.swift */; };
+		73B6580122B3E8090054F9A8 /* EyeBrowNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B6580022B3E8090054F9A8 /* EyeBrowNavigation.swift */; };
+		73B6580322B3EB580054F9A8 /* UIButtton+touches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B6580222B3EB580054F9A8 /* UIButtton+touches.swift */; };
 		73B97A702253995400B43D71 /* SetNewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A6F2253995400B43D71 /* SetNewUser.swift */; };
 		73B97A7322539DC500B43D71 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A7222539DC500B43D71 /* UserRequest.swift */; };
 		73B97A752253B20400B43D71 /* UpdateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B97A742253B20400B43D71 /* UpdateUser.swift */; };
@@ -480,6 +482,8 @@
 		73A56D3122663E8600D2293B /* ContinueFacebookRegistrationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueFacebookRegistrationViewModel.swift; sourceTree = "<group>"; };
 		73A56D3522663ED700D2293B /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		73A9BA662296E42900C7D6F2 /* PanDismissInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanDismissInteractor.swift; sourceTree = "<group>"; };
+		73B6580022B3E8090054F9A8 /* EyeBrowNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeBrowNavigation.swift; sourceTree = "<group>"; };
+		73B6580222B3EB580054F9A8 /* UIButtton+touches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButtton+touches.swift"; sourceTree = "<group>"; };
 		73B97A6F2253995400B43D71 /* SetNewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNewUser.swift; sourceTree = "<group>"; };
 		73B97A7222539DC500B43D71 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		73B97A742253B20400B43D71 /* UpdateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUser.swift; sourceTree = "<group>"; };
@@ -1209,6 +1213,14 @@
 			path = My;
 			sourceTree = "<group>";
 		};
+		73B657FF22B3E7F30054F9A8 /* EyeBrowNavigation */ = {
+			isa = PBXGroup;
+			children = (
+				73B6580022B3E8090054F9A8 /* EyeBrowNavigation.swift */,
+			);
+			path = EyeBrowNavigation;
+			sourceTree = "<group>";
+		};
 		73B97A6E225398C100B43D71 /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -1235,6 +1247,7 @@
 				73C02ACA228EAE6F00A16B6E /* DisclaimerLabel.swift */,
 				7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */,
 				7342010322AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift */,
+				73B6580222B3EB580054F9A8 /* UIButtton+touches.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1262,6 +1275,7 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
+				73B657FF22B3E7F30054F9A8 /* EyeBrowNavigation */,
 				73F13679222C289200FB8EBC /* Artist */,
 				73F13667222C289200FB8EBC /* ArtistsFollowed */,
 				73A56D2D22663E8600D2293B /* Auth */,
@@ -3015,6 +3029,7 @@
 				73F1389B222C289200FB8EBC /* TrackCells.swift in Sources */,
 				73F13886222C289200FB8EBC /* ChangeEmailViewController.swift in Sources */,
 				73F1391A222C28A300FB8EBC /* AppDelegate.swift in Sources */,
+				73B6580322B3EB580054F9A8 /* UIButtton+touches.swift in Sources */,
 				7361C00C2236851E008EA36E /* ClearTracks.swift in Sources */,
 				73F13888222C289200FB8EBC /* ProfileViewModel.swift in Sources */,
 				738DE8AB22B3D93B00BB52BF /* BestForYouHeader.swift in Sources */,
@@ -3118,6 +3133,7 @@
 				73F13849222C289200FB8EBC /* DiscoverRouter.swift in Sources */,
 				7361C00A22368504008EA36E /* DeleteTracks.swift in Sources */,
 				73DB1FD62271AC2300E01622 /* VideoViewModel.swift in Sources */,
+				73B6580122B3E8090054F9A8 /* EyeBrowNavigation.swift in Sources */,
 				7361C02222368F40008EA36E /* PrepareNewTrack.swift in Sources */,
 				73F138D2222C289200FB8EBC /* KaraokeFooterView.swift in Sources */,
 				7361C01C22368ED6008EA36E /* GetBackToPreviousItem.swift in Sources */,
