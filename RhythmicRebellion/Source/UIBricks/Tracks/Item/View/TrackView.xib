@@ -45,6 +45,7 @@
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zeg-CD-osw">
                     <rect key="frame" x="493" y="20.5" width="24" height="24"/>
+                    <color key="tintColor" red="0.74901960779999999" green="0.78039215689999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="options-horizontal"/>
                     <connections>
                         <action selector="onActionButtonWithSender:" destination="iN0-l3-epB" eventType="touchUpInside" id="yaY-8K-kRb"/>
@@ -122,6 +123,7 @@
                 <outlet property="descriptionLabel" destination="ACO-cQ-wwM" id="FJ3-WZ-9TN"/>
                 <outlet property="equlizerView" destination="F7c-d1-XaN" id="Q0g-o5-lUG"/>
                 <outlet property="indexLabel" destination="AW7-vZ-kaO" id="EgS-DV-7IQ"/>
+                <outlet property="optionsButton" destination="zeg-CD-osw" id="bD0-EN-KXQ"/>
                 <outlet property="previewLabel" destination="A1N-ce-dRn" id="R5N-BZ-AwN"/>
                 <outlet property="titleLabel" destination="Yu7-y9-D3z" id="AqD-py-Hzr"/>
             </connections>

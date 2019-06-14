@@ -30,6 +30,8 @@ final class PlaylistViewController: UIViewController {
     @IBOutlet weak var tableHeaderView: PlaylistTableHeaderView!
     @IBOutlet var emptyPlaylistView: UIView!
 
+    @IBOutlet weak var playlistTitle: UILabel!
+    
     var viewModel: PlaylistViewModel!
 
     // MARK: - Lifecycle -
@@ -37,8 +39,6 @@ final class PlaylistViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = viewModel.headerViewModel.title
-        
         tableView.register(R.nib.trackTableViewCell)
         
         tableHeaderView.setup(viewModel: viewModel.headerViewModel)
@@ -123,6 +123,31 @@ extension PlaylistViewController: UITableViewDelegate {
         guard section == 0, self.viewModel.tracksViewModel.isPlaylistEmpty else { return nil }
         return self.emptyPlaylistView
     }
+}
+
+extension PlaylistViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let shouldHide = (scrollView.contentOffset.y - playlistTitle.frame.origin.y - 50) < 0
+        
+        if shouldHide {
+            navigationItem.title  = ""
+            return
+        }
+        
+        if !shouldHide && navigationItem.title == "" {
+            let fadeTextAnimation = CATransition()
+            fadeTextAnimation.duration = 0.3
+            fadeTextAnimation.type = CATransitionType.fade
+            fadeTextAnimation.isRemovedOnCompletion = true
+            
+            navigationController?.navigationBar.layer.add(fadeTextAnimation, forKey: "fadeText")
+            navigationItem.title = viewModel.headerViewModel.title
+        }
+        
+    }
+    
 }
 
 // MARK: - Router -

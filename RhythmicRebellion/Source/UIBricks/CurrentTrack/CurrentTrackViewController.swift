@@ -140,6 +140,7 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
             })
             .disposed(by: rx.disposeBag)
     }
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -175,6 +176,10 @@ extension CurrentTrackViewController {
     
     @IBAction func dislikeTapped(_ sender: Any) {
         viewModel.dislike()
+    }
+    
+    @IBAction func dismissController(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
     
 }

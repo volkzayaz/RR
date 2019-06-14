@@ -24,6 +24,12 @@ class TrackView: UIView {
     @IBOutlet weak var attributesStackView: UIStackView!
     @IBOutlet var previewLabel: UILabel!
     
+    @IBOutlet weak var optionsButton: UIButton! {
+        didSet {
+            optionsButton.setImage(R.image.optionsHorizontal()?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+    }
+    
     var viewModel: TrackViewModel!
     
     var disposeBag = DisposeBag()
