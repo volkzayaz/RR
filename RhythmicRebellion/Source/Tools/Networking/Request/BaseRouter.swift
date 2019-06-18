@@ -114,7 +114,7 @@ struct URI {
             return "https://rhythmic-rebellion.com"
         }
         
-        let `protocol` = env == "staging" ? "https" : "http"
+        let `protocol` = ["staging", "staging-dev"].contains(env) ? "https" : "http"
         
         return "\(`protocol`)://\(String(describing: env)).fan.rebellionretailsite.com"
     }
@@ -127,7 +127,7 @@ struct URI {
             return "https://api.rhythmic-rebellion.com"
         }
         
-        let `protocol` = env == "staging" ? "https" : "http"
+        let `protocol` = ["staging", "staging-dev"].contains(env) ? "https" : "http"
         
         return "\(`protocol`)://\(String(describing: env)).api.rebellionretailsite.com"
         
@@ -141,8 +141,8 @@ struct URI {
             return "wss://ws.rebellion-services.com"
         }
         
-        guard env != "staging" else {
-            return "wss://staging.ws.rebellionretailsite.com:3000/"
+        if ["staging", "staging-dev"].contains(env) {
+            return "wss://\(env).ws.rebellionretailsite.com:3000/"
         }
         
         return "ws://\(String(describing: env)).rebellionretailsite.com:3000/"
