@@ -10,7 +10,7 @@ import UIKit
 
 import RxSwift
 import RxCocoa
-import SwiftGifOrigin
+import SwiftyGif
 
 class SplashViewController: UIViewController, MVVM_View {
     
@@ -21,8 +21,8 @@ class SplashViewController: UIViewController, MVVM_View {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imageView.loadGif(name: "splash")
-
+        imageView.setGifImage(try! UIImage(gifName: "splash.gif"))
+        
         viewModel.finishedLoading
             .drive(onNext: { [unowned self] (_) in
                 
@@ -31,7 +31,6 @@ class SplashViewController: UIViewController, MVVM_View {
                 x.viewModel = .init(router: .init(owner: x))
                 x.transitioningDelegate = self
                 
-                //UIApplication.shared.keyWindow!.rootViewController = appViewController
                 self.present(x, animated: true, completion: nil)
                 
             })

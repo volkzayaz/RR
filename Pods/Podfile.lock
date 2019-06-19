@@ -83,8 +83,8 @@ PODS:
   - RxSwift (4.5.0)
   - SnapKit (4.2.0)
   - Starscream (3.0.5)
-  - SwiftGifOrigin (1.7.0)
   - SwiftValidator (4.0.0)
+  - SwiftyGif (5.1.1)
   - XLActionController (5.0.0):
     - XLActionController/Core (= 5.0.0)
   - XLActionController/Core (5.0.0)
@@ -111,8 +111,8 @@ DEPENDENCIES:
   - RxReachability
   - SnapKit (~> 4.2.0)
   - Starscream (= 3.0.5)
-  - SwiftGifOrigin (~> 1.7.0)
   - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, tag `4.2.0`)
+  - SwiftyGif
   - XLActionController
   - youtube-ios-player-helper (~> 0.1.4)
 
@@ -148,7 +148,7 @@ SPEC REPOS:
     - RxSwift
     - SnapKit
     - Starscream
-    - SwiftGifOrigin
+    - SwiftyGif
     - XLActionController
     - youtube-ios-player-helper
 
@@ -193,11 +193,11 @@ SPEC CHECKSUMS:
   RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
-  SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
   SwiftValidator: 58c155c8ae8421ef716a96e52a49984dd54c700c
+  SwiftyGif: f7702483db93586a41f04f4927cd682852a2fa10
   XLActionController: d7dea0b162bd3977311bcba7d377b88d6b87a7b4
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: 941b43d166c3c976f9ee6e46ca5eefd243dfbe9a
+PODFILE CHECKSUM: 8885bd860d5e3876455344c77dae1435cd4d75a7
 
 COCOAPODS: 1.6.1

@@ -15,6 +15,7 @@
 		733768E92289954100C922D9 /* SplashRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E62289954100C922D9 /* SplashRouter.swift */; };
 		733768EA2289954100C922D9 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E72289954100C922D9 /* SplashViewController.swift */; };
 		733768EB2289954100C922D9 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733768E82289954100C922D9 /* SplashViewModel.swift */; };
+		733FA05022BA2B52001A0914 /* equalizer.gif in Resources */ = {isa = PBXBuildFile; fileRef = 733FA04F22BA2B52001A0914 /* equalizer.gif */; };
 		734200D022A7F2FF00EE2CCC /* CurrentTrackRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CD22A7F2FF00EE2CCC /* CurrentTrackRouter.swift */; };
 		734200D122A7F2FF00EE2CCC /* CurrentTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CE22A7F2FF00EE2CCC /* CurrentTrackViewController.swift */; };
 		734200D222A7F2FF00EE2CCC /* CurrentTrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200CF22A7F2FF00EE2CCC /* CurrentTrackViewModel.swift */; };
@@ -411,6 +412,7 @@
 		733768E62289954100C922D9 /* SplashRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashRouter.swift; sourceTree = "<group>"; };
 		733768E72289954100C922D9 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		733768E82289954100C922D9 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
+		733FA04F22BA2B52001A0914 /* equalizer.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = equalizer.gif; sourceTree = "<group>"; };
 		734200CD22A7F2FF00EE2CCC /* CurrentTrackRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackRouter.swift; sourceTree = "<group>"; };
 		734200CE22A7F2FF00EE2CCC /* CurrentTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackViewController.swift; sourceTree = "<group>"; };
 		734200CF22A7F2FF00EE2CCC /* CurrentTrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTrackViewModel.swift; sourceTree = "<group>"; };
@@ -2223,6 +2225,7 @@
 		76F1FA3E20DBA8DE00C9191F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				733FA04F22BA2B52001A0914 /* equalizer.gif */,
 				733768E02289949000C922D9 /* splash.gif */,
 				736598E321D66E480092E499 /* Strings */,
 				76F1FA4D20DBA92F00C9191F /* Assets.xcassets */,
@@ -2581,6 +2584,7 @@
 				73F137FC222C289200FB8EBC /* ArtistCoverHeader.xib in Resources */,
 				73C02ACD228EE8D900A16B6E /* AlbumCell.xib in Resources */,
 				73F1389A222C289200FB8EBC /* TrackTableViewCell.xib in Resources */,
+				733FA05022BA2B52001A0914 /* equalizer.gif in Resources */,
 				763157FE219D798700E1D7F5 /* Profile.storyboard in Resources */,
 				736598E621D66E6C0092E499 /* Localizable.strings in Resources */,
 				76A45B46213927470080885D /* SelectableList.storyboard in Resources */,
@@ -2626,8 +2630,8 @@
 				"${BUILT_PRODUCTS_DIR}/RxReachability/RxReachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftGifOrigin/SwiftGifOrigin.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework",
 				"${BUILT_PRODUCTS_DIR}/XLActionController/XLActionController.framework",
 				"${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework",
 			);
@@ -2654,8 +2658,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxReachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftGifOrigin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyGif.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XLActionController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/youtube_ios_player_helper.framework",
 			);

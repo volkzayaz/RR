@@ -43,7 +43,7 @@ target 'RhythmicRebellion' do
     #ui
     pod 'SnapKit', '~> 4.2.0'
     pod 'youtube-ios-player-helper', '~> 0.1.4'
-    pod 'SwiftGifOrigin', '~> 1.7.0'
+    pod 'SwiftyGif'
     pod 'XLActionController'
     pod 'FXBlurView'
     pod 'Parchment'

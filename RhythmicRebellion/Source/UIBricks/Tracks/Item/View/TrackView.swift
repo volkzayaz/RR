@@ -12,6 +12,8 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+import SwiftyGif
+
 class TrackView: UIView {
 
     @IBOutlet weak var titleLabel: UILabel!
@@ -20,6 +22,7 @@ class TrackView: UIView {
     @IBOutlet weak var artworkImageView: UIImageView!
     
     @IBOutlet weak var equlizerView: UIView!
+    @IBOutlet weak var equalizerImageView: UIImageView!
     
     @IBOutlet weak var attributesStackView: UIStackView!
     @IBOutlet var previewLabel: UILabel!
@@ -29,6 +32,13 @@ class TrackView: UIView {
     var viewModel: TrackViewModel!
     
     var disposeBag = DisposeBag()
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        equalizerImageView.setGifImage( try! UIImage(gifName: "equalizer.gif") )
+        equalizerImageView.stopAnimatingGif()
+    }
     
     func prepareToDisplay() {
         artworkImageView.image = nil
@@ -42,12 +52,20 @@ class TrackView: UIView {
 
         self.viewModel = viewModel
       
-        self.titleLabel.text = viewModel.title
-        self.descriptionLabel.text = viewModel.description
-
+        titleLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.description
+        
         viewModel.equalizerHidden
             .drive(equlizerView.rx.isHidden)
             .disposed(by: disposeBag)
+        
+        viewModel.isPlaying
+            .drive(onNext: { [unowned self] (isPlaying) in
+                isPlaying ?
+                    self.equalizerImageView.startAnimatingGif() :
+                    self.equalizerImageView.stopAnimatingGif()
+            })
+            .disposed(by: rx.disposeBag)
         
         indexLabel.isHidden = viewModel.indexHidden
         artworkImageView.isHidden = viewModel.artworkHidden
