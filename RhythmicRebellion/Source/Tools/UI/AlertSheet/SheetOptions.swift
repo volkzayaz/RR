@@ -73,7 +73,7 @@ extension RRSheetController {
             x.addAction(XLActionController.Action(RRSheetActionData(title: i.option.title,
                                                                     image: i.option.image),
                                                   style: .default,
-                                             executeImmediatelyOnTouch: true,
+                                             executeImmediatelyOnTouch: false,
                                              handler: { _ in
                                                 i.action()
                 }))

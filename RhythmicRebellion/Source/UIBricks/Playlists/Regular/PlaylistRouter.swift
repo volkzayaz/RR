@@ -62,9 +62,7 @@ final class PlaylistRouter: FlowRouterSegueCompatible {
     }
 
     func showAddToPlaylist(for playlist: Playlist) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.perform(segue: .showAddPlaylistToPlaylist(playlist: playlist))
-        }
+        self.perform(segue: .showAddPlaylistToPlaylist(playlist: playlist))
     }
 
     func dismiss() {

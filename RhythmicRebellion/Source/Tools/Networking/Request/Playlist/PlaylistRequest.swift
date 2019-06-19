@@ -56,7 +56,7 @@ extension PlaylistRequest {
             
         case .attachRR(let rrPlaylist, let to):
             return anonymousRequest(method: .post,
-                                    path: "fan/playlist/\(to.id)/playlists",
+                                    path: "fan/playlist/\(to.id)/attach-playlists",
                                     params: ["playlist_id": rrPlaylist.id])
         
         case .attach(let playlist, let to):
