@@ -3,6 +3,7 @@ project '../RhythmicRebellion.xcodeproj'
 
 platform :ios, '10.0'
 use_frameworks!
+inhibit_all_warnings!
 
 def base
   pod 'Firebase/Core'
@@ -45,6 +46,7 @@ target 'RhythmicRebellion' do
     pod 'SwiftGifOrigin', '~> 1.7.0'
     pod 'XLActionController'
     pod 'FXBlurView'
+    pod 'Parchment'
     
 end
 

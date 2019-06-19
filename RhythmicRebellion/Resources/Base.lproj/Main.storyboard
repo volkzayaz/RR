@@ -1148,14 +1148,14 @@ for this Artist</string>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Songwriter" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQJ-ny-3tj">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Songwriter" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQJ-ny-3tj">
                                         <rect key="frame" x="17" y="702.66666666666663" width="83.333333333333329" height="20.333333333333371"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="James Hetfield" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4EP-bZ-Cjk">
-                                        <rect key="frame" x="237.66666666666663" y="702.66666666666663" width="120.33333333333337" height="20.333333333333371"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="James Hetfield" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4EP-bZ-Cjk">
+                                        <rect key="frame" x="237.66666666666666" y="702.66666666666663" width="120.33333333333334" height="20.333333333333371"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -1316,13 +1316,12 @@ for this Artist</string>
         <!--Library-->
         <scene sceneID="5C5-mU-wdm">
             <objects>
-                <navigationController storyboardIdentifier="LibraryViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H74-0G-LXl" customClass="LibraryViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="LibraryNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" navigationBarHidden="YES" id="H74-0G-LXl" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Library" image="library" id="aOZ-0g-c1b">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-3"/>
                     </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" shadowImage="bg-shadow" id="tZx-Os-44P">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.74901960779999999" green="0.78039215689999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.35158014300000001" green="0.34124588970000003" blue="0.32031321530000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1331,22 +1330,28 @@ for this Artist</string>
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="fZ6-CR-Ua2" kind="relationship" relationship="rootViewController" id="Msf-oE-qnk"/>
+                        <segue destination="rIB-L7-qaG" kind="relationship" relationship="rootViewController" id="8Vs-yb-tM7"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3wz-EK-r0j" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1236" y="2119"/>
         </scene>
-        <!--Page View Controller-->
-        <scene sceneID="4Lc-J7-bDU">
+        <!--Library View Controller-->
+        <scene sceneID="MKs-Fd-2hf">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="fZ6-CR-Ua2" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="i6b-Lj-fGl"/>
-                </pageViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4GC-aC-AAJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="rIB-L7-qaG" customClass="LibraryViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rTE-B2-uuW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="VIY-Vu-bEg"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ZhK-8J-pk3"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zi8-Jh-tfF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-361" y="2119"/>
+            <point key="canvasLocation" x="-450" y="2118"/>
         </scene>
         <!--Discover-->
         <scene sceneID="cYs-Qc-Bep">

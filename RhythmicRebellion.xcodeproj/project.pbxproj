@@ -21,7 +21,6 @@
 		734200D722A813AE00EE2CCC /* SettingsNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200D422A813AE00EE2CCC /* SettingsNavigationRouter.swift */; };
 		734200D822A813AE00EE2CCC /* SettingsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200D522A813AE00EE2CCC /* SettingsNavigationViewController.swift */; };
 		734200D922A813AE00EE2CCC /* SettingsNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200D622A813AE00EE2CCC /* SettingsNavigationViewModel.swift */; };
-		734200FE22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 734200FC22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m */; };
 		7342010022A8FA4800EE2CCC /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */; };
 		7342010222A909AA00EE2CCC /* UIViewController+Embeded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */; };
 		7342010422AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7342010322AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift */; };
@@ -419,8 +418,6 @@
 		734200D522A813AE00EE2CCC /* SettingsNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewController.swift; sourceTree = "<group>"; };
 		734200D622A813AE00EE2CCC /* SettingsNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewModel.swift; sourceTree = "<group>"; };
 		734200FB22A8F8BA00EE2CCC /* RhythmicRebellion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RhythmicRebellion-Bridging-Header.h"; sourceTree = "<group>"; };
-		734200FC22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKSwipeBetweenViewControllers.m; sourceTree = "<group>"; };
-		734200FD22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKSwipeBetweenViewControllers.h; sourceTree = "<group>"; };
 		734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		7342010122A909AA00EE2CCC /* UIViewController+Embeded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Embeded.swift"; sourceTree = "<group>"; };
 		7342010322AA42AE00EE2CCC /* LayoutConstraint+Multipler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LayoutConstraint+Multipler.swift"; sourceTree = "<group>"; };
@@ -863,6 +860,14 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
+		733FA04E22BA2717001A0914 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		734200CC22A7F2EB00EE2CCC /* CurrentTrack */ = {
 			isa = PBXGroup;
 			children = (
@@ -886,19 +891,8 @@
 		734200F922A8F8A500EE2CCC /* third_party */ = {
 			isa = PBXGroup;
 			children = (
-				734200FA22A8F8B200EE2CCC /* RKSwipe */,
 			);
 			path = third_party;
-			sourceTree = "<group>";
-		};
-		734200FA22A8F8B200EE2CCC /* RKSwipe */ = {
-			isa = PBXGroup;
-			children = (
-				734200FF22A8FA4800EE2CCC /* LibraryViewController.swift */,
-				734200FD22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.h */,
-				734200FC22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m */,
-			);
-			path = RKSwipe;
 			sourceTree = "<group>";
 		};
 		7343FC9F2282E04300A3DA3D /* TrackGroup */ = {
@@ -1275,6 +1269,7 @@
 		73F13666222C289200FB8EBC /* UIBricks */ = {
 			isa = PBXGroup;
 			children = (
+				733FA04E22BA2717001A0914 /* Library */,
 				73B657FF22B3E7F30054F9A8 /* EyeBrowNavigation */,
 				73F13679222C289200FB8EBC /* Artist */,
 				73F13667222C289200FB8EBC /* ArtistsFollowed */,
@@ -2625,6 +2620,7 @@
 				"${BUILT_PRODUCTS_DIR}/FXBlurView/FXBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/MaterialTextField/MaterialTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/NSStringMask/NSStringMask.framework",
+				"${BUILT_PRODUCTS_DIR}/Parchment/Parchment.framework",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/RxReachability/RxReachability.framework",
@@ -2652,6 +2648,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FXBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSStringMask.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Parchment.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxReachability.framework",
@@ -2890,7 +2887,6 @@
 				73F13811222C289200FB8EBC /* BaseFlowLayout.swift in Sources */,
 				73F13880222C289200FB8EBC /* ProfileSettingsViewController.swift in Sources */,
 				73F137F3222C289200FB8EBC /* ArtistsFollowedViewController.swift in Sources */,
-				734200FE22A8F8BB00EE2CCC /* RKSwipeBetweenViewControllers.m in Sources */,
 				73F13907222C289200FB8EBC /* ViewIndicator.swift in Sources */,
 				73F13914222C289200FB8EBC /* UIColor+Extention.swift in Sources */,
 				73F13842222C289200FB8EBC /* SkipArtistAddonsState.swift in Sources */,

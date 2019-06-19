@@ -42,8 +42,6 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(moreButton.adjustsImageWhenHighlighted)
-        
         viewModel.rightProgress.drive(rightProgress.rx.text)
             .disposed(by: rx.disposeBag)
         
@@ -80,7 +78,7 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
             .drive(trackImageView.rx.image)
             .disposed(by: rx.disposeBag)
         
-        image.map { $0?.blurredImage(withRadius: 1, iterations: 10, tintColor: nil) }
+        image.map { $0?.blurredImage(withRadius: 12, iterations: 5, tintColor: nil) }
             .drive(blurryImageView.rx.image)
             .disposed(by: rx.disposeBag)
         

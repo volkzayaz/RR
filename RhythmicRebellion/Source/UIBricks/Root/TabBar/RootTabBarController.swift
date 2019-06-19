@@ -44,7 +44,7 @@ class RootTabBarController: UITabBarController {
                 
                 var x = self.viewControllers!
                 
-                let y = R.storyboard.main.libraryViewController()!
+                let y = R.storyboard.main.libraryNavigationController()!
                 x.insert(y, at: 2)
                 
                 self.setViewControllers(x, animated: true)

@@ -37,7 +37,7 @@ platform :ios do
     
     if options[:adhoc]
         configuration = "AdHoc"
-        environmentName = "Staging-Dev"
+        environmentName = "Staging"
     else
         configuration = "Release"
         environmentName = "Production"

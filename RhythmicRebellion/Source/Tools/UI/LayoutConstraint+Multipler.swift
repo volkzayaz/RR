@@ -6,7 +6,7 @@
 //  Copyright © 2019 Patron Empowerment, LLC. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension NSLayoutConstraint {
     /**
