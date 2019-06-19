@@ -295,6 +295,27 @@ extension CurrentTrackViewModel {
                            artistId: track.artist.id)
             .subscribe()
     }
+    
+    func moreOptions() {
+        //Download, Add to Library, Share, Delete from Playing options are displayed.
+        
+        guard let x = appStateSlice.currentTrack else { return }
+        let r = router
+        
+        var result: [RRSheet.Action] = []
+        
+        if appStateSlice.user.isGuest == false {
+            result.append( .init(option: .addToLibrary) {
+                r.showAddToPlaylist(for: x.track)
+            })
+        }
+        
+        result.append( .init(option: .delete) {
+            Dispatcher.dispatch(action: RemoveTrack(orderedTrack: x))
+        })
+        
+        router.owner.show(viewModels: result)
+    }
 
     func presentVideo() {
         router.presentVideo()

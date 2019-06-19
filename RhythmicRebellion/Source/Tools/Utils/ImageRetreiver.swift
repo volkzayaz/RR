@@ -33,6 +33,12 @@ extension ImageRetreiver {
     static func imageForURLWithoutProgress<T: URLConvertible>(url: T) -> Driver<UIImage?> {
         
         return self.imageForURL(url: url)
+            .filter { x in
+                switch x {
+                case .image(_): return true
+                case .progress(_): return false
+                }
+            }
             .map { res -> UIImage? in
                 switch res {
                 case .image(let x): return x
@@ -45,6 +51,12 @@ extension ImageRetreiver {
     static func imageForURLRequestWithoutProgress<T: URLRequestConvertible> (url: T) -> Driver<UIImage?> {
         
         return self.imageForURLReques(request: url)
+            .filter { x in
+                switch x {
+                case .image(_): return true
+                case .progress(_): return false
+                }
+            }
             .map { res -> UIImage? in
                 switch res {
                 case .image(let x): return x

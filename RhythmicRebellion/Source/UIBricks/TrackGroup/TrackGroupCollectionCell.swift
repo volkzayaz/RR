@@ -44,6 +44,7 @@ class TrackGroupCollectionCell: UICollectionViewCell {
                     }
                     
                     v?.contentMode = .center
+                    v?.backgroundColor = .primaryPink
                     return R.image.cover_placeholder()
                 }
                 .drive(coverImageView.rx.image(transitionType: CATransitionType.fade.rawValue))
@@ -60,6 +61,7 @@ class TrackGroupCollectionCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
+        coverImageView.backgroundColor = .secondaryDark
     }
     
     

@@ -803,6 +803,9 @@
                                 <state key="normal" image="options-horizontal">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="moreActions:" destination="oo8-4e-lgz" eventType="touchUpInside" id="kX5-Ux-bom"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NVL-zP-T2b">
                                 <rect key="frame" x="293" y="437.66666666666669" width="24" height="22"/>

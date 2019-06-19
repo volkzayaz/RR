@@ -128,7 +128,7 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
                 self.attributesStackView.subviews.forEach { $0.removeFromSuperview() }
                 
                 x.forEach { x in
-                    
+ 
                     switch x {
                         
                     case .downloadEnabled:
@@ -194,6 +194,10 @@ extension CurrentTrackViewController {
     
     @IBAction func dislikeTapped(_ sender: Any) {
         viewModel.dislike()
+    }
+    
+    @IBAction func moreActions(_ sender: Any) {
+        viewModel.moreOptions()
     }
     
     @IBAction func dismissController(_ sender: Any) {
