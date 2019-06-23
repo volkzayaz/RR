@@ -61,7 +61,10 @@ struct CodableWebSocketCommand<T: Codable>: Codable, WSCommand {
     
     init(jsonData: Data) {
         do {
-            self = try JSONDecoder().decode(CodableWebSocketCommand<T>.self, from: jsonData)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            
+            self = try decoder.decode(CodableWebSocketCommand<T>.self, from: jsonData)
         }
         catch (let e) {
             fatalError("Error trying to decode \(CodableWebSocketCommand<T>.self). Details: \(e)")
@@ -69,6 +72,10 @@ struct CodableWebSocketCommand<T: Codable>: Codable, WSCommand {
     }
     
     var jsonData: Data {
+        
+        let x = JSONEncoder()
+        x.dateEncodingStrategy = .iso8601
+        
         return try! JSONEncoder().encode(self)
     }
     

@@ -15,19 +15,8 @@ public struct Track: Codable {
         case none = 0
         case liked = 1
 
-        var isLiked: Bool {
-            switch self {
-            case .liked: return true
-            default: return false
-            }
-        }
-
-        var isDisliked: Bool {
-            switch self {
-            case .disliked: return true
-            default: return false
-            }
-        }
+        var isLiked: Bool { return self == .liked }
+        var isDisliked: Bool { return self == .disliked }
     }
 
     enum TrackPreviewType: Int, Codable {
@@ -43,7 +32,6 @@ public struct Track: Codable {
     let radioInfo: String
     let ownerId: String
     let isCensorship: Bool
-    let videoURLStrings: [String]?
     let isInstrumental: Bool
     let isFreeForPlaylist: Bool
     let previewType: TrackPreviewType?
@@ -55,11 +43,13 @@ public struct Track: Codable {
     let audioFile: TrackAudioFile?
     let cleanAudioFile: DefaultAudioFile?
     let artist: Artist
-    //    let current_fan_listen: Any? TODO: why this is comented?
     let writer: TrackWriter
     let backingAudioFile: DefaultAudioFile?
-    let price: Money?
-
+    
+    struct Video: Codable {
+        let video_id: String
+    }; let video: Video?
+    
     var isPlayable: Bool { return self.audioFile != nil }
 
     enum CodingKeys: String, CodingKey {
@@ -69,7 +59,7 @@ public struct Track: Codable {
         case radioInfo = "radio_info"
         case ownerId = "owner_id"
         case isCensorship = "is_censorship"
-        case videoURLStrings = "video"
+        case video = "video_preview"
         case isInstrumental = "is_instrumental"
         case isFreeForPlaylist = "is_free_for_playlist"
         case previewType = "preview_type"
@@ -83,126 +73,8 @@ public struct Track: Codable {
         case artist
         case writer = "songwriter"
         case backingAudioFile = "backing_track"
-        case price
     }
     
-    init(id: Int,
-         songId: Int,
-         name: String,
-         radioInfo: String,
-         ownerId: String,
-         artist: Artist,
-         writer: TrackWriter,
-         images: [Image],
-         isCensorship: Bool = false,
-         isInstrumental: Bool = false,
-         isFreeForPlaylist: Bool = false,
-         isFollowAllowFreeDownload: Bool = false,
-         videoURLStrings: [String]? = nil,
-         previewType: TrackPreviewType? = nil,
-         previewLimitTimes: Int? = nil,
-         releaseDateFans: Date? = nil,
-         featuring: String? = nil,
-         audioFile: TrackAudioFile? = nil,
-         cleanAudioFile: DefaultAudioFile? = nil,
-         backingAudioFile: DefaultAudioFile? = nil,
-         price: Money? = nil) {
-        
-        self.id = id
-        self.songId = songId
-        self.name = name
-        self.radioInfo = radioInfo
-        self.ownerId = ownerId
-        self.isCensorship = isCensorship
-        self.isInstrumental = isInstrumental
-        self.isFreeForPlaylist = isFreeForPlaylist
-        self.isFollowAllowFreeDownload = isFollowAllowFreeDownload
-        self.artist = artist
-        self.writer = writer
-        self.images = images
-        self.videoURLStrings = videoURLStrings
-        self.previewType = previewType
-        self.previewLimitTimes = previewLimitTimes
-        self.releaseDateFans = releaseDateFans
-        self.featuring = featuring
-        self.audioFile = audioFile
-        self.cleanAudioFile = cleanAudioFile
-        self.backingAudioFile = backingAudioFile
-        self.price = price
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        self.id = try container.decode(Int.self, forKey: .id)
-
-        self.songId = try container.decode(Int.self, forKey: .songId)
-        self.name = try container.decode(String.self, forKey: .name)
-        self.radioInfo = try container.decode(String.self, forKey: .radioInfo)
-        self.ownerId = try container.decode(String.self, forKey: .ownerId)
-        self.isCensorship = try container.decode(Bool.self, forKey: .isCensorship)
-
-        self.videoURLStrings = try? container.decode([String].self, forKey: .videoURLStrings)
-        self.isInstrumental = try container.decode(Bool.self, forKey: .isInstrumental)
-        self.isFreeForPlaylist = try container.decode(Bool.self, forKey: .isFreeForPlaylist)
-        self.previewType = try? container.decode(TrackPreviewType.self, forKey: .previewType)
-        self.previewLimitTimes = try? container.decode(Int.self, forKey: .previewLimitTimes)
-        self.isFollowAllowFreeDownload = try container.decode(Bool.self, forKey: .isFollowAllowFreeDownload)
-
-        let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
-        self.releaseDateFans = try container.decodeAsDate(String.self, forKey: .releaseDateFans, dateFormatter: dateTimeFormatter)
-
-        self.featuring = try? container.decode(String.self, forKey: .featuring)
-
-        self.images = try container.decode([Image].self, forKey: .images)
-        self.audioFile = try? container.decode(TrackAudioFile.self, forKey: .audioFile)
-        self.cleanAudioFile = try? container.decode(DefaultAudioFile.self, forKey: .cleanAudioFile)
-        self.artist = try container.decode(Artist.self, forKey: .artist)
-
-        self.writer = try container.decode(TrackWriter.self, forKey: .writer)
-        self.backingAudioFile = try? container.decode(DefaultAudioFile.self, forKey: .backingAudioFile)
-
-        if let priceValue = try container.decodeIfPresent(Decimal.self, forKey: .price) {
-            self.price = Money(value: priceValue, currency: .USD)
-        } else {
-            self.price = nil
-        }
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(self.id, forKey: .id)
-        try container.encode(self.songId, forKey: .songId)
-        try container.encode(self.name, forKey: .name)
-        try container.encode(self.radioInfo, forKey: .radioInfo)
-        try container.encode(self.ownerId, forKey: .ownerId)
-        try container.encode(self.isCensorship, forKey: .isCensorship)
-        try container.encode(self.videoURLStrings, forKey: .videoURLStrings)
-
-        try container.encode(self.isInstrumental, forKey: .isInstrumental)
-        try container.encode(self.isFreeForPlaylist, forKey: .isFreeForPlaylist)
-        try container.encode(self.previewType, forKey: .previewType)
-        try container.encode(self.previewLimitTimes, forKey: .previewLimitTimes)
-        try container.encode(self.isFollowAllowFreeDownload, forKey: .isFollowAllowFreeDownload)
-
-        let dateTimeFormatter = ModelSupport.sharedInstance.dateTimeFormattre
-        try container.encodeAsString(self.releaseDateFans, forKey: .releaseDateFans, dateFormatter: dateTimeFormatter)
-
-        try container.encode(self.featuring, forKey: .featuring)
-        try container.encode(self.images, forKey: .images)
-        try container.encode(self.audioFile, forKey: .audioFile)
-        try container.encode(self.cleanAudioFile, forKey: .cleanAudioFile)
-        try container.encode(self.artist, forKey: .artist)
-
-        try container.encode(self.writer, forKey: .writer)
-        try container.encode(self.backingAudioFile, forKey: .backingAudioFile)
-
-        if let priceValue = self.price?.amount {
-            try container.encode(priceValue, forKey: .price)
-        }
-    }
-
     func thumbnailURL(with orderedImageLinksTypes: [ImageLinkType]) -> URL? {
 
         for trackImage in self.images {

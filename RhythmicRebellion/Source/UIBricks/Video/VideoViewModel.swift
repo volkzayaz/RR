@@ -22,27 +22,12 @@ extension Collection {
 extension VideoViewModel {
     
     var video1: Driver<String?> {
-        return appState.map { $0.currentTrack?.track.videoURLStrings }
+        return appState.map { $0.currentTrack?.track.video?.video_id }
             .distinctUntilChanged()
-            .map { state in
-            if let x = state?[safe: 0]?.split(separator: "=").last {
-                return String(x)
-            }
-            
-            return nil
-        }
     }
     
     var video2: Driver<String?> {
-        return appState.map { $0.currentTrack?.track.videoURLStrings }
-            .distinctUntilChanged()
-            .map { state in
-            if let x = state?[safe: 1]?.split(separator: "=").last {
-                return String(x)
-            }
-            
-            return nil
-        }
+        return .just(nil)
     }
     
 }
@@ -59,12 +44,6 @@ struct VideoViewModel : MVVM_ViewModel {
     
     init(router: VideoRouter) {
         self.router = router
-        
-        appState.map { $0.currentTrack?.track.videoURLStrings }
-            .distinctUntilChanged()
-            .drive(onNext: { (x) in
-                print("Videos: \(x)")
-            })
         
         /**
          

@@ -24,15 +24,17 @@ extension Reactive where Base : BaseNetworkRouter {
     func response<T: Decodable>(type: T.Type) -> Maybe<T> {
         return base.rxResponse()
             .map { (input) -> T in
-                return try JSONDecoder().decode(T.self, from: input)
+                
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                
+                return try decoder.decode(T.self, from: input)
             }
     }
     
     func baseResponse<T: Decodable>(type: T.Type) -> Maybe<T> {
-        return base.rxResponse()
-            .map { (input) -> T in
-                return try JSONDecoder().decode(BaseReponse<T>.self, from: input).data
-        }
+        return response(type: BaseReponse<T>.self)
+            .map { $0.data }
     }
 }
 
