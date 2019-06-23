@@ -153,7 +153,7 @@ extension UserRequest {
          
         case .skipAddonRule(let `for`, let shouldSkip):
             
-            return anonymousRequest(method: shouldSkip ? .delete : .post,
+            return anonymousRequest(method: shouldSkip ? .post : .delete,
                                     path: "fan/profile/skip-add-ons-for-artist/\(`for`.id)")
 
         case .like(let track, let state):

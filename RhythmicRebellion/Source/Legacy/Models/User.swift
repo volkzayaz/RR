@@ -318,6 +318,7 @@ extension UserProfile: Equatable {
                 lhs.followedArtistsIds == rhs.followedArtistsIds &&
                 lhs.tracksLikeStates == rhs.tracksLikeStates &&
                 lhs.listeningSettings == rhs.listeningSettings &&
-                lhs.forceToPlay == rhs.forceToPlay
+                lhs.forceToPlay == rhs.forceToPlay &&
+                lhs.skipAddonsArtistsIds == rhs.skipAddonsArtistsIds
     }
 }

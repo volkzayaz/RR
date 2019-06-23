@@ -370,10 +370,6 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
                         userProfile.genres != self.genresField?.genres ||
                         userProfile.language != self.languageField?.language?.id
 
-
-
-
-
         if self.isDirty != isDirty {
             self.isDirty = isDirty
             self.delegate?.refreshUI()

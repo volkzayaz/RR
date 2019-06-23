@@ -54,10 +54,6 @@ final class PromoViewController: UIViewController {
             .drive(artistNameLabel.rx.text)
             .disposed(by: rx.disposeBag)
         
-        //        viewModel.trackName
-        //            .drive(trackNameLabel.rx.text)
-        //            .disposed(by: rx.disposeBag)
-        
         viewModel.infoText
             .drive(infoTextView.rx.text)
             .disposed(by: rx.disposeBag)
