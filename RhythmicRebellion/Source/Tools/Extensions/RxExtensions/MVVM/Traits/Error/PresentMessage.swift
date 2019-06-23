@@ -206,8 +206,8 @@ extension UIViewController : CanPresentQuestions {
     
     
     func presentConfirmQuestion(question: DisplayMessage,
-                                negativeText: String = "Нет",
-                                positiveText: String = "Да") -> Observable<Bool> {
+                                negativeText: String = "No",
+                                positiveText: String = "Yes") -> Observable<Bool> {
         
         let x: Observable<Bool> = Observable.create({ [unowned self] (subscriber) -> Disposable in
             

@@ -11,7 +11,7 @@ import Foundation
 struct ProfileLocation: Codable {
 
     var country: Country
-    var region: ProfileRegion?
+    var region: Region?
     var city: ProfileCity?
     var zip: String?
 
@@ -22,9 +22,9 @@ struct ProfileLocation: Codable {
         case zip
     }
 
-    public init(country: Country, region: RegionInfo? = nil, city: CityInfo? = nil, zip: String? = nil) {
+    public init(country: Country, region: Region? = nil, city: CityInfo? = nil, zip: String? = nil) {
         self.country = country
-        self.region = region != nil ? ProfileRegion(with: region!) : nil
+        self.region = region
         self.city = city != nil ? ProfileCity(with: city!) : nil
         self.zip = zip
     }
@@ -34,7 +34,7 @@ struct ProfileLocation: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.country = try container.decode(Country.self, forKey: .country)
-        self.region = try container.decodeIfPresent(ProfileRegion.self, forKey: .region)
+        self.region = try container.decodeIfPresent(Region.self, forKey: .region)
         self.city = try container.decodeIfPresent(ProfileCity.self, forKey: .city)
         self.zip = try container.decodeIfPresent(String.self, forKey: .zip)
     }

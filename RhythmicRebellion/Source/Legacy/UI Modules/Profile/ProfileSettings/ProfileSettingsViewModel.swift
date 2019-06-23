@@ -102,7 +102,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
         self.delegate?.refreshBirthDateField(with: userProfile.birthDate)
         self.delegate?.refreshCountryField(with: Country(with: userProfile.location.country))
         self.delegate?.refreshZipField(with: userProfile.location.zip)
-        self.delegate?.refreshRegionField(with: userProfile.location.region != nil ? Region(with: userProfile.location.region!) : nil)
+        self.delegate?.refreshRegionField(with: userProfile.location.region)
         self.delegate?.refreshCityField(with: userProfile.location.city != nil ? City(with: userProfile.location.city!) : nil)
         self.delegate?.refreshPhoneField(with: userProfile.phone)
         self.delegate?.refreshHobbiesField(with: userProfile.hobbies)
@@ -363,7 +363,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
                         userProfile.birthDate != self.birthDateField?.date ||
                         Country(with: userProfile.location.country) != self.countryField?.country ||
                         userProfile.location.zip != self.zipField?.validationText ||
-                        Region(with: userProfile.location.region) != self.regionField?.region ||
+                        userProfile.location.region != self.regionField?.region ||
                         City(with: userProfile.location.city) != self.cityField?.city ||
                         userProfile.phone ?? "" != self.phoneField?.validationText ||
                         userProfile.hobbies != self.hobbiesField?.hobbies ||
