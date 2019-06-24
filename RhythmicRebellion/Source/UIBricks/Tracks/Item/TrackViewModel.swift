@@ -157,11 +157,6 @@ struct TrackViewModel : MVVM_ViewModel, IdentifiableType {
         return trackRepresentation.identity
     }
     
-    enum ThumbMode {
-        case index
-        case artwork
-    }
-    
 }
 
 extension TrackViewModel {

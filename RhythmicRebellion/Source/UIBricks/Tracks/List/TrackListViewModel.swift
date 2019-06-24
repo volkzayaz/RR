@@ -11,15 +11,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol TrackProvider {
-    
-    var mode: TrackViewModel.ThumbMode { get }
-    
-    ////provide list of tracks to play back
-    func provide() -> Observable<[TrackRepresentation]>
-    
-}
-
 class TrackListViewModel {
 
     ////provide list of actions available for given track

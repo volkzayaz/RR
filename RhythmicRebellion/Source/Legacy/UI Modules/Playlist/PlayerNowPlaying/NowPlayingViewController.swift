@@ -2,7 +2,7 @@
 //  NowPlayingViewController.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 8/6/18.
+//  Created by Vlad Soroka on 8/6/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //

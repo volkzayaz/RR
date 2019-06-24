@@ -1,8 +1,8 @@
 //
-//  PlayerNowPlayingRouter.swift
+//  NowPlayingRouter.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 8/6/18.
+//  Created by Vlad Soroka on 8/6/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
@@ -22,11 +22,14 @@ struct NowPlayingRouter: MVVM_Router {
     
     func showAddToPlaylist(for tracks: [Track]) {
         
+        let r = R.storyboard.main.addToPlaylistContainer()!
         let x = R.storyboard.main.addToPlaylistViewController()!
-        let r = AddToPlaylistRouter()
-        r.start(controller: x, tracks: tracks)
         
-        owner.present(UINavigationController(rootViewController: x), animated: true, completion: nil)
+        x.viewModel = .init(router: .init(owner: x), attachable: tracks)
+        
+        r.viewControllers = [x]
+        
+        owner.present(r, animated: true, completion: nil)
         
     }
 }

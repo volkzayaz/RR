@@ -13,22 +13,25 @@ class CreatePlaylistTableViewCell: UITableViewCell, UITextFieldDelegate {
     @IBOutlet weak var addImage: UIImageView!
     @IBOutlet weak var playlistNametextField: UITextField!
     
-    var nameEditingFinishedCallback : ((String?)->())?    
+    var viewModel: AddToPlaylistViewModel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         NotificationCenter.default.addObserver(forName: UITextField.textDidEndEditingNotification, object: playlistNametextField, queue: OperationQueue.main) {[weak self] (notification) in
-            self?.nameEditingFinishedCallback?(self?.playlistNametextField.text)
+            
+            guard let t = self?.playlistNametextField.text else { return }
+            self?.playlistNametextField.text = ""
+            
+            self?.viewModel.createPlaylist(with: t)
+            
         }
         
         playlistNametextField.delegate = self
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        
+        addImage.layer.borderColor = UIColor(red: 0.39, green: 0.39, blue: 0.6, alpha: 1.0).cgColor
+        addImage.layer.borderWidth = 1
+        addImage.layer.cornerRadius = 6
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

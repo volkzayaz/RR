@@ -150,22 +150,6 @@ extension PlaylistViewController: UIScrollViewDelegate {
     
 }
 
-// MARK: - Router -
-extension PlaylistViewController {
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        viewModel.router.prepare(for: segue, sender: sender)
-        return super.prepare(for: segue, sender: sender)
-    }
-
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if viewModel.router.shouldPerformSegue(withIdentifier: identifier, sender: sender) == false {
-            return false
-        }
-        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
-    }
-
-}
 
 extension PlaylistViewController: PKDownloadButtonDelegate {
 

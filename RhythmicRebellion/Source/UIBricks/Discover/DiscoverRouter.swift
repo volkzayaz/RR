@@ -21,7 +21,7 @@ struct DiscoverRouter {
         
         let vc = R.storyboard.main.playlistViewController()!
         vc.viewModel = PlaylistViewModel(router: PlaylistRouter(owner: vc),
-                                         provider: DefinedPlaylistProvider(playlist: playlist))
+                                         provider: DefinedPlaylistProvider(data: playlist))
         
         owner?.navigationController?.pushViewController(vc, animated: true)
         

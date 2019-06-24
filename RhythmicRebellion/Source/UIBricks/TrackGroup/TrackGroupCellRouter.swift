@@ -25,12 +25,15 @@ struct TrackGroupCellRouter : MVVM_Router {
     
     func presentPlaylistCreation(for tracks: [Track]) {
         
+        let r = R.storyboard.main.addToPlaylistContainer()!
         let x = R.storyboard.main.addToPlaylistViewController()!
-        let router = AddToPlaylistRouter()
-        router.start(controller: x, tracks: tracks)
         
-        owner.present(UINavigationController(rootViewController: x),
-                      animated: true, completion: nil)
+        x.viewModel = .init(router: .init(owner: x), attachable: tracks)
+        
+        r.viewControllers = [x]
+        
+        owner.present(r, animated: true, completion: nil)
+        
     }
     
 }

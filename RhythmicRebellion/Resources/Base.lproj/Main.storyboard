@@ -546,8 +546,6 @@
                         <outlet property="playlistTitle" destination="fKw-Ed-0lZ" id="d2c-VM-TXa"/>
                         <outlet property="tableHeaderView" destination="upv-Gx-oyy" id="eTw-3y-DVK"/>
                         <outlet property="tableView" destination="Ctl-dI-oob" id="q35-ud-VzV"/>
-                        <segue destination="BLg-mo-FYo" kind="presentation" identifier="AddToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="tg1-kY-VU3"/>
-                        <segue destination="BLg-mo-FYo" kind="presentation" identifier="AttachPlaylistToPlaylistSegueIdentifier" modalPresentationStyle="formSheet" id="tB5-cT-enA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IZT-3q-7wg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -578,11 +576,11 @@
             <objects>
                 <viewController storyboardIdentifier="AddToPlaylistViewController" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zup-uM-O9o" customClass="AddToPlaylistViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HV7-OB-pTw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="54" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2Gp-Ld-g8C">
-                                <rect key="frame" x="0.0" y="140" width="375" height="516"/>
+                                <rect key="frame" x="0.0" y="140" width="375" height="638"/>
                                 <color key="backgroundColor" red="0.043137254901960784" green="0.074509803921568626" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.68999999999999995" green="0.72999999999999998" blue="1" alpha="0.30419234154929575" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -662,7 +660,6 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="Zup-uM-O9o" id="AxA-X2-zNw"/>
                                     <outlet property="delegate" destination="Zup-uM-O9o" id="g0e-hb-XJL"/>
                                 </connections>
                             </tableView>
@@ -1151,14 +1148,14 @@ for this Artist</string>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Songwriter" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQJ-ny-3tj">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Songwriter" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQJ-ny-3tj">
                                         <rect key="frame" x="17" y="702.66666666666663" width="83.333333333333329" height="20.333333333333371"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="James Hetfield" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4EP-bZ-Cjk">
-                                        <rect key="frame" x="237.66666666666666" y="702.66666666666663" width="120.33333333333334" height="20.333333333333371"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="James Hetfield" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4EP-bZ-Cjk">
+                                        <rect key="frame" x="237.66666666666663" y="702.66666666666663" width="120.33333333333337" height="20.333333333333371"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -1428,7 +1425,4 @@ for this Artist</string>
         <image name="small-play" width="24" height="24"/>
         <image name="splash.gif" width="361" height="540"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="tg1-kY-VU3"/>
-    </inferredMetricsTieBreakers>
 </document>

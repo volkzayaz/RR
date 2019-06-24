@@ -9,13 +9,36 @@
 
 import UIKit
 
-final class AddToPlaylistViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    // MARK: - Public properties -
+import RxDataSources
 
-    @IBOutlet weak var tableView: UITableView!
+class AddToPlaylistViewController: UIViewController, UITableViewDelegate {
+
     var viewModel: AddToPlaylistViewModel!
     
-    // MARK: - Configuration -
+    lazy var dataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<String, AddToPlaylistViewModel.Row>>(configureCell: { [unowned self] (_, tableView, ip, data) in
+        
+        switch data {
+            
+        case .create:
+        
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.addPlaylistCellId,
+                                                     for: ip)!
+            cell.viewModel = self.viewModel
+            
+            return cell
+            
+        case .playlist(let x):
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.playlistCellId,
+                                                     for: ip)!
+            cell.playlistTitle.text = x.name
+            
+            return cell
+        }
+        
+    })
+
+    @IBOutlet weak var tableView: UITableView!
 
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -31,29 +54,31 @@ final class AddToPlaylistViewController: UIViewController, UITableViewDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(AddToPlaylistViewController.keyboardDidShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(AddToPlaylistViewController.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        viewModel.load(with: self)
+        viewModel.dataSource
+            .drive(tableView.rx.items(dataSource: dataSource))
+            .disposed(by: rx.disposeBag)
+        
+        tableView.rx.modelSelected(AddToPlaylistViewModel.Row.self)
+            .subscribe(onNext: { [unowned self] (x) in
+                guard case .playlist(let p) = x else { return }
+                
+                self.viewModel.select(playlist: p)
+            })
+            .disposed(by: rx.disposeBag)
+        
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
         viewModel.cancel()        
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.numberOfItems()
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let vm = self.viewModel.object(at: indexPath)!
-        let cell = tableView.dequeueReusableCell(withIdentifier: vm.identifier)!
-        vm.configure(cell: cell)
-        return cell
-    }
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         if let cell = tableView.cellForRow(at: indexPath) as? CreatePlaylistTableViewCell {
             cell.playlistNametextField.becomeFirstResponder()
         }
-        self.viewModel.selectObject(at: indexPath)
+        
     }
     
     // MARK: - Notifications
@@ -73,16 +98,4 @@ final class AddToPlaylistViewController: UIViewController, UITableViewDataSource
         tableView.contentInset = .zero
         tableView.scrollIndicatorInsets = .zero
     }
-}
-
-extension AddToPlaylistViewController: AddToPlaylistViewModelDelegate {
-
-    func refreshUI() {
-
-    }
-
-    func reloadUI() {
-        tableView.reloadData()
-    }
-
 }

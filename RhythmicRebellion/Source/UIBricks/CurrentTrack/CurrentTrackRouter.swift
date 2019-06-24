@@ -45,11 +45,14 @@ class CurrentTrackRouter : MVVM_Router {
     
     func showAddToPlaylist(for track: Track) {
         
+        let r = R.storyboard.main.addToPlaylistContainer()!
         let x = R.storyboard.main.addToPlaylistViewController()!
-        let r = AddToPlaylistRouter()
-        r.start(controller: x, tracks: [track])
         
-        owner.present(UINavigationController(rootViewController: x), animated: true, completion: nil)
+        x.viewModel = .init(router: .init(owner: x), attachable: [track])
+        
+        r.viewControllers = [x]
+        
+        owner.present(r, animated: true, completion: nil)
         
     }
 

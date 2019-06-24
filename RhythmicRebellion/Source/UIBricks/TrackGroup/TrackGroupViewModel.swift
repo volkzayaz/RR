@@ -12,18 +12,6 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-extension TrackGroupViewModel {
-    
-    /** Reference binding drivers that are going to be used in the corresponding view
-    
-    var text: Driver<String> {
-        return privateTextVar.asDriver().notNil()
-    }
- 
-     */
-    
-}
-
 ///entity that can represent group of tracks
 ///for example album or playlist
 protocol TrackGroupPresentable {

@@ -2,7 +2,7 @@
 //  PlayerNowPlayingControllerViewModel.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 8/6/18.
+//  Created by Vlad Soroka on 8/6/18.
 //  Copyright (c) 2018 Patron Empowerment, LLC. All rights reserved.
 //
 //
@@ -14,7 +14,7 @@ import RxDataSources
 
 struct NowPlayingProvider : TrackProvider {
     
-    var mode: TrackViewModel.ThumbMode { return .artwork }
+    var mode: ThumbMode { return .artwork }
     
     func provide() -> Observable<[TrackRepresentation]> {
         return appState.map { $0.player.tracks }

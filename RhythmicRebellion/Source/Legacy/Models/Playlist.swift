@@ -9,24 +9,6 @@
 import Foundation
 import RxSwift
 
-protocol Playlist {
-    var id: Int {get}
-    var name: String {get}
-    var isDefault: Bool {get}
-    var thumbnailURL: URL? {get}
-    
-    var description: String? {get}
-    var title: String? {get}
-    
-    var isFanPlaylist: Bool {get}
-}
-
-extension Playlist where Self: Equatable {
-    static func ==(rhs: Playlist, lhs: Playlist) -> Bool {
-        return lhs.id == rhs.id
-    }
-}
-
 struct DefinedPlaylist: Playlist, Codable, TrackGroupPresentable {
     
     let id: Int

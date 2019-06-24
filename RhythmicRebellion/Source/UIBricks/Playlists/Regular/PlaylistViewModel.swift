@@ -12,145 +12,6 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol PlaylistProvider: TrackProvider {
-    var playlist: Playlist { get }
-}
-
-extension PlaylistProvider {
-    var mode   : TrackViewModel.ThumbMode { return .index }
-}
-
-protocol DeletablePlaylistProvider: PlaylistProvider {
-    var canDelete: Bool { get }
-    func delete(track: Track) -> Maybe<Void>
-    func drop() -> Maybe<Void> ///deletes whole playlist
-}
-
-protocol ClearablePlaylistProvider: PlaylistProvider {
-    func clear() -> Maybe<Void>
-}
-
-protocol DownloadablePlaylistProvider: PlaylistProvider {
-    
-    var downloadable: Maybe<Downloadable> { get }
-    
-    var instantDownload: Bool { get }
-}
-
-struct FanPlaylistProvider: DeletablePlaylistProvider, ClearablePlaylistProvider {
-    
-    let fanPlaylist: FanPlaylist
-    var playlist: Playlist {
-        return fanPlaylist
-    }
-    
-    var canDelete: Bool { return !fanPlaylist.isDefault }
-    
-    func provide() -> Observable<[TrackRepresentation]> {
-        return TrackRequest.fanTracks(playlistId: playlist.id)
-            .rx.response(type: PlaylistTracksResponse.self)
-            .map { $0.tracks.enumerated().map(TrackRepresentation.init) }
-            .asObservable()
-    }
-    
-    func delete(track: Track) -> Maybe<Void> {
-        return PlaylistRequest.deleteTrack(track, from: fanPlaylist)
-            .rx.emptyResponse()
-    }
-    
-    func drop() -> Maybe<Void> {
-        return PlaylistManager.delete(playlist: fanPlaylist)
-    }
-    
-    func clear() -> Maybe<Void> {
-        return PlaylistRequest.clear(playlist: fanPlaylist)
-            .rx.emptyResponse()
-    }
-    
-    
-}
-
-struct DefinedPlaylistProvider: PlaylistProvider {
-    
-    let playlist: Playlist
-    
-    func provide() -> Observable<[TrackRepresentation]> {
-        return TrackRequest.tracks(playlistId: playlist.id)
-            .rx.response(type: PlaylistTracksResponse.self)
-            .map { $0.tracks.enumerated().map(TrackRepresentation.init) }
-            .asObservable()
-    }
-    
-}
-
-struct AlbumPlaylistProvider: PlaylistProvider, Playlist, DownloadablePlaylistProvider {
-    
-    let album: Album
-    let instantDownload: Bool
-    
-    func provide() -> Observable<[TrackRepresentation]> {
-        return ArtistRequest.albumRecords(album: album)
-            .rx.response(type: BaseReponse<[Track]>.self)
-            .map { $0.data.enumerated().map(TrackRepresentation.init) }
-            .asObservable()
-    }
-    
-    ///surrogate getter
-    var playlist: Playlist {
-        return self
-    }
-    
-    var id: Int { return album.id }
-    var name: String { return album.name }
-    var thumbnailURL: URL? {
-        guard let x = album.image.simpleURL else { return nil }
-            
-        return URL(string: x)
-    }
-
-    var isDefault: Bool { return false }
-    var description: String? { return nil }
-    var title: String? { return nil }
-    var isFanPlaylist: Bool { return false }
- 
-    var downloadable: Maybe<Downloadable> {
-        
-        struct DownloadableAlbum: Downloadable {
-            let fileName: String
-            let url: URL
-            func asURL() throws -> URL { return url }
-        }
-        
-        let x = album.name
-        return AlbumRequest.downloadLink(album: album)
-            .rx.response(type: BaseReponse<String>.self)
-            .map {
-                DownloadableAlbum( fileName: "\(x).zip",
-                                   url: URL(string: $0.data)! )
-                
-            }
-        
-    }
-    
-}
-
-struct ArtistPlaylistProvider: PlaylistProvider {
-    
-    let artistPlaylist: ArtistPlaylist
-    
-    func provide() -> Observable<[TrackRepresentation]> {
-        return ArtistRequest.playlistRecords(playlist: artistPlaylist)
-            .rx.response(type: BaseReponse<[Track]>.self)
-            .map { $0.data.enumerated().map(TrackRepresentation.init) }
-            .asObservable()
-    }
-    
-    var playlist: Playlist {
-        return artistPlaylist
-    }
-    
-}
-
 extension PlaylistViewModel {
     
     var downloadButtonHidden: Driver<Bool> {
@@ -176,7 +37,7 @@ final class PlaylistViewModel {
         return (tracksViewModel.trackProivder as! PlaylistProvider).playlist
     }
     
-    private(set) weak var router: PlaylistRouter!
+    private let router: PlaylistRouter
     
     let headerViewModel: PlaylistHeaderViewModel
     
@@ -263,8 +124,7 @@ final class PlaylistViewModel {
                                              router: TrackListRouter(owner: router.owner),
                                              actionsProvider: actions)
         
-        headerViewModel = PlaylistHeaderViewModel(playlist: provider.playlist,
-                                                          isEmpty: tracksViewModel.isPlaylistEmpty)
+        headerViewModel = PlaylistHeaderViewModel(playlist: provider.playlist)
     }
     
     func openIn(sourceRect: CGRect, sourceView: UIView) {
@@ -320,10 +180,11 @@ extension PlaylistViewModel {
             }),
         ]
         
-        if appStateSlice.user.isGuest == false {
+        if appStateSlice.user.isGuest == false,
+           let p = tracksViewModel.trackProivder as? AttachableProvider {
 
             let toPlaylist = RRSheet.Action(option: .addToLibrary) {
-                self.router?.showAddToPlaylist(for: self.playlist)
+                self.router.showAddToPlaylist(for: p)
             }
             
             actions.append(toPlaylist)

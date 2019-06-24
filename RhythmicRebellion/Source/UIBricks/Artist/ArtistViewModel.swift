@@ -187,7 +187,7 @@ extension ArtistViewModel {
     struct TracksProvider: TrackProvider {
         
         let artist: Artist
-        var mode: TrackViewModel.ThumbMode { return .artwork }
+        var mode: ThumbMode { return .artwork }
         
         func provide() -> Observable<[TrackRepresentation]> {
             
