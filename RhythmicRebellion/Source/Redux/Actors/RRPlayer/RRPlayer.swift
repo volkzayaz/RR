@@ -30,7 +30,7 @@ class RRPlayer: Actor {
     ///The rest become slave clients
     ///The rule is: If you've just became master, you must ignore all "currentTrack" and "trackState" commands
     ///for the next 1 second ¯\_(ツ)_/¯
-    fileprivate let masterDate = BehaviorSubject(value: Date())
+    fileprivate let masterDate = BehaviorSubject(value: Date(timeIntervalSince1970: 0))
     
     fileprivate let bag = DisposeBag()
 }
@@ -113,7 +113,9 @@ extension RRPlayer {
             .disposed(by: bag)
         
         ////sync master date
-        appState.ownChangesOnlyOf { $0.player.lastChangeSignatureHash }
+        appState
+            .skip(1) ///initially we don't post any changes
+            .ownChangesOnlyOf { $0.player.lastChangeSignatureHash }
             .distinctUntilChanged { $0.player.currentItem?.state == $1.player.currentItem?.state }
             .map { _ in Date() }
             .drive(masterDate)
@@ -145,7 +147,7 @@ extension RRPlayer {
             .disposed(by: bag)
         
         webSocket.didReceiveTrackState
-            .filter { _ in self.masterDate.unsafeValue.timeIntervalSinceNow < -0.4 }
+            .filter { [unowned self] _ in self.masterDate.unsafeValue.timeIntervalSinceNow < -0.4 }
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: ChangeTrackState(trackState: state)))
             })

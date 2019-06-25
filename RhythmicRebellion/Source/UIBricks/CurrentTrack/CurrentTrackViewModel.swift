@@ -199,9 +199,19 @@ extension CurrentTrackViewModel {
     }
     
     var sliderThumb: Driver<UIImage> {
+        
+        let thumb = R.image.thumb()!
+        let rect = CGRect(x: 0, y: 0, width: thumb.size.width, height: thumb.size.height)
+        UIGraphicsBeginImageContextWithOptions(thumb.size, false, 0)
+        UIColor.clear.setFill()
+        UIRectFill(rect)
+        guard let blankImg = UIGraphicsGetImageFromCurrentImageContext() else { fatalError() }
+        
+        UIGraphicsEndImageContext()
+        
         return appState.map { $0.player.isBlocked }
             .distinctUntilChanged()
-            .map { $0 ? UIImage() : R.image.thumb()! }
+            .map { $0 ? blankImg : thumb }
     }
     
 }
