@@ -26,7 +26,7 @@ final class ProfileSettingsRouter: FlowRouterSegueCompatible {
     enum SegueActions: SegueDestinations {
         case showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: (Country) -> Void)
         case showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: (Region) -> Void)
-        case showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: (City) -> Void)
+        case showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: CityInfo?, selectionCallback: (CityInfo) -> Void)
         case showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, selectionCallback: ([Hobby]) -> Void)
         case showGenresSelectableList(dataSource: GenresDataSource, selectedItems: [Genre]?, additionalItems: [Genre]?, selectionCallback: ([Genre]) -> Void)
         case showLanguagesSelectableList(dataSource: LanguagesDataSource, selectedItems: Language?, selectionCallback: (Language) -> Void)
@@ -138,7 +138,7 @@ final class ProfileSettingsRouter: FlowRouterSegueCompatible {
         self.perform(segue: .showRegionsSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
     }
 
-    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: @escaping (City) -> Void) {
+    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: CityInfo?, selectionCallback: @escaping (CityInfo) -> Void) {
         self.perform(segue: .showCitiesSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
     }
 

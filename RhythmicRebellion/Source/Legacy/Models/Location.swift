@@ -12,7 +12,7 @@ struct ProfileLocation: Codable {
 
     var country: Country
     var region: Region?
-    var city: ProfileCity?
+    var city: CityInfo?
     var zip: String?
 
     enum CodingKeys: String, CodingKey {
@@ -25,7 +25,7 @@ struct ProfileLocation: Codable {
     public init(country: Country, region: Region? = nil, city: CityInfo? = nil, zip: String? = nil) {
         self.country = country
         self.region = region
-        self.city = city != nil ? ProfileCity(with: city!) : nil
+        self.city = city
         self.zip = zip
     }
 
@@ -35,7 +35,7 @@ struct ProfileLocation: Codable {
 
         self.country = try container.decode(Country.self, forKey: .country)
         self.region = try container.decodeIfPresent(Region.self, forKey: .region)
-        self.city = try container.decodeIfPresent(ProfileCity.self, forKey: .city)
+        self.city = try container.decodeIfPresent(CityInfo.self, forKey: .city)
         self.zip = try container.decodeIfPresent(String.self, forKey: .zip)
     }
 
@@ -60,10 +60,10 @@ struct DetailedLocation: Decodable {
 
     let country: Country
     let region: Region
-    let city: City
+    let city: CityInfo
     let zip: String
     let regions: [Region]
-    let cities: [City]
+    let cities: [CityInfo]
 
     enum CodingKeys: String, CodingKey {
         case country
@@ -79,10 +79,10 @@ struct DetailedLocation: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.country = try container.decode(Country.self, forKey: .country)
         self.region = try container.decode(Region.self, forKey: .region)
-        self.city = try container.decode(City.self, forKey: .city)
+        self.city = try container.decode(CityInfo.self, forKey: .city)
         self.zip = try container.decode(String.self, forKey: .zip)
 
         self.regions = try container.decode([Region].self, forKey: .regions)
-        self.cities = try container.decode([City].self, forKey: .cities)
+        self.cities = try container.decode([CityInfo].self, forKey: .cities)
     }
 }

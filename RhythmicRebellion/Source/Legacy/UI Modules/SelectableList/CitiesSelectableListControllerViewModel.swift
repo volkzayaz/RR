@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-extension City: SelectableListItem {
+extension CityInfo: SelectableListItem {
 
     var identifier: String { return String(self.id) }
     var title: String { return self.name }
@@ -17,15 +17,15 @@ extension City: SelectableListItem {
 
 protocol CitiesDataSource: class {
 
-    var cities: [City] { get }
-    func reloadCities(completion: @escaping (Result<[City]>) -> Void)
+    var cities: [CityInfo] { get }
+    func reloadCities(completion: @escaping (Result<[CityInfo]>) -> Void)
 }
 
 class CitiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
     var dataSource: CitiesDataSource
 
-    typealias Item = City
+    typealias Item = CityInfo
 
     var items: [Item] { return dataSource.cities }
 
@@ -54,21 +54,21 @@ class CitiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
     var isEditable: Bool { return false }
 
     func canAddItem(with name: String) -> Bool { return false }
-    func addItem(with name: String) -> City? { return nil }
+    func addItem(with name: String) -> CityInfo? { return nil }
 }
 
 final class CitiesSelectableListControllerViewModel: SelectableListControllerViewModel<CitiesSelectableListItemsDataProvider> {
 
-    typealias ItemSelectionCallback = (City) -> Void
+    typealias ItemSelectionCallback = (CityInfo) -> Void
 
-    override var title: String { return NSLocalizedString("Select City", comment: "Select City Title") }
+    override var title: String { return NSLocalizedString("Select CityInfo", comment: "Select CityInfo Title") }
 
     var itemSelectionCallback: ItemSelectionCallback?
 
 
-    init(router: SelectableListRouter, dataSource: CitiesDataSource, selectedItem: City?, itemSelectionCallback: ItemSelectionCallback?) {
+    init(router: SelectableListRouter, dataSource: CitiesDataSource, selectedItem: CityInfo?, itemSelectionCallback: ItemSelectionCallback?) {
 
-        var selectedItems: [City] = [City]()
+        var selectedItems: [CityInfo] = [CityInfo]()
         if let selectedItem = selectedItem {
             selectedItems.append(selectedItem)
         }

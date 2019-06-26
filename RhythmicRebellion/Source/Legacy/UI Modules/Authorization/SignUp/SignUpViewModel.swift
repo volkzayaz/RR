@@ -20,7 +20,7 @@ protocol SignUpViewModelDelegate: class, ErrorPresenting {
     func refreshCountryField(with country: Country?)
     func refreshZipField(with zip: String?)
     func refreshRegionField(with region: Region?)
-    func refreshCityField(with city: City?)
+    func refreshCityField(with city: CityInfo?)
     func refreshHobbiesField(with hobbies: [Hobby])
     func refreshHowHearField(with howHear: HowHear?)
 }
@@ -56,7 +56,7 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
 
     private(set) var countries: [Country]
     private(set) var regions: [Region]
-    private(set) var cities: [City]
+    private(set) var cities: [CityInfo]
     var howHearList: [HowHear] { return self.config?.howHearList ?? [] }
     private let validator: Validator
 
@@ -90,7 +90,7 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
 
         self.countries = [Country]()
         self.regions = [Region]()
-        self.cities = [City]()
+        self.cities = [CityInfo]()
 
         self.validator = Validator()
     }
@@ -408,7 +408,7 @@ final class SignUpViewModel: CountriesDataSource, RegionsDataSource, CitiesDataS
         }
     }
 
-    func set(city: City) {
+    func set(city: CityInfo) {
         self.delegate?.refreshCityField(with: city)
         self.validateField(self.cityField)
     }
@@ -626,11 +626,11 @@ extension SignUpViewModel {
         
     }
 
-    func reloadCities(completion: @escaping (Result<[City]>) -> Void) {
+    func reloadCities(completion: @escaping (Result<[CityInfo]>) -> Void) {
         guard let region = self.regionField?.region else { completion(.success([])); return }
 
         let _ =
-        ConfigRequest.cities(for: region).rx.response(type: [City].self)
+        ConfigRequest.cities(for: region).rx.response(type: [CityInfo].self)
             .subscribe(onSuccess: { [weak self] (cities) in
                 
                 self?.cities = cities

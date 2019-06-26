@@ -25,7 +25,7 @@ protocol ProfileSettingsViewModelDelegate: class, ErrorPresenting {
     func refreshCountryField(with country: Country?)
     func refreshZipField(with zip: String?)
     func refreshRegionField(with region: Region?)
-    func refreshCityField(with city: City?)
+    func refreshCityField(with city: CityInfo?)
     func refreshPhoneField(with phone: String?)
     
     func refreshHobbiesField(with hobbies: [Hobby]?)
@@ -52,7 +52,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
 
     private(set) var countries: [Country]
     private(set) var regions: [Region]
-    private(set) var cities: [City]
+    private(set) var cities: [CityInfo]
     private(set) var loadedGenres: [Genre]
     var languages: [Language] { return self.config?.languages ?? [] }
 
@@ -103,7 +103,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
         self.delegate?.refreshCountryField(with: Country(with: userProfile.location.country))
         self.delegate?.refreshZipField(with: userProfile.location.zip)
         self.delegate?.refreshRegionField(with: userProfile.location.region)
-        self.delegate?.refreshCityField(with: userProfile.location.city != nil ? City(with: userProfile.location.city!) : nil)
+        self.delegate?.refreshCityField(with: userProfile.location.city)
         self.delegate?.refreshPhoneField(with: userProfile.phone)
         self.delegate?.refreshHobbiesField(with: userProfile.hobbies)
         self.delegate?.refreshGenresField(with: userProfile.genres)
@@ -364,7 +364,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
                         Country(with: userProfile.location.country) != self.countryField?.country ||
                         userProfile.location.zip != self.zipField?.validationText ||
                         userProfile.location.region != self.regionField?.region ||
-                        City(with: userProfile.location.city) != self.cityField?.city ||
+                        userProfile.location.city != self.cityField?.city ||
                         userProfile.phone ?? "" != self.phoneField?.validationText ||
                         userProfile.hobbies != self.hobbiesField?.hobbies ||
                         userProfile.genres != self.genresField?.genres ||
@@ -422,7 +422,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
         }
     }
 
-    func set(city: City) {
+    func set(city: CityInfo) {
         self.delegate?.refreshCityField(with: city)
         self.validateField(self.cityField)
     }
@@ -713,11 +713,11 @@ extension ProfileSettingsViewModel {
         
     }
     
-    func reloadCities(completion: @escaping (Result<[City]>) -> Void) {
+    func reloadCities(completion: @escaping (Result<[CityInfo]>) -> Void) {
         guard let region = self.regionField?.region else { completion(.success([])); return }
         
         let _ =
-        ConfigRequest.cities(for: region).rx.response(type: [City].self)
+        ConfigRequest.cities(for: region).rx.response(type: [CityInfo].self)
             .subscribe(onSuccess: { [weak self] (cities) in
                 
                 self?.cities = cities
