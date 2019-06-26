@@ -16,15 +16,14 @@ struct TrackPreviewOptionViewModel {
         case freeForPlaylist
         case fullLimitTimes(Int)
         case limitSeconds(UInt)
-        case authorizationNeeded
         
-        init(with track: Track, user: User?, μSecondsPlayed: UInt64? = nil) {
+        init(with track: Track, user: User, μSecondsPlayed: UInt64? = nil) {
             
             guard track.isPlayable, let trackAudioFile = track.audioFile else { self = .commigSoon; return }
             guard track.isFreeForPlaylist == false else { self = .freeForPlaylist; return }
-            guard let fanUser = user else { self = .authorizationNeeded; return; }
-            guard fanUser.hasPurchase(for: track) == false else { self = .freeForPlaylist; return }
-            guard (track.isFollowAllowFreeDownload && fanUser.isFollower(for: track.artist.id)) == false else { self = .freeForPlaylist; return }
+            if user.isGuest { self = .noPreview; return; }
+            if user.hasPurchase(for: track) { self = .freeForPlaylist; return }
+            guard (track.isFollowAllowFreeDownload && user.isFollower(for: track.artist.id)) == false else { self = .freeForPlaylist; return }
             guard let t = track.previewType else { self = .noPreview; return }
             
             switch t {
@@ -68,7 +67,6 @@ struct TrackPreviewOptionViewModel {
         case .limitSeconds(let seconds):
             let firstSecondsLocalizedTemplate = NSLocalizedString("First %d seconds preview", comment: "First seconds preview hint template")
             return String(format: firstSecondsLocalizedTemplate, seconds)
-        case .authorizationNeeded: return NSLocalizedString("Login to see previews available", comment: "Login to see previews available hint text")
         }
     }
 }

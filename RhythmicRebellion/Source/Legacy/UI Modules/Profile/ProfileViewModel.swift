@@ -117,6 +117,8 @@ final class ProfileViewModel {
 
     func logout() {
         
+        DataLayer.get.pagesLocalStorageService.reset()
+        
         let _ =
         UserRequest.logout.rx.baseResponse(type: User.self)
             .subscribe(onSuccess: { guestUser in
