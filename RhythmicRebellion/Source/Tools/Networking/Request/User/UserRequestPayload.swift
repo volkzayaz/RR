@@ -25,7 +25,7 @@ struct UserProfilePayload: Encodable {
         case phone
         case hobbies
         case genres
-        case language
+        case language = "primary_language"
     }
 
     public func encode(to encoder: Encoder) throws {

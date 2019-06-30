@@ -129,6 +129,8 @@ final class SignInViewModel {
             guard error.isEmpty else { return }
             guard let email = self.emailField?.validationText, let password = self.passwordField?.validationText else { return }
 
+            DataLayer.get.pagesLocalStorageService.reset()
+            
             let _ =
             UserRequest.signIn(login: email, password: password)
                 .rx.response(type: FanLoginResponse.self)
@@ -209,6 +211,8 @@ final class SignInViewModel {
             .trackView(viewIndicator: indicator)
             .silentCatch(handler: router!.sourceController!)
             .subscribe(onNext: { (resp) in
+                
+                DataLayer.get.pagesLocalStorageService.reset()
                 
                 Dispatcher.dispatch(action: SetNewUser(user: resp.user))
                 

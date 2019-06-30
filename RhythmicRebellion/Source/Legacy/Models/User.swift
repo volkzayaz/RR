@@ -121,7 +121,7 @@ struct UserProfile: Codable {
         case phone
         case hobbies
         case genres
-        case language
+        case language = "primary_language"
         case forceToPlay = "force_to_play"
         case listeningSettings = "listening_settings"
         case followedArtistsIds = "artists_followed"
