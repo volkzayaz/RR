@@ -65,7 +65,19 @@ class RootTabBarController: UITabBarController {
                 
             })
             .disposed(by: rx.disposeBag)
-        
+
+        ////TODO: kill it with fire =)
+        NotificationCenter.default.rx.notification(NSNotification.Name(rawValue: "navigateToSignIn"))
+            .subscribe(onNext: { [unowned self] (n) in
+                
+                self.selectedIndex = 2
+//                self.dismiss(animated: true, completion: {
+//                    let x = (self.viewControllers![1] as! UINavigationController).viewControllers.first! as! PagesViewController
+//                    x.viewModel.navigateToPage(with: url)
+//                })
+                
+            })
+            .disposed(by: rx.disposeBag)
         
     }
     

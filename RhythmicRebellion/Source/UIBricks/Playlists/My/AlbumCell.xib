@@ -93,7 +93,7 @@
                 <outlet property="albumNameLabel" destination="uhv-ak-kDW" id="ejR-sB-64g"/>
                 <outlet property="coverImageView" destination="Adq-di-HPq" id="UDT-Bw-9nl"/>
             </connections>
-            <point key="canvasLocation" x="-12.318840579710146" y="131.58482142857142"/>
+            <point key="canvasLocation" x="-14" y="133"/>
         </collectionViewCell>
     </objects>
     <resources>

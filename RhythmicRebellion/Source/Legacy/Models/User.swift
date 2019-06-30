@@ -2,7 +2,7 @@
 //  User.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 6/29/18.
+//  Created by Vlad Soroka on 6/29/18.
 //  Copyright © 2018 Patron Empowerment, LLC. All rights reserved.
 //
 

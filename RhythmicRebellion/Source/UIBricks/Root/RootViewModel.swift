@@ -162,7 +162,10 @@ extension RootViewModel {
     func follow() {
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard !appStateSlice.user.isGuest else {
-            //            self.routeToAuthorization();
+            
+            ////TODO: kill it with fire!!
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToSignIn"), object: nil)
+            
             return
         }
         

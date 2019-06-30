@@ -267,7 +267,11 @@ extension CurrentTrackViewModel {
     func like() {
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard !appStateSlice.user.isGuest else {
-            //self.routeToAuthorization();
+            
+            ////TODO: kill it with fire!!
+            router.owner.dismissController()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToSignIn"), object: nil)
+            
             return
         }
         
@@ -280,7 +284,11 @@ extension CurrentTrackViewModel {
     func dislike() {
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard !appStateSlice.user.isGuest else {
-            //self.routeToAuthorization();
+            
+            ////TODO: kill it with fire!!
+            router.owner.dismissController()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToSignIn"), object: nil)
+            
             return
         }
         
@@ -297,7 +305,11 @@ extension CurrentTrackViewModel {
         
         guard let track = appStateSlice.currentTrack?.track else { return }
         guard !appStateSlice.user.isGuest else {
-            //            self.routeToAuthorization();
+            
+            ////TODO: kill it with fire!!
+            router.owner.dismissController()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToSignIn"), object: nil)
+            
             return
         }
         

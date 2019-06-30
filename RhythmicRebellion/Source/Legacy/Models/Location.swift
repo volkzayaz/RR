@@ -29,25 +29,6 @@ struct ProfileLocation: Codable {
         self.zip = zip
     }
 
-    public init(from decoder: Decoder) throws {
-
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        self.country = try container.decode(Country.self, forKey: .country)
-        self.region = try container.decodeIfPresent(Region.self, forKey: .region)
-        self.city = try container.decodeIfPresent(CityInfo.self, forKey: .city)
-        self.zip = try container.decodeIfPresent(String.self, forKey: .zip)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(self.country, forKey: .country)
-        
-        try container.encodeIfPresent(self.region, forKey: .region)
-        try container.encodeIfPresent(self.city, forKey: .city)
-        try container.encodeIfPresent(self.zip, forKey: .zip)
-    }
 }
 
 extension ProfileLocation: Equatable {
