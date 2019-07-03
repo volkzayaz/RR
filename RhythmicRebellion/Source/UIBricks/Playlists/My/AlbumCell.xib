@@ -23,13 +23,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="177" height="177"/>
                         <color key="backgroundColor" red="0.16862745098039217" green="0.1764705882352941" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="Adq-di-HPq" secondAttribute="height" id="87K-aL-Pm0">
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </constraint>
+                            <constraint firstAttribute="width" secondItem="Adq-di-HPq" secondAttribute="height" id="87K-aL-Pm0"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
