@@ -329,11 +329,11 @@ struct RegionsResponse: Decodable {
 
 struct CitiesResponse: Decodable {
 
-    let cities: [CityInfo]
+    let cities: [City]
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.cities = try container.decode([CityInfo].self)
+        self.cities = try container.decode([City].self)
     }
 }
 

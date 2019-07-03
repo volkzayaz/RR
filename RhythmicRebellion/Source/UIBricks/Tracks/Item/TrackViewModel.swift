@@ -32,6 +32,10 @@ extension TrackViewModel {
         return mode == .index
     }
     
+    var equalizerBackgroundColor: UIColor {
+        return artworkHidden ? .clear : .equalizerBackground
+    }
+    
     var isPlaying: Driver<Bool> {
         return appState.map { $0.player.currentItem?.state.isPlaying ?? false }
                        .distinctUntilChanged()

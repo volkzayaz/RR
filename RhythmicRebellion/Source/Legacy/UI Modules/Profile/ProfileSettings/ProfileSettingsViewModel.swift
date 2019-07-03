@@ -25,7 +25,7 @@ protocol ProfileSettingsViewModelDelegate: class, ErrorPresenting {
     func refreshCountryField(with country: Country?)
     func refreshZipField(with zip: String?)
     func refreshRegionField(with region: Region?)
-    func refreshCityField(with city: CityInfo?)
+    func refreshCityField(with city: City?)
     func refreshPhoneField(with phone: String?)
     
     func refreshHobbiesField(with hobbies: [Hobby]?)
@@ -52,7 +52,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
 
     private(set) var countries: [Country]
     private(set) var regions: [Region]
-    private(set) var cities: [CityInfo]
+    private(set) var cities: [City]
     private(set) var loadedGenres: [Genre]
     var languages: [Language] { return self.config?.languages ?? [] }
 
@@ -422,7 +422,7 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
         }
     }
 
-    func set(city: CityInfo) {
+    func set(city: City) {
         self.delegate?.refreshCityField(with: city)
         self.validateField(self.cityField)
     }
@@ -713,11 +713,11 @@ extension ProfileSettingsViewModel {
         
     }
     
-    func reloadCities(completion: @escaping (Result<[CityInfo]>) -> Void) {
+    func reloadCities(completion: @escaping (Result<[City]>) -> Void) {
         guard let region = self.regionField?.region else { completion(.success([])); return }
         
         let _ =
-        ConfigRequest.cities(for: region).rx.response(type: [CityInfo].self)
+        ConfigRequest.cities(for: region).rx.response(type: [City].self)
             .subscribe(onSuccess: { [weak self] (cities) in
                 
                 self?.cities = cities

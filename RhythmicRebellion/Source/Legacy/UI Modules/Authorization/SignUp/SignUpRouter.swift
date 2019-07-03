@@ -12,7 +12,7 @@ import UIKit
 protocol SignUpRouter: FlowRouter {
     func showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: @escaping (Country) -> Void)
     func showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: @escaping (Region) -> Void)
-    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: CityInfo?, selectionCallback: @escaping (CityInfo) -> Void)
+    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: @escaping (City) -> Void)
     func showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, selectionCallback: @escaping ([Hobby]) -> Void)
     func showHowHearSelectableList(dataSource: HowHearListDataSource, selectedItem: HowHear?, selectionCallback: @escaping (HowHear) -> Void)
 }
@@ -34,7 +34,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
     enum SegueActions: SegueDestinations {
         case showContriesSelectableList(dataSource: CountriesDataSource, selectedItem: Country?, selectionCallback: (Country) -> Void)
         case showRegionsSelectableList(dataSource: RegionsDataSource, selectedItem: Region?, selectionCallback: (Region) -> Void)
-        case showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: CityInfo?, selectionCallback: (CityInfo) -> Void)
+        case showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: (City) -> Void)
         case showHobbiesSelectableList(dataSource: HobbiesDataSource, selectedItems: [Hobby]?, additionalItems: [Hobby]?, selectionCallback: ([Hobby]) -> Void)
         case showHowHearSelectableList(dataSource: HowHearListDataSource, selectedItem: HowHear?, selectionCallback: (HowHear) -> Void)
 
@@ -134,7 +134,7 @@ final class DefaultSignUpRouter:  SignUpRouter, FlowRouterSegueCompatible {
         self.perform(segue: .showRegionsSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
     }
 
-    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: CityInfo?, selectionCallback: @escaping (CityInfo) -> Void) {
+    func showCitiesSelectableList(dataSource: CitiesDataSource, selectedItem: City?, selectionCallback: @escaping (City) -> Void) {
         self.perform(segue: .showCitiesSelectableList(dataSource: dataSource, selectedItem: selectedItem, selectionCallback: selectionCallback))
     }
 

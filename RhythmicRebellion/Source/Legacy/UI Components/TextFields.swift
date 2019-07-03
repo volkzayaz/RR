@@ -29,7 +29,7 @@ class RegionTextField: MFTextField {
 
 class CityTextField: MFTextField {
 
-    var city: CityInfo? {
+    var city: City? {
         didSet {
             self.text = self.city?.name ?? ""
         }

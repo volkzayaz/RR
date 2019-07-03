@@ -54,9 +54,21 @@ class TrackView: UIView {
       
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
+        equlizerView.backgroundColor = viewModel.equalizerBackgroundColor
+        
+        indexLabel.isHidden = viewModel.indexHidden
+        artworkImageView.isHidden = viewModel.artworkHidden
         
         viewModel.equalizerHidden
-            .drive(equlizerView.rx.isHidden)
+            .drive(onNext: { [unowned self] (isHidden) in
+                
+                self.equlizerView.isHidden = isHidden
+                
+                if self.viewModel.artworkHidden {
+                    self.indexLabel.isHidden = !isHidden
+                }
+                
+            })
             .disposed(by: disposeBag)
         
         viewModel.isPlaying
@@ -66,9 +78,6 @@ class TrackView: UIView {
                     self.equalizerImageView.stopAnimatingGif()
             })
             .disposed(by: rx.disposeBag)
-        
-        indexLabel.isHidden = viewModel.indexHidden
-        artworkImageView.isHidden = viewModel.artworkHidden
         
         indexLabel.text = viewModel.index
         ImageRetreiver.imageForURLWithoutProgress(url: viewModel.artwork)

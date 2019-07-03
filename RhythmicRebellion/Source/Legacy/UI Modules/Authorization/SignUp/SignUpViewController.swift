@@ -530,7 +530,7 @@ extension SignUpViewController: SignUpViewModelDelegate {
         self.regionTextField.region = region
     }
 
-    func refreshCityField(with city: CityInfo?) {
+    func refreshCityField(with city: City?) {
         self.cityTextField.city = city
     }
 

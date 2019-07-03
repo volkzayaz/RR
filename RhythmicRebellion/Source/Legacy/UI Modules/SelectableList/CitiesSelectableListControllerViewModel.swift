@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-extension CityInfo: SelectableListItem {
+extension City: SelectableListItem {
 
     var identifier: String { return String(self.id) }
     var title: String { return self.name }
@@ -17,15 +17,15 @@ extension CityInfo: SelectableListItem {
 
 protocol CitiesDataSource: class {
 
-    var cities: [CityInfo] { get }
-    func reloadCities(completion: @escaping (Result<[CityInfo]>) -> Void)
+    var cities: [City] { get }
+    func reloadCities(completion: @escaping (Result<[City]>) -> Void)
 }
 
 class CitiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
 
     var dataSource: CitiesDataSource
 
-    typealias Item = CityInfo
+    typealias Item = City
 
     var items: [Item] { return dataSource.cities }
 
@@ -54,21 +54,21 @@ class CitiesSelectableListItemsDataProvider: SelectableListItemsDataProvider {
     var isEditable: Bool { return false }
 
     func canAddItem(with name: String) -> Bool { return false }
-    func addItem(with name: String) -> CityInfo? { return nil }
+    func addItem(with name: String) -> City? { return nil }
 }
 
 final class CitiesSelectableListControllerViewModel: SelectableListControllerViewModel<CitiesSelectableListItemsDataProvider> {
 
-    typealias ItemSelectionCallback = (CityInfo) -> Void
+    typealias ItemSelectionCallback = (City) -> Void
 
-    override var title: String { return NSLocalizedString("Select CityInfo", comment: "Select CityInfo Title") }
+    override var title: String { return "Select City" }
 
     var itemSelectionCallback: ItemSelectionCallback?
 
 
-    init(router: SelectableListRouter, dataSource: CitiesDataSource, selectedItem: CityInfo?, itemSelectionCallback: ItemSelectionCallback?) {
+    init(router: SelectableListRouter, dataSource: CitiesDataSource, selectedItem: City?, itemSelectionCallback: ItemSelectionCallback?) {
 
-        var selectedItems: [CityInfo] = [CityInfo]()
+        var selectedItems: [City] = [City]()
         if let selectedItem = selectedItem {
             selectedItems.append(selectedItem)
         }

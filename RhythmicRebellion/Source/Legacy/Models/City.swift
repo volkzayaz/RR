@@ -1,5 +1,5 @@
 //
-//  CityInfo.swift
+//  City.swift
 //  RhythmicRebellion
 //
 //  Created by Alexander Obolentsev on 9/5/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CityInfo: Codable {
+struct City: Codable {
 
     let id: Int
     let name: String
@@ -22,9 +22,9 @@ struct CityInfo: Codable {
 
 }
 
-extension CityInfo: Hashable {
+extension City: Hashable {
 
-    static func == (lhs: CityInfo, rhs: CityInfo) -> Bool {
+    static func == (lhs: City, rhs: City) -> Bool {
         return lhs.id == rhs.id && lhs.countryCode == rhs.countryCode
     }
 

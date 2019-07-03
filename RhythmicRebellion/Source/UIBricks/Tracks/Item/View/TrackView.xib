@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -29,7 +29,7 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="R5g-z0-lRx">
                     <rect key="frame" x="85" y="12" width="283" height="41"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invisible kid" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-y9-D3z">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="253" verticalHuggingPriority="253" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" text="Invisible kid" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-y9-D3z">
                             <rect key="frame" x="0.0" y="0.0" width="89" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -43,7 +43,7 @@
                         </label>
                     </subviews>
                 </stackView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zeg-CD-osw" customClass="DaButton" customModule="RhythmicRebellion" customModuleProvider="target">
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" verticalHuggingPriority="248" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="753" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zeg-CD-osw" customClass="DaButton" customModule="RhythmicRebellion" customModuleProvider="target">
                     <rect key="frame" x="493" y="20.5" width="24" height="24"/>
                     <color key="tintColor" red="0.74901960779999999" green="0.78039215689999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="options-horizontal"/>
@@ -127,6 +127,7 @@
                 <constraint firstItem="F7c-d1-XaN" firstAttribute="leading" secondItem="AW7-vZ-kaO" secondAttribute="leading" id="rLM-Sy-u2M"/>
                 <constraint firstItem="AW7-vZ-kaO" firstAttribute="trailing" secondItem="B4i-8W-bmq" secondAttribute="trailing" id="skt-xg-PtW"/>
                 <constraint firstItem="wpZ-HZ-Jgb" firstAttribute="centerY" secondItem="ACO-cQ-wwM" secondAttribute="centerY" id="v0l-9H-zBW"/>
+                <constraint firstItem="zeg-CD-osw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Yu7-y9-D3z" secondAttribute="trailing" constant="8" id="xgm-jx-Xut"/>
                 <constraint firstItem="R5g-z0-lRx" firstAttribute="top" secondItem="B4i-8W-bmq" secondAttribute="top" constant="4" id="yoA-xw-Gkn"/>
                 <constraint firstItem="B4i-8W-bmq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="21" id="yp4-DO-o0Y"/>
             </constraints>

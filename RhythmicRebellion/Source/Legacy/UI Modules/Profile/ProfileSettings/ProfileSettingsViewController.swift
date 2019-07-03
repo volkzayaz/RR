@@ -452,7 +452,7 @@ extension ProfileSettingsViewController: ProfileSettingsViewModelDelegate {
     func refreshCountryField(with country: Country?) { self.countryTextField.country = country }
     func refreshZipField(with zip: String?) { self.zipTextField.text = zip }
     func refreshRegionField(with region: Region?) { self.regionTextField.region = region }
-    func refreshCityField(with city: CityInfo?) { self.cityTextField.city = city }
+    func refreshCityField(with city: City?) { self.cityTextField.city = city }
     func refreshPhoneField(with phone: String?) { self.phoneTextField.text = phone }
 
     func refreshHobbiesField(with hobbies: [Hobby]?) { self.hobbiesContainerView.hobbies = hobbies }

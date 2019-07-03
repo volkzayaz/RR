@@ -69,4 +69,6 @@ extension UIColor {
     static let primaryPink = UIColor(fromHex: 0xFF3EA7)
     static let blockedYellow = UIColor(fromHex: 0xF8E71C)
     
+    static let equalizerBackground = UIColor(fromHex: 0x1B0E2F)
+    
 }

@@ -12,7 +12,7 @@ struct ProfileLocation: Codable {
 
     var country: Country
     var region: Region?
-    var city: CityInfo?
+    var city: City?
     var zip: String?
 
     enum CodingKeys: String, CodingKey {
@@ -22,7 +22,7 @@ struct ProfileLocation: Codable {
         case zip
     }
 
-    public init(country: Country, region: Region? = nil, city: CityInfo? = nil, zip: String? = nil) {
+    public init(country: Country, region: Region? = nil, city: City? = nil, zip: String? = nil) {
         self.country = country
         self.region = region
         self.city = city
@@ -41,10 +41,10 @@ struct DetailedLocation: Decodable {
 
     let country: Country
     let region: Region
-    let city: CityInfo
+    let city: City
     let zip: String
     let regions: [Region]
-    let cities: [CityInfo]
+    let cities: [City]
 
     enum CodingKeys: String, CodingKey {
         case country
@@ -60,10 +60,10 @@ struct DetailedLocation: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.country = try container.decode(Country.self, forKey: .country)
         self.region = try container.decode(Region.self, forKey: .region)
-        self.city = try container.decode(CityInfo.self, forKey: .city)
+        self.city = try container.decode(City.self, forKey: .city)
         self.zip = try container.decode(String.self, forKey: .zip)
 
         self.regions = try container.decode([Region].self, forKey: .regions)
-        self.cities = try container.decode([CityInfo].self, forKey: .cities)
+        self.cities = try container.decode([City].self, forKey: .cities)
     }
 }
