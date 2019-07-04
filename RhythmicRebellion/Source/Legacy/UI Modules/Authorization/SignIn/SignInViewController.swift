@@ -24,7 +24,10 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var facebookButton: UIButton! {
         didSet {
-            //facebookButton.isHidden = true
+            #if DEBUG
+            #else
+            facebookButton.isHidden = true
+            #endif
         }
     }
     

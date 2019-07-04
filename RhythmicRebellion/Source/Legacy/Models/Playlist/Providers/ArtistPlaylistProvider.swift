@@ -25,3 +25,12 @@ struct ArtistPlaylistProvider: PlaylistProvider {
     }
     
 }
+
+extension ArtistPlaylistProvider: AttachableProvider {
+    
+    func attach(to playlist: FanPlaylist) -> Maybe<Void> {
+        return PlaylistRequest.attachArtist(playlist: artistPlaylist, to: playlist)
+            .rx.emptyResponse()
+    }
+    
+}

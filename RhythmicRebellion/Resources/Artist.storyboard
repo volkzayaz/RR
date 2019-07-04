@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GJF-65-Qpk">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,11 +15,11 @@
             <objects>
                 <viewController id="GJF-65-Qpk" customClass="ArtistViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jWq-5C-885">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="498-lm-2La">
-                                <rect key="frame" x="0.0" y="69" width="375" height="598"/>
+                                <rect key="frame" x="0.0" y="69" width="320" height="499"/>
                                 <color key="backgroundColor" red="0.086274509803921567" green="0.054901960784313725" blue="0.19607843137254902" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4dc-Nk-GzG" customClass="BaseFlowLayout" customModule="RhythmicRebellion" customModuleProvider="target">
                                     <size key="itemSize" width="50" height="50"/>
@@ -29,7 +29,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="track cell" id="gJY-M4-YXV" customClass="TrackCollectionViewCell" customModule="RhythmicRebellion" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="10" width="355" height="38"/>
+                                        <rect key="frame" x="-17.5" y="10" width="355" height="38"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="355" height="38"/>
@@ -43,10 +43,10 @@
                                 </connections>
                             </collectionView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="g7E-DC-af4">
-                                <rect key="frame" x="0.0" y="20" width="375" height="49"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="49"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wRx-sQ-xxE">
-                                        <rect key="frame" x="0.0" y="0.0" width="125" height="49"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="106.5" height="49"/>
                                         <color key="backgroundColor" red="0.086274509799999996" green="0.054901960780000002" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Albums">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -56,7 +56,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXb-xP-VCb">
-                                        <rect key="frame" x="125" y="0.0" width="125" height="49"/>
+                                        <rect key="frame" x="106.5" y="0.0" width="107" height="49"/>
                                         <color key="backgroundColor" red="0.086274509799999996" green="0.054901960780000002" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Playlists">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -66,7 +66,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fMG-5T-BAR">
-                                        <rect key="frame" x="250" y="0.0" width="125" height="49"/>
+                                        <rect key="frame" x="213.5" y="0.0" width="106.5" height="49"/>
                                         <color key="backgroundColor" red="0.086274509799999996" green="0.054901960780000002" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Songs">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -81,7 +81,7 @@
                                 </constraints>
                             </stackView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="45O-XA-Py4" userLabel="selector">
-                                <rect key="frame" x="0.0" y="68" width="125" height="1"/>
+                                <rect key="frame" x="0.0" y="68" width="106.5" height="1"/>
                                 <color key="backgroundColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="xuk-dH-xiD"/>
@@ -123,11 +123,11 @@
             <objects>
                 <tableViewController storyboardIdentifier="ArtistsFollowedViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Ka-ot-SDX" customClass="ArtistsFollowedViewController" customModule="RhythmicRebellion" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="58" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mhJ-FU-aHT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.086274509803921567" green="0.054901960784313725" blue="0.19607843137254902" alpha="1" colorSpace="calibratedRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" translucent="NO" id="9yg-X3-FX1">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -140,23 +140,26 @@
                                     <color key="value" red="0.15304270389999999" green="0.1260358989" blue="0.25044286249999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
+                            <connections>
+                                <outlet property="delegate" destination="8Ka-ot-SDX" id="EG1-6Y-Bw3"/>
+                            </connections>
                         </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="artist followed cell" rowHeight="58" id="bnc-tU-QFO" customClass="ArtistsFollowedCell" customModule="RhythmicRebellion" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="84" width="375" height="58"/>
+                                <rect key="frame" x="0.0" y="84" width="320" height="58"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bnc-tU-QFO" id="JLm-u2-13r">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="58"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="Metallica" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v9j-nO-D7w">
-                                            <rect key="frame" x="16" y="19" width="275" height="20"/>
+                                            <rect key="frame" x="16" y="19" width="220" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DY3-dB-iXd">
-                                            <rect key="frame" x="299" y="14" width="60" height="30"/>
+                                            <rect key="frame" x="244" y="14" width="60" height="30"/>
                                             <state key="normal" title="Unfollow">
                                                 <color key="titleColor" red="1" green="0.24313725489999999" blue="0.65490196079999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>

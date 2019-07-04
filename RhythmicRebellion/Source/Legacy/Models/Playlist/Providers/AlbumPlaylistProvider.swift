@@ -63,3 +63,12 @@ extension AlbumPlaylistProvider: DownloadablePlaylistProvider {
     }
     
 }
+
+extension AlbumPlaylistProvider: AttachableProvider {
+    
+    func attach(to playlist: FanPlaylist) -> Maybe<Void> {
+        return PlaylistRequest.attachAlbum(album: album, to: playlist)
+            .rx.emptyResponse()
+    }
+    
+}
