@@ -113,6 +113,7 @@ final class SignInViewModel {
 
     func signIn() {
         
+        #if DEBUG
         if let e = self.emailField?.validationText, e.starts(with: "#") {
 
             SettingsStore.environment.value = String(e.dropFirst())
@@ -122,7 +123,7 @@ final class SignInViewModel {
             
             return
         }
-        
+        #endif
         
         
         self.validator.validate { [unowned self] (error) in
