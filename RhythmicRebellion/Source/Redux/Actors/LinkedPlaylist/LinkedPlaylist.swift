@@ -101,6 +101,10 @@ struct LinkedPlaylist {
     }
     
     func next(after: TrackOrderHash) -> OrderedTrack? {
+        if shouldRepeat {
+            return self[after]
+        }
+        
         var it = orderReflection.makeIterator()
         
         while let x = it.next() {
