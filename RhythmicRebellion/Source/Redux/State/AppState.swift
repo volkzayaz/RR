@@ -129,6 +129,10 @@ extension AppState {
     var firstTrack: OrderedTrack? {
         return player.tracks.orderedTracks.first
     }
+    
+    var lastTrack: OrderedTrack? {
+        return player.tracks.orderedTracks.last
+    }
  
     var canForward: Bool {
         

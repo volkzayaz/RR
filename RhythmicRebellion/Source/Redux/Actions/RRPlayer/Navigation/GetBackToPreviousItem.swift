@@ -22,7 +22,7 @@ struct GetBackToPreviousItem: ActionCreator {
         }
         
         guard let currentHash = initialState.currentTrack?.orderHash,
-            let previousItem = initialState.player.tracks.previous(before: currentHash) else {
+            let previousItem = initialState.player.tracks.previous(before: currentHash) ?? initialState.lastTrack else {
                 return .just(initialState)
         }
         
