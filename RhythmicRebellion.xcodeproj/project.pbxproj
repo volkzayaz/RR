@@ -34,6 +34,7 @@
 		7343FCA42282E06D00A3DA3D /* TrackGroupCellRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA12282E06D00A3DA3D /* TrackGroupCellRouter.swift */; };
 		7343FCA52282E06D00A3DA3D /* TrackGroupCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA22282E06D00A3DA3D /* TrackGroupCollectionCell.swift */; };
 		7343FCA62282E06D00A3DA3D /* TrackGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343FCA32282E06D00A3DA3D /* TrackGroupViewModel.swift */; };
+		735C313222D0AE6F000BA05F /* ShuffleRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735C313122D0AE6F000BA05F /* ShuffleRepeat.swift */; };
 		735D78092292EE15000E43E1 /* ReplacePlaylists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735D78082292EE15000E43E1 /* ReplacePlaylists.swift */; };
 		735D780B2292EE48000E43E1 /* AppendPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735D780A2292EE48000E43E1 /* AppendPlaylist.swift */; };
 		735D78102296CB89000E43E1 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735D780D2296CB89000E43E1 /* RootRouter.swift */; };
@@ -438,6 +439,7 @@
 		734F82742229965E0006E1DE /* Appfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Appfile; sourceTree = "<group>"; };
 		734F82762229965E0006E1DE /* Fastfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = Fastfile; sourceTree = "<group>"; };
 		734F828622299CD90006E1DE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		735C313122D0AE6F000BA05F /* ShuffleRepeat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuffleRepeat.swift; sourceTree = "<group>"; };
 		735D78082292EE15000E43E1 /* ReplacePlaylists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplacePlaylists.swift; sourceTree = "<group>"; };
 		735D780A2292EE48000E43E1 /* AppendPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppendPlaylist.swift; sourceTree = "<group>"; };
 		735D780D2296CB89000E43E1 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
@@ -1030,6 +1032,7 @@
 				7361C00922368504008EA36E /* DeleteTracks.swift */,
 				7361C00B2236851E008EA36E /* ClearTracks.swift */,
 				7361C00D2236855E008EA36E /* ReplaceTracks.swift */,
+				735C313122D0AE6F000BA05F /* ShuffleRepeat.swift */,
 			);
 			path = LinkedPlaylist;
 			sourceTree = "<group>";
@@ -3135,6 +3138,7 @@
 				73F13866222C289200FB8EBC /* ListeningSettingsViewModel.swift in Sources */,
 				73F1385B222C289200FB8EBC /* ContriesSelectableListControllerViewModel.swift in Sources */,
 				73F137F4222C289200FB8EBC /* ArtistsFollowedViewModel.swift in Sources */,
+				735C313222D0AE6F000BA05F /* ShuffleRepeat.swift in Sources */,
 				73F138BB222C289200FB8EBC /* NowPlayingRouter.swift in Sources */,
 				73DB1FD52271AC2300E01622 /* VideoViewController.swift in Sources */,
 				73F13818222C289200FB8EBC /* GenresContainerView.swift in Sources */,

@@ -56,6 +56,14 @@ class WebSocketService {
             .map { $0.data }
     }
     
+    var didReceiveShuffle: Observable<ShouldShuffle> {
+        return commandObservable()
+    }
+    
+    var didReceiveRepeat: Observable<ShouldRepeat> {
+        return commandObservable()
+    }
+    
     ////User mutations
     var didReceiveListeningSettings: Observable<ListeningSettings> {
         return commandObservable()

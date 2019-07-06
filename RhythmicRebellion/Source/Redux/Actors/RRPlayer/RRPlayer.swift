@@ -121,6 +121,32 @@ extension RRPlayer {
             .drive(masterDate)
             .disposed(by: bag)
         
+        appState.ownChangesOnlyOf { $0.player.tracks.shouldShuffle }
+            .skip(1)
+            .drive(onNext: { [weak w = webSocket] (x) in
+                
+                let data = ShouldShuffle(booleanLiteral: x.player.tracks.shouldShuffle)
+                
+                w?.sendCommand(command: CodableWebSocketCommand(data: data))
+                
+                print("Sending out block state via webSoccket shouldShuffle = \(x.player.tracks.shouldShuffle)")
+                
+            })
+            .disposed(by: bag)
+        
+        appState.ownChangesOnlyOf { $0.player.tracks.shouldRepeat }
+            .skip(1)
+            .drive(onNext: { [weak w = webSocket] (x) in
+                
+                let data = ShouldRepeat(booleanLiteral: x.player.tracks.shouldRepeat)
+                
+                w?.sendCommand(command: CodableWebSocketCommand(data: data))
+                
+                print("Sending out block state via webSoccket shouldRepeat = \(x.player.tracks.shouldRepeat)")
+                
+            })
+            .disposed(by: bag)
+        
     }
     
     func bindWebSocket() {
@@ -166,6 +192,18 @@ extension RRPlayer {
             })
             .disposed(by: bag)
         
+        webSocket.didReceiveRepeat
+            .subscribe(onNext: { (shouldRepeat) in
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: Repeat(change: .value(shouldRepeat.x))))
+            })
+            .disposed(by: bag)
+        
+        webSocket.didReceiveShuffle
+            .subscribe(onNext: { (shouldShuffle) in
+                Dispatcher.dispatch(action: AlienSignatureWrapper(action: Shuffle(change: .value(shouldShuffle.x))))
+            })
+            .disposed(by: bag)
+        
         ////User mutations
         
         webSocket.didReceiveListeningSettings
@@ -207,26 +245,6 @@ extension RRPlayer {
                 }))
             })
             .disposed(by: bag)
-        
-        
-        
-            //    func webSocketService(_ service: WebSocketService, didReceivePurchases purchases: [Purchase]) {
-            //        guard let currentFanUser = self.user as? User else { return }
-            //
-            //        var fanUser = currentFanUser
-            //        fanUser.profile?.update(with: purchases)
-            //        self.user = fanUser
-            //
-            //        notifyUserProfileChanged(purchasedTracksIds: fanUser.profile?.purchasedTracksIds,
-            //                                 previousPurchasedTracksIds: currentFanUser.profile.purchasedTracksIds)
-            //    }
-            //
-            //    func webSocketService(_ service: WebSocketService, didRecieveFanPlaylistState fanPlaylistState: FanPlaylistState) {
-            //        guard (self.user as? User) != nil else { return }
-            //
-            //        notifyFanPlaylistChanged(with: fanPlaylistState)
-            //    }
-            //
         
     }
     

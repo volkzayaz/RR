@@ -161,6 +161,26 @@ struct TrackReduxViewPatch: WSCommand {
     
 }
 
+protocol WSBoolWrapper: ExpressibleByBooleanLiteral, Codable {
+    var x: Bool { set get }
+    init()
+}
+
+extension WSBoolWrapper {
+    init(from decoder: Decoder) throws {
+        self.init(booleanLiteral: try (try decoder.singleValueContainer()).decode(Bool.self))
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.singleValueContainer()
+        try c.encode(x)
+    }
+    
+    init(booleanLiteral value: Bool) {
+        self.init()
+        x = value
+    }
+}
 
 extension Token: WSCommandData {
     static var channel: String { return "user" }
@@ -242,4 +262,20 @@ extension CheckAddons: WSCommandData {
 extension AddonState: WSCommandData {
     static var channel: String { return "addons" }
     static var command: String { return "playAddon" }
+}
+
+struct ShouldShuffle: WSBoolWrapper, WSCommandData {
+    var x: Bool = false
+    init() {}
+    
+    static var channel: String { return "playlist" }
+    static var command: String { return "syncShuffle" }
+}
+
+struct ShouldRepeat: WSBoolWrapper, WSCommandData {
+    var x: Bool = false
+    init() {}
+    
+    static var channel: String { return "playlist" }
+    static var command: String { return "syncRepeatOne" }
 }

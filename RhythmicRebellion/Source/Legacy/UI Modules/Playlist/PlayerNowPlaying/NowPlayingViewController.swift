@@ -27,6 +27,8 @@ class NowPlayingViewController: UIViewController {
     })
     
     @IBOutlet var clearBarButton: UIBarButtonItem!
+    @IBOutlet var shuffleBarButton: UIBarButtonItem!
+    @IBOutlet var repeatBarButtton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
 
     var viewModel: NowPlayingViewModel!
@@ -35,10 +37,22 @@ class NowPlayingViewController: UIViewController {
         super.viewDidLoad()
 
         tableView.register(R.nib.trackTableViewCell)
-        navigationItem.rightBarButtonItem = clearBarButton
+        navigationItem.rightBarButtonItems = [shuffleBarButton, repeatBarButtton, clearBarButton].reversed()
         
         viewModel.dataSource
             .drive(tableView.rx.items(dataSource: dataSource))
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.repeatColor
+            .drive(onNext: { [unowned self] (x) in
+                self.repeatBarButtton.tintColor = x
+            })
+            .disposed(by: rx.disposeBag)
+        
+        viewModel.shuffleColor
+            .drive(onNext: { [unowned self] (x) in
+                self.shuffleBarButton.tintColor = x
+            })
             .disposed(by: rx.disposeBag)
         
         tableView.rx.modelSelected(TrackViewModel.self)
@@ -51,6 +65,15 @@ class NowPlayingViewController: UIViewController {
     @IBAction func clear(_ sender: Any) {
         Dispatcher.dispatch(action: ClearTracks())
     }
+    
+    @IBAction func shuffle(_ sender: Any) {
+        Dispatcher.dispatch(action: Shuffle(change: .toggle))
+    }
+    
+    @IBAction func `repeat`(_ sender: Any) {
+        Dispatcher.dispatch(action: Repeat(change: .toggle))
+    }
+    
     
 }
 

@@ -28,6 +28,9 @@ struct LinkedPlaylist {
     ///Mutated by ApplyReduxViewPatch
     var trackDump: [Int: Track] = [:]
     
+    var shouldShuffle: Bool = false
+    var shouldRepeat: Bool = false
+    
     ///Dictionary of trackID and corresponding preview time
     ///that has been already played by user
     ///Mutated by RRPlayer.didReceivePreviewTimes
@@ -222,6 +225,8 @@ extension LinkedPlaylist: Equatable {
         
         guard lhs.previewTime == rhs.previewTime,
               lhs.trackDump == rhs.trackDump,
+              lhs.shouldShuffle == rhs.shouldShuffle,
+              lhs.shouldRepeat == rhs.shouldRepeat,
               lhs.reduxView.count == rhs.reduxView.count else { return false }
         
         for (key, value) in lhs.reduxView {

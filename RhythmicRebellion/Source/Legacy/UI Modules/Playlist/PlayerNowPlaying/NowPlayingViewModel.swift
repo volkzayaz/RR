@@ -12,24 +12,23 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-struct NowPlayingProvider : TrackProvider {
-    
-    var mode: ThumbMode { return .artwork }
-    
-    func provide() -> Observable<[TrackRepresentation]> {
-        return appState.map { $0.player.tracks }
-                       .distinctUntilChanged()
-                       .map { $0.orderedTracks.map(TrackRepresentation.init) }
-                       .asObservable()
-    }
-    
-}
-
 extension NowPlayingViewModel {
     
     var dataSource: Driver<[AnimatableSectionModel<String, TrackViewModel>]> {
         return data.asDriver().map { x in
             return [AnimatableSectionModel(model: "", items: x)]
+        }
+    }
+    
+    var shuffleColor: Driver<UIColor> {
+        return appState.map {
+            $0.player.tracks.shouldShuffle ? .primaryPink : .navigationBlue
+        }
+    }
+    
+    var repeatColor: Driver<UIColor> {
+        return appState.map {
+            $0.player.tracks.shouldRepeat ? .primaryPink : .navigationBlue
         }
     }
     
@@ -118,5 +117,18 @@ extension NowPlayingViewModel {
         
         Dispatcher.dispatch(action: AudioPlayer.Switch())
     }
+    
+}
 
+struct NowPlayingProvider : TrackProvider {
+    
+    var mode: ThumbMode { return .artwork }
+    
+    func provide() -> Observable<[TrackRepresentation]> {
+        return appState.map { $0.player.tracks }
+            .distinctUntilChanged()
+            .map { $0.orderedTracks.map(TrackRepresentation.init) }
+            .asObservable()
+    }
+    
 }
