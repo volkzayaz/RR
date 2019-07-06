@@ -15,16 +15,27 @@ extension Track: Fakeble {
     }
     
     static func fake(id: Int, audioFile: TrackAudioFile? = TrackAudioFile.fake()) -> Track {
+        
         return Track(id: id,
                      songId: fakeNumber(bound: 1000),
                      name: fakeString(),
                      radioInfo: fakeString(),
                      ownerId: fakeID(),
+                     isCensorship: fakeBool(),
+                     isInstrumental: fakeBool(),
+                     isFreeForPlaylist: fakeBool(),
+                     previewType: nil,
+                     previewLimitTimes: nil,
+                     isFollowAllowFreeDownload: fakeBool(),
+                     releaseDateFans: nil,
+                     featuring: nil,
+                     images: [],
+                     audioFile: audioFile,
+                     cleanAudioFile: nil,
                      artist: Artist.fake(),
                      writer: TrackWriter.fake(),
-                     images: [Image](),
-                     audioFile: audioFile,
-                     backingAudioFile: DefaultAudioFile.fake())
+                     backingAudioFile: DefaultAudioFile.fake(),
+                     video: nil)
         
     }
 }

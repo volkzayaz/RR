@@ -20,7 +20,7 @@ struct LinkedPlaylist {
         },
      ....
      */
-    var reduxView: ReduxView = [:]
+    private(set) var reduxView: ReduxView = [:]
     
     ///Dictionary of trackID and corresponding Track
     ///All tracks that are present in reduxView
@@ -28,19 +28,25 @@ struct LinkedPlaylist {
     ///Mutated by ApplyReduxViewPatch
     var trackDump: [Int: Track] = [:]
     
-    var shouldShuffle: Bool = false
+    var shouldShuffle: Bool = false { didSet { updateReflection() } }
     var shouldRepeat: Bool = false
+    
+    ///Holds references of all tracks in ReduxView
+    ///Purpose: provide order of playback for tracks
+    ///Respects |shuffle| setting
+    ///Use trackFollowing(after:) for accessing exact neighbour of given track
+    ///regardless of order settings
+    private var orderReflection: [TrackOrderHash] = []
     
     ///Dictionary of trackID and corresponding preview time
     ///that has been already played by user
     ///Mutated by RRPlayer.didReceivePreviewTimes
     var previewTime: [Int: UInt64] = [:]
     
-    var orderedTracks: [OrderedTrack] {
-        
+    private var orderedTrackHashes: [TrackOrderHash] {
         guard reduxView.count > 0 else { return [] }
         
-        var res: [OrderedTrack] = []
+        var res: [TrackOrderHash] = []
         
         ///starting from the head
         let head = reduxView.first(where: { (_, value) in
@@ -48,22 +54,23 @@ struct LinkedPlaylist {
         })!
         
         var pointer: TrackOrderHash? = head.key
-        
         while let p = pointer {
-        
+            
             let node = reduxView[p]!
-                
-            let trackID =   node[.id]!   as! Int
+            
             let orderHash = node[.hash]! as! String
             
-            res.append( OrderedTrack(track: trackDump[trackID]!,
-                                     hash: orderHash) )
+            res.append( orderHash )
             
             pointer = node[.next]! as? String
             
         }
         
         return res
+    }
+    
+    var orderedTracks: [OrderedTrack] {
+        return orderedTrackHashes.compactMap { self[$0] }
     }
     
     var count: Int {
@@ -82,24 +89,43 @@ struct LinkedPlaylist {
         }
     }
     
-    func next(after: TrackOrderHash) -> OrderedTrack? {
-        var it = orderedTracks.makeIterator()
+    ///Track that is next in linked playlist
+    ///Ignores all repeat and shuffle logics
+    func trackFollowing(after: TrackOrderHash) -> OrderedTrack? {
         
-        while let x = it.next() {
-            if x.orderHash == after { break }
+        guard let key = reduxView[after]?[.next] as? TrackOrderHash else {
+            return nil
         }
         
-        return it.next()
+        return self[key]
+    }
+    
+    func next(after: TrackOrderHash) -> OrderedTrack? {
+        var it = orderReflection.makeIterator()
+        
+        while let x = it.next() {
+            if x == after { break }
+        }
+        
+        guard let hash = it.next() else { ///after is last track in the reflection
+            return nil
+        }
+        
+        return self[hash]
     }
     
     func previous(before: TrackOrderHash) -> OrderedTrack? {
-        var it = orderedTracks.reversed().makeIterator()
+        var it = orderReflection.reversed().makeIterator()
         
         while let x = it.next() {
-            if x.orderHash == before { break }
+            if x == before { break }
         }
         
-        return it.next()
+        guard let hash = it.next() else { ///before is last track in the reflection
+            return nil
+        }
+        
+        return self[hash]
     }
     
     enum ViewKey: String {
@@ -114,6 +140,7 @@ struct LinkedPlaylist {
     
     mutating func clear() {
         reduxView = [:]
+        updateReflection()
     }
     
     mutating func apply(patch: PlayerState.ReduxViewPatch) {
@@ -152,6 +179,11 @@ struct LinkedPlaylist {
             
         }
         
+        updateReflection()
+    }
+    
+    private mutating func updateReflection() {
+        orderReflection = shouldShuffle ? reduxView.keys.shuffled() : orderedTrackHashes
     }
     
     func insertPatch(tracks: [Track], after: OrderedTrack?) -> NullableReduxView {

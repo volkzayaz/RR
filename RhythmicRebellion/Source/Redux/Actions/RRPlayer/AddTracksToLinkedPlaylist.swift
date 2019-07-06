@@ -20,6 +20,8 @@ struct AddTracksToLinkedPlaying: ActionCreator {
     
     func perform(initialState: AppState) -> Observable<AppState> {
         
+        guard tracks.count > 0 else { return .just(initialState) }
+        
         let playableTracks = tracks.filter { $0.isPlayable }
         
         switch style {
@@ -33,7 +35,15 @@ struct AddTracksToLinkedPlaying: ActionCreator {
                 .perform(initialState: initialState)
                 .flatMap { newState -> Observable<AppState> in
                     
-                    guard let newCurrentTrack = newState.nextTrack ?? newState.firstTrack else {
+                    let newCurrentTrack: OrderedTrack
+                    if let c = newState.currentTrack,
+                       let t = newState.player.tracks.trackFollowing(after: c.orderHash) {
+                        newCurrentTrack = t
+                    }
+                    else if let c = newState.firstTrack {
+                        newCurrentTrack = c
+                    }
+                    else {
                         return .just(newState)
                     }
                     
