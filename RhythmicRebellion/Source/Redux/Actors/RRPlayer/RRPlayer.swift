@@ -173,7 +173,7 @@ extension RRPlayer {
             .disposed(by: bag)
         
         webSocket.didReceiveTrackState
-            .filter { [unowned self] _ in self.masterDate.unsafeValue.timeIntervalSinceNow < -0.4 }
+            //.filter { [unowned self] _ in self.masterDate.unsafeValue.timeIntervalSinceNow < -0.4 }
             .subscribe(onNext: { (state) in
                 Dispatcher.dispatch(action: AlienSignatureWrapper(action: ChangeTrackState(trackState: state)))
             })
