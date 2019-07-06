@@ -2,71 +2,92 @@
 //  TrackPreviewViewModel.swift
 //  RhythmicRebellion
 //
-//  Created by Alexander Obolentsev on 10/18/18.
+//  Created by Vlad Soroka on 10/18/18.
 //  Copyright © 2018 Patron Empowerment, LLC. All rights reserved.
 //
 
 import UIKit
 
-struct TrackPreviewOptionViewModel {
-
-    enum PreviewOptionType {
-        case commigSoon
+struct PreviewOptions {
+    
+    enum Badge {
+        case seconds45
+        case seconds90
+        case times(Int)
+        case lock
+        case exclaimation
+    }; let badge: Badge?
+    
+    enum AudioRestriction {
+        case seconds45
+        case seconds90
         case noPreview
-        case freeForPlaylist
-        case fullLimitTimes(Int)
-        case limitSeconds(UInt)
+    }; let audioRestriction: AudioRestriction?
+    
+    init(with track: Track, user: User, μSecondsPlayed: UInt64? = nil) {
         
-        init(with track: Track, user: User, μSecondsPlayed: UInt64? = nil) {
-            
-            guard track.isPlayable, let trackAudioFile = track.audioFile else { self = .commigSoon; return }
-            guard track.isFreeForPlaylist == false else { self = .freeForPlaylist; return }
-            if user.isGuest { self = .noPreview; return; }
-            if user.hasPurchase(for: track) { self = .freeForPlaylist; return }
-            guard (track.isFollowAllowFreeDownload && user.isFollower(for: track.artist.id)) == false else { self = .freeForPlaylist; return }
-            guard let t = track.previewType else { self = .noPreview; return }
-            
-            switch t {
-            case .full:
-                guard let previewLimitTimes = track.previewLimitTimes else { self = .freeForPlaylist; return }
-                guard previewLimitTimes > 0 else { self = .fullLimitTimes(-1); return }
-                
-                guard let trackTotalPlayMSeconds = μSecondsPlayed else { self = .fullLimitTimes(previewLimitTimes); return }
-                
-                let trackMaxPlayMSeconds = UInt64(trackAudioFile.duration * 1000 * previewLimitTimes)
-                guard trackMaxPlayMSeconds > trackTotalPlayMSeconds else { self = .fullLimitTimes(-1); return }
-                
-                let previewTimes = Int((trackMaxPlayMSeconds - trackTotalPlayMSeconds) / UInt64(trackAudioFile.duration * 1000))
-                
-                self = .fullLimitTimes(previewTimes)
-                
-            case .limit45: self = .limitSeconds(45)
-            case .limit90: self = .limitSeconds(90)
-                
-            case .noPreview: self = .noPreview
-            }
+/*
+  trackPreview |    45/guest  |   90/guest      |  times/guest |       noPreview/guest             |   full/guest
+               |              |                 |              |                                   |
+  badge        |    45sec / ! |   90sec / !     |   X / !      |             🔒 / !                |   empty / empty
+               |              |                 |              |                                   |
+  audio        |  45sec/45sec |   90sec / 45sec | X -> / 45sec | "noPreview".mp3 / "noPreview".mp3 |   full  /  full
+ restriction
+*/
+        
+        guard let t = track.previewType else {
+            badge = nil; audioRestriction = nil
+            return
         }
-    }
-    
-    let type: PreviewOptionType
-    
-    init(type: PreviewOptionType) {
-        self.type = type
-    }
-
-
-    var hintText: String? {
-        switch type {
-        case .commigSoon: return nil
-        case .noPreview: return NSLocalizedString("No previews available", comment: "No previews hint text")
-        case .freeForPlaylist: return NSLocalizedString("Free add to playlist", comment: "Free add to playlist hint text")
-        case .fullLimitTimes(let limitTimes):
-            guard limitTimes >= 0 else { return NSLocalizedString("Buy this song to get full version", comment: "Buy this song to get full version hint text") }
-            let limitTimesLocalizedTemplate = NSLocalizedString("%d full previews available", comment: "Limit times full previews available hint template")
-            return String(format: limitTimesLocalizedTemplate, limitTimes)
-        case .limitSeconds(let seconds):
-            let firstSecondsLocalizedTemplate = NSLocalizedString("First %d seconds preview", comment: "First seconds preview hint template")
-            return String(format: firstSecondsLocalizedTemplate, seconds)
+        
+        guard user.isGuest == false else {
+            badge = .exclaimation
+            
+            if case .noPreview = t { audioRestriction = .noPreview }
+            else                   { audioRestriction = .seconds45 }
+            
+            return
         }
+        
+        ///1. user logged in
+        ///2.1 user has purchased track
+        ///    OR
+        ///2.2 user followed track's artist AND Artist allows preview on following
+        if user.hasPurchase(for: track) ||
+           (track.isFollowAllowFreeDownload && user.isFollower(for: track.artist.id)) {
+            badge = nil
+            audioRestriction = nil
+            return
+        }
+        
+        switch t {
+        case .limit45:
+            badge = .seconds45
+            audioRestriction = .seconds45
+            
+        case .limit90:
+            badge = .seconds90
+            audioRestriction = .seconds90
+            
+        case .full:
+            
+            guard let audioDuration = track.audioFile?.duration,
+                  let times = track.previewLimitTimes,
+                  let μSecondsEllapsed = μSecondsPlayed else { badge = nil; audioRestriction = nil; return; }
+            
+            let μSecondsAllowed = UInt64(audioDuration * 1000 * times)
+            let previewTimes = Int((μSecondsAllowed - μSecondsEllapsed) / UInt64(audioDuration * 1000))
+            
+            badge            = previewTimes > 0 ? .times(previewTimes) : .seconds45
+            audioRestriction = previewTimes > 0 ? nil : .seconds45
+            
+        case .noPreview:
+            
+            badge = .lock
+            audioRestriction = .noPreview
+            
+        }
+    
     }
 }
+

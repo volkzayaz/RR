@@ -175,7 +175,7 @@ extension AppState {
         }
         
         ///possible stubs
-        if case .noPreview? = t.previewType, !user.isFollower(for: t.artist.id) {
+        if case .noPreview? = previewOptions?.audioRestriction {
             return .stub(player.config.noPreviewAudioFile,
                          explanation: t.name /*R.string.localizable.noPreviewMessage(t.artist.name)*/)
         }
@@ -210,6 +210,14 @@ extension AppState {
         case .stub(_, let t): return t
         }
         
+    }
+    
+    ///preview options for currently played track
+    var previewOptions: PreviewOptions? {
+        
+        guard let c = currentTrack?.track else { return nil }
+        
+        return PreviewOptions(with: c, user: user, μSecondsPlayed: player.tracks.previewTime[c.id])
     }
     
 }

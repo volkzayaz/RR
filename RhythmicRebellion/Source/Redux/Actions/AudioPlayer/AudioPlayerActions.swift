@@ -31,21 +31,12 @@ extension AudioPlayer {
             
             ////Preview Rules
             
-            if case .limit45? = currentTrack.track.previewType, newValue > 45 {
+            if case .seconds45? = state.previewOptions?.audioRestriction, newValue > 45 {
                 return ProceedToNextItem().perform(initialState: initialState)
             }
-            else if case .limit90? = currentTrack.track.previewType, newValue > 90 {
+            else if case .seconds90? = state.previewOptions?.audioRestriction, newValue > 90 {
                 return ProceedToNextItem().perform(initialState: initialState)
             }
-            else if case .full? = currentTrack.track.previewType,
-                let audioDuration = currentTrack.track.audioFile?.duration,
-                let fullPreviewsAmount = currentTrack.track.previewLimitTimes,
-                let μSecondsEllapsed = state.player.tracks.previewTime[currentTrack.track.id],
-                (fullPreviewsAmount * audioDuration) - Int(μSecondsEllapsed / 1000) < 0,
-                newValue > 45 {
-                return ProceedToNextItem().perform(initialState: initialState)
-            }
-            
             
             state.player.currentItem?.state = .init(progress: newValue,
                                                     isPlaying: currentTrackState.isPlaying,
