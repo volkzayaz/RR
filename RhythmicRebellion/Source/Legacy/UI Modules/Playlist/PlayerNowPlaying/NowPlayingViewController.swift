@@ -37,7 +37,9 @@ class NowPlayingViewController: UIViewController {
         super.viewDidLoad()
 
         tableView.register(R.nib.trackTableViewCell)
-        navigationItem.rightBarButtonItems = [shuffleBarButton, repeatBarButtton, clearBarButton].reversed()
+        navigationItem.rightBarButtonItems = [
+            //shuffleBarButton, repeatBarButtton,
+            clearBarButton].reversed()
         
         viewModel.dataSource
             .drive(tableView.rx.items(dataSource: dataSource))

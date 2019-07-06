@@ -113,6 +113,9 @@ struct MediaWidget: Actor {
             Dispatcher.dispatch(action: GetBackToPreviousItem())
         })
         
+        commandWrapper(musicPlayer.togglePlayPauseCommand, actionWrapper { _ in
+            Dispatcher.dispatch(action: AudioPlayer.Switch())
+        })
         
         appState.map { $0.canForward }
             .distinctUntilChanged()
