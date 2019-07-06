@@ -34,7 +34,7 @@ class DateTextField: MFTextField {
 
 class DatePickerInputView: UIView {
 
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var datePicker: UIDatePicker! 
 
     weak var dateTextField: DateTextField?
 
@@ -42,6 +42,7 @@ class DatePickerInputView: UIView {
         super.awakeFromNib()
 
         self.datePicker.setValue(UIColor.white, forKey: DatePickerProperties.TextColor.rawValue)
+        self.datePicker.maximumDate = Date()
     }
 
     func bind(with dateTextField: DateTextField) {
