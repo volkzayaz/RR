@@ -57,6 +57,8 @@ extension TrackViewModel {
     enum Attribute {
         case explicitMaterial
         case downloadEnabled
+        case exclaimation
+        case lock
         case raw(String)
     }
     
@@ -77,36 +79,28 @@ extension TrackViewModel {
             x.append(.downloadEnabled)
         }
         
-        if case .limit45? = track.previewType {
-            x.append( .raw(" 45 SEC ") )
-            return .just(x)
-        }
-        else if case .limit45? = track.previewType {
-            x.append( .raw(" 90 SEC ") )
-            return .just(x)
-        }
-        else if case .full? = track.previewType {
-            
-            let u = user
-            let t = track
-            
-            return appState.map { $0.player.tracks.previewTime[t.id] }
-                .distinctUntilChanged()
-                .map { time in
-                    
-                    let z = TrackPreviewOptionViewModel(type: .init(with: t,
-                                                                    user: u,
-                                                                    μSecondsPlayed: time))
-                    
-                    if case .fullLimitTimes(let previewTimes) = z.type {
-                        x.append(.raw("   X\(previewTimes)   "))
-                    }
-                    
-                    return x
+        
+        let u = user
+        let t = track
+        
+        return appState.map { $0.player.tracks.previewTime[t.id] }
+            .distinctUntilChanged()
+            .map { time in
+                
+                guard let b = PreviewOptions(with: t, user: u, μSecondsPlayed: time).badge else { return x }
+                
+                switch b {
+                case .seconds45   : x.append( .raw(" 45 SEC ") )
+                case .seconds90   : x.append( .raw(" 90 SEC ") )
+                case .times(let t): x.append( .raw("   X\(t)   "))
+                case .exclaimation: x.append( .exclaimation )
+                case .lock        : x.append( .lock )
                 }
+                
+                return x
         }
         
-        return .just(x)
+    
     }
     
     var track: Track {

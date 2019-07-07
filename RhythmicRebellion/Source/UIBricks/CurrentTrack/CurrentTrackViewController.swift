@@ -137,6 +137,12 @@ class CurrentTrackViewController: UIViewController, MVVM_View {
                     case .explicitMaterial:
                         self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.explicit()))
                         
+                    case .exclaimation:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.exclaim()))
+                        
+                    case .lock:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.lock()))
+                        
                     case .raw(let str):
                         self.previewTimesLabel.text = str
                         self.attributesStackView.addArrangedSubview(self.previewTimesLabel)

@@ -78,25 +78,14 @@ extension RootViewModel {
                     x.append(.downloadEnabled)
                 }
                 
-                if case .limit45? = track.previewType {
-                    x.append( .raw(" 45 SEC ") )
-                    return x
-                }
-                else if case .limit45? = track.previewType {
-                    x.append( .raw(" 90 SEC ") )
-                    return x
-                }
-                else if case .full? = track.previewType {
-                    
-                    let z = TrackPreviewOptionViewModel(type: .init(with: track,
-                                                                    user: user,
-                                                                    μSecondsPlayed: state.player.tracks.previewTime[track.id]))
-                    
-                    if case .fullLimitTimes(let previewTimes) = z.type {
-                        x.append(.raw("   X\(previewTimes)   "))
-                    }
-                    
-                    return x
+                guard let b = state.previewOptions?.badge else { return x }
+                
+                switch b {
+                case .seconds45   : x.append( .raw(" 45 SEC ") )
+                case .seconds90   : x.append( .raw(" 90 SEC ") )
+                case .times(let t): x.append( .raw("   X\(t)   "))
+                case .exclaimation: x.append( .exclaimation )
+                case .lock        : x.append( .lock )
                 }
                 
                 return x

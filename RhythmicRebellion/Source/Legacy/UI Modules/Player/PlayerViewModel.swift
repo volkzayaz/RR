@@ -27,7 +27,7 @@ struct KaraokeIntervalsProgressViewModel {
 
 }
 
-final class PlayerViewModel: NSObject {
+struct PlayerViewModel {
 
     // MARK: - Public properties -
     var playerItemDurationString: Driver<String> {
@@ -73,20 +73,18 @@ final class PlayerViewModel: NSObject {
             .distinctUntilChanged { $0.currentTrack == $1.currentTrack &&
                                     $0.user.profile == $1.user.profile }
             .map { newState in
-        
-                guard let track = newState.currentTrack?.track,
-                      let audio = track.audioFile else { return 0 }
                 
-                let option = TrackPreviewOptionViewModel(type: .init(with: track,
-                                                                     user: newState.user,
-                                                                     μSecondsPlayed: nil))
-                
-                if case .limitSeconds(let x) = option.type {
-                    return Float(x) / Float(audio.duration)
+                guard let r = newState.previewOptions?.audioRestriction,
+                      let d = newState.currentTrack?.track.audioFile?.duration else {
+                    return 0
+                }
+
+                switch r {
+                case .seconds45: return Float(45) / Float(d)
+                case .seconds90: return Float(90) / Float(d)
+                case .noPreview: return 0
                 }
                 
-                return 0
-        
             }
 
     }
@@ -140,40 +138,6 @@ final class PlayerViewModel: NSObject {
     var canChangePlayState: Driver<Bool> {
         return appState.map { $0.activePlayable != nil }
     }
-    
-    var preview: Driver<TrackPreviewOptionViewModel?> {
-        
-
-        return appState
-            .distinctUntilChanged { $0.currentTrack == $1.currentTrack &&
-                                    $0.user.profile == $1.user.profile }
-            .flatMapLatest { (newState) in
-                
-                guard let track = newState.currentTrack?.track else { return .just(nil) }
-                
-                let option = TrackPreviewOptionViewModel(type: .init(with: track,
-                                                                     user: newState.user,
-                                                                     μSecondsPlayed: nil))
-                
-                guard case .fullLimitTimes = option.type else {
-                    return .just(option)
-                }
-                
-                return appState.map { $0.player.tracks.previewTime[track.id] }
-                    .distinctUntilChanged()
-                    .map { time in
-                        
-                        return TrackPreviewOptionViewModel(type: .init(with: track,
-                                                                       user: newState.user,
-                                                                       μSecondsPlayed: time))
-                        
-                }
-                
-        }
-        
-    }
-
-    let previewOptionHintText = BehaviorRelay<String?>(value: nil)
     
     var isPlayerBlocked: Driver<Bool> {
         return appState.distinctUntilChanged({ (lhs, rhs) -> Bool in
@@ -276,11 +240,6 @@ final class PlayerViewModel: NSObject {
     init(router: PlayerRouter) {
         self.router = router
 
-        super.init()
-        
-        preview.map { $0?.hintText }
-            .drive(previewOptionHintText)
-            .disposed(by: disposeBag)
     }
 
 
@@ -360,16 +319,6 @@ final class PlayerViewModel: NSObject {
         UserManager.follow(shouldFollow: !appStateSlice.user.isFollower(for: track.artist.id),
                                 artistId: track.artist.id)
             .subscribe()
-    }
-
-}
-
-extension PlayerViewModel {
-
-    func application( didChangeUserProfile followedArtistsIds: [String], with artistFollowingState: ArtistFollowingState) {
-        guard let artist = appStateSlice.currentTrack?.track.artist, artist.id == artistFollowingState.artistId else { return }
-        
-        
     }
 
 }

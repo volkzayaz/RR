@@ -16,8 +16,7 @@ extension LyricsViewModel {
     var canSwitchToKaraoke: Driver<Bool> {
         return appState.map { state in
             
-            if let track = state.currentTrack?.track,
-               case .noPreview = TrackPreviewOptionViewModel(type: .init(with: track, user: state.user)).type {
+            if case .noPreview? = state.previewOptions?.audioRestriction {
                 return false
             }
             
@@ -41,7 +40,7 @@ extension LyricsViewModel {
                 return "\n This is an instrumental song \n"
             }
             
-            if case .noPreview = TrackPreviewOptionViewModel(type: .init(with: track, user: state.user)).type {
+            if case .noPreview? = state.previewOptions?.audioRestriction {
                 return "\n No preview \n"
             }
             

@@ -99,6 +99,13 @@ class TrackView: UIView {
                     case .explicitMaterial:
                         self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.explicit()))
                         
+                    case .exclaimation:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.exclaim()))
+                        
+                    case .lock:
+                        self.attributesStackView.addArrangedSubview(UIImageView(image: R.image.lock()))
+                        
+                        
                     case .raw(let str):
                         self.previewLabel.text = str
                         self.attributesStackView.addArrangedSubview(self.previewLabel)

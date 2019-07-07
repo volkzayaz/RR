@@ -8,9 +8,9 @@
 
 import UIKit
 
-struct PreviewOptions {
+struct PreviewOptions: Equatable {
     
-    enum Badge {
+    enum Badge: Equatable {
         case seconds45
         case seconds90
         case times(Int)
@@ -18,7 +18,7 @@ struct PreviewOptions {
         case exclaimation
     }; let badge: Badge?
     
-    enum AudioRestriction {
+    enum AudioRestriction: Equatable {
         case seconds45
         case seconds90
         case noPreview
