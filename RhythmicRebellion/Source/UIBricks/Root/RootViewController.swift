@@ -106,8 +106,10 @@ class RootViewController: UIViewController, MVVM_View {
         
         if (motion == .motionShake)
         {
+            #if DEBUG || ADHOC
             UIAlertView(title: "Info", message: "Current Environent: \(SettingsStore.environment.value)"
                 , delegate: nil, cancelButtonTitle: "Ok").show()
+            #endif
         }
         
     }

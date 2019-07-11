@@ -406,6 +406,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4CE7DA089A7CA0A06FBFD167 /* Pods-RhythmicRebellionTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.adhoc.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.adhoc.xcconfig"; sourceTree = "<group>"; };
+		4E32820A6DAAD65DF8F7326B /* Pods-RhythmicRebellion.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellion.adhoc.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellion/Pods-RhythmicRebellion.adhoc.xcconfig"; sourceTree = "<group>"; };
 		6165EDC869B9752E26C17DD8 /* Pods_RhythmicRebellion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RhythmicRebellion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RhythmicRebellionTests.debug.xcconfig"; path = "Pods/Pods/Target Support Files/Pods-RhythmicRebellionTests/Pods-RhythmicRebellionTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7300FACA22AA694D005BAB1B /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
@@ -832,6 +834,8 @@
 				80BC96C5C2DF2EDD9FF2BB72 /* Pods-RhythmicRebellion.release.xcconfig */,
 				63F4BAE9E294D602F4FE5DF2 /* Pods-RhythmicRebellionTests.debug.xcconfig */,
 				F05180DA2C91E533BD4FA6D5 /* Pods-RhythmicRebellionTests.release.xcconfig */,
+				4E32820A6DAAD65DF8F7326B /* Pods-RhythmicRebellion.adhoc.xcconfig */,
+				4CE7DA089A7CA0A06FBFD167 /* Pods-RhythmicRebellionTests.adhoc.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -2770,7 +2774,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift,
+				"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3321,6 +3325,105 @@
 			};
 			name = Release;
 		};
+		73767A4122D65B9B00C092E5 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AdHoc;
+		};
+		73767A4222D65B9B00C092E5 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4E32820A6DAAD65DF8F7326B /* Pods-RhythmicRebellion.adhoc.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 64Y27SX25U;
+				INFOPLIST_FILE = RhythmicRebellion/supporting_files/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.patronempowerment.rhytmicrebellion;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "RhythmicRebellion AdHoc";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = ADHOC;
+				SWIFT_OBJC_BRIDGING_HEADER = "RhythmicRebellion/supporting_files/RhythmicRebellion-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = AdHoc;
+		};
+		73767A4322D65B9B00C092E5 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4CE7DA089A7CA0A06FBFD167 /* Pods-RhythmicRebellionTests.adhoc.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 64Y27SX25U;
+				INFOPLIST_FILE = RhythmicRebellionTests/support_files/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rythmic-rebellion.RhythmicRebellionTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RhythmicRebellion.app/RhythmicRebellion";
+			};
+			name = AdHoc;
+		};
 		76F1FA3720DBA88100C9191F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3484,6 +3587,7 @@
 			buildConfigurations = (
 				736456A6220C7610005BE389 /* Debug */,
 				736456A7220C7610005BE389 /* Release */,
+				73767A4322D65B9B00C092E5 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3493,6 +3597,7 @@
 			buildConfigurations = (
 				76F1FA3720DBA88100C9191F /* Debug */,
 				76F1FA3820DBA88100C9191F /* Release */,
+				73767A4122D65B9B00C092E5 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3502,6 +3607,7 @@
 			buildConfigurations = (
 				76F1FA3A20DBA88100C9191F /* Debug */,
 				76F1FA3B20DBA88100C9191F /* Release */,
+				73767A4222D65B9B00C092E5 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

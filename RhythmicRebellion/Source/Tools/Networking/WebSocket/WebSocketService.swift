@@ -279,7 +279,7 @@ class WebSocketService {
                         return
                 }
                 
-                //print("Received message: \(text)")
+                print("Received message: \(text)")
                 
                 subscriber.onNext( (data, channel, cmd) )
                 

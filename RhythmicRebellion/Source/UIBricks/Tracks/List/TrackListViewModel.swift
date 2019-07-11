@@ -90,9 +90,9 @@ extension TrackListViewModel {
             self?.forceToPlay(track: t.track)
         }
         
-//        let dnp = RRSheet.Action(option: .doNotPlay) { [weak self] in
-//            self?.doNotPlay(track: t.track)
-//        }
+        let dnp = RRSheet.Action(option: .doNotPlay) { [weak self] in
+            self?.doNotPlay(track: t.track)
+        }
         
         var result: [RRSheet.Action] = []
         
@@ -101,7 +101,7 @@ extension TrackListViewModel {
         }
         
         if t.track.isCensorship, let p = user.profile, p.forceToPlay.contains(t.track.id) {
-            //result.append(dnp)
+            result.append(dnp)
         }
         
         if user.hasPurchase(for: t.track) {

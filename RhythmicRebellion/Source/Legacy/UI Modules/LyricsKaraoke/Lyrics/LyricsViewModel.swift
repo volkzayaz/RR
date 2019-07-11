@@ -20,6 +20,10 @@ extension LyricsViewModel {
                 return false
             }
             
+            if let t = state.currentTrack?.track, state.user.shouldCensorTrack(t) {
+                return false
+            }
+            
             return state.player.currentItem?.lyrics?.data.karaoke != nil
             //                && self.player.currentItem.state.blocked == false
             //                && self.player.currentItem.state.waitingAddons == false
@@ -59,11 +63,11 @@ extension LyricsViewModel {
     
 }
 
-final class LyricsViewModel {
+struct LyricsViewModel {
 
     // MARK: - Private properties -
 
-    private(set) weak var router: LyricsRouter?
+    private let router: LyricsRouter
     
     let disposeBag = DisposeBag()
 
@@ -73,11 +77,16 @@ final class LyricsViewModel {
     }
 
     func switchToKaraoke() {
+        
         guard !appStateSlice.user.isGuest else {
-            //router?.routeToAuthorization(with: .signIn)
+            
+            ////TODO: kill it with fire!!
+            router.owner?.dismissController()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToSignIn"), object: nil)
+            
             return
         }
-
+        
         Dispatcher.dispatch(action: ChangeLyricsMode(to: .karaoke(config: .init(track: .vocal, mode: .onePhrase))) )
     }
 }

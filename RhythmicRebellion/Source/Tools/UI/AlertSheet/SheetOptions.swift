@@ -14,7 +14,7 @@ enum RRSheet {
     enum Option {
         
         case playNow, playNext, playLater, download
-        case addToLibrary, addToWishlist, share, delete, forceToPlay
+        case addToLibrary, addToWishlist, share, delete, forceToPlay, doNotPlay
         case replace, clear
         
         var title: String {
@@ -28,6 +28,7 @@ enum RRSheet {
             case .share:            return "Share"
             case .delete:           return "Delete"
             case .forceToPlay:      return "Force to Play"
+            case .doNotPlay:        return "Not to Play"
             case .replace:          return "Replace Playing"
             case .clear:            return "Clear"
             }
@@ -44,6 +45,7 @@ enum RRSheet {
             case .share:            return R.image.shareAction()!
             case .delete:           return R.image.deleteAction()!
             case .forceToPlay:      return R.image.forceToPlayAction()!
+            case .doNotPlay:        return R.image.doNotPlay()!
             case .replace:          return R.image.replaceAction()!
             case .clear:            return R.image.deleteAction()!
             }

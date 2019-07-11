@@ -54,16 +54,16 @@ final class PromoViewModel {
         }
     }
     
-    var canToggleSkipAddons: Driver<Bool> {
-        return appState.distinctUntilChanged { $0.currentTrack?.track == $0.currentTrack?.track }
-            .map { (state) -> Bool? in
-            
-                guard state.currentTrack?.track != nil else { return nil }
-                
-                return !state.user.isGuest
-            }
-            .notNil()
-    }
+    var canToggleSkipAddons: Driver<Bool> { return .just(true) }
+//        return appState.distinctUntilChanged { $0.currentTrack?.track == $0.currentTrack?.track }
+//            .map { (state) -> Bool? in
+//
+//                guard state.currentTrack?.track != nil else { return nil }
+//
+//                return !state.user.isGuest
+//            }
+//            .notNil()
+//    }
     
     // MARK: - Private properties -
 
@@ -93,6 +93,15 @@ final class PromoViewModel {
     }
 
     func setSkipAddons(skip: Bool) {
+        guard !appStateSlice.user.isGuest else {
+            
+            ////TODO: kill it with fire!!
+            router?.owner.dismissController()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "navigateToSignIn"), object: nil)
+            
+            return
+        }
+        
         guard let artist = appStateSlice.currentTrack?.track.artist else { return }
 
         UserManager.updateSkipAddons(for: artist, skip: skip)

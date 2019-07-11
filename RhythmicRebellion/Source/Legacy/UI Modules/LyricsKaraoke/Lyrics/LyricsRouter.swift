@@ -9,12 +9,12 @@
 
 import UIKit
 
-final class LyricsRouter {
+struct LyricsRouter {
 
-    weak var sourceController: UIViewController?
+    weak var owner: UIViewController?
     
     init(owner: UIViewController) {
-        self.sourceController = owner
+        self.owner = owner
     }
 
 }
