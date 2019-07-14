@@ -80,6 +80,17 @@ extension RRSheetController {
                                                 i.action()
                 }))
         }
+        
+        if #available(iOS 11.0, *) {
+            if UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0 > 0 {
+                x.addAction(XLActionController.Action(RRSheetActionData(title: "",
+                                                                        image: UIImage()),
+                                                      style: .default,
+                                                      executeImmediatelyOnTouch: false,
+                                                      handler: { _ in }))
+            }
+        }
+        
         return x
     }
 }

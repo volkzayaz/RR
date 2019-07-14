@@ -47,7 +47,7 @@ class RootRouter : MVVM_Router {
     }
     
     func presentPlayer() {
-        let x = R.storyboard.main.currentTrackViewController()!
+        let x = R.storyboard.currentTrack.currentTrackViewController()!
         x.viewModel = .init(router: .init(owner: x))
         interactor.present(vc: x, on: owner)
     }

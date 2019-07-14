@@ -62,6 +62,7 @@
 		736456A2220C7610005BE389 /* PlayListInsertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456A1220C7610005BE389 /* PlayListInsertTests.swift */; };
 		736456AF220C80CE005BE389 /* DeleteTrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736456AE220C80CE005BE389 /* DeleteTrackTests.swift */; };
 		736598E621D66E6C0092E499 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 736598E821D66E6C0092E499 /* Localizable.strings */; };
+		736B66D822DB413B005E9839 /* CurrentTrack.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 736B66D722DB413B005E9839 /* CurrentTrack.storyboard */; };
 		73732119225523E000606E09 /* PlaylistRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73732118225523E000606E09 /* PlaylistRequest.swift */; };
 		7373211C22552A4500606E09 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7373211B22552A4500606E09 /* UserManager.swift */; };
 		7373211E22552A5B00606E09 /* PlaylistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7373211D22552A5B00606E09 /* PlaylistManager.swift */; };
@@ -470,6 +471,7 @@
 		736456A1220C7610005BE389 /* PlayListInsertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListInsertTests.swift; sourceTree = "<group>"; };
 		736456AE220C80CE005BE389 /* DeleteTrackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTrackTests.swift; sourceTree = "<group>"; };
 		736598E721D66E6C0092E499 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		736B66D722DB413B005E9839 /* CurrentTrack.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CurrentTrack.storyboard; sourceTree = "<group>"; };
 		73732118225523E000606E09 /* PlaylistRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRequest.swift; sourceTree = "<group>"; };
 		7373211B22552A4500606E09 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		7373211D22552A5B00606E09 /* PlaylistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistManager.swift; sourceTree = "<group>"; };
@@ -2270,6 +2272,7 @@
 				763157F9219D794500E1D7F5 /* Pages.storyboard */,
 				737622F521CD28AF005B603E /* Artist.storyboard */,
 				7641B2E121CA4E5C005535E6 /* LyricsKaraoke.storyboard */,
+				736B66D722DB413B005E9839 /* CurrentTrack.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2615,6 +2618,7 @@
 				76C821AF2142675F00A6F5AE /* Authorization.storyboard in Resources */,
 				73F137FC222C289200FB8EBC /* ArtistCoverHeader.xib in Resources */,
 				73C02ACD228EE8D900A16B6E /* AlbumCell.xib in Resources */,
+				736B66D822DB413B005E9839 /* CurrentTrack.storyboard in Resources */,
 				73F1389A222C289200FB8EBC /* TrackTableViewCell.xib in Resources */,
 				733FA05022BA2B52001A0914 /* equalizer.gif in Resources */,
 				763157FE219D798700E1D7F5 /* Profile.storyboard in Resources */,
@@ -2774,7 +2778,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift",
+				$SRCROOT/RhythmicRebellion/Source/Tools/Utils/UI/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

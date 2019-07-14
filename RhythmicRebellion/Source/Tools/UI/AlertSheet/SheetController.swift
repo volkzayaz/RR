@@ -117,8 +117,11 @@ open class RRSheetController: ActionController<RRSheetCell, RRSheetActionData, R
         settings.animation.dismiss.duration = 0.6
         settings.animation.dismiss.offset = 30
         settings.animation.dismiss.options = .curveLinear
+        settings.behavior.hideNavigationBarOnShow = false
         
-        cellSpec = .nibFile(nibName: "RRSheetCell", bundle: Bundle(for: RRSheetCell.self), height: { _  in 58 })
+        cellSpec = .nibFile(nibName: "RRSheetCell", bundle: Bundle(for: RRSheetCell.self), height: { x in
+            return x.title == "" ? 20 : 58
+        })
         
         onConfigureCellForAction = { cell, action, indexPath in
             cell.setup(action.data?.title, detail: "", image: action.data?.image)
@@ -138,6 +141,10 @@ open class RRSheetController: ActionController<RRSheetCell, RRSheetActionData, R
         onConfigureHeader = { header, title in
         }
     
+    }
+    
+    open override var safeAreaInsets: UIEdgeInsets {
+        return .zero
     }
   
     required public init?(coder aDecoder: NSCoder) {
