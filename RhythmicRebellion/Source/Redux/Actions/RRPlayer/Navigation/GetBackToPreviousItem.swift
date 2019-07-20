@@ -27,7 +27,7 @@ struct GetBackToPreviousItem: ActionCreator {
         }
         
         return PrepareNewTrack(orderedTrack: previousItem,
-                               shouldPlayImmidiatelly: true).perform(initialState: initialState)
+                               shouldPlayImmidiatelly: false).perform(initialState: initialState)
     }
     
 }

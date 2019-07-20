@@ -90,7 +90,7 @@ struct PrepareNewTrack: ActionCreator {
                 state.player.currentItem = .init(activeTrackHash: self.orderedTrack.orderHash,
                                                  addons: addons,
                                                  state: .init(progress: 0,
-                                                              isPlaying: self.shouldPlayImmidiatelly),
+                                                              isPlaying: self.shouldPlayImmidiatelly ? true : initialState.player.currentItem?.state.isPlaying ?? false),
                                                  lyrics: nil)
                 
                 return state

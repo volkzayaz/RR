@@ -71,6 +71,16 @@ final class PageContentControllerViewModel: NSObject, PageContentViewModel {
                                      PageCommandType.error.rawValue,
                                     PageCommandType.downloadAlbum.rawValue
         ]
+        
+        super.init()
+        
+        appState.map { $0.player.currentItem?.state.isPlaying }
+            .distinctUntilChanged()
+            .drive(onNext: { [weak self] _ in
+                self?.updateCurrentTrackStateOnPage()
+            })
+            .disposed(by: self.rx.disposeBag)
+        
     }
 
     func load(with delegate: PageContentViewModelDelegate) {
@@ -206,7 +216,7 @@ extension PageContentControllerViewModel: WKScriptMessageHandler {
         do {
             let tracks = try JSONDecoder().decode([Track].self, from: jsonData)
             return tracks
-        } catch {
+        } catch (let e) {
             print("Bad Tracks JSON : \(jsonString)")
         }
 
@@ -338,13 +348,6 @@ extension PageContentControllerViewModel {
         self.updatePreviewOptOnPage(tracksTotalPlayMSeconds: tracksTotalPlayMSeconds)
     }
 
-    func player(didChangePlayState isPlaying: Bool) {
-        self.updateCurrentTrackStateOnPage()
-    }
-
-    func player(didChangePlayerItem playerItem: Int/*PlayerItem?*/) {
-        self.updateCurrentTrackStateOnPage()
-    }
 }
 
 extension PageContentControllerViewModel {

@@ -24,11 +24,15 @@ struct DefinedPlaylistProvider: PlaylistProvider {
     
 }
 
-extension DefinedPlaylistProvider: AttachableProvider {
-    
-    func attach(to playlist: FanPlaylist) -> Maybe<Void> {
-        return PlaylistRequest.attachRR(playlist: data, to: playlist)
-            .rx.emptyResponse()
-    }
-    
-}
+//extension DefinedPlaylistProvider: AttachableProvider {
+//    
+//    func attach(to playlist: FanPlaylist) -> Maybe<Void> {
+//        return PlaylistRequest.attachRR(playlist: data, to: playlist)
+//            .rx.emptyResponse()
+//    }
+// 
+//    var shouldIncludePlaylist: (FanPlaylist) -> Bool {
+//        return { _ in true }
+//    }
+//    
+//}

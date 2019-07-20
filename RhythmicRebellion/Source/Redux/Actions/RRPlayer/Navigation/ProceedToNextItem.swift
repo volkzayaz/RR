@@ -47,11 +47,11 @@ struct ProceedToNextItem: ActionCreator {
         }
         else if let next = state.nextTrack {
             return PrepareNewTrack(orderedTrack: next,
-                                   shouldPlayImmidiatelly: true).perform(initialState: state)
+                                   shouldPlayImmidiatelly: false).perform(initialState: state)
         }
         else if let first = state.firstTrack {
             return PrepareNewTrack(orderedTrack: first,
-                                   shouldPlayImmidiatelly: true).perform(initialState: state)
+                                   shouldPlayImmidiatelly: false).perform(initialState: state)
         }
         
         return .just(state)

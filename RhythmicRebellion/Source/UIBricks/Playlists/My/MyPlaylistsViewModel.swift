@@ -22,8 +22,9 @@ extension MyPlaylistsViewModel {
             .distinctUntilChanged()
             .map { x in
                 
-                let y = x.map {  TrackGroupViewModel(router: .init(owner: r.owner!),
-                                                     data: $0) }
+                let y = x.map { p in TrackGroupViewModel(router: .init(owner: r.owner!),
+                                                         data: p,
+                                                         inclusionClosure: { $0.id != p.id }) }
                 
             return [AnimatableSectionModel(model: "", items: y)]
         }

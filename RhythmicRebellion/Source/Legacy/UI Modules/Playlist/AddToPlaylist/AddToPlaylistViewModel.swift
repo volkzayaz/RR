@@ -30,7 +30,11 @@ extension AddToPlaylistViewModel {
     }
     
     var dataSource: Driver<[AnimatableSectionModel<String, Row>]> {
+        
+        let filter = inclusionClosure
+        
         return appState.map { $0.player.myPlaylists }
+            .map { $0.filter(filter) }
             .distinctUntilChanged()
             .map { x in
                 return [AnimatableSectionModel(model: "", items: [.create] + x.map { Row.playlist($0) })]
@@ -44,13 +48,14 @@ struct AddToPlaylistViewModel {
     // MARK: - Private properties -
 
     private let router: AddToPlaylistRouter
-    
-    private(set) var playlists: [FanPlaylist] = [FanPlaylist]()
     private let attachable: AttachableProvider
+    private let inclusionClosure: InclusionClosure
     
-    init(router: AddToPlaylistRouter, attachable: AttachableProvider) {
+    init(router: AddToPlaylistRouter, attachable: AttachableProvider,
+         inclusionClosure: @escaping InclusionClosure = { _ in true }) {
         self.router = router
         self.attachable = attachable
+        self.inclusionClosure = inclusionClosure
         
         PlaylistRequest.fanList
             .rx.response(type: [FanPlaylist].self)

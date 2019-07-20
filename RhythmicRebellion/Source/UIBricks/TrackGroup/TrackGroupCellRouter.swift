@@ -23,12 +23,14 @@ struct TrackGroupCellRouter : MVVM_Router {
         owner.show(viewModels: actions)
     }
     
-    func presentPlaylistCreation(for tracks: [Track]) {
+    func presentPlaylistCreation(for tracks: [Track], inclusionClosure: @escaping InclusionClosure) {
         
         let r = R.storyboard.main.addToPlaylistContainer()!
         let x = R.storyboard.main.addToPlaylistViewController()!
         
-        x.viewModel = .init(router: .init(owner: x), attachable: tracks)
+        x.viewModel = .init(router: .init(owner: x),
+                            attachable: tracks,
+                            inclusionClosure: inclusionClosure)
         
         r.viewControllers = [x]
         

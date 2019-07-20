@@ -38,13 +38,17 @@ protocol TrackGroupPresentable {
     var underlineTracks: Maybe<[Track]> { get }
 }
 
+typealias InclusionClosure = (FanPlaylist) -> Bool
 struct TrackGroupViewModel<T: TrackGroupPresentable> : MVVM_ViewModel, TrackGroupViewModelProtocol {
     
     let data: T
+    let inclusionClosure: InclusionClosure
     
-    init(router: TrackGroupCellRouter, data: T) {
+    init(router: TrackGroupCellRouter, data: T,
+         inclusionClosure: @escaping InclusionClosure = { _ in true}) {
         self.router = router
         self.data = data
+        self.inclusionClosure = inclusionClosure
         
         /**
          
@@ -116,7 +120,7 @@ extension TrackGroupViewModel {
         
         if !appStateSlice.user.isGuest {
             x.append(RRSheet.Action(option: .addToLibrary, action: loader {
-                r.presentPlaylistCreation(for: $0)
+                r.presentPlaylistCreation(for: $0, inclusionClosure: self.inclusionClosure)
             }))
         }
         

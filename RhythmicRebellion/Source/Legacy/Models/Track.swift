@@ -37,7 +37,6 @@ public struct Track: Codable {
     let previewType: TrackPreviewType?
     let previewLimitTimes: Int?
     let isFollowAllowFreeDownload: Bool
-    let releaseDateFans: Date?
     let featuring: String?
     let images: [Image]
     let audioFile: TrackAudioFile?
@@ -65,7 +64,6 @@ public struct Track: Codable {
         case previewType = "preview_type"
         case previewLimitTimes = "preview_limit_times"
         case isFollowAllowFreeDownload = "is_follow_allow_free_download"
-        case releaseDateFans = "release_date_fans"
         case featuring
         case images
         case audioFile = "mp3_file"

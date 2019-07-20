@@ -27,7 +27,6 @@ extension Track: Fakeble {
                      previewType: nil,
                      previewLimitTimes: nil,
                      isFollowAllowFreeDownload: fakeBool(),
-                     releaseDateFans: nil,
                      featuring: nil,
                      images: [],
                      audioFile: audioFile,

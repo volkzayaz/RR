@@ -45,11 +45,18 @@ extension FanPlaylistProvider: ClearablePlaylistProvider {
     
 }
 
-extension FanPlaylistProvider: AttachableProvider {
-    
-    func attach(to playlist: FanPlaylist) -> Maybe<Void> {
-        return PlaylistRequest.attach(playlist: fanPlaylist, to: playlist)
-            .rx.emptyResponse()
-    }
-    
-}
+//extension FanPlaylistProvider: AttachableProvider {
+//    
+//    func attach(to playlist: FanPlaylist) -> Maybe<Void> {
+//        return PlaylistRequest.attach(playlist: fanPlaylist, to: playlist)
+//            .rx.emptyResponse()
+//    }
+//    
+//    var shouldIncludePlaylist: (FanPlaylist) -> Bool {
+//        let id = fanPlaylist.id
+//        return {
+//            $0.id != id
+//        }
+//    }
+//    
+//}

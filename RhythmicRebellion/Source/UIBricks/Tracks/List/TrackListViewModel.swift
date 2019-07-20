@@ -150,7 +150,12 @@ extension TrackListViewModel {
     func drop(track: TrackRepresentation) {
         var x = tracks.value
         x.removeAll { $0.identity == track.identity }
-        tracks.accept(x)
+        let y = x.enumerated().map { (i, element) -> TrackRepresentation in
+            var e = element
+            e.index = i
+            return e
+        }
+        tracks.accept(y)
     }
     
     func dropAllTracks() {
@@ -170,7 +175,7 @@ protocol TrackProvidable {
 struct TrackRepresentation: Equatable, IdentifiableType {
     
     let identity: String
-    let index: Int
+    var index: Int
     let providable: TrackProvidable
     
     init(index: Int, track: Track) {
