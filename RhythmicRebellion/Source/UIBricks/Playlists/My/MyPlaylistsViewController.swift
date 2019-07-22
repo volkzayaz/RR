@@ -24,10 +24,22 @@ final class MyPlaylistsViewController: UIViewController {
         
         return cell
         
+    }, configureSupplementaryView: { [unowned self] (_, collectionView, kind, ip) in
+        
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                   withReuseIdentifier: R.reuseIdentifier.myPlaylistHeader.identifier,
+                                                                   for: ip) as! MyPlaylistsHeaderView
+    
+        view.viewModel = self.viewModel
+        
+        view.searchBar.delegate = self
+        
+        return view
     })
     
     var viewModel: MyPlaylistsViewModel!
     
+
     // MARK: - Lifecycle -
     
     override func viewDidLoad() {
@@ -49,6 +61,20 @@ final class MyPlaylistsViewController: UIViewController {
                 self?.viewModel.select(viewModel: x)
             })
             .disposed(by: rx.disposeBag)
+    }
+    
+}
+
+extension MyPlaylistsViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.text = ""
+        self.searchBar(searchBar, textDidChange: "")
     }
     
 }

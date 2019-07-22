@@ -18,6 +18,8 @@ class BaseFlowLayout: UICollectionViewFlowLayout {
         minimumInteritemSpacing = 17
         sectionInset.left = 17
         sectionInset.right = 17
+        
+        headerReferenceSize = .init(width: 2, height: 116)
     }
     
     func configureFor(bounds: CGRect) {
@@ -33,5 +35,5 @@ class BaseFlowLayout: UICollectionViewFlowLayout {
         }
         
     }
-    
+
 }

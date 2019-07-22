@@ -10,6 +10,7 @@
 		7300FACB22AA694D005BAB1B /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7300FACA22AA694D005BAB1B /* RootTabBarController.swift */; };
 		730D1FEA223E5B1900571383 /* MediaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FE9223E5B1900571383 /* MediaWidget.swift */; };
 		730D1FEE223FD65A00571383 /* BaseActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1FED223FD65A00571383 /* BaseActions.swift */; };
+		73228C9E22E5E5D40042C01F /* MyPlaylistsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73228C9D22E5E5D40042C01F /* MyPlaylistsHeaderView.swift */; };
 		7327C9682252403800692810 /* ConfigRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327C9672252403800692810 /* ConfigRequest.swift */; };
 		7327E88B22C0BE6F00927B96 /* FanPlaylistProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327E88A22C0BE6F00927B96 /* FanPlaylistProvider.swift */; };
 		7327E88E22C0BE9A00927B96 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327E88D22C0BE9A00927B96 /* Protocols.swift */; };
@@ -414,6 +415,7 @@
 		7300FACA22AA694D005BAB1B /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
 		730D1FE9223E5B1900571383 /* MediaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWidget.swift; sourceTree = "<group>"; };
 		730D1FED223FD65A00571383 /* BaseActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseActions.swift; sourceTree = "<group>"; };
+		73228C9D22E5E5D40042C01F /* MyPlaylistsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlaylistsHeaderView.swift; sourceTree = "<group>"; };
 		7327C9672252403800692810 /* ConfigRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigRequest.swift; sourceTree = "<group>"; };
 		7327E88A22C0BE6F00927B96 /* FanPlaylistProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanPlaylistProvider.swift; sourceTree = "<group>"; };
 		7327E88D22C0BE9A00927B96 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
@@ -1241,6 +1243,7 @@
 				73F13775222C289200FB8EBC /* MyPlaylistsViewController.swift */,
 				73F13777222C289200FB8EBC /* MyPlaylistsViewModel.swift */,
 				73C02ACC228EE8D900A16B6E /* AlbumCell.xib */,
+				73228C9D22E5E5D40042C01F /* MyPlaylistsHeaderView.swift */,
 			);
 			path = My;
 			sourceTree = "<group>";
@@ -3143,6 +3146,7 @@
 				73F13854222C289200FB8EBC /* SelectableListItemViewModel.swift in Sources */,
 				73F138D1222C289200FB8EBC /* KaraokeIntervalCell.swift in Sources */,
 				7361C02C22369144008EA36E /* RemoveTrack.swift in Sources */,
+				73228C9E22E5E5D40042C01F /* MyPlaylistsHeaderView.swift in Sources */,
 				73F13866222C289200FB8EBC /* ListeningSettingsViewModel.swift in Sources */,
 				73F1385B222C289200FB8EBC /* ContriesSelectableListControllerViewModel.swift in Sources */,
 				73F137F4222C289200FB8EBC /* ArtistsFollowedViewModel.swift in Sources */,

@@ -64,4 +64,8 @@ extension MyPlaylistsViewModel {
         router.showContent(of: viewModel.data)
     }
     
+    func addPlaylist() {
+        
+    }
+    
 }

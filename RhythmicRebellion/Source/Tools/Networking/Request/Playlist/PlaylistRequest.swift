@@ -16,6 +16,7 @@ enum PlaylistRequest: BaseNetworkRouter {
     
     case create(name: String) ///returns FanPlaylist
     case delete(playlist: FanPlaylist)/// Void
+    case rename(playlist: FanPlaylist, newName: String) ///Void
     case clear(playlist: FanPlaylist)/// Void
     
     case attachTracks(_ tracks: [Track],         to: FanPlaylist) ///AttachTracksResponse
@@ -52,6 +53,13 @@ extension PlaylistRequest {
         case .delete(let playlist):
             return anonymousRequest(method: .delete,
                                     path: "fan/playlist/\(playlist.id)")
+            
+        case .rename(let playlist, let newName):
+            return anonymousRequest(method: .put,
+                                    path: "fan/playlist/\(playlist.id)",
+                                    params: ["id": playlist.id,
+                                             "name": newName,
+                                             "is_default": false])
             
         case .clear(let playlist):
             return anonymousRequest(method: .post,
