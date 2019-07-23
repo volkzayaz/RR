@@ -42,12 +42,16 @@ typealias InclusionClosure = (FanPlaylist) -> Bool
 struct TrackGroupViewModel<T: TrackGroupPresentable> : MVVM_ViewModel, TrackGroupViewModelProtocol {
     
     let data: T
+    let extraActions: [RRSheet.Action]
     let inclusionClosure: InclusionClosure
     
     init(router: TrackGroupCellRouter, data: T,
-         inclusionClosure: @escaping InclusionClosure = { _ in true}) {
+         extraActions: [RRSheet.Action] = [],
+         inclusionClosure: @escaping InclusionClosure = { _ in true}
+         ) {
         self.router = router
         self.data = data
+        self.extraActions = extraActions
         self.inclusionClosure = inclusionClosure
         
         /**
@@ -124,6 +128,8 @@ extension TrackGroupViewModel {
             }))
         }
         
+        x.append(contentsOf: extraActions)
+        
         router.present(actions: x)
     }
     
@@ -132,7 +138,8 @@ extension TrackGroupViewModel {
 extension TrackGroupViewModel: Equatable, IdentifiableType {
     
     static func ==(lhs: TrackGroupViewModel<T>, rhs: TrackGroupViewModel<T>) -> Bool {
-        return lhs.data.identity == rhs.data.identity
+        return lhs.data.identity == rhs.data.identity &&
+               lhs.data.name == rhs.data.name
     }
     
     var identity: String {

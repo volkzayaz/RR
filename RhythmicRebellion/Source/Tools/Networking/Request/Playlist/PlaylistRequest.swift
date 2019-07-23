@@ -16,7 +16,7 @@ enum PlaylistRequest: BaseNetworkRouter {
     
     case create(name: String) ///returns FanPlaylist
     case delete(playlist: FanPlaylist)/// Void
-    case rename(playlist: FanPlaylist, newName: String) ///Void
+    case rename(playlist: FanPlaylist, newName: String) ///FanPlaylist
     case clear(playlist: FanPlaylist)/// Void
     
     case attachTracks(_ tracks: [Track],         to: FanPlaylist) ///AttachTracksResponse

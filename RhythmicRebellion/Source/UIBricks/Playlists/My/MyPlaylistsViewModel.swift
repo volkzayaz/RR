@@ -19,6 +19,14 @@ extension MyPlaylistsViewModel {
         
         let r = router
         
+        func renameAction(x: FanPlaylist) -> RRSheet.Action {
+            return RRSheet.Action(option: .rename, action: { self.rename(playlist: x) })
+        }
+        
+        func deleteAction(x: FanPlaylist) -> RRSheet.Action {
+            return RRSheet.Action(option: .delete, action: { self.delete(playlist: x) })
+        }
+        
         let s = appState.map { $0.player.myPlaylists }
             .distinctUntilChanged()
         
@@ -34,6 +42,8 @@ extension MyPlaylistsViewModel {
                 
                 let y = x.map { p in TrackGroupViewModel(router: .init(owner: r.owner!),
                                                          data: p,
+                                                         extraActions: [renameAction(x: p),
+                                                                        deleteAction(x: p)],
                                                          inclusionClosure: { $0.id != p.id }) }
                 
             return [AnimatableSectionModel(model: "", items: y)]
@@ -100,4 +110,32 @@ extension MyPlaylistsViewModel {
         
     }
     
+    func rename(playlist: FanPlaylist) {
+        
+        router.owner?.showTextQuestion(with: "Rename playlist",
+                                       question: "Enter a new name for this playlist",
+                                       actionName: "Save", callback: { (name) in
+                                        
+                                        PlaylistRequest.rename(playlist: playlist, newName: name).rx.response(type: FanPlaylist.self)
+                                            .silentCatch(handler: self.router.owner)
+                                            .trackView(viewIndicator: self.indicator)
+                                            .subscribe(onNext: { (x) in
+                                                Dispatcher.dispatch(action: SubstitutePlaylist(new: x))
+                                            })
+                                            .disposed(by: self.bag)
+                                        
+        })
+        
+    }
+    
+    func delete(playlist: FanPlaylist) {
+        
+        Dispatcher.dispatch(action: RemovePlaylist(playlist: playlist))
+        
+        PlaylistRequest.delete(playlist: playlist).rx.emptyResponse()
+            .silentCatch(handler: router.owner)
+            .subscribe()
+            .disposed(by: bag)
+        
+    }
 }

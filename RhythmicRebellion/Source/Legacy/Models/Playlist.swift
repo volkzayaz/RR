@@ -142,12 +142,16 @@ struct FanPlaylist: Playlist, Codable, TrackGroupPresentable {
 }
 
 extension FanPlaylist: Equatable {
+    
+    static func ==(lhs: FanPlaylist, rhs: FanPlaylist) -> Bool {
+        return lhs.id == rhs.id && lhs.name == rhs.name
+    }
+    
 }
 
 extension FanPlaylist: Hashable {
     public var hashValue: Int { return self.id }
 }
-
 
 struct ArtistPlaylist: Codable, Equatable, TrackGroupPresentable, Playlist {
     

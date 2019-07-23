@@ -167,6 +167,10 @@ extension PlaylistViewModel {
         let tracks = tracksViewModel.tracks.value.map { $0.track }
         
         var actions = [
+            RRSheet.Action(option: .playNow, action: {
+                Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
+                                                                     style: .now))
+            }),
             RRSheet.Action(option: .playNext, action: {
                 Dispatcher.dispatch(action: AddTracksToLinkedPlaying(tracks: tracks,
                                                                      style: .next))

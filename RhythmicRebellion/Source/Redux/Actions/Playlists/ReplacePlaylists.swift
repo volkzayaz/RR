@@ -21,3 +21,19 @@ struct ReplacePlaylists: Action {
     }
     
 }
+
+struct SubstitutePlaylist: Action {
+    
+    let new: FanPlaylist
+    
+    func perform(initialState: AppState) -> AppState {
+        var x = initialState
+     
+        if let i = x.player.myPlaylists.firstIndex(where: { $0.id == new.id }) {
+            x.player.myPlaylists[i] = new
+        }
+        
+        return x
+    }
+    
+}
