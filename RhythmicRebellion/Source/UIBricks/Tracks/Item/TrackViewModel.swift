@@ -173,6 +173,16 @@ extension TrackViewModel {
     func presentActions(sourceRect: CGRect,
                         sourceView: UIView) {
         
+        var actions = self.actions
+        
+        if let shareURL = track.shareURL {
+            
+            actions.append(RRSheet.Action(option: .share) { [weak h = router.owner] in
+                let vc = UIActivityViewController(activityItems: [shareURL], applicationActivities: [])
+                h?.present(vc, animated: true, completion: nil)
+            })
+        }
+        
         router.present(actions: actions,
                        sourceRect: sourceRect,
                        sourceView: sourceView)
@@ -184,7 +194,7 @@ extension TrackViewModel {
 extension TrackViewModel: Equatable {
     
     static func ==(lhs: TrackViewModel, rhs: TrackViewModel) -> Bool {
-        return lhs.track == rhs.track &&
+        return lhs.trackRepresentation == rhs.trackRepresentation &&
             ///TODO: compare only user items that are reflected in the UI (follow, listening progress)
             ///for example we don't care if user changed email for displaying track
             lhs.user == rhs.user

@@ -88,6 +88,15 @@ public struct Track: Codable {
 
         return nil
     }
+    
+    var shareURL: URL? {
+        
+        guard let shareURL = artist.urlString else {
+            return nil
+        }
+        
+        return URL(string: "\(shareURL)/songs/\(name.replacingOccurrences(of: " ", with: "-"))")
+    }
 
 }
 
