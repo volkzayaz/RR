@@ -18,9 +18,19 @@ extension MyPlaylistsViewModel {
     var dataSource: Driver<[AnimatableSectionModel<String, TrackGroupViewModel<FanPlaylist>>]> {
         
         let r = router
-        return appState.map { $0.player.myPlaylists }
+        
+        let s = appState.map { $0.player.myPlaylists }
             .distinctUntilChanged()
-            .map { x in
+        
+        return Driver.combineLatest(s, searchQuery.asDriver()) { (playlists, query) in
+            
+                if query.isEmpty {
+                    return playlists
+                }
+            
+                return playlists.filter { $0.name.lowercased().contains(query.lowercased()) }
+            }
+            .map { (x: [FanPlaylist]) in
                 
                 let y = x.map { p in TrackGroupViewModel(router: .init(owner: r.owner!),
                                                          data: p,
@@ -32,13 +42,10 @@ extension MyPlaylistsViewModel {
     
 }
 
-final class MyPlaylistsViewModel {
-    
-    // MARK: - Private properties -
+struct MyPlaylistsViewModel {
     
     private let router: MyPlaylistsRouter
-    
-    // MARK: - Lifecycle -
+    private let searchQuery = BehaviorRelay(value: "")
     
     init(router: MyPlaylistsRouter) {
         self.router = router
@@ -51,10 +58,17 @@ final class MyPlaylistsViewModel {
                 Dispatcher.dispatch(action: ReplacePlaylists(playlists: x))
             })
             .disposed(by: bag)
+    
+        indicator.asDriver()
+            .drive(onNext: { [weak h = router.owner] (loading) in
+                h?.changedAnimationStatusTo(status: loading)
+            })
+            .disposed(by: bag)
         
     }
     
     private let bag = DisposeBag()
+    fileprivate let indicator: ViewIndicator = ViewIndicator()
     
 }
 
@@ -64,7 +78,25 @@ extension MyPlaylistsViewModel {
         router.showContent(of: viewModel.data)
     }
     
+    func queryChanged(q: String) {
+        searchQuery.accept(q)
+    }
+    
     func addPlaylist() {
+        
+        router.owner?.showTextQuestion(with: "Create playlist",
+                                       question: "Enter a name for your playlist",
+                                       actionName: "Create", callback: { (name) in
+                                        
+                                        PlaylistRequest.create(name: name).rx.response(type: FanPlaylist.self)
+                                            .silentCatch(handler: self.router.owner)
+                                            .trackView(viewIndicator: self.indicator)
+                                            .subscribe(onNext: { (x) in
+                                                Dispatcher.dispatch(action: AppendPlaylists(playlists: [x]))
+                                            })
+                                            .disposed(by: self.bag)
+                                        
+        })
         
     }
     

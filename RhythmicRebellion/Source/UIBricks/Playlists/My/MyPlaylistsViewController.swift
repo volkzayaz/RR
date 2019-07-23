@@ -68,7 +68,7 @@ final class MyPlaylistsViewController: UIViewController {
 extension MyPlaylistsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
+        viewModel.queryChanged(q: searchText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
