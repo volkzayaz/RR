@@ -647,12 +647,8 @@ extension SignUpViewModel {
     var hobbies: [Hobby] { return self.hobbies(for: self.config?.hobbies ?? []) }
 
     func hobbies(for loadedHobbies: [Hobby]) -> [Hobby] {
-        let selectedAdditionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil } ?? []
-
-        var hobbies = loadedHobbies
-        hobbies.append(contentsOf: selectedAdditionalHobbies)
-
-        return hobbies
+        
+        return loadedHobbies
     }
 
     func reloadHobbies(completion: @escaping (Result<[Hobby]>) -> Void) {

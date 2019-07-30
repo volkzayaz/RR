@@ -20,4 +20,5 @@ private func delegateClassName() -> String? {
     
 }
 
+setenv("CFNETWORK_DIAGNOSTICS", "3", 1)
 UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, nil, delegateClassName())

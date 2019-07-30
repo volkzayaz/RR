@@ -429,15 +429,12 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
 
     func set(hobbies: [Hobby]) {
 
-        let additionalHobbies = self.userProfile?.hobbies.filter { $0.id == nil} ?? []
         let currentItems = self.hobbiesField?.hobbies ?? []
         var newItems = hobbies
         var mergedItems = [Hobby]()
 
         for currentItem in currentItems {
             guard let currentGenreIndex = newItems.index(of: currentItem) else {
-                guard currentItem.id == nil, additionalHobbies.contains(currentItem) else { continue }
-                mergedItems.append(currentItem);
                 continue
             }
 
@@ -499,12 +496,11 @@ final class ProfileSettingsViewModel: CountriesDataSource, RegionsDataSource, Ci
 
     func showHobbiesSelectableList() {
 
-        let additionalHobbies = self.userProfile?.hobbies.filter { $0.id == nil && self.hobbiesField?.hobbies?.contains($0) ?? false }
-        let selectedHobbies = self.hobbiesField?.hobbies?.filter { $0.id != nil || additionalHobbies?.contains($0) == false }
+        let selectedHobbies = self.hobbiesField?.hobbies ?? []
 
         self.router?.showHobbiesSelectableList(dataSource: self,
                                                selectedItems: selectedHobbies,
-                                               additionalItems: additionalHobbies,
+                                               additionalItems: [],
                                                selectionCallback: { [weak self] (hobbies) in
                                                     self?.set(hobbies: hobbies)
                                             })
@@ -734,8 +730,8 @@ extension ProfileSettingsViewModel {
     var hobbies: [Hobby] { return self.hobbies(for: self.config?.hobbies ?? []) }
 
     func hobbies(for loadedHobbies: [Hobby]) -> [Hobby] {
-        let additionalHobbies = self.userProfile?.hobbies.filter { $0.id == nil}
-        let selectedAdditionalHobbies = self.hobbiesField?.hobbies?.filter { $0.id == nil && additionalHobbies?.contains($0) == false } ?? []
+        
+        let selectedAdditionalHobbies = self.hobbiesField?.hobbies ?? []
 
         var hobbies = loadedHobbies
         hobbies.append(contentsOf: selectedAdditionalHobbies)
